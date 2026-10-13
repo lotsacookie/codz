@@ -146,7 +146,7 @@ export class ViewWeapon {
     this.rig.play(key,false,this.clipSpeed(key,duration),0);
     return {duration,delay:charge?def.chargeDelay:def.delay,damage:def.damage};
   }
-  update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0}={}){
+  update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0,look=null}={}){
     if(!this.ready)return;
     this.rig.update(dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     const action=this.rig.actions[this.rig.current],finished=!action?.isRunning();
@@ -169,6 +169,13 @@ export class ViewWeapon {
     const offsetSprint=sprint&&!this.rig.actions.sprintLoopAnim&&this.mode==='sprint';
     this.sprintBlend=THREE.MathUtils.damp(this.sprintBlend,offsetSprint?1:0,16,dt);
     if(this.sprintBlend>.001){this.pivot.position.addScaledVector(new THREE.Vector3(...this.def.sprintOffset),this.sprintBlend);const r=this.def.sprintRotation;this.pivot.rotation.set(r[0]*this.sprintBlend,r[1]*this.sprintBlend,r[2]*this.sprintBlend);}
+    const swayScale=1-this.aim*.7,safeDt=Math.max(dt,1e-3);
+    const yawRate=THREE.MathUtils.clamp((look?.yaw??0)/safeDt,-12,12),pitchRate=THREE.MathUtils.clamp((look?.pitch??0)/safeDt,-12,12);
+    this.swayYaw=THREE.MathUtils.damp(this.swayYaw??0,-yawRate*.011*swayScale,7,dt);
+    this.swayPitch=THREE.MathUtils.damp(this.swayPitch??0,-pitchRate*.011*swayScale,7,dt);
+    this.pivot.rotation.y+=this.swayYaw;this.pivot.rotation.x+=this.swayPitch;
+    this.pivot.rotation.z+=this.swayYaw*.5;
+    this.pivot.position.x+=this.swayYaw*.5;this.pivot.position.y+=this.swayPitch*.35;
     this.root.updateMatrixWorld(true);
   }
   snapshot(){

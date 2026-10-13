@@ -22,16 +22,16 @@ const renderer=new THREE.WebGLRenderer({antialias:!profile.mobile,powerPreferenc
 const basePixelRatio=Math.min(devicePixelRatio,profile.mobile?1:2),adapt=new AdaptiveResolution({min:profile.mobile?.6:.65,targetMs:profile.mobile?1000/30:1000/60,enabled:!/[?&]adaptive=0\b/.test(location.search)}),perf=createPerfOverlay();
 if(/[?&]fx=0\b/.test(location.search))document.body.classList.add('no-fx');
 renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobile?2:16,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
-let previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=2.05;renderer.autoClear=false;
+let lastLookYaw=0,lastLookPitch=0,previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;renderer.autoClear=false;
 document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,Math.LN2/2332.79);
-const ambient=new THREE.AmbientLight(0xb3bcc7,1.2);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,2.0));
-const keyLight=new THREE.DirectionalLight(0xffdfb1,1.5);keyLight.position.set(.4,1,.2);scene.add(keyLight);
-const fill=new THREE.DirectionalLight(0x8cabc9,.7);fill.position.set(-1,.5,-.5);scene.add(fill);
+const ambient=new THREE.AmbientLight(0xb3bcc7,.75);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
+const keyLight=new THREE.DirectionalLight(0xffdfb1,1.05);keyLight.position.set(.4,1,.2);scene.add(keyLight);
+const fill=new THREE.DirectionalLight(0x8cabc9,.5);fill.position.set(-1,.5,-.5);scene.add(fill);
 const camera=new THREE.PerspectiveCamera(78,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
-viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.8));const vl=new THREE.DirectionalLight(0xffefc8,2);vl.position.set(0,4,2);viewScene.add(vl);
+viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
 let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
@@ -343,7 +343,8 @@ function update(dt){
       const forward=Number(keys.has('KeyW'))-Number(keys.has('KeyS'))+touch.forward,strafe=Number(keys.has('KeyD'))-Number(keys.has('KeyA'))+touch.strafe;
       const moving=Math.hypot(forward,strafe)>.01,sprint=((keys.has('ShiftLeft')||keys.has('ShiftRight'))&&keys.has('KeyW')||touch.sprint)&&!ads&&!session.reloadLeft&&!session.meleeLeft&&!session.drinking;
       player.update(dt,session.phase==='reviving'?{}:{forward,strafe,sprint,crouch:keys.has('ControlLeft')||keys.has('ControlRight')||keys.has('KeyC')||touch.crouch,jump:keys.has('Space'),jumpPressed:touch.jump});
-      view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time});
+      const lookYaw=Math.atan2(Math.sin(camera.rotation.y-lastLookYaw),Math.cos(camera.rotation.y-lastLookYaw)),lookPitch=camera.rotation.x-lastLookPitch;lastLookYaw=camera.rotation.y;lastLookPitch=camera.rotation.x;
+      view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch}});
       view.pivot.visible=!session.weaponUnavailable&&!features.events.room;
       perkDrink.update(dt,session);
       if(!sprint&&session.phase!=='reviving'&&(primaryPressed||(primary&&session.def.automatic)||burstLeft>0||reloadShot)){
