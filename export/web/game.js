@@ -25,7 +25,7 @@ renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobil
 let previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=2.05;renderer.autoClear=false;
 document.body.prepend(renderer.domElement);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,.00032);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,Math.LN2/2332.79);
 const ambient=new THREE.AmbientLight(0xb3bcc7,1.2);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,2.0));
 const keyLight=new THREE.DirectionalLight(0xffdfb1,1.5);keyLight.position.set(.4,1,.2);scene.add(keyLight);
 const fill=new THREE.DirectionalLight(0x8cabc9,.7);fill.position.set(-1,.5,-.5);scene.add(fill);
