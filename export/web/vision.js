@@ -22,7 +22,25 @@ export const THEATER_BLOOM = Object.freeze({
   breakpoint: 0.4947
 });
 
+export const THEATER_WORLD = Object.freeze({
+  ambientColor: Object.freeze([0.5960, 0.6078, 0.6196]),
+  sunColor: Object.freeze([0.82, 0.76, 0.62]),
+  sunAngles: Object.freeze({ yaw: -48.9, pitch: -74.2 }),
+  cgFov: 65
+});
+
 export const REFERENCE_TEMPERATURE = 6500;
+
+export function sunTravelDirection({ yaw, pitch } = THEATER_WORLD.sunAngles) {
+  const p = pitch * Math.PI / 180;
+  const y = yaw * Math.PI / 180;
+  const towardSun = [Math.cos(p) * Math.cos(y), Math.cos(p) * Math.sin(y), -Math.sin(p)];
+  return [-towardSun[0], -towardSun[2], towardSun[1]];
+}
+
+export function verticalFovFromCgFov(cgFov) {
+  return 2 * Math.atan(Math.tan(cgFov * Math.PI / 360) * 0.75) * 180 / Math.PI;
+}
 
 export function gradeUniforms(vision = THEATER_VISION) {
   return {

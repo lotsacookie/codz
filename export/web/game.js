@@ -15,7 +15,7 @@ import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
 import { AdaptiveResolution, createPerfOverlay } from './quality.js';
 import { GradePass } from './grade.js';
-import { THEATER_FOG, fogDensityFromHalfDistance } from './vision.js';
+import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from './vision.js';
 
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
 const profile=configureKinoAssets();
@@ -31,12 +31,13 @@ renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.
 const grade=gradeOn?new GradePass(renderer):null;console.info('[kino] graphics build 2026-10-13: grade pass '+(grade?'on':'off')+', shadows '+(profile.shadows?'on':'off')+', pixel ratio cap '+(profile.mobile?1:2)+', anisotropy '+profile.anisotropy);
 document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,fogDensityFromHalfDistance(THEATER_FOG.halfDist));
-const ambient=new THREE.AmbientLight(0xb3bcc7,.75);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
-const keyLight=new THREE.DirectionalLight(0xffdfb1,1.05);keyLight.position.set(.4,1,.2);scene.add(keyLight,keyLight.target);
-const keyDirection=new THREE.Vector3(-.28,-1,-.14).normalize();
+const ambient=new THREE.AmbientLight(new THREE.Color(...THEATER_WORLD.ambientColor),.9);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
+const keyLight=new THREE.DirectionalLight(new THREE.Color(...THEATER_WORLD.sunColor),1.2);keyLight.position.set(.4,1,.2);scene.add(keyLight,keyLight.target);
+const keyDirection=new THREE.Vector3(...sunTravelDirection()).normalize();
 if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);Object.assign(keyLight.shadow.camera,{left:-800,right:800,top:800,bottom:-800,near:1,far:700});keyLight.shadow.bias=-.0006;keyLight.shadow.normalBias=1.5;keyLight.shadow.radius=3;}
 const fill=new THREE.DirectionalLight(0x8cabc9,.5);fill.position.set(-1,.5,-.5);scene.add(fill);
-const camera=new THREE.PerspectiveCamera(78,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
+const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(location.search)?.[1])||THEATER_WORLD.cgFov)),hipFov=verticalFovFromCgFov(cgFov);
+const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
@@ -385,7 +386,7 @@ function update(dt){
       for(const p of [...particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);if(p.life<=0){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();particles.splice(particles.indexOf(p),1);}}
     }
   }
-  muzzle.intensity=Math.max(0,muzzle.intensity-dt*2200);camera.fov=THREE.MathUtils.damp(camera.fov,ads&&!session.def.dualWield&&!session.drinking&&!session.meleeLeft&&!session.reloadLeft?(session.def.adsFov||56):78,12,dt);camera.updateProjectionMatrix();
+  muzzle.intensity=Math.max(0,muzzle.intensity-dt*2200);camera.fov=THREE.MathUtils.damp(camera.fov,ads&&!session.def.dualWield&&!session.drinking&&!session.meleeLeft&&!session.reloadLeft?verticalFovFromCgFov(session.def.adsFov||56):hipFov,12,dt);camera.updateProjectionMatrix();
   hud();
 }
 function hud(){
