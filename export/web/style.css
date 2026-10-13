@@ -3,3 +3,10 @@
 #effects{display:flex;gap:18px;align-items:center;bottom:42px}.powerup-timer{display:flex;flex-direction:column;align-items:center;gap:3px;letter-spacing:1px;text-shadow:0 1px 3px #000}.powerup-timer img{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 5px #80bb4580)}.powerup-timer.expiring{opacity:.3}body.menu-open #effects{visibility:hidden}
 
 #objective{position:fixed;top:84px;left:36px;color:#c6b89a;font:11px/1.5 sans-serif;letter-spacing:1px;pointer-events:none;text-shadow:0 1px 3px #000;z-index:3}.menu-open #objective{display:none}#grenades{max-width:560px;line-height:1.7}
+
+/* Cheap atmosphere: a static vignette and faint grain composited above the canvas, below the HUD.
+   No extra render passes. Disable with ?fx=0 (adds class no-fx). */
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 52%,rgba(0,0,0,.28) 82%,rgba(0,0,0,.5) 100%)}
+#fx::after{content:"";position:absolute;inset:0;opacity:.045;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+body.no-fx #fx{display:none}
+#loading #retry{margin-top:14px}

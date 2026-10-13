@@ -1,11 +1,21 @@
 // Stream directly into the final allocation. Holding all fetched parts before
 // joining them doubled the collision buffer at the busiest point of startup.
-export async function loadBinaryParts(parts, { baseUrl, byteLength, onProgress } = {}) {
+export async function loadBinaryParts(parts, { baseUrl, byteLength, onProgress, fetchPart } = {}) {
   if (!Number.isSafeInteger(byteLength) || byteLength <= 0 || !parts?.length) throw new Error('Invalid collision binary layout');
   const output = new Uint8Array(byteLength);
   let offset = 0;
   onProgress?.({ loaded: 0, total: byteLength });
   for (const part of parts) {
+    if (fetchPart) {
+      // Resilient path: the loader writes straight into the final allocation, with retries,
+      // stall detection and alternate hosts. Same size checks as the streaming path below.
+      const start = offset, uri = new URL(part.uri, baseUrl).href;
+      const { bytes } = await fetchPart(uri, { buffer: output, offset });
+      offset += bytes.byteLength;
+      onProgress?.({ loaded: offset, total: byteLength });
+      if (part.byteLength != null && offset - start !== part.byteLength) throw new Error(`collision BVH size mismatch: ${part.uri}`);
+      continue;
+    }
     const response = await fetch(new URL(part.uri, baseUrl));
     if (!response.ok) throw new Error(`collision BVH HTTP ${response.status}: ${part.uri}`);
     const start = offset;

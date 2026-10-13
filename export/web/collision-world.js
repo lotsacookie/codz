@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { acceleratedRaycast, MeshBVH } from 'three-mesh-bvh';
 import { loadBinaryParts } from './binary-parts.js';
+import { assets, rfetch } from './asset-loader.js';
 
 const _bounds = new THREE.Box3();
 const _segment = new THREE.Line3();
@@ -53,11 +54,14 @@ export async function loadCollisionWorld({
   onProgress = null,
 } = {}) {
   const started = performance.now();
-  const metadataResponse = await fetch(metadataUrl);
+  const metadataResponse = await rfetch(metadataUrl);
   if (!metadataResponse.ok) throw new Error(`collision metadata HTTP ${metadataResponse.status}`);
   const metadata = await metadataResponse.json();
   const parts = metadata.binaryParts ?? [{ uri: metadata.binary, byteLength: metadata.byteLength }];
-  const binary = await loadBinaryParts(parts, { baseUrl: metadataResponse.url, byteLength: metadata.byteLength, onProgress });
+  const binary = await loadBinaryParts(parts, {
+    baseUrl: metadataResponse.url, byteLength: metadata.byteLength, onProgress,
+    fetchPart: (url, into) => assets.getBytes(url, undefined, into),
+  });
   const world = deserializeCollisionWorld(metadata, binary);
   world.loadMilliseconds = performance.now() - started;
   return world;

@@ -3,6 +3,10 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { Rig, loadModel, loadAnimation } from './animation.js';
 import { zombieHealth } from './rules.js';
 import { disposeSkeletons } from './runtime-assets.js';
+import { turnToward, steerDirection, smoothingEnabled } from './steering.js';
+
+const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
+const STEER_RATE = smoothingEnabled() ? 8 : Infinity;   // path-direction easing; Infinity = old behaviour
 
 export class Enemies {
   constructor(scene,world,data,session,{damage,kill,hit,sound}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};}
@@ -59,14 +63,14 @@ export class Enemies {
       z.rig.update(dt);z.growl-=dt;
       if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
       if(z.state==='barricade'){
-        z.root.rotation.y=Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x);
+        z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
         z.tearLeft-=dt;
-        if(z.barrier.count>0){z.rig.play('attack');if(z.tearLeft<=0){this.world.setBoards(z.barrier,z.barrier.count-1);z.tearLeft=1.1;this.onSound?.('board',z.root.position);}}
-        else{z.state='entering';z.enterFrom=z.root.position.clone();z.enterTime=0;z.rig.play('walk');}
+        if(z.barrier.count>0){z.rig.play('attack',true,1,BLEND);if(z.tearLeft<=0){this.world.setBoards(z.barrier,z.barrier.count-1);z.tearLeft=1.1;this.onSound?.('board',z.root.position);}}
+        else{z.state='entering';z.enterFrom=z.root.position.clone();z.enterTime=0;z.rig.play('walk',true,1,BLEND);}
         continue;
       }
       if(z.state==='entering'){
-        z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);z.root.position.lerpVectors(z.enterFrom,z.barrier.inside,t);z.root.position.y+=Math.sin(t*Math.PI)*12;
+        z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);z.root.position.lerpVectors(z.enterFrom,z.barrier.inside,t*t*(3-2*t));z.root.position.y+=Math.sin(t*Math.PI)*12;
         if(t===1){z.state='chase';z.repath=0;}continue;
       }
       const lure=this.lureTarget?.(z),goal=lure??player;
@@ -74,10 +78,10 @@ export class Enemies {
       if(z.state==='attack'){
         z.attackLeft-=dt;
         if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:50);}
-        if(z.attackLeft<=0){z.state='chase';z.rig.play('walk');}continue;
+        if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&dist<62&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
-        z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false);continue;
+        z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
       }
       z.repath-=dt;
       if(z.repath<=0){z.path=this.world.path(z.root.position,goal);z.pathIndex=1;z.repath=.55+(z.id%5)*.07;}
@@ -86,11 +90,13 @@ export class Enemies {
         const delta=target.clone().sub(z.root.position),horizontal=Math.hypot(delta.x,delta.z);
         if(horizontal<10){z.pathIndex++;}
         else{
-          const next=z.root.position.clone().addScaledVector(delta,Math.min(1,z.speed*dt/horizontal));
+          const want={x:delta.x/horizontal,y:delta.y/horizontal,z:delta.z/horizontal};
+          z.heading=z.heading?steerDirection(z.heading,want,dt,STEER_RATE):want;
+          const next=z.root.position.clone().addScaledVector(new THREE.Vector3(z.heading.x,z.heading.y,z.heading.z),Math.min(z.speed*dt,horizontal));
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const sep=next.clone().sub(other.root.position);sep.y=0;const d=sep.length();if(d<29&&d>.01)next.addScaledVector(sep,(29-d)/d*dt*2);}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
           if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
-          z.root.rotation.y=Math.atan2(-delta.z,delta.x);
+          z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
         }
       }
       z.stuck+=dt;

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export const assetManager = new THREE.LoadingManager();
-export const runtimeProfile = { mobile: false };
+export const runtimeProfile = { mobile: false, anisotropy: 1 };
 const textures = new Map();
 const textureLoader = new THREE.TextureLoader();
 let running = 0;

@@ -11,12 +11,17 @@ import { PerkDrink } from './perk-drink.js';
 import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
 import { configureKinoAssets, assetDiagnostics } from './runtime-assets.js';
+import { assets, rfetch } from './asset-loader.js';
+import { smoothingEnabled } from './steering.js';
+import { AdaptiveResolution, createPerfOverlay } from './quality.js';
 
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
 const profile=configureKinoAssets();
 audio.maxBufferBytes=profile.mobile?16*1024*1024:Infinity;audio.preload=!profile.mobile;
 const renderer=new THREE.WebGLRenderer({antialias:!profile.mobile,powerPreference:profile.mobile?'default':'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,profile.mobile?1:1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
+const basePixelRatio=Math.min(devicePixelRatio,profile.mobile?1:1.5),adapt=new AdaptiveResolution({min:profile.mobile?.6:.65,targetMs:profile.mobile?1000/30:1000/60,enabled:!/[?&]adaptive=0\b/.test(location.search)}),perf=createPerfOverlay();
+if(/[?&]fx=0\b/.test(location.search))document.body.classList.add('no-fx');
+renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobile?2:8,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
 let previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=2.05;renderer.autoClear=false;
 document.body.prepend(renderer.domElement);
@@ -55,6 +60,10 @@ const touchControls=createZombieTouch({
 });
 addEventListener('error',e=>errors.push(e.message));addEventListener('unhandledrejection',e=>errors.push(String(e.reason)));
 function progress(text,percent){$('load-label').textContent=text;$('load-progress').style.width=percent+'%';}
+// Real byte progress for the big downloads, instead of a bar parked at 15%.
+let byteProgress=false;
+assets.onProgress(s=>{if(!byteProgress||!s.total)return;const mb=n=>(n/1048576).toFixed(0);$('load-label').textContent=`Loading the theater · ${mb(s.loaded)} / ${mb(s.total)} MB`;$('load-progress').style.width=(10+s.fraction*70)+'%';});
+function showRetry(){if($('retry'))return;const b=document.createElement('button');b.id='retry';b.textContent='RETRY';b.onclick=()=>location.reload();$('loading').appendChild(b);}
 function toast(text,duration=2.5){$('toast').textContent=text;toastUntil=(session?.time??0)+duration;}
 function announce(title,small='KINO DER TOTEN',duration=4){$('announcement-title').textContent=title;$('announcement-small').textContent=small;$('announcement').style.opacity=1;announcementUntil=session.time+duration;}
 function setActive(value){
@@ -378,9 +387,9 @@ Object.assign(kino.debug,{
   setRound:n=>{enemies.reset();while(session.round<n)session.nextRound();session.countdown=0;session.spawned=0;session.killed=0;},
 });
 try{
-  progress('Loading game data',5);data=await fetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await world.load(progress);
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);byteProgress=true;await world.load(progress);byteProgress=false;
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
-  player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10});
+  player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000))});
   world.actors=()=>enemies.list;
@@ -388,14 +397,15 @@ try{
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Ready',100);$('loading').hidden=true;$('start').disabled=contextLost;$('menu-status').textContent=contextLost?'Graphics paused. Waiting for Safari to restore the game…':touchControls.mode?'Tap to enter the theater':'Click to capture the mouse · Esc to pause';
-}catch(error){console.error(error);errors.push(String(error));$('load-label').textContent='Unable to start: '+error.message;$('menu-status').textContent='See browser console for details';}
+}catch(error){console.error(error);errors.push(String(error));byteProgress=false;$('load-label').textContent='Unable to start: '+error.message;$('menu-status').textContent=error.name==='LfsPointerError'?'The game files were not deployed correctly. See the message above.':'Check your connection, then retry. Files that already finished downloading are kept.';showRetry();}
 renderer.info.autoReset=false;
 function renderFrame(now){
   if(document.hidden||contextLost)return;
   const interval=profile.mobile?(active?1000/30:200):0;
   if(lastRendered&&now-lastRendered<interval-1)return;
-  lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;frameCount++;renderedFrames++;
-  if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;}
+  lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
+  if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
+  if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
   update(dt);renderer.info.reset();renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}
 }
 resumeRendering();

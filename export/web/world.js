@@ -6,6 +6,8 @@ import { optimizeStaticScene } from './scene-optimizer.js';
 import { loadModel } from './animation.js';
 import { censorFlags } from './flag-censorship.js';
 import { assetManager, runtimeProfile } from './runtime-assets.js';
+import { assets } from './asset-loader.js';
+import { applyAnisotropy } from './quality.js';
 
 export const vector=a=>new THREE.Vector3().fromArray(a);
 export const zoneNames={foyer_zone:'Lobby',foyer2_zone:'Lobby',vip_zone:'Upper hall',crematorium_zone:'Lower hall',alleyway_zone:'Alley',dining_zone:'Speed Cola room',dressing_zone:'Dressing room',stage_zone:'Stage',theater_zone:'Theater',west_balcony_zone:'Back room'};
@@ -15,12 +17,23 @@ export class World {
   constructor(scene,data){this.scene=scene;this.data=data;this.doors=new Map();this.entities=new Map();this.barriers=[];this.dynamic=[];this.markers=[];this.navDisabled=new Set();}
   async load(progress){
     progress('Loading the theater',15);
-    const loadMap=()=>new GLTFLoader(assetManager).loadAsync('kino.gltf');
-    const loadCollision=()=>loadCollisionWorld({metadataUrl:'collision.json'});
-    const [gltf,collision,bytes]=runtimeProfile.mobile
-      ? [await loadMap(),await loadCollision(),await fetch('navigation.bin').then(r=>r.arrayBuffer())]
-      : await Promise.all([loadMap(),loadCollision(),fetch('navigation.bin').then(r=>r.arrayBuffer())]);
-    await init();
+    // Every large download starts at once and goes through the resilient loader (byte progress,
+    // retries, stall detection, LFS-pointer fallback, cache). Phones still parse one asset at a
+    // time so peak memory is unchanged: the 91 MB collision download waits for the geometry.
+    const early=p=>{p.catch(()=>{});return p;};   // a failure is reported where it is awaited
+    const loadCollision=()=>early(loadCollisionWorld({metadataUrl:'collision.json'}));
+    const geometry=early(assets.prefetchBlob('kino.bin'));
+    const navigation=early(assets.buffer('navigation.bin'));
+    const recast=early(init());
+    let collisionLoad=runtimeProfile.mobile?null:loadCollision();
+    await geometry;
+    assetManager.setURLModifier(assets.urlModifier);
+    const gltf=await new GLTFLoader(assetManager).loadAsync('kino.gltf');
+    assets.release('kino.bin');
+    applyAnisotropy(gltf.scene,runtimeProfile.anisotropy);
+    collisionLoad??=loadCollision();
+    const [collision,bytes]=await Promise.all([collisionLoad,navigation]);
+    await recast;
     censorFlags(gltf.scene);
     this.collision=collision;this.scene.add(gltf.scene);
     const moving=[];

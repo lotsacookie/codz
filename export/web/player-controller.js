@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { Octree } from 'three/addons/math/Octree.js';
+import { CameraSmoother } from './camera-smoothing.js';
 
 // A small, physics-only first-person controller.  The Octree is deliberately
 // separate from the render scene: pass it the collision-only Object3D (or the
@@ -162,6 +163,9 @@ export class PlayerController {
     this.moveSpeed = Math.max(0, numberOr(options.moveSpeed, 380));
     this.sprintSpeed = Math.max(0, numberOr(options.sprintSpeed, 900));
     this.crouchSpeed = Math.max(0, numberOr(options.crouchSpeed, 190));
+    // Visual-only camera easing (crouch, stairs, landing). Off unless the game asks for it.
+    this._smoother = options.smoothCamera ? new CameraSmoother() : null;
+    this._lastDt = 0;
     this.groundAcceleration = Math.max(0, numberOr(options.groundAcceleration, 2600));
     this.airAcceleration = Math.max(0, numberOr(options.airAcceleration, 900));
     this.maxFallSpeed = Math.max(0, numberOr(options.maxFallSpeed, 2600));
@@ -316,6 +320,7 @@ export class PlayerController {
     this._lastCollision = null;
     this._releaseLadder();
     this._ladderExitTimer = 0;
+    this._smoother?.reset();
 
     if (resolve && this.worldReady) this._resolveOverlaps();
     this._syncCamera();
@@ -384,6 +389,7 @@ export class PlayerController {
     }
 
     const dt = clamp(numberOr(deltaSeconds, 0), 0, this.maxDelta);
+    this._lastDt = dt;
     this._accumulator = Math.min(
       this._accumulator + dt,
       this.fixedTimeStep * this.maxSubSteps,
@@ -847,7 +853,9 @@ export class PlayerController {
 
   _syncCamera() {
     const feetY = this.collider.start.y - this.radius;
-    this.camera.position.set(this.collider.start.x, feetY + this._eyeHeight, this.collider.start.z);
+    if (!this._smoother) { this.camera.position.set(this.collider.start.x, feetY + this._eyeHeight, this.collider.start.z); return; }
+    const view = this._smoother.update(this._lastDt, { feetY, eyeHeight: this._eyeHeight, onFloor: this.onFloor, velocityY: this.velocity.y });
+    this.camera.position.set(this.collider.start.x, feetY + view.eye + view.offset, this.collider.start.z);
   }
 }
 
