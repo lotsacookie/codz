@@ -64,6 +64,16 @@ function progress(text,percent){$('load-label').textContent=text;$('load-progres
 let byteProgress=false;
 assets.onProgress(s=>{if(!byteProgress||!s.total)return;const mb=n=>(n/1048576).toFixed(0);$('load-label').textContent=`Loading the theater · ${mb(s.loaded)} / ${mb(s.total)} MB`;$('load-progress').style.width=(10+s.fraction*70)+'%';});
 function showRetry(){if($('retry'))return;const b=document.createElement('button');b.id='retry';b.textContent='RETRY';b.onclick=()=>location.reload();$('loading').appendChild(b);}
+async function prewarm(){
+  if(profile.mobile||/[?&]prewarm=0\b/.test(location.search))return;
+  const sources=new Set(),textures=[],started=performance.now(),yieldFrame=()=>new Promise(resolve=>setTimeout(resolve));
+  for(const root of [scene,viewScene])root.traverse(object=>{for(const material of [object.material].flat())if(material)for(const value of Object.values(material))if(value?.isTexture&&!sources.has(value.source)){sources.add(value.source);textures.push(value);}});
+  try{await Promise.race([Promise.all([renderer.compileAsync(scene,camera),renderer.compileAsync(viewScene,viewCamera)]),new Promise(resolve=>setTimeout(resolve,6000))]);}catch(error){console.warn('Shader pre-compile skipped',error);}
+  for(let i=0;i<textures.length&&performance.now()-started<12000;i++){
+    renderer.initTexture(textures[i]);
+    if(i%8===7){progress(`Preparing graphics · ${Math.round(i/textures.length*100)}%`,90+i/textures.length*9);await yieldFrame();}
+  }
+}
 function toast(text,duration=2.5){$('toast').textContent=text;toastUntil=(session?.time??0)+duration;}
 function announce(title,small='KINO DER TOTEN',duration=4){$('announcement-title').textContent=title;$('announcement-small').textContent=small;$('announcement').style.opacity=1;announcementUntil=session.time+duration;}
 function setActive(value){
@@ -396,7 +406,9 @@ try{
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
+  progress('Preparing graphics',90);await prewarm();
   progress('Ready',100);$('loading').hidden=true;$('start').disabled=contextLost;$('menu-status').textContent=contextLost?'Graphics paused. Waiting for Safari to restore the game…':touchControls.mode?'Tap to enter the theater':'Click to capture the mouse · Esc to pause';
+  {const missing=assetDiagnostics().failedTextures;if(missing)$('menu-status').textContent+=` · ${missing} texture${missing>1?'s':''} could not be loaded (see console)`;}
 }catch(error){console.error(error);errors.push(String(error));byteProgress=false;$('load-label').textContent='Unable to start: '+error.message;$('menu-status').textContent=error.name==='LfsPointerError'?'The game files were not deployed correctly. See the message above.':'Check your connection, then retry. Files that already finished downloading are kept.';showRetry();}
 renderer.info.autoReset=false;
 function renderFrame(now){

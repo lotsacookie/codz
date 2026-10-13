@@ -10,6 +10,13 @@
   one-at-a-time *parsing* so peak memory is unchanged). Large files are kept in Cache Storage, so later visits skip the
   download; a changed file size on the server invalidates the cached copy.
 * **Loads from anywhere.** All URLs resolve against the page, so any folder or sub-path works.
+* **Textures use the same loader.** Map and character textures (including the Git LFS ones such as the zombie bodies and
+  heads) go through `asset-loader.js` too, so an LFS pointer served in place of a texture falls back to the alternate
+  hosts instead of leaving the model untextured. Identical textures are fetched once, at most 8 at a time (3 on phones).
+  If one still cannot be loaded the game uses a flat placeholder, keeps running and reports it in the console, in the
+  menu status line and in `window.kino.debug` (`failedTextures`, `failedTextureList`).
+* **Less hitching at the start.** On desktop the shaders are compiled and the textures uploaded to the GPU behind the
+  loading screen (a time-capped "Preparing graphics" step) instead of during the first seconds of play.
 
 ## Hosting
 Serve `export/web` with the real files, not LFS pointers (`git lfs pull` before deploying). If you cannot, point the
@@ -29,6 +36,7 @@ On `<user>.github.io/<repo>/` the loader also tries `media.githubusercontent.com
 | `?perf=1` | overlay with fps, render scale, draw calls, triangles - use it to compare before/after |
 | `?adaptive=0` | disable dynamic resolution |
 | `?fx=0` | disable the vignette/grain overlay |
+| `?prewarm=0` | skip the shader/texture pre-warm during loading |
 
 Dynamic resolution lowers the render scale (down to 65% desktop / 60% mobile) when frames run long and probes back up
 when stable. Anisotropic filtering (8x desktop, 2x mobile) is applied to world textures before their first upload.
