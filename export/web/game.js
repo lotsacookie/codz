@@ -14,18 +14,22 @@ import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, 
 import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
 import { AdaptiveResolution, createPerfOverlay } from './quality.js';
+import { GradePass } from './grade.js';
+import { THEATER_FOG, fogDensityFromHalfDistance } from './vision.js';
 
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
 const profile=configureKinoAssets();
 audio.maxBufferBytes=profile.mobile?16*1024*1024:Infinity;audio.preload=!profile.mobile;
-const renderer=new THREE.WebGLRenderer({antialias:!profile.mobile,powerPreference:profile.mobile?'default':'high-performance'});
+const gradeOn=!profile.mobile&&!/[?&]grade=0\b/.test(location.search);
+const renderer=new THREE.WebGLRenderer({antialias:!profile.mobile&&!gradeOn,powerPreference:profile.mobile?'default':'high-performance'});
 const basePixelRatio=Math.min(devicePixelRatio,profile.mobile?1:2),adapt=new AdaptiveResolution({min:profile.mobile?.6:.65,targetMs:profile.mobile?1000/30:1000/60,enabled:!/[?&]adaptive=0\b/.test(location.search)}),perf=createPerfOverlay();
 if(/[?&]fx=0\b/.test(location.search))document.body.classList.add('no-fx');
 renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobile?2:16,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
 let lastLookYaw=0,lastLookPitch=0,previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;renderer.autoClear=false;
+const grade=gradeOn?new GradePass(renderer):null;
 document.body.prepend(renderer.domElement);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,Math.LN2/2332.79);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,fogDensityFromHalfDistance(THEATER_FOG.halfDist));
 const ambient=new THREE.AmbientLight(0xb3bcc7,.75);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
 const keyLight=new THREE.DirectionalLight(0xffdfb1,1.05);keyLight.position.set(.4,1,.2);scene.add(keyLight);
 const fill=new THREE.DirectionalLight(0x8cabc9,.5);fill.position.set(-1,.5,-.5);scene.add(fill);
@@ -99,7 +103,7 @@ async function prewarm(){
   if(profile.mobile||/[?&]prewarm=0\b/.test(location.search))return;
   const sources=new Set(),textures=[],started=performance.now(),yieldFrame=()=>new Promise(resolve=>setTimeout(resolve));
   for(const value of loadedTextures())if(!sources.has(value.source)){sources.add(value.source);textures.push(value);}
-  try{await Promise.race([Promise.all([renderer.compileAsync(scene,camera),renderer.compileAsync(viewScene,viewCamera)]),new Promise(resolve=>setTimeout(resolve,6000))]);}catch(error){console.warn('Shader pre-compile skipped',error);}
+  try{if(grade){grade.sync();renderer.setRenderTarget(grade.target);}await Promise.race([Promise.all([renderer.compileAsync(scene,camera),renderer.compileAsync(viewScene,viewCamera)]),new Promise(resolve=>setTimeout(resolve,6000))]);}catch(error){console.warn('Shader pre-compile skipped',error);}finally{if(grade)renderer.setRenderTarget(null);}
   for(let i=0;i<textures.length&&performance.now()-started<12000;i++){
     renderer.initTexture(textures[i]);
     if(i%8===7){progress(`Preparing graphics · ${Math.round(i/textures.length*100)}%`,90+i/textures.length*9);await yieldFrame();}
@@ -451,6 +455,6 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);renderer.info.reset();renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}
+  update(dt);renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
