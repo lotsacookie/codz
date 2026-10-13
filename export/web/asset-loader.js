@@ -164,8 +164,9 @@ export class AssetLoader {
     } catch { return true; }
   }
 
-  async getBytes(url, signal, into) {
+  async getBytes(url, signal, into, { stallMs = this.stallMs, retries = this.retries } = {}) {
     const entry = this.files.get(url) ?? this.track(url);
+    entry.failed = false;
     const bulk = /\.(bin|gz|glb|gltf|wasm)(?:[?#].*)?$/i.test(url);
     const cached = bulk ? await this.cacheGet(url) : null;
     if (cached && await this.stillFresh(url, cached.byteLength)) {
@@ -183,7 +184,7 @@ export class AssetLoader {
         const isGz = variant !== candidate;
         try {
           const { bytes, total } = await fetchBytes(variant, {
-            fetchImpl: this.fetchImpl, retries: this.retries, stallMs: this.stallMs, backoffMs: this.backoffMs, signal, into: isGz ? undefined : into,
+            fetchImpl: this.fetchImpl, retries, stallMs, backoffMs: this.backoffMs, signal, into: isGz ? undefined : into,
             onProgress: (got, t) => { entry.got = got; entry.total = t || got; this.emit(); },
           });
           const ptr = parseLfsPointer(bytes);

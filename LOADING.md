@@ -10,11 +10,19 @@
   one-at-a-time *parsing* so peak memory is unchanged). Large files are kept in Cache Storage, so later visits skip the
   download; a changed file size on the server invalidates the cached copy.
 * **Loads from anywhere.** All URLs resolve against the page, so any folder or sub-path works.
-* **Textures use the same loader.** Map and character textures (including the Git LFS ones such as the zombie bodies and
-  heads) go through `asset-loader.js` too, so an LFS pointer served in place of a texture falls back to the alternate
-  hosts instead of leaving the model untextured. Identical textures are fetched once, at most 8 at a time (3 on phones).
-  If one still cannot be loaded the game uses a flat placeholder, keeps running and reports it in the console, in the
-  menu status line and in `window.kino.debug` (`failedTextures`, `failedTextureList`).
+* **Textures use the same loader, and the game knows when they are ready.** Map, character and weapon textures go
+  through `asset-loader.js` too (retries, a 60 s stall window, LFS-pointer fallback). Identical textures are fetched once,
+  at most 6 at a time (3 on phones). Every download is checked for completeness (PNG/JPEG/WebP end markers), so a file cut
+  short by a chunking proxy is fetched again instead of decoding as blank. Each texture is tracked as pending, ready or
+  failed; the loading screen shows `textures 212 / 417`, and the game only reports **Ready** once none are pending and
+  none have failed.
+* **Failures heal.** A texture that cannot be loaded gets a flat placeholder so the model still builds, then the loader
+  retries it (3 rounds with backoff) and swaps the real image in place. If some still fail you get **RETRY** or
+  **PLAY ANYWAY**. For scripts and browser tests, `window.kino.debug` reports `texturesTotal`, `texturesLoaded`,
+  `texturesPending`, `failedTextures`, `failedTextureList` and a single `texturesReady` boolean.
+* **Order.** The 91 MB collision download now starts after the map and its textures are in, so on a slow or proxied
+  connection it cannot starve the ~400 texture requests. The byte counter covers geometry/collision/navmesh only;
+  textures are counted separately (this is why the total used to grow while downloading).
 * **Less hitching at the start.** On desktop the shaders are compiled and the textures uploaded to the GPU behind the
   loading screen (a time-capped "Preparing graphics" step) instead of during the first seconds of play.
 

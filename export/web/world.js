@@ -17,15 +17,16 @@ export class World {
   constructor(scene,data){this.scene=scene;this.data=data;this.doors=new Map();this.entities=new Map();this.barriers=[];this.dynamic=[];this.markers=[];this.navDisabled=new Set();}
   async load(progress){
     progress('Loading the theater',15);
-    // Every large download starts at once and goes through the resilient loader (byte progress,
-    // retries, stall detection, LFS-pointer fallback, cache). Phones still parse one asset at a
-    // time so peak memory is unchanged: the 91 MB collision download waits for the geometry.
+    // Geometry, navmesh and the recast WASM download together through the resilient loader (byte
+    // progress, retries, stall detection, LFS-pointer fallback, cache). The 91 MB collision download
+    // waits until the map and all of its textures are in, so on a slow or proxied connection it cannot
+    // starve the ~400 texture requests (which then time out and render untextured).
     const early=p=>{p.catch(()=>{});return p;};   // a failure is reported where it is awaited
     const loadCollision=()=>early(loadCollisionWorld({metadataUrl:'collision.json'}));
     const geometry=early(assets.prefetchBlob('kino.bin'));
     const navigation=early(assets.buffer('navigation.bin'));
     const recast=early(init());
-    let collisionLoad=runtimeProfile.mobile?null:loadCollision();
+    let collisionLoad=null;
     await geometry;
     assetManager.setURLModifier(assets.urlModifier);
     const gltf=await new GLTFLoader(assetManager).loadAsync('kino.gltf');

@@ -1,8 +1,86 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createTextureQueue, placeholderColor, canUseImageBitmap } from '../export/web/texture-queue.js';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { createTextureQueue, createTextureRegistry, looksComplete, placeholderColor, canUseImageBitmap } from '../export/web/texture-queue.js';
 
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
+const texturesDir = new URL('../export/web/textures/', import.meta.url).pathname;
+const isPointer = bytes => Buffer.from(bytes.subarray(0, 23)).toString() === 'version https://git-lfs';
+
+test('registry reports pending, ready and failed textures and says when all are ready', () => {
+  const registry = createTextureRegistry();
+  assert.equal(registry.report().allReady, false);
+  registry.begin('a.png'); registry.begin('b.png'); registry.begin('c.png');
+  assert.deepEqual(registry.report(), { total: 3, ready: 0, pending: 3, failed: 0, failedList: [], allReady: false });
+  registry.ready('a.png');
+  registry.fail('b.png', new Error('HTTP 502'));
+  const mid = registry.report();
+  assert.equal(mid.ready, 1); assert.equal(mid.pending, 1); assert.equal(mid.failed, 1);
+  assert.deepEqual(mid.failedList, [{ url: 'b.png', error: 'HTTP 502', attempts: 1 }]);
+  registry.ready('c.png');
+  assert.equal(registry.report().allReady, false);
+  registry.begin('b.png');
+  assert.equal(registry.report().pending, 1);
+  registry.ready('b.png');
+  const done = registry.report();
+  assert.equal(done.allReady, true);
+  assert.equal(done.failed, 0);
+});
+
+test('settled() waits for every pending texture, including ones that fail', async () => {
+  const registry = createTextureRegistry();
+  registry.begin('a.png'); registry.begin('b.png');
+  let settled = false;
+  const waiting = registry.settled().then(() => { settled = true; });
+  registry.ready('a.png');
+  await tick();
+  assert.equal(settled, false);
+  registry.fail('b.png', 'boom');
+  await waiting;
+  assert.equal(settled, true);
+  assert.deepEqual(registry.failedKeys(), ['b.png']);
+});
+
+test('a retried texture counts its attempts and a ready texture stays ready when asked for again', () => {
+  const registry = createTextureRegistry();
+  registry.begin('a.png'); registry.fail('a.png', 'x');
+  registry.begin('a.png'); registry.fail('a.png', 'y');
+  assert.equal(registry.report().failedList[0].attempts, 2);
+  registry.begin('a.png'); registry.ready('a.png');
+  registry.begin('a.png');
+  assert.equal(registry.report().ready, 1);
+  assert.equal(registry.report().pending, 0);
+});
+
+test('looksComplete accepts whole images and rejects ones cut off by a chunking proxy', () => {
+  const name = readdirSync(texturesDir).find(file => file.endsWith('.png') && !isPointer(readFileSync(join(texturesDir, file)).subarray(0, 23)));
+  const whole = new Uint8Array(readFileSync(join(texturesDir, name)));
+  assert.equal(looksComplete(whole, name), true);
+  assert.equal(looksComplete(whole.subarray(0, whole.length - 1), name), false);
+  assert.equal(looksComplete(whole.subarray(0, Math.floor(whole.length / 2)), name), false);
+  assert.equal(looksComplete(new Uint8Array(0), name), false);
+  const jpeg = Uint8Array.from([0xff, 0xd8, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xff, 0xd9]);
+  assert.equal(looksComplete(jpeg, 'a.jpg'), true);
+  assert.equal(looksComplete(jpeg.subarray(0, 10), 'a.jpg'), false);
+  const webp = Uint8Array.from([0x52, 0x49, 0x46, 0x46, 8, 0, 0, 0, 0x57, 0x45, 0x42, 0x50, 0, 0, 0, 0]);
+  assert.equal(looksComplete(webp, 'a.webp'), true);
+  assert.equal(looksComplete(webp.subarray(0, 12), 'a.webp'), false);
+});
+
+test('looksComplete has no false positives on any real texture in the repo', () => {
+  let checked = 0;
+  const bad = [];
+  for (const file of readdirSync(texturesDir)) {
+    if (!/\.(?:png|webp|jpe?g)$/i.test(file)) continue;
+    const bytes = new Uint8Array(readFileSync(join(texturesDir, file)));
+    if (isPointer(bytes)) continue;
+    checked++;
+    if (!looksComplete(bytes, file)) bad.push(file);
+  }
+  assert.ok(checked > 100);
+  assert.deepEqual(bad, []);
+});
 
 test('the same texture is loaded once however many models ask for it', async () => {
   let loads = 0;
