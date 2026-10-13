@@ -111,7 +111,7 @@ for (const name of readdirSync(destination)) {
   unlinkSync(file);
 }
 write('404.html', '<!doctype html><html lang="en"><meta charset="utf-8"><title>Page not found</title><h1>Page not found</h1><a href="/">Play Kino der Toten</a></html>');
-write('_headers', '/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/*.bin\n  Content-Type: application/octet-stream\n/*.gltf\n  Content-Type: model/gltf+json\n');
+write('_headers', '/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/*.bin\n  Content-Type: application/octet-stream\n/*.gltf\n  Content-Type: model/gltf+json\n/*.js\n  Cache-Control: no-cache\n/*.html\n  Cache-Control: no-cache\n/*.css\n  Cache-Control: no-cache\n/\n  Cache-Control: no-cache\n');
 
 let count = 0, bytes = 0, largest = 0;
 function validate(directory) {

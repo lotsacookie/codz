@@ -27,7 +27,7 @@ if(/[?&]fx=0\b/.test(location.search))document.body.classList.add('no-fx');
 renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobile?2:16,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
 let lastLookYaw=0,lastLookPitch=0,previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;renderer.autoClear=false;
-const grade=gradeOn?new GradePass(renderer):null;
+const grade=gradeOn?new GradePass(renderer):null;console.info('[kino] graphics build 2026-10-13: grade pass '+(grade?'on':'off')+', pixel ratio cap '+(profile.mobile?1:2)+', anisotropy '+profile.anisotropy);
 document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,fogDensityFromHalfDistance(THEATER_FOG.halfDist));
 const ambient=new THREE.AmbientLight(0xb3bcc7,.75);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
