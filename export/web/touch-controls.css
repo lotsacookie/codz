@@ -152,6 +152,6 @@ body.touch-mode #journal p:last-child { font-size: 10px; }
 /* BO1 HUD on touch screens: chalk, score and perks sit above the move stick; ammo clears the fire buttons. */
 body.touch-mode #chalk{--u:calc(100dvh / 760);transform:translateY(calc(-1 * max(150px, 28dvh)))}
 body.touch-mode #perks{bottom:calc(var(--u) * 70 + max(150px, 28dvh)) !important}
-body.touch-mode #player-panel{bottom:calc(var(--u) * 94 + max(150px, 28dvh))}
+body.touch-mode #player-panel{bottom:calc(var(--u) * 102 + max(150px, 28dvh))}
 body.touch-mode #weapon-panel{top:60px;bottom:auto;right:12px}
 body.touch-mode #effects{bottom:calc(var(--u) * 5 + 8px)}

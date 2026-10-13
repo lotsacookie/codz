@@ -9,8 +9,10 @@
 // Script HUD coordinates are in a 640x480 space; the CSS uses --u (1/480 of the
 // viewport height) as that unit.
 
-// (0.21, 0, 0) in the scripts: the resting colour of the chalk tally.
-export const CHALK_DARK = '#360000';
+// The scripts tint the chalk shader (0.21, 0, 0), which is #360000 on a flat white mark.
+// Real chalk strokes carry grain and glow, so the flat vector marks need a touch more red
+// to read the same on screen; set this to '#360000' for the literal script value.
+export const CHALK_DARK = '#5a0d0a';
 export const CHALK_WHITE = '#ffffff';
 // Fallback for zombie_between_round_time (the scripts use 10 by default).
 const BETWEEN_ROUND_TIME = 10;
@@ -20,17 +22,19 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms * 1000));
 
 // Hand-drawn chalk strokes standing in for hud_chalk_1..5 (those shaders are not
 // part of the extracted texture set). Slight per-stroke jitter keeps it uneven.
-const STROKE_X = [12, 24, 36, 48];
+const STROKE_X = [14, 26, 38, 50];
 const STROKE_TOP = [6, 8, 5, 7];
 const STROKE_BOTTOM = [58, 56, 59, 57];
 const STROKE_LEAN = [1.2, -1.4, 0.8, -1];
 
 function tallySvg(count) {
   let paths = '';
-  for (let i = 0; i < Math.min(count, 4); i++) {
-    paths += `<path d="M${STROKE_X[i] + STROKE_LEAN[i]} ${STROKE_TOP[i]} L${STROKE_X[i] - STROKE_LEAN[i]} ${STROKE_BOTTOM[i]}"/>`;
+  // Fewer than five marks are centred in the 64x64 cell; five use the full width with the slash.
+  const n = Math.min(count, 4), shift = count >= 5 ? 0 : (4 - n) * 6;
+  for (let i = 0; i < n; i++) {
+    paths += `<path d="M${STROKE_X[i] + shift + STROKE_LEAN[i]} ${STROKE_TOP[i]} L${STROKE_X[i] + shift - STROKE_LEAN[i]} ${STROKE_BOTTOM[i]}"/>`;
   }
-  if (count >= 5) paths += '<path d="M4 47 L60 15"/>';
+  if (count >= 5) paths += '<path d="M8 47 L62 15"/>';
   return `<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" filter="url(#chalk-rough)">${paths}</g></svg>`;
 }
 

@@ -18,13 +18,13 @@ body.no-fx #fx{display:none}
 #crosshair i:nth-child(3){top:calc(50% - 1px);left:0;height:2px;width:8px}
 #crosshair i:nth-child(4){top:calc(50% - 1px);right:0;height:2px;width:8px}
 #chalk{position:fixed;inset:0;pointer-events:none;z-index:3}
-.chalk-group{position:absolute;width:calc(var(--u) * 64);height:calc(var(--u) * 64);color:#360000;opacity:0;white-space:nowrap}
+.chalk-group{position:absolute;filter:drop-shadow(0 0 1px #000);width:calc(var(--u) * 64);height:calc(var(--u) * 64);color:#360000;opacity:0;white-space:nowrap}
 .chalk-group svg{display:block;width:100%;height:100%;overflow:visible}
 .chalk-num{display:block;font-family:Impact,'Arial Narrow',var(--hud-font);font-weight:900;font-size:calc(var(--u) * 58);line-height:calc(var(--u) * 64);letter-spacing:calc(var(--u) * -1);filter:url(#chalk-rough)}
 #chalk-label{position:absolute;left:50%;bottom:calc(var(--u) * 265);transform:translateX(-50%);font-family:Impact,'Arial Narrow',var(--hud-font);font-size:calc(var(--u) * 44);font-weight:900;letter-spacing:calc(var(--u) * 2);color:#fff;opacity:0;filter:url(#chalk-rough)}
 #perks{position:fixed;left:0;bottom:calc(var(--u) * 70);display:flex;gap:calc(var(--u) * 6);z-index:3;pointer-events:none}
 #perks img{width:calc(var(--u) * 24);height:calc(var(--u) * 24);display:block}
-#player-panel{position:fixed;left:calc(var(--u) * 6);bottom:calc(var(--u) * 94);z-index:3;pointer-events:none}
+#player-panel{position:fixed;left:calc(var(--u) * 6);bottom:calc(var(--u) * 102);z-index:3;pointer-events:none}
 .points{position:relative;display:inline-flex;align-items:center;min-width:calc(var(--u) * 92);height:calc(var(--u) * 28);padding:0 calc(var(--u) * 18) 0 calc(var(--u) * 10);isolation:isolate}
 .points::before{content:'';position:absolute;inset:-25% -8%;z-index:-1;background:#000;opacity:.55;-webkit-mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat;mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat}
 #points{font-weight:700;font-size:calc(var(--u) * 24);color:#fff;text-shadow:0 1px 2px #000}
