@@ -10,6 +10,7 @@ import { Powerups } from './powerups.js';
 import { PerkDrink } from './perk-drink.js';
 import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
+import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt } from './hud.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
@@ -18,6 +19,8 @@ import { GradePass } from './grade.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from './vision.js';
 
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
+const chalk=new ChalkHud();let lastPoints=null,perkKey='';
+const perkIcons={specialty_quickrevive:'specialty_quickrevive_zombies',specialty_fastreload:'specialty_fastreload_zombies',specialty_rof:'specialty_doubletap_zombies',specialty_armorvest:'specialty_juggernaut_zombies'};
 const profile=configureKinoAssets();
 audio.maxBufferBytes=profile.mobile?16*1024*1024:Infinity;audio.preload=!profile.mobile;
 const gradeOn=!profile.mobile&&!/[?&]grade=0\b/.test(location.search);
@@ -119,7 +122,7 @@ function setActive(value){
   active=!!value&&ready&&session.phase!=='gameover';$('menu').hidden=active;document.body.classList.toggle('menu-open',!active);keys.clear();primary=false;primaryPressed=false;ads=false;reloadShot=false;
   mousePrimary=mouseAim=false;touchControls.reset();touchControls.setEnabled(active&&session.phase!=='reviving',active);
   if(active&&audio.ctx)audio.start();else if(!active)audio.pause();
-  if(active){if(!started){started=true;announce('Round 1','SURVIVE');audio.play('round');}else if(session.phase==='preparing')announce('Round '+session.round,'PREPARE YOURSELF');}
+  if(active){if(!started){started=true;audio.play('round');}}
   else if(started&&session.phase!=='gameover'){$('start').innerHTML='RESUME GAME <span>→</span>';$('restart').hidden=false;$('menu-status').textContent='Paused · Round '+session.round;}
 }
 function start(){if(!ready||contextLost)return;if(session.phase==='gameover')reset();audio.start();warmViewAudio();if(touchControls.mode){setActive(true);return;}renderer.domElement.requestPointerLock?.()?.catch(e=>toast('Click the game to capture the mouse'));}
@@ -159,7 +162,7 @@ function damage(n){
   if(!session.drinking)perkDrink?.stop();
   if(session.phase==='gameover'){
     primary=false;ads=false;setActive(false);document.exitPointerLock?.();$('start').innerHTML='TRY AGAIN <span>→</span>';$('restart').hidden=true;
-    $('menu-status').textContent='You survived '+session.round+' rounds';$('results').hidden=false;$('results').textContent=session.kills+' kills · '+session.headshots+' headshots · '+Math.floor(session.time/60)+'m '+Math.floor(session.time%60)+'s';
+    $('menu-status').textContent='GAME OVER · You survived '+session.round+(session.round===1?' Round':' Rounds');$('results').hidden=false;$('results').textContent=session.kills+' kills · '+session.headshots+' headshots · '+Math.floor(session.time/60)+'m '+Math.floor(session.time%60)+'s';
     try{const best=Math.max(session.round,+(localStorage.getItem('kino.best')||0));localStorage.setItem('kino.best',String(best));}catch{}
   }else if(session.phase==='reviving')announce('A second chance','QUICK REVIVE',4);
 }
@@ -301,7 +304,7 @@ function interact(){
     if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id);return true;
   }
   if(t==='use_elec_switch'&&!session.power){
-    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=1.7;announce('Power restored','THE SHOW GOES ON');audio.play('round');return true;
+    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=1.7;audio.play('round');return true;
   }
   if(t==='treasure_chest_use'){
     if(mysteryBox.at(e)){if(session.pack?.weapon===session.weapon)return false;const weapon=mysteryBox.take(e);if(!weapon)return false;if(weapon==='zombie_cymbal_monkey'){session.giveMonkeys();toast('Monkey Bombs · X to throw');}else{session.giveWeapon(weapon);equipView();toast(data.weapons[weapon].name);}return true;}
@@ -333,7 +336,7 @@ function reset(){
   features?.reset();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
-  started=false;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=1.2;view.currentId=null;equipView();$('results').hidden=true;$('menu-status').textContent=touchControls.mode?'Tap to start':'Click to capture the mouse';
+  started=false;chalk.reset();lastPoints=null;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=1.2;view.currentId=null;equipView();$('results').hidden=true;$('menu-status').textContent=touchControls.mode?'Tap to start':'Click to capture the mouse';
 }
 function returnToLobby(){
   const dest=data.entities.find(e=>e.targetname==='theater_teleport_player0');player.setPosition(vector(dest.position));camera.rotation.set(0,dest.yaw-Math.PI/2,0);cooldownUntil=session.time+90;flashUntil=session.time+.8;
@@ -362,7 +365,7 @@ function update(dt){
       enemies.update(dt,player.getFeetPosition());
       features.update(dt);
       repairLeft=Math.max(0,repairLeft-dt);findPrompt();if((keys.has('KeyF')||keys.has('KeyE')||touch.use)&&prompt?.barrier)repair(prompt.barrier);
-      if(session.round!==lastRound||session.phase!==lastPhase){if(session.phase==='fighting'){announce(session.dogRound?'Fetch their souls':'Round '+session.round,session.dogRound?'HELLHOUNDS':'SURVIVE');audio.play(session.dogRound?'dog_round':'round');if(session.dogRound)audio.play('dog_announce');}else if(session.phase==='preparing'&&session.round>1){announce('Round survived','RELOAD. REBUILD. PREPARE.');audio.play('round_end');}lastRound=session.round;lastPhase=session.phase;}
+      if(session.round!==lastRound||session.phase!==lastPhase){if(session.phase==='fighting'){audio.play(session.dogRound?'dog_round':'round');if(session.dogRound)audio.play('dog_announce');}else if(session.phase==='preparing'&&session.round>1){audio.play('round_end');}lastRound=session.round;lastPhase=session.phase;}
       mysteryBox.update(dt);
       if(session.teleporter==='linking'&&session.time>linkUntil){session.teleporter='unlinked';toast('Teleporter link timed out');}
       if(teleportPending&&session.time>=teleportPending){teleportPending=0;const dest=data.entities.find(e=>e.targetname==='projroom_teleport_player0');player.setPosition(vector(dest.position));returnAt=session.time+30;session.teleporter='cooldown';flashUntil=session.time+.8;toast('Projection room · 30 seconds',4);}
@@ -391,17 +394,24 @@ function update(dt){
 }
 function hud(){
   const s=session,w=s.weapon;
-  $('round').textContent=s.round<=5?'I'.repeat(s.round):String(s.round);$('remaining').textContent=s.phase==='preparing'?'STARTS IN '+Math.max(0,Math.ceil(s.countdown)):(s.total-s.killed)+' REMAINING';
-  $('points').textContent=s.points.toLocaleString();$('mag').textContent=s.weaponUnavailable?'—':w.mag;$('reserve').textContent=s.weaponUnavailable?'—':w.reserve;$('weapon-name').textContent=s.weaponUnavailable?(s.pack?'Weapon in Pack-a-Punch':'No weapon'):s.def.name;$('grenades').textContent='G · '+s.grenades+' GRENADES'+(s.claymoresOwned?'  |  4 · '+s.claymores+' CLAYMORES':'')+(s.monkeysOwned?'  |  X · '+s.monkeys+' MONKEYS':'');$('reload-label').textContent=s.weaponUnavailable?'':s.reloadLeft>0?'RELOADING':w.mag===0?'R TO RELOAD':s.weapon.upgraded&&data.weapons[w.id].upgrade?.attachment?'5 · SWITCH ATTACHMENT':'';
-  if(touchControls.mode){$('grenades').textContent=$('grenades').textContent.replace('G · ','').replace('4 · ','').replace('X · ','');$('reload-label').textContent=$('reload-label').textContent.replace('R TO RELOAD','TAP RELOAD').replace('5 · SWITCH ATTACHMENT','TAP ALT FIRE');}
-  $('health-fill').style.width=(100*s.health/s.maxHealth)+'%';$('health-label').textContent=Math.ceil(s.health)+' / '+s.maxHealth;
+  chalk.update(s,started);
+  if(lastPoints===null||s.points===0&&lastPoints>0&&s.phase==='gameover')lastPoints=s.points;
+  if(s.points!==lastPoints){spawnScorePopup($('score-popups'),s.points-lastPoints);lastPoints=s.points;}
+  $('points').textContent=String(s.points);
+  const unavailable=s.weaponUnavailable,cap=s.def.magSize||s.def.clip||s.def.ammoClip||s.def.mag||8;
+  $('mag').textContent=unavailable?'—':w.mag;$('reserve').textContent=unavailable?'—':w.reserve;
+  $('mag').classList.toggle('low',!unavailable&&w.mag<=Math.floor(cap/3));
+  $('grenade-count').textContent=s.grenades;
+  $('claymore').hidden=!s.claymoresOwned;$('claymore-count').textContent=s.claymores;
+  $('monkey').hidden=!s.monkeysOwned;$('monkey-count').textContent=s.monkeys;
+  $('reload-label').textContent=!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'';
   $('hurt').style.opacity=s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0;$('hitmarker').style.opacity=hitUntil>s.time?1:0;$('flash').style.opacity=Math.max(0,flashUntil-s.time);
-  $('prompt').innerHTML=active&&promptText?(promptText==='Barricade secured'?promptText:touchControls.mode?'<kbd>USE</kbd> '+promptText.replace('Hold F','Hold USE'):'<kbd>F</kbd> '+promptText):'';
+  $('prompt').textContent=active&&promptText?bo1Prompt(promptText,touchControls.mode):'';
   if(toastUntil<s.time)$('toast').textContent='';if(announcementUntil<s.time)$('announcement').style.opacity=0;
-  const perkHtml=[...s.perks].map(id=>`<span class="perk" title="${perkInfo[id].name}" style="background:${perkInfo[id].color}">${perkInfo[id].icon}</span>`).join('');if($('perks').innerHTML!==perkHtml)$('perks').innerHTML=perkHtml;
-  const effectHtml=Object.entries(s.effects).filter(([k,t])=>t>s.time&&powerupNames[k]).map(([k,t])=>`<span class="powerup-timer ${t-s.time<5&&Math.floor(s.time*4)%2?'expiring':''}"><img src="${data.powerups[k].icon}" alt="${powerupNames[k]}"><span>${Math.ceil(t-s.time)}s</span></span>`).join('')+(returnAt?'<span>RETURN IN '+Math.ceil(returnAt-s.time)+'</span>':'');if($('effects').innerHTML!==effectHtml)$('effects').innerHTML=effectHtml;
-  $('location').textContent=features.events.room?'Hidden room · '+Math.max(0,Math.ceil(features.events.roomUntil-s.time))+'s':returnAt?'Projection room':zoneNames[world.zoneAt(player.getFeetPosition().add(new THREE.Vector3(0,35,0)))]??'Kino der Toten';
-  $('objective').textContent=features.events.carried?'Film reel carried · return to the projector':features.events.installed.size?'Film reels projected · '+features.events.installed.size+' / 3':!s.power?'Open the theater and restore power':s.teleporter==='unlinked'?'Link the stage teleporter and lobby pad':s.teleporter==='linking'?'Activate the lobby pad':s.teleporter==='linked'?'Teleporter ready · return to the stage':'';
+  const nextPerkKey=[...s.perks].join();if(nextPerkKey!==perkKey){perkKey=nextPerkKey;$('perks').innerHTML=[...s.perks].filter(id=>perkIcons[id]).map(id=>`<img alt="${perkInfo[id].name}" src="textures/${perkIcons[id]}.png">`).join('');}
+  const nowSeconds=performance.now()/1000;
+  for(const k of ['double_points','insta_kill','fire_sale']){const left=(s.effects[k]??0)-s.time;$('pu-'+k).hidden=!(left>0&&powerupVisible(left,nowSeconds));}
+  $('return-timer').textContent=returnAt?Math.ceil(returnAt-s.time):'';
   if(debugVisible)$('debug').textContent=`${fps} FPS · ${renderer.info.render.calls} calls\n${camera.position.toArray().map(v=>v.toFixed(1)).join(', ')}\n${enemies.list.length} enemies · ${world.navDisabled.size} blocked polygons`;
 }
 

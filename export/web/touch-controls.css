@@ -76,28 +76,17 @@ body.touch-mode .menu-content, body.touch-mode #menu .panel { margin: auto; flex
 body.touch-mode #menu button, body.touch-mode #menu a { min-height: 44px; touch-action: manipulation; }
 body.touch-mode #menu a { display: inline-flex; align-items: center; }
 body.touch-mode #start, body.touch-mode #restart, body.touch-mode #loading { max-width: 100%; }
-body.touch-mode .menu-controls, body.touch-mode .menu-side, body.touch-mode .controls, body.touch-mode #controls-hint, body.touch-mode .hint { display: none; }
-body.touch-mode #top { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); max-width: 22%; font-size: 8px; letter-spacing: 1px; pointer-events: none; }
-body.touch-mode #location { font-size: 13px; margin-top: 5px; }
-body.touch-mode #round-panel { top: 70px; left: 12px; bottom: auto; pointer-events: none; }
-body.touch-mode #round { font-size: 25px; }
-body.touch-mode #remaining { font-size: 8px; }
+body.touch-mode .menu-controls, body.touch-mode .menu-side, body.touch-mode .controls, body.touch-mode .hint { display: none; }
 body.touch-mode #player-panel { top: 68px; left: 104px; bottom: auto; min-width: 0; pointer-events: none; }
 body.touch-mode .points { font-size: 22px; }
-body.touch-mode .health-track { width: 90px; margin-top: 5px; }
 body.touch-mode #weapon-panel { top: 65px; right: 12px; bottom: auto; max-width: 180px; pointer-events: none; }
-body.touch-mode #weapon-name { font-size: 10px; }
 body.touch-mode #ammo { margin-top: 3px; gap: 7px; }
 body.touch-mode #mag { font-size: 28px; }
-body.touch-mode #grenades { font-size: 8px; letter-spacing: .3px; }
-body.touch-mode #objective { top: 130px; left: 12px; max-width: 30%; font-size: 9px; }
 body.touch-mode #prompt { top: 48%; left: 50%; width: min(340px, 82%); transform: translateX(-50%); font-size: 12px; pointer-events: none; }
 body.touch-mode #toast, body.touch-mode #notice { top: 34%; font-size: 12px; width: 80%; text-align: center; pointer-events: none; }
 body.touch-mode #notice { left: 10%; }
 body.touch-mode #announcement { top: 28%; min-width: 0; width: 80%; }
 body.touch-mode #announcement-title { font-size: 25px; }
-body.touch-mode #effects { bottom: auto; top: 155px; font-size: 10px; pointer-events: none; }
-body.touch-mode .powerup-timer img { width: 25px; height: 25px; }
 body.touch-mode .location { top: 12px; left: 12px; max-width: 23%; }
 body.touch-mode .location .eyebrow { font-size: 8px; }
 body.touch-mode .location strong { font-size: 13px; }
@@ -141,17 +130,13 @@ body.touch-mode #journal p:last-child { font-size: 10px; }
   .touch-use { right: calc(var(--touch-right) + 66px); bottom: calc(var(--touch-bottom) + 224px); }
   .touch-melee { right: var(--touch-right); bottom: calc(var(--touch-bottom) + 253px); }
   .touch-toolbar { top: max(64px, calc(env(safe-area-inset-top) + 56px)); width: min(292px, 96%); flex-wrap: wrap; justify-content: center; }
-  body.touch-mode #top, body.touch-mode .location { max-width: 76%; }
-  body.touch-mode #round-panel, body.touch-mode .round-display { top: 163px; }
   body.touch-mode #player-panel { top: 163px; }
   body.touch-mode #weapon-panel { top: 225px; }
-  body.touch-mode #objective { top: 225px; max-width: 42%; }
   body.touch-mode .vitals { top: 200px; }
   body.touch-mode .systems { top: 163px; }
   body.touch-mode .ammunition { top: 210px; }
   body.touch-mode #hud #perks { top: 260px; left: 12px; }
   body.touch-mode #equipment { top: 280px; }
-  body.touch-mode #effects { top: 310px; }
   body.touch-mode #announcement { top: 29%; }
   body.touch-mode #journal { top: 158px; }
 }
@@ -161,6 +146,12 @@ body.touch-mode #journal p:last-child { font-size: 10px; }
   body.touch-mode .ammunition { top: 194px; }
   body.touch-mode #equipment { top: 235px; max-width: 120px; }
   body.touch-mode #notice, body.touch-mode #toast { top: 40%; font-size: 10px; }
-  body.touch-mode #effects { top: 240px; }
 }
 
+
+/* BO1 HUD on touch screens: chalk, score and perks sit above the move stick; ammo clears the fire buttons. */
+body.touch-mode #chalk{--u:calc(100dvh / 760);transform:translateY(calc(-1 * max(150px, 28dvh)))}
+body.touch-mode #perks{bottom:calc(var(--u) * 70 + max(150px, 28dvh)) !important}
+body.touch-mode #player-panel{bottom:calc(var(--u) * 94 + max(150px, 28dvh))}
+body.touch-mode #weapon-panel{top:60px;bottom:auto;right:12px}
+body.touch-mode #effects{bottom:calc(var(--u) * 5 + 8px)}
