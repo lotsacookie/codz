@@ -48,6 +48,9 @@ device profile, so the game makes one request instead of ~1400:
   upload it next to `index.html` (the game requests `asset-pack/kino-<profile>.pack`). `npm run verify:pack` compares
   the packs with the files on disk and fails if they are stale.
 * `?pack=0` skips the pack and loads files individually, for before/after comparisons.
+* No computer needed: the **Build asset pack** workflow (GitHub → Actions → Build asset pack → Run workflow) pulls the
+  LFS media, builds and verifies both packs, and attaches them, with a `SHA256SUMS` file, to the `asset-pack` release.
+  Download them from the release page, then host them in `asset-pack/` next to `index.html`.
 
 ## Optional: smaller downloads
 `node .tools/compress-assets.mjs` writes `*.bin.gz` plus `asset-manifest.json`. Add
