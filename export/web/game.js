@@ -428,7 +428,7 @@ Object.assign(kino.debug,{
   setRound:n=>{enemies.reset();while(session.round<n)session.nextRound();session.countdown=0;session.spawned=0;session.killed=0;},
 });
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);byteProgress=true;await world.load(progress);byteProgress=false;
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack'));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);

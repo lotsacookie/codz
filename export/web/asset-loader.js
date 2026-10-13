@@ -1,3 +1,5 @@
+import { parsePack } from './asset-pack.js';
+
 const POINTER = /^version https:\/\/git-lfs\.github\.com\/spec\/v1\r?\noid sha256:([0-9a-f]{64})\r?\nsize (\d+)/;
 const MAX_POINTER_BYTES = 512;
 
@@ -95,6 +97,7 @@ export class AssetLoader {
     this.stallMs = options.stallMs ?? 20000;
     this.backoffMs = options.backoffMs ?? 400;
     this.manifest = options.manifest ?? null;
+    this.pack = null;
     this.files = new Map();
     this.listeners = new Set();
     this.blobUrls = new Map();
@@ -164,10 +167,38 @@ export class AssetLoader {
     } catch { return true; }
   }
 
+  packKey(url) {
+    const rel = this.rel(url);
+    if (rel == null) return null;
+    try { return decodeURIComponent(rel); } catch { return rel; }
+  }
+
+  async loadPack(path) {
+    const url = this.abs(path);
+    try {
+      const { bytes } = await this.getBytes(url);
+      this.pack = parsePack(bytes);
+      return true;
+    } catch (error) {
+      this.pack = null;
+      this.files.delete(url);
+      try { await (await this.openCache())?.delete(url); } catch {}
+      console.warn(`Asset pack unavailable, loading files individually: ${error.message}`);
+      return false;
+    }
+  }
+
   async getBytes(url, signal, into, { stallMs = this.stallMs, retries = this.retries } = {}) {
+    const packed = this.pack?.get(this.packKey(url));
+    if (packed) {
+      if (!into) return { bytes: packed, finalUrl: url };
+      if (into.offset + packed.byteLength > into.buffer.byteLength) throw new Error(`size mismatch: ${url} is larger than expected`);
+      into.buffer.set(packed, into.offset);
+      return { bytes: into.buffer.subarray(into.offset, into.offset + packed.byteLength), finalUrl: url };
+    }
     const entry = this.files.get(url) ?? this.track(url);
     entry.failed = false;
-    const bulk = /\.(bin|gz|glb|gltf|wasm)(?:[?#].*)?$/i.test(url);
+    const bulk = /\.(bin|gz|glb|gltf|wasm|pack)(?:[?#].*)?$/i.test(url);
     const cached = bulk ? await this.cacheGet(url) : null;
     if (cached && await this.stillFresh(url, cached.byteLength)) {
       entry.got = entry.total = cached.byteLength; entry.done = true; entry.cached = true;

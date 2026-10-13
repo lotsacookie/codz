@@ -24,6 +24,8 @@
     "start": "node .tools/serve.mjs 5173",
     "start:mobile": "node .tools/serve.mjs 5184 --lan",
     "build:assets": "py -3.11 .tools/build_game_assets.py",
+    "build:pack": "node .tools/build-asset-pack.mjs",
+    "verify:pack": "node .tools/build-asset-pack.mjs --verify",
     "build:world": "py -3.11 .tools/compose_scene_t5.py",
     "build:audio": "py -3.11 .tools/extract_audio.py",
     "bake": "node .tools/bake-world.mjs",

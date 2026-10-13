@@ -34,6 +34,21 @@ game at a host that has them:
 On `<user>.github.io/<repo>/` the loader also tries `media.githubusercontent.com/media/<user>/<repo>/main/export/web/`
 (best effort; requires that host to allow cross-origin reads).
 
+## Asset pack: one download for textures, models and animations
+Kino requests ~590 textures, 137 models and 676 animation files. `npm run build:pack` bundles them into one file per
+device profile, so the game makes one request instead of ~1400:
+
+* `export/web/asset-pack/kino-desktop.pack` (~166 MB) and `kino-mobile.pack` (~85 MB, uses the `textures-mobile` images).
+* The loader fetches the pack with the normal resilient downloader (byte progress, retries, stall detection, Cache
+  Storage, LFS-pointer detection), then serves every texture, model and animation from memory. Anything not in the pack,
+  or any pack that is missing, truncated or an LFS pointer, falls back to the individual files, so a bad pack cannot
+  break the game.
+* The builder refuses to pack Git LFS pointers or missing files. Run `git lfs pull` first.
+* The pack is generated, not committed (`.gitignore`). Rebuild it whenever a texture, model or animation changes, and
+  upload it next to `index.html` (the game requests `asset-pack/kino-<profile>.pack`). `npm run verify:pack` compares
+  the packs with the files on disk and fails if they are stale.
+* `?pack=0` skips the pack and loads files individually, for before/after comparisons.
+
 ## Optional: smaller downloads
 `node .tools/compress-assets.mjs` writes `*.bin.gz` plus `asset-manifest.json`. Add
 `<meta name="kino-asset-manifest" content="asset-manifest.json">` to `index.html` to use them. Check the printed ratios first.
