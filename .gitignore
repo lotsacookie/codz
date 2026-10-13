@@ -20,8 +20,6 @@
 /artifacts/*
 !/artifacts/social-preview/
 
-/export/web/asset-pack/
-
 # Local tools, credentials, dependencies, caches, and generated reports.
 node_modules/
 __pycache__/

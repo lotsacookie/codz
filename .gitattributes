@@ -13,6 +13,7 @@
 # Meshes and collision data belong in Git LFS.
 *.bin filter=lfs diff=lfs merge=lfs -text
 *.glb filter=lfs diff=lfs merge=lfs -text
+*.pack filter=lfs diff=lfs merge=lfs -text
 
 # Additional large media assets; keep smaller files directly in Git.
 "export/web/ascension/textures/~-gbunker_door01_col.png" filter=lfs diff=lfs merge=lfs -text

@@ -2,6 +2,17 @@ name: Build asset pack
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - export/web/textures/**
+      - export/web/textures-mobile/**
+      - export/web/models/**
+      - export/web/animations/**
+      - export/web/kino.gltf
+      - export/web/game-data.json
+      - export/web/asset-pack.js
+      - .tools/build-asset-pack.mjs
 
 permissions:
   contents: write
@@ -12,10 +23,10 @@ concurrency:
 
 env:
   LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*
-  RELEASE_TAG: asset-pack
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -46,16 +57,16 @@ jobs:
       - name: Verify packs
         run: node .tools/build-asset-pack.mjs --verify
 
-      - name: Publish to release
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Commit packs
         run: |
-          cd export/web/asset-pack
-          sha256sum kino-desktop.pack kino-mobile.pack > SHA256SUMS
-          notes="Built from ${GITHUB_SHA} (workflow run ${GITHUB_RUN_ID}). Put both .pack files in an asset-pack/ folder next to index.html."
-          if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
-            gh release edit "$RELEASE_TAG" --notes "$notes"
-            gh release upload "$RELEASE_TAG" kino-desktop.pack kino-mobile.pack SHA256SUMS --clobber
-          else
-            gh release create "$RELEASE_TAG" kino-desktop.pack kino-mobile.pack SHA256SUMS --target "$GITHUB_SHA" --title "Kino asset pack" --notes "$notes" --latest=false
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git lfs install --local
+          git add export/web/asset-pack/kino-desktop.pack export/web/asset-pack/kino-mobile.pack
+          if git diff --cached --quiet; then
+            echo "Asset packs are already up to date."
+            exit 0
           fi
+          git commit -m "Update asset packs from ${GITHUB_SHA::7}"
+          git pull --rebase origin main
+          git push origin HEAD:main

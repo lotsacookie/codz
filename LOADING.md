@@ -44,13 +44,17 @@ device profile, so the game makes one request instead of ~1400:
   or any pack that is missing, truncated or an LFS pointer, falls back to the individual files, so a bad pack cannot
   break the game.
 * The builder refuses to pack Git LFS pointers or missing files. Run `git lfs pull` first.
-* The pack is generated, not committed (`.gitignore`). Rebuild it whenever a texture, model or animation changes, and
-  upload it next to `index.html` (the game requests `asset-pack/kino-<profile>.pack`). `npm run verify:pack` compares
-  the packs with the files on disk and fails if they are stale.
+* The packs are committed to `export/web/asset-pack/` through Git LFS (`*.pack` in `.gitattributes`), so they are
+  served from the same place as `index.html` and the other LFS files (the game requests
+  `asset-pack/kino-<profile>.pack`). Deploy with the LFS files pulled, as for `kino.bin`.
+* The builder is deterministic: unchanged inputs give byte-identical packs, so a rebuild with nothing new commits
+  nothing. `npm run verify:pack` compares the packs with the files on disk and fails if they are stale.
+* No computer needed: the **Build asset pack** workflow rebuilds, verifies and commits both packs to `main`. It runs
+  automatically when a push to `main` changes textures, models, animations, `kino.gltf`, `game-data.json` or the pack
+  tooling, and manually from GitHub → Actions → Build asset pack → Run workflow.
+* Every changed pack adds its full size (~250 MB for both) to the repository's Git LFS storage, and the old versions stay
+  there. Check the LFS quota before rebuilding often.
 * `?pack=0` skips the pack and loads files individually, for before/after comparisons.
-* No computer needed: the **Build asset pack** workflow (GitHub → Actions → Build asset pack → Run workflow) pulls the
-  LFS media, builds and verifies both packs, and attaches them, with a `SHA256SUMS` file, to the `asset-pack` release.
-  Download them from the release page, then host them in `asset-pack/` next to `index.html`.
 
 ## Optional: smaller downloads
 `node .tools/compress-assets.mjs` writes `*.bin.gz` plus `asset-manifest.json`. Add
