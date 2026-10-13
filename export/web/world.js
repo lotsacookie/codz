@@ -40,6 +40,7 @@ export class World {
     const moving=[];
     gltf.scene.traverse(o=>{if(o.userData?.collisionOnly)o.visible=false;if(o.userData?.dynamicBrush){moving.push(o);this.entities.set(o.userData.entityId,o);}});
     for(const o of moving){this.scene.attach(o);if(o.userData.targetname==='theater_extracam_screen')o.visible=false;}
+    if(runtimeProfile.shadows)gltf.scene.traverse(o=>{if(o.isMesh&&!o.userData?.collisionOnly){o.castShadow=true;o.receiveShadow=true;}});
     this.optimization=optimizeStaticScene(gltf.scene,{cellSize:768});
     const nav=importNavMesh(new Uint8Array(bytes));this.nav=nav.navMesh;this.query=new NavMeshQuery(this.nav,{maxNodes:8192});this.query.defaultQueryHalfExtents={x:70,y:100,z:70};
     progress('Placing machines and barricades',65);

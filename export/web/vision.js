@@ -16,6 +16,12 @@ export const THEATER_FOG = Object.freeze({
   halfDist: 2332.79
 });
 
+export const THEATER_BLOOM = Object.freeze({
+  colorScale: 0.519,
+  blurRadius: 1.75,
+  breakpoint: 0.4947
+});
+
 export const REFERENCE_TEMPERATURE = 6500;
 
 export function gradeUniforms(vision = THEATER_VISION) {

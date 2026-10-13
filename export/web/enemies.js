@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { Rig, loadModel, loadAnimation } from './animation.js';
 import { zombieHealth } from './rules.js';
-import { disposeSkeletons } from './runtime-assets.js';
+import { disposeSkeletons, runtimeProfile } from './runtime-assets.js';
 import { turnToward, steerDirection, smoothingEnabled } from './steering.js';
 
 const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
@@ -30,6 +30,7 @@ export class Enemies {
         if(mount&&anchor){head.matrixAutoUpdate=false;head.matrix.copy(anchor.matrixWorld).invert();mount.add(head);anchor.userData.animationAnchor=true;}
       }
     }
+    if(runtimeProfile.shadows)root.traverse(o=>{if(o.isMesh)o.castShadow=true;});
     root.position.copy(position??barrier.outside);this.scene.add(root);
     const rig=new Rig(root),round=this.session.round;
     const speed=kind==='dog'?230:Math.min(210,34+round*8+(id%4)*5);
