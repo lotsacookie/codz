@@ -7,7 +7,7 @@ import { loadModel } from './animation.js';
 import { censorFlags } from './flag-censorship.js';
 import { assetManager, runtimeProfile } from './runtime-assets.js';
 import { assets } from './asset-loader.js';
-import { applyAnisotropy } from './quality.js';
+import { applyAnisotropy, applyDithering } from './quality.js';
 
 export const vector=a=>new THREE.Vector3().fromArray(a);
 export const zoneNames={foyer_zone:'Lobby',foyer2_zone:'Lobby',vip_zone:'Upper hall',crematorium_zone:'Lower hall',alleyway_zone:'Alley',dining_zone:'Speed Cola room',dressing_zone:'Dressing room',stage_zone:'Stage',theater_zone:'Theater',west_balcony_zone:'Back room'};
@@ -31,7 +31,7 @@ export class World {
     assetManager.setURLModifier(assets.urlModifier);
     const gltf=await new GLTFLoader(assetManager).loadAsync('kino.gltf');
     assets.release('kino.bin');
-    applyAnisotropy(gltf.scene,runtimeProfile.anisotropy);
+    applyAnisotropy(gltf.scene,runtimeProfile.anisotropy);if(!runtimeProfile.mobile)applyDithering(gltf.scene);
     collisionLoad??=loadCollision();
     const [collision,bytes]=await Promise.all([collisionLoad,navigation]);
     await recast;

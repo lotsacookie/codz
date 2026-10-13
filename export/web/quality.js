@@ -41,6 +41,16 @@ export function applyAnisotropy(root, level) {
   return seen.size;
 }
 
+export function applyDithering(root) {
+  let count = 0;
+  root.traverse(object => {
+    for (const material of [].concat(object.material ?? [])) {
+      if (material && 'dithering' in material && !material.dithering) { material.dithering = true; material.needsUpdate = true; count++; }
+    }
+  });
+  return count;
+}
+
 export function createPerfOverlay(search = globalThis.location?.search ?? '', doc = globalThis.document) {
   if (!/[?&]perf=1\b/.test(search) || !doc) return null;
   const el = doc.createElement('div');
