@@ -274,6 +274,7 @@ function update(dt) {
     $('effects').textContent=Object.entries(s.effects).filter(([key,time])=>time>s.time&&['double_points','insta_kill'].includes(key)).map(([key,time])=>(key==='double_points'?'Double Points':'Insta-Kill')+' '+Math.ceil(time-s.time)+'s').join(' · ');
   }
 }
+const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
 async function load() {
   const response = await fetch('moon/map-data.json');
   if (!response.ok) throw new Error('Moon data is missing. Run .tools/rebuild-moon.ps1.');
@@ -286,7 +287,9 @@ async function load() {
   const world = await loadCollisionWorld({metadataUrl: 'moon/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Moon collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)});
   const missingTextures = textureWarning(textureReport);
   if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); $('error').hidden = false; $('error').textContent = missingTextures; }
+  showStatus('Preparing Moon scene…'); await nextTask();
   collision = world; scene.add(gltf.scene); scene.updateMatrixWorld(true);
+  showStatus('Loading Moon water…'); await nextTask();
   water = await loadMoonWater(gltf.scene);
   const hazardIds=data.entities.filter(e=>['digger_hangar_blocker','digger_teleporter_blocker'].includes(e.targetname)).map(e=>e.id);
   const windowGroups=new Set(data.entities.filter(e=>e.targetname==='exterior_goal').map(e=>e.target));
@@ -306,7 +309,9 @@ async function load() {
   });
   for (const o of detach) { scene.attach(o); o.matrixAutoUpdate = true; }
   for (const id of moving) { const part = makePart(data.entities[id], objects.get(id)); if (part) {part.hazard=hazardIds.includes(id);part.window=windowIds.includes(id);part.removable=part.hazard||boardIds.includes(id);if(part.hazard)part.amount=1;parts.set(id, part);} }
+  showStatus('Optimizing Moon…'); await nextTask();
   const optimization = optimizeStaticScene(gltf.scene, {cellSize: 1024});
+  showStatus('Loading Moon navigation…'); await nextTask();
   navigation=new MoonNavigation(data);await navigation.load();navigation.setDoors(parts);
   player = new PlayerController(camera, {capsuleIntersect, rayIntersect}, {radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4});
   $('status').textContent='Loading Moon zombies and weapons…';
@@ -318,7 +323,11 @@ async function load() {
   $('status').textContent='Preparing station systems and quest…';
   features=new MoonFeatures({data,state,combat,scene,camera,player,objects,opened,parts,navigation,notice:showNotice,raycast:rayIntersect});await features.load();
   presentation=new MoonPresentation(scene,camera,features);await presentation.load();
-  relocate('area51'); water.captureReflection(renderer, scene); player.enabled = false; ready = true;setModeUi();
+  $('status').textContent='Preparing Moon graphics…'; await nextTask();
+  relocate('area51'); water.captureReflection(renderer, scene);
+  // Compile shaders in parallel behind the loading screen instead of in one long freeze on the first frame.
+  try { await Promise.race([Promise.all([renderer.compileAsync(scene, camera), combat.viewScene && renderer.compileAsync(combat.viewScene, combat.viewCamera)]), new Promise(resolve => setTimeout(resolve, 20000))]); } catch (error) { console.warn('[moon] shader precompile skipped', error); }
+  player.enabled = false; ready = true;setModeUi();
   $('status').textContent = mode==='survival'?'500 points. M1911. Reach the teleporter and survive.':'Exploration: free doors and destination shortcuts.';
   $('new-run').disabled=false;$('explore').disabled=false;
   $('start').disabled = false; document.querySelectorAll('[data-destination]').forEach(b => b.disabled = false);
@@ -333,6 +342,7 @@ renderer.setAnimationLoop(now => {
   if (active) water?.update(Math.min(.25, dt));
   // Preserve real-time timers on slower GPUs while keeping collision steps small.
   for(let remaining=Math.min(.25,dt);active&&remaining>0;){const step=Math.min(.05,remaining);update(step);remaining-=step;}
+  if(!ready){previous=now;return;}
   renderer.clear();renderer.render(scene, camera);
   if(ready&&active&&combat.enabled){renderer.clearDepth();renderer.render(combat.viewScene,combat.viewCamera);}
   frames++; frameTime += dt;

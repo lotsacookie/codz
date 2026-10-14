@@ -209,8 +209,13 @@ function stagePercent(text) {
   const mb = text.match(/(\d+)\s*\/\s*(\d+)\s*MB/i);
   const mbF = mb && +mb[2] ? Math.min(1, +mb[1] / +mb[2]) : 0;
   if (/collision/i.test(text)) return 60 + 25 * mbF;
-  if (/zombies and weapons/i.test(text)) return 88;
-  if (/station systems|quest/i.test(text)) return 94;
+  if (/Moon scene/i.test(text)) return 86;
+  if (/water/i.test(text)) return 87;
+  if (/Optimizing/i.test(text)) return 87.5;
+  if (/navigation/i.test(text)) return 88;
+  if (/zombies and weapons/i.test(text)) return 90;
+  if (/station systems|quest/i.test(text)) return 95;
+  if (/graphics/i.test(text)) return 98;
   return 4 + 56 * mbF;
 }
 
