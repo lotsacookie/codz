@@ -5,7 +5,7 @@
 import { chromium } from 'playwright-core';
 import { existsSync } from 'node:fs';
 
-const URL = process.argv[2] || 'http://localhost:5173/';
+const URL = process.argv[2] || 'http://localhost:5173/?map=kino';
 const OUT = process.argv[3] || 'artifacts/kino.png';
 
 const CANDIDATES = [

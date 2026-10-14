@@ -6,7 +6,7 @@ const root = path.resolve(import.meta.dirname, '..');
 const out = path.join(root, 'artifacts/shangri-la');
 fs.mkdirSync(out, {recursive: true});
 const savedUrl = path.join(root, 'artifacts/shangri-la-url.txt');
-const url = process.env.SHANGRI_LA_URL || (fs.existsSync(savedUrl) ? fs.readFileSync(savedUrl, 'utf8').trim() : 'http://127.0.0.1:5173/shangri-la.html');
+const url = process.env.SHANGRI_LA_URL || (fs.existsSync(savedUrl) ? fs.readFileSync(savedUrl, 'utf8').trim() : 'http://127.0.0.1:5173/?map=shangri-la');
 const executablePath = ['C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find(fs.existsSync);
 const browser = await chromium.launch({executablePath, headless: true, args: ['--enable-webgl', '--ignore-gpu-blocklist']});
 const page = await browser.newPage({viewport: {width: 1440, height: 900}});

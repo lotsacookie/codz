@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadMapGltf, settleTextures, textureWarning } from './map-assets.js';
 import { loadCollisionWorld } from './collision-world.js';
 import { PlayerController } from './player-controller.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
@@ -110,12 +110,15 @@ async function load() {
   const fill = new THREE.DirectionalLight(0xa2bbc5, .55);
   fill.position.set(.5, .3, -.7); scene.add(fill);
 
+  const showStatus = text => { status.textContent = text; };
   const manager = new THREE.LoadingManager();
-  manager.onProgress = (_url, loaded, total) => { status.textContent = `Loading Ascension… ${Math.round(100 * loaded / total)}%`; };
   manager.onError = url => errors.push(`Asset failed: ${url}`);
-  const [gltf, collider, sky] = await Promise.all([
-    new GLTFLoader(manager).loadAsync('./ascension/ascension.gltf'),
-    loadCollisionWorld({metadataUrl: './ascension/collision.json'}),
+  showStatus('Loading Ascension…');
+  const gltf = await loadMapGltf('./ascension/ascension.gltf', {label: 'Ascension', onStatus: showStatus});
+  const textureReport = await settleTextures({onStatus: showStatus});
+  showStatus('Loading Ascension collision and sky…');
+  const [collider, sky] = await Promise.all([
+    loadCollisionWorld({metadataUrl: './ascension/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Ascension collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)}),
     new THREE.CubeTextureLoader(manager).loadAsync(data.sky.faces.map(face => './ascension/' + face)),
   ]);
   if (errors.length) throw new Error(errors.join('\n'));
@@ -133,7 +136,9 @@ async function load() {
   });
   reset();
   ready = true;
-  status.hidden = true;
+  const missingTextures = textureWarning(textureReport);
+  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); status.textContent = missingTextures; }
+  status.hidden = !missingTextures;
   updateHelp();
   renderer.domElement.addEventListener('click', () => {
     if (!ready || active) return;

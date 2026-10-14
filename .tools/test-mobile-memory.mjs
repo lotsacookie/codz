@@ -31,7 +31,7 @@ const state = () => page.evaluate(() => kino.debug.getState());
 const memory = () => page.evaluate(() => kino.debug.memoryState());
 const settle = () => page.waitForTimeout(250);
 try {
-  await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'domcontentloaded', timeout: 180000 });
+  await page.goto(`http://127.0.0.1:${port}/?map=kino`, { waitUntil: 'domcontentloaded', timeout: 180000 });
   await page.waitForFunction(() => globalThis.kino?.debug.getState().ready || globalThis.kino?.debug.getState().errors.length, null, { timeout: 240000 });
   check('boots successfully', (await state()).ready);
   await page.locator('#start').tap();

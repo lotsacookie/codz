@@ -9,7 +9,7 @@ page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()
 const check=(name,passed,details=null)=>{checks.push({name,passed:!!passed,details});if(!passed)throw new Error(name+': '+JSON.stringify(details));console.log('PASS',name);};
 const snap=()=>page.evaluate(()=>moon.debug.snapshot());
 try{
-  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/moon.html',{waitUntil:'load',timeout:180000});
+  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/?map=moon',{waitUntil:'load',timeout:180000});
   await page.waitForFunction(()=>window.moon?.ready||document.querySelector('#error').textContent,null,{timeout:120000});
   check('Survival loads with native weapon rig',await page.evaluate(()=>window.moon?.combat.view.ready),await page.locator('#error').textContent());
   await page.screenshot({path:path.join(out,'menu.png')});

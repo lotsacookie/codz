@@ -13,7 +13,7 @@ page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
 page.on('response', r => { if (r.status() >= 400) failed.push(r.url() + ' ' + r.status()); });
 const check = (name, passed, details = null) => { checks.push({name, passed: !!passed, details}); if (!passed) throw new Error(name + ': ' + JSON.stringify(details)); console.log('PASS', name); };
 try {
-  await page.goto((process.env.MOON_URL??'http://127.0.0.1:5173/moon.html')+'?mode=explore', {waitUntil: 'load', timeout: 180000});
+  await page.goto((process.env.MOON_URL??'http://127.0.0.1:5173/?map=moon')+'&mode=explore', {waitUntil: 'load', timeout: 180000});
   await page.waitForFunction(() => window.moon?.ready || document.querySelector('#error')?.textContent, null, {timeout: 180000});
   check('Moon assets load', await page.evaluate(() => !!window.moon?.ready), await page.locator('#error').textContent());
   await page.screenshot({path: path.join(out, 'menu.png')});

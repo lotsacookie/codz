@@ -16,7 +16,7 @@ const entity=name=>data.entities.find(e=>e.targetname===name);
 const power=()=>use(entity('use_elec_switch'));
 async function snap(name){await page.evaluate(()=>{kino.debug.pause();document.getElementById('menu').hidden=true;document.body.classList.remove('menu-open');});await page.screenshot({path:out+'/'+name+'.png'});await page.evaluate(()=>kino.debug.resume());}
 try{
-  await page.goto(process.env.KINO_URL??'http://127.0.0.1:5173/');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');await fresh();
+  await page.goto(process.env.KINO_URL??'http://127.0.0.1:5173/?map=kino');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');await fresh();
   assert(await use(entity('claymore_purchase')));assert.equal((await state()).claymores,2);
   await page.evaluate(()=>{kino.debug.teleportPlayer([0,100,1120]);kino.debug.lookAt([0,150,800]);kino.debug.step(.5);});await page.keyboard.press('Digit4');assert.equal((await state()).claymores,1);let f=await features();assert.equal(f.mines.length,1);
   await step(1);const mine=f.mines[0];const victim=await page.evaluate(m=>kino.debug.spawnEnemy(m.position.map((x,i)=>x+m.forward[i]*55)),mine);await step(.6);f=await features();assert.equal(f.mines.length,0);assert((await state()).enemies.find(z=>z.id===victim)?.health<150||!(await state()).enemies.some(z=>z.id===victim));pass('Claymore purchase, keyboard placement, direction sensor and timed blast');

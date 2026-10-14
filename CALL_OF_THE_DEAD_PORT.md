@@ -1,7 +1,7 @@
 Call of the Dead — browser map
 ==============================
 
-Double-click **Play Call of the Dead.cmd**. It opens `/call-of-the-dead.html` on this workspace's local server, directly into the map. There is no landing page or gameplay interface.
+Double-click **Play Call of the Dead.cmd**. It opens `/?map=call-of-the-dead` on this workspace's local server, directly into the map. There is no landing page or gameplay interface.
 
 Click the map to capture the mouse. **WASD** moves, **Shift** sprints, **Space** jumps, and **Ctrl** crouches. **V** switches between walking and free flight; in flight, Space/Ctrl move up/down. **R** returns to the original beach spawn. **Esc** releases the mouse and pauses movement while keeping the map visible.
 
@@ -15,4 +15,4 @@ Run `npm run build:coast` to rebuild from the retained dumps. To extract fresh m
 
 Run `npm run test:coast` for browser verification. It starts or reuses the local server and checks direct loading, the native beach spawn, keyboard movement, jumping, crouching, cursor release/resume, flight/reset, floor collision at six additional map locations, resizing and asset errors. Reports and screenshots are in `artifacts/call-of-the-dead`. Landmark checks use controlled camera placement; they do not establish that every possible walking route matches T5.
 
-Runtime files are `export/web/call-of-the-dead.html`, `call-of-the-dead.js`, `coast-controller.js` and `export/web/coast`. `coast/provenance.json` records source hashes; `coast/composition.json` records asset coverage. Add `?debug` to expose `window.coast` for inspection.
+Runtime files are `export/web/index.html` (the shared map list), `call-of-the-dead.js`, `coast-controller.js` and `export/web/coast`. `coast/provenance.json` records source hashes; `coast/composition.json` records asset coverage. Add `?debug` to expose `window.coast` for inspection.

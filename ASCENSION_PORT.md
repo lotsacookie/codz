@@ -1,6 +1,6 @@
 # Ascension browser map
 
-Double-click **Play Ascension.cmd** to open directly into `/ascension.html`. Click the map to capture the mouse. This uses the same local server, asset composer, Three.js renderer, collision loader and movement controller as the Kino/Shangri-La ports.
+Double-click **Play Ascension.cmd** to open directly into `/?map=ascension`. Click the map to capture the mouse. This uses the same local server, asset composer, Three.js renderer, collision loader and movement controller as the Kino/Shangri-La ports.
 
 | Control | Action |
 | --- | --- |
@@ -28,6 +28,6 @@ npm run test:ascension
 
 Rebuilding uses Python 3.11/Pillow, Node.js and retained local dumps/shared Kino exports. To refresh the raw map extraction, run `.tools/rebuild-ascension.ps1 -Extract`. This invokes the same Windows OpenAssetTools exporter and patched WSL world exporter used by Kino and Shangri-La. Override the latter's path with `-PatchedUnlinker` if necessary. Original archives are unchanged.
 
-Browser files are `export/web/ascension.html`, `export/web/ascension.js` and `export/web/ascension/`. Reports and screenshots are in `artifacts/ascension/`. The browser suite verifies direct rendering, floor collision, the parked lander, movement, jump/landing, mouse look, fly mode, pausing, reset, resize and asset errors. Additional location screenshots use controlled camera positions, not physical route traversal. All 58 shared unit tests also passed.
+Browser files are `export/web/index.html` (the shared map list), `export/web/ascension.js` and `export/web/ascension/`. Reports and screenshots are in `artifacts/ascension/`. The browser suite verifies direct rendering, floor collision, the parked lander, movement, jump/landing, mouse look, fly mode, pausing, reset, resize and asset errors. Additional location screenshots use controlled camera positions, not physical route traversal. All 58 shared unit tests also passed.
 
 The launcher reuses a server only after matching this workspace's health endpoint, or starts one on a free port from 5173–5183. The current URL is saved in `artifacts/ascension-url.txt`. **Stop Ascension.cmd** stops a server recorded as started by this launcher; a reused Kino/Moon server keeps running.

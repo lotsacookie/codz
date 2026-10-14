@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $moonRoot = Split-Path -Parent $PSScriptRoot
-foreach ($moonFile in @('moon.html','moon/moon.gltf','moon/moon.bin','moon/collision.bin','moon/map-data.json','moon/combat-data.json','moon/navigation-earth.bin','moon/navigation-moon.bin','moon/navigation.json')) {
+foreach ($moonFile in @('index.html','launcher.js','moon.js','map-assets.js','moon/moon.gltf','moon/moon.bin','moon/collision.bin','moon/map-data.json','moon/combat-data.json','moon/navigation-earth.bin','moon/navigation-moon.bin','moon/navigation.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $moonRoot "export/web/$moonFile"))) {
         throw "Missing Moon asset: $moonFile. Run .tools/rebuild-moon.ps1."
     }
@@ -34,7 +34,7 @@ if ($null -eq $moonPort) {
     }
     if ($moonHealth.root -ne (Join-Path $moonRoot 'export\web')) { throw 'Moon server failed to start. See artifacts\moon-server-error.log.' }
 }
-$moonUrl = "http://127.0.0.1:$moonPort/moon.html"
+$moonUrl = "http://127.0.0.1:$moonPort/?map=moon"
 Set-Content -LiteralPath (Join-Path $moonRoot 'artifacts/moon-url.txt') -Value $moonUrl
 Write-Host "Moon Zombies is ready at $moonUrl"
 if (-not $NoBrowser) { Start-Process $moonUrl }

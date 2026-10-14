@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
 const page=await browser.newPage({viewport:{width:1000,height:600}});
 try{
- await page.goto('http://127.0.0.1:5173/');await page.waitForFunction(()=>kino?.debug.getState().ready);
+ await page.goto('http://127.0.0.1:5173/?map=kino');await page.waitForFunction(()=>kino?.debug.getState().ready);
  const result=await page.evaluate(async()=>{
   const THREE=await import('three'),{MysteryBox}=await import('./mystery-box.js'),data=await fetch('game-data.json').then(r=>r.json());
   const scene=new THREE.Scene();scene.background=new THREE.Color(0x1c2125);scene.add(new THREE.HemisphereLight(0xffffff,0x4a4130,3));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(0,20,40);scene.add(light);

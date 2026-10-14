@@ -79,7 +79,10 @@ function textureUrl(url) {
   const resolved = new URL(url, document.baseURI);
   // Resolve smaller images before decoding; shrinking a full-size image in
   // the browser would still incur Safari's original memory spike.
-  if (runtimeProfile.mobile && resolved.origin === location.origin) resolved.pathname = resolved.pathname.replace('/textures/', '/textures-mobile/');
+  const full = new URL('textures/', document.baseURI).pathname;
+  if (runtimeProfile.mobile && resolved.origin === location.origin && resolved.pathname.startsWith(full)) {
+    resolved.pathname = new URL('textures-mobile/', document.baseURI).pathname + resolved.pathname.slice(full.length);
+  }
   return resolved.href;
 }
 

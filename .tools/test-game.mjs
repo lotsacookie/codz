@@ -7,7 +7,7 @@ const browser=await chromium.launch({executablePath,headless:true,args:['--enabl
 const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[],failed=[];
 page.on('pageerror',e=>{errors.push(String(e));console.log('PAGE ERROR',String(e));});page.on('console',m=>{if(m.type()==='error'){errors.push(m.text());console.log('CONSOLE ERROR',m.text());}});page.on('response',r=>{if(r.status()>=400)failed.push(r.url()+' '+r.status());});
 try{
- await page.goto('http://127.0.0.1:5173/',{waitUntil:'load',timeout:180000});
+ await page.goto('http://127.0.0.1:5173/?map=kino',{waitUntil:'load',timeout:180000});
  await page.waitForFunction(()=>globalThis.kino?.debug.getState().ready||globalThis.kino?.debug.getState().errors.length,null,{timeout:180000});
  const boot=await page.evaluate(()=>kino.debug.getState());if(!boot.ready)throw new Error(JSON.stringify(boot.errors));
  await page.screenshot({path:path.join(out,'menu.png')});

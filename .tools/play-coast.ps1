@@ -2,7 +2,7 @@ param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $coastRoot = Split-Path -Parent $PSScriptRoot
 $coastWeb = Join-Path $coastRoot 'export\web'
-foreach ($coastFile in @('call-of-the-dead.html','call-of-the-dead.js','coast/coast.gltf','coast/coast.bin','coast/collision.json','coast/collision.bin','coast/map-data.json','coast/sky/0.png')) {
+foreach ($coastFile in @('index.html','launcher.js','map-assets.js','call-of-the-dead.js','coast/coast.gltf','coast/coast.bin','coast/collision.json','coast/collision.bin','coast/map-data.json','coast/sky/0.png')) {
     if (-not (Test-Path -LiteralPath (Join-Path $coastWeb $coastFile))) { throw "Missing Call of the Dead asset: $coastFile. Run .tools/rebuild-coast.ps1." }
 }
 $coastPorts = 5173..5183
@@ -34,7 +34,7 @@ if ($null -eq $coastPort) {
     }
     if (-not $coastReady) { throw 'Call of the Dead server failed to start. See artifacts\call-of-the-dead\server-error.log.' }
 }
-$coastUrl = "http://127.0.0.1:$coastPort/call-of-the-dead.html"
+$coastUrl = "http://127.0.0.1:$coastPort/?map=call-of-the-dead"
 Set-Content -LiteralPath (Join-Path $coastLogs 'url.txt') -Value $coastUrl
 Write-Host "Call of the Dead map: $coastUrl"
 if (-not $NoBrowser) { Start-Process $coastUrl }

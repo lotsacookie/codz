@@ -28,7 +28,7 @@ async function approach(kind,id=null){
 async function use(kind,id=null,hold=0){await approach(kind,id);await page.keyboard.down('KeyF');if(hold>=5){await page.waitForTimeout(150);check('Hack starts',await page.evaluate(()=>!!moon.features.hack),await page.evaluate(()=>({target:moon.debug.target()?.kind,notice:document.querySelector('#notice').textContent})));await page.waitForFunction(()=>!moon.features.hack,null,{timeout:15000});}else if(hold)await page.waitForTimeout(hold*1000);else await page.waitForTimeout(80);await page.keyboard.up('KeyF');await page.waitForTimeout(100);}
 async function prepare(){await page.evaluate(()=>{const s=moon.combat.session;s.effects.invulnerable=Infinity;s.points=100000;moon.state.equipSuit();moon.combat.enemies.reset();moon.combat.enemies.spawnDelay=1e9;moon.combat.enemies.nextAstroRound=Infinity;for(const d of moon.data.doors){s.openDoors.add(d.name);if(d.flag)s.flags.add(d.flag);moon.opened.add(d.name);}for(let i=0;i<30;i++)moon.debug.update(.05);});}
 try{
-  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/moon.html',{waitUntil:'load',timeout:180000});
+  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/?map=moon',{waitUntil:'load',timeout:180000});
   await page.waitForFunction(()=>window.moon?.ready||document.querySelector('#error').textContent,null,{timeout:180000});
   check('Complete build loads',await page.evaluate(()=>!!window.moon?.features.box),await page.locator('#error').textContent());
   await page.locator('#start').click();await page.waitForFunction(()=>moon.debug.snapshot().active);await prepare();

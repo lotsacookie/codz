@@ -82,7 +82,7 @@ try {
       await cdp.send('Input.dispatchTouchEvent', { type, touchPoints: [] });
     };
     try {
-      await page.goto(`http://127.0.0.1:${port}/${map === 'moon' ? 'moon.html' : ''}`, { waitUntil: 'load', timeout: 180000 });
+      await page.goto(`http://127.0.0.1:${port}/?map=${map}`, { waitUntil: 'load', timeout: 180000 });
       await page.waitForFunction(() => globalThis.moon?.ready || globalThis.kino?.debug.getState().ready, null, { timeout: 180000 });
       await shot('menu-landscape');
       await tap('#start', 'started');

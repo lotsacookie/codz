@@ -43,7 +43,12 @@ function includeModule(relative) {
   }
 }
 includeModule('game.js');
-for (const file of ['index.html', 'style.css', 'touch-controls.css', 'game-data.json', 'navigation.bin']) copy(file);
+for (const file of ['launcher.js', 'launcher.css', 'style.css', 'touch-controls.css', 'game-data.json', 'navigation.bin']) copy(file);
+const kinoOnlyPage = readFileSync(path.join(source, 'index.html'), 'utf8')
+  .replace(/\s*<li data-map-entry="(?!kino")[^"]*">[\s\S]*?<\/li>/g, '')
+  .replace(/\s*<template id="map-(?!kino")[^"]*">[\s\S]*?<\/template>/g, '');
+assert(kinoOnlyPage.includes('data-map="kino"') && !/data-map="(?!kino")/.test(kinoOnlyPage) && !/<template id="map-(?!kino")/.test(kinoOnlyPage), 'Staged map list must contain only Kino');
+write('index.html', kinoOnlyPage);
 for (const directory of ['animations', 'audio', 'models', 'textures', 'textures-mobile', 'vendor', 'social']) copy(directory);
 
 // glTF supports multiple buffers natively. Repack complete buffer views with

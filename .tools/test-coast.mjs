@@ -25,7 +25,7 @@ async function hold(key, milliseconds) {
 }
 try {
   const started = performance.now();
-  await page.goto(url+'?debug', {waitUntil: 'load', timeout: 180000});
+  await page.goto(url+(url.includes('?')?'&':'?')+'debug', {waitUntil: 'load', timeout: 180000});
   await page.waitForFunction(() => window.coast?.ready || document.querySelector('#error').textContent, null, {timeout: 180000});
   check('Native map, textures, sky and collision load', await page.evaluate(() => coast.ready), {milliseconds: Math.round(performance.now()-started), error: await page.locator('#error').textContent()});
   check('Map opens directly with no landing page', await page.locator('canvas').isVisible() && await page.locator('#status').isHidden() && await page.locator('button').count() === 0);

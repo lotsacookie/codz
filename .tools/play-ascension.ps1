@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $ascensionRoot = Split-Path -Parent $PSScriptRoot
-foreach ($ascensionFile in @('ascension.html','ascension.js','ascension/ascension.gltf','ascension/ascension.bin','ascension/collision.json','ascension/collision.bin','ascension/map-data.json')) {
+foreach ($ascensionFile in @('index.html','launcher.js','map-assets.js','ascension.js','ascension/ascension.gltf','ascension/ascension.bin','ascension/collision.json','ascension/collision.bin','ascension/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $ascensionRoot "export/web/$ascensionFile"))) {
         throw "Missing Ascension asset: $ascensionFile. Run npm run build:ascension."
     }
@@ -36,7 +36,7 @@ if ($null -eq $ascensionPort) {
     }
     if (-not $ascensionStarted) { throw 'Server failed to start. See artifacts\ascension-server-error.log.' }
 }
-$ascensionUrl = "http://127.0.0.1:$ascensionPort/ascension.html"
+$ascensionUrl = "http://127.0.0.1:$ascensionPort/?map=ascension"
 Set-Content -LiteralPath (Join-Path $ascensionLogs 'ascension-url.txt') -Value $ascensionUrl
 Write-Host "Ascension map is ready at $ascensionUrl"
 if (-not $NoBrowser) { Start-Process $ascensionUrl }

@@ -12,7 +12,7 @@ async function freeze(name){await page.evaluate(()=>{kino.debug.pause();document
 function pass(name,detail){checks.push({name,passed:true,detail});console.log('PASS',name);}
 async function station(predicate){const e=await page.evaluate(predicate);assert(e);await page.evaluate(p=>kino.debug.teleportPlayer(p),e.position);return e;}
 try{
- await page.goto('http://127.0.0.1:5173/');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');await fresh();
+ await page.goto('http://127.0.0.1:5173/?map=kino');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');await fresh();
  const definitions=await page.evaluate(()=>fetch('game-data.json').then(r=>r.json()));
  for(const perk of Object.keys(definitions.perkDrinks)){
   await fresh();await page.evaluate(()=>kino.debug.grantPoints(20000));await station(()=>kino.debug.getEntities().find(e=>e.targetname==='use_elec_switch'));await page.evaluate(()=>kino.debug.interact());

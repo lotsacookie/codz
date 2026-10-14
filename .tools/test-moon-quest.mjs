@@ -25,7 +25,7 @@ async function souls(all=false){const r=await page.evaluate(all=>{
   for(const tank of tanks)for(let i=0;i<25;i++){const z=c.enemies.spawn(new T.Vector3(...tank.position));c.enemies.hurt(z,z.health,false,false,'bullet');}
   return {stage:q.stage,tanks:q.tanks};},all);check(all?'Four collectors count 100 actual enemy deaths':'First collector counts 25 actual enemy deaths',r.stage===(all?'swap':'switch'),r);}
 try{
-  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/moon.html',{waitUntil:'load',timeout:180000});
+  await page.goto(process.env.MOON_URL??'http://127.0.0.1:5173/?map=moon',{waitUntil:'load',timeout:180000});
   await page.waitForFunction(()=>window.moon?.ready||document.querySelector('#error').textContent,null,{timeout:180000});
   check('Moon loads',await page.evaluate(()=>!!window.moon?.ready),await page.locator('#error').textContent());
   await page.locator('#start').click();await page.waitForFunction(()=>moon.debug.snapshot().active);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadMapGltf, settleTextures, textureWarning } from './map-assets.js';
 import { CoastController } from './coast-controller.js';
 import { loadCollisionWorld } from './collision-world.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
@@ -66,12 +66,15 @@ async function load() {
   const response = await fetch('coast/map-data.json');
   if (!response.ok) throw new Error(`Map metadata HTTP ${response.status}`);
   data = await response.json();
+  const showStatus = text => {status.textContent = text;};
   const manager = new THREE.LoadingManager();
-  manager.onProgress = (_url, loaded, total) => {status.textContent = `Loading Call of the Dead… ${Math.round(loaded/total*100)}%`;};
   manager.onError = url => errors.push(`Asset failed: ${url}`);
-  const [gltf, physics, sky, waves] = await Promise.all([
-    new GLTFLoader(manager).loadAsync('coast/coast.gltf'),
-    loadCollisionWorld({metadataUrl: 'coast/collision.json'}),
+  showStatus('Loading Call of the Dead…');
+  const gltf = await loadMapGltf('coast/coast.gltf', {label: 'Call of the Dead', onStatus: showStatus});
+  const textureReport = await settleTextures({onStatus: showStatus});
+  showStatus('Loading Call of the Dead collision and sky…');
+  const [physics, sky, waves] = await Promise.all([
+    loadCollisionWorld({metadataUrl: 'coast/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Call of the Dead collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)}),
     new THREE.CubeTextureLoader(manager).setPath('coast/').loadAsync(data.sky),
     new THREE.TextureLoader(manager).loadAsync('coast/textures/ocean_waves_bump.png'),
   ]);
@@ -119,7 +122,10 @@ async function load() {
   relocate();
   // Settle at the original spawn before requesting mouse input.
   player.setEnabled(true); for (let i = 0; i < 120; i++) player.update(1/120, {}); player.setEnabled(false);
-  ready = true; status.hidden = true;
+  ready = true;
+  const missingTextures = textureWarning(textureReport);
+  if (missingTextures) {errors.push(missingTextures); console.warn(missingTextures); status.textContent = missingTextures;}
+  status.hidden = !missingTextures;
   if (debug && query.has('landmark')) relocate(query.get('landmark'));
   renderer.setAnimationLoop(frame);
 }

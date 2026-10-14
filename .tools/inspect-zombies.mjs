@@ -5,7 +5,7 @@ const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chr
 const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[];
 page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
 try{
- await page.goto('http://127.0.0.1:5173/');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');
+ await page.goto('http://127.0.0.1:5173/?map=kino');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});await page.click('#start');
  await page.evaluate(()=>{kino.debug.setInvulnerable(true);kino.debug.step(.6);kino.debug.grantPoints(10000);});
  const perk=await page.evaluate(()=>kino.debug.getEntities().find(e=>e.script_noteworthy==='specialty_quickrevive'));
  await page.evaluate(e=>{kino.debug.teleportPlayer(e.position);kino.debug.lookAt([e.position[0],e.position[1]+45,e.position[2]-70]);kino.debug.interact();kino.debug.step(.6);kino.debug.pause();},perk);

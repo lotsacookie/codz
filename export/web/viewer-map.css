@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #252e28; }
+body { color: #fff; font: 13px/1.5 system-ui, sans-serif; }
+canvas { display: block; width: 100%; height: 100%; outline: none; }
+#status, #help, #debug { position: fixed; margin: 0; padding: 7px 11px; background: #121912b0; border-radius: 3px; pointer-events: none; }
+#status { top: 12px; left: 12px; max-width: calc(100% - 24px); white-space: pre-wrap; }
+#help { left: 50%; bottom: 14px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); text-align: center; }
+#debug { top: 12px; right: 12px; font: 12px/1.5 monospace; }
+.maps-link { position: fixed; left: 12px; bottom: 14px; z-index: 2; padding: 7px 11px; background: #121912b0; border-radius: 3px; color: #fff; text-decoration: none; }
+.maps-link:hover, .maps-link:focus-visible { background: #f3f3f1; color: #161412; outline: 0; }
+[hidden] { display: none !important; }

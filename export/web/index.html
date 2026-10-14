@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kino der Toten — Zombies</title>
+<title>Zombies — Select a map</title>
 <meta name="description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
 <link rel="canonical" href="https://kino-der-toten.pages.dev/">
 <meta property="og:type" content="website">
@@ -20,7 +20,26 @@
 <meta name="twitter:description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
 <meta name="twitter:image" content="https://kino-der-toten.pages.dev/social/kino-preview-v1.png">
 <meta name="twitter:image:alt" content="Kino der Toten: Solo Survival. Zombies emerge from the shadows of a ruined theater with red curtains and twin staircases.">
-<link rel="stylesheet" href="style.css"><link rel="icon" href="data:,"><link rel="stylesheet" href="touch-controls.css"></head><body class="menu-open"><div id="fx" aria-hidden="true"></div>
+<link rel="stylesheet" href="launcher.css"><link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/jsm/","three-mesh-bvh":"./vendor/bvh.js","@recast-navigation/core":"./vendor/recast-core.mjs","@recast-navigation/wasm":"./vendor/recast-wasm.js"}}</script>
+</head><body class="launcher-open">
+<main id="launcher">
+  <section class="launcher-panel" aria-labelledby="launcher-title">
+    <p class="launcher-eyebrow">ZOMBIES / SOLO SURVIVAL</p>
+    <h1 id="launcher-title">SELECT A MAP</h1>
+    <ul id="map-list">
+      <li data-map-entry="kino"><button type="button" data-map="kino" data-label="Kino der Toten" data-module="./game.js" data-styles="style.css touch-controls.css" data-body-class="menu-open" data-title="Kino der Toten — Zombies"><strong>Kino der Toten</strong><span>Solo survival in the ruined theater.</span></button></li>
+      <li data-map-entry="moon"><button type="button" data-map="moon" data-label="Moon" data-module="./moon.js" data-styles="moon.css touch-controls.css" data-body-class="" data-title="Moon — Zombies"><strong>Moon</strong><span>Solo survival and the Griffin Station quest.</span></button></li>
+      <li data-map-entry="shangri-la"><button type="button" data-map="shangri-la" data-label="Shangri-La" data-module="./shangri-la.js" data-styles="viewer-map.css" data-body-class="" data-title="Shangri-La — Zombies"><strong>Shangri-La</strong><span>Walk or fly through the temple and jungle.</span></button></li>
+      <li data-map-entry="ascension"><button type="button" data-map="ascension" data-label="Ascension" data-module="./ascension.js" data-styles="viewer-map.css" data-body-class="" data-title="Ascension — Zombies"><strong>Ascension</strong><span>Walk or fly through the Cosmodrome.</span></button></li>
+      <li data-map-entry="call-of-the-dead"><button type="button" data-map="call-of-the-dead" data-label="Call of the Dead" data-module="./call-of-the-dead.js" data-styles="coast.css" data-body-class="" data-title="Call of the Dead — Zombies"><strong>Call of the Dead</strong><span>Walk or fly through the shipwreck and lighthouse island.</span></button></li>
+    </ul>
+    <p id="launcher-note" role="status">Nothing is downloaded until you choose a map.</p>
+    <p id="launcher-error" role="alert" hidden></p>
+    <noscript>This game requires JavaScript and WebGL.</noscript>
+  </section>
+</main>
+<template id="map-kino"><div id="fx" aria-hidden="true"></div>
 <div id="vignette"></div><div id="hurt"></div><div id="flash"></div>
 <div id="crosshair"><i></i><i></i><i></i><i></i></div><div id="hitmarker">×</div>
 <div id="announcement"><span id="announcement-small"></span><strong id="announcement-title"></strong></div><div id="prompt"></div><div id="toast"></div>
@@ -29,5 +48,54 @@
 
 <div id="weapon-panel"><div id="ammo-block"><div id="player-panel"><div id="perks"></div><div class="points"><strong id="points">500</strong></div><div id="score-popups"></div></div><div id="ammo"><strong id="mag">8</strong><span>/</span><span id="reserve">32</span></div><div id="ammo-icons"></div><div id="reload-label"></div></div><div id="equipment"><span id="lethal"><img id="lethal-icon" alt="" src="textures/hud_us_grenade.png" onerror="this.hidden=true"><b id="grenade-count">4</b></span><span id="claymore" hidden><img alt="" src="textures/hud_claymore.png"><b id="claymore-count">0</b></span><span id="monkey" hidden><img alt="" src="textures/hud_cymbal_monkey.png"><b id="monkey-count">0</b></span></div></div>
 <div id="effects"><img class="powerup-slot" id="pu-double_points" alt="" src="textures/specialty_2x_zombies.png" hidden><img class="powerup-slot" id="pu-insta_kill" alt="" src="textures/specialty_instakill_zombies.png" hidden><img class="powerup-slot" id="pu-fire_sale" alt="" src="textures/specialty_firesale_zombies.png" hidden><span id="return-timer"></span></div><div id="debug" hidden></div>
-<section id="menu"><div class="menu-grain"></div><div class="menu-content"><h1 id="menu-title">KINO DER TOTEN</h1><div id="menu-main"><div class="menu-list"><div id="loading"><div class="load-track"><i id="load-progress"></i></div><span id="load-label">Recovering the theater…</span></div><button id="start" disabled>START GAME <span>→</span></button><button id="options" type="button">OPTIONS</button><button id="restart" class="secondary" hidden>RESTART LEVEL</button></div><p id="menu-status">Loading map and equipment</p><div id="results" hidden></div></div><div id="options-view" hidden><div class="menu-list"><div class="menu-row"><label for="look-sensitivity">LOOK SENSITIVITY</label><input id="look-sensitivity" type="range" min="0.25" max="3" step="0.05" value="1"><output id="look-sensitivity-value" for="look-sensitivity">1.00×</output></div><button id="fullscreen" type="button" hidden>FULL SCREEN</button><button id="options-back" type="button">BACK</button></div></div></div></section>
-<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/jsm/","three-mesh-bvh":"./vendor/bvh.js","@recast-navigation/core":"./vendor/recast-core.mjs","@recast-navigation/wasm":"./vendor/recast-wasm.js"}}</script><script type="module" src="game.js"></script></body></html>
+<section id="menu"><div class="menu-grain"></div><div class="menu-content"><h1 id="menu-title">KINO DER TOTEN</h1><div id="menu-main"><div class="menu-list"><div id="loading"><div class="load-track"><i id="load-progress"></i></div><span id="load-label">Recovering the theater…</span></div><button id="start" disabled>START GAME <span>→</span></button><button id="options" type="button">OPTIONS</button><button id="restart" class="secondary" hidden>RESTART LEVEL</button><a id="maps-link" class="maps-link" href="./">MAPS</a></div><p id="menu-status">Loading map and equipment</p><div id="results" hidden></div></div><div id="options-view" hidden><div class="menu-list"><div class="menu-row"><label for="look-sensitivity">LOOK SENSITIVITY</label><input id="look-sensitivity" type="range" min="0.25" max="3" step="0.05" value="1"><output id="look-sensitivity-value" for="look-sensitivity">1.00×</output></div><button id="fullscreen" type="button" hidden>FULL SCREEN</button><button id="options-back" type="button">BACK</button></div></div></div></section></template>
+<template id="map-moon"><div id="visor" hidden></div>
+  <div id="damage"></div>
+  <div id="earth-flash"></div>
+  <div id="hud" hidden>
+    <div class="location"><span class="eyebrow" id="mode-label">MOON / SOLO SURVIVAL</span><strong id="location">No Man’s Land</strong></div>
+    <div class="systems"><span id="gravity">EARTH GRAVITY</span><span id="power">POWER OFF</span><span id="suit">P.E.S. NOT ACQUIRED</span></div>
+    <div id="crosshair">+</div>
+    <div id="prompt"></div>
+    <div id="notice" role="status"></div>
+    <div id="oxygen" hidden><span>NO OXYGEN — EQUIP P.E.S.</span><progress id="air" max="15" value="15"></progress></div>
+    <div id="combat-hud">
+      <div class="round-display"><strong id="round">NO MAN’S LAND</strong><span id="remaining">REACH THE TELEPORTER</span></div>
+      <div class="vitals"><strong id="points">500</strong><span>POINTS</span><span id="health">100 / 100</span></div>
+      <div class="ammunition"><span id="weapon">M1911</span><strong id="ammo">8 / 32</strong><span id="weapon-status">G · 4 GRENADES</span></div>
+      <div id="effects"></div>
+      <div id="perks" aria-label="Equipped perks"></div>
+      <div id="equipment"></div>
+      <div id="hazard" role="status"></div>
+      <progress id="hack-progress" max="1" value="0" hidden></progress>
+      <aside id="journal" hidden><strong>GRIFFIN STATION / OBJECTIVE</strong><p id="objective"></p><p>Restore power, gather equipment from the Mystery Box, and follow the station’s clues. Tab closes this panel.</p></aside>
+    </div>
+    <div class="hint">F · Interact &nbsp; H · Hack &nbsp; Q · P.E.S. &nbsp; X · Equipment &nbsp; Tab · Objective &nbsp; Esc · Pause</div>
+    <pre id="debug" hidden></pre>
+  </div>
+  <main id="menu">
+    <section class="panel">
+      <a class="back" href="./">← All maps</a>
+      <p class="eyebrow">ZOMBIES / SOLO SURVIVAL</p>
+      <h1>MOON</h1>
+      <p class="intro">From No Man’s Land to Griffin Station.</p>
+      <p class="description">Fight your way out of No Man’s Land. Reach the Moon, equip P.E.S., and hold off the undead. Earn points for weapons and airlocks as each round grows stronger.</p>
+      <p class="preview">Solo survival and the Griffin Station quest. Restore power, acquire perks and equipment, and uncover the MPD’s secrets. Tab shows your current objective.</p>
+      <p id="status" role="status">Loading Moon…</p>
+      <button id="start" disabled>SURVIVE MOON <span>→</span></button>
+      <div class="mode-buttons"><button id="new-run" disabled>New survival run</button><button id="explore" disabled>Explore map</button></div>
+      <div id="destinations" aria-label="Exploration destinations" hidden>
+        <button data-destination="area51" disabled>No Man’s Land</button>
+        <button data-destination="receiving" disabled>Receiving Bay</button>
+        <button data-destination="power" disabled>Power / MPD</button>
+        <button data-destination="biodome" disabled>Biodome</button>
+      </div>
+      <p class="controls">WASD · Move &nbsp; Mouse · Fire / Aim &nbsp; Shift · Sprint<br>Space · Jump &nbsp; Ctrl / C · Crouch &nbsp; F / E · Interact<br>R · Reload &nbsp; V · Knife &nbsp; G · Grenade &nbsp; 1 / 2 / 3 · Weapon<br>Q · P.E.S. &nbsp; X · Gersh / QED &nbsp; B · Wave Gun mode<br>Tab · Objective &nbsp; M · Sound &nbsp; Esc · Pause &nbsp; F3 · Diagnostics</p>
+      <p id="error" role="alert" hidden></p>
+    </section>
+  </main></template>
+<template id="map-shangri-la"><p id="status" role="status">Loading Shangri-La…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
+<template id="map-ascension"><p id="status" role="status">Loading Ascension…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
+<template id="map-call-of-the-dead"><p id="status" role="status">Loading Call of the Dead…</p><p id="help">Click the map to look around · WASD move · Shift sprint · Space jump · Ctrl crouch · V fly · R return · Esc release</p><p id="error" role="alert" hidden></p><a class="maps-link" href="./">← Maps</a></template>
+<script type="module" src="launcher.js"></script>
+</body></html>

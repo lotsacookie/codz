@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 import { chromium } from 'playwright-core';
 
 const root = path.resolve(import.meta.dirname, '..');
-const url = process.env.KINO_URL ?? 'http://127.0.0.1:5190/';
+const url = process.env.KINO_URL ?? 'http://127.0.0.1:5190/?map=kino';
 const out = path.join(root, 'artifacts', 'cloudflare', process.env.KINO_URL ? 'live' : 'local');
 fs.mkdirSync(out, { recursive: true });
 let server;

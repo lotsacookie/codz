@@ -8,7 +8,7 @@ const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[],c
 fs.mkdirSync('artifacts/weapons',{recursive:true});
 page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
 try{
- await page.goto('http://127.0.0.1:5173/');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});
+ await page.goto('http://127.0.0.1:5173/?map=kino');await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});
  await page.click('#start');
  for(const [id,base]of Object.entries(data.weapons)){
   const def=upgraded?{...base,...base.upgrade}:base;

@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $shangriRoot = Split-Path -Parent $PSScriptRoot
-foreach ($shangriFile in @('shangri-la.html','shangri-la.js','shangri-la/shangri-la.gltf','shangri-la/shangri-la.bin','shangri-la/collision.json','shangri-la/collision.bin','shangri-la/map-data.json')) {
+foreach ($shangriFile in @('index.html','launcher.js','map-assets.js','shangri-la.js','shangri-la/shangri-la.gltf','shangri-la/shangri-la.bin','shangri-la/collision.json','shangri-la/collision.bin','shangri-la/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $shangriRoot "export/web/$shangriFile"))) {
         throw "Missing Shangri-La asset: $shangriFile. Run npm run build:shangri-la."
     }
@@ -36,7 +36,7 @@ if ($null -eq $shangriPort) {
     }
     if (-not $shangriStarted) { throw 'Server failed to start. See artifacts\shangri-la-server-error.log.' }
 }
-$shangriUrl = "http://127.0.0.1:$shangriPort/shangri-la.html"
+$shangriUrl = "http://127.0.0.1:$shangriPort/?map=shangri-la"
 Set-Content -LiteralPath (Join-Path $shangriLogs 'shangri-la-url.txt') -Value $shangriUrl
 Write-Host "Shangri-La map is ready at $shangriUrl"
 if (-not $NoBrowser) { Start-Process $shangriUrl }

@@ -1,6 +1,6 @@
 # Shangri-La browser map
 
-Double-click **Play Shangri-La.cmd**. It opens directly into the map at `/shangri-la.html`, using the same local server as Kino. Click the map to capture the mouse. There is no landing page or gameplay menu.
+Double-click **Play Shangri-La.cmd**. It opens directly into the map at `/?map=shangri-la`, using the same local server as Kino. Click the map to capture the mouse. There is no landing page or gameplay menu.
 
 | Control | Action |
 | --- | --- |
@@ -20,7 +20,7 @@ The port reuses Kino's `.tools/compose_scene_t5.py`, Three.js modules, `PlayerCo
 
 Like Kino, this is a browser reconstruction using the installed assets. Lighting, compound material layers, water shaders, foliage motion and particle effects—including falling water—do not reproduce the T5 renderer. Collision is baked from filtered render geometry, and free flight can reveal the original map's unfinished backs and edges. Native lightmaps and complete clipMap collision are retained as future work.
 
-Browser files are in `export/web/shangri-la.html`, `export/web/shangri-la.js` and `export/web/shangri-la/`. Original archives are unchanged. `export/web/shangri-la/provenance.json` records source fastfile hashes, counts and materials without albedo textures (water shaders, black/hidden surfaces and weapon tag placeholders).
+Browser files are in `export/web/index.html` (the shared map list), `export/web/shangri-la.js` and `export/web/shangri-la/`. Original archives are unchanged. `export/web/shangri-la/provenance.json` records source fastfile hashes, counts and materials without albedo textures (water shaders, black/hidden surfaces and weapon tag placeholders).
 
 ```powershell
 npm run build:shangri-la

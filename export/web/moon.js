@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { loadMapGltf, settleTextures, textureWarning } from './map-assets.js';
 import { PlayerController } from './player-controller.js';
 import { CollisionWorld, loadCollisionWorld } from './collision-world.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
@@ -278,8 +278,14 @@ async function load() {
   const response = await fetch('moon/map-data.json');
   if (!response.ok) throw new Error('Moon data is missing. Run .tools/rebuild-moon.ps1.');
   data = await response.json(); state = new MoonState(data.rules);
-  $('status').textContent = 'Loading lunar geometry, textures and collision…';
-  const [gltf, world] = await Promise.all([new GLTFLoader().loadAsync('moon/moon.gltf'), loadCollisionWorld({metadataUrl: 'moon/collision.json'})]);
+  const showStatus = text => { $('status').textContent = text; };
+  showStatus('Loading Moon…');
+  const gltf = await loadMapGltf('moon/moon.gltf', {label: 'Moon', onStatus: showStatus});
+  const textureReport = await settleTextures({onStatus: showStatus});
+  showStatus('Loading Moon collision…');
+  const world = await loadCollisionWorld({metadataUrl: 'moon/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Moon collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)});
+  const missingTextures = textureWarning(textureReport);
+  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); $('error').hidden = false; $('error').textContent = missingTextures; }
   collision = world; scene.add(gltf.scene); scene.updateMatrixWorld(true);
   water = await loadMoonWater(gltf.scene);
   const hazardIds=data.entities.filter(e=>['digger_hangar_blocker','digger_teleporter_blocker'].includes(e.targetname)).map(e=>e.id);

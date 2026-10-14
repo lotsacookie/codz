@@ -9,6 +9,8 @@ A browser-based Three.js reconstruction of Black Ops Zombies. Kino der Toten is 
 
 **Play online:** [Kino der Toten](https://kino-der-toten.pages.dev/). This Pages site hosts Kino only, with desktop and touch controls. Wait for the map to load, then press **Enter the Theater**. The site does not need the local launcher.
 
+**Choosing a map:** `/` is a single page with a built-in map list. Nothing for a map is downloaded until you pick it; `/?map=moon` (or `kino`, `shangri-la`, `ascension`, `call-of-the-dead`) skips the list. Each map's HUD stays hidden until the map has loaded and you start playing.
+
 > [!IMPORTANT]
 > This is an unofficial, non-commercial fan project. It is not affiliated with,
 > endorsed by, or sponsored by Activision, Treyarch, Microsoft, or the Call of
@@ -44,7 +46,7 @@ The exported assets are included in the repository. Playing requires Node.js and
 
 Kino automatically uses smaller textures and a 30 FPS limit on phones. Its renderer and sound pause when Safari is backgrounded, and a restored graphics context resumes the existing run from the pause menu. This reduces memory pressure; iOS can still discard a background tab, and a fully discarded tab does not currently restore its run. `npm run build:mobile` regenerates phone textures. The memory/rotation checks are `npm run test:mobile:memory` and `npm run test:mobile:webkit`; the latter uses Playwright's Windows WebKit port, not a physical iPhone.
 
-To play from a phone on the same Wi-Fi, double-click **Play Mobile.cmd** (or run `npm run start:mobile`) on your PC and open one of the printed phone addresses. Kino is at `/`, and Moon is at `/moon.html`, on port 5184. Keep the terminal running while playing; Ctrl+C stops the server. The maps still load their full local assets, so the first load can take time on a phone. Mobile touch and layout checks use Chromium device emulation; physical Android and iPhone performance has not been measured.
+To play from a phone on the same Wi-Fi, double-click **Play Mobile.cmd** (or run `npm run start:mobile`) on your PC and open one of the printed phone addresses. The map list is at `/`, on port 5184; pick a map there, or open `/?map=kino`, `/?map=moon`, `/?map=shangri-la`, `/?map=ascension` or `/?map=call-of-the-dead` to go straight in. Keep the terminal running while playing; Ctrl+C stops the server. The maps still load their full local assets, so the first load can take time on a phone. Mobile touch and layout checks use Chromium device emulation; physical Android and iPhone performance has not been measured.
 
 This is a playable solo reconstruction built from the original game's geometry, textures, models, animations, scripts, and weapon definitions. It implements rounds, barricades, pursuit and melee, hellhounds, Nova crawlers, points, weapons, perks, power, traps, the Mystery Box, teleporting, Pack-a-Punch, and the 115 music Easter egg. It is not yet a complete reproduction of the T5 engine. See **RECONSTRUCTION.md** for the remaining differences and source references.
 

@@ -14,7 +14,7 @@ async function fresh(){await page.evaluate(()=>{kino.debug.reset();kino.debug.se
 async function station(predicate){const e=await page.evaluate(predicate);assert(e,'interaction entity exists');await page.evaluate(p=>{kino.debug.teleportPlayer(p);kino.debug.step(.45);},e.position);return e;}
 async function use(){await page.keyboard.press('KeyF');await page.waitForTimeout(50);await page.evaluate(()=>{const s=kino.debug.getState();if(s.drinking)kino.debug.step(s.drinkLeft+.5);});return state();}
 try{
- await page.goto('http://127.0.0.1:5173/',{waitUntil:'load'});await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});
+ await page.goto('http://127.0.0.1:5173/?map=kino',{waitUntil:'load'});await page.waitForFunction(()=>kino?.debug.getState().ready,null,{timeout:120000});
  await snap('01-menu');await page.click('#start');await page.waitForFunction(()=>kino.debug.getState().active);pass('Start button captures the pointer and starts gameplay');
  await page.evaluate(()=>kino.debug.setInvulnerable(true));
  let before=await state();await page.keyboard.down('KeyD');await page.waitForTimeout(800);await page.keyboard.up('KeyD');let after=await state();

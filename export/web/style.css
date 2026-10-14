@@ -72,7 +72,7 @@ body.menu-open #effects{visibility:hidden}
 #menu .menu-list{display:flex;flex-direction:column;gap:var(--row-gap)}
 
 /* rows: loading bar, buttons and the slider row */
-#menu #loading,#menu .menu-list>button,#menu .menu-row{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:calc(var(--u) * 8);width:100%;min-height:var(--row-h);margin:0;padding:0 var(--row-pad);border:0;border-radius:0;
+#menu #loading,#menu .menu-list>button,#menu .menu-list>a.maps-link,#menu .menu-row{position:relative;text-decoration:none;display:flex;align-items:center;justify-content:flex-start;gap:calc(var(--u) * 8);width:100%;min-height:var(--row-h);margin:0;padding:0 var(--row-pad);border:0;border-radius:0;
   font-family:var(--menu-font);font-size:var(--row-font);font-weight:700;letter-spacing:.01em;text-transform:uppercase;text-align:left;line-height:1;
   background:rgba(0,0,0,.62);color:#f4f2ec;box-shadow:none;transition:background .08s,color .08s}
 #menu .menu-list>button span{display:none}
@@ -80,7 +80,7 @@ body.menu-open #effects{visibility:hidden}
 #menu .menu-list>button:disabled{color:rgba(244,242,236,.32)}
 
 /* selected row: white. The first button is selected unless another row is hovered or focused. */
-#menu .menu-list>button:hover:not(:disabled),#menu .menu-list>button:focus-visible,#menu .menu-row:hover,#menu .menu-row:focus-within{background:#f3f3f1;color:#161412;outline:0}
+#menu .menu-list>button:hover:not(:disabled),#menu .menu-list>button:focus-visible,#menu .menu-list>a.maps-link:hover,#menu .menu-list>a.maps-link:focus-visible,#menu .menu-row:hover,#menu .menu-row:focus-within{background:#f3f3f1;color:#161412;outline:0}
 #menu .menu-list:not(:has(>button:is(:hover,:focus-visible),>.menu-row:is(:hover,:focus-within)))>#start:not(:disabled){background:#f3f3f1;color:#161412}
 
 /* loading: the bar row fills left to right behind its label */
@@ -107,3 +107,4 @@ body.menu-open #effects{visibility:hidden}
 body.touch-mode #menu{--row-h:44px;--row-font:max(14px,calc(var(--u) * 15))}
 body.touch-mode #menu .menu-content{margin:auto;width:min(360px,100%)}
 body.touch-mode #menu h1{margin-bottom:18px}
+body.menu-open #prompt,body.menu-open #toast,body.menu-open #announcement,body.menu-open #hitmarker,body.menu-open #hurt,body.menu-open #flash,body.menu-open #score-popups,body.menu-open #equipment,body.menu-open #ammo,body.menu-open #ammo-icons,body.menu-open #reload-label{visibility:hidden}
