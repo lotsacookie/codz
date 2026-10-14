@@ -9,7 +9,7 @@ body.no-fx #fx{display:none}
 #loading #texture-choice{display:flex;gap:12px;justify-content:center;margin-top:14px}
 
 /* ---- Black Ops zombies HUD (positions from the decompiled scripts; --u = 1/480 of the screen height) ---- */
-:root{--u:calc(100dvh / 480);--hud-font:'Bahnschrift','DIN Alternate','Arial Narrow',Arial,Helvetica,sans-serif}
+:root{--u:calc(100dvh / 480);--hud-font:'Bahnschrift','DIN Alternate','Arial Narrow',Arial,Helvetica,sans-serif;--hud-font-wide:'Bank Gothic','BankGothic Md BT','Eurostile','Microgramma D Extended','Bahnschrift','DIN Alternate',Arial,Helvetica,sans-serif}
 #chalk,#perks,#player-panel,#weapon-panel,#effects,#crosshair,#prompt,#toast,#announcement{font-family:var(--hud-font)}
 #crosshair{position:fixed;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);z-index:3;pointer-events:none;font-size:0}
 #crosshair i{position:absolute;background:#fff;opacity:.92;box-shadow:0 0 2px #000}
@@ -18,7 +18,7 @@ body.no-fx #fx{display:none}
 #crosshair i:nth-child(3){top:calc(50% - 1px);left:0;height:2px;width:8px}
 #crosshair i:nth-child(4){top:calc(50% - 1px);right:0;height:2px;width:8px}
 #chalk{position:fixed;inset:0;pointer-events:none;z-index:3}
-.chalk-group{position:absolute;filter:drop-shadow(0 0 1px #000);width:calc(var(--u) * 64);height:calc(var(--u) * 64);color:#360000;opacity:0;white-space:nowrap}
+.chalk-group{position:absolute;filter:drop-shadow(0 0 calc(var(--u) * 1.5) #5a0000);width:calc(var(--u) * 64);height:calc(var(--u) * 64);color:#360000;opacity:0;white-space:nowrap}
 .chalk-group svg{display:block;width:100%;height:100%;overflow:visible}
 .chalk-num{display:block;font-family:Impact,'Arial Narrow',var(--hud-font);font-weight:900;font-size:calc(var(--u) * 58);line-height:calc(var(--u) * 64);letter-spacing:calc(var(--u) * -1);filter:url(#chalk-rough)}
 #chalk-label{position:absolute;left:50%;bottom:calc(var(--u) * 265);transform:translateX(-50%);font-family:Impact,'Arial Narrow',var(--hud-font);font-size:calc(var(--u) * 44);font-weight:900;letter-spacing:calc(var(--u) * 2);color:#fff;opacity:0;filter:url(#chalk-rough)}
@@ -32,10 +32,16 @@ body.no-fx #fx{display:none}
 .score-popup{position:absolute;white-space:nowrap;font-weight:700;font-size:calc(var(--u) * 20);transform:translate(0,-50%);text-shadow:0 1px 2px #000}
 .score-popup.gain{color:#e6e600}.score-popup.loss{color:#a01010}
 #weapon-panel{position:fixed;right:calc(var(--u) * 30);bottom:calc(var(--u) * 24);z-index:3;text-align:right;pointer-events:none;color:#fff;text-shadow:0 1px 3px #000}
-#ammo{display:flex;align-items:baseline;justify-content:flex-end;gap:calc(var(--u) * 5)}
-#mag{font-size:calc(var(--u) * 46);font-weight:700}#mag.low{color:#d32b24}
-#ammo>span{font-size:calc(var(--u) * 26);color:#e8e8e8}#ammo>span:first-of-type{color:#9a9a9a;font-weight:300}
+body:not(.touch-mode) #weapon-panel{display:flex;align-items:flex-end;justify-content:flex-end;gap:calc(var(--u) * 22)}
+#ammo-block{display:flex;flex-direction:column;align-items:flex-end}
+#ammo{display:flex;align-items:baseline;justify-content:flex-end;gap:calc(var(--u) * 6);font-family:var(--hud-font-wide);transform:scaleX(1.16);transform-origin:100% 50%;letter-spacing:calc(var(--u) * 1)}
+#mag{font-size:calc(var(--u) * 40);font-weight:700}#mag.low{color:#d32b24}
+#ammo>span{font-size:calc(var(--u) * 27);color:#fff;font-weight:600}#ammo>span:first-of-type{color:#fff;font-weight:400;font-size:calc(var(--u) * 24)}
+#ammo-icons{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 1.5);margin-top:calc(var(--u) * 4);min-height:calc(var(--u) * 6)}
+#ammo-icons i{display:block;background-repeat:repeat-x;filter:drop-shadow(0 1px 1px #000)}
+body.touch-mode #ammo-icons{display:none}
 #equipment{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u) * 14);margin-bottom:calc(var(--u) * 4)}
+body:not(.touch-mode) #equipment{flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 6);margin-bottom:calc(var(--u) * 2)}
 #equipment>span{display:flex;align-items:center;gap:calc(var(--u) * 4)}
 #equipment svg,#equipment img{width:calc(var(--u) * 24);height:calc(var(--u) * 24);display:block;object-fit:contain}
 #equipment svg{color:#d8d8d0}#equipment b{font-size:calc(var(--u) * 20);font-weight:700}

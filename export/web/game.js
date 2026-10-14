@@ -10,7 +10,7 @@ import { Powerups } from './powerups.js';
 import { PerkDrink } from './perk-drink.js';
 import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
-import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt } from './hud.js';
+import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from './hud.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
@@ -401,6 +401,7 @@ function hud(){
   const unavailable=s.weaponUnavailable,cap=s.def.magSize||s.def.clip||s.def.ammoClip||s.def.mag||8;
   $('mag').textContent=unavailable?'—':w.mag;$('reserve').textContent=unavailable?'—':w.reserve;
   $('mag').classList.toggle('low',!unavailable&&w.mag<=Math.floor(cap/3));
+  renderAmmoIcons($('ammo-icons'),s.def,unavailable?0:w.mag);
   $('grenade-count').textContent=s.grenades;
   $('claymore').hidden=!s.claymoresOwned;$('claymore-count').textContent=s.claymores;
   $('monkey').hidden=!s.monkeysOwned;$('monkey-count').textContent=s.monkeys;

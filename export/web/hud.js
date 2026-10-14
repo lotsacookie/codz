@@ -10,9 +10,9 @@
 // viewport height) as that unit.
 
 // The scripts tint the chalk shader (0.21, 0, 0), which is #360000 on a flat white mark.
-// Real chalk strokes carry grain and glow, so the flat vector marks need a touch more red
-// to read the same on screen; set this to '#360000' for the literal script value.
-export const CHALK_DARK = '#5a0d0a';
+// In the reference capture the settled marks read as saturated blood red, thick and softly
+// edged, so the flat vector marks use that on-screen colour instead of the literal tint.
+export const CHALK_DARK = '#b0141b';
 export const CHALK_WHITE = '#ffffff';
 // Fallback for zombie_between_round_time (the scripts use 10 by default).
 const BETWEEN_ROUND_TIME = 10;
@@ -22,20 +22,19 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms * 1000));
 
 // Hand-drawn chalk strokes standing in for hud_chalk_1..5 (those shaders are not
 // part of the extracted texture set). Slight per-stroke jitter keeps it uneven.
-const STROKE_X = [14, 26, 38, 50];
-const STROKE_TOP = [6, 8, 5, 7];
-const STROKE_BOTTOM = [58, 56, 59, 57];
-const STROKE_LEAN = [1.2, -1.4, 0.8, -1];
+const STROKE_X = [12, 25, 38, 51];
+const STROKE_TOP = [5, 7, 4, 6];
+const STROKE_BOTTOM = [58, 56, 60, 57];
+const STROKE_LEAN = [0.9, -1, 0.6, -0.8];
 
 function tallySvg(count) {
   let paths = '';
-  // Fewer than five marks are centred in the 64x64 cell; five use the full width with the slash.
-  const n = Math.min(count, 4), shift = count >= 5 ? 0 : (4 - n) * 6;
+  const n = Math.min(count, 4), shift = count >= 5 ? 0 : (4 - n) * 6.5;
   for (let i = 0; i < n; i++) {
     paths += `<path d="M${STROKE_X[i] + shift + STROKE_LEAN[i]} ${STROKE_TOP[i]} L${STROKE_X[i] + shift - STROKE_LEAN[i]} ${STROKE_BOTTOM[i]}"/>`;
   }
-  if (count >= 5) paths += '<path d="M8 47 L62 15"/>';
-  return `<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" filter="url(#chalk-rough)">${paths}</g></svg>`;
+  if (count >= 5) paths += '<path d="M5 49 L63 13"/>';
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" filter="url(#chalk-rough)">${paths}</g></svg>`;
 }
 
 export function chalkMarkup(round) {
@@ -162,6 +161,42 @@ export class ChalkHud {
       await sleep(0.5); if (token !== this.token) return;
     }
     for (const g of visible) setFade(g, time * 0.25, { color: CHALK_DARK, opacity: '0' });
+  }
+}
+
+const AMMO_ICONS = {
+  pistol: { url: 'textures/ammo_counter_bullet.png', w: 4, h: 8, scale: 2.5, perRow: 15 },
+  rifle: { url: 'textures/ammo_counter_riflebullet.png', w: 32, h: 8, scale: 0.5, perRow: 10 },
+  belt: { url: 'textures/ammo_counter_beltbullet.png', w: 8, h: 4, scale: 1, perRow: 20 },
+  shell: { url: 'textures/ammo_counter_shotgunshell.png', w: 16, h: 8, scale: 1.25, perRow: 8 },
+  rocket: { url: 'textures/ammo_counter_rocket.png', w: 64, h: 16, scale: 0.6, perRow: 3 }
+};
+
+export function ammoIconKind(def) {
+  if (!def) return 'pistol';
+  if ((def.projectileSpeed || 0) > 0 && (def.explosionRadius || 0) > 0) return 'rocket';
+  if ((def.pellets || 0) > 1) return 'shell';
+  const clip = def.clipSize || 0;
+  if (clip >= 60) return 'belt';
+  if (clip >= 20 || /burst/i.test(def.fireType || '')) return 'rifle';
+  return 'pistol';
+}
+
+export function renderAmmoIcons(el, def, mag) {
+  if (!el) return;
+  const kind = ammoIconKind(def);
+  const count = Math.max(0, Math.min(Math.floor(mag) || 0, 150));
+  const key = kind + ':' + count;
+  if (el.dataset.key === key) return;
+  el.dataset.key = key;
+  const icon = AMMO_ICONS[kind];
+  const iw = icon.w * icon.scale, ih = icon.h * icon.scale;
+  el.replaceChildren();
+  for (let left = count; left > 0; left -= icon.perRow) {
+    const n = Math.min(left, icon.perRow);
+    const row = document.createElement('i');
+    row.style.cssText = `width:calc(var(--u) * ${n * iw});height:calc(var(--u) * ${ih});background-image:url(${icon.url});background-size:calc(var(--u) * ${iw}) calc(var(--u) * ${ih})`;
+    el.appendChild(row);
   }
 }
 
