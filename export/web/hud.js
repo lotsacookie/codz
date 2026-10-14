@@ -114,8 +114,8 @@ export class ChalkHud {
     const [g1, g2] = this.groups;
     this.render(round);
     setFade(g2, 0, { opacity: '0' });
-    // Centre of the screen: x=-5 from user_center, 200 above the bottom; "Round" 265 above.
-    setFade(g1, 0, { left: 'calc(50% - var(--u) * 5)', bottom: 'calc(var(--u) * 200)', opacity: '0', color: CHALK_WHITE });
+    // Centre of the screen (the 64-wide mark box is centred under "Round"), 200 above the bottom; "Round" 265 above.
+    setFade(g1, 0, { left: 'calc(50% - var(--u) * 32)', bottom: 'calc(var(--u) * 200)', opacity: '0', color: CHALK_WHITE });
     setFade(this.label, 0, { opacity: '0', color: CHALK_WHITE });
     await sleep(0.05); if (token !== this.token) return;
     setFade(this.label, 1, { opacity: '1' });
