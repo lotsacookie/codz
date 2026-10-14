@@ -12,6 +12,7 @@ import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from './hud.js';
 import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF } from './lighting.js';
+import { BloodFx } from './blood.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
@@ -49,7 +50,7 @@ const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
 let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 const errors=[];
@@ -174,8 +175,9 @@ function effect(position,color=0x9e3023,count=7){
     particles.push({mesh,velocity:new THREE.Vector3((Math.random()-.5)*100,Math.random()*90,(Math.random()-.5)*100),life:.45+Math.random()*.3});
   }
 }
-function hit(z,head){hitUntil=session.time+.12;$('hitmarker').style.color=head?'#db5140':'#eee';effect(head?enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0)));}
+function hit(z,head){hitUntil=session.time+.12;$('hitmarker').style.color=head?'#db5140':'#eee';{const p=head?enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(blood.ready())blood.spray(p,camera.position,{head});else effect(p);}}
 function kill(z,force,position){
+  if(z?.root&&blood.ready())blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),camera.position,{kill:true});
   if(z?.gasDeath){
     const mesh=new THREE.Mesh(new THREE.SphereGeometry(75,12,8),new THREE.MeshBasicMaterial({color:0x8ca345,transparent:true,opacity:.14,depthWrite:false}));
     mesh.scale.set(1.65,.6,1.65);mesh.position.copy(z.root.position).add(new THREE.Vector3(0,28,0));scene.add(mesh);gasClouds.push({mesh,position:z.root.position.clone(),life:7});
@@ -336,6 +338,7 @@ function reset(){
   session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
   powerups.reset();perkDrink.stop();mysteryBox.reset();
   features?.reset();
+  blood.clear();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
   started=false;chalk.reset();lastPoints=null;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=lightLevels.ambient;view.currentId=null;equipView();$('results').hidden=true;$('menu-status').textContent=touchControls.mode?'Tap to start':'Click to capture the mouse';
@@ -472,6 +475,6 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(theaterFx)theaterFx.update(dt,camera);if(world)world.updateBoards(dt);if(profile.shadows){keyLight.target.position.copy(camera.position);keyLight.position.copy(camera.position).addScaledVector(keyDirection,-SHADOW_BACKOFF);keyLight.target.updateMatrixWorld();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(profile.shadows){keyLight.target.position.copy(camera.position);keyLight.position.copy(camera.position).addScaledVector(keyDirection,-SHADOW_BACKOFF);keyLight.target.updateMatrixWorld();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
