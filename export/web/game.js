@@ -11,6 +11,7 @@ import { PerkDrink } from './perk-drink.js';
 import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from './hud.js';
+import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF } from './lighting.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
@@ -34,11 +35,12 @@ renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.
 const grade=gradeOn?new GradePass(renderer):null;console.info('[kino] graphics build 2026-10-13: grade pass '+(grade?'on':'off')+', shadows '+(profile.shadows?'on':'off')+', pixel ratio cap '+(profile.mobile?1:2)+', anisotropy '+profile.anisotropy);
 document.body.prepend(renderer.domElement);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,fogDensityFromHalfDistance(THEATER_FOG.halfDist));
-const ambient=new THREE.AmbientLight(new THREE.Color(...THEATER_WORLD.ambientColor),.9);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,1.25));
-const keyLight=new THREE.DirectionalLight(new THREE.Color(...THEATER_WORLD.sunColor),1.2);keyLight.position.set(.4,1,.2);scene.add(keyLight,keyLight.target);
-const keyDirection=new THREE.Vector3(...sunTravelDirection()).normalize();
-if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);Object.assign(keyLight.shadow.camera,{left:-800,right:800,top:800,bottom:-800,near:1,far:700});keyLight.shadow.bias=-.0006;keyLight.shadow.normalBias=1.5;keyLight.shadow.radius=3;}
-const fill=new THREE.DirectionalLight(0x8cabc9,.5);fill.position.set(-1,.5,-.5);scene.add(fill);
+const lightLevels=pickLightLevels(location.search);let theaterFx=null;
+const ambient=new THREE.AmbientLight(new THREE.Color(...THEATER_WORLD.ambientColor),lightLevels.ambient);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,lightLevels.hemi));
+const keyLight=new THREE.DirectionalLight(new THREE.Color(...THEATER_WORLD.sunColor),lightLevels.sun);keyLight.position.set(.4,1,.2);scene.add(keyLight,keyLight.target);
+const keyDirection=new THREE.Vector3(...sunTravelDirection()).normalize();keyLight.position.copy(keyDirection).multiplyScalar(-SHADOW_BACKOFF);
+if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);Object.assign(keyLight.shadow.camera,{left:-700,right:700,top:700,bottom:-700,near:1,far:SHADOW_BACKOFF+1100});keyLight.shadow.bias=-.0003;keyLight.shadow.normalBias=1.5;keyLight.shadow.radius=3;}
+const fill=new THREE.DirectionalLight(0x8cabc9,lightLevels.fill);fill.position.set(-1,.5,-.5);scene.add(fill);
 const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(location.search)?.[1])||THEATER_WORLD.cgFov)),hipFov=verticalFovFromCgFov(cgFov);
 const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
@@ -448,7 +450,7 @@ Object.assign(kino.debug,{
   setRound:n=>{enemies.reset();while(session.round<n)session.nextRound();session.countdown=0;session.spawned=0;session.killed=0;},
 });
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack'));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack'));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
@@ -470,6 +472,6 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(profile.shadows){keyLight.position.set(camera.position.x,camera.position.y+30,camera.position.z);keyLight.target.position.copy(keyLight.position).addScaledVector(keyDirection,300);keyLight.target.updateMatrixWorld();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);if(profile.shadows){keyLight.target.position.copy(camera.position);keyLight.position.copy(camera.position).addScaledVector(keyDirection,-SHADOW_BACKOFF);keyLight.target.updateMatrixWorld();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
