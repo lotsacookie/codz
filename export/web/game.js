@@ -124,12 +124,13 @@ async function prewarm(){
 }
 function toast(text,duration=2.5){$('toast').textContent=text;toastUntil=(session?.time??0)+duration;}
 function announce(title,small='KINO DER TOTEN',duration=4){$('announcement-title').textContent=title;$('announcement-small').textContent=small;$('announcement').style.opacity=1;announcementUntil=session.time+duration;}
+function menuTitle(t){const e=$('menu-title');if(e&&e.textContent!==t)e.textContent=t;}
 function setActive(value){
   active=!!value&&ready&&session.phase!=='gameover';$('menu').hidden=active;document.body.classList.toggle('menu-open',!active);keys.clear();primary=false;primaryPressed=false;ads=false;reloadShot=false;
   mousePrimary=mouseAim=false;touchControls.reset();touchControls.setEnabled(active&&session.phase!=='reviving',active);
   if(active&&audio.ctx)audio.start();else if(!active)audio.pause();
   if(active){if(!started){started=true;audio.play('round');}}
-  else if(started&&session.phase!=='gameover'){$('start').innerHTML='RESUME GAME <span>→</span>';$('restart').hidden=false;$('menu-status').textContent='Paused · Round '+session.round;}
+  else if(started&&session.phase!=='gameover'){menuTitle('PAUSED');$('start').innerHTML='RESUME GAME <span>→</span>';$('restart').hidden=false;$('menu-status').textContent='Paused · Round '+session.round;}
 }
 function start(){if(!ready||contextLost)return;if(session.phase==='gameover')reset();audio.start();warmViewAudio();if(touchControls.mode){setActive(true);return;}renderer.domElement.requestPointerLock?.()?.catch(e=>toast('Click the game to capture the mouse'));}
 $('start').addEventListener('click',start);$('restart').addEventListener('click',()=>{reset();start();});
@@ -167,7 +168,7 @@ function damage(n){
   if(!session.damage(n))return;audio.play('hit');
   if(!session.drinking)perkDrink?.stop();
   if(session.phase==='gameover'){
-    primary=false;ads=false;setActive(false);document.exitPointerLock?.();$('start').innerHTML='TRY AGAIN <span>→</span>';$('restart').hidden=true;
+    primary=false;ads=false;setActive(false);document.exitPointerLock?.();menuTitle('GAME OVER');$('start').innerHTML='TRY AGAIN <span>→</span>';$('restart').hidden=true;
     $('menu-status').textContent='GAME OVER · You survived '+session.round+(session.round===1?' Round':' Rounds');$('results').hidden=false;$('results').textContent=session.kills+' kills · '+session.headshots+' headshots · '+Math.floor(session.time/60)+'m '+Math.floor(session.time%60)+'s';
     try{const best=Math.max(session.round,+(localStorage.getItem('kino.best')||0));localStorage.setItem('kino.best',String(best));}catch{}
   }else if(session.phase==='reviving')announce('A second chance','QUICK REVIVE',4);
@@ -344,7 +345,7 @@ function reset(){
   blood.clear();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
-  started=false;chalk.reset();lastPoints=null;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=lightLevels.ambient;view.currentId=null;equipView();$('results').hidden=true;$('menu-status').textContent=touchControls.mode?'Tap to start':'Click to capture the mouse';
+  started=false;chalk.reset();lastPoints=null;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=lightLevels.ambient;view.currentId=null;equipView();menuTitle('KINO DER TOTEN');$('results').hidden=true;$('menu-status').textContent=touchControls.mode?'Tap to start':'Click to capture the mouse';
 }
 function returnToLobby(){
   const dest=data.entities.find(e=>e.targetname==='theater_teleport_player0');player.setPosition(vector(dest.position));camera.rotation.set(0,dest.yaw-Math.PI/2,0);cooldownUntil=session.time+90;flashUntil=session.time+.8;

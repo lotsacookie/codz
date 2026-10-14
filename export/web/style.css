@@ -52,3 +52,52 @@ body.touch-mode #ammo-icons{display:none}
 #return-timer{position:absolute;left:0;bottom:calc(var(--u) * 40);transform:translateX(-50%);white-space:nowrap;font-size:calc(var(--u) * 16);color:#fff;text-shadow:0 1px 3px #000}
 #prompt{font-size:calc(var(--u) * 16);color:#fff;text-shadow:0 1px 3px #000}
 body.menu-open #effects{visibility:hidden}
+
+/* ---- Pause / loading menu: Black Ops list style (see screenshots/PauseMenu.png) ----
+   Blurred dark backdrop, bold title, and a left-aligned list of bars: the selected row is
+   white with a dark disc icon, the others dark and translucent. Sizes use --u (1/480 of the
+   screen height) so the layout scales like the original 4:3 menus. */
+#menu{--row-h:max(34px,calc(var(--u) * 42));--row-gap:max(4px,calc(var(--u) * 5));--row-font:max(14px,calc(var(--u) * 19));--row-text:max(46px,calc(var(--u) * 60));
+  align-items:flex-start;
+  background:linear-gradient(180deg,rgba(24,19,15,.52),rgba(10,8,6,.72));
+  -webkit-backdrop-filter:blur(max(3px,calc(var(--u) * 5))) brightness(.6) saturate(.6);
+  backdrop-filter:blur(max(3px,calc(var(--u) * 5))) brightness(.6) saturate(.6)}
+@supports not (backdrop-filter:blur(1px)){#menu{background:linear-gradient(180deg,rgba(24,19,15,.86),rgba(10,8,6,.94))}}
+#menu .menu-grain{opacity:.7}
+#menu .menu-content{width:min(calc(var(--u) * 473),90vw);max-width:none;margin:calc(var(--u) * 62) 0 calc(var(--u) * 30) max(5vw,calc((100vw - var(--u) * 640) / 2 + var(--u) * 105))}
+#menu h1{font-family:'Bahnschrift','DIN Alternate','Arial Narrow',Arial,Helvetica,sans-serif;font-weight:700;font-size:max(30px,calc(var(--u) * 46));letter-spacing:.045em;line-height:1;text-transform:uppercase;color:#f1efe9;text-shadow:0 2px 6px rgba(0,0,0,.55);margin:0 0 calc(var(--u) * 52)}
+#menu h1>span{color:inherit}
+#menu .menu-list{display:flex;flex-direction:column;gap:var(--row-gap)}
+
+/* shared row look: loading bar, start/resume and restart */
+#menu #loading,#menu #start,#menu #restart{position:relative;display:flex;align-items:center;justify-content:flex-start;width:100%;min-height:var(--row-h);margin:0;padding:0 var(--row-text) 0 var(--row-text);border:0;border-radius:0;
+  font-family:'Bahnschrift','DIN Alternate','Arial Narrow',Arial,Helvetica,sans-serif;font-size:var(--row-font);font-weight:700;letter-spacing:.01em;text-transform:uppercase;text-align:left;line-height:1;
+  background:rgba(0,0,0,.62);color:#f4f2ec;box-shadow:none;transition:background .08s,color .08s}
+#menu #start span{display:none}
+#menu #restart:disabled,#menu #start:disabled{opacity:1;cursor:wait}
+
+/* selected row: white bar + dark disc (the first row is selected unless another is hovered/focused) */
+#menu #start,#menu #restart:hover,#menu #restart:focus-visible{background:#f3f3f1;color:#161412}
+#menu #start::before,#menu #restart:hover::before,#menu #restart:focus-visible::before{content:"";position:absolute;left:max(5px,calc(var(--u) * 5));top:50%;width:calc(var(--row-h) * .74);height:calc(var(--row-h) * .74);transform:translateY(-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#2b2623 0 34%,#585049 36% 62%,#2b2623 64% 100%);box-shadow:0 0 0 1px rgba(0,0,0,.35)}
+.menu-list:has(#restart:hover,#restart:focus-visible) #start:not(:hover):not(:focus-visible){background:rgba(0,0,0,.62);color:#f4f2ec}
+.menu-list:has(#restart:hover,#restart:focus-visible) #start:not(:hover):not(:focus-visible)::before{display:none}
+#menu #start:disabled{background:rgba(0,0,0,.62);color:rgba(244,242,236,.32)}
+#menu #start:disabled::before{display:none}
+
+/* loading screen: the bar row fills left to right behind its label */
+#menu #loading{flex-wrap:wrap;overflow:hidden;color:#f4f2ec;font-size:var(--row-font)}
+#menu #loading>.load-track{position:absolute;inset:0;height:auto;margin:0;background:transparent}
+#menu #load-progress{position:absolute;left:0;top:0;bottom:0;height:auto;background:rgba(255,255,255,.2);transition:width .5s}
+#menu #load-label{position:relative;z-index:1;letter-spacing:.02em}
+#menu #loading #retry,#menu #loading #texture-choice button{position:relative;z-index:1;margin:0 0 0 auto;padding:calc(var(--u) * 6) calc(var(--u) * 14);border:0;background:#f3f3f1;color:#161412;font:inherit;font-size:calc(var(--row-font) * .8);font-weight:700}
+#menu #loading #texture-choice{position:relative;z-index:1;display:flex;gap:calc(var(--u) * 8);justify-content:flex-end;margin:0 0 0 auto}
+
+#menu #menu-status{margin:calc(var(--u) * 14) 0 0;padding-left:var(--row-text);font-size:max(11px,calc(var(--u) * 12));letter-spacing:.06em;text-transform:uppercase;color:rgba(244,242,236,.55);min-height:12px}
+#menu #results{margin:calc(var(--u) * 6) 0 0;padding-left:var(--row-text);font-size:max(12px,calc(var(--u) * 15));line-height:1.6;color:rgba(244,242,236,.8)}
+@media(max-width:700px){#menu .menu-content{margin-left:5vw}}
+/* touch layout keeps its own centering, but the rows still need room for the disc icon */
+body.touch-mode #menu{--row-h:max(44px,calc(var(--u) * 42))}
+body.touch-mode #menu .menu-content{margin:auto;width:min(560px,100%)}
+body.touch-mode #menu .menu-list #start,body.touch-mode #menu .menu-list #restart,body.touch-mode #menu .menu-list #loading{padding-left:var(--row-text);padding-right:18px}
+body.touch-mode #menu h1{margin-bottom:24px}
