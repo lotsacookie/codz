@@ -32,16 +32,15 @@ body.no-fx #fx{display:none}
 .score-popup{position:absolute;white-space:nowrap;font-weight:700;font-size:calc(var(--u) * 20);transform:translate(0,-50%);text-shadow:0 1px 2px #000}
 .score-popup.gain{color:#e6e600}.score-popup.loss{color:#a01010}
 #weapon-panel{position:fixed;right:calc(var(--u) * 30);bottom:calc(var(--u) * 24);z-index:3;text-align:right;pointer-events:none;color:#fff;text-shadow:0 1px 3px #000}
-body:not(.touch-mode) #weapon-panel{display:flex;align-items:flex-end;justify-content:flex-end;gap:calc(var(--u) * 22)}
+#weapon-panel{display:flex;align-items:flex-end;justify-content:flex-end;gap:calc(var(--u) * 22)}
 #ammo-block{display:flex;flex-direction:column;align-items:flex-end}
 #ammo{display:flex;align-items:baseline;justify-content:flex-end;gap:calc(var(--u) * 6);font-family:var(--hud-font-wide);transform:scaleX(1.16);transform-origin:100% 50%;letter-spacing:calc(var(--u) * 1)}
 #mag{font-size:calc(var(--u) * 40);font-weight:700}#mag.low{color:#d32b24}
 #ammo>span{font-size:calc(var(--u) * 27);color:#fff;font-weight:600}#ammo>span:first-of-type{color:#fff;font-weight:400;font-size:calc(var(--u) * 24)}
 #ammo-icons{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 1.5);margin-top:calc(var(--u) * 4);min-height:calc(var(--u) * 6)}
 #ammo-icons i{display:block;background-repeat:repeat-x;filter:drop-shadow(0 1px 1px #000)}
-body.touch-mode #ammo-icons{display:none}
 #equipment{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u) * 14);margin-bottom:calc(var(--u) * 4)}
-body:not(.touch-mode) #equipment{flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 6);margin-bottom:calc(var(--u) * 2)}
+#equipment{flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 6);margin-bottom:calc(var(--u) * 2)}
 #equipment>span{display:flex;align-items:center;gap:calc(var(--u) * 4)}
 #equipment svg,#equipment img{width:calc(var(--u) * 24);height:calc(var(--u) * 24);display:block;object-fit:contain}
 #equipment svg{color:#d8d8d0}#equipment b{font-size:calc(var(--u) * 20);font-weight:700}
