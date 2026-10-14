@@ -76,7 +76,7 @@ body.launcher-booting>*:not(#launcher):not(script):not(#boot-failure){display:no
 
 <div id="weapon-panel"><div id="ammo-block"><div id="player-panel"><div id="perks"></div><div class="points"><strong id="points">500</strong></div><div id="score-popups"></div></div><div id="ammo"><strong id="mag">8</strong><span>/</span><span id="reserve">32</span></div><div id="ammo-icons"></div><div id="reload-label"></div></div><div id="equipment"><span id="lethal"><img id="lethal-icon" alt="" src="textures/hud_us_grenade.png" onerror="this.hidden=true"><b id="grenade-count">4</b></span><span id="claymore" hidden><img alt="" src="textures/hud_claymore.png"><b id="claymore-count">0</b></span><span id="monkey" hidden><img alt="" src="textures/hud_cymbal_monkey.png"><b id="monkey-count">0</b></span></div></div>
 <div id="effects"><img class="powerup-slot" id="pu-double_points" alt="" src="textures/specialty_2x_zombies.png" hidden><img class="powerup-slot" id="pu-insta_kill" alt="" src="textures/specialty_instakill_zombies.png" hidden><img class="powerup-slot" id="pu-fire_sale" alt="" src="textures/specialty_firesale_zombies.png" hidden><span id="return-timer"></span></div><div id="debug" hidden></div>
-<section id="menu"><div class="menu-grain"></div><div class="menu-content"><h1 id="menu-title">KINO DER TOTEN</h1><div id="menu-main"><div class="menu-list"><div id="loading"><div class="load-track"><i id="load-progress"></i></div><span id="load-label">Recovering the theater…</span></div><button id="start" disabled>START GAME <span>→</span></button><button id="options" type="button">OPTIONS</button><button id="restart" class="secondary" hidden>RESTART LEVEL</button><a id="maps-link" class="maps-link" href="./">MAPS</a></div><p id="menu-status">Loading map and equipment</p><div id="results" hidden></div></div><div id="options-view" hidden><div class="menu-list"><div class="menu-row"><label for="look-sensitivity">LOOK SENSITIVITY</label><input id="look-sensitivity" type="range" min="0.25" max="3" step="0.05" value="1"><output id="look-sensitivity-value" for="look-sensitivity">1.00×</output></div><button id="fullscreen" type="button" hidden>FULL SCREEN</button><button id="options-back" type="button">BACK</button></div></div></div></section></template>
+<section id="menu"><div class="menu-grain"></div><div class="menu-content"><h1 id="menu-title">KINO DER TOTEN</h1><div id="menu-main"><div class="menu-list"><div id="loading"><div class="load-track"><i id="load-progress"></i></div><span id="load-label">Recovering the theater…</span></div><button id="start" disabled>START GAME <span>→</span></button><button id="options" type="button">OPTIONS</button><button id="restart" class="secondary" hidden>RESTART LEVEL</button><a id="maps-link" class="maps-link" href="./">QUIT</a></div><p id="menu-status">Loading map and equipment</p><div id="results" hidden></div></div><div id="options-view" hidden><div class="menu-list"><div class="menu-row"><label for="look-sensitivity">LOOK SENSITIVITY</label><input id="look-sensitivity" type="range" min="0.25" max="3" step="0.05" value="1"><output id="look-sensitivity-value" for="look-sensitivity">1.00×</output></div><button id="fullscreen" type="button" hidden>FULL SCREEN</button><button id="options-back" type="button">BACK</button></div></div></div></section></template>
 <template id="map-moon"><div id="visor" hidden></div>
   <div id="damage"></div>
   <div id="earth-flash"></div>
@@ -103,7 +103,7 @@ body.launcher-booting>*:not(#launcher):not(script):not(#boot-failure){display:no
   </div>
   <main id="menu">
     <section class="panel">
-      <a class="back" href="./">← All maps</a>
+      <a class="back" href="./">QUIT</a>
       <p class="eyebrow">ZOMBIES / SOLO SURVIVAL</p>
       <h1>MOON</h1>
       <p class="intro">From No Man’s Land to Griffin Station.</p>
@@ -122,9 +122,9 @@ body.launcher-booting>*:not(#launcher):not(script):not(#boot-failure){display:no
       <p id="error" role="alert" hidden></p>
     </section>
   </main></template>
-<template id="map-shangri-la"><p id="status" role="status">Loading Shangri-La…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
-<template id="map-ascension"><p id="status" role="status">Loading Ascension…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
-<template id="map-call-of-the-dead"><p id="status" role="status">Loading Call of the Dead…</p><p id="help">Click the map to look around · WASD move · Shift sprint · Space jump · Ctrl crouch · V fly · R return · Esc release</p><p id="error" role="alert" hidden></p><a class="maps-link" href="./">← Maps</a></template>
+<template id="map-shangri-la"><p id="status" role="status">Loading Shangri-La…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">QUIT</a></template>
+<template id="map-ascension"><p id="status" role="status">Loading Ascension…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">QUIT</a></template>
+<template id="map-call-of-the-dead"><p id="status" role="status">Loading Call of the Dead…</p><p id="help">Click the map to look around · WASD move · Shift sprint · Space jump · Ctrl crouch · V fly · R return · Esc release</p><p id="error" role="alert" hidden></p><a class="maps-link" href="./">QUIT</a></template>
 <script type="module" id="launcher-script">
 // One page for every map. Picking a map loads it hidden behind its own button (progress bar on the button),
 // then swaps it in and starts it. No second page, no second menu.
@@ -206,12 +206,12 @@ function watchKino(meter, done, fail) {
 }
 
 function stagePercent(text) {
-  const mb = text.match(/(\d+)\s*\/\s*(\d+)\s*MB/i), tex = text.match(/textures?\s*(\d+)\s*\/\s*(\d+)/i);
-  const mbF = mb && +mb[2] ? Math.min(1, +mb[1] / +mb[2]) : 0, texF = tex && +tex[2] ? Math.min(1, +tex[1] / +tex[2]) : 0;
+  const mb = text.match(/(\d+)\s*\/\s*(\d+)\s*MB/i);
+  const mbF = mb && +mb[2] ? Math.min(1, +mb[1] / +mb[2]) : 0;
   if (/collision/i.test(text)) return 60 + 25 * mbF;
   if (/zombies and weapons/i.test(text)) return 88;
   if (/station systems|quest/i.test(text)) return 94;
-  return 4 + 36 * mbF + 20 * texF;
+  return 4 + 56 * mbF;
 }
 
 function watchStatus(meter, map, done, fail) {

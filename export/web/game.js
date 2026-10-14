@@ -85,8 +85,8 @@ assets.onProgress(s=>{
   if(!byteProgress)return;
   let loaded=0,total=0;for(const f of s.files)if(!/\.(?:png|webp|jpe?g)(?:[?#].*)?$/i.test(f.url)){loaded+=f.got;total+=f.total;}
   if(!total)return;
-  const mb=n=>(n/1048576).toFixed(0),t=textureReport(),textures=t.total?` · textures ${t.ready} / ${t.total}`:'';
-  $('load-label').textContent=`Loading the theater · ${mb(loaded)} / ${mb(total)} MB${textures}`;
+  const mb=n=>(n/1048576).toFixed(0);
+  $('load-label').textContent=`Loading the theater · ${mb(loaded)} / ${mb(total)} MB`;
   $('load-progress').style.width=(10+Math.min(1,loaded/total)*70)+'%';
 });
 function showRetry(){if($('retry'))return;const b=document.createElement('button');b.id='retry';b.textContent='RETRY';b.onclick=()=>location.reload();$('loading').appendChild(b);}

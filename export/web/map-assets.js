@@ -38,8 +38,7 @@ export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}
     const snapshot = assets.snapshot();
     const textures = textureReport();
     const bytes = snapshot.total ? ` ${megabytes(snapshot.loaded)} / ${megabytes(snapshot.total)} MB` : '';
-    const images = textures.total ? ` · textures ${textures.ready} / ${textures.total}` : '';
-    onStatus(`Loading ${label}…${bytes}${images}`);
+    onStatus(`Loading ${label}…${bytes}`);
   };
   const stopListening = assets.onProgress(report);
   const timer = setInterval(report, 500);
