@@ -117,10 +117,12 @@ export class BloodFx {
   }
 
   update(dt) {
-    for (const item of [...this.items]) {
+    const items = this.items;
+    for (let i = items.length - 1; i >= 0; i--) {
+      const item = items[i];
       item.age += dt;
       const k = item.age / item.life;
-      if (k >= 1) { this.release(item); continue; }
+      if (k >= 1) { item.sprite.removeFromParent(); item.material.dispose(); items.splice(i, 1); continue; }
       item.velocity.y -= item.gravity * dt;
       item.sprite.position.addScaledVector(item.velocity, dt);
       const s = item.size * (1 + (item.grow - 1) * Math.min(1, k * 1.5));

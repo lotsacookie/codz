@@ -400,27 +400,32 @@ function update(dt){
   muzzle.intensity=Math.max(0,muzzle.intensity-dt*2200);camera.fov=THREE.MathUtils.damp(camera.fov,ads&&!session.def.dualWield&&!session.drinking&&!session.meleeLeft&&!session.reloadLeft?verticalFovFromCgFov(session.def.adsFov||56):hipFov,12,dt);camera.updateProjectionMatrix();
   hud();
 }
+// HUD writes compare against the live DOM first so unchanged frames cause no style/layout work.
+const hudEls={},hudEl=id=>hudEls[id]??=$(id);
+function text(id,v){const e=hudEl(id),t=String(v);if(e.textContent!==t)e.textContent=t;}
+function opacity(id,v){const e=hudEl(id),t=String(v);if(e.style.opacity!==t)e.style.opacity=t;}
+function hide(id,v){const e=hudEl(id);if(e.hidden!==v)e.hidden=v;}
 function hud(){
   const s=session,w=s.weapon;
   chalk.update(s,started);
   if(lastPoints===null||s.points===0&&lastPoints>0&&s.phase==='gameover')lastPoints=s.points;
   if(s.points!==lastPoints){spawnScorePopup($('score-popups'),s.points-lastPoints);lastPoints=s.points;}
-  $('points').textContent=String(s.points);
+  text('points',s.points);
   const unavailable=s.weaponUnavailable,cap=s.def.magSize||s.def.clip||s.def.ammoClip||s.def.mag||8;
-  $('mag').textContent=unavailable?'—':w.mag;$('reserve').textContent=unavailable?'—':w.reserve;
+  text('mag',unavailable?'—':w.mag);text('reserve',unavailable?'—':w.reserve);
   $('mag').classList.toggle('low',!unavailable&&w.mag<=Math.floor(cap/3));
   renderAmmoIcons($('ammo-icons'),s.def,unavailable?0:w.mag);
-  $('grenade-count').textContent=s.grenades;
-  $('claymore').hidden=!s.claymoresOwned;$('claymore-count').textContent=s.claymores;
-  $('monkey').hidden=!s.monkeysOwned;$('monkey-count').textContent=s.monkeys;
-  $('reload-label').textContent=!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'';
-  $('hurt').style.opacity=s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0;$('hitmarker').style.opacity=hitUntil>s.time?1:0;$('flash').style.opacity=Math.max(0,flashUntil-s.time);
-  $('prompt').textContent=active&&promptText?bo1Prompt(promptText,touchControls.mode):'';
-  if(toastUntil<s.time)$('toast').textContent='';if(announcementUntil<s.time)$('announcement').style.opacity=0;
+  text('grenade-count',s.grenades);
+  hide('claymore',!s.claymoresOwned);text('claymore-count',s.claymores);
+  hide('monkey',!s.monkeysOwned);text('monkey-count',s.monkeys);
+  text('reload-label',!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'');
+  opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
+  text('prompt',active&&promptText?bo1Prompt(promptText,touchControls.mode):'');
+  if(toastUntil<s.time)text('toast','');if(announcementUntil<s.time)opacity('announcement',0);
   const nextPerkKey=[...s.perks].join();if(nextPerkKey!==perkKey){perkKey=nextPerkKey;$('perks').innerHTML=[...s.perks].filter(id=>perkIcons[id]).map(id=>`<img alt="${perkInfo[id].name}" src="textures/${perkIcons[id]}.png">`).join('');}
   const nowSeconds=performance.now()/1000;
-  for(const k of ['double_points','insta_kill','fire_sale']){const left=(s.effects[k]??0)-s.time;$('pu-'+k).hidden=!(left>0&&powerupVisible(left,nowSeconds));}
-  $('return-timer').textContent=returnAt?Math.ceil(returnAt-s.time):'';
+  for(const k of ['double_points','insta_kill','fire_sale']){const left=(s.effects[k]??0)-s.time;hide('pu-'+k,!(left>0&&powerupVisible(left,nowSeconds)));}
+  text('return-timer',returnAt?Math.ceil(returnAt-s.time):'');
   if(debugVisible)$('debug').textContent=`${fps} FPS · ${renderer.info.render.calls} calls\n${camera.position.toArray().map(v=>v.toFixed(1)).join(', ')}\n${enemies.list.length} enemies · ${world.navDisabled.size} blocked polygons`;
 }
 

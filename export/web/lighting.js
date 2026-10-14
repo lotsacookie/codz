@@ -85,11 +85,12 @@ function moteFallback() {
   return new THREE.CanvasTexture(canvas);
 }
 
-function distanceToSegment(point, a, b, scratch) {
-  scratch.copy(b).sub(a);
-  const lengthSq = scratch.lengthSq();
-  const t = lengthSq > 0 ? THREE.MathUtils.clamp(point.clone().sub(a).dot(scratch) / lengthSq, 0, 1) : 0;
-  return point.distanceTo(scratch.multiplyScalar(t).add(a));
+function distanceToSegment(point, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+  const lengthSq = dx * dx + dy * dy + dz * dz;
+  const t = lengthSq > 0 ? THREE.MathUtils.clamp(((point.x - a.x) * dx + (point.y - a.y) * dy + (point.z - a.z) * dz) / lengthSq, 0, 1) : 0;
+  const ex = point.x - (dx * t + a.x), ey = point.y - (dy * t + a.y), ez = point.z - (dz * t + a.z);
+  return Math.sqrt(ex * ex + ey * ey + ez * ez);
 }
 
 export class TheaterLighting {
@@ -211,7 +212,7 @@ export class TheaterLighting {
   update(dt, camera) {
     this.time += dt;
     for (const shaft of this.shafts) {
-      const near = distanceToSegment(camera.position, shaft.start, shaft.end, this.scratch);
+      const near = distanceToSegment(camera.position, shaft.start, shaft.end);
       const fade = THREE.MathUtils.smoothstep(near, 40, 170);
       const flicker = 0.88 + 0.12 * Math.sin(this.time * 0.55 + shaft.phase);
       shaft.material.opacity = shaft.base * fade * flicker;

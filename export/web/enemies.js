@@ -114,7 +114,7 @@ export class Enemies {
           const want={x:delta.x/horizontal,y:delta.y/horizontal,z:delta.z/horizontal};
           z.heading=z.heading?steerDirection(z.heading,want,dt,STEER_RATE):want;
           const next=z.root.position.clone().addScaledVector(new THREE.Vector3(z.heading.x,z.heading.y,z.heading.z),Math.min(z.speed*dt,horizontal));
-          for(const other of this.list){if(other===z||other.state==='barricade')continue;const sep=next.clone().sub(other.root.position);sep.y=0;const d=sep.length();if(d<29&&d>.01)next.addScaledVector(sep,(29-d)/d*dt*2);}
+          for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
           if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
