@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $ascensionRoot = Split-Path -Parent $PSScriptRoot
-foreach ($ascensionFile in @('index.html','launcher.js','map-assets.js','ascension.js','ascension/ascension.gltf','ascension/ascension.bin','ascension/collision.json','ascension/collision.bin','ascension/map-data.json')) {
+foreach ($ascensionFile in @('index.html','map-assets.js','ascension.js','ascension/ascension.gltf','ascension/ascension.bin','ascension/collision.json','ascension/collision.bin','ascension/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $ascensionRoot "export/web/$ascensionFile"))) {
         throw "Missing Ascension asset: $ascensionFile. Run npm run build:ascension."
     }

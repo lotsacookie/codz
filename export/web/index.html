@@ -20,7 +20,35 @@
 <meta name="twitter:description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
 <meta name="twitter:image" content="https://kino-der-toten.pages.dev/social/kino-preview-v1.png">
 <meta name="twitter:image:alt" content="Kino der Toten: Solo Survival. Zombies emerge from the shadows of a ruined theater with red curtains and twin staircases.">
-<link rel="stylesheet" href="launcher.css"><link rel="icon" href="data:,">
+<style id="launcher-style">
+body.launcher-open{margin:0;min-height:100vh;background:#080909;color:#eee8dc;font-family:Arial,Helvetica,sans-serif}
+/* While a map loads behind its button, everything the map adds stays hidden so nothing flashes or jumps. */
+body.launcher-booting>*:not(#launcher):not(script):not(#boot-failure){display:none!important}
+#launcher{min-height:100vh;display:flex;align-items:center;padding:6vh 7vw;background:radial-gradient(ellipse at 20% 30%,#1b1713 0,#080909 70%)}
+#launcher .launcher-panel{width:min(440px,100%)}
+#launcher .launcher-eyebrow{margin:0 0 8px;font-size:12px;letter-spacing:.28em;color:#a99f8c}
+#launcher h1{margin:0 0 28px;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-weight:400;font-size:clamp(40px,7vw,64px);letter-spacing:.04em;color:#f4f2ec}
+#launcher ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+#launcher li{margin:0}
+#launcher button{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;margin:0;padding:15px 20px;border:0;border-radius:0;background:rgba(255,255,255,.07);color:#f4f2ec;font:inherit;text-align:left;cursor:pointer;transition:background .08s,color .08s}
+#launcher button>strong,#launcher button>span{position:relative;z-index:1}
+#launcher button strong{font-size:19px;letter-spacing:.04em;text-transform:uppercase}
+#launcher button span{font-size:13px;color:#b7ae9d;transition:color .08s}
+#launcher button:hover:not(:disabled),#launcher button:focus-visible{background:#f3f3f1;color:#161412;outline:0}
+#launcher button:hover:not(:disabled) span,#launcher button:focus-visible span{color:#4a443b}
+#launcher button:disabled{cursor:wait;color:rgba(244,242,236,.4)}
+/* Progress fill, same look as the in-game loading row. */
+#launcher button>i.map-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.2);transition:width .5s;z-index:0}
+#launcher button.loading:disabled{color:#f4f2ec;opacity:1}
+#launcher button.loading:disabled span{color:#d8d0bf}
+#launcher #launcher-note{margin:22px 0 0;font-size:13px;color:#a99f8c}
+#launcher #launcher-error{margin:12px 0 0;font-size:13px;color:#ffb4a8}
+#launcher [hidden]{display:none}
+#boot-failure{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(460px,calc(100% - 32px));padding:20px 24px;background:#120d0cf0;color:#f4e6e2;font:14px/1.5 Arial,Helvetica,sans-serif;border:1px solid #6b2a22}
+#boot-failure strong{display:block;margin-bottom:8px;font-size:17px}
+#boot-failure p{margin:0 0 14px;color:#ffb4a8;word-break:break-word}
+#boot-failure a{color:#f4f2ec}
+</style><link rel="icon" href="data:,">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/jsm/","three-mesh-bvh":"./vendor/bvh.js","@recast-navigation/core":"./vendor/recast-core.mjs","@recast-navigation/wasm":"./vendor/recast-wasm.js"}}</script>
 </head><body class="launcher-open">
 <main id="launcher">
@@ -97,5 +125,182 @@
 <template id="map-shangri-la"><p id="status" role="status">Loading Shangri-La…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
 <template id="map-ascension"><p id="status" role="status">Loading Ascension…</p><p id="help" hidden></p><pre id="debug" hidden></pre><a class="maps-link" href="./">← Maps</a></template>
 <template id="map-call-of-the-dead"><p id="status" role="status">Loading Call of the Dead…</p><p id="help">Click the map to look around · WASD move · Shift sprint · Space jump · Ctrl crouch · V fly · R return · Esc release</p><p id="error" role="alert" hidden></p><a class="maps-link" href="./">← Maps</a></template>
-<script type="module" src="launcher.js"></script>
+<script type="module" id="launcher-script">
+// One page for every map. Picking a map loads it hidden behind its own button (progress bar on the button),
+// then swaps it in and starts it. No second page, no second menu.
+const launcher = document.getElementById('launcher');
+const list = document.getElementById('map-list');
+const note = document.getElementById('launcher-note');
+const errorBox = document.getElementById('launcher-error');
+const buttons = [...list.querySelectorAll('button[data-map]')];
+const IDLE_NOTE = note.textContent;
+let booting = false;
+
+const setEnabled = enabled => { for (const b of buttons) b.disabled = !enabled; };
+function showError(message) { errorBox.textContent = message; errorBox.hidden = false; }
+
+function loadStyle(href) {
+  return new Promise((resolve, reject) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.media = 'not all'; // downloaded now, applied only when the map is shown, so it cannot restyle this list
+    link.onload = () => resolve(link);
+    link.onerror = () => { link.remove(); reject(new Error(`Could not load ${href}`)); };
+    document.head.append(link);
+  });
+}
+
+function showBootFailure(label, error) {
+  console.error(error);
+  const box = document.createElement('div');
+  box.id = 'boot-failure';
+  box.setAttribute('role', 'alert');
+  const title = document.createElement('strong');
+  title.textContent = `${label} could not start`;
+  const detail = document.createElement('p');
+  detail.textContent = error?.message ?? String(error);
+  const back = document.createElement('a');
+  back.href = './';
+  back.textContent = 'Back to maps';
+  box.append(title, detail, back);
+  document.body.append(box);
+}
+
+// Progress bar living on the chosen map's button.
+function makeMeter(button) {
+  const fill = document.createElement('i');
+  fill.className = 'map-fill';
+  button.prepend(fill);
+  button.classList.add('loading');
+  const caption = button.querySelector('span');
+  const original = caption.textContent;
+  let value = 0;
+  return {
+    set(percent, text) {
+      value = Math.max(value, Math.min(100, percent));
+      fill.style.width = `${value}%`;
+      if (text) caption.textContent = `${Math.round(value)}% · ${text}`;
+    },
+    get value() { return value; },
+    reset() { fill.remove(); button.classList.remove('loading'); caption.textContent = original; },
+  };
+}
+
+// Each map reports loading differently; these adapters turn that into one "percent + text + ready/failed" feed.
+function watchKino(meter, done, fail) {
+  const bar = document.getElementById('load-progress'), label = document.getElementById('load-label');
+  const start = document.getElementById('start'), loading = document.getElementById('loading');
+  const tick = () => {
+    meter.set(parseFloat(bar.style.width) || 0, label.textContent.trim());
+    if (!start.disabled) done(() => start.click());
+    else if (document.getElementById('retry') || document.getElementById('texture-choice') || /^Unable to start/.test(label.textContent)) fail();
+  };
+  const observer = new MutationObserver(tick);
+  observer.observe(bar, { attributes: true, attributeFilter: ['style'] });
+  observer.observe(label, { childList: true, characterData: true, subtree: true });
+  observer.observe(start, { attributes: true, attributeFilter: ['disabled'] });
+  observer.observe(loading, { childList: true });
+  tick();
+  return () => observer.disconnect();
+}
+
+function stagePercent(text) {
+  const mb = text.match(/(\d+)\s*\/\s*(\d+)\s*MB/i), tex = text.match(/textures?\s*(\d+)\s*\/\s*(\d+)/i);
+  const mbF = mb && +mb[2] ? Math.min(1, +mb[1] / +mb[2]) : 0, texF = tex && +tex[2] ? Math.min(1, +tex[1] / +tex[2]) : 0;
+  if (/collision/i.test(text)) return 60 + 25 * mbF;
+  if (/zombies and weapons/i.test(text)) return 88;
+  if (/station systems|quest/i.test(text)) return 94;
+  return 4 + 36 * mbF + 20 * texF;
+}
+
+function watchStatus(meter, map, done, fail) {
+  const status = document.getElementById('status');
+  const startButton = document.getElementById('start'); // Moon has one; viewer maps start on a click in the scene
+  const read = () => {
+    const text = status.textContent.trim();
+    if (/could not load|unable to load/i.test(text)) return fail();
+    const ready = startButton ? !startButton.disabled : status.hidden || !/^(Loading|Retrying)/i.test(text);
+    if (ready) return done(startButton ? () => startButton.click() : null);
+    meter.set(stagePercent(text), text);
+  };
+  const observer = new MutationObserver(read);
+  observer.observe(status, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  if (startButton) observer.observe(startButton, { attributes: true, attributeFilter: ['disabled'] });
+  // Slow creep so the bar never looks frozen between status updates; real progress always wins.
+  const creep = setInterval(() => meter.set(Math.min(92, meter.value + (92 - meter.value) * 0.02)), 500);
+  read();
+  return () => { observer.disconnect(); clearInterval(creep); };
+}
+
+async function boot(button) {
+  if (booting) return;
+  booting = true;
+  setEnabled(false);
+  errorBox.hidden = true;
+  const { map, label, module, title, bodyClass } = button.dataset;
+  note.textContent = `Loading ${label}…`;
+  const meter = makeMeter(button);
+  const template = document.getElementById(`map-${map}`);
+  const styles = [];
+  const abort = message => {
+    for (const link of styles) link.remove();
+    meter.reset();
+    document.body.classList.remove('launcher-booting');
+    note.textContent = IDLE_NOTE;
+    showError(message);
+    setEnabled(true);
+    booting = false;
+  };
+  try {
+    if (!template) throw new Error(`No layout is defined for ${label}.`);
+    for (const href of (button.dataset.styles ?? '').split(/\s+/).filter(Boolean)) styles.push(await loadStyle(href));
+  } catch (error) { return abort(error.message); }
+
+  const params = new URLSearchParams(location.search);
+  params.set('map', map);
+  history.replaceState(null, '', `?${params}`);
+  meter.set(2, 'Preparing');
+
+  // Mount the map's own markup (hidden) and run its module; the launcher stays visible meanwhile.
+  document.body.classList.add('launcher-booting');
+  document.body.prepend(template.content.cloneNode(true));
+  let stop = () => {};
+  let finished = false;
+  const reveal = async startGame => {
+    if (finished) return;
+    finished = true;
+    stop();
+    meter.set(100, 'Starting');
+    await new Promise(resolve => setTimeout(resolve, 250)); // let the bar visibly reach the end
+    for (const link of styles) link.media = 'all';
+    document.title = title || document.title;
+    launcher.remove();
+    document.body.className = bodyClass ?? '';
+    startGame?.();
+  };
+  // On a load error, show the map anyway so its own error message and RETRY button are visible.
+  const fail = () => { if (finished) return; finished = true; stop(); for (const link of styles) link.media = 'all'; launcher.remove(); document.body.className = bodyClass ?? ''; };
+  stop = map === 'kino' ? watchKino(meter, reveal, fail) : watchStatus(meter, map, reveal, fail);
+  try {
+    await import(module);
+  } catch (error) {
+    finished = true; stop();
+    launcher.remove(); // map markup stays hidden (launcher-booting) behind the failure box
+    showBootFailure(label, error);
+  }
+}
+
+list.addEventListener('click', event => {
+  const button = event.target.closest('button[data-map]');
+  if (button && !button.disabled) boot(button);
+});
+
+const requested = new URLSearchParams(location.search).get('map');
+if (requested) {
+  const button = buttons.find(candidate => candidate.dataset.map === requested);
+  if (button) boot(button);
+  else showError(`There is no map called "${requested}". Choose one from the list.`);
+}
+</script>
 </body></html>

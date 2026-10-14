@@ -43,7 +43,7 @@ function includeModule(relative) {
   }
 }
 includeModule('game.js');
-for (const file of ['launcher.js', 'launcher.css', 'style.css', 'touch-controls.css', 'game-data.json', 'navigation.bin']) copy(file);
+for (const file of ['style.css', 'touch-controls.css', 'game-data.json', 'navigation.bin']) copy(file);
 const kinoOnlyPage = readFileSync(path.join(source, 'index.html'), 'utf8')
   .replace(/\s*<li data-map-entry="(?!kino")[^"]*">[\s\S]*?<\/li>/g, '')
   .replace(/\s*<template id="map-(?!kino")[^"]*">[\s\S]*?<\/template>/g, '');

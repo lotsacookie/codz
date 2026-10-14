@@ -24,8 +24,8 @@ test('each map has a layout template, a module and stylesheets that exist', () =
 
 test('the page itself loads no map code or map assets', () => {
   const outside = html.replace(/<template[\s\S]*?<\/template>/g, '');
-  assert.equal([...outside.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]).join(), 'launcher.js');
-  assert.deepEqual([...outside.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/g)].map(match => match[1]), ['launcher.css']);
+  assert.deepEqual([...outside.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]), []);
+  assert.deepEqual([...outside.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/g)].map(match => match[1]), []);
   assert.ok(!/<(?:img|audio|video)\b/.test(outside));
 });
 
