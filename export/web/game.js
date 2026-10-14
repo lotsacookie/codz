@@ -11,7 +11,8 @@ import { PerkDrink } from './perk-drink.js';
 import { MysteryBox } from './mystery-box.js';
 import { createZombieTouch } from './zombies-touch.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from './hud.js';
-import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF } from './lighting.js';
+import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } from './lighting.js';
+import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from './blood.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
@@ -40,10 +41,12 @@ const lightLevels=pickLightLevels(location.search);let theaterFx=null;
 const ambient=new THREE.AmbientLight(new THREE.Color(...THEATER_WORLD.ambientColor),lightLevels.ambient);scene.add(ambient,new THREE.HemisphereLight(0xd2d9e3,0x574236,lightLevels.hemi));
 const keyLight=new THREE.DirectionalLight(new THREE.Color(...THEATER_WORLD.sunColor),lightLevels.sun);keyLight.position.set(.4,1,.2);scene.add(keyLight,keyLight.target);
 const keyDirection=new THREE.Vector3(...sunTravelDirection()).normalize();keyLight.position.copy(keyDirection).multiplyScalar(-SHADOW_BACKOFF);
-if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);Object.assign(keyLight.shadow.camera,{left:-700,right:700,top:700,bottom:-700,near:1,far:SHADOW_BACKOFF+1100});keyLight.shadow.bias=-.0003;keyLight.shadow.normalBias=1.5;keyLight.shadow.radius=3;}
+let csm=null;
+if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;keyLight.visible=false;}
 const fill=new THREE.DirectionalLight(0x8cabc9,lightLevels.fill);fill.position.set(-1,.5,-.5);scene.add(fill);
 const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(location.search)?.[1])||THEATER_WORLD.cgFov)),hipFov=verticalFovFromCgFov(cgFov);
 const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
+if(profile.shadows){csm=new CSM({camera,parent:scene,lightDirection:keyDirection.clone(),lightIntensity:lightLevels.sun,...SHADOW_CASCADES});csm.fade=true;csm.lights.forEach(l=>{l.color.setRGB(...THEATER_WORLD.sunColor);l.shadow.normalBias=1.5;l.shadow.radius=3;});profile.csm=csm;}
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
@@ -158,7 +161,7 @@ addEventListener('keydown',e=>{
 });
 addEventListener('keyup',e=>keys.delete(e.code));
 addEventListener('wheel',()=>{if(active){session.switchWeapon();equipView();}});
-addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const width=innerWidth,height=innerHeight,current=renderer.getSize(new THREE.Vector2());if(current.x===width&&current.y===height)return;camera.aspect=viewCamera.aspect=width/height;camera.updateProjectionMatrix();viewCamera.updateProjectionMatrix();renderer.setSize(width,height);},profile.mobile?150:0);});
+addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const width=innerWidth,height=innerHeight,current=renderer.getSize(new THREE.Vector2());if(current.x===width&&current.y===height)return;camera.aspect=viewCamera.aspect=width/height;camera.updateProjectionMatrix();viewCamera.updateProjectionMatrix();if(csm)csm.updateFrustums();renderer.setSize(width,height);},profile.mobile?150:0);});
 
 function damage(n){
   if(!session.damage(n))return;audio.play('hit');
@@ -475,6 +478,6 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(profile.shadows){keyLight.target.position.copy(camera.position);keyLight.position.copy(camera.position).addScaledVector(keyDirection,-SHADOW_BACKOFF);keyLight.target.updateMatrixWorld();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();

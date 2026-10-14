@@ -2,6 +2,35 @@ import * as THREE from 'three';
 
 export const SHADOW_BACKOFF = 900;
 
+// Cascaded sun shadows. A single fixed box (the old +-700 unit one) left everything
+// beyond it unshadowed but still fully sun lit, so distant areas rendered brighter
+// with no shadows. Cascades keep shadows sharp up close and cover out past where
+// the fog (half distance ~2333) hides the scene.
+export const SHADOW_CASCADES = Object.freeze({
+  cascades: 3,
+  maxFar: 5000,
+  mode: 'practical',
+  shadowMapSize: 2048,
+  shadowBias: -0.00008,
+  lightNear: 1,
+  lightFar: 8000,
+  lightMargin: 3000
+});
+
+const DEFAULT_ON_BEFORE_COMPILE = THREE.Material.prototype.onBeforeCompile;
+
+// Registers a lit material with the cascade shader. Materials that already carry a
+// custom shader hook (flag cloth, water) are left alone because CSM would replace it.
+export function enableCascadedShadows(csm, material) {
+  if (!csm || !material) return;
+  for (const m of Array.isArray(material) ? material : [material]) {
+    if (!(m.isMeshStandardMaterial || m.isMeshLambertMaterial || m.isMeshPhongMaterial)) continue;
+    if (m.onBeforeCompile !== DEFAULT_ON_BEFORE_COMPILE) continue;
+    if (m.defines && m.defines.USE_CSM) continue;
+    csm.setupMaterial(m);
+  }
+}
+
 const LEVELS = {
   dump: { sun: 3.2, ambient: 0.55, powered: 0.95, hemi: 0.6, fill: 0.2 },
   classic: { sun: 1.2, ambient: 0.9, powered: 1.7, hemi: 1.25, fill: 0.5 }

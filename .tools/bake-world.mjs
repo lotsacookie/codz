@@ -91,7 +91,7 @@ for(const [src,dst] of [
  ['@recast-navigation/core/dist/index.mjs','recast-core.mjs'],
  ['@recast-navigation/wasm/dist/recast-navigation.wasm-compat.js','recast-wasm.js'],
 ]) fs.copyFileSync(path.join(root,'node_modules',src),path.join(out,'vendor',dst));
-for(const file of ['math/Capsule.js','math/Octree.js','loaders/GLTFLoader.js','utils/SkeletonUtils.js','utils/BufferGeometryUtils.js','controls/PointerLockControls.js']) {
+for(const file of ['math/Capsule.js','math/Octree.js','loaders/GLTFLoader.js','utils/SkeletonUtils.js','utils/BufferGeometryUtils.js','controls/PointerLockControls.js','csm/CSM.js','csm/CSMFrustum.js','csm/CSMShader.js']) {
  const dest=path.join(out,'vendor/jsm',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(path.join(root,'node_modules/three/examples/jsm',file),dest);
 }
 fs.mkdirSync(path.join(out,'vendor/licenses'),{recursive:true});

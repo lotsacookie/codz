@@ -6,6 +6,7 @@ import { optimizeStaticScene } from './scene-optimizer.js';
 import { loadModel } from './animation.js';
 import { censorFlags } from './flag-censorship.js';
 import { assetManager, runtimeProfile } from './runtime-assets.js';
+import { enableCascadedShadows } from './lighting.js';
 import { assets } from './asset-loader.js';
 import { applyAnisotropy, applyDithering } from './quality.js';
 
@@ -40,7 +41,7 @@ export class World {
     const moving=[];
     gltf.scene.traverse(o=>{if(o.userData?.collisionOnly)o.visible=false;if(o.userData?.dynamicBrush){moving.push(o);this.entities.set(o.userData.entityId,o);}});
     for(const o of moving){this.scene.attach(o);if(o.userData.targetname==='theater_extracam_screen')o.visible=false;}
-    if(runtimeProfile.shadows)gltf.scene.traverse(o=>{if(o.isMesh&&!o.userData?.collisionOnly){o.castShadow=true;o.receiveShadow=true;}});
+    if(runtimeProfile.shadows)gltf.scene.traverse(o=>{if(o.isMesh&&!o.userData?.collisionOnly){o.castShadow=true;o.receiveShadow=true;enableCascadedShadows(runtimeProfile.csm,o.material);}});
     this.optimization=optimizeStaticScene(gltf.scene,{cellSize:768});
     const nav=importNavMesh(new Uint8Array(bytes));this.nav=nav.navMesh;this.query=new NavMeshQuery(this.nav,{maxNodes:8192});this.query.defaultQueryHalfExtents={x:70,y:100,z:70};
     progress('Placing machines and barricades',65);
