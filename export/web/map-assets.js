@@ -28,7 +28,7 @@ function parseGltf(text, base) {
   });
 }
 
-export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {} } = {}) {
+export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}, pack = null } = {}) {
   if (!configured) {
     configureKinoAssets();
     configured = true;
@@ -47,6 +47,9 @@ export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}
   const held = [];
   try {
     report();
+    // One download for every texture of this map. If the pack is missing or damaged the loader falls back
+    // to the individual files, so a bad pack can never stop the map. ?pack=0 skips it.
+    if (pack && !/[?&]pack=0\b/.test(location.search)) await assets.loadPack(pack);
     const response = await assets.fetch(gltfPath);
     if (!response.ok) throw new Error(`${gltfPath} HTTP ${response.status}`);
     const text = await response.text();

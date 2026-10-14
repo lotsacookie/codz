@@ -112,7 +112,7 @@ async function load() {
   const manager = new THREE.LoadingManager();
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Shangri-La…');
-  const gltf = await loadMapGltf('./shangri-la/shangri-la.gltf', {label: 'Shangri-La', onStatus: showStatus});
+  const gltf = await loadMapGltf('./shangri-la/shangri-la.gltf', {label: 'Shangri-La', onStatus: showStatus, pack: 'asset-pack/shangri-la.pack'});
   const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Shangri-La collision and sky…');
   const [collider, sky] = await Promise.all([

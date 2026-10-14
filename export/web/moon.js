@@ -280,7 +280,7 @@ async function load() {
   data = await response.json(); state = new MoonState(data.rules);
   const showStatus = text => { $('status').textContent = text; };
   showStatus('Loading Moon…');
-  const gltf = await loadMapGltf('moon/moon.gltf', {label: 'Moon', onStatus: showStatus});
+  const gltf = await loadMapGltf('moon/moon.gltf', {label: 'Moon', onStatus: showStatus, pack: 'asset-pack/moon.pack'});
   const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Moon collision…');
   const world = await loadCollisionWorld({metadataUrl: 'moon/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Moon collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)});

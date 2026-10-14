@@ -114,7 +114,7 @@ async function load() {
   const manager = new THREE.LoadingManager();
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Ascension…');
-  const gltf = await loadMapGltf('./ascension/ascension.gltf', {label: 'Ascension', onStatus: showStatus});
+  const gltf = await loadMapGltf('./ascension/ascension.gltf', {label: 'Ascension', onStatus: showStatus, pack: 'asset-pack/ascension.pack'});
   const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Ascension collision and sky…');
   const [collider, sky] = await Promise.all([

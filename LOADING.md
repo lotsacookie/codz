@@ -75,3 +75,10 @@ Zombies now turn with eased, rate-limited yaw instead of snapping to the next pa
 ## Not verified here
 The real Kino geometry could not be downloaded in the authoring environment, so frame rates and visual quality were
 not measured. Loader behaviour was verified with unit tests and in headless Chromium against pointer and placeholder files.
+
+## Per-map texture packs (Moon, Shangri-La, Ascension, Call of the Dead)
+Each of these maps has one pack of its whole `textures/` folder: `asset-pack/moon.pack`, `shangri-la.pack`, `ascension.pack`, `coast.pack`.
+The map downloads its pack first (one resilient request with byte progress, retries and Cache Storage) and serves every texture from memory,
+instead of requesting 300-400 images one by one. A missing, truncated or LFS-pointer pack falls back to the individual files; `?pack=0` skips it.
+The **Build asset pack** workflow builds and verifies them with the Kino packs. Locally: `node .tools/build-asset-pack.mjs --map=moon` (or no
+flag for everything), and `--verify` to check they are current. Run `git lfs pull` first.

@@ -11,6 +11,10 @@ on:
       - export/web/animations/**
       - export/web/kino.gltf
       - export/web/game-data.json
+      - export/web/moon/textures/**
+      - export/web/shangri-la/textures/**
+      - export/web/ascension/textures/**
+      - export/web/coast/textures/**
       - export/web/asset-pack.js
       - .tools/build-asset-pack.mjs
 
@@ -22,7 +26,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*
+  LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*,export/web/moon/textures/*,export/web/shangri-la/textures/*,export/web/ascension/textures/*,export/web/coast/textures/*
 
 jobs:
   build:
@@ -62,7 +66,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git lfs install --local
-          git add export/web/asset-pack/kino-desktop.pack export/web/asset-pack/kino-mobile.pack
+          git add export/web/asset-pack/*.pack
           if git diff --cached --quiet; then
             echo "Asset packs are already up to date."
             exit 0

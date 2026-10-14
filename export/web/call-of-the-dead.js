@@ -70,7 +70,7 @@ async function load() {
   const manager = new THREE.LoadingManager();
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Call of the Dead…');
-  const gltf = await loadMapGltf('coast/coast.gltf', {label: 'Call of the Dead', onStatus: showStatus});
+  const gltf = await loadMapGltf('coast/coast.gltf', {label: 'Call of the Dead', onStatus: showStatus, pack: 'asset-pack/coast.pack'});
   const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Call of the Dead collision and sky…');
   const [physics, sky, waves] = await Promise.all([
