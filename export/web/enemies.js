@@ -8,6 +8,24 @@ import { turnToward, steerDirection, smoothingEnabled } from './steering.js';
 const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
 const STEER_RATE = smoothingEnabled() ? 8 : Infinity;   // path-direction easing; Infinity = old behaviour
 
+export const MELEE_DAMAGE = 60;
+export const MELEE_ATTACK_DIST = 64;
+const SPAWN_DELAY_FLOOR = .08;
+const GAIT_SPEED = {
+  zombie: { walk: [42, 52, 62], run: [100, 100, 100], sprint: [150, 150, 150] },
+  nova: { walk: [48, 48, 48], run: [92, 92, 92], sprint: [128, 128, 128] }
+};
+const GAIT_ANIM = {
+  zombie: { walk: ['ai_zombie_walk_v1', 'ai_zombie_walk_v2', 'ai_zombie_walk_fast_v1'], run: ['ai_zombie_run_v1', 'ai_zombie_run_v1', 'ai_zombie_run_v1'], sprint: ['ai_zombie_sprint_v1', 'ai_zombie_sprint_v1', 'ai_zombie_sprint_v1'] },
+  nova: { walk: 'ai_zombie_quad_crawl', run: 'ai_zombie_quad_crawl_run', sprint: 'ai_zombie_quad_crawl_sprint' }
+};
+
+export function rollGait(round, rules = {}, random = Math.random) {
+  const base = round <= 1 ? 1 : (round - 1) * (rules.zombie_move_speed_multiplier ?? 8);
+  const roll = base + Math.floor(random() * 35);
+  return roll <= 35 ? 'walk' : roll <= 70 ? 'run' : 'sprint';
+}
+
 export class Enemies {
   constructor(scene,world,data,session,{damage,kill,hit,sound}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};}
   async load(){
@@ -33,8 +51,10 @@ export class Enemies {
     if(runtimeProfile.shadows)root.traverse(o=>{if(o.isMesh)o.castShadow=true;});
     root.position.copy(position??barrier.outside);this.scene.add(root);
     const rig=new Rig(root),round=this.session.round;
-    const speed=kind==='dog'?230:Math.min(210,34+round*8+(id%4)*5);
-    const walk=kind==='dog'?'zombie_dog_run':kind==='nova'?(speed<90?'ai_zombie_quad_crawl':'ai_zombie_quad_crawl_run'):speed<70?(id%2?'ai_zombie_walk_v1':'ai_zombie_walk_v2'):speed<110?'ai_zombie_walk_fast_v1':speed<165?'ai_zombie_run_v1':'ai_zombie_sprint_v1';
+    const gait=kind==='dog'?'sprint':rollGait(round,this.data.rules,()=>this.session.random());
+    const variant=Math.floor(this.session.random()*3),jitter=.94+this.session.random()*.12;
+    const speed=kind==='dog'?230:GAIT_SPEED[kind==='nova'?'nova':'zombie'][gait][variant]*jitter;
+    const walk=kind==='dog'?'zombie_dog_run':kind==='nova'?GAIT_ANIM.nova[gait]:GAIT_ANIM.zombie[gait][variant];
     const attack=kind==='dog'?'zombie_dog_run_attack':kind==='nova'?'ai_zombie_quad_attack':'ai_zombie_attack_v1';
     if(this.anims[walk])rig.add('walk',this.anims[walk],true);
     if(this.anims[attack])rig.add('attack',this.anims[attack],true);
@@ -55,7 +75,7 @@ export class Enemies {
         if(candidates.length){
           const b=candidates[Math.floor(s.random()*candidates.length)],nova=s.power&&!s.dogRound&&s.spawned%5===4&&['foyer_zone','foyer2_zone','theater_zone','stage_zone','dining_zone'].includes(this.world.zoneAt(player.clone().add(new THREE.Vector3(0,35,0))));
           this.spawn(s.dogRound||nova?b.inside:null,s.dogRound||nova?null:b,s.dogRound?'dog':nova?'nova':'zombie');
-          this.nextSpawn=Math.max(.35,(this.data.rules.zombie_spawn_delay??2)*Math.pow(.95,s.round-1));
+          this.nextSpawn=Math.max(SPAWN_DELAY_FLOOR,(this.data.rules.zombie_spawn_delay??2)*Math.pow(.95,s.round-1));
         }
         else this.nextSpawn=1;
       }
@@ -78,10 +98,10 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=z.root.position.clone().add(new THREE.Vector3(0,z.kind==='dog'?25:45,0)),eye=player.clone().add(new THREE.Vector3(0,40,0));
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:50);}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE);}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
-      if(!lure&&dist<62&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
+      if(!lure&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
         z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
       }
       z.repath-=dt;
