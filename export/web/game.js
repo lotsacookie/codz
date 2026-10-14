@@ -60,7 +60,9 @@ const errors=[];
 let lastShot=null;
 let pendingMelee=null,lastReloadSerial=0,reloadShot=false;
 let mousePrimary=false,mouseAim=false;
+let mouseSens=1;try{const v=Number(localStorage.getItem('kino.lookSensitivity'));if(v>0)mouseSens=Math.min(3,Math.max(.25,v));}catch{}
 const touchControls=createZombieTouch({
+  menuSettings:false,
   onLook:(x,y,sensitivity)=>{
     if(!active||session.phase==='reviving')return;
     const scale=.005*sensitivity*(ads?.5:1);
@@ -125,12 +127,20 @@ async function prewarm(){
 function toast(text,duration=2.5){$('toast').textContent=text;toastUntil=(session?.time??0)+duration;}
 function announce(title,small='KINO DER TOTEN',duration=4){$('announcement-title').textContent=title;$('announcement-small').textContent=small;$('announcement').style.opacity=1;announcementUntil=session.time+duration;}
 function menuTitle(t){const e=$('menu-title');if(e&&e.textContent!==t)e.textContent=t;}
-function setActive(value){
+const optionsView=$('options-view'),menuMain=$('menu-main'),lookSlider=$('look-sensitivity'),lookValue=$('look-sensitivity-value'),fullscreenButton=$('fullscreen');
+function menuStateTitle(){return session&&session.phase==='gameover'?'GAME OVER':started?'PAUSED':'KINO DER TOTEN';}
+function syncOptions(){const touch=!!touchControls.mode;lookSlider.min=touch?.4:.25;lookSlider.max=touch?2:3;lookSlider.step=touch?.1:.05;lookSlider.value=touch?touchControls.sensitivity:mouseSens;lookValue.textContent=Number(lookSlider.value).toFixed(touch?1:2)+'×';fullscreenButton.hidden=!(touch&&document.fullscreenEnabled);}
+function showOptions(open){if(optionsView.hidden!==open)return;optionsView.hidden=!open;menuMain.hidden=open;if(open){syncOptions();menuTitle('OPTIONS');}else menuTitle(menuStateTitle());}
+lookSlider.addEventListener('input',()=>{const v=Number(lookSlider.value);if(!(v>0))return;if(touchControls.mode){touchControls.setSensitivity(v);}else{mouseSens=v;try{localStorage.setItem('kino.lookSensitivity',String(v));}catch{}}lookValue.textContent=v.toFixed(touchControls.mode?1:2)+'×';});
+$('options').addEventListener('click',()=>showOptions(true));$('options-back').addEventListener('click',()=>showOptions(false));
+fullscreenButton.addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{}});
+addEventListener('keydown',e=>{if(e.code==='Escape'&&!optionsView.hidden){e.preventDefault();showOptions(false);}});
+function setActive(value){showOptions(false);
   active=!!value&&ready&&session.phase!=='gameover';$('menu').hidden=active;document.body.classList.toggle('menu-open',!active);keys.clear();primary=false;primaryPressed=false;ads=false;reloadShot=false;
   mousePrimary=mouseAim=false;touchControls.reset();touchControls.setEnabled(active&&session.phase!=='reviving',active);
   if(active&&audio.ctx)audio.start();else if(!active)audio.pause();
   if(active){if(!started){started=true;audio.play('round');}}
-  else if(started&&session.phase!=='gameover'){menuTitle('PAUSED');$('start').innerHTML='RESUME GAME <span>→</span>';$('restart').hidden=false;$('menu-status').textContent='Paused · Round '+session.round;}
+  else if(started&&session.phase!=='gameover'){menuTitle('PAUSED');$('start').innerHTML='RESUME GAME <span>→</span>';$('restart').hidden=false;$('menu-status').textContent='';}
 }
 function start(){if(!ready||contextLost)return;if(session.phase==='gameover')reset();audio.start();warmViewAudio();if(touchControls.mode){setActive(true);return;}renderer.domElement.requestPointerLock?.()?.catch(e=>toast('Click the game to capture the mouse'));}
 $('start').addEventListener('click',start);$('restart').addEventListener('click',()=>{reset();start();});
@@ -144,7 +154,7 @@ addEventListener('pageshow',resumeRendering);
 renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();contextLost=true;suspendRendering();$('start').disabled=true;$('menu-status').textContent='Graphics paused. Waiting for Safari to restore the game…';});
 renderer.domElement.addEventListener('webglcontextrestored',()=>{contextLost=false;$('start').disabled=!ready;$('menu-status').textContent='Graphics restored · tap to resume';resumeRendering();});
 addEventListener('blur',()=>{keys.clear();primary=false;ads=false;if(started&&active){setActive(false);document.exitPointerLock?.();}});
-addEventListener('mousemove',e=>{if(!active||document.pointerLockElement!==renderer.domElement)return;const sensitivity=ads?.0012:.002;camera.rotation.y-=e.movementX*sensitivity;camera.rotation.x=THREE.MathUtils.clamp(camera.rotation.x-e.movementY*sensitivity,-1.5,1.5);});
+addEventListener('mousemove',e=>{if(!active||document.pointerLockElement!==renderer.domElement)return;const sensitivity=(ads?.0012:.002)*mouseSens;camera.rotation.y-=e.movementX*sensitivity;camera.rotation.x=THREE.MathUtils.clamp(camera.rotation.x-e.movementY*sensitivity,-1.5,1.5);});
 addEventListener('mousedown',e=>{if(!active||e.sourceCapabilities?.firesTouchEvents||e.target.closest('#touch-controls'))return;if(e.button===0){mousePrimary=primary=true;primaryPressed=true;}if(e.button===2)mouseAim=ads=true;});
 addEventListener('mouseup',e=>{if(e.sourceCapabilities?.firesTouchEvents)return;if(e.button===0)mousePrimary=primary=false;if(e.button===2)mouseAim=ads=false;});
 addEventListener('contextmenu',e=>e.preventDefault());

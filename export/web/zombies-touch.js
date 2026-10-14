@@ -1,7 +1,7 @@
 import { TouchControls } from './touch-controls.js';
 
 // Shared BO2 pointer controls, with the actions needed by both Zombies maps.
-export function createZombieTouch({ moon = false, onLook, onAction, onPause, onReset }) {
+export function createZombieTouch({ moon = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
   const button = (kind, label, icon = '') => `<button type="button" class="touch-button touch-${kind}" data-touch="${kind}" aria-label="${label}">${icon}<span>${label}</span></button>`;
   const svg = content => `<svg viewBox="0 0 24 24" aria-hidden="true">${content}</svg>`;
   const root = document.createElement('div');
@@ -32,29 +32,31 @@ export function createZombieTouch({ moon = false, onLook, onAction, onPause, onR
   };
   const controls = new TouchControls({ root, onLook, onAction, onReset, onModeChange: updateHints });
   if (controls.mode) updateHints();
-  const settings = document.createElement('div');
-  settings.className = 'touch-only touch-settings';
-  settings.innerHTML = `<p>Left stick: move; push forward to sprint. Swipe right to look, or drag FIRE to aim while shooting. Tap AIM / CROUCH to toggle. Hold USE to repair${moon ? ', or HACK to hack' : ''}.</p>
-    <label for="touch-sensitivity">Look sensitivity <input id="touch-sensitivity" type="range" min="0.4" max="2" step="0.1"><output id="touch-sensitivity-value" for="touch-sensitivity"></output></label>
-    <p>Landscape gives you more room to aim.</p>
-    <button type="button" id="touch-fullscreen" hidden>Full screen</button>`;
-  document.querySelector(moon ? '#menu .panel' : '#menu .menu-content').append(settings);
-  const slider = settings.querySelector('input');
-  const value = settings.querySelector('output');
-  slider.value = controls.sensitivity;
-  value.textContent = `${controls.sensitivity.toFixed(1)}×`;
-  slider.addEventListener('input', () => {
-    controls.setSensitivity(slider.value);
+  if (menuSettings) {
+    const settings = document.createElement('div');
+    settings.className = 'touch-only touch-settings';
+    settings.innerHTML = `<p>Left stick: move; push forward to sprint. Swipe right to look, or drag FIRE to aim while shooting. Tap AIM / CROUCH to toggle. Hold USE to repair${moon ? ', or HACK to hack' : ''}.</p>
+      <label for="touch-sensitivity">Look sensitivity <input id="touch-sensitivity" type="range" min="0.4" max="2" step="0.1"><output id="touch-sensitivity-value" for="touch-sensitivity"></output></label>
+      <p>Landscape gives you more room to aim.</p>
+      <button type="button" id="touch-fullscreen" hidden>Full screen</button>`;
+    document.querySelector(moon ? '#menu .panel' : '#menu .menu-content').append(settings);
+    const slider = settings.querySelector('input');
+    const value = settings.querySelector('output');
+    slider.value = controls.sensitivity;
     value.textContent = `${controls.sensitivity.toFixed(1)}×`;
-  });
-  const fullscreen = settings.querySelector('#touch-fullscreen');
-  fullscreen.hidden = !document.fullscreenEnabled;
-  fullscreen.addEventListener('click', async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch { /* Full screen is optional. */ }
-  });
+    slider.addEventListener('input', () => {
+      controls.setSensitivity(slider.value);
+      value.textContent = `${controls.sensitivity.toFixed(1)}×`;
+    });
+    const fullscreen = settings.querySelector('#touch-fullscreen');
+    fullscreen.hidden = !document.fullscreenEnabled;
+    fullscreen.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen();
+      } catch { /* Full screen is optional. */ }
+    });
+  }
   // A third finger must be able to pause while move and fire are held.
   const pause = root.querySelector('#touch-pause');
   pause.addEventListener('pointerdown', event => {

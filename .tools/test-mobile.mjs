@@ -178,10 +178,13 @@ try {
       const paused = await shot('paused');
       await release();
       check('third finger pauses and releases all contacts', !paused.active && !paused.touch.visible && paused.touch.pointers === 0 && !paused.primary);
-      await tap('#touch-sensitivity', 'settings');
+      // Kino keeps look sensitivity behind OPTIONS; Moon still shows it in the pause panel.
+      if (map === 'kino') await tap('#options', 'options');
+      await tap(map === 'kino' ? '#look-sensitivity' : '#touch-sensitivity', 'settings');
       check('settings do not resume gameplay', !(await state()).active);
       const sensitivity = (await state()).touch.sensitivity;
       check('sensitivity is saved', await page.evaluate(value => Number(localStorage.getItem('zombies.touchSensitivity')) === value, sensitivity));
+      if (map === 'kino') await tap('#options-back', 'options-back');
       await tap('#start', 'resumed');
       await contact('touchStart', 1, await center('[data-touch="fire"]'));
       await shot('rotation-setup');
