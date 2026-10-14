@@ -3,8 +3,8 @@ import * as THREE from 'three';
 export const SHADOW_BACKOFF = 900;
 
 const LEVELS = {
-  dump: { sun: 3.2, ambient: 0.55, hemi: 0.6, fill: 0.2 },
-  classic: { sun: 1.2, ambient: 0.9, hemi: 1.25, fill: 0.5 }
+  dump: { sun: 3.2, ambient: 0.55, powered: 0.95, hemi: 0.6, fill: 0.2 },
+  classic: { sun: 1.2, ambient: 0.9, powered: 1.7, hemi: 1.25, fill: 0.5 }
 };
 
 export function pickLightLevels(search = '') {

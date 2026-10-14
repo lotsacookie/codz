@@ -86,7 +86,7 @@ export class Enemies {
       if(z.state==='barricade'){
         z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
         z.tearLeft-=dt;
-        if(z.barrier.count>0){z.rig.play('attack',true,1,BLEND);if(z.tearLeft<=0){this.world.setBoards(z.barrier,z.barrier.count-1);z.tearLeft=1.1;this.onSound?.('board',z.root.position);}}
+        if(z.barrier.count>0){z.rig.play('attack',true,1,BLEND);if(z.tearLeft<=0){this.world.setBoards(z.barrier,z.barrier.count-1,true);z.tearLeft=1.1;this.onSound?.('board',z.root.position);}}
         else{z.state='entering';z.enterFrom=z.root.position.clone();z.enterTime=0;z.rig.play('walk',true,1,BLEND);}
         continue;
       }

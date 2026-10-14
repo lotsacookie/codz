@@ -115,6 +115,49 @@ export class World {
   activeZones(session){const active=new Set(['foyer_zone','foyer2_zone']);let changed=true;while(changed){changed=false;for(const [a,b,f]of this.data.zoneLinks)if(session.flags.has(f)&&(active.has(a)||active.has(b))){if(!active.has(a)||!active.has(b))changed=true;active.add(a);active.add(b);}}return active;}
   zoneAt(p){return this.zones.find(e=>e.bounds&&new THREE.Box3(vector(e.bounds[0]),vector(e.bounds[1])).containsPoint(p))?.targetname;}
   spawnBarriers(session){const zones=this.activeZones(session),groups=new Set(this.zones.filter(e=>zones.has(e.targetname)).map(e=>e.target));return this.barriers.filter(b=>groups.has(b.group));}
-  setBoards(barrier,count){barrier.count=Math.max(0,Math.min(barrier.boards.length||6,count));barrier.boards.forEach((o,i)=>o.visible=i<barrier.count);}
+  setBoards(barrier,count,animate=false){
+    const before=barrier.count;barrier.count=Math.max(0,Math.min(barrier.boards.length||6,count));
+    let changed=0;
+    barrier.boards.forEach((o,i)=>{
+      const shown=i<barrier.count,was=i<before;
+      if(animate&&shown!==was)this.animateBoard(barrier,o,shown,changed++*.07);
+      else{this.cancelBoardFx(o);this.restoreBoard(o);o.visible=shown;}
+    });
+  }
+  boardHome(o){return o.userData.boardHome??=(o.userData.boardHome={p:o.position.clone(),q:o.quaternion.clone()});}
+  restoreBoard(o){const home=o.userData.boardHome;if(home){o.position.copy(home.p);o.quaternion.copy(home.q);}}
+  cancelBoardFx(o){if(!this.boardFx)return;const i=this.boardFx.findIndex(f=>f.o===o);if(i>=0)this.boardFx.splice(i,1);}
+  animateBoard(barrier,o,entering,delay=0){
+    this.cancelBoardFx(o);this.restoreBoard(o);const home=this.boardHome(o);
+    const out=barrier.outside.clone().sub(barrier.inside);out.y=0;if(out.lengthSq()<1e-6)out.set(1,0,0);out.normalize();
+    const side=new THREE.Vector3(-out.z,0,out.x),sign=Math.random()<.5?-1:1;
+    const offset=out.clone().multiplyScalar(entering?46+Math.random()*18:58+Math.random()*26).addScaledVector(side,sign*(8+Math.random()*16));
+    offset.y=entering?-16-Math.random()*10:-8;
+    const tilt=new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random()-.5)*1.1,(Math.random()-.5)*.7,(Math.random()-.5)*1.6));
+    const away=home.q.clone().multiply(tilt);
+    (this.boardFx??=[]).push({o,entering,t:-delay,dur:entering?.34:.42,home,offset,away,started:false});
+    if(entering)o.visible=false;
+  }
+  updateBoards(dt){
+    if(!this.boardFx?.length)return;
+    for(const fx of [...this.boardFx]){
+      fx.t+=dt;if(fx.t<0)continue;
+      const k=Math.min(1,fx.t/fx.dur),o=fx.o;
+      if(!fx.started){fx.started=true;o.visible=true;}
+      if(fx.entering){
+        const c1=1.4,c3=c1+1,e=1+c3*Math.pow(k-1,3)+c1*Math.pow(k-1,2),r=1-Math.pow(1-k,3);
+        o.position.copy(fx.home.p).addScaledVector(fx.offset,1-e);
+        o.quaternion.copy(fx.away).slerp(fx.home.q,r);
+      }else{
+        const e=k*k;
+        o.position.copy(fx.home.p).addScaledVector(fx.offset,e);o.position.y-=70*k*k;
+        o.quaternion.copy(fx.home.q).slerp(fx.away,Math.min(1,e*1.4));
+      }
+      if(k>=1){
+        this.boardFx.splice(this.boardFx.indexOf(fx),1);
+        this.restoreBoard(o);o.visible=fx.entering;
+      }
+    }
+  }
   reset(session){for(const b of this.barriers){this.setBoards(b,b.boards.length||6);b.reward=0;b.rewardRound=0;}this.activeBox=this.boxLocations.find(e=>e.script_noteworthy==='start_chest')??this.boxLocations[0];this.updateBox();this.setDoors(session);}
 }
