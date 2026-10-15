@@ -245,6 +245,9 @@ function createContext(entry) {
   const disposers = [];
   const exposed = [];
   const controller = new AbortController();
+  // A map can keep calling its context after it was quit (late loads, WebGL events); only the
+  // session this context belongs to may be changed, and only while it is still the current one.
+  const live = () => (session && session.ctx === ctx ? session : null);
   const ctx = {
     id: entry.map,
     label: entry.label,
@@ -257,9 +260,11 @@ function createContext(entry) {
     listen: (target, type, handler, options) => listeners.add(target, type, handler, options),
     onDispose: fn => { disposers.push(fn); },
     attach(renderer) {
+      const own = live();
+      if (!own) return renderer.domElement;
       viewport.append(renderer.domElement);
-      session.canvas = renderer.domElement;
-      session.renderer = renderer;
+      own.canvas = renderer.domElement;
+      own.renderer = renderer;
       return renderer.domElement;
     },
     progress: setLoading,
@@ -273,9 +278,9 @@ function createContext(entry) {
     sensitivity: () => mouseSensitivity,
     // Maps that have shadows / god rays call this to get the shared Graphics setting and
     // to show the GRAPHICS row in the pause menu's options.
-    useGraphics() { session.graphicsEnabled = true; return graphics; },
-    setControls(text) { session.controls = text; pauseEls.controls.textContent = text; },
-    setHint(text) { session.hint = text; },
+    useGraphics() { const own = live(); if (own) own.graphicsEnabled = true; return graphics; },
+    setControls(text) { const own = live(); if (!own) return; own.controls = text; pauseEls.controls.textContent = text; },
+    setHint(text) { const own = live(); if (own) own.hint = text; },
     setButtons(items) {
       pauseEls.extra.replaceChildren();
       for (const { label, run } of items) {
@@ -294,9 +299,9 @@ function createContext(entry) {
     expose(name, value) { globalThis[name] = value; exposed.push(name); },
     pause: () => { document.exitPointerLock?.(); if (session?.ctx.touch?.mode) deactivate(); },
     gameOver({ title = 'GAME OVER', status = '', results = '' } = {}) {
-      if (!session) return;
+      if (!live()) return;
       session.over = true;
-      if (session.active) { session.active = false; session.api.setActive?.(false); }
+      if (session.active) { session.active = false; session.api?.setActive?.(false); }
       document.exitPointerLock?.();
       setState('gameover');
       renderPause({ title, resumeLabel: 'TRY AGAIN', status, results, restart: false });
@@ -309,6 +314,7 @@ function createContext(entry) {
       addLoadButton('BACK TO MAPS', () => quit());
     },
     ready() {
+      if (!live()) return;
       session.ready = true;
       showLoading(false);
       setState('paused');
