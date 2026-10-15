@@ -68,11 +68,11 @@ function applyGraphics(){
   autoGraphics.reset();
   if(adapt.scale<adapt.max){adapt.scale=adapt.max;adapt.stable=0;adapt.probed=false;renderer.setPixelRatio(basePixelRatio);}
 }
-const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
 let culler=null,cullReady=false;
+const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
