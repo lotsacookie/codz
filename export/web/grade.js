@@ -162,6 +162,13 @@ export class GradePass {
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   }
 
+  dispose() {
+    this.target.depthTexture?.dispose();
+    this.target.dispose();
+    this.material.dispose();
+    this.quad.geometry.dispose();
+  }
+
   sync() {
     this.renderer.getDrawingBufferSize(this.size);
     const width = Math.max(1, this.size.x);

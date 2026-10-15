@@ -12,7 +12,7 @@ import { MysteryBox } from '../mystery-box.js';
 import { createZombieTouch } from '../zombies-touch.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from '../hud.js';
 import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } from '../lighting.js';
-import { AutoGraphics } from '../graphics.js';
+import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from '../runtime-assets.js';
@@ -34,14 +34,19 @@ const perkIcons={specialty_quickrevive:'specialty_quickrevive_zombies',specialty
 const profile=configureKinoAssets();
 audio.maxBufferBytes=profile.mobile?16*1024*1024:Infinity;audio.preload=!profile.mobile;
 const gradeOn=!profile.mobile&&!/[?&]grade=0\b/.test(location.search);
+const graphics=ctx.useGraphics();
 profile.shadows=!profile.mobile&&!/[?&]shadows=0\b/.test(location.search);
 const renderer=new THREE.WebGLRenderer({antialias:!profile.mobile&&!gradeOn,powerPreference:profile.mobile?'default':'high-performance'});
 const basePixelRatio=Math.min(devicePixelRatio,profile.mobile?1:2),adapt=new AdaptiveResolution({min:profile.mobile?.6:.65,targetMs:profile.mobile?1000/30:1000/60,enabled:!/[?&]adaptive=0\b/.test(location.search)}),perf=createPerfOverlay();
-if(/[?&]fx=0\b/.test(location.search))document.body.classList.add('no-fx');
-renderer.setPixelRatio(basePixelRatio);profile.anisotropy=Math.min(profile.mobile?2:16,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
+const noFxQuery=/[?&]fx=0\b/.test(location.search);if(noFxQuery)document.body.classList.add('no-fx');
+graphics.assessGpu(gpuName(renderer.getContext()));
+const ratio=()=>basePixelRatio*graphics.preset.resolution;
+renderer.setPixelRatio(ratio());profile.anisotropy=Math.min(profile.mobile||graphics.level==='low'?2:16,renderer.capabilities.getMaxAnisotropy());renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
 let lastLookYaw=0,lastLookPitch=0,previous=performance.now(),lastRendered=0,renderedFrames=0,contextLost=false,resizeTimer;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.4;renderer.autoClear=false;
-const grade=gradeOn?new GradePass(renderer):null;console.info('[kino] graphics build 2026-10-13: grade pass '+(grade?'on':'off')+', shadows '+(profile.shadows?'on':'off')+', pixel ratio cap '+(profile.mobile?1:2)+', anisotropy '+profile.anisotropy);
+let grade=null;
+function syncGrade(){const want=gradeOn&&graphics.preset.postProcess;if(want&&!grade)grade=new GradePass(renderer);else if(!want&&grade){try{grade.dispose();}catch{}grade=null;}}
+syncGrade();console.info('[kino] graphics build 2026-10-15: level '+graphics.level+', grade pass '+(grade?'on':'off')+', shadows '+(profile.shadows?'on':'off')+', pixel ratio cap '+(profile.mobile?1:2)+', anisotropy '+profile.anisotropy);
 ctx.attach(renderer);
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x101319);scene.fog=new THREE.FogExp2(0x14181b,fogDensityFromHalfDistance(THEATER_FOG.halfDist));
 const lightLevels=pickLightLevels(location.search);let theaterFx=null;
@@ -55,7 +60,7 @@ const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(locat
 const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
 if(profile.shadows){csm=new CSM({camera,parent:scene,lightDirection:keyDirection.clone(),lightIntensity:lightLevels.sun,...SHADOW_CASCADES});csm.fade=true;csm.lights.forEach(l=>{l.color.setRGB(...THEATER_WORLD.sunColor);l.shadow.normalBias=1.5;l.shadow.radius=3;});profile.csm=csm;}
 // Graphics setting (Auto / High / Medium / Low) from the pause menu drives shadows, god rays and sun brightness.
-const graphics=ctx.useGraphics(),autoGraphics=new AutoGraphics({targetMs:profile.mobile?1000/30:1000/60});
+const autoGraphics=new AutoGraphics({targetMs:profile.mobile?1000/30:1000/60});
 function applyGraphics(){
   const preset=graphics.preset,shadowsOn=!!profile.shadows&&preset.shadows;
   if(csm){
@@ -66,7 +71,12 @@ function applyGraphics(){
   if(culler)culler.shadows=shadowsOn;
   theaterFx?.setGodRays(preset.godRays);
   autoGraphics.reset();
-  if(adapt.scale<adapt.max){adapt.scale=adapt.max;adapt.stable=0;adapt.probed=false;renderer.setPixelRatio(basePixelRatio);}
+  adapt.min=profile.mobile?Math.min(.6,preset.minResolution):preset.minResolution;
+  adapt.scale=adapt.max;adapt.stable=0;adapt.probed=false;adapt.holdWindows=4;renderer.setPixelRatio(ratio());
+  syncGrade();
+  muzzle.visible=preset.muzzleLight;
+  camera.far=14000*preset.farScale;camera.updateProjectionMatrix();
+  document.body.classList.toggle('no-fx',noFxQuery||!preset.overlay);
 }
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
@@ -109,6 +119,7 @@ ctx.onDispose(()=>{
   try{blood.clear();}catch{}
   try{chalk.reset();}catch{}
   try{grade?.dispose?.();}catch{}
+  try{if(!noFxQuery)document.body.classList.remove('no-fx');}catch{}
   try{stopGraphics();}catch{}
   try{csm?.dispose?.();}catch{}
   try{culler?.dispose?.();}catch{}
@@ -511,7 +522,7 @@ function renderFrame(now){
   const interval=profile.mobile?(active?1000/30:200):0;
   if(lastRendered&&now-lastRendered<interval-1)return;
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
-  if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);if(graphics.setting==='auto'&&autoGraphics.sample(dt*1000,adapt.scale<adapt.max-.15))graphics.stepDown();}frameCount++;renderedFrames++;
+  if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(ratio()*scale);if(graphics.setting==='auto'&&autoGraphics.sample(dt*1000,adapt.scale<adapt.max-.15))graphics.stepDown();}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
   update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],80,40);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }

@@ -4,7 +4,7 @@ import { detectMobile, releaseRuntime } from './runtime-assets.js';
 import { resetMapAssets } from './map-assets.js';
 import { releaseModelCache } from './animation.js';
 import { createListeners, disposeRenderer } from './dispose.js';
-import { GraphicsSettings } from './graphics.js';
+import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -68,7 +68,7 @@ function readSensitivity() {
   return 1;
 }
 let mouseSensitivity = readSensitivity();
-const graphics = new GraphicsSettings();
+const graphics = new GraphicsSettings({ lowEnd: detectLowEndBrowser() });
 
 function loadStyle(href) {
   return new Promise((resolve, reject) => {
