@@ -102,6 +102,7 @@ export class TheaterLighting {
     this.scratch = new THREE.Vector3();
     this.group = new THREE.Group();
     this.group.name = 'theater-light-fx';
+    this.godRays = true;
     scene.add(this.group);
     if (fxData?.ray?.length) this.buildShafts(world, fxData.ray, sunColor);
     if (fxData?.mote?.length) this.buildMotes(fxData.mote);
@@ -209,7 +210,14 @@ export class TheaterLighting {
     geometry.attributes.position.needsUpdate = true;
   }
 
+  // God rays and dust motes are one effect group; the Graphics setting turns them on or off.
+  setGodRays(enabled) {
+    this.godRays = !!enabled;
+    this.group.visible = this.godRays;
+  }
+
   update(dt, camera) {
+    if (!this.godRays) return;
     this.time += dt;
     for (const shaft of this.shafts) {
       const near = distanceToSegment(camera.position, shaft.start, shaft.end);

@@ -12,6 +12,7 @@ import { MysteryBox } from '../mystery-box.js';
 import { createZombieTouch } from '../zombies-touch.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, bo1Prompt, renderAmmoIcons } from '../hud.js';
 import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } from '../lighting.js';
+import { AutoGraphics } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from '../runtime-assets.js';
@@ -53,6 +54,21 @@ const fill=new THREE.DirectionalLight(0x8cabc9,lightLevels.fill);fill.position.s
 const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(location.search)?.[1])||THEATER_WORLD.cgFov)),hipFov=verticalFovFromCgFov(cgFov);
 const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
 if(profile.shadows){csm=new CSM({camera,parent:scene,lightDirection:keyDirection.clone(),lightIntensity:lightLevels.sun,...SHADOW_CASCADES});csm.fade=true;csm.lights.forEach(l=>{l.color.setRGB(...THEATER_WORLD.sunColor);l.shadow.normalBias=1.5;l.shadow.radius=3;});profile.csm=csm;}
+// Graphics setting (Auto / High / Medium / Low) from the pause menu drives shadows, god rays and sun brightness.
+const graphics=ctx.useGraphics(),autoGraphics=new AutoGraphics({targetMs:profile.mobile?1000/30:1000/60});
+function applyGraphics(){
+  const preset=graphics.preset,shadowsOn=!!profile.shadows&&preset.shadows;
+  if(csm){
+    if(preset.shadows&&preset.shadowMapSize&&csm.shadowMapSize!==preset.shadowMapSize){csm.shadowMapSize=preset.shadowMapSize;for(const l of csm.lights){l.shadow.mapSize.set(preset.shadowMapSize,preset.shadowMapSize);l.shadow.dispose();l.shadow.map=null;l.shadow.mapPass=null;}}
+    csm.lights.forEach(l=>{l.visible=shadowsOn;l.castShadow=shadowsOn;});
+  }
+  keyLight.visible=!shadowsOn;keyLight.intensity=lightLevels.sun*preset.sunScale;
+  if(culler)culler.shadows=shadowsOn;
+  theaterFx?.setGodRays(preset.godRays);
+  autoGraphics.reset();
+  if(adapt.scale<adapt.max){adapt.scale=adapt.max;adapt.stable=0;adapt.probed=false;renderer.setPixelRatio(basePixelRatio);}
+}
+const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
@@ -93,6 +109,7 @@ ctx.onDispose(()=>{
   try{blood.clear();}catch{}
   try{chalk.reset();}catch{}
   try{grade?.dispose?.();}catch{}
+  try{stopGraphics();}catch{}
   try{csm?.dispose?.();}catch{}
   try{culler?.dispose?.();}catch{}
   try{perf?.remove?.();}catch{}
@@ -473,7 +490,7 @@ Object.assign(kinoApi.debug,{
 });
 ctx.expose('kino',kinoApi);
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack')]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});}catch(error){console.warn('[kino] theater light fx unavailable',error);}
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack')]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
@@ -484,7 +501,7 @@ try{
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();
   progress('Preparing graphics',90);await prewarm();
-  if(!/[?&]cull=0\b/.test(location.search)&&world.staticRoot){try{culler=new OcclusionCuller({root:world.staticRoot,lightDirection:keyDirection,shadows:!!profile.shadows});}catch(error){console.warn('[kino] culling unavailable',error);culler=null;}}cullReady=true;
+  if(!/[?&]cull=0\b/.test(location.search)&&world.staticRoot){try{culler=new OcclusionCuller({root:world.staticRoot,lightDirection:keyDirection,shadows:!!profile.shadows&&graphics.preset.shadows});}catch(error){console.warn('[kino] culling unavailable',error);culler=null;}}cullReady=true;
   progress('Ready',100);ctx.hud.combat(true);ctx.hud.crosshair(true);ctx.setControls(CONTROLS);
   {let hint=contextLost?'Graphics paused. Waiting for Safari to restore the game…':touchControls.mode?'Tap to enter the theater':'Click to capture the mouse · Esc to pause';const missing=assetDiagnostics().failedTextures;if(missing)hint+=` · ${missing} texture${missing>1?'s':''} could not be loaded (see console)`;ctx.setHint(hint);}
 }catch(error){console.error(error);errors.push(String(error));byteProgress=false;throw error;}
@@ -494,7 +511,7 @@ function renderFrame(now){
   const interval=profile.mobile?(active?1000/30:200):0;
   if(lastRendered&&now-lastRendered<interval-1)return;
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
-  if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
+  if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);if(graphics.setting==='auto'&&autoGraphics.sample(dt*1000,adapt.scale<adapt.max-.15))graphics.stepDown();}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
   update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],80,40);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }

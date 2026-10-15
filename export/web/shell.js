@@ -4,6 +4,7 @@ import { detectMobile, releaseRuntime } from './runtime-assets.js';
 import { resetMapAssets } from './map-assets.js';
 import { releaseModelCache } from './animation.js';
 import { createListeners, disposeRenderer } from './dispose.js';
+import { GraphicsSettings } from './graphics.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -16,7 +17,7 @@ const pauseEls = {
   eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('start'), restart: $('pause-restart'),
   extra: $('pause-extra'), options: $('pause-options'), quit: $('pause-quit'), status: $('pause-status'), results: $('pause-results'),
   controls: $('pause-controls'), optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
-  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'),
+  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'),
 };
 const loadEls = { label: $('load-label'), bar: $('load-progress'), actions: $('load-actions') };
 
@@ -58,6 +59,7 @@ function readSensitivity() {
   return 1;
 }
 let mouseSensitivity = readSensitivity();
+const graphics = new GraphicsSettings();
 
 function loadStyle(href) {
   return new Promise((resolve, reject) => {
@@ -99,7 +101,14 @@ function showOptions(open) {
   pauseEls.title.textContent = open ? 'OPTIONS' : session?.pauseTitle ?? 'PAUSED';
 }
 
+function syncGraphics() {
+  const supported = !!session?.graphicsEnabled;
+  pauseEls.graphics.hidden = !supported;
+  if (supported) pauseEls.graphics.textContent = `GRAPHICS: ${graphics.label()}`;
+}
+
 function syncOptions() {
+  syncGraphics();
   const touch = !!session?.ctx.touch?.mode;
   const slider = pauseEls.slider;
   slider.min = touch ? .4 : .25;
@@ -121,6 +130,7 @@ pauseEls.slider.addEventListener('input', () => {
   }
   pauseEls.sliderValue.textContent = value.toFixed(touch?.mode ? 1 : 2) + '×';
 });
+pauseEls.graphics.addEventListener('click', () => { graphics.cycle(); syncGraphics(); });
 pauseEls.options.addEventListener('click', () => showOptions(true));
 pauseEls.back.addEventListener('click', () => showOptions(false));
 pauseEls.fullscreen.addEventListener('click', async () => {
@@ -252,6 +262,9 @@ function createContext(entry) {
       });
     },
     sensitivity: () => mouseSensitivity,
+    // Maps that have shadows / god rays call this to get the shared Graphics setting and
+    // to show the GRAPHICS row in the pause menu's options.
+    useGraphics() { session.graphicsEnabled = true; return graphics; },
     setControls(text) { session.controls = text; pauseEls.controls.textContent = text; },
     setHint(text) { session.hint = text; },
     setButtons(items) {
