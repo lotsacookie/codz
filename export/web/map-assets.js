@@ -28,6 +28,8 @@ function parseGltf(text, base) {
   });
 }
 
+export function resetMapAssets() { configured = false; }
+
 export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}, pack = null } = {}) {
   if (!configured) {
     configureKinoAssets();

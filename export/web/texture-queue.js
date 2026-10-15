@@ -22,7 +22,9 @@ export function createTextureQueue({ load, limit = 8, canRun = () => true }) {
     return cache.get(key);
   }
 
-  return { request, pump, stats: () => ({ sources: cache.size, loading: running, queued: queue.length }) };
+  const clear = () => { queue.length = 0; cache.clear(); };
+
+  return { request, pump, clear, stats: () => ({ sources: cache.size, loading: running, queued: queue.length }) };
 }
 
 export function createTextureRegistry() {
@@ -53,6 +55,7 @@ export function createTextureRegistry() {
       entries.set(key, entry);
       wake();
     },
+    clear() { entries.clear(); const list = waiters; waiters = []; for (const resolve of list) resolve(); },
     settled() { return pendingCount() ? new Promise(resolve => waiters.push(resolve)) : Promise.resolve(); },
     failedKeys() { return [...entries].filter(([, e]) => e.state === 'failed').map(([key]) => key); },
     report() {

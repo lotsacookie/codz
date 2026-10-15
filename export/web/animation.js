@@ -6,6 +6,13 @@ import { assets, rfetch } from './asset-loader.js';
 
 const loader=new GLTFLoader(assetManager), models=new Map(), clips=new Map();
 export async function loadModel(url){if(!url)return null;if(!models.has(url))models.set(url,assets.buffer(url).then(bytes=>loader.parseAsync(bytes,THREE.LoaderUtils.extractUrlBase(assets.abs(url)))).then(gltf=>gltf.scene));return clone(await models.get(url));}
+export async function releaseModelCache(){
+  const pending=[...models.values()];models.clear();clips.clear();
+  for(const entry of pending){
+    let scene;try{scene=await entry;}catch{continue;}
+    scene.traverse(o=>{o.geometry?.dispose();for(const m of [o.material].flat())if(m){for(const v of Object.values(m))if(v?.isTexture)v.dispose();m.dispose();}});
+  }
+}
 export async function loadAnimation(url){if(!clips.has(url))clips.set(url,rfetch(url).then(r=>{if(!r.ok)throw new Error('Animation '+url+': '+r.status);return r.json();}));return clips.get(url);}
 export function makeClip(root, data, locomotion=false){
   const tracks=[];const nodes=new Map();

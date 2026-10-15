@@ -131,6 +131,17 @@ export class AssetLoader {
     return entry;
   }
 
+  releaseTransient() {
+    for (const blobUrl of this.blobUrls.values()) URL.revokeObjectURL(blobUrl);
+    this.blobUrls.clear();
+    for (const url of [...this.files.keys()]) if (!this.packs.has(url)) this.files.delete(url);
+    this.listeners.clear();
+  }
+
+  packStatus() {
+    return { loaded: this.packs.size, bytes: [...this.packs.values()].reduce((sum, pack) => sum + (pack.byteLength ?? 0), 0) };
+  }
+
   async openCache() {
     if (this._cache !== undefined) return this._cache;
     try { this._cache = this.cachesImpl ? await this.cachesImpl.open(this.cacheName) : null; } catch { this._cache = null; }

@@ -89,9 +89,14 @@ function textureUrl(url) {
 export const detectMobile = () => matchMedia('(pointer: coarse)').matches || /iPhone|iPad|iPod/.test(navigator.userAgent)
   || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
 
+let visibilityHandler = null;
+
 export function configureKinoAssets() {
   runtimeProfile.mobile = detectMobile();
-  if (runtimeProfile.mobile) document.addEventListener('visibilitychange', () => { if (!document.hidden) textureQueue.pump(); });
+  if (runtimeProfile.mobile && !visibilityHandler) {
+    visibilityHandler = () => { if (!document.hidden) textureQueue.pump(); };
+    document.addEventListener('visibilitychange', visibilityHandler);
+  }
   assetManager.addHandler(/\.(?:png|webp|jpe?g)(?:\?.*)?$/i, {
     load(url, onLoad) {
       const key = textureUrl(url);
@@ -113,6 +118,23 @@ export function configureKinoAssets() {
     },
   });
   return runtimeProfile;
+}
+
+export function releaseRuntime() {
+  if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+  visibilityHandler = null;
+  for (const texture of tracked) {
+    texture.image?.close?.();
+    texture.dispose();
+  }
+  tracked.clear();
+  for (const list of placeholders.values()) for (const texture of list) texture.dispose();
+  placeholders.clear();
+  textureQueue.clear();
+  registry.clear();
+  delete runtimeProfile.shadows;
+  delete runtimeProfile.csm;
+  THREE.Cache.clear();
 }
 
 export const textureReport = () => registry.report();

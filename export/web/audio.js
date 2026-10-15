@@ -55,6 +55,7 @@ export class GameAudio {
     if(on&&this.ctx)this.native('fire_sale_music',.35,true).then(source=>{if(token!==this.saleToken)source.stop();else this.saleMusic=source;}).catch(console.error);
   }
   pause(){this.ctx?.suspend();}
+  dispose(){this.musicToken++;try{this.music?.stop();}catch{}this.music=null;try{this.saleMusic?.stop();}catch{}this.saleMusic=null;this.buffers.clear();this.bufferSizes.clear();this.bufferBytes=0;this.variants.clear();const ctx=this.ctx;this.ctx=null;this.master=null;ctx?.close?.().catch(()=>{});}
   async buffer(key){
     if(this.buffers.has(key)){const cached=this.buffers.get(key);this.buffers.delete(key);this.buffers.set(key,cached);return cached;}
     const pending=fetch(this.manifest[key].url).then(r=>{if(!r.ok)throw new Error('Audio '+key+' HTTP '+r.status);return r.arrayBuffer();}).then(b=>this.ctx.decodeAudioData(b)).then(buffer=>{

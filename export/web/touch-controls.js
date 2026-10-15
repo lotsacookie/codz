@@ -118,6 +118,7 @@ export class TouchControls {
       onModeChange();
     };
     document.body.classList.toggle('touch-mode', this.mode);
+    this.activate = activate;
     document.addEventListener('pointerdown', activate, { capture: true, passive: true });
     root.addEventListener('pointerdown', (event) => {
       const target = event.target.closest('[data-touch]');
@@ -153,8 +154,17 @@ export class TouchControls {
     root.addEventListener('contextmenu', event => event.preventDefault());
     // Rotation/browser chrome changes invalidate the stick origin and pointer
     // coordinates. Never carry movement or a held trigger into a new layout.
-    addEventListener('resize', () => this.reset());
-    globalThis.visualViewport?.addEventListener('resize', () => this.reset());
+    this.onResize = () => this.reset();
+    addEventListener('resize', this.onResize);
+    globalThis.visualViewport?.addEventListener('resize', this.onResize);
+  }
+
+  destroy() {
+    document.removeEventListener('pointerdown', this.activate, { capture: true });
+    removeEventListener('resize', this.onResize);
+    globalThis.visualViewport?.removeEventListener('resize', this.onResize);
+    this.input.reset();
+    this.root.remove();
   }
 
   setSensitivity(value) {
