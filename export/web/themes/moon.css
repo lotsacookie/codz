@@ -1,5 +1,5 @@
 @import url('hud-bo1.css');
-body[data-theme="moon"]{color:#e1e8eb;--hud-font:"Segoe UI",sans-serif;--menu-font:"Segoe UI",sans-serif;--menu-backdrop:linear-gradient(90deg,rgba(3,8,13,.98),rgba(3,8,13,.78) 50%,rgba(3,8,13,.45));--menu-row-bg:#15232cbb;--menu-select-bg:#c1d7e2;--menu-select-text:#101c24;--menu-text:#e1e8eb;--load-accent:#85acbf;background:#030609}
+body[data-theme="moon"]{color:#e1e8eb;--hud-font:"Segoe UI",sans-serif;--menu-font:"Segoe UI",sans-serif;--menu-backdrop:linear-gradient(90deg,rgba(3,8,13,.98),rgba(3,8,13,.78) 50%,rgba(3,8,13,.45));--menu-row-bg:#15232cbb;--menu-select-bg:#c1d7e2;--menu-select-text:#101c24;--menu-text:#e1e8eb;background:#030609}
 body[data-theme="moon"] #launcher{background:#030609}
 #pause-eyebrow{color:#85acbf}
 #visor{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;border:min(3vw,30px) solid #05101888;border-radius:17%;box-shadow:inset 0 0 85px 24px #07121ddb}

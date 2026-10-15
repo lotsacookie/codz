@@ -1,4 +1,4 @@
-body[data-theme="viewer"]{background:#252e28;--menu-backdrop:linear-gradient(180deg,rgba(18,25,18,.6),rgba(10,14,10,.82));--menu-row-bg:#121912b0;--load-accent:#9fb78d}
+body[data-theme="viewer"]{background:#252e28;--menu-backdrop:linear-gradient(180deg,rgba(18,25,18,.6),rgba(10,14,10,.82));--menu-row-bg:#121912b0}
 #hud #status,#hud #help,#hud #debug{position:fixed;display:block;margin:0;padding:7px 11px;background:#121912b0;border-radius:3px;pointer-events:none;color:#fff;font:13px/1.5 system-ui,sans-serif}
 #hud #status{top:12px;left:12px;max-width:calc(100% - 24px);white-space:pre-wrap}
 #hud #help{left:50%;bottom:14px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);text-align:center}

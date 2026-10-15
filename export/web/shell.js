@@ -83,6 +83,15 @@ function loadStyle(href) {
   });
 }
 
+function prepareLoadscreen(entry) {
+  const href = entry.loadscreen ? new URL(entry.loadscreen, location.href).href : '';
+  loading.style.setProperty('--art', href ? `url("${href}")` : 'none');
+  if (!href) return Promise.resolve();
+  const image = new Image();
+  image.src = href;
+  return Promise.race([image.decode().catch(() => {}), new Promise(resolve => setTimeout(resolve, 1500))]);
+}
+
 function setLoading(text, fraction) {
   loadEls.label.textContent = text;
   if (typeof fraction === 'number') loadEls.bar.style.width = `${Math.max(2, Math.min(100, fraction * 100))}%`;
@@ -350,6 +359,7 @@ async function boot(entry) {
     return;
   }
   for (const link of styles) link.media = 'all';
+  await prepareLoadscreen(entry);
   const holder = createContext(entry);
   session = {
     ...entry, ctx: holder.ctx, holder, styles, canvas: null, renderer: null, api: null, ready: false, active: false, over: false, started: false,
@@ -432,6 +442,26 @@ list.addEventListener('click', event => {
   const button = event.target.closest('button[data-map]');
   if (button && !button.disabled) boot(registry.get(button.dataset.map));
 });
+
+function selectMap(button) {
+  const chosen = button.closest('li');
+  for (const item of list.children) item.classList.toggle('selected', item === chosen);
+}
+for (const type of ['pointerover', 'focusin']) {
+  list.addEventListener(type, event => {
+    const button = event.target.closest('button[data-map]');
+    if (button) selectMap(button);
+  });
+}
+list.addEventListener('keydown', event => {
+  const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+  const enabled = buttons.filter(button => !button.disabled);
+  const at = enabled.indexOf(document.activeElement);
+  if (!step || at < 0) return;
+  event.preventDefault();
+  enabled[(at + step + enabled.length) % enabled.length].focus();
+});
+if (buttons[0]) selectMap(buttons[0]);
 
 const preloadEls = { root: $('preload'), label: $('preload-label'), bar: $('preload-bar') };
 const MB = 1048576;

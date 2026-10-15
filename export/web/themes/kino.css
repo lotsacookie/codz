@@ -6,4 +6,4 @@ body[data-theme="kino"]{--menu-backdrop:linear-gradient(180deg,rgba(24,19,15,.52
 body.no-fx #fx{display:none}
 #pause h1{font-family:var(--menu-font)}
 #pause #pause-main>.menu-list>#pause-restart{border:0}
-#load-label{font-family:var(--menu-font)}
+#load-label{font-family:var(--shell-font)}
