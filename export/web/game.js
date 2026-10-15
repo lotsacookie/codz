@@ -19,6 +19,7 @@ import { assets, rfetch } from './asset-loader.js';
 import { smoothingEnabled } from './steering.js';
 import { AdaptiveResolution, createPerfOverlay } from './quality.js';
 import { GradePass } from './grade.js';
+import { OcclusionCuller } from './occlusion.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from './vision.js';
 
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
@@ -50,6 +51,7 @@ if(profile.shadows){csm=new CSM({camera,parent:scene,lightDirection:keyDirection
 const viewScene=new THREE.Scene(),viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
 viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.DirectionalLight(0xffefc8,1.5);vl.position.set(0,4,2);viewScene.add(vl);
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
+let culler=null,cullReady=false;
 let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
@@ -450,6 +452,8 @@ Object.assign(kino.debug,{
     for(const geometry of geometries){for(const attribute of Object.values(geometry.attributes))geometryBytes+=(attribute.array??attribute.data?.array)?.byteLength??0;geometryBytes+=geometry.index?.array.byteLength??0;}
     return {...assetDiagnostics(),textureBytes:Math.round(textureBytes),geometryBytes,collisionBytes:world?.collision.metadata.byteLength,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,renderedFrames,contextLost,antialias:renderer.getContext().getContextAttributes()?.antialias};
   },
+  cullState:()=>culler?{...culler.stats,enabled:culler.enabled}:null,
+  setCulling:value=>{if(culler)culler.setEnabled(value);return !!culler;},
   simulateContextLoss:()=>renderer.forceContextLoss(),
   simulateContextRestore:()=>renderer.forceContextRestore(),
   completionState:()=>features.snapshot(),
@@ -483,6 +487,7 @@ try{
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();
   progress('Preparing graphics',90);await prewarm();
+  if(!/[?&]cull=0\b/.test(location.search)&&world.staticRoot){try{culler=new OcclusionCuller({root:world.staticRoot,lightDirection:keyDirection,shadows:!!profile.shadows});}catch(error){console.warn('[kino] culling unavailable',error);culler=null;}}cullReady=true;
   progress('Ready',100);$('loading').hidden=true;$('start').disabled=contextLost;$('menu-status').textContent=contextLost?'Graphics paused. Waiting for Safari to restore the game…':touchControls.mode?'Tap to enter the theater':'Click to capture the mouse · Esc to pause';
   {const missing=assetDiagnostics().failedTextures;if(missing)$('menu-status').textContent+=` · ${missing} texture${missing>1?'s':''} could not be loaded (see console)`;}
 }catch(error){console.error(error);errors.push(String(error));byteProgress=false;$('load-label').textContent='Unable to start: '+error.message;$('menu-status').textContent=error.name==='LfsPointerError'?'The game files were not deployed correctly. See the message above.':'Check your connection, then retry. Files that already finished downloading are kept.';showRetry();}
@@ -494,6 +499,6 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(basePixelRatio*scale);}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],80,40);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
