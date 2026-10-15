@@ -9,7 +9,7 @@ A browser-based Three.js reconstruction of Black Ops Zombies. Kino der Toten is 
 
 **Play online:** [Kino der Toten](https://kino-der-toten.pages.dev/). This Pages site hosts Kino only, with desktop and touch controls. Wait for the map to load, then press **Enter the Theater**. The site does not need the local launcher.
 
-**Choosing a map:** `/` is a single page with a built-in map list. Nothing for a map is downloaded until you pick it; `/?map=moon` (or `kino`, `shangri-la`, `ascension`, `call-of-the-dead`) skips the list. Picking a map swaps the list for that map's own loading screen on the same page; there is no hidden loader.
+**Choosing a map:** `/` is a single page with a built-in map list. Nothing for a map is downloaded until you pick it; `/?map=moon` (or `kino`, `shangri-la`, `ascension`, `call-of-the-dead`) skips the list. Picking a map swaps the list for that map's own loading screen on the same page without changing the URL, then starts the game as soon as it has loaded.
 
 > [!IMPORTANT]
 > This is an unofficial, non-commercial fan project. It is not affiliated with,

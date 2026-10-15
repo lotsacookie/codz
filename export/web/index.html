@@ -175,19 +175,30 @@ async function boot(button) {
     booting = false;
     return;
   }
-  const params = new URLSearchParams(location.search);
-  params.set('map', map);
-  history.replaceState(null, '', `?${params}`);
   for (const link of styles) link.media = 'all';
   document.title = title || document.title;
   launcher.remove();
   document.body.className = bodyClass ?? '';
   document.body.prepend(template.content.cloneNode(true));
   try {
-    await import(module);
+    const loaded = import(module);
+    startWhenReady();
+    await loaded;
   } catch (error) {
     showBootFailure(label, error);
   }
+}
+function startWhenReady() {
+  const start = document.getElementById('start');
+  if (!start) return;
+  const go = () => {
+    if (start.disabled) return;
+    observer.disconnect();
+    start.click();
+  };
+  const observer = new MutationObserver(go);
+  observer.observe(start, { attributes: true, attributeFilter: ['disabled'] });
+  go();
 }
 
 list.addEventListener('click', event => {
