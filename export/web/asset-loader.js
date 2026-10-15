@@ -97,7 +97,7 @@ export class AssetLoader {
     this.stallMs = options.stallMs ?? 20000;
     this.backoffMs = options.backoffMs ?? 400;
     this.manifest = options.manifest ?? null;
-    this.pack = null;
+    this.packs = new Map();
     this.files = new Map();
     this.listeners = new Set();
     this.blobUrls = new Map();
@@ -173,14 +173,27 @@ export class AssetLoader {
     try { return decodeURIComponent(rel); } catch { return rel; }
   }
 
+  get pack() { return [...this.packs.values()].at(-1) ?? null; }
+  set pack(value) { if (value) this.packs.set('manual', value); else this.packs.delete('manual'); }
+
+  packed(key) {
+    if (key == null) return undefined;
+    for (const pack of this.packs.values()) {
+      const bytes = pack.get(key);
+      if (bytes) return bytes;
+    }
+    return undefined;
+  }
+
   async loadPack(path) {
     const url = this.abs(path);
+    if (this.packs.has(url)) return true;
     try {
       const { bytes } = await this.getBytes(url);
-      this.pack = parsePack(bytes);
+      this.packs.set(url, parsePack(bytes));
       return true;
     } catch (error) {
-      this.pack = null;
+      this.packs.delete(url);
       this.files.delete(url);
       try { await (await this.openCache())?.delete(url); } catch {}
       console.warn(`Asset pack unavailable, loading files individually: ${error.message}`);
@@ -189,7 +202,7 @@ export class AssetLoader {
   }
 
   async getBytes(url, signal, into, { stallMs = this.stallMs, retries = this.retries } = {}) {
-    const packed = this.pack?.get(this.packKey(url));
+    const packed = this.packed(this.packKey(url));
     if (packed) {
       if (!into) return { bytes: packed, finalUrl: url };
       if (into.offset + packed.byteLength > into.buffer.byteLength) throw new Error(`size mismatch: ${url} is larger than expected`);

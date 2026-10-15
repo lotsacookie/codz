@@ -13,7 +13,11 @@ export const packName = profile => `kino-${profile}.pack`;
 // Every other map ships one pack of its texture folder (the map folders have no separate mobile images).
 export const MAP_PACKS = ['moon', 'shangri-la', 'ascension', 'coast'];
 export const mapPackName = map => `${map}.pack`;
+export const SHARED_PACKS = ['weapons', 'enemies'];
+export const sharedPackName = (name, profile = 'desktop') => `${name}${profile === 'mobile' ? '-mobile' : ''}.pack`;
 const IMAGE = /\.(?:png|webp|jpe?g)$/i;
+const SHARED_FILE = /^(?:moon\/)?(?:models\/[^"\\]+\.glb|animations\/[^"\\]+\.json)$/i;
+const ALWAYS_WEAPON = /^(?:viewhands_|viewmodel_|tag_flash|projectile_|weapon_|t5_weapon_)[^/]*\.glb$/i;
 
 export function collectMapTextures(root, map) {
   const out = [];
@@ -33,6 +37,56 @@ function glbJson(bytes, name) {
   if (isPointer(bytes)) throw new Error(`${name} is a Git LFS pointer. Run "git lfs pull" first.`);
   if (bytes.length < 20 || bytes.readUInt32LE(0) !== 0x46546c67 || bytes.readUInt32LE(16) !== 0x4e4f534a) throw new Error(`${name} is not a binary glTF`);
   return JSON.parse(bytes.toString('utf8', 20, 20 + bytes.readUInt32LE(12)));
+}
+
+function readJson(root, rel) {
+  const file = path.join(root, rel);
+  return existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : null;
+}
+
+function collectStrings(value, out = new Set()) {
+  if (typeof value === 'string') out.add(value);
+  else if (Array.isArray(value)) for (const entry of value) collectStrings(entry, out);
+  else if (value && typeof value === 'object') for (const entry of Object.values(value)) collectStrings(entry, out);
+  return out;
+}
+
+function glbImagePaths(root, rel) {
+  const json = glbJson(readFileSync(path.join(root, rel)), rel);
+  const out = [];
+  for (const image of json.images ?? []) if (image.uri && !image.uri.startsWith('data:')) out.push(path.posix.join(path.posix.dirname(rel), decodeURIComponent(image.uri)));
+  return out;
+}
+
+export function collectShared(root = defaultRoot) {
+  const kino = readJson(root, 'game-data.json');
+  const sources = [kino, readJson(root, 'moon/combat-data.json')].filter(Boolean);
+  const exists = rel => existsSync(path.join(root, rel));
+  const weapons = new Set();
+  const enemies = new Set();
+  const take = (set, value) => {
+    for (const text of collectStrings(value)) {
+      const clean = text.replace(/^,/, '');
+      if (SHARED_FILE.test(clean) && exists(clean)) set.add(clean);
+    }
+  };
+  for (const data of sources) for (const key of ['weapons', 'melee', 'equipment']) take(weapons, data[key]);
+  const modelDir = path.join(root, 'models');
+  if (existsSync(modelDir)) for (const name of readdirSync(modelDir)) if (ALWAYS_WEAPON.test(name)) weapons.add(`models/${name}`);
+  if (kino) {
+    take(enemies, kino.characters);
+    for (const [name, url] of Object.entries(kino.animations ?? {})) if (/^(?:ai_zombie_|zombie_dog_)/.test(name)) take(enemies, url);
+  }
+  for (const rel of weapons) enemies.delete(rel);
+  const finish = set => {
+    const all = new Set(set);
+    for (const rel of set) if (rel.endsWith('.glb')) for (const image of glbImagePaths(root, rel)) all.add(image);
+    return [...all].sort();
+  };
+  const result = { weapons: finish(weapons), enemies: finish(enemies) };
+  const claimed = new Set(result.weapons);
+  result.enemies = result.enemies.filter(rel => !claimed.has(rel));
+  return result;
 }
 
 export function collectAssets(root = defaultRoot) {
@@ -65,7 +119,8 @@ export function collectAssets(root = defaultRoot) {
   if (existsSync(animationDir)) {
     for (const name of readdirSync(animationDir).filter(n => n.endsWith('.json')).sort()) add(`animations/${name}`);
   }
-  return [...found].sort();
+  const shared = new Set(Object.values(collectShared(root)).flat());
+  return [...found].filter(rel => !shared.has(rel)).sort();
 }
 
 export function buildEntries(root, profile, rels) {
@@ -92,63 +147,49 @@ function describeProblems(profile, { missing, pointers }) {
   return lines;
 }
 
-export function writePacks({ root = defaultRoot, outDir = path.join(root, 'asset-pack'), profiles = PROFILES, maps = MAP_PACKS } = {}) {
+function packTargets({ root, profiles, maps, shared, sharedProfiles }) {
+  const targets = [];
   const rels = profiles.length ? collectAssets(root) : [];
+  for (const profile of profiles) targets.push({ name: packName(profile), label: profile, profile, rels });
+  for (const map of maps) {
+    const mapRels = collectMapTextures(root, map);
+    if (mapRels.length) targets.push({ name: mapPackName(map), label: map, profile: 'desktop', rels: mapRels });
+  }
+  if (shared.length) {
+    const found = collectShared(root);
+    for (const name of shared) {
+      if (!found[name]?.length) continue;
+      for (const profile of sharedProfiles) targets.push({ name: sharedPackName(name, profile), label: `${name} ${profile}`, profile, rels: found[name] });
+    }
+  }
+  return targets;
+}
+
+export function writePacks({ root = defaultRoot, outDir = path.join(root, 'asset-pack'), profiles = PROFILES, maps = MAP_PACKS, shared = SHARED_PACKS, sharedProfiles = PROFILES } = {}) {
   mkdirSync(outDir, { recursive: true });
   const results = [];
-  for (const profile of profiles) {
-    const built = buildEntries(root, profile, rels);
-    const problems = describeProblems(profile, built);
+  for (const target of packTargets({ root, profiles, maps, shared, sharedProfiles })) {
+    const built = buildEntries(root, target.profile, target.rels);
+    const problems = describeProblems(target.label, built);
     if (problems.length) throw new Error(problems.join('\n'));
     const bytes = encodePack(built.entries);
-    const file = path.join(outDir, packName(profile));
+    const file = path.join(outDir, target.name);
     writeFileSync(file, bytes);
-    results.push({ profile, file, files: built.entries.length, bytes: bytes.byteLength });
-  }
-  for (const map of maps) {
-    const rels = collectMapTextures(root, map);
-    if (!rels.length) continue;
-    const built = buildEntries(root, 'desktop', rels);
-    const problems = describeProblems(map, built);
-    if (problems.length) throw new Error(problems.join('\n'));
-    const bytes = encodePack(built.entries);
-    const file = path.join(outDir, mapPackName(map));
-    writeFileSync(file, bytes);
-    results.push({ profile: map, file, files: built.entries.length, bytes: bytes.byteLength });
+    results.push({ profile: target.label, file, files: built.entries.length, bytes: bytes.byteLength });
   }
   return results;
 }
 
-export function verifyPacks({ root = defaultRoot, outDir = path.join(root, 'asset-pack'), profiles = PROFILES, maps = MAP_PACKS } = {}) {
-  const rels = profiles.length ? collectAssets(root) : [];
+export function verifyPacks({ root = defaultRoot, outDir = path.join(root, 'asset-pack'), profiles = PROFILES, maps = MAP_PACKS, shared = SHARED_PACKS, sharedProfiles = PROFILES } = {}) {
   const problems = [];
-  for (const profile of profiles) {
-    const file = path.join(outDir, packName(profile));
-    if (!existsSync(file)) { problems.push(`${packName(profile)} does not exist`); continue; }
-    let pack;
-    try { pack = parsePack(readFileSync(file)); } catch (error) { problems.push(`${packName(profile)}: ${error.message}`); continue; }
-    const built = buildEntries(root, profile, rels);
-    problems.push(...describeProblems(profile, built));
-    const expected = new Map(built.entries.map(e => [e.path, e.bytes]));
-    const stale = [];
-    for (const [key, bytes] of expected) {
-      const packed = pack.get(key);
-      if (!packed) problems.push(`${packName(profile)} is missing ${key}`);
-      else if (Buffer.compare(Buffer.from(packed), bytes) !== 0) stale.push(key);
-    }
-    if (stale.length) problems.push(`${packName(profile)} has ${stale.length} stale file(s): ${stale.slice(0, 5).join(', ')}${stale.length > 5 ? ', ...' : ''}`);
-    const extra = pack.paths().filter(key => !expected.has(key));
-    if (extra.length) problems.push(`${packName(profile)} has ${extra.length} file(s) no longer used: ${extra.slice(0, 5).join(', ')}${extra.length > 5 ? ', ...' : ''}`);
-  }
-  for (const map of maps) {
-    const rels = collectMapTextures(root, map);
-    if (!rels.length) continue;
-    const name = mapPackName(map), file = path.join(outDir, name);
+  for (const target of packTargets({ root, profiles, maps, shared, sharedProfiles })) {
+    const { name } = target;
+    const file = path.join(outDir, name);
     if (!existsSync(file)) { problems.push(`${name} does not exist`); continue; }
     let pack;
     try { pack = parsePack(readFileSync(file)); } catch (error) { problems.push(`${name}: ${error.message}`); continue; }
-    const built = buildEntries(root, 'desktop', rels);
-    problems.push(...describeProblems(map, built));
+    const built = buildEntries(root, target.profile, target.rels);
+    problems.push(...describeProblems(target.label, built));
     const expected = new Map(built.entries.map(e => [e.path, e.bytes]));
     const stale = [];
     for (const [key, bytes] of expected) {
@@ -169,7 +210,14 @@ function main(argv) {
   if (profile && !PROFILES.includes(profile)) { console.error(`--profile must be one of: ${PROFILES.join(', ')}`); return 2; }
   const map = option('map');
   if (map && !MAP_PACKS.includes(map)) { console.error(`--map must be one of: ${MAP_PACKS.join(', ')}`); return 2; }
-  const options = { profiles: map ? [] : profile ? [profile] : PROFILES, maps: map ? [map] : profile ? [] : MAP_PACKS };
+  const sharedOnly = option('shared');
+  if (sharedOnly && !SHARED_PACKS.includes(sharedOnly)) { console.error(`--shared must be one of: ${SHARED_PACKS.join(', ')}`); return 2; }
+  const options = {
+    profiles: map || sharedOnly ? [] : profile ? [profile] : PROFILES,
+    maps: sharedOnly ? [] : map ? [map] : profile ? [] : MAP_PACKS,
+    shared: map ? [] : sharedOnly ? [sharedOnly] : SHARED_PACKS,
+    sharedProfiles: profile ? [profile] : PROFILES,
+  };
   const root = option('root');
   if (root) options.root = path.resolve(root);
   const out = option('out');

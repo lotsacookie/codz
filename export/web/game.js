@@ -16,6 +16,7 @@ import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from './blood.js';
 import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
+import { preloadShared } from './shared-assets.js';
 import { smoothingEnabled } from './steering.js';
 import { AdaptiveResolution, createPerfOverlay } from './quality.js';
 import { GradePass } from './grade.js';
@@ -476,7 +477,7 @@ Object.assign(kino.debug,{
   setRound:n=>{enemies.reset();while(session.round<n)session.nextRound();session.countdown=0;session.spawned=0;session.killed=0;},
 });
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack'));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});}catch(error){console.warn('[kino] theater light fx unavailable',error);}
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack')]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);

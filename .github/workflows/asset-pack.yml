@@ -12,6 +12,8 @@ on:
       - export/web/kino.gltf
       - export/web/game-data.json
       - export/web/moon/textures/**
+      - export/web/moon/models/**
+      - export/web/moon/combat-data.json
       - export/web/shangri-la/textures/**
       - export/web/ascension/textures/**
       - export/web/coast/textures/**
@@ -26,7 +28,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*,export/web/moon/textures/*,export/web/shangri-la/textures/*,export/web/ascension/textures/*,export/web/coast/textures/*
+  LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*,export/web/moon/models/*,export/web/moon/textures/*,export/web/shangri-la/textures/*,export/web/ascension/textures/*,export/web/coast/textures/*
 
 jobs:
   build:

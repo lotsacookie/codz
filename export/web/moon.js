@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { loadMapGltf, settleTextures, textureWarning } from './map-assets.js';
+import { preloadShared } from './shared-assets.js';
 import { PlayerController } from './player-controller.js';
 import { CollisionWorld, loadCollisionWorld } from './collision-world.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
@@ -281,6 +282,7 @@ async function load() {
   data = await response.json(); state = new MoonState(data.rules);
   const showStatus = text => { $('status').textContent = text; };
   showStatus('Loading Moon…');
+  const sharedAssets = preloadShared();
   const gltf = await loadMapGltf('moon/moon.gltf', {label: 'Moon', onStatus: showStatus, pack: 'asset-pack/moon.pack'});
   const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Moon collision…');
@@ -315,6 +317,7 @@ async function load() {
   navigation=new MoonNavigation(data);await navigation.load();navigation.setDoors(parts);
   player = new PlayerController(camera, {capsuleIntersect, rayIntersect}, {radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4});
   $('status').textContent='Loading Moon zombies and weapons…';
+  await sharedAssets;
   const worldApi={navigation,path:(a,b)=>navigation.path(a,b),closest:(p,e)=>navigation.closest(p,e),raycast:rayIntersect,
     lineClear:(a,b)=>{const d=b.clone().sub(a);return !rayIntersect(new THREE.Ray(a,d.clone().normalize()),1,Math.max(1,d.length()-4));},
     zoneAt:p=>environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon').zone,

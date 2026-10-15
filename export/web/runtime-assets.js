@@ -86,9 +86,11 @@ function textureUrl(url) {
   return resolved.href;
 }
 
+export const detectMobile = () => matchMedia('(pointer: coarse)').matches || /iPhone|iPad|iPod/.test(navigator.userAgent)
+  || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+
 export function configureKinoAssets() {
-  runtimeProfile.mobile = matchMedia('(pointer: coarse)').matches || /iPhone|iPad|iPod/.test(navigator.userAgent)
-    || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+  runtimeProfile.mobile = detectMobile();
   if (runtimeProfile.mobile) document.addEventListener('visibilitychange', () => { if (!document.hidden) textureQueue.pump(); });
   assetManager.addHandler(/\.(?:png|webp|jpe?g)(?:\?.*)?$/i, {
     load(url, onLoad) {

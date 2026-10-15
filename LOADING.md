@@ -56,6 +56,23 @@ device profile, so the game makes one request instead of ~1400:
   there. Check the LFS quota before rebuilding often.
 * `?pack=0` skips the pack and loads files individually, for before/after comparisons.
 
+### Shared packs: weapons and enemies
+Weapons, hands, knives, equipment and the common zombie models are not repeated in every map's pack. `npm run build:pack`
+also writes them once:
+
+* `asset-pack/weapons.pack` and `weapons-mobile.pack`: every weapon, viewmodel, hands, knife and equipment model with its
+  textures, plus their weapon animations. Built from the `weapons`, `melee` and `equipment` sections of `game-data.json`
+  and `moon/combat-data.json`, so Kino and Moon both get them.
+* `asset-pack/enemies.pack` and `enemies-mobile.pack`: the Kino zombie, head, quad and dog models with their textures and
+  the `ai_zombie_*` / `zombie_dog_*` animations.
+* `kino-desktop.pack` and `kino-mobile.pack` leave those files out, so they shrink by the same amount.
+* Kino and Moon start loading the shared packs at the same time as their own map files (`shared-assets.js`) and wait for
+  them before building weapons and zombies. The loader keeps every pack it has loaded, so a map pack and the shared packs
+  work together. Moon now gets its weapon textures from `weapons.pack` instead of requesting each one separately.
+* `node .tools/build-asset-pack.mjs --shared=weapons` (or `enemies`) rebuilds one shared pack; `--map=` and `--profile=`
+  still work as before. A missing shared pack falls back to individual files like any other pack.
+* Shangri-La, Ascension and Call of the Dead never download the shared packs.
+
 ## Optional: smaller downloads
 `node .tools/compress-assets.mjs` writes `*.bin.gz` plus `asset-manifest.json`. Add
 `<meta name="kino-asset-manifest" content="asset-manifest.json">` to `index.html` to use them. Check the printed ratios first.
