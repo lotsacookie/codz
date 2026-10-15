@@ -27,6 +27,7 @@ export function createZombieTouch({ moon = false, menuSettings = true, onLook, o
     if (!moon) return;
     for (const selector of ['#menu .preview', '#journal p:last-child']) {
       const element = document.querySelector(selector);
+      if (!element) continue;
       element.textContent = element.textContent.replace('Tab shows', 'OBJECTIVE shows').replace('Tab closes this panel.', 'Tap OBJECTIVE to close.');
     }
   };

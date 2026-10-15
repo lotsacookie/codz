@@ -135,7 +135,6 @@ export class AssetLoader {
     for (const blobUrl of this.blobUrls.values()) URL.revokeObjectURL(blobUrl);
     this.blobUrls.clear();
     for (const url of [...this.files.keys()]) if (!this.packs.has(url)) this.files.delete(url);
-    this.listeners.clear();
   }
 
   packStatus() {

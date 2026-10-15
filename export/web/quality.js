@@ -56,5 +56,7 @@ export function createPerfOverlay(search = globalThis.location?.search ?? '', do
   const el = doc.createElement('div');
   el.style.cssText = 'position:fixed;left:6px;top:6px;z-index:99;font:11px/1.3 monospace;color:#9f9;background:#0008;padding:3px 6px;pointer-events:none;white-space:pre';
   doc.body.appendChild(el);
-  return (fps, scale, calls, triangles) => { el.textContent = `${fps} fps  scale ${scale.toFixed(2)}\n${calls} calls  ${(triangles / 1000).toFixed(0)}k tris`; };
+  const draw = (fps, scale, calls, triangles) => { el.textContent = `${fps} fps  scale ${scale.toFixed(2)}\n${calls} calls  ${(triangles / 1000).toFixed(0)}k tris`; };
+  draw.remove = () => el.remove();
+  return draw;
 }
