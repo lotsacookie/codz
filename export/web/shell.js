@@ -19,6 +19,15 @@ const pauseEls = {
   controls: $('pause-controls'), optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
   fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'),
 };
+// A cached older index.html (common on mobile) has no GRAPHICS button; create it so the rest of
+// the shell never fails to start because of it.
+if (!pauseEls.graphics) {
+  pauseEls.graphics = document.createElement('button');
+  pauseEls.graphics.id = 'pause-graphics';
+  pauseEls.graphics.type = 'button';
+  pauseEls.graphics.hidden = true;
+  (pauseEls.fullscreen ?? pauseEls.back)?.before(pauseEls.graphics);
+}
 const loadEls = { label: $('load-label'), bar: $('load-progress'), actions: $('load-actions') };
 
 function createHud(root) {

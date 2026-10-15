@@ -70,7 +70,7 @@ export class GameAudio {
     this.buffers.set(key,pending);return pending;
   }
   async native(key,volume=1,loop=false){const b=await this.buffer(key),source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=b;source.loop=loop;gain.gain.value=volume;source.connect(gain);gain.connect(this.master);source.onended=()=>{source.disconnect();gain.disconnect();};source.start();this.played.push(key);if(this.played.length>30)this.played.shift();return source;}
-  async playMusic(key){if(!this.ctx)return;const token=++this.musicToken;this.music?.stop();this.music={stop(){}};const music=await this.native(key,key==='ambience'?.18:.65,key==='ambience');if(token!==this.musicToken){music.stop();return;}this.music=music;}
+  async playMusic(key){if(!this.ctx)return;const token=++this.musicToken;this.music?.stop();this.music={stop(){}};let music;try{music=await this.native(key,key==='ambience'?.18:.65,key==='ambience');}catch(error){console.warn('Music '+key+' could not be decoded',error);return;}if(token!==this.musicToken){music.stop();return;}this.music=music;}
   play(kind,volume=1){
     if(!this.enabled||!this.ctx||this.ctx.state!=='running')return;
     if(this.manifest[kind]){this.native(kind,volume*.8).catch(console.error);return;}
