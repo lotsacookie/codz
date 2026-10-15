@@ -322,7 +322,7 @@ export class MoonFeatures {
     const s=this.s,q=this.quest,$=id=>document.getElementById(id);
     if($('objective'))$('objective').textContent=q.objective();
     if($('perks')){const html=[...s.perks].map(id=>`<span title="${MOON_PERKS[id].name}" style="background:${MOON_PERKS[id].color}">${MOON_PERKS[id].icon}</span>`).join('');if($('perks').innerHTML!==html)$('perks').innerHTML=html;}
-    if($('equipment'))$('equipment').textContent=(s.hacker?'HACKER · ':'')+(s.equipment?this.combat.data.equipment[s.equipment].name+' × '+s.equipmentAmmo+' · X':'')+(s.weapon.id==='microwavegun_zm'?' · B: combine / split':'');
+    if($('special-equipment'))$('special-equipment').textContent=(s.hacker?'HACKER · ':'')+(s.equipment?this.combat.data.equipment[s.equipment].name+' × '+s.equipmentAmmo+' · X':'')+(s.weapon.id==='microwavegun_zm'?' · B: combine / split':'');
     if($('hazard'))$('hazard').textContent=Object.entries(q.diggers).filter(([,d])=>d.phase!=='idle').map(([id,d])=>`${DIGGERS[id].name} · ${DIGGERS[id].label} · ${d.phase==='digging'?'BREACHED':Math.ceil(d.left)+'s'}`).join(' / ');
     if($('hack-progress')){$('hack-progress').hidden=!this.hack;$('hack-progress').value=this.hack?1-this.hack.left/this.hack.duration:0;}
   }
