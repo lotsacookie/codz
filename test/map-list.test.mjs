@@ -53,7 +53,7 @@ test('the shell tears a map down: disposers, renderer, HUD, styles and caches, b
 test('the launcher preloads shared packs with a progress bar in the bottom-left corner', () => {
   assert.ok(html.includes('id="preload-bar"'));
   assert.ok(readFileSync(path.join(web, 'shell.js'), 'utf8').includes('preloadShared()'));
-  assert.match(readFileSync(path.join(web, 'shell.css'), 'utf8'), /#preload\{position:fixed;left:[^}]*bottom:/);
+  assert.match(readFileSync(path.join(web, 'shell.css'), 'utf8'), /#preload\{position:fixed;[^}]*left:[^}]*bottom:/);
 });
 
 test('the loader fixes hold: Moon uses the resilient map loader and viewers keep mobile textures out of map folders', () => {
