@@ -13,7 +13,7 @@ const buttons = [...list.querySelectorAll('button[data-map]')];
 const IDLE_NOTE = note.textContent;
 const SENSITIVITY_KEY = 'kino.lookSensitivity';
 const pauseEls = {
-  eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('pause-resume'), restart: $('pause-restart'),
+  eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('start'), restart: $('pause-restart'),
   extra: $('pause-extra'), options: $('pause-options'), quit: $('pause-quit'), status: $('pause-status'), results: $('pause-results'),
   controls: $('pause-controls'), optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
   fullscreen: $('pause-fullscreen'), back: $('pause-options-back'),
@@ -154,8 +154,8 @@ function lock() {
   if (session.ctx.touch?.mode) { activate(); return; }
   try {
     const result = session.canvas.requestPointerLock?.();
-    result?.catch?.(() => { pauseEls.status.textContent = 'Click Resume to capture the mouse.'; });
-  } catch { pauseEls.status.textContent = 'Click Resume to capture the mouse.'; }
+    result?.catch?.(() => { pauseEls.status.textContent = 'Press the button to capture the mouse.'; });
+  } catch { pauseEls.status.textContent = 'Press the button to capture the mouse.'; }
 }
 
 function activate() {
@@ -211,7 +211,7 @@ document.addEventListener('pointerlockchange', () => {
   if (!session.ctx.touch?.mode) deactivate();
 });
 document.addEventListener('pointerlockerror', () => {
-  if (session?.ready) pauseEls.status.textContent = 'Click Resume to capture the mouse.';
+  if (session?.ready) pauseEls.status.textContent = 'Press the button to capture the mouse.';
 });
 const interrupt = () => {
   if (!session?.active) return;
@@ -346,6 +346,7 @@ async function boot(entry) {
     current.api = api ?? {};
     if (current.cancelled) return;
     if (!current.ready) current.ctx.ready();
+    if (!current.cancelled) lock();
   } catch (error) {
     if (current.cancelled) return;
     console.error(error);
@@ -414,10 +415,10 @@ function preload() {
     () => import('./moon-combat.js'),
     () => import('./audio.js'),
     () => import('@recast-navigation/core').then(core => core.init()),
-    () => fetch('audio/manifest.json').then(r => r.arrayBuffer()),
-    () => fetch('game-data.json').then(r => r.arrayBuffer()),
-    () => fetch('moon/combat-data.json').then(r => r.arrayBuffer()),
-  ];
+    () => fetch('audio/manifest.json').then(r => r.ok ? r.arrayBuffer() : null),
+    () => fetch('game-data.json').then(r => r.ok ? r.arrayBuffer() : null),
+    () => fetch('moon/combat-data.json').then(r => r.ok ? r.arrayBuffer() : null),
+  ].map(step => () => Promise.resolve().then(step).catch(() => null));
   let finishedSteps = 0, loaded = 0, total = 0;
   const render = () => {
     const bytes = total ? Math.min(1, loaded / total) : 0;

@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $moonRoot = Split-Path -Parent $PSScriptRoot
-foreach ($moonFile in @('index.html','moon.js','map-assets.js','moon/moon.gltf','moon/moon.bin','moon/collision.bin','moon/map-data.json','moon/combat-data.json','moon/navigation-earth.bin','moon/navigation-moon.bin','moon/navigation.json')) {
+foreach ($moonFile in @('index.html','shell.js','shell.css','maps/moon.js','themes/moon.css','map-assets.js','moon/moon.gltf','moon/moon.bin','moon/collision.bin','moon/map-data.json','moon/combat-data.json','moon/navigation-earth.bin','moon/navigation-moon.bin','moon/navigation.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $moonRoot "export/web/$moonFile"))) {
         throw "Missing Moon asset: $moonFile. Run .tools/rebuild-moon.ps1."
     }
