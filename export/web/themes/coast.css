@@ -1,7 +1,0 @@
-body[data-theme="coast"]{background:#23313d;--menu-backdrop:linear-gradient(180deg,rgba(14,22,30,.6),rgba(8,12,18,.84));--menu-row-bg:#121a22ba;--menu-select-bg:#e6ebef;--menu-select-text:#121a22}
-#hud #status,#hud #help,#hud #debug{position:fixed;display:block;margin:0;padding:8px 12px;background:#121a22ba;border-radius:3px;color:#e6ebef;font:12px/1.6 system-ui,sans-serif;pointer-events:none}
-#hud #status{left:16px;top:16px;white-space:pre-wrap}
-#hud #help{bottom:16px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);text-align:center;transition:opacity .25s}
-#hud #help.quiet{opacity:0}
-#hud #debug{top:16px;right:16px;font:12px/1.5 monospace;white-space:pre}
-#hud #status[hidden],#hud #help[hidden],#hud #debug[hidden]{display:none}

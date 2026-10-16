@@ -260,7 +260,6 @@ function createContext(entry) {
   const ctx = {
     id: entry.map,
     label: entry.label,
-    theme: entry.theme,
     mobile: detectMobile(),
     touch: null,
     viewport,
@@ -367,7 +366,6 @@ async function boot(entry) {
   };
   document.title = entry.title || document.title;
   body.dataset.map = entry.map;
-  body.dataset.theme = entry.theme;
   setState('loading');
   launcher.hidden = true;
   stage.hidden = false;
@@ -429,7 +427,6 @@ async function quit() {
   pause.hidden = true;
   document.title = 'Zombies — Select a map';
   body.dataset.map = '';
-  body.dataset.theme = '';
   setState('launcher');
   launcher.hidden = false;
   note.textContent = IDLE_NOTE;

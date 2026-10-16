@@ -1,10 +1,10 @@
 import { Session, roundPopulation, makeWeapon } from './rules.js';
 
 export const MOON_PERKS = {
-  specialty_quickrevive:{name:'Quick Revive',price:500,color:'#64bad7',icon:'QR'},
-  specialty_armorvest:{name:'Juggernog',price:2500,color:'#c84343',icon:'J'},
-  specialty_fastreload:{name:'Speed Cola',price:3000,color:'#65bd76',icon:'SC'},
-  specialty_rof:{name:'Double Tap',price:2000,color:'#d6a647',icon:'DT'},
+  specialty_quickrevive:{name:'Quick Revive',price:500,color:'#64bad7',icon:'QR',image:'specialty_quickrevive_zombies'},
+  specialty_armorvest:{name:'Juggernog',price:2500,color:'#c84343',icon:'J',image:'specialty_juggernaut_zombies'},
+  specialty_fastreload:{name:'Speed Cola',price:3000,color:'#65bd76',icon:'SC',image:'specialty_fastreload_zombies'},
+  specialty_rof:{name:'Double Tap',price:2000,color:'#d6a647',icon:'DT',image:'specialty_doubletap_zombies'},
   specialty_longersprint:{name:'Stamin-Up',price:2000,color:'#ebbd4b',icon:'S'},
   specialty_flakjacket:{name:'PhD Flopper',price:2000,color:'#be83da',icon:'PhD'},
   specialty_deadshot:{name:'Deadshot Daiquiri',price:1500,color:'#9da8ac',icon:'DS'},

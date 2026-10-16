@@ -2,7 +2,7 @@ param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $coastRoot = Split-Path -Parent $PSScriptRoot
 $coastWeb = Join-Path $coastRoot 'export\web'
-foreach ($coastFile in @('index.html','map-assets.js','shell.js','shell.css','maps/call-of-the-dead.js','themes/coast.css','coast/coast.gltf','coast/coast.bin','coast/collision.json','coast/collision.bin','coast/map-data.json','coast/sky/0.png')) {
+foreach ($coastFile in @('index.html','map-assets.js','shell.js','shell.css','maps/call-of-the-dead.js','hud.css','coast/coast.gltf','coast/coast.bin','coast/collision.json','coast/collision.bin','coast/map-data.json','coast/sky/0.png')) {
     if (-not (Test-Path -LiteralPath (Join-Path $coastWeb $coastFile))) { throw "Missing Call of the Dead asset: $coastFile. Run .tools/rebuild-coast.ps1." }
 }
 $coastPorts = 5173..5183

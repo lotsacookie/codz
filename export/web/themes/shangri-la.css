@@ -1,6 +1,0 @@
-@import url('hud-bo1.css');
-body[data-theme="shangri-la"]{--menu-backdrop:linear-gradient(180deg,rgba(18,28,20,.58),rgba(8,14,10,.78));--menu-row-bg:rgba(10,18,12,.66);--menu-select-bg:#e9efe2;--menu-select-text:#142016}
-#vignette{display:block;position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse,transparent 55%,#0408048c)}
-#hud #status{background:#121912b0}
-#toast{color:#d6e5bd}
-#announcement-title{color:#cfe0b0}

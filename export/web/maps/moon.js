@@ -13,6 +13,7 @@ import { loadMoonWater } from '../moon-water.js';
 import { createZombieTouch } from '../zombies-touch.js';
 import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
+import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 
 export async function mount(ctx) {
@@ -33,6 +34,8 @@ const camera = new THREE.PerspectiveCamera(78, innerWidth/innerHeight, 1, 70000)
 const gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1 : 1.5), baseFar: 70000, targetMs: matchMedia('(pointer: coarse)').matches ? 1000 / 30 : 1000 / 60});
 let data, state, player, collision, ready = false, active = false, onMoon = false, checkpoint = 'area51', environment, target;
 let navigation, combat, features, presentation, water, mode = new URLSearchParams(location.search).get('mode') === 'explore' ? 'explore' : 'survival';
+const chalk = new ChalkHud();
+let lastPoints = null;
 let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0;
 const objects = new Map(), parts = new Map(), opened = new Set(), wallGuns = new Map(), boughtGuns = new Set();
 function syncWallGuns(){for(const [id,o] of wallGuns)o.visible=!combat.enabled||boughtGuns.has(id);}
@@ -75,7 +78,7 @@ function setModeUi(){
 }
 async function resetRun(){
   if(!ready)return;
-  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();boughtGuns.clear();syncWallGuns();Object.assign(state,new MoonState(data.rules));
+  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();boughtGuns.clear();syncWallGuns();chalk.reset();lastPoints=null;Object.assign(state,new MoonState(data.rules));
   for(const part of parts.values()){part.amount=0;part.delta.set(0,0,0);if(part.object)part.object.position.copy(part.origin);}
   navigation.setDoors(parts);await combat.reset();features.reset();presentation.reset();relocate('area51');setModeUi();ready=true;
   ctx.setHint('500 points. M1911. Reach the teleporter and survive.');
@@ -262,15 +265,22 @@ function update(dt) {
   $('air').value = data.rules.suffocationSeconds-state.exposure;
   $('hurt').style.opacity = active?Math.max(Math.min(.7, state.exposure/data.rules.suffocationSeconds*.7),combat.enabled?(1-combat.session.health/combat.session.maxHealth)*.8:0):0;
   if(combat.enabled){
-    const s=combat.session;$('round').textContent=s.area==='earth'?'NO MAN’S LAND':'ROUND '+s.round;
-    $('remaining').textContent=s.area==='earth'?'REACH THE TELEPORTER':s.phase==='preparing'?'STARTS IN '+Math.max(0,Math.ceil(s.countdown)):(s.total-s.killed)+' REMAINING';
-    $('points').textContent=s.points.toLocaleString();$('health').textContent=Math.ceil(s.health)+' / '+s.maxHealth;
-    $('weapon-name').textContent=s.def.name;$('mag').textContent=s.weapon.mag;$('reserve').textContent=s.weapon.reserve;
-    $('weapon-status').textContent=s.phase==='reviving'?'QUICK REVIVE…':s.pack?'WEAPON IN PACK-A-PUNCH':s.reloadLeft?'RELOADING':s.weapon.mag===0?'R · RELOAD':'G · '+s.grenades+' GRENADES';
-    if(touchControls.mode)$('weapon-status').textContent=$('weapon-status').textContent.replace('R · RELOAD','TAP RELOAD').replace('G · ','');
-    if(s.effects.death_machine>s.time){$('weapon-name').textContent='DEATH MACHINE';$('mag').textContent=Math.ceil(s.effects.death_machine-s.time)+'s';$('reserve').textContent='';}
+    const s=combat.session,w=s.weapon;
+    if(s.area==='moon')chalk.update(s,true);
+    if(lastPoints===null||s.points===0&&lastPoints>0&&s.phase==='gameover')lastPoints=s.points;
+    if(s.points!==lastPoints){spawnScorePopup($('score-popups'),s.points-lastPoints);lastPoints=s.points;}
+    $('points').textContent=s.points;
+    $('mag').textContent=w.mag;$('reserve').textContent=w.reserve;
+    const cap=s.def.magSize||s.def.clipSize||s.def.clip||s.def.ammoClip||s.def.mag||8,deathMachine=s.effects.death_machine>s.time;
+    $('mag').classList.toggle('low',!deathMachine&&w.mag<=Math.floor(cap/3));
+    renderAmmoIcons($('ammo-icons'),s.def,w.mag);
+    $('grenade-count').textContent=s.grenades;
+    $('reload-label').textContent=!deathMachine&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?(touchControls.mode?'Tap reload':'Reload'):'';
+    $('weapon-status').textContent=s.phase==='reviving'?'QUICK REVIVE…':s.pack?'WEAPON IN PACK-A-PUNCH':'';
+    if(deathMachine){$('mag').textContent=Math.ceil(s.effects.death_machine-s.time)+'s';$('reserve').textContent='';}
     $('hitmarker').style.opacity=combat.hitUntil>s.time?1:0;
-    $('effects-text').textContent=Object.entries(s.effects).filter(([key,time])=>time>s.time&&['double_points','insta_kill'].includes(key)).map(([key,time])=>(key==='double_points'?'Double Points':'Insta-Kill')+' '+Math.ceil(time-s.time)+'s').join(' · ');
+    const seconds=performance.now()/1000;
+    for(const key of ['double_points','insta_kill','fire_sale']){const slot=$('pu-'+key),left=(s.effects[key]??0)-s.time,visible=left>0&&powerupVisible(left,seconds);if(slot&&slot.hidden===visible)slot.hidden=!visible;}
   }
 }
 const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));

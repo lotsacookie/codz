@@ -1,9 +1,0 @@
-@import url('hud-bo1.css');
-body[data-theme="kino"]{--menu-backdrop:linear-gradient(180deg,rgba(24,19,15,.52),rgba(10,8,6,.72))}
-#fx{display:block;position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 52%,rgba(0,0,0,.28) 82%,rgba(0,0,0,.5) 100%)}
-#fx::after{content:"";position:absolute;inset:0;opacity:.045;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
-#vignette{display:block;position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse,transparent 45%,#03050480)}
-body.no-fx #fx{display:none}
-#pause h1{font-family:var(--menu-font)}
-#pause #pause-main>.menu-list>#pause-restart{border:0}
-#load-label{font-family:var(--shell-font)}
