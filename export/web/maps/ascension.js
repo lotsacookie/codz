@@ -4,6 +4,7 @@ import { loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { applyChalkTransparency } from '../chalk-transparency.js';
 import { createWallGuns } from '../wall-guns.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 
@@ -144,6 +145,7 @@ async function load() {
   collision = collider;
   world = gltf.scene;
   prepareMaterials(world);
+  applyChalkTransparency(world);
   wallGuns = createWallGuns({entities: data.entities, root: world, camera, promptElement: document.getElementById('prompt'), offsets: data.entityOffsets});
   optimization = optimizeStaticScene(world, {cellSize: 640, verticalCellSize: 384});
   scene.add(world);

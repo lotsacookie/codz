@@ -10,6 +10,7 @@ import { assetManager, runtimeProfile } from './runtime-assets.js';
 import { enableCascadedShadows } from './lighting.js';
 import { assets } from './asset-loader.js';
 import { applyAnisotropy, applyDithering } from './quality.js';
+import { applyChalkTransparency } from './chalk-transparency.js';
 
 export const vector=a=>new THREE.Vector3().fromArray(a);
 export const zoneNames={foyer_zone:'Lobby',foyer2_zone:'Lobby',vip_zone:'Upper hall',crematorium_zone:'Lower hall',alleyway_zone:'Alley',dining_zone:'Speed Cola room',dressing_zone:'Dressing room',stage_zone:'Stage',theater_zone:'Theater',west_balcony_zone:'Back room'};
@@ -38,6 +39,7 @@ export class World {
     const [collision,bytes]=await Promise.all([collisionLoad,navigation]);
     await recast;
     censorFlags(gltf.scene);
+    applyChalkTransparency(gltf.scene);
     this.collision=collision;this.scene.add(gltf.scene);
     const moving=[];
     gltf.scene.traverse(o=>{if(o.userData?.collisionOnly)o.visible=false;if(o.userData?.dynamicBrush){moving.push(o);this.entities.set(o.userData.entityId,o);}});

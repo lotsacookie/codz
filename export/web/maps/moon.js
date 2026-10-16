@@ -12,6 +12,7 @@ import { MoonPresentation } from '../moon-presentation.js';
 import { loadMoonWater } from '../moon-water.js';
 import { createZombieTouch } from '../zombies-touch.js';
 import { disposeObject } from '../dispose.js';
+import { applyChalkTransparency } from '../chalk-transparency.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 
 export async function mount(ctx) {
@@ -296,6 +297,7 @@ async function load() {
   const windowIds=data.entities.filter(e=>windowGroups.has(e.targetname)&&e.script_noteworthy==='clip').map(e=>e.id);
   const boardIds=data.entities.filter(e=>windowGroups.has(e.targetname)&&e.script_parameters?.startsWith('barricade_')).map(e=>e.id);
   const moving = new Set([...data.doors.flatMap(d => d.parts),...hazardIds,...windowIds,...boardIds]), detach = [];
+  applyChalkTransparency(gltf.scene);
   gltf.scene.traverse(o => {
     if (o.userData.collisionOnly) o.visible = false;
     // Native sky materials use cubemap shaders; their flat DDS preview makes

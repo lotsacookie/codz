@@ -4,6 +4,7 @@ import { CoastController } from '../coast-controller.js';
 import { loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { applyChalkTransparency } from '../chalk-transparency.js';
 import { createWallGuns } from '../wall-guns.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 
@@ -123,6 +124,7 @@ async function load() {
       }
     }
   });
+  applyChalkTransparency(gltf.scene);
   wallGuns = createWallGuns({entities: data.entities, root: gltf.scene, camera, promptElement: document.getElementById('prompt')});
   optimization = optimizeStaticScene(gltf.scene, {cellSize: 768, verticalCellSize: 256});
   scene.add(gltf.scene);
