@@ -4,6 +4,8 @@ import { loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { createWallGuns } from '../wall-guns.js';
+import { bindExploreGraphics } from '../explore-graphics.js';
 
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
@@ -18,7 +20,7 @@ const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 1, 7000
 camera.rotation.order = 'YXZ';
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x212c39);
-let renderer, data, player, collision, world, optimization;
+let renderer, data, player, collision, world, optimization, gfx, wallGuns;
 let ready = false, active = false, flying = false, helpVisible = true, fps = 0;
 const forward = new THREE.Vector3(), right = new THREE.Vector3(), wish = new THREE.Vector3();
 ctx.onDispose(() => {
@@ -109,6 +111,7 @@ async function load() {
   renderer.toneMappingExposure = 1.55;
   renderer.domElement.setAttribute('aria-label', 'Ascension map');
   ctx.attach(renderer);
+  gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, 1.5), baseFar: 70000});
 
   const response = await fetch('./ascension/map-data.json');
   if (!response.ok) throw new Error(`Map data failed to load (${response.status})`);
@@ -141,6 +144,7 @@ async function load() {
   collision = collider;
   world = gltf.scene;
   prepareMaterials(world);
+  wallGuns = createWallGuns({entities: data.entities, root: world, camera, promptElement: document.getElementById('prompt'), offsets: data.entityOffsets});
   optimization = optimizeStaticScene(world, {cellSize: 640, verticalCellSize: 384});
   scene.add(world);
   player = new PlayerController(camera, collision, {
@@ -189,6 +193,7 @@ async function load() {
         if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) reset();
       }
     }
+    if (active) { gfx.sample(dt * 1000); wallGuns.update(); }
     renderer.render(scene, camera);
     frames++; frameTime += dt;
     if (frameTime >= .5) { fps = Math.round(frames / frameTime); frames = 0; frameTime = 0; }
@@ -211,6 +216,7 @@ addEventListener('keydown', e => {
   keys.add(e.code);
   if (e.repeat) return;
   if (e.code === 'KeyF') toggleFly();
+  if (e.code === 'KeyE') wallGuns?.interact();
   if (e.code === 'KeyR') reset();
   if (e.code === 'KeyH') { helpVisible = !helpVisible; updateHelp(); }
   if (e.code === 'F3') debug.hidden = !debug.hidden;

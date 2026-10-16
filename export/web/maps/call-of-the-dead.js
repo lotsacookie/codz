@@ -4,6 +4,8 @@ import { CoastController } from '../coast-controller.js';
 import { loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { createWallGuns } from '../wall-guns.js';
+import { bindExploreGraphics } from '../explore-graphics.js';
 
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
@@ -21,7 +23,7 @@ scene.add(new THREE.AmbientLight(0xb5c4d5, 1.15), new THREE.HemisphereLight(0xbd
 const sun = new THREE.DirectionalLight(0xc2cbce, 2.1);
 sun.position.set(-.862899, .430586, -.264579); scene.add(sun);
 const fill = new THREE.DirectionalLight(0x91a8bf, .65); fill.position.set(.6, .5, .8); scene.add(fill);
-let renderer, data, player, collision, waterNormal, ready = false, active = false, flying = false, optimization;
+let renderer, data, player, collision, gfx, wallGuns, waterNormal, ready = false, active = false, flying = false, optimization;
 let previous = performance.now(), helpUntil = 0, resetCount = 0;
 const wish = new THREE.Vector3(), forward = new THREE.Vector3(), right = new THREE.Vector3();
 const query = new URLSearchParams(location.search);
@@ -67,6 +69,7 @@ async function load() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .9;
   renderer.domElement.setAttribute('aria-label', 'Call of the Dead map');
   renderer.domElement.tabIndex = 0; ctx.attach(renderer);
+  gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, 1.5), baseFar: 70000});
   renderer.domElement.addEventListener('webglcontextlost', event => {event.preventDefault(); fail('Graphics context was lost');});
   const response = await fetch('coast/map-data.json');
   if (!response.ok) throw new Error(`Map metadata HTTP ${response.status}`);
@@ -120,6 +123,7 @@ async function load() {
       }
     }
   });
+  wallGuns = createWallGuns({entities: data.entities, root: gltf.scene, camera, promptElement: document.getElementById('prompt')});
   optimization = optimizeStaticScene(gltf.scene, {cellSize: 768, verticalCellSize: 256});
   scene.add(gltf.scene);
   player = new CoastController(camera, collision, {radius: 14, height: 70, eyeHeight: 60,
@@ -153,6 +157,7 @@ function frame(now) {
   }
   help.classList.toggle('quiet', active && now > helpUntil);
   if (waterNormal && active) {waterNormal.offset.x += dt*data.water.scroll[0]; waterNormal.offset.y += dt*data.water.scroll[1];}
+  if (ready && active) { gfx.sample(dt*1000); wallGuns.update(); }
   renderer.render(scene, camera);
 }
 function setActive(value) {
@@ -171,6 +176,7 @@ addEventListener('keydown', event => {
   if (event.repeat) return;
   if (event.code === 'Escape') {ctx.pause(); return;}
   if (event.code === 'KeyV') toggleFlight();
+  if (event.code === 'KeyE') wallGuns?.interact();
   if (event.code === 'KeyR') relocate();
 });
 addEventListener('keyup', event => keys.delete(event.code));
