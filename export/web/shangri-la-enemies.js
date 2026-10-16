@@ -53,14 +53,35 @@ export class ShangriEnemies extends Enemies {
     return false;
   }
 
+  // A spawn or a per-frame update that throws would otherwise stop the whole game loop the moment a
+  // round starts. Contain it: back off, count it, and remove any actor left with a broken position.
+  guard(label, fn) {
+    try { return fn(); } catch (error) {
+      this.faults = (this.faults ?? 0) + 1;
+      if (this.faults <= 3) console.error('[enemies] ' + label + ' failed', error);
+      this.lastFault = String(error?.message ?? error);
+      return undefined;
+    }
+  }
+
+  purgeBroken() {
+    for (const z of [...this.list]) {
+      const p = z.root.position;
+      if (Number.isFinite(p.x + p.y + p.z)) continue;
+      this.remove(z);
+      this.session.spawned = Math.max(0, this.session.spawned - 1);
+    }
+  }
+
   update(dt, player) {
     const s = this.session;
     this.spawnDelay -= dt;
     if (s.phase === 'fighting' && this.list.length < (s.dogRound ? 8 : 24) && s.spawned < s.total && this.spawnDelay <= 0) {
-      const spawned = this.trySpawn(player, s.dogRound ? 'dog' : 'zombie');
-      this.spawnDelay = spawned ? (s.dogRound ? 1.6 : Math.max(.4, 2 * Math.pow(.95, s.round - 1))) : .8;
+      const spawned = this.guard('spawn', () => this.trySpawn(player, s.dogRound ? 'dog' : 'zombie'));
+      this.spawnDelay = spawned ? (s.dogRound ? 1.6 : Math.max(.4, 2 * Math.pow(.95, s.round - 1))) : spawned === undefined ? 2 : .8;
     }
-    super.update(dt, player);
+    this.guard('update', () => super.update(dt, player));
+    this.purgeBroken();
     if (s.phase === 'fighting' && s.spawned >= s.total && !this.list.length) {
       if (s.dogRound && this.lastDogDeath) this.onDrop?.('full_ammo', this.lastDogDeath);
       s.nextRound();
