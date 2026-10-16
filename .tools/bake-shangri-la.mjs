@@ -4,6 +4,7 @@ import path from 'node:path';
 import * as THREE from 'three';
 import { MeshBVH, SAH } from 'three-mesh-bvh';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { doorGroups, movingEntityIds } from '../export/web/shangri-la-rules.js';
 
 const out = path.resolve(import.meta.dirname, '../export/web/shangri-la');
 const doc = JSON.parse(fs.readFileSync(path.join(out, 'shangri-la.gltf')));
@@ -17,7 +18,11 @@ for (const e of data.entities) {
 }
 if (playable.isEmpty()) throw new Error('No source traversal bounds');
 playable.expandByScalar(512);
+const moving = movingEntityIds(data.entities);
+const clipPoints = doorGroups(data.entities).flatMap(g => g.clips.map(id => data.entities[id].position));
+const CLIP_RADIUS = 90;
 const p = new THREE.Vector3(), matrix = new THREE.Matrix4();
+let skippedNodes = 0, removedHelperComponents = 0, removedHelperTriangles = 0;
 const triBounds = new THREE.Box3(), positions = [], indices = [];
 function accessor(i) {
   const a = doc.accessors[i], view = doc.bufferViews[a.bufferView];
@@ -25,8 +30,33 @@ function accessor(i) {
   return new Type(buffer.buffer, buffer.byteOffset + (view.byteOffset || 0) + (a.byteOffset || 0),
     a.count * {VEC3: 3, VEC2: 2, SCALAR: 1}[a.type]);
 }
+function helperComponentsToDrop(transformed, ix) {
+  const welded = new Map(), ids = new Int32Array(transformed.length / 3);
+  for (let i = 0; i < ids.length; i++) {
+    const key = Math.round(transformed[i * 3] * 100) + ',' + Math.round(transformed[i * 3 + 1] * 100) + ',' + Math.round(transformed[i * 3 + 2] * 100);
+    if (!welded.has(key)) welded.set(key, welded.size);
+    ids[i] = welded.get(key);
+  }
+  const parent = Int32Array.from({ length: welded.size }, (_, i) => i);
+  const find = x => { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; };
+  for (let i = 0; i < ix.length; i += 3) { const a = find(ids[ix[i]]); parent[find(ids[ix[i + 1]])] = a; parent[find(ids[ix[i + 2]])] = a; }
+  const boxes = new Map();
+  for (let i = 0; i < ix.length; i += 3) {
+    const root = find(ids[ix[i]]);
+    if (!boxes.has(root)) boxes.set(root, { box: new THREE.Box3(), triangles: 0 });
+    const entry = boxes.get(root);
+    for (let k = 0; k < 3; k++) entry.box.expandByPoint(p.fromArray(transformed, ix[i + k] * 3));
+    entry.triangles++;
+  }
+  const drop = new Set(), point = new THREE.Vector3();
+  for (const [root, entry] of boxes) {
+    if (clipPoints.some(c => entry.box.distanceToPoint(point.fromArray(c)) < CLIP_RADIUS)) { drop.add(root); removedHelperComponents++; removedHelperTriangles += entry.triangles; }
+  }
+  return { drop, root: i => find(ids[i]) };
+}
 for (const node of doc.nodes) {
   if (node.mesh === undefined) continue;
+  if (node.extras?.entityId !== undefined && moving.has(node.extras.entityId)) { skippedNodes++; continue; }
   matrix.identity();
   if (node.matrix) matrix.fromArray(node.matrix);
   else matrix.compose(new THREE.Vector3(...(node.translation || [0, 0, 0])),
@@ -40,8 +70,10 @@ for (const node of doc.nodes) {
     const transformed = new Float32Array(src.length);
     for (let i = 0; i < src.length; i += 3) p.fromArray(src, i).applyMatrix4(matrix).toArray(transformed, i);
     const used = new Map();
+    const helpers = node.extras?.collisionOnly ? helperComponentsToDrop(transformed, ix) : null;
     for (let i = 0; i < ix.length; i += 3) {
       const tri = [ix[i], ix[i + 1], ix[i + 2]];
+      if (helpers && helpers.drop.has(helpers.root(tri[0]))) continue;
       triBounds.makeEmpty();
       for (const v of tri) triBounds.expandByPoint(p.fromArray(transformed, v * 3));
       if (!playable.intersectsBox(triBounds)) continue;
@@ -77,8 +109,10 @@ const report = {
   format: 'hijacked-collision-bvh-v1', binary: 'collision.bin', byteLength: offset, layout,
   vertices: geometry.attributes.position.count, triangles: indices.length / 3,
   bounds: {min: playable.min.toArray(), max: playable.max.toArray()},
-  source: 'shangri-la.gltf; filtered render geometry and static brush entities in source traversal bounds',
+  source: 'shangri-la.gltf; filtered render geometry and static brush entities in source traversal bounds; door, debris and window-board parts are excluded and collide as separate runtime parts',
+  excludedParts: skippedNodes, removedHelperComponents, removedHelperTriangles,
 };
 fs.writeFileSync(path.join(out, 'collision.bin'), Buffer.concat(chunks));
 fs.writeFileSync(path.join(out, 'collision.json'), JSON.stringify(report));
+console.log('Excluded', skippedNodes, 'moving part nodes and', removedHelperComponents, 'door clip components (' + removedHelperTriangles + ' triangles)');
 console.log('Shangri-La collision:', report.vertices, 'vertices,', report.triangles, 'triangles,', Math.round(offset / 1048576), 'MiB');

@@ -1,7 +1,7 @@
 import { TouchControls } from './touch-controls.js';
 
 // Shared BO2 pointer controls, with the actions needed by both Zombies maps.
-export function createZombieTouch({ moon = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
+export function createZombieTouch({ moon = false, minimal = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
   const button = (kind, label, icon = '') => `<button type="button" class="touch-button touch-${kind}" data-touch="${kind}" aria-label="${label}">${icon}<span>${label}</span></button>`;
   const svg = content => `<svg viewBox="0 0 24 24" aria-hidden="true">${content}</svg>`;
   const root = document.createElement('div');
@@ -19,7 +19,7 @@ export function createZombieTouch({ moon = false, menuSettings = true, onLook, o
     ${button('melee', 'KNIFE', svg('<path d="m4 21 6-6m-3-3 6 6M9 14 20 3l-2 9-6 5"/>'))}
     <div class="touch-toolbar">
       ${button('weapon', 'WEAPON')}${button('grenade', 'GRENADE')}
-      ${moon ? button('equipment', 'GERSH/QED') + button('suit', 'P.E.S.') + button('hack', 'HACK') + button('attachment', 'WAVE') + button('journal', 'OBJECTIVE') : button('claymore', 'CLAYMORE') + button('equipment', 'MONKEY') + button('attachment', 'ALT FIRE')}
+      ${minimal ? '' : moon ? button('equipment', 'GERSH/QED') + button('suit', 'P.E.S.') + button('hack', 'HACK') + button('attachment', 'WAVE') + button('journal', 'OBJECTIVE') : button('claymore', 'CLAYMORE') + button('equipment', 'MONKEY') + button('attachment', 'ALT FIRE')}
     </div>
     <button type="button" class="touch-button touch-pause" id="touch-pause" aria-label="Pause">Ⅱ</button>`;
   document.body.append(root);

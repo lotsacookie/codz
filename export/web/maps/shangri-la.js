@@ -1,89 +1,330 @@
 import * as THREE from 'three';
 import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
-import { loadCollisionWorld } from '../collision-world.js';
+import { preloadShared } from '../shared-assets.js';
+import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
-import { createWallGuns } from '../wall-guns.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
+import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
+import { createZombieTouch } from '../zombies-touch.js';
+import { MoonCombat } from '../moon-combat.js';
+import { MOON_PERKS } from '../moon-session.js';
+import { ShangriSession } from '../shangri-la-session.js';
+import { ShangriEnemies } from '../shangri-la-enemies.js';
+import { ShangriFeatures } from '../shangri-la-features.js';
+import { SurvivalNavigation } from '../shangri-la-navigation.js';
+import { doorGroups, barrierGroups, movingEntityIds, boxLocations } from '../shangri-la-rules.js';
 
 export async function mount(ctx) {
+const CONTROLS = 'WASD · Move   Mouse · Fire / Aim   Shift · Sprint\nSpace · Jump   Ctrl / C · Crouch   F / E · Interact (hold to repair)\nR · Reload   V · Knife   G · Grenade   1 / 2 / 3 · Weapon\nM · Sound   Esc · Pause   F3 · Diagnostics';
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
 let disposed = false;
-const CONTROLS = 'WASD · Move   Mouse · Look   Shift · Sprint / fly faster\nSpace · Jump / ascend   Ctrl · Crouch / descend\nF · Fly or walk   R · Return to spawn   H · Hide help\nF3 · Diagnostics   Esc · Pause';
-
-const status = document.getElementById('status');
-const help = document.getElementById('help');
-const debug = document.getElementById('debug');
-const keys = new Set(), errors = [];
-const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 1, 70000);
-camera.rotation.order = 'YXZ';
+const $ = id => document.getElementById(id), keys = new Set(), errors = [];
+const vector = a => new THREE.Vector3(...a);
+const coarse = matchMedia('(pointer: coarse)').matches;
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.35;
+renderer.autoClear = false;
+renderer.domElement.setAttribute('aria-label', 'Shangri-La map');
+ctx.attach(renderer);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa4bbbf);
-let renderer, data, player, collision, world, optimization, gfx, wallGuns;
-let ready = false, active = false, flying = false, helpVisible = true, fps = 0;
-const forward = new THREE.Vector3(), right = new THREE.Vector3(), wish = new THREE.Vector3();
-ctx.onDispose(() => {
-  disposed = true; renderer?.setAnimationLoop(null);
-  try { scene.background?.dispose?.(); } catch {}
-  try { disposeObject(scene); } catch (error) { console.warn(error); }
+const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 1, 70000);
+camera.rotation.order = 'YXZ';
+const gfx = bindExploreGraphics({ ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, coarse ? 1 : 1.5), baseFar: 70000, targetMs: coarse ? 1000 / 30 : 1000 / 60 });
+scene.add(new THREE.AmbientLight(0xc3d6e8, .9), new THREE.HemisphereLight(0xbfd8ec, 0x756342, 2.0));
+const sun = new THREE.DirectionalLight(0xf7ba7f, 2.5);
+sun.position.set(-.75, .65, .15);
+const fill = new THREE.DirectionalLight(0xa2bbc5, .55);
+fill.position.set(.5, .3, -.7);
+scene.add(sun, fill);
+
+let data, player, collision, navigation, combat, features, groups = [], ready = false, active = false, lastPoints = null, perkKey = '';
+let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0, target = null;
+const objects = new Map(), parts = new Map(), boughtGuns = new Set(), wallGuns = new Map();
+const chalk = new ChalkHud();
+let mousePrimary = false, mouseSecondary = false, mouseAim = false, touchFirePending = false;
+
+function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
+
+const touchControls = createZombieTouch({
+  minimal: true, menuSettings: false,
+  onReset: () => { touchFirePending = false; },
+  onLook: (x, y, sensitivity) => {
+    if (!active || combat.session.phase === 'reviving') return;
+    const scale = .005 * sensitivity * (combat.ads ? .5 : 1);
+    camera.rotation.y -= x * scale;
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - y * scale, -1.5, 1.5);
+  },
+  onAction: action => {
+    if (!active || combat.session.phase === 'reviving') return;
+    const code = { reload: 'KeyR', melee: 'KeyV', grenade: 'KeyG' }[action];
+    if (code) combat.key(code);
+    if (action === 'weapon') combat.switchWeapon();
+    if (action === 'use') interact();
+  },
+  onPause: () => ctx.pause(),
 });
-
-
-function updateHelp() {
-  help.hidden = !ready || !helpVisible;
-  help.textContent = active
-    ? `WASD move · Mouse look · Shift ${flying ? 'faster' : 'sprint'} · ${flying ? 'Space / Ctrl up / down' : 'Space jump'} · F ${flying ? 'walk' : 'fly'} · R reset · H hide · Esc release`
-    : 'Click the map to explore · WASD move · Mouse look · F fly / walk';
-}
 
 function pause() {
   active = false;
   keys.clear();
+  mousePrimary = mouseSecondary = mouseAim = touchFirePending = false;
+  touchControls.reset();
+  touchControls.setEnabled(false);
   player?.setEnabled(false);
-  updateHelp();
+  combat?.pause();
+  $('hurt').style.opacity = 0;
 }
-
-function reset() {
-  flying = false;
-  keys.clear();
-  player.setPosition(new THREE.Vector3(...data.spawn.position).add(new THREE.Vector3(0, 3, 0)));
-  camera.rotation.set(0, data.spawn.yaw - Math.PI / 2, 0);
-  // Settle onto the exported floor before the first click.
+function resume() {
+  if (!ready || combat.session.phase === 'gameover') return;
+  touchControls.reset();
+  touchControls.setEnabled(true);
+  active = true;
   player.setEnabled(true);
-  for (let i = 0; i < 90; i++) player.update(1 / 120, {});
-  player.setEnabled(active);
-  updateHelp();
+  combat.resume();
+}
+function setActive(value) { if (value) resume(); else pause(); }
+
+function endRun() {
+  const s = combat.session;
+  ctx.gameOver({ status: `Game over · ${s.kills} kills · Round ${s.round} · ${Math.floor(s.time)} seconds` });
 }
 
-function toggleFly() {
-  flying = !flying;
-  if (!flying) {
-    player.setPosition(camera.position.clone().add(new THREE.Vector3(0, -player.eyeHeight, 0)));
-  }
-  player.setEnabled(active && !flying);
-  keys.clear();
-  updateHelp();
+function spawnPlayer() {
+  player.setPosition(vector(data.spawn.position).add(new THREE.Vector3(0, 3, 0)));
+  camera.rotation.set(0, data.spawn.yaw - Math.PI / 2, 0);
 }
+
+function syncWallGuns() { for (const [id, list] of wallGuns) for (const o of list) o.visible = boughtGuns.has(id); }
+
+function makePart(entity, object, extra = {}) {
+  if (!object) return null;
+  object.updateWorldMatrix(true, true);
+  const box = new THREE.Box3().setFromObject(object);
+  if (box.isEmpty()) return null;
+  return makeBoxPart(entity, object, box, extra);
+}
+function makeBoxPart(entity, object, box, extra = {}) {
+  const size = box.getSize(new THREE.Vector3());
+  if (Math.min(size.x, size.y, size.z) < .01) return null;
+  const geometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+  geometry.translate(...box.getCenter(new THREE.Vector3()).toArray());
+  geometry.computeBoundingBox();
+  return { entity, object, box, origin: object?.position.clone(), amount: 0, open: false, opening: false, collider: new CollisionWorld(geometry), ...extra };
+}
+function closedBoxes() { return [...parts.values()].filter(p => p.door && !p.open).map(p => p.box); }
+function syncNavigation() { navigation.setBlockers(closedBoxes()); }
+
+function capsuleIntersect(capsule) {
+  const hit = collision.capsuleIntersect(capsule);
+  if (hit) return hit;
+  for (const part of parts.values()) {
+    if (part.open) continue;
+    const contact = part.collider.capsuleIntersect(capsule);
+    if (contact) return contact;
+  }
+  if (combat?.enabled) for (const z of combat.enemies.list) {
+    const p = z.root.position, feet = capsule.start.y - capsule.radius, top = capsule.end.y + capsule.radius;
+    if (feet > p.y + 65 || top < p.y + 4) continue;
+    const normal = new THREE.Vector3(capsule.start.x - p.x, 0, capsule.start.z - p.z), distance = normal.length(), depth = capsule.radius + 15 - distance;
+    if (depth > 0) return { normal: distance > .001 ? normal.divideScalar(distance) : new THREE.Vector3(1, 0, 0), depth };
+  }
+  return false;
+}
+function rayIntersect(ray, near = 0, far = Infinity) {
+  let hit = collision.rayIntersect(ray, near, far);
+  for (const part of parts.values()) {
+    if (part.window || part.open) continue;
+    const contact = part.collider.rayIntersect(ray, near, hit ? Math.min(hit.distance, far) : far);
+    if (contact) hit = contact;
+  }
+  return hit;
+}
+
+function openDoor(group) {
+  for (const part of parts.values()) if (part.door === group.name) { part.open = true; part.opening = true; }
+  syncNavigation();
+}
+function updateDoors(dt) {
+  for (const part of parts.values()) {
+    if (!part.opening || !part.object) continue;
+    part.amount = Math.min(1, part.amount + dt / 1.2);
+    part.object.position.copy(part.origin).y -= part.amount * 150;
+    if (part.amount >= 1) { part.opening = false; part.object.visible = false; }
+  }
+}
+
+function interact() {
+  features.findTarget();
+  if (!features.target || !combat.session.canAct && !(features.target.kind === 'pack' && combat.session.pack)) return false;
+  return features.interact(features.target);
+}
+function promptText() {
+  const t = features.findTarget();
+  target = t;
+  if (!t) return '';
+  const label = t.label.startsWith('Hold F') ? t.label : 'F · ' + t.label;
+  return touchControls.mode ? label.replace(/\bF\s*·/g, 'USE ·').replace('Hold F', 'Hold USE') : label;
+}
+
+function update(dt) {
+  touchControls.setEnabled(active && !['reviving', 'gameover'].includes(combat.session.phase), active);
+  const touch = touchControls.input.read();
+  if (!touchControls.enabled) touchFirePending = false;
+  touchFirePending ||= touch.firePressed;
+  const touchWantsFire = touch.fire || touchFirePending;
+  combat.primary = mousePrimary || touchWantsFire;
+  if (touchFirePending && combat.view.ready && !['raise', 'melee', 'sprintIn', 'sprint', 'sprintOut'].includes(combat.view.mode)) {
+    combat.pressed = true;
+    touchFirePending = false;
+  }
+  const secondary = mouseSecondary || (combat.session.def.dualWield && touch.aim);
+  combat.secondaryPressed ||= secondary && !combat.secondary;
+  combat.secondary = secondary;
+  combat.ads = mouseAim || (touch.aim && !combat.session.def.dualWield);
+  const forward = Number(keys.has('KeyW')) - Number(keys.has('KeyS')) + touch.forward;
+  const strafe = Number(keys.has('KeyD')) - Number(keys.has('KeyA')) + touch.strafe;
+  const moving = Math.hypot(forward, strafe) > .01;
+  const sprint = ((keys.has('ShiftLeft') || keys.has('ShiftRight')) && keys.has('KeyW') || touch.sprint) && !touchWantsFire && !combat.ads && !combat.session.reloadLeft && !combat.session.meleeLeft;
+  const fast = combat.session.perks.has('specialty_longersprint');
+  player.moveSpeed = fast ? 209 : 190;
+  player.sprintSpeed = fast ? 330 : 285;
+  if (combat.session.phase !== 'reviving') player.update(dt, { forward, strafe, sprint, jump: keys.has('Space'), jumpPressed: touch.jump, crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || touch.crouch });
+  if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) spawnPlayer();
+  updateDoors(dt);
+  combat.update(dt, { moving, sprint });
+  features.update(dt, keys.has('KeyF') || keys.has('KeyE') || touch.use);
+  noticeLeft = Math.max(0, noticeLeft - dt);
+  $('toast').textContent = noticeLeft ? notice : '';
+  $('prompt').textContent = promptText();
+  hud();
+}
+
+function hud() {
+  const s = combat.session, w = s.weapon;
+  $('hurt').style.opacity = active ? (1 - s.health / s.maxHealth) * .8 : 0;
+  chalk.update(s, true);
+  if (lastPoints === null || s.points === 0 && lastPoints > 0 && s.phase === 'gameover') lastPoints = s.points;
+  if (s.points !== lastPoints) { spawnScorePopup($('score-popups'), s.points - lastPoints); lastPoints = s.points; }
+  $('points').textContent = s.points;
+  $('mag').textContent = w.mag;
+  $('reserve').textContent = w.reserve;
+  const cap = s.def.magSize || s.def.clipSize || s.def.clip || s.def.ammoClip || s.def.mag || 8;
+  $('mag').classList.toggle('low', w.mag <= Math.floor(cap / 3));
+  renderAmmoIcons($('ammo-icons'), s.def, w.mag);
+  $('weapon-name').textContent = s.def.name;
+  $('grenade-count').textContent = s.grenades;
+  $('reload-label').textContent = s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : 'Reload') : '';
+  $('weapon-status').textContent = s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '';
+  $('hitmarker').style.opacity = combat.hitUntil > s.time ? 1 : 0;
+  $('power').textContent = s.power ? 'POWER ON' : 'POWER OFF';
+  const seconds = performance.now() / 1000;
+  for (const key of ['double_points', 'insta_kill', 'fire_sale']) {
+    const slot = $('pu-' + key), left = (s.effects[key] ?? 0) - s.time, visible = left > 0 && powerupVisible(left, seconds);
+    if (slot && slot.hidden === visible) slot.hidden = !visible;
+  }
+  const key = [...s.perks].join();
+  if (key !== perkKey) {
+    perkKey = key;
+    $('perks').innerHTML = [...s.perks].map(id => MOON_PERKS[id].image
+      ? `<img alt="${MOON_PERKS[id].name}" title="${MOON_PERKS[id].name}" src="textures/${MOON_PERKS[id].image}.png">`
+      : `<span title="${MOON_PERKS[id].name}" style="background:${MOON_PERKS[id].color}">${MOON_PERKS[id].icon}</span>`).join('');
+  }
+}
+
+async function resetRun() {
+  if (!ready) return;
+  pause();
+  ready = false;
+  boughtGuns.clear();
+  syncWallGuns();
+  chalk.reset();
+  lastPoints = null;
+  perkKey = '';
+  for (const part of parts.values()) {
+    part.open = part.opening = false;
+    part.amount = 0;
+    if (part.object) { part.object.position.copy(part.origin); part.object.visible = true; }
+  }
+  syncNavigation();
+  await combat.reset();
+  features.reset();
+  spawnPlayer();
+  ready = true;
+  ctx.setHint('500 points. M1911. Buy a door, throw both power switches and survive.');
+}
+
+addEventListener('mousemove', e => {
+  if (active && document.pointerLockElement === renderer.domElement) {
+    const sensitivity = combat?.ads ? .0012 : .002;
+    camera.rotation.y -= e.movementX * sensitivity;
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - e.movementY * sensitivity, -1.5, 1.5);
+  }
+});
+addEventListener('mousedown', e => {
+  if (!active || e.sourceCapabilities?.firesTouchEvents || e.target.closest('#touch-controls')) return;
+  if (e.button === 0) { mousePrimary = combat.primary = true; combat.pressed = true; }
+  if (e.button === 2) {
+    if (combat.session.def.dualWield) { mouseSecondary = combat.secondary = true; combat.secondaryPressed = true; } else mouseAim = combat.ads = true;
+  }
+});
+addEventListener('mouseup', e => {
+  if (!combat || e.sourceCapabilities?.firesTouchEvents) return;
+  if (e.button === 0) mousePrimary = combat.primary = false;
+  if (e.button === 2) { mouseAim = combat.ads = false; mouseSecondary = combat.secondary = false; }
+});
+addEventListener('contextmenu', e => e.preventDefault());
+addEventListener('wheel', () => { if (active) combat.switchWeapon(); });
+addEventListener('keydown', e => {
+  if (['Space', 'F3', 'Tab'].includes(e.code)) e.preventDefault();
+  if (!active) return;
+  keys.add(e.code);
+  if (e.repeat) return;
+  combat.key(e.code);
+  if (['KeyF', 'KeyE'].includes(e.code)) interact();
+  if (e.code === 'F3') { debugVisible = !debugVisible; $('debug').hidden = !debugVisible; }
+  if (e.code === 'Escape') ctx.pause();
+});
+addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  if (combat) { combat.viewCamera.aspect = camera.aspect; combat.viewCamera.updateProjectionMatrix(); }
+  renderer.setSize(innerWidth, innerHeight);
+});
+addEventListener('error', e => errors.push(e.message));
+addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
+ctx.onDispose(() => {
+  disposed = true;
+  renderer.setAnimationLoop(null);
+  try { touchControls.destroy(); } catch {}
+  try { combat?.audio.dispose(); } catch {}
+  try { combat?.clearTransient(); combat?.enemies.reset(); combat?.pickups.reset(); } catch {}
+  try { navigation?.dispose(); } catch {}
+  for (const root of [scene, combat?.viewScene]) if (root) { try { disposeObject(root); } catch (error) { console.warn(error); } }
+  objects.clear();
+  parts.clear();
+  wallGuns.clear();
+});
 
 function prepareMaterials(root) {
-  const prepared = new Map();
-  const hiddenEntities = new Set(data.hiddenEntities);
+  const prepared = new Set(), hiddenEntities = new Set(data.hiddenEntities);
   root.traverse(object => {
     if (object.userData.collisionOnly || hiddenEntities.has(object.userData.entityId)) object.visible = false;
     if (!object.isMesh) return;
-    const original = Array.isArray(object.material) ? object.material : [object.material];
-    const converted = original.map(material => {
-      if (prepared.has(material)) return prepared.get(material);
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      if (prepared.has(material)) continue;
+      prepared.add(material);
       const source = material.userData.sourceMaterialNames?.[0] || material.name;
       const base = source.startsWith('*') ? (source.match(/\(([^:)]+)/)?.[1] ?? source) : source.replace(/^[^:]+:(?=[mw]c\/)/, '');
-      // GfxWorld retains editor masks and sky portals along with visible faces.
-      // Hide these before instancing so the cube sky shows through the portals.
       const rule = data.materialRules[base];
-      if (rule?.hidden || /sky|shadowcaster|hdrportal|caulk|portal_nodraw|clip_player|lightshaft|mtl_player_icon|mtl_clan_tag/i.test(base)) {
-        material.visible = false;
-      }
+      if (rule?.hidden || /sky|shadowcaster|hdrportal|caulk|portal_nodraw|clip_player|lightshaft|mtl_player_icon|mtl_clan_tag/i.test(base)) material.visible = false;
       if (rule?.water) {
         material.color.setRGB(...rule.color.slice(0, 3));
         material.transparent = true;
@@ -94,46 +335,26 @@ function prepareMaterials(root) {
         material.envMapIntensity = .55;
       }
       if (material.map) material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-      prepared.set(material, material);
-      return material;
-    });
-    object.material = Array.isArray(object.material) ? converted : converted[0];
+    }
   });
 }
 
+const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
 async function load() {
-  renderer = new THREE.WebGLRenderer({antialias: true, powerPreference: 'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.35;
-  renderer.domElement.setAttribute('aria-label', 'Shangri-La map');
-  ctx.attach(renderer);
-  gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, 1.5), baseFar: 70000});
-
   const response = await fetch('./shangri-la/map-data.json');
   if (!response.ok) throw new Error(`Map data failed to load (${response.status})`);
   data = await response.json();
-  camera.position.fromArray(data.spawn.position).add(new THREE.Vector3(0, 60, 0));
-  camera.rotation.set(0, data.spawn.yaw - Math.PI / 2, 0);
-  scene.add(new THREE.AmbientLight(0xc3d6e8, .9));
-  scene.add(new THREE.HemisphereLight(0xbfd8ec, 0x756342, 2.0));
-  const sun = new THREE.DirectionalLight(0xf7ba7f, 2.5);
-  sun.position.set(-.75, .65, .15); scene.add(sun);
-  const fill = new THREE.DirectionalLight(0xa2bbc5, .55);
-  fill.position.set(.5, .3, -.7); scene.add(fill);
-
   let steps = 0;
-  const showStatus = text => ctx.progress(text, Math.min(.92, .05 + (++steps) * .03));
+  const showStatus = text => ctx.progress(text, Math.min(.92, .04 + (++steps) * .025));
   const manager = new THREE.LoadingManager();
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Shangri-La…');
-  const gltf = await loadMapGltf('./shangri-la/shangri-la.gltf', {label: 'Shangri-La', onStatus: showStatus, pack: 'asset-pack/shangri-la.pack'});
-  const textureReport = await settleTextures({onStatus: showStatus});
+  const sharedAssets = preloadShared();
+  const gltf = await loadMapGltf('./shangri-la/shangri-la.gltf', { label: 'Shangri-La', onStatus: showStatus, pack: 'asset-pack/shangri-la.pack' });
+  const textureReport = await settleTextures({ onStatus: showStatus });
   showStatus('Loading Shangri-La collision and sky…');
   const [collider, sky] = await Promise.all([
-    loadCollisionWorld({metadataUrl: './shangri-la/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Shangri-La collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)}),
+    loadCollisionWorld({ metadataUrl: './shangri-la/collision.json', onProgress: ({ loaded, total }) => showStatus(`Loading Shangri-La collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`) }),
     new THREE.CubeTextureLoader(manager).loadAsync(data.sky.faces.map(face => './shangri-la/' + face)),
   ]);
   if (errors.length) throw new Error(errors.join('\n'));
@@ -141,92 +362,128 @@ async function load() {
   scene.background = sky;
   scene.backgroundRotation.x = -Math.PI / 2;
   collision = collider;
-  world = gltf.scene;
-  prepareMaterials(world);
-  applyChalkTransparency(world);
-  wallGuns = createWallGuns({entities: data.entities, root: world, camera, promptElement: document.getElementById('prompt')});
-  optimization = optimizeStaticScene(world, {cellSize: 640, verticalCellSize: 384});
-  scene.add(world);
-  player = new PlayerController(camera, collision, {
+  const missingTextures = textureWarning(textureReport);
+  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); }
+  showStatus('Preparing Shangri-La scene…');
+  await nextTask();
+  prepareMaterials(gltf.scene);
+  applyChalkTransparency(gltf.scene);
+  scene.add(gltf.scene);
+  scene.updateMatrixWorld(true);
+
+  groups = doorGroups(data.entities);
+  const barriers = barrierGroups(data.entities);
+  const dynamic = new Set(movingEntityIds(data.entities));
+  for (const e of boxLocations(data.entities)) for (const suffix of ['_box', '_lid']) {
+    const entity = data.entities.find(n => n.targetname === e.script_noteworthy + suffix);
+    if (entity) dynamic.add(entity.id);
+  }
+  const gunModels = new Map();
+  for (const t of data.entities) {
+    if (t.targetname !== 'weapon_upgrade' || !t.target) continue;
+    const model = data.entities.find(n => n.classname === 'script_model' && n.targetname === t.target);
+    if (model) { dynamic.add(model.id); gunModels.set(t.id, model.id); }
+  }
+  const detach = [];
+  gltf.scene.traverse(o => { if (o.userData.entityId !== undefined && dynamic.has(o.userData.entityId)) detach.push(o); });
+  for (const o of detach) { scene.attach(o); o.matrixAutoUpdate = true; objects.set(o.userData.entityId, o); }
+
+  for (const group of groups) for (const id of group.parts) {
+    const part = makePart(data.entities[id], objects.get(id), { door: group.name });
+    if (part) parts.set(id, part);
+  }
+  for (const b of barriers) {
+    const boxes = b.boards.map(id => objects.get(id)).filter(Boolean).map(o => new THREE.Box3().setFromObject(o));
+    if (!boxes.length) continue;
+    const box = boxes.reduce((a, c) => a.union(c), new THREE.Box3());
+    const part = makeBoxPart(data.entities[b.id], null, box, { window: true });
+    if (part) parts.set('window-' + b.id, part);
+  }
+  showStatus('Optimizing Shangri-La…');
+  await nextTask();
+  const optimization = optimizeStaticScene(gltf.scene, { cellSize: 640, verticalCellSize: 384 });
+  showStatus('Loading Shangri-La navigation…');
+  await nextTask();
+  navigation = new SurvivalNavigation('./shangri-la');
+  await navigation.load();
+  syncNavigation();
+
+  player = new PlayerController(camera, { capsuleIntersect, rayIntersect }, {
     radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285,
     crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4,
   });
-  reset();
+  showStatus('Loading zombies and weapons…');
+  await sharedAssets;
+  const worldApi = {
+    navigation,
+    path: (a, b) => navigation.path(a, b),
+    closest: (p, e) => navigation.closest(p, e),
+    raycast: rayIntersect,
+    lineClear: (a, b) => { const d = b.clone().sub(a); return !rayIntersect(new THREE.Ray(a, d.clone().normalize()), 1, Math.max(1, d.length() - 4)); },
+    lowGravity: () => false,
+    zoneAt: () => 'shangri-la',
+  };
+  combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: ShangriSession, enemiesClass: ShangriEnemies });
+  await combat.load();
+  showStatus('Preparing perks, box and barricades…');
+  features = new ShangriFeatures({ data, combat, scene, camera, objects, notice: showNotice, raycast: rayIntersect, doors: groups, openDoor });
+  await features.load();
+  worldApi.setBoards = (b, n) => features.setBoards(b, n);
+  combat.enemies.barriers = features.barriers;
+  combat.enemies.candidates = navigation.metadata.candidates.map(c => ({ ...c, point: vector(c.position) }));
+  combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
+  for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) wallGuns.set(triggerId, [o]); }
+  const buy = features.interact.bind(features);
+  features.interact = t => {
+    const ok = buy(t);
+    if (ok && t?.kind === 'wall') { boughtGuns.add(t.e.id); syncWallGuns(); }
+    return ok;
+  };
+  syncWallGuns();
+  features.setAllBoards();
+  spawnPlayer();
+  for (let i = 0; i < 90; i++) player.update(1 / 120, {});
+  showStatus('Preparing graphics…');
+  await nextTask();
+  try { await Promise.race([Promise.all([renderer.compileAsync(scene, camera), renderer.compileAsync(combat.viewScene, combat.viewCamera)]), new Promise(resolve => setTimeout(resolve, 20000))]); } catch (error) { console.warn('[shangri-la] shader precompile skipped', error); }
+  player.enabled = false;
   ready = true;
-  const missingTextures = textureWarning(textureReport);
-  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); status.textContent = missingTextures; }
-  status.hidden = !missingTextures;
-  updateHelp();
+  $('mode-label').textContent = 'SHANGRI-LA / SOLO SURVIVAL';
+  $('location').textContent = 'Shangri-La';
+  ctx.hud.hidden('systems', false);
+  ctx.hud.combat(true);
+  ctx.hud.crosshair(true);
   ctx.setControls(CONTROLS);
-  ctx.setHint('Click to capture the mouse · Esc to pause');
+  ctx.setHint('500 points. M1911. Buy a door, throw both power switches and survive.');
   ctx.expose('shangriLa', {
-    ready, scene, camera, player, collision, renderer, data, world,
+    ready: true, data, player, camera, scene, renderer, collision, parts, errors, optimization, combat, navigation, features,
     debug: {
-      reset,
-      snapshot: () => ({ready, active, flying, grounded: player.isGrounded, position: camera.position.toArray(),
-        feet: player.getFeetPosition().toArray(), rotation: camera.rotation.toArray().slice(0, 3),
-        fps, drawCalls: renderer.info.render.calls, triangles: renderer.info.render.triangles,
-        optimization, errors: [...errors]}),
+      interact, update, resetRun, pause, resume, target: () => target,
+      snapshot: () => ({ position: player.getFeetPosition().toArray(), grounded: player.isGrounded, active, power: combat.session.power, doors: [...combat.session.openDoors], combat: combat.snapshot(), fps, errors: [...errors] }),
     },
-  });
-  let previous = performance.now(), frameTime = 0, frames = 0;
-  renderer.setAnimationLoop(now => {
-    if (disposed) return;
-    const dt = Math.min((now - previous) / 1000, .25); previous = now;
-    if (active) {
-      const x = Number(keys.has('KeyD')) - Number(keys.has('KeyA'));
-      const z = Number(keys.has('KeyW')) - Number(keys.has('KeyS'));
-      const sprint = keys.has('ShiftLeft') || keys.has('ShiftRight');
-      if (flying) {
-        camera.getWorldDirection(forward);
-        right.setFromMatrixColumn(camera.matrix, 0);
-        wish.copy(forward).multiplyScalar(z).addScaledVector(right, x);
-        wish.y += Number(keys.has('Space')) - Number(keys.has('ControlLeft') || keys.has('ControlRight'));
-        if (wish.lengthSq()) camera.position.addScaledVector(wish.normalize(), (sprint ? 1800 : 600) * dt);
-      } else {
-        for (let remaining = dt; remaining > 0;) {
-          const step = Math.min(remaining, .05);
-          player.update(step, {forward: z, strafe: x, sprint, jump: keys.has('Space'),
-            crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC')});
-          remaining -= step;
-        }
-        if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) reset();
-      }
-    }
-    if (active) { gfx.sample(dt * 1000); wallGuns.update(); }
-    renderer.render(scene, camera);
-    frames++; frameTime += dt;
-    if (frameTime >= .5) { fps = Math.round(frames / frameTime); frames = 0; frameTime = 0; }
-    if (!debug.hidden) debug.textContent = `${fps} FPS · ${renderer.info.render.calls} calls\n${flying ? 'Fly' : 'Walk'} · ${camera.position.toArray().map(n => n.toFixed(1)).join(', ')}`;
   });
 }
 
-function setActive(value) {
-  if (!value) { pause(); return; }
-  active = true; keys.clear(); player?.setEnabled(!flying); updateHelp();
-}
-ctx.listen(document, 'mousemove', e => {
-  if (!active) return;
-  camera.rotation.y -= e.movementX * .002;
-  camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - e.movementY * .002, -1.55, 1.55);
-});
-addEventListener('keydown', e => {
-  if (!active) return;
-  if (['Space', 'F3'].includes(e.code)) e.preventDefault();
-  keys.add(e.code);
-  if (e.repeat) return;
-  if (e.code === 'KeyF') toggleFly();
-  if (e.code === 'KeyE') wallGuns?.interact();
-  if (e.code === 'KeyR') reset();
-  if (e.code === 'KeyH') { helpVisible = !helpVisible; updateHelp(); }
-  if (e.code === 'F3') debug.hidden = !debug.hidden;
-  if (e.code === 'Escape') ctx.pause();
-});
-addEventListener('keyup', e => keys.delete(e.code));
-addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-  renderer?.setSize(innerWidth, innerHeight);
-});
 await load();
-return { setActive };
+let previous = performance.now();
+renderer.setAnimationLoop(now => {
+  if (disposed) return;
+  const dt = Math.max(0, (now - previous) / 1000);
+  previous = now;
+  if (ready && active) gfx.sample(dt * 1000);
+  for (let remaining = Math.min(.25, dt); active && remaining > 0;) {
+    const step = Math.min(.05, remaining);
+    update(step);
+    remaining -= step;
+  }
+  if (!ready) { previous = now; return; }
+  renderer.clear();
+  renderer.render(scene, camera);
+  if (active) { renderer.clearDepth(); renderer.render(combat.viewScene, combat.viewCamera); }
+  frames++;
+  frameTime += dt;
+  if (frameTime >= .5) { fps = Math.round(frames / frameTime); frames = 0; frameTime = 0; }
+  if (debugVisible) $('debug').textContent = `${fps} FPS · ${renderer.info.render.calls} calls\n${player.getFeetPosition().toArray().map(n => n.toFixed(1)).join(', ')}\n${combat.session.openDoors.size}/${groups.length} doors open`;
+});
+return { setActive, restart: () => resetRun() };
 }

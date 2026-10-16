@@ -11,8 +11,8 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
 export class MoonCombat {
-  constructor(scene,camera,world,{notice,end,feet}) {
-    Object.assign(this,{scene,camera,world,notice,end,feet});this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+  constructor(scene,camera,world,{notice,end,feet,sessionClass=MoonSession,enemiesClass=MoonEnemies}) {
+    Object.assign(this,{scene,camera,world,notice,end,feet,sessionClass,enemiesClass});this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.audio=new MoonAudio();
     // Common combat cues are reusable; Kino's looping theater ambience is not.
     this.audio.music={stop(){}};
@@ -23,9 +23,9 @@ export class MoonCombat {
   }
   async load(){
     const response=await fetch('moon/combat-data.json');if(!response.ok)throw new Error('Missing Moon combat assets; rebuild Moon.');
-    this.data=await response.json();this.session=new MoonSession(this.data);
+    this.data=await response.json();this.session=new this.sessionClass(this.data);
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
-    this.enemies=new MoonEnemies(this.scene,this.world,this.data,this.session,{damage:n=>this.damage(n),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000))});
+    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:n=>this.damage(n),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000))});
     this.pickups=new Powerups(this.scene,this.data,this.audio,type=>this.collect(type));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};
     await Promise.all([this.audio.load(),this.enemies.load(),this.pickups.load(),this.equip(),this.perkDrink.load(),
