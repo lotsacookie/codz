@@ -326,7 +326,8 @@ function interact(){
   if(!active||session.busy)return false;findPrompt();if(!prompt)return false;
   if(prompt.barrier)return repair(prompt.barrier);
   const e=prompt,t=e.targetname;
-  if(t==='claymore_purchase'||e.script_noteworthy==='auto_turret_trigger'||t?.startsWith('trigger_movie_reel_')||t==='trigger_change_projector_reels')return features.interact(e);
+  if(t==='claymore_purchase'){const ok=features.interact(e);if(ok)world.revealWallGun(e);return ok;}
+  if(e.script_noteworthy==='auto_turret_trigger'||t?.startsWith('trigger_movie_reel_')||t==='trigger_change_projector_reels')return features.interact(e);
   if(t==='meteor_egg_trigger'){meteors.add(e.id);audio.play('buy');toast('Meteor fragment '+meteors.size+' / 3');if(meteors.size===3){audio.playMusic('115');announce('115','MUSICAL EASTER EGG');}return true;}
   const pay=n=>{if(!session.spend(n)){toast('Not enough points');return false;}audio.play('buy');return true;};
   if(t==='bowie_upgrade'){if(session.bowie||!pay(3000))return false;session.bowie=true;toast('Bowie Knife');return true;}
@@ -340,7 +341,7 @@ function interact(){
     const cost=owned?(owned.upgraded?4500:d.ammoPrice??Math.ceil(d.price/2)):d.price;
     if(!pay(cost))return false;
     if(owned)owned.reserve=owned.upgraded?d.upgrade?.maxAmmo??d.maxAmmo:d.maxAmmo;
-    else {session.giveWeapon(d.id);equipView();}toast(owned?'Ammo replenished':d.name);return true;
+    else {session.giveWeapon(d.id);equipView();}world.revealWallGun(e);toast(owned?'Ammo replenished':d.name);return true;
   }
   if(t==='zombie_vending'){
     const id=e.script_noteworthy,p=perkInfo[id];if(!p||session.perks.has(id)||(!session.power&&id!=='specialty_quickrevive'))return false;

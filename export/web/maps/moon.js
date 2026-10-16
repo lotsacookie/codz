@@ -31,7 +31,8 @@ const camera = new THREE.PerspectiveCamera(78, innerWidth/innerHeight, 1, 70000)
 let data, state, player, collision, ready = false, active = false, onMoon = false, checkpoint = 'area51', environment, target;
 let navigation, combat, features, presentation, water, mode = new URLSearchParams(location.search).get('mode') === 'explore' ? 'explore' : 'survival';
 let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0;
-const objects = new Map(), parts = new Map(), opened = new Set();
+const objects = new Map(), parts = new Map(), opened = new Set(), wallGuns = new Map(), boughtGuns = new Set();
+function syncWallGuns(){for(const [id,o] of wallGuns)o.visible=!combat.enabled||boughtGuns.has(id);}
 const labels = {nml_zone: 'No Man’s Land', bridge_zone: 'Receiving Bay', water_zone: 'Lunar Surface', cata_left_start_zone: 'Tunnel 6', cata_left_middle_zone: 'Tunnel 6', cata_right_start_zone: 'Tunnel 11', cata_right_middle_zone: 'Tunnel 11', cata_right_end_zone: 'Tunnel 11', generator_zone: 'Power / MPD', generator_exit_east_zone: 'Laboratories', enter_forest_east_zone: 'Upper Laboratories', forest_zone: 'Biodome', tower_zone_east: 'Laboratories', tower_zone_east2: 'Laboratories'};
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
@@ -61,7 +62,7 @@ function resume() {
   touchControls.reset();touchControls.setEnabled(true);active=true;player.setEnabled(true);combat.resume();
 }
 function setActive(value){ if(value)resume(); else pause(); }
-function exploreMode(){mode='explore';combat.enabled=false;combat.enemies.reset();combat.pickups.reset();combat.clearTransient();camera.fov=78;camera.updateProjectionMatrix();setModeUi();}
+function exploreMode(){mode='explore';combat.enabled=false;combat.enemies.reset();combat.pickups.reset();combat.clearTransient();syncWallGuns();camera.fov=78;camera.updateProjectionMatrix();setModeUi();}
 function setModeUi(){
   ctx.hud.combat(mode==='survival');
   $('mode-label').textContent=mode==='survival'?'MOON / SOLO SURVIVAL':'MOON / EXPLORATION';
@@ -71,7 +72,7 @@ function setModeUi(){
 }
 async function resetRun(){
   if(!ready)return;
-  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();Object.assign(state,new MoonState(data.rules));
+  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();boughtGuns.clear();syncWallGuns();Object.assign(state,new MoonState(data.rules));
   for(const part of parts.values()){part.amount=0;part.delta.set(0,0,0);if(part.object)part.object.position.copy(part.origin);}
   navigation.setDoors(parts);await combat.reset();features.reset();presentation.reset();relocate('area51');setModeUi();ready=true;
   ctx.setHint('500 points. M1911. Reach the teleporter and survive.');
@@ -105,7 +106,7 @@ ctx.onDispose(() => {
   try { combat?.clearTransient(); combat?.enemies.reset(); combat?.pickups.reset(); } catch {}
   try { presentation?.dispose?.(); water?.dispose?.(); navigation?.dispose?.(); } catch {}
   for (const root of [scene, combat?.viewScene]) { if (root) { try { disposeObject(root); } catch (error) { console.warn(error); } } }
-  objects.clear(); parts.clear(); opened.clear();
+  objects.clear(); parts.clear(); opened.clear(); wallGuns.clear(); boughtGuns.clear();
 });
 
 function relocate(destination, entityId = null) {
@@ -201,7 +202,7 @@ function interact() {
   if (target.kind === 'suit') { state.equipSuit();combat.session.hacker=false;showNotice('P.E.S. equipped · Q to remove or replace the helmet.'); }
   if (target.kind === 'power') { state.power = true; combat.session.power=true;showNotice('Power restored. Pressurized rooms now have normal gravity.'); }
   if (target.kind === 'door') { if(combat.enabled&&!combat.session.buyDoor(target.door)){showNotice('Not enough points.');return false;}opened.add(target.door.name); showNotice('Passage opened', 2); }
-  if (target.kind === 'weapon') return combat.buyWeapon(target.weapon.id);
+  if (target.kind === 'weapon') { const bought = combat.buyWeapon(target.weapon.id); if (bought) { boughtGuns.add(target.entity.id); syncWallGuns(); } return bought; }
   return true;
 }
 function update(dt) {
@@ -320,6 +321,12 @@ async function load() {
   combat=new MoonCombat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});await combat.load();combat.enabled=mode==='survival';
   showStatus('Preparing station systems and quest…');
   features=new MoonFeatures({data,state,combat,scene,camera,player,objects,opened,parts,navigation,notice:showNotice,raycast:rayIntersect});await features.load();
+  for(const t of data.entities){
+    if(t.targetname!=='weapon_upgrade'||!combat.data.weapons[t.zombie_weapon_upgrade])continue;
+    const model=data.entities.find(n=>n.classname==='script_model'&&n.targetname===t.target),o=model&&objects.get(model.id);
+    if(o)wallGuns.set(t.id,o);
+  }
+  syncWallGuns();
   presentation=new MoonPresentation(scene,camera,features);await presentation.load();
   showStatus('Preparing Moon graphics…'); await nextTask();
   relocate('area51'); water.captureReflection(renderer, scene);

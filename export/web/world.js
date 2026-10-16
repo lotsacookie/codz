@@ -81,6 +81,13 @@ export class World {
     this.boxLocations=this.interactions.filter(e=>e.targetname==='treasure_chest_use');
     this.interactions.push(...ents.filter(e=>['trigger_use','trigger_use_touch'].includes(e.classname)&&(e.targetname==='claymore_purchase'||e.script_noteworthy==='auto_turret_trigger'||e.targetname?.startsWith('trigger_movie_reel_')||e.targetname==='trigger_change_projector_reels')));
     this.activeBox=this.boxLocations.find(e=>e.script_noteworthy==='start_chest')??this.boxLocations[0];
+    this.wallGuns=new Map();
+    for(const t of this.interactions){
+      if(!((t.targetname==='weapon_upgrade'&&this.data.weapons[t.zombie_weapon_upgrade])||t.targetname==='claymore_purchase'))continue;
+      const model=ents.find(m=>m.classname==='script_model'&&m.targetname===t.target),root=model&&this.entities.get(model.id);
+      if(root)this.wallGuns.set(t.id,root);
+    }
+    this.resetWallGuns();
     this.boxBeam=new THREE.Mesh(new THREE.CylinderGeometry(8,28,1600,12,1,true),new THREE.MeshBasicMaterial({color:0x8cacdd,transparent:true,opacity:.1,side:THREE.DoubleSide,depthWrite:false}));
     this.scene.add(this.boxBeam);this.updateBox();
     // The static collision mesh is shared by player physics, weapon occlusion,
@@ -163,5 +170,7 @@ export class World {
       }
     }
   }
-  reset(session){for(const b of this.barriers){this.setBoards(b,b.boards.length||6);b.reward=0;b.rewardRound=0;}this.activeBox=this.boxLocations.find(e=>e.script_noteworthy==='start_chest')??this.boxLocations[0];this.updateBox();this.setDoors(session);}
+  resetWallGuns(){for(const root of this.wallGuns.values())root.visible=false;}
+  revealWallGun(trigger){const root=this.wallGuns.get(trigger.id);if(root)root.visible=true;}
+  reset(session){for(const b of this.barriers){this.setBoards(b,b.boards.length||6);b.reward=0;b.rewardRound=0;}this.activeBox=this.boxLocations.find(e=>e.script_noteworthy==='start_chest')??this.boxLocations[0];this.updateBox();this.resetWallGuns();this.setDoors(session);}
 }
