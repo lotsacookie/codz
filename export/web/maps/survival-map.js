@@ -385,21 +385,25 @@ function prepareMaterials(root) {
 
 const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
 async function load() {
-  const response = await fetch(C.mapData);
-  if (!response.ok) throw new Error(`Map data failed to load (${response.status})`);
-  data = await response.json();
+  const custom = C.buildWorld ? await C.buildWorld() : null;
+  if (custom) data = custom.data;
+  else {
+    const response = await fetch(C.mapData);
+    if (!response.ok) throw new Error(`Map data failed to load (${response.status})`);
+    data = await response.json();
+  }
   let steps = 0;
   const showStatus = text => ctx.progress(text, Math.min(.92, .04 + (++steps) * .025));
   const manager = new THREE.LoadingManager();
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus(`Loading ${C.label}…`);
   const sharedAssets = preloadShared();
-  const gltf = await loadMapGltf(C.gltf, { label: C.label, onStatus: showStatus, pack: C.pack });
-  const textureReport = await settleTextures({ onStatus: showStatus });
+  const gltf = custom ? { scene: custom.scene } : await loadMapGltf(C.gltf, { label: C.label, onStatus: showStatus, pack: C.pack });
+  const textureReport = custom ? null : await settleTextures({ onStatus: showStatus });
   showStatus(`Loading ${C.label} collision and sky…`);
   const [collider, sky] = await Promise.all([
-    loadCollisionWorld({ metadataUrl: C.collisionMeta, onProgress: ({ loaded, total }) => showStatus(`Loading ${C.label} collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`) }),
-    new THREE.CubeTextureLoader(manager).loadAsync(data.sky.faces.map(face => C.base + '/' + face)),
+    custom ? new CollisionWorld(custom.collisionGeometry, custom.collisionMetadata) : loadCollisionWorld({ metadataUrl: C.collisionMeta, onProgress: ({ loaded, total }) => showStatus(`Loading ${C.label} collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`) }),
+    new THREE.CubeTextureLoader(manager).loadAsync(data.sky.faces.map(face => (C.skyBase ?? C.base) + '/' + face)),
   ]);
   if (errors.length) throw new Error(errors.join('\n'));
   sky.colorSpace = THREE.SRGBColorSpace;
@@ -445,7 +449,7 @@ async function load() {
   }
   showStatus(`Optimizing ${C.label}…`);
   await nextTask();
-  const optimization = optimizeStaticScene(gltf.scene, { cellSize: C.cellSize, verticalCellSize: C.verticalCellSize });
+  const optimization = custom ? null : optimizeStaticScene(gltf.scene, { cellSize: C.cellSize, verticalCellSize: C.verticalCellSize });
   showStatus(`Loading ${C.label} navigation…`);
   await nextTask();
   navigation = new C.classes.navigation(C.base);

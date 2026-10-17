@@ -9,7 +9,7 @@ A browser-based Three.js reconstruction of Black Ops Zombies. Kino der Toten is 
 
 **Play online:** [Kino der Toten](https://kino-der-toten.pages.dev/). This Pages site hosts Kino only, with desktop and touch controls. Wait for the map to load, then press **Enter the Theater**. The site does not need the local launcher.
 
-**Choosing a map:** `/` is a single page with a built-in map list. Nothing for a map is downloaded until you pick it; `/?map=moon` (or `kino`, `shangri-la`, `ascension`, `call-of-the-dead`) skips the list. Picking a map swaps the list for that map's own loading screen on the same page without changing the URL, then starts the game as soon as it has loaded.
+**Choosing a map:** `/` is a single page with a built-in map list. Nothing for a map is downloaded until you pick it; `/?map=moon` (or `kino`, `shangri-la`, `ascension`, `call-of-the-dead`, `one-window-challenge`) skips the list. Picking a map swaps the list for that map's own loading screen on the same page without changing the URL, then starts the game as soon as it has loaded.
 
 > [!IMPORTANT]
 > This is an unofficial, non-commercial fan project. It is not affiliated with,
@@ -118,3 +118,5 @@ The browser exposes `kino.debug` for inspecting entities, navigation, collision,
 **Moon now includes the solo quest and ending:** double-click **Play Moon.cmd**. Perks, Mystery Box, Pack-a-Punch, Wave/Zap Guns, Gersh/QED equipment, Hacker, excavators, special enemies and the Big Bang Theory sequence are connected. The launcher finds an available local port. See [MOON_PORT.md](MOON_PORT.md) for controls, the quest guide, build instructions, test evidence and differences from the original T5 game.
 
 **Shangri-La and Ascension maps:** double-click **Play Shangri-La.cmd** or **Play Ascension.cmd** to open either map directly in the browser for exploration. See [SHANGRI_LA_PORT.md](SHANGRI_LA_PORT.md) and [ASCENSION_PORT.md](ASCENSION_PORT.md) for controls and rebuild instructions.
+
+**One Window Challenge:** a small generated arena (no baked data) with a single zombie window, every perk in a row, Pack-a-Punch on the same wall, one Mystery Box, power on from the start and the Shangri-La sky. Zombies route over a handful of path points. The layout and path points are constants in `export/web/one-window-challenge-world.js`.

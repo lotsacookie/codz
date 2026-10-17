@@ -68,6 +68,7 @@ export class ShangriFeatures {
     const randoms = d.entities.filter(e => e.targetname === 'zombie_vending_random').sort((a, b) => a.id - b.id);
     randoms.forEach((e, i) => { if (perks[i]) this.targets.push({ kind: 'perk', e, perk: perks[i] }); });
     for (const e of d.entities.filter(e => e.targetname === 'zombie_vending' && e.script_noteworthy === 'specialty_quickrevive')) this.targets.push({ kind: 'perk', e, perk: e.script_noteworthy });
+    for (const e of d.entities.filter(e => e.targetname === 'zombie_vending_perk' && MOON_PERKS[e.script_noteworthy] && cd.perkDrinks[e.script_noteworthy])) this.targets.push({ kind: 'perk', e, perk: e.script_noteworthy });
     for (const t of this.targets.filter(t => t.kind === 'perk')) {
       const sprite = perkSprite(MOON_PERKS[t.perk]);
       sprite.position.copy(V(t.e.position)).y += 62;

@@ -16,6 +16,7 @@ canvas{display:block;outline:none}
 #map-list li:nth-child(3){--i:2}
 #map-list li:nth-child(4){--i:3}
 #map-list li:nth-child(5){--i:4}
+#map-list li:nth-child(6){--i:5}
 #launcher li button{position:absolute;z-index:3;left:calc(352 / 1920 * 100%);top:calc((259 + var(--i,0) * 42) / 1080 * 100%);width:calc(450 / 1920 * 100%);height:calc(42 / 1080 * 100%);margin:0;padding:0;border:0;border-radius:0;background:none;color:inherit;outline:0;cursor:pointer}
 #launcher li button:disabled{cursor:progress;opacity:1}
 #launcher li img{position:absolute;pointer-events:none;user-select:none;-webkit-user-drag:none}
@@ -33,6 +34,12 @@ canvas{display:block;outline:none}
 #preload.done,#preload.failed{opacity:.75}
 #preload.done b{background:#7fa86c}
 #preload.failed b{background:#b3893a}
+
+@media (pointer:fine) and (min-aspect-ratio:1/1){
+#launcher li.plain button{display:flex;align-items:center;padding:0 calc(var(--s) * 14);background:none}
+#launcher li.plain button strong{position:static;width:auto;height:auto;overflow:visible;clip-path:none;font-size:calc(var(--s) * 22);letter-spacing:.14em;text-transform:uppercase;color:#f2f2f2;text-shadow:var(--shade)}
+#launcher li.plain button:hover,#launcher li.plain.selected button{background:#ffffff1f}
+}
 
 @media (pointer:coarse),(max-aspect-ratio:1/1){
 #launcher{display:flex;align-items:flex-start;padding:6vh 7vw;overflow-y:auto;background:radial-gradient(ellipse at 20% 30%,#2a1110 0,#050404 72%)}

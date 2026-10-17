@@ -12,7 +12,7 @@ const entries = [...html.matchAll(/<button type="button" data-map="([^"]+)"([^>]
 const count = pattern => (html.match(pattern) ?? []).length;
 
 test('the page lists every map once', () => {
-  assert.deepEqual(entries.map(entry => entry.id), ['kino', 'moon', 'shangri-la', 'ascension', 'call-of-the-dead']);
+  assert.deepEqual(entries.map(entry => entry.id), ['kino', 'moon', 'shangri-la', 'ascension', 'call-of-the-dead', 'one-window-challenge']);
 });
 
 test('each map has a module that mounts into the shell and stylesheets that exist', () => {
