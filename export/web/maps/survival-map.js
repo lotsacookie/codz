@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
+import { loadMapGltf } from '../map-assets.js';
+import { loadManifest, loadPacks, ensureTextures, prewarm } from '../load-flow.js';
 import { preloadShared } from '../shared-assets.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
-import { configureKinoAssets, assetManager, detectMobile } from '../runtime-assets.js';
+import { configureKinoAssets, assetManager, assetDiagnostics } from '../runtime-assets.js';
 import { assets } from '../asset-loader.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
@@ -295,7 +296,8 @@ async function resetRun() {
   features.reset();
   spawnPlayer();
   ready = true;
-  ctx.setHint(C.startHint);
+  const missing = assetDiagnostics().failedTextures;
+  ctx.setHint(C.startHint + (missing ? ` · ${missing} texture${missing > 1 ? 's' : ''} could not be loaded (see console)` : ''));
 }
 
 addEventListener('mousemove', e => {
@@ -382,13 +384,10 @@ async function load() {
   // loadMapGltf registers the texture loader for baked maps; generated maps skip it, so models (machines, box, weapons)
   // would otherwise load their textures through the default loader and come out untextured.
   if (C.buildWorld) { configureKinoAssets(); assetManager.setURLModifier(assets.urlModifier); }
-  // Generated maps reuse real models (machines, box, Pack-a-Punch) whose textures live in the same asset packs Kino loads.
-  // Download those packs first (one request each, like Kino) instead of fetching every texture as a loose file.
-  if (C.buildWorld && C.packs?.length && !/[?&]pack=0\b/.test(location.search)) {
-    ctx.progress(`Loading ${C.label} textures…`, .04);
-    const mobile = detectMobile();
-    await Promise.all(C.packs.map(pack => assets.loadPack(typeof pack === 'function' ? pack(mobile) : pack)));
-  }
+  // Kino's loading sequence: manifest, then asset packs (generated maps reuse Kino/Moon models whose textures live in those
+  // packs), instead of fetching every texture as a loose file.
+  await loadManifest();
+  if (C.packs?.length) { ctx.progress(`Loading ${C.label} textures…`, .04); await loadPacks(C.packs); }
   const custom = C.buildWorld ? await C.buildWorld() : null;
   if (custom) data = custom.data;
   else {
@@ -403,9 +402,6 @@ async function load() {
   showStatus(`Loading ${C.label}…`);
   const sharedAssets = preloadShared();
   const gltf = custom ? { scene: custom.scene } : await loadMapGltf(C.gltf, { label: C.label, onStatus: showStatus, pack: C.pack });
-  // Generated maps still load real T5 models (machines, box, Pack-a-Punch) whose textures stream in asynchronously, so wait for
-  // them (and retry failures) exactly like baked maps; otherwise the map starts with flat untextured props.
-  const textureReport = await settleTextures({ onStatus: showStatus });
   showStatus(`Loading ${C.label} collision and sky…`);
   const [collider, sky] = await Promise.all([
     custom ? new CollisionWorld(custom.collisionGeometry, custom.collisionMetadata) : loadCollisionWorld({ metadataUrl: C.collisionMeta, onProgress: ({ loaded, total }) => showStatus(`Loading ${C.label} collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`) }),
@@ -416,8 +412,6 @@ async function load() {
   scene.background = sky;
   scene.backgroundRotation.x = -Math.PI / 2;
   collision = collider;
-  const missingTextures = textureWarning(textureReport);
-  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); }
   showStatus(`Preparing ${C.label} scene…`);
   await nextTask();
   prepareMaterials(gltf.scene);
@@ -478,12 +472,12 @@ async function load() {
   };
   combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
   await combat.load();
-  // Weapon and hand textures are requested by combat.load(), after the map's own settle pass above. Settle again so
-  // any that failed (and got a flat placeholder) are retried and healed, for custom-world maps too.
-  try { await settleTextures({ onStatus: showStatus }); } catch (error) { console.warn(LOG + ' weapon texture settle failed', error); }
   showStatus('Preparing perks, box and barricades…');
   features = new C.classes.features({ data, combat, scene, camera, objects, notice: showNotice, raycast: rayIntersect, doors: groups, openDoor });
   await features.load();
+  // One texture check for the map, its props and the weapons (Kino's retry / play-anyway flow).
+  showStatus('Checking textures…');
+  await ensureTextures(ctx);
   worldApi.setBoards = (b, n) => features.setBoards(b, n);
   combat.enemies.barriers = features.barriers;
   combat.enemies.trail = trail;
@@ -508,7 +502,7 @@ async function load() {
   for (let i = 0; i < 90; i++) player.update(1 / 120, {});
   showStatus('Preparing graphics…');
   await nextTask();
-  try { await Promise.race([Promise.all([renderer.compileAsync(scene, camera), renderer.compileAsync(combat.viewScene, combat.viewCamera)]), new Promise(resolve => setTimeout(resolve, 20000))]); } catch (error) { console.warn(LOG + ' shader precompile skipped', error); }
+  await prewarm({ ctx, renderer, scenes: [[scene, camera], [combat.viewScene, combat.viewCamera]] });
   player.enabled = false;
   ready = true;
   $('mode-label').textContent = (C.modeLabel ?? C.label.toUpperCase() + ' / SOLO SURVIVAL');

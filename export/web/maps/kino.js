@@ -15,9 +15,10 @@ import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } fro
 import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
-import { configureKinoAssets, assetDiagnostics, textureReport, texturesSettled, retryFailedTextures, loadedTextures } from '../runtime-assets.js';
+import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
 import { preloadShared } from '../shared-assets.js';
+import { ensureTextures as sharedEnsureTextures, prewarm as sharedPrewarm, kinoPack } from '../load-flow.js';
 import { smoothingEnabled } from '../steering.js';
 import { AdaptiveResolution, createPerfOverlay } from '../quality.js';
 import { GradePass } from '../grade.js';
@@ -140,32 +141,8 @@ const stopProgress=assets.onProgress(s=>{
   const mb=n=>(n/1048576).toFixed(0);
   ctx.progress(`Loading the theater · ${mb(loaded)} / ${mb(total)} MB`,(10+Math.min(1,loaded/total)*70)/100);
 });
-async function askAboutTextures(count){const choice=await ctx.choice(`${count} texture${count>1?'s':''} failed to load`,['RETRY','PLAY ANYWAY']);if(choice===0)throw new Error('Some textures failed to load. Go back to the maps and open the map again to retry.');}
-async function ensureTextures(){
-  for(let round=0;round<3;round++){
-    await texturesSettled();
-    let report=textureReport();
-    if(!report.failed)return report;
-    progress(`Retrying ${report.failed} texture${report.failed>1?'s':''}`,89);
-    await new Promise(resolve=>setTimeout(resolve,700*2**round));
-    report=await retryFailedTextures();
-    if(!report.failed)return report;
-  }
-  const report=textureReport();
-  console.warn('Textures still missing:',report.failedList);
-  await askAboutTextures(report.failed);
-  return report;
-}
-async function prewarm(){
-  if(profile.mobile||/[?&]prewarm=0\b/.test(location.search))return;
-  const sources=new Set(),textures=[],started=performance.now(),yieldFrame=()=>new Promise(resolve=>setTimeout(resolve));
-  for(const value of loadedTextures())if(!sources.has(value.source)){sources.add(value.source);textures.push(value);}
-  try{if(grade){grade.sync();renderer.setRenderTarget(grade.target);}await Promise.race([Promise.all([renderer.compileAsync(scene,camera),renderer.compileAsync(viewScene,viewCamera)]),new Promise(resolve=>setTimeout(resolve,6000))]);}catch(error){console.warn('Shader pre-compile skipped',error);}finally{if(grade)renderer.setRenderTarget(null);}
-  for(let i=0;i<textures.length&&performance.now()-started<12000;i++){
-    renderer.initTexture(textures[i]);
-    if(i%8===7){progress(`Preparing graphics · ${Math.round(i/textures.length*100)}%`,90+i/textures.length*9);await yieldFrame();}
-  }
-}
+const ensureTextures=()=>sharedEnsureTextures(ctx,{at:.89});
+const prewarm=()=>sharedPrewarm({ctx,renderer,mobile:profile.mobile,scenes:[[scene,camera],[viewScene,viewCamera]],withTarget:grade?{begin(){grade.sync();renderer.setRenderTarget(grade.target);},end(){renderer.setRenderTarget(null);}}:null});
 function toast(text,duration=2.5){$('toast').textContent=text;toastUntil=(session?.time??0)+duration;}
 function announce(title,small='KINO DER TOTEN',duration=4){$('announcement-title').textContent=title;$('announcement-small').textContent=small;$('announcement').style.opacity=1;announcementUntil=session.time+duration;}
 function setActive(value){
@@ -504,7 +481,7 @@ Object.assign(kinoApi.debug,{
 });
 ctx.expose('kino',kinoApi);
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(profile.mobile?'asset-pack/kino-mobile.pack':'asset-pack/kino-desktop.pack')]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(kinoPack(profile.mobile))]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
+import { loadMapGltf } from '../map-assets.js';
+import { ensureTextures, prewarm } from '../load-flow.js';
 import { preloadShared } from '../shared-assets.js';
 import { PlayerController } from '../player-controller.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
@@ -306,11 +307,8 @@ async function load() {
   showStatus('Loading Moon…');
   const sharedAssets = preloadShared();
   const gltf = await loadMapGltf('moon/moon.gltf', {label: 'Moon', onStatus: showStatus, pack: 'asset-pack/moon.pack'});
-  const textureReport = await settleTextures({onStatus: showStatus});
   showStatus('Loading Moon collision…');
   const world = await loadCollisionWorld({metadataUrl: 'moon/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Moon collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)});
-  const missingTextures = textureWarning(textureReport);
-  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); }
   showStatus('Preparing Moon scene…'); await nextTask();
   collision = world; scene.add(gltf.scene); scene.updateMatrixWorld(true);
   showStatus('Loading Moon water…'); await nextTask();
@@ -355,10 +353,11 @@ async function load() {
   }
   syncWallGuns();
   presentation=new MoonPresentation(scene,camera,features);await presentation.load();
+  showStatus('Checking textures…'); await ensureTextures(ctx);
   showStatus('Preparing Moon graphics…'); await nextTask();
   relocate('area51'); water.captureReflection(renderer, scene);
   // Compile shaders in parallel behind the loading screen instead of in one long freeze on the first frame.
-  try { await Promise.race([Promise.all([renderer.compileAsync(scene, camera), combat.viewScene && renderer.compileAsync(combat.viewScene, combat.viewCamera)]), new Promise(resolve => setTimeout(resolve, 20000))]); } catch (error) { console.warn('[moon] shader precompile skipped', error); }
+  await prewarm({ ctx, renderer, scenes: [[scene, camera], ...(combat.viewScene ? [[combat.viewScene, combat.viewCamera]] : [])] });
   player.enabled = false; ready = true;setModeUi();
   ctx.setHint(mode==='survival'?'500 points. M1911. Reach the teleporter and survive.':'Exploration: free doors and destination shortcuts.');
   ctx.hud.crosshair(true);ctx.setControls(CONTROLS);

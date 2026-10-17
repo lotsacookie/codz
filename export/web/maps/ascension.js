@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
+import { loadMapGltf } from '../map-assets.js';
+import { ensureTextures } from '../load-flow.js';
+import { assetDiagnostics } from '../runtime-assets.js';
 import { loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
@@ -151,7 +153,7 @@ async function load() {
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Ascension…');
   const gltf = await loadMapGltf('./ascension/ascension.gltf', {label: 'Ascension', onStatus: showStatus, pack: 'asset-pack/ascension.pack'});
-  const textureReport = await settleTextures({onStatus: showStatus});
+  await ensureTextures(ctx);
   showStatus('Loading Ascension collision and sky…');
   const [collider, sky] = await Promise.all([
     loadCollisionWorld({metadataUrl: './ascension/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Ascension collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)}),
@@ -174,9 +176,9 @@ async function load() {
   });
   reset();
   ready = true;
-  const missingTextures = textureWarning(textureReport);
-  if (missingTextures) { errors.push(missingTextures); console.warn(missingTextures); status.textContent = missingTextures; }
-  status.hidden = !missingTextures;
+  const failedTextures = assetDiagnostics().failedTextures;
+  if (failedTextures) status.textContent = `${failedTextures} texture${failedTextures > 1 ? 's' : ''} could not be loaded (see console).`;
+  status.hidden = !failedTextures;
   updateHelp();
   ctx.setControls(CONTROLS);
   ctx.setPadControls(PAD_CONTROLS);

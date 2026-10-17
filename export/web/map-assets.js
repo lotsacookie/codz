@@ -1,14 +1,10 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { assets } from './asset-loader.js';
-import { assetManager, configureKinoAssets, texturesSettled, textureReport, retryFailedTextures } from './runtime-assets.js';
+import { assetManager, configureKinoAssets, textureReport } from './runtime-assets.js';
 
 let configured = false;
 
 const megabytes = bytes => (bytes / 1048576).toFixed(0);
-const relativeName = url => {
-  try { return decodeURIComponent(new URL(url, document.baseURI).pathname.replace(/^\//, '')); } catch { return String(url); }
-};
-
 async function fetchExact(path, expected) {
   const url = assets.abs(path);
   for (let attempt = 0; ; attempt++) {
@@ -38,7 +34,6 @@ export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}
   assetManager.setURLModifier(assets.urlModifier);
   const report = () => {
     const snapshot = assets.snapshot();
-    const textures = textureReport();
     const bytes = snapshot.total ? ` ${megabytes(snapshot.loaded)} / ${megabytes(snapshot.total)} MB` : '';
     onStatus(`Loading ${label}…${bytes}`);
   };
@@ -69,21 +64,4 @@ export async function loadMapGltf(gltfPath, { label = 'map', onStatus = () => {}
     stopListening();
     for (const path of held) assets.release(path);
   }
-}
-
-export async function settleTextures({ rounds = 3, onStatus = () => {} } = {}) {
-  await texturesSettled();
-  let report = textureReport();
-  for (let round = 0; report.failed && round < rounds; round++) {
-    onStatus(`Retrying ${report.failed} texture${report.failed > 1 ? 's' : ''}…`);
-    await new Promise(resolve => setTimeout(resolve, 600 * 2 ** round));
-    report = await retryFailedTextures();
-  }
-  return report;
-}
-
-export function textureWarning(report) {
-  if (!report?.failed) return '';
-  const first = report.failedList[0];
-  return `${report.failed} of ${report.total} textures could not be loaded and are shown as flat colour. First: ${relativeName(first.url)} (${first.error}).`;
 }

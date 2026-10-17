@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
+import { loadMapGltf } from '../map-assets.js';
+import { ensureTextures } from '../load-flow.js';
 import { PlayerController } from '../player-controller.js';
 import { loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
@@ -99,7 +100,7 @@ async function load() {
   manager.onError = url => errors.push(`Asset failed: ${url}`);
   showStatus('Loading Call of the Dead…');
   const gltf = await loadMapGltf('coast/coast.gltf', {label: 'Call of the Dead', onStatus: showStatus, pack: 'asset-pack/coast.pack'});
-  const textureReport = await settleTextures({onStatus: showStatus});
+  await ensureTextures(ctx);
   showStatus('Loading Call of the Dead collision and sky…');
   const [physics, sky, waves] = await Promise.all([
     loadCollisionWorld({metadataUrl: 'coast/collision.json', onProgress: ({loaded, total}) => showStatus(`Loading Call of the Dead collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`)}),
@@ -153,8 +154,6 @@ async function load() {
   // Settle at the original spawn before requesting mouse input.
   player.setEnabled(true); for (let i = 0; i < 120; i++) player.update(1/120, {}); player.setEnabled(false);
   ready = true;
-  const missingTextures = textureWarning(textureReport);
-  if (missingTextures) {errors.push(missingTextures); console.warn(missingTextures);}
   if (debug && query.has('landmark')) relocate(query.get('landmark'));
   ctx.setControls(CONTROLS);
   ctx.setPadControls(PAD_CONTROLS);
