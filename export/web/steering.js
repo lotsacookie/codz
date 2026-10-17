@@ -21,8 +21,9 @@ export function steerDirection(current, desired, dt, rate = 8) {
   current.y += (desired.y - current.y) * k;
   current.z += (desired.z - current.z) * k;
   const horizontal = Math.hypot(current.x, current.z);
-  if (horizontal > 1e-6) { current.x /= horizontal; current.y /= horizontal; current.z /= horizontal; }
+  if (horizontal > .2) { current.x /= horizontal; current.y /= horizontal; current.z /= horizontal; }
   else { current.x = desired.x; current.y = desired.y; current.z = desired.z; }
+  current.y = Math.max(-2, Math.min(2, current.y));
   return current;
 }
 

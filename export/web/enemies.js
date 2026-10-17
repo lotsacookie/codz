@@ -115,10 +115,11 @@ export class Enemies {
         const delta=target.clone().sub(z.root.position),horizontal=Math.hypot(delta.x,delta.z);
         if(horizontal<10){z.pathIndex++;}
         else{
-          const want={x:delta.x/horizontal,y:delta.y/horizontal,z:delta.z/horizontal};
+          const want={x:delta.x/horizontal,y:Math.max(-2,Math.min(2,delta.y/horizontal)),z:delta.z/horizontal};
           z.heading=z.heading?steerDirection(z.heading,want,dt,STEER_RATE):want;
           const next=z.root.position.clone().addScaledVector(new THREE.Vector3(z.heading.x,z.heading.y,z.heading.z),Math.min(z.speed*dt,horizontal));
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
+          if(!Number.isFinite(next.x+next.y+next.z)){z.heading=null;z.path=[];z.repath=0;continue;}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
           if(z.trail){if(!this.world.stepClear||this.world.stepClear(z.root.position,next))z.root.position.copy(next);else{z.path=[];z.repath=0;}}else if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
