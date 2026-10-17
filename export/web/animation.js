@@ -14,7 +14,7 @@ export async function releaseModelCache(){
   }
 }
 export async function loadAnimation(url){if(!clips.has(url))clips.set(url,rfetch(url).then(r=>{if(!r.ok)throw new Error('Animation '+url+': '+r.status);return r.json();}));return clips.get(url);}
-export function makeClip(root, data, locomotion=false){
+export function makeClip(root, data, locomotion=false, options={}){
   const tracks=[];const nodes=new Map();
   root.traverse(n=>{if(!nodes.has(n.name))nodes.set(n.name,[]);nodes.get(n.name).push(n);});
   for(const b of data.bones){
@@ -24,6 +24,19 @@ export function makeClip(root, data, locomotion=false){
       if(b.rot)tracks.push(new THREE.QuaternionKeyframeTrack(node.uuid+'.quaternion',b.rot.frames.map(f=>f/data.fps),b.rot.values));
       if(b.pos){
         const values=b.pos.values.slice();
+        // The M1911 slide is keyed along the gun's own axis, but its exported parent bone can sit in a
+        // rotated frame, which sent the slide downward instead of back. Re-express the keyed offsets in
+        // the parent's frame so the slide travels along the same axis the animation was authored on.
+        if(options.boltFrame&&b.name==='j_bolt'&&node.parent){
+          const anchor=root.getObjectByName('j_gun');
+          if(anchor){
+            root.updateWorldMatrix(true,true);
+            const fix=node.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(anchor.getWorldQuaternion(new THREE.Quaternion()));
+            const angle=fix.angleTo(new THREE.Quaternion());
+            console.info('[viewmodel] j_bolt parent frame offset',(angle*180/Math.PI).toFixed(1)+'deg');
+            if(angle>.05){const v=new THREE.Vector3();for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyQuaternion(fix);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}}
+          }
+        }
         // T5 locomotion stores j_mainroot translations as displacement from
         // the bind pelvis, unlike the absolute viewmodel pose tracks.
         if(locomotion&&b.name==='j_mainroot')for(let i=0;i<values.length;i+=3){values[i]=node.position.x;values[i+1]=node.position.y;values[i+2]+=node.position.z;}
@@ -34,8 +47,8 @@ export function makeClip(root, data, locomotion=false){
   return new THREE.AnimationClip(data.name,Math.max(1/data.fps,data.duration),tracks);
 }
 export class Rig {
-  constructor(root,onNotify=()=>{}){this.root=root;this.mixer=new THREE.AnimationMixer(root);this.actions={};this.data={};this.current=null;this.onNotify=onNotify;this.elapsed=0;}
-  add(key,data,locomotion=false){this.data[key]=data;this.actions[key]=this.mixer.clipAction(makeClip(this.root,data,locomotion));}
+  constructor(root,onNotify=()=>{}){this.root=root;this.mixer=new THREE.AnimationMixer(root);this.actions={};this.data={};this.options={};this.current=null;this.onNotify=onNotify;this.elapsed=0;}
+  add(key,data,locomotion=false){this.data[key]=data;this.actions[key]=this.mixer.clipAction(makeClip(this.root,data,locomotion,this.options));}
   play(key,loop=true,speed=1,fade=.1){
     const a=this.actions[key];if(!a)return false;if(this.current===key&&loop)return true;
     const old=this.actions[this.current];
@@ -106,6 +119,7 @@ export class ViewWeapon {
     for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);this.hiddenTags.push(name);}}
     this.root.matrixAutoUpdate=false;this.root.matrix.copy(cameraBasis);this.pivot.add(this.root);
     this.rig=new Rig(this.root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
+    this.rig.options={boltFrame:def.id==='m1911_zm'};
     for(const [key,clip] of [...entries,...meleeEntries])this.rig.add(key,clip);
     // ADS is a separate native animation of tag_torso. Its first frame also
     // defines each gun's HIP pose; the arms' bind torso is only right for M1911.
