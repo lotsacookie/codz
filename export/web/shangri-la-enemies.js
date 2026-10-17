@@ -1,46 +1,75 @@
+import * as THREE from 'three';
 import { Enemies } from './enemies.js';
 
-// Survival enemies use Kino's proven flow (Enemies base: barricade spawns that must path to the player,
-// per-round population, auto round advance) plus two safety nets for imperfect navmeshes:
-//  - starvation: if nothing could spawn for a while, force a spawn at any barricade;
-//  - trail: when pathing fails, follow the player's breadcrumb trail (see player-trail.js).
+const SPAWN_DELAY_FLOOR = .08;
+const LIFT = new THREE.Vector3(0, 30, 0);
+
+// Survival enemies use Kino's proven flow (Enemies base: barricade spawns, per-round population, auto round advance)
+// with the spawn decision made from a preflight instead of at the moment the round starts:
+//  - only barricades that navigation already verified can reach the player's spawn are used, and the chosen one is
+//    re-checked with a single query, so a bad navmesh is never discovered by a zombie that then has nowhere to go;
+//  - starvation: if nothing could spawn for a while, force a spawn at a verified barricade (any as a last resort);
+//  - routes: baked navmesh first, then the automatically mapped graph, then the player's breadcrumb trail, then a
+//    straight line when it is clear. Every one of the fallbacks is wall-checked (see Enemies.update stepClear).
+// Crash protection (spawn/update faults) is applied by guardEnemies() in MoonCombat.
 export class ShangriEnemies extends Enemies {
   constructor(...args) {
     super(...args);
+    this.autoSpawn = false;
     this.barriers = [];
     this.candidates = [];
     this.starve = 0;
     this.seenSpawned = 0;
     this.trail = null;
-    this.fallbackPath = (z, goal) => this.trail?.route(z.root.position, goal, (a, b) => this.world.lineClear(a, b)) ?? [];
+    this.fallbackPath = (z, goal) => this.fallbackRoute(z, goal);
   }
 
-  guard(label, fn) {
-    try { return fn(); } catch (error) {
-      this.faults = (this.faults ?? 0) + 1;
-      if (this.faults <= 3) console.error('[enemies] ' + label + ' failed', error);
-      this.lastFault = String(error?.message ?? error);
-      return undefined;
-    }
+  arrives(route, goal) { return route?.length > 1 && route.at(-1).distanceTo(goal) < 90; }
+
+  fallbackRoute(z, goal) {
+    const from = z.root.position, nav = this.world.navigation;
+    const auto = nav?.autoPath?.(from, goal);
+    if (this.arrives(auto, goal)) return auto;
+    const crumbs = this.trail?.route(from, goal, (a, b) => this.world.lineClear(a, b));
+    if (crumbs?.length) return crumbs;
+    if (this.world.lineClear(from.clone().add(LIFT), goal.clone().add(LIFT))) return [goal.clone()];
+    return [];
   }
 
-  purgeBroken() {
-    for (const z of [...this.list]) {
-      const p = z.root.position;
-      if (Number.isFinite(p.x + p.y + p.z)) continue;
-      this.remove(z);
-      this.session.spawned = Math.max(0, this.session.spawned - 1);
+  pool() {
+    const nav = this.world.navigation;
+    return nav?.viable ? nav.viable(this.barriers) : this.barriers;
+  }
+
+  isFree(b) { return !this.list.some(z => z.barrier === b && ['barricade', 'entering'].includes(z.state)); }
+
+  spawnStep(dt, player) {
+    const s = this.session;
+    if (s.phase !== 'fighting' || s.spawned >= s.total || this.list.length >= 24) return;
+    this.nextSpawn -= dt;
+    if (this.nextSpawn > 0) return;
+    const nav = this.world.navigation, kind = s.dogRound ? 'dog' : 'zombie';
+    const free = this.pool().filter(b => this.isFree(b));
+    for (let tries = 0; tries < 4 && free.length; tries++) {
+      const b = free.splice(Math.floor(s.random() * free.length), 1)[0];
+      if (nav?.canReach && !nav.canReach(b.inside, player)) continue;
+      if (kind === 'dog') this.spawn(b.inside, null, 'dog'); else this.spawn(null, b, 'zombie');
+      this.nextSpawn = Math.max(SPAWN_DELAY_FLOOR, (this.data.rules.zombie_spawn_delay ?? 2) * Math.pow(.95, s.round - 1));
+      return;
     }
+    this.nextSpawn = 1;
   }
 
   forceSpawn() {
     const s = this.session, kind = s.dogRound ? 'dog' : 'zombie';
-    if (kind === 'zombie' && this.barriers.length) {
-      const free = this.barriers.filter(b => !this.list.some(z => z.barrier === b && ['barricade', 'entering'].includes(z.state)));
-      const pick = (free.length ? free : this.barriers)[Math.floor(s.random() * (free.length || this.barriers.length))];
-      this.spawn(null, pick, kind);
-    } else if (this.candidates.length) this.spawn(this.candidates[Math.floor(s.random() * this.candidates.length)].point, null, kind);
-    else if (this.barriers.length) this.spawn(this.barriers[0].inside, null, kind);
+    const verified = this.pool();
+    const barriers = verified.length ? verified : this.barriers;
+    if (kind === 'zombie' && barriers.length) {
+      const free = barriers.filter(b => this.isFree(b));
+      const list = free.length ? free : barriers;
+      this.spawn(null, list[Math.floor(s.random() * list.length)], kind);
+    } else if (barriers.length) this.spawn(barriers[Math.floor(s.random() * barriers.length)].inside, null, kind);
+    else if (this.candidates.length) this.spawn(this.candidates[Math.floor(s.random() * this.candidates.length)].point, null, kind);
   }
 
   update(dt, player) {
@@ -48,11 +77,11 @@ export class ShangriEnemies extends Enemies {
     if (s.spawned !== this.seenSpawned) { this.seenSpawned = s.spawned; this.starve = 0; }
     if (s.phase === 'fighting' && s.spawned < s.total && this.list.length < 24) {
       this.starve += dt;
-      if (this.starve > 5) { this.starve = 0; this.guard('forced spawn', () => this.forceSpawn()); }
+      if (this.starve > 5) { this.starve = 0; this.forceSpawn(); }
     } else this.starve = 0;
+    this.spawnStep(dt, player);
     if (s.dogRound && s.phase === 'fighting' && s.spawned >= s.total && !this.list.length) this.onDrop?.('full_ammo', this.lastDogDeath ?? player);
-    this.guard('update', () => super.update(dt, player));
-    this.purgeBroken();
+    super.update(dt, player);
   }
 
   reset() {

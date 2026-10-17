@@ -25,3 +25,14 @@ test('collision downloads preserve order across network chunks and reject incomp
     await assert.rejects(loadBinaryParts([{ uri: 'missing', byteLength: 1 }], { baseUrl, byteLength: 1 }), /HTTP 404/);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 });
+
+test('collision layouts are validated against the declared byte length before any download is used', async () => {
+  const { validateCollisionLayout } = await import('../export/web/collision-world.js');
+  const fs = await import('node:fs');
+  for (const map of ['shangri-la', 'moon']) {
+    const meta = JSON.parse(fs.readFileSync(new URL(`../export/web/${map}/collision.json`, import.meta.url)));
+    assert.doesNotThrow(() => validateCollisionLayout(meta, [{ uri: meta.binary, byteLength: meta.byteLength }]), map);
+    assert.throws(() => validateCollisionLayout({ ...meta, byteLength: meta.byteLength + 4 }, [{ uri: meta.binary }]), /size mismatch/);
+    assert.throws(() => validateCollisionLayout(meta, [{ uri: 'a', byteLength: 10 }, { uri: 'b', byteLength: 10 }]), /size mismatch/);
+  }
+});

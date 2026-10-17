@@ -28,5 +28,7 @@ Shangri-La is a solo survival map built on the shared Zombies combat stack, with
 ## Known limits
 
 - The six random perk machines all use the Speed Cola model; each is labelled with its perk.
-- The navigation mesh is fragmented in places; spawning only uses locations that can path to the player and relaxes distance limits when none qualify.
+- The baked navigation mesh is fragmented in places. While the map loads, every barricade is checked for a route to the player's spawn (`SurvivalNavigation.prepare`). If the mesh cannot connect them, or fails to load, the level is mapped automatically (`auto-paths.js`): a grid flood fill whose edges are checked against walls, floor continuity and closed doors, so routes cannot pass through geometry. The map is re-checked whenever a door opens. Spawning only uses barricades verified at load, and every movement step on a mapped or breadcrumb route is wall-checked.
+- Enemy and render-loop faults are contained (`enemy-guard.js`, per-subsystem guards): a failing spawn or update is logged once and skipped instead of stopping the game. Diagnostics: `window.shangriLa.debug.navigation()` shows the preflight report.
+- If `collision.bin` reports a size mismatch the loader discards the cached copy and downloads it once more; a persistent mismatch means `collision.json` and `collision.bin` come from different bakes (re-run the bake or `git lfs pull`).
 - The original quest, special enemies and teleport effects are not included.

@@ -49,20 +49,59 @@ export function deserializeCollisionWorld(metadata, binary) {
   return new CollisionWorld(geometry, metadata);
 }
 
+// The layout must describe exactly the bytes the loader is going to assemble; catching a metadata/binary pair that
+// disagree here gives one clear message instead of a typed-array RangeError deep inside the BVH deserializer.
+export function validateCollisionLayout(metadata, parts) {
+  const { position, index, roots } = metadata?.layout ?? {};
+  if (!position || !index || !Array.isArray(roots) || !roots.length) throw new Error('Invalid collision binary layout');
+  const end = Math.max(position.byteOffset + position.byteLength, index.byteOffset + index.byteLength, ...roots.map(r => r.byteOffset + r.byteLength));
+  if (end !== metadata.byteLength) throw new Error(`collision layout size mismatch: layout ends at ${end} bytes but collision.json declares ${metadata.byteLength}`);
+  const declared = parts.reduce((sum, part) => sum + (part.byteLength ?? 0), 0);
+  if (parts.every(part => part.byteLength != null) && declared !== metadata.byteLength) {
+    throw new Error(`collision layout size mismatch: parts add up to ${declared} bytes but collision.json declares ${metadata.byteLength}`);
+  }
+}
+
+async function loadCollisionOnce(metadataUrl, onProgress, fresh) {
+  const metadataResponse = await rfetch(metadataUrl);
+  if (!metadataResponse.ok) throw new Error(`collision metadata HTTP ${metadataResponse.status}`);
+  const metadata = await metadataResponse.json();
+  const parts = metadata.binaryParts ?? [{ uri: metadata.binary, byteLength: metadata.byteLength }];
+  validateCollisionLayout(metadata, parts);
+  const binary = await loadBinaryParts(parts, {
+    baseUrl: metadataResponse.url, byteLength: metadata.byteLength, onProgress,
+    fetchPart: (url, into) => assets.getBytes(url, undefined, into, { expected: into.expected, fresh }),
+  });
+  return { metadata, binary, parts, baseUrl: metadataResponse.url };
+}
+
 export async function loadCollisionWorld({
   metadataUrl = 'hijacked_collision_bvh.json',
   onProgress = null,
 } = {}) {
   const started = performance.now();
-  const metadataResponse = await rfetch(metadataUrl);
-  if (!metadataResponse.ok) throw new Error(`collision metadata HTTP ${metadataResponse.status}`);
-  const metadata = await metadataResponse.json();
-  const parts = metadata.binaryParts ?? [{ uri: metadata.binary, byteLength: metadata.byteLength }];
-  const binary = await loadBinaryParts(parts, {
-    baseUrl: metadataResponse.url, byteLength: metadata.byteLength, onProgress,
-    fetchPart: (url, into) => assets.getBytes(url, undefined, into),
-  });
-  const world = deserializeCollisionWorld(metadata, binary);
+  let loaded;
+  try {
+    loaded = await loadCollisionOnce(metadataUrl, onProgress, false);
+  } catch (error) {
+    // A size error almost always means a stale copy (Cache Storage, HTTP cache or a CDN edge) of a file that was
+    // re-baked since. Forget every copy of the collision files and download them once more, bypassing caches.
+    if (!/size mismatch|Invalid collision binary layout/i.test(String(error?.message))) throw error;
+    console.warn('[collision] size mismatch, discarding cached copies and downloading again:', error.message);
+    const base = new URL(metadataUrl, assets.baseURI).href;
+    await assets.invalidate(base);
+    try {
+      const stale = await (await rfetch(metadataUrl)).json();
+      for (const part of stale.binaryParts ?? [{ uri: stale.binary }]) await assets.invalidate(new URL(part.uri, base).href);
+    } catch { /* the retry below reports the real problem */ }
+    onProgress?.({ loaded: 0, total: 1 });
+    try {
+      loaded = await loadCollisionOnce(metadataUrl, onProgress, true);
+    } catch (retryError) {
+      throw new Error(`${retryError.message}. The map's collision.json and collision.bin do not match. Re-run the Shangri-La bake or "git lfs pull", then reload.`);
+    }
+  }
+  const world = deserializeCollisionWorld(loaded.metadata, loaded.binary);
   world.loadMilliseconds = performance.now() - started;
   return world;
 }

@@ -232,12 +232,14 @@ function update(dt) {
   const fast = combat.session.perks.has('specialty_longersprint');
   player.moveSpeed = fast ? 209 : 190;
   player.sprintSpeed = fast ? 330 : 285;
-  if (combat.session.phase !== 'reviving') player.update(dt, { forward, strafe, sprint, jump: keys.has('Space'), jumpPressed: touch.jump, crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || touch.crouch });
-  if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) spawnPlayer();
-  trail.record(player.getFeetPosition());
-  updateDoors(dt);
-  combat.update(dt, { moving, sprint });
-  features.update(dt, keys.has('KeyF') || keys.has('KeyE') || touch.use);
+  // Each subsystem is isolated: a failure in one is reported once and must not stop the others (or the render).
+  const safely = fn => { try { fn(); } catch (error) { reportFault(error); } };
+  if (combat.session.phase !== 'reviving') safely(() => player.update(dt, { forward, strafe, sprint, jump: keys.has('Space'), jumpPressed: touch.jump, crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || touch.crouch }));
+  safely(() => { if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) spawnPlayer(); });
+  safely(() => trail.record(player.getFeetPosition()));
+  safely(() => updateDoors(dt));
+  safely(() => combat.update(dt, { moving, sprint }));
+  safely(() => features.update(dt, keys.has('KeyF') || keys.has('KeyE') || touch.use));
   noticeLeft = Math.max(0, noticeLeft - dt);
   $('toast').textContent = noticeLeft ? notice : '';
   $('prompt').textContent = promptText();
@@ -459,6 +461,7 @@ async function load() {
     lowGravity: () => false,
     zoneAt: () => C.id,
     spawnBarriers: () => features.barriers,
+    stepClear: (a, b) => navigation.stepClear(a, b),
   };
   combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies });
   await combat.load();
@@ -469,6 +472,12 @@ async function load() {
   combat.enemies.barriers = features.barriers;
   combat.enemies.trail = trail;
   combat.enemies.candidates = navigation.metadata.candidates.map(c => ({ ...c, point: vector(c.position) }));
+  // Preflight: verify (and if needed automatically map) the routes now, while the map is loading, so a bad navmesh
+  // is handled here instead of by the first zombie of round 1.
+  navigation.attach({ raycast: rayIntersect }, { start: vector(navigation.metadata.start ?? data.spawn.position), barriers: features.barriers, candidates: combat.enemies.candidates });
+  showStatus('Checking zombie routes…');
+  await navigation.prepare({ onStatus: showStatus });
+  if (navigation.health && !navigation.health.reachable) showNotice('No verified zombie route found. Using fallback movement.', 8);
   combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
   for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) wallGuns.set(triggerId, [o]); }
   const buy = features.interact.bind(features);
@@ -496,7 +505,7 @@ async function load() {
   ctx.expose(C.expose ?? C.id.replace(/-(\w)/g, (_, c) => c.toUpperCase()), {
     ready: true, data, player, camera, scene, renderer, collision, parts, errors, optimization, combat, navigation, features,
     debug: {
-      interact, update, resetRun, pause, resume, target: () => target,
+      interact, update, resetRun, pause, resume, target: () => target, navigation: () => navigation.health,
       snapshot: () => ({ position: player.getFeetPosition().toArray(), grounded: player.isGrounded, active, power: combat.session.power, doors: [...combat.session.openDoors], combat: combat.snapshot(), fps, errors: [...errors] }),
     },
   });

@@ -7,6 +7,7 @@ import { MoonEnemies } from './moon-enemies.js';
 import { PerkDrink } from './perk-drink.js';
 import { loadModel } from './animation.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
+import { guardEnemies } from './enemy-guard.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
@@ -26,6 +27,7 @@ export class MoonCombat {
     this.data=await response.json();this.session=new this.sessionClass(this.data);
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
     this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:n=>this.damage(n),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000))});
+    guardEnemies(this.enemies,{onFault:(where,error)=>this.faultNotice?.(where,error)});
     this.pickups=new Powerups(this.scene,this.data,this.audio,type=>this.collect(type));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};
     await Promise.all([this.audio.load(),this.enemies.load(),this.pickups.load(),this.equip(),this.perkDrink.load(),

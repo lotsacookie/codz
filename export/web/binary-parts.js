@@ -10,7 +10,7 @@ export async function loadBinaryParts(parts, { baseUrl, byteLength, onProgress, 
       // Resilient path: the loader writes straight into the final allocation, with retries,
       // stall detection and alternate hosts. Same size checks as the streaming path below.
       const start = offset, uri = new URL(part.uri, baseUrl).href;
-      const { bytes } = await fetchPart(uri, { buffer: output, offset });
+      const { bytes } = await fetchPart(uri, { buffer: output, offset, expected: part.byteLength ?? null });
       offset += bytes.byteLength;
       onProgress?.({ loaded: offset, total: byteLength });
       if (part.byteLength != null && offset - start !== part.byteLength) throw new Error(`collision BVH size mismatch: ${part.uri}`);

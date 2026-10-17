@@ -160,3 +160,36 @@ test('survives a wrong content-length (transfer encoding) by growing the buffer'
   const { bytes } = await fetchBytes(BASE + 'x', { fetchImpl: net });
   assert.deepEqual(bytes, data);
 });
+
+test('a stale cached copy of the wrong size is replaced instead of failing with a size error', async () => {
+  const url = BASE + 'collision.bin', fresh = payload(3000), stale = payload(4500);
+  const caches = memoryCaches();
+  caches.store.set(url, stale);
+  // gzip-encoded HEAD answers hide the length, so the old freshness probe could not catch this.
+  const net = network({ [url]: { body: fresh } });
+  const loader = new AssetLoader({ baseURI: BASE, fetchImpl: net, cachesImpl: caches, backoffMs: 1, minCacheBytes: 1 });
+  const into = { buffer: new Uint8Array(3000), offset: 0 };
+  const { bytes } = await loader.getBytes(url, undefined, into, { expected: 3000 });
+  assert.equal(bytes.byteLength, 3000);
+  assert.deepEqual(bytes, fresh);
+  assert.deepEqual(caches.store.get(url), fresh, 'the cache now holds the right file');
+});
+
+test('a mirror serving another bake of the file is skipped when the expected size is known', async () => {
+  const url = BASE + 'collision.bin', good = payload(2000);
+  const net = network({ [url]: { body: payload(2600) }, [FALLBACK + 'collision.bin']: { body: good } });
+  const loader = new AssetLoader({ baseURI: BASE, fetchImpl: net, cachesImpl: null, backoffMs: 1, bases: [FALLBACK] });
+  const { bytes } = await loader.getBytes(url, undefined, { buffer: new Uint8Array(2000), offset: 0 }, { expected: 2000 });
+  assert.deepEqual(bytes, good);
+});
+
+test('invalidate forgets a cached file so the next read downloads it again', async () => {
+  const url = BASE + 'a.bin', caches = memoryCaches();
+  caches.store.set(url, payload(900));
+  const loader = new AssetLoader({ baseURI: BASE, fetchImpl: network({ [url]: { body: payload(1200) } }), cachesImpl: caches, backoffMs: 1, minCacheBytes: 1 });
+  await loader.openCache();
+  const cache = await loader.openCache();
+  cache.delete = async u => { caches.store.delete(u); };
+  await loader.invalidate(url);
+  assert.equal(caches.store.has(url), false);
+});

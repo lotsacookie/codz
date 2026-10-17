@@ -22,7 +22,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const TYPES = { json: 'application/json', bin: 'application/octet-stream', gltf: 'model/gltf+json', wasm: 'application/wasm', png: 'image/png', webp: 'image/webp', ogg: 'audio/ogg', wav: 'audio/wav' };
 const typeOf = url => TYPES[/\.([a-z0-9]+)(?:[?#].*)?$/i.exec(url)?.[1]?.toLowerCase()] ?? 'application/octet-stream';
 
-export async function fetchBytes(url, { fetchImpl = (...a) => globalThis.fetch(...a), retries = 3, stallMs = 20000, backoffMs = 400, signal, onProgress, into } = {}) {
+export async function fetchBytes(url, { fetchImpl = (...a) => globalThis.fetch(...a), retries = 3, stallMs = 20000, backoffMs = 400, signal, onProgress, into, cacheMode } = {}) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
@@ -33,7 +33,7 @@ export async function fetchBytes(url, { fetchImpl = (...a) => globalThis.fetch(.
     try {
       if (signal?.aborted) throw signal.reason ?? new Error('aborted');
       arm();
-      const response = await fetchImpl(url, { signal: controller.signal });
+      const response = await fetchImpl(url, cacheMode ? { signal: controller.signal, cache: cacheMode } : { signal: controller.signal });
       if (!response.ok) throw Object.assign(new Error(`HTTP ${response.status} for ${url}`), { status: response.status });
       const total = Number(response.headers.get('content-length')) || 0;
       onProgress?.(0, total);
@@ -211,24 +211,36 @@ export class AssetLoader {
     }
   }
 
-  async getBytes(url, signal, into, { stallMs = this.stallMs, retries = this.retries } = {}) {
+  // Forget everything known about one URL (in-memory entry and Cache Storage) so the next read downloads it again.
+  async invalidate(url) {
+    this.files.delete(url);
+    try { await (await this.openCache())?.delete(url); } catch { /* caching is optional */ }
+  }
+
+  // `expected` is the byte length the caller knows the file must have. A stale cache entry, a pack entry or a
+  // mirror that serves another bake of the file is then discarded and downloaded again instead of failing with a
+  // size error that a reload could never fix.
+  async getBytes(url, signal, into, { stallMs = this.stallMs, retries = this.retries, expected = null, fresh = false } = {}) {
+    const fits = n => !into || into.offset + n <= into.buffer.byteLength;
+    const sized = n => expected == null || n === expected;
     const packed = this.packed(this.packKey(url));
-    if (packed) {
+    if (packed && fits(packed.byteLength) && sized(packed.byteLength)) {
       if (!into) return { bytes: packed, finalUrl: url };
-      if (into.offset + packed.byteLength > into.buffer.byteLength) throw new Error(`size mismatch: ${url} is larger than expected`);
       into.buffer.set(packed, into.offset);
       return { bytes: into.buffer.subarray(into.offset, into.offset + packed.byteLength), finalUrl: url };
     }
     const entry = this.files.get(url) ?? this.track(url);
     entry.failed = false;
     const bulk = /\.(bin|gz|glb|gltf|wasm|pack)(?:[?#].*)?$/i.test(url);
-    const cached = bulk ? await this.cacheGet(url) : null;
-    if (cached && await this.stillFresh(url, cached.byteLength)) {
+    const cached = bulk && !fresh ? await this.cacheGet(url) : null;
+    if (cached && fits(cached.byteLength) && sized(cached.byteLength) && await this.stillFresh(url, cached.byteLength)) {
       entry.got = entry.total = cached.byteLength; entry.done = true; entry.cached = true;
       this.emit(true);
-      if (into) { if (into.offset + cached.byteLength > into.buffer.byteLength) throw new Error(`size mismatch: ${url} is larger than expected`); into.buffer.set(cached, into.offset); return { bytes: into.buffer.subarray(into.offset, into.offset + cached.byteLength), finalUrl: url }; }
+      if (into) { into.buffer.set(cached, into.offset); return { bytes: into.buffer.subarray(into.offset, into.offset + cached.byteLength), finalUrl: url }; }
       return { bytes: cached, finalUrl: url };
     }
+    if (cached) { try { await (await this.openCache())?.delete(url); } catch { /* ignore */ } }
+    const cacheMode = fresh ? 'reload' : /\.json(?:[?#].*)?$/i.test(url) ? 'no-cache' : undefined;
     const gzPath = this.manifest?.[this.rel(url)]?.gz;
     const candidates = [{ url, root: this.root() }, ...this.bases.map(b => ({ url: this.rebase(url, b), root: b })).filter(c => c.url)];
     let pointer = null, lastError;
@@ -238,13 +250,14 @@ export class AssetLoader {
         const isGz = variant !== candidate;
         try {
           const { bytes, total } = await fetchBytes(variant, {
-            fetchImpl: this.fetchImpl, retries, stallMs, backoffMs: this.backoffMs, signal, into: isGz ? undefined : into,
+            fetchImpl: this.fetchImpl, retries, stallMs, backoffMs: this.backoffMs, signal, into: isGz ? undefined : into, cacheMode,
             onProgress: (got, t) => { entry.got = got; entry.total = t || got; this.emit(); },
           });
           const ptr = parseLfsPointer(bytes);
           if (ptr) { pointer = ptr; entry.got = 0; entry.total = ptr.size; continue; }
           let out = isGz ? await gunzip(bytes) : bytes;
-          if (isGz && into) { if (into.offset + out.byteLength > into.buffer.byteLength) throw new Error(`size mismatch: ${url} is larger than expected`); into.buffer.set(out, into.offset); out = into.buffer.subarray(into.offset, into.offset + out.byteLength); }
+          if (!sized(out.byteLength)) throw new Error(`size mismatch: ${variant} is ${out.byteLength} bytes but ${expected} were expected`);
+          if (isGz && into) { if (!fits(out.byteLength)) throw new Error(`size mismatch: ${url} is larger than expected`); into.buffer.set(out, into.offset); out = into.buffer.subarray(into.offset, into.offset + out.byteLength); }
           entry.got = entry.total = bytes.byteLength; entry.done = true;
           this.emit(true);
           if (bulk) await this.cachePut(url, out);

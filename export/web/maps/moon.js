@@ -42,6 +42,13 @@ function syncWallGuns(){for(const [id,o] of wallGuns)o.visible=!combat.enabled||
 const labels = {nml_zone: 'No Man’s Land', bridge_zone: 'Receiving Bay', water_zone: 'Lunar Surface', cata_left_start_zone: 'Tunnel 6', cata_left_middle_zone: 'Tunnel 6', cata_right_start_zone: 'Tunnel 11', cata_right_middle_zone: 'Tunnel 11', cata_right_end_zone: 'Tunnel 11', generator_zone: 'Power / MPD', generator_exit_east_zone: 'Laboratories', enter_forest_east_zone: 'Upper Laboratories', forest_zone: 'Biodome', tower_zone_east: 'Laboratories', tower_zone_east2: 'Laboratories'};
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
+// One bad frame must not stop the render loop (everything would vanish): log it once, show it in diagnostics and keep drawing.
+const faults = new Map();
+function reportFault(error) {
+  const key = String(error?.message ?? error), n = (faults.get(key) ?? 0) + 1;
+  faults.set(key, n);
+  if (n === 1) { console.error('[moon]', error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
+}
 let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;
 const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
   onReset:()=>{touchFirePending=false;},
@@ -361,7 +368,7 @@ renderer.setAnimationLoop(now => {
   if (active) water?.update(Math.min(.25, dt));
   if (ready && active) gfx.sample(dt * 1000);
   // Preserve real-time timers on slower GPUs while keeping collision steps small.
-  for(let remaining=Math.min(.25,dt);active&&remaining>0;){const step=Math.min(.05,remaining);update(step);remaining-=step;}
+  for(let remaining=Math.min(.25,dt);active&&remaining>0;){const step=Math.min(.05,remaining);try{update(step);}catch(error){reportFault(error);break;}remaining-=step;}
   if(!ready){previous=now;return;}
   renderer.clear();renderer.render(scene, camera);
   if(ready&&active&&combat.enabled){renderer.clearDepth();renderer.render(combat.viewScene,combat.viewCamera);}

@@ -15,8 +15,9 @@ export class MoonNavigation {
     }
   }
   get query(){return this.regions[this.area].query;}
-  closest(p,extents){const r=this.query.findClosestPoint(p,extents?{halfExtents:extents}:undefined);return r.success?new THREE.Vector3(r.point.x,r.point.y,r.point.z):null;}
-  path(a,b){const r=this.query.computePath(a,b);return r.success?r.path.map(p=>new THREE.Vector3(p.x,p.y,p.z)):[];}
+  // Navigation queries must never throw into the game loop: a failed query is simply "no route".
+  closest(p,extents){try{const r=this.query.findClosestPoint(p,extents?{halfExtents:extents}:undefined);return r.success?new THREE.Vector3(r.point.x,r.point.y,r.point.z):null;}catch{return null;}}
+  path(a,b){try{const r=this.query.computePath(a,b);return r.success?r.path.map(p=>new THREE.Vector3(p.x,p.y,p.z)):[];}catch{return [];}}
   setDoors(parts){
     const {navMesh,query}=this.regions.moon;
     for(const ref of this.disabled)navMesh.setPolyFlags(ref,1);this.disabled.clear();
