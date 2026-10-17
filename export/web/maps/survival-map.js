@@ -15,6 +15,7 @@ import { ShangriSession } from '../shangri-la-session.js';
 import { ShangriEnemies } from '../shangri-la-enemies.js';
 import { ShangriFeatures } from '../shangri-la-features.js';
 import { SurvivalNavigation } from '../shangri-la-navigation.js';
+import { PlayerTrail } from '../player-trail.js';
 import { doorGroups, barrierGroups, movingEntityIds, boxLocations } from '../shangri-la-rules.js';
 
 /**
@@ -72,6 +73,7 @@ scene.add(sun, fill);
 
 let data, player, collision, navigation, combat, features, groups = [], ready = false, active = false, lastPoints = null, perkKey = '';
 let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0, target = null;
+const trail = new PlayerTrail();
 const objects = new Map(), parts = new Map(), boughtGuns = new Set(), wallGuns = new Map();
 const chalk = new ChalkHud();
 let mousePrimary = false, mouseSecondary = false, mouseAim = false, touchFirePending = false;
@@ -231,6 +233,7 @@ function update(dt) {
   player.sprintSpeed = fast ? 330 : 285;
   if (combat.session.phase !== 'reviving') player.update(dt, { forward, strafe, sprint, jump: keys.has('Space'), jumpPressed: touch.jump, crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || touch.crouch });
   if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) spawnPlayer();
+  trail.record(player.getFeetPosition());
   updateDoors(dt);
   combat.update(dt, { moving, sprint });
   features.update(dt, keys.has('KeyF') || keys.has('KeyE') || touch.use);
@@ -287,6 +290,7 @@ async function resetRun() {
     if (part.object) { part.object.position.copy(part.origin); part.object.visible = true; }
   }
   syncNavigation();
+  trail.reset();
   await combat.reset();
   features.reset();
   spawnPlayer();
@@ -453,6 +457,7 @@ async function load() {
     lineClear: (a, b) => { const d = b.clone().sub(a); return !rayIntersect(new THREE.Ray(a, d.clone().normalize()), 1, Math.max(1, d.length() - 4)); },
     lowGravity: () => false,
     zoneAt: () => C.id,
+    spawnBarriers: () => features.barriers,
   };
   combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies });
   await combat.load();
@@ -461,6 +466,7 @@ async function load() {
   await features.load();
   worldApi.setBoards = (b, n) => features.setBoards(b, n);
   combat.enemies.barriers = features.barriers;
+  combat.enemies.trail = trail;
   combat.enemies.candidates = navigation.metadata.candidates.map(c => ({ ...c, point: vector(c.position) }));
   combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
   for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) wallGuns.set(triggerId, [o]); }

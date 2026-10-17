@@ -105,7 +105,11 @@ export class Enemies {
         z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
       }
       z.repath-=dt;
-      if(z.repath<=0){z.path=this.world.path(z.root.position,goal);z.pathIndex=1;z.repath=.55+(z.id%5)*.07;}
+      if(z.repath<=0){
+        z.path=this.world.path(z.root.position,goal);z.pathIndex=1;z.repath=.55+(z.id%5)*.07;z.trail=false;
+        // Navmesh could not connect us to the goal: optionally follow the player's breadcrumb trail instead.
+        if(this.fallbackPath&&(z.path.length<2||z.path.at(-1).distanceTo(goal)>90)){const alt=this.fallbackPath(z,goal);if(alt?.length){z.path=alt;z.pathIndex=0;z.trail=true;}}
+      }
       const target=z.path[z.pathIndex];
       if(target){
         const delta=target.clone().sub(z.root.position),horizontal=Math.hypot(delta.x,delta.z);
@@ -116,7 +120,7 @@ export class Enemies {
           const next=z.root.position.clone().addScaledVector(new THREE.Vector3(z.heading.x,z.heading.y,z.heading.z),Math.min(z.speed*dt,horizontal));
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
-          if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
+          if(z.trail)z.root.position.copy(next);else if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
         }
       }
