@@ -8,6 +8,7 @@ const map = createSurvivalMap({
   base: './one-window-challenge',
   skyBase: './shangri-la',
   buildWorld,
+  blood: true,
   classes: { session: OneWindowSession, features: OneWindowFeatures, navigation: PathPointNavigation },
   startHint: '500 points. M1911. One window, every perk, Pack-a-Punch and a single Mystery Box. Hold the window as long as you can.',
 });

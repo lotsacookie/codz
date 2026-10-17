@@ -470,8 +470,11 @@ async function load() {
     spawnBarriers: () => features.barriers,
     stepClear: (a, b) => navigation.stepClear(a, b),
   };
-  combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies });
+  combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
   await combat.load();
+  // Weapon and hand textures are requested by combat.load(), after the map's own settle pass above. Settle again so
+  // any that failed (and got a flat placeholder) are retried and healed, for custom-world maps too.
+  try { await settleTextures({ onStatus: showStatus }); } catch (error) { console.warn(LOG + ' weapon texture settle failed', error); }
   showStatus('Preparing perks, box and barricades…');
   features = new C.classes.features({ data, combat, scene, camera, objects, notice: showNotice, raycast: rayIntersect, doors: groups, openDoor });
   await features.load();

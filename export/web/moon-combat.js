@@ -8,12 +8,15 @@ import { PerkDrink } from './perk-drink.js';
 import { loadModel } from './animation.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
+import { BloodFx } from './blood.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
 export class MoonCombat {
-  constructor(scene,camera,world,{notice,end,feet,sessionClass=MoonSession,enemiesClass=MoonEnemies}) {
-    Object.assign(this,{scene,camera,world,notice,end,feet,sessionClass,enemiesClass});this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+  constructor(scene,camera,world,{notice,end,feet,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
+    Object.assign(this,{scene,camera,world,notice,end,feet,sessionClass,enemiesClass});
+    // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
+    this.blood=blood?new BloodFx(scene):null;this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.audio=new MoonAudio();
     // Common combat cues are reusable; Kino's looping theater ambience is not.
     this.audio.music={stop(){}};
@@ -47,6 +50,7 @@ export class MoonCombat {
     this.perkDrink?.stop();
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
+    this.blood?.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.lastRound=0;this.lastReload=0;await this.equip();}
   damage(n){
@@ -121,9 +125,10 @@ export class MoonCombat {
   effect(position,color=0x9e3023,count=7){
     for(let i=0;i<count;i++){const mesh=new THREE.Mesh(new THREE.BoxGeometry(1.5,1.5,1.5),new THREE.MeshBasicMaterial({color}));mesh.position.copy(position);this.scene.add(mesh);this.particles.push({mesh,life:.5,velocity:new THREE.Vector3((Math.random()-.5)*90,Math.random()*80,(Math.random()-.5)*90)});}
   }
-  hit(z,head){this.hitUntil=this.session.time+.12;this.effect(head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,40,0)));}
+  hit(z,head){this.hitUntil=this.session.time+.12;const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
   onKill(z){
     this.features?.onKill(z);
+    if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});
     if(!z||this.nuking||this.session.area==='earth'||z.kind==='astronaut'||['wave','gersh'].includes(z.deathCause))return;
     const type=this.session.drops.tryDrop(this.session,{kind:z.kind,playable:true,destroyedWindows:this.features?.brokenWindows??0,boxMoves:this.features?.box?.moves??0});
     if(type&&this.data.powerups[type])this.pickups.spawn(type,z.root.position);
@@ -138,6 +143,7 @@ export class MoonCombat {
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
   update(dt,{moving,sprint}){
+    this.blood?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);
