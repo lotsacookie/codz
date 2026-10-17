@@ -14,6 +14,10 @@ export async function releaseModelCache(){
   }
 }
 export async function loadAnimation(url){if(!clips.has(url))clips.set(url,rfetch(url).then(r=>{if(!r.ok)throw new Error('Animation '+url+': '+r.status);return r.json();}));return clips.get(url);}
+const IDENTITY=new THREE.Quaternion();
+// Bones of the gun model hang under tag_weapon (or tag_weapon1 for a left-hand gun); knives under tag_knife_attach.
+function isGunBone(node){for(let p=node.parent;p;p=p.parent){if(p.name==='tag_knife_attach')return false;if(p.name==='tag_weapon'||p.name==='tag_weapon1')return true;}return false;}
+function noteAnchored(options,name){options.anchored??=new Set();if(!options.anchored.has(name)){options.anchored.add(name);console.info('[viewmodel] anchored keyed offsets to rest pose:',name);}}
 export function makeClip(root, data, locomotion=false, options={}){
   const tracks=[];const nodes=new Map();
   root.traverse(n=>{if(!nodes.has(n.name))nodes.set(n.name,[]);nodes.get(n.name).push(n);});
@@ -21,17 +25,32 @@ export function makeClip(root, data, locomotion=false, options={}){
     if(b.name==='tag_origin'||b.name==='tag_sync')continue;
     for(const node of nodes.get(b.name)??[]){
       if(node.userData.animationAnchor)continue;
-      if(b.rot)tracks.push(new THREE.QuaternionKeyframeTrack(node.uuid+'.quaternion',b.rot.frames.map(f=>f/data.fps),b.rot.values));
+      const gun=isGunBone(node);
+      if(b.rot){
+        let rot=b.rot.values;
+        // Some gun bones (the magazine tag, the slide) are keyed as offsets from rest: their first key is the
+        // identity. Applied as absolute values they replace the bone's real rest rotation, so keep the keyed
+        // motion but compose it onto the rest rotation. A no-op when the rest rotation is already identity.
+        if(gun&&b.rot.values.length>=4){
+          const first=new THREE.Quaternion().fromArray(b.rot.values,0);
+          if(first.angleTo(IDENTITY)<.05&&node.quaternion.angleTo(IDENTITY)>.05){
+            rot=b.rot.values.slice();const q=new THREE.Quaternion();
+            for(let i=0;i<rot.length;i+=4){q.fromArray(rot,i);q.premultiply(node.quaternion).toArray(rot,i);}
+            noteAnchored(options,b.name+'.rot');
+          }
+        }
+        tracks.push(new THREE.QuaternionKeyframeTrack(node.uuid+'.quaternion',b.rot.frames.map(f=>f/data.fps),rot));
+      }
       if(b.pos){
         const values=b.pos.values.slice();
-        // M1911 slide: the keyed slide offsets are absolute and start at ~0 (slide forward). If the exported
-        // slide bone rests elsewhere, firing snapped it to the parent origin (down, and stuck there on the
-        // last shot). Keep the keyed travel but anchor it to the bone's real rest position. A no-op when the
-        // rest position is already ~0, as on the other pistols.
-        if(options.boltFrame&&b.name==='j_bolt'){
-          const rest=node.position.clone();
-          if(!options.boltLogged){options.boltLogged=true;console.info('[viewmodel] M1911 j_bolt rest position',JSON.stringify(rest.toArray().map(x=>+x.toFixed(3))),'first key',JSON.stringify(values.slice(0,3).map(x=>+x.toFixed(3))));}
-          if(rest.length()>.05)for(let i=0;i<values.length;i+=3){values[i]+=rest.x;values[i+1]+=rest.y;values[i+2]+=rest.z;}
+        // Gun bones such as the magazine tag and the slide are keyed as offsets that start at ~0 (rest). Applied
+        // as absolute values they snap the bone to its parent's origin instead of its real rest position, which
+        // dropped the slide and left every gun's magazine out of its well and out of the hand. Keep the keyed
+        // motion and anchor it to the bone's rest position. A no-op when the rest position is already ~0.
+        if(gun&&values.length>=3&&Math.hypot(values[0],values[1],values[2])<.01&&node.position.length()>.05){
+          const rest=node.position;
+          for(let i=0;i<values.length;i+=3){values[i]+=rest.x;values[i+1]+=rest.y;values[i+2]+=rest.z;}
+          noteAnchored(options,b.name+'.pos');
         }
         // T5 locomotion stores j_mainroot translations as displacement from
         // the bind pelvis, unlike the absolute viewmodel pose tracks.
@@ -115,7 +134,7 @@ export class ViewWeapon {
     for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);this.hiddenTags.push(name);}}
     this.root.matrixAutoUpdate=false;this.root.matrix.copy(cameraBasis);this.pivot.add(this.root);
     this.rig=new Rig(this.root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
-    this.rig.options={boltFrame:def.id==='m1911_zm',boltLogged:false};
+    this.rig.options={};
     for(const [key,clip] of [...entries,...meleeEntries])this.rig.add(key,clip);
     // ADS is a separate native animation of tag_torso. Its first frame also
     // defines each gun's HIP pose; the arms' bind torso is only right for M1911.
