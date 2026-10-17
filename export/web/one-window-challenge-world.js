@@ -17,6 +17,42 @@ const CHEST = { x: 250, halfWidth: 35, depth: 30, height: 26, lidDepth: 28 };
 
 export const PERK_IDS = Object.keys(MOON_PERKS);
 
+// Real T5 models, the same files Kino and the other maps use (models/ and moon/models/). Perks without a standalone
+// model file yet keep their block machine so the map always loads.
+const PERK_MODELS = {
+  specialty_quickrevive: 'models/zombie_vending_revive.glb',
+  specialty_armorvest: 'models/zombie_vending_jugg.glb',
+  specialty_fastreload: 'models/zombie_vending_sleight.glb',
+  specialty_rof: 'models/zombie_vending_doubletap.glb',
+  specialty_additionalprimaryweapon: 'moon/models/zombie_vending_three_gun.glb',
+  specialty_longersprint: 'models/zombie_vending_marathon.glb',
+  specialty_flakjacket: 'models/zombie_vending_nuke.glb',
+  specialty_deadshot: 'models/zombie_vending_ads.glb',
+};
+const PACK_MODEL = 'models/zombie_vending_packapunch.glb';
+const CHEST_MODEL = 'models/zombie_treasure_box.glb';
+const CHEST_LID_MODEL = 'models/zombie_treasure_box_lid.glb';
+// T5 models face -Z at yaw 0 (the box hinge sits at +Z). Lid origin relative to the box origin at yaw 0, taken from
+// the baked Shangri-La chests.
+const LID_OFFSET = [0, 17, 12];
+
+async function tryLoad(loadModel, url) {
+  if (!loadModel) return null;
+  try { return await loadModel(url); } catch (error) { console.warn('[one-window-challenge] model unavailable, using blocks:', url, error?.message ?? error); return null; }
+}
+
+// Wrap a model at the given yaw and slide it so its box sits on the floor (y = 0), centred on x, and flush against a wall.
+function seat(model, { yaw, x, wallZ, wall = 'max' }) {
+  const group = new THREE.Group();
+  model.rotation.y = yaw;
+  group.add(model);
+  group.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(group);
+  group.position.set(x - (box.min.x + box.max.x) / 2, -box.min.y, wall === 'max' ? wallZ - box.max.z : wallZ - box.min.z);
+  group.updateMatrixWorld(true);
+  return { group, box: new THREE.Box3().setFromObject(group) };
+}
+
 const solid = (min, max) => ({ min, max });
 
 export const OBSTACLES = [
@@ -144,6 +180,8 @@ function packMachine() {
 }
 
 export async function buildWorld() {
+  let loadModel = null;
+  try { ({ loadModel } = await import('./animation.js')); } catch (error) { console.warn('[one-window-challenge] model loader unavailable', error); }
   const entities = [];
   const add = entity => { const record = { id: entities.length, ...entity }; entities.push(record); return record; };
 
@@ -161,7 +199,7 @@ export async function buildWorld() {
   const chestFrontZ = ROOM.minZ + CHEST.depth;
   const lidEntity = add({ classname: 'script_model', targetname: 'owc_chest_lid', position: [CHEST.x, CHEST.height, ROOM.minZ + 1], yaw: Math.PI });
   const baseEntity = add({ classname: 'script_model', targetname: 'owc_chest_box', position: [CHEST.x, 0, ROOM.minZ], yaw: 0 });
-  add({ classname: 'script_struct', targetname: 'owc_chest_org', position: [CHEST.x, CHEST.height - 2, ROOM.minZ + CHEST.depth / 2], yaw: -Math.PI / 2 });
+  const orgEntity = add({ classname: 'script_struct', targetname: 'owc_chest_org', position: [CHEST.x, CHEST.height - 2, ROOM.minZ + CHEST.depth / 2], yaw: -Math.PI / 2 });
   add({ classname: 'trigger_use', targetname: 'treasure_chest_use', target: 'owc_chest_org', script_noteworthy: 'owc_chest', position: [CHEST.x, 18, chestFrontZ + 6], yaw: 0 });
 
   PERK_IDS.forEach((id, i) => add({ classname: 'trigger_use', targetname: 'zombie_vending_perk', script_noteworthy: id, position: [MACHINE.firstX + i * MACHINE.pitch, 36, ROOM.maxZ - MACHINE.depth - 4], yaw: Math.PI }));
@@ -178,8 +216,14 @@ export async function buildWorld() {
   const floorGeometry = worldUV(mergeGeometries(FLOORS.map(([min, max]) => boxGeometry(min, max)), false), 1 / 128);
   scene.add(new THREE.Mesh(wallGeometry, wallMaterial), new THREE.Mesh(floorGeometry, floorMaterial));
 
-  PERK_IDS.forEach((id, i) => scene.add(perkMachine(id, MACHINE.firstX + i * MACHINE.pitch)));
-  scene.add(packMachine());
+  const perkModels = await Promise.all(PERK_IDS.map(id => tryLoad(loadModel, PERK_MODELS[id])));
+  PERK_IDS.forEach((id, i) => {
+    const x = MACHINE.firstX + i * MACHINE.pitch;
+    // Front faces -Z, into the room (yaw 0).
+    scene.add(perkModels[i] ? seat(perkModels[i], { yaw: 0, x, wallZ: ROOM.maxZ }).group : perkMachine(id, x));
+  });
+  const packModel = await tryLoad(loadModel, PACK_MODEL);
+  scene.add(packModel ? seat(packModel, { yaw: 0, x: PACK.x, wallZ: ROOM.maxZ }).group : packMachine());
 
   const wood = material('owc_wood', 0x7a5a3a, null, { roughness: .95 });
   boardIds.forEach(id => {
@@ -191,15 +235,32 @@ export async function buildWorld() {
   });
 
   const chestWood = material('owc_chest', 0x5b3b22, null, { roughness: .8 });
-  const chestBase = new THREE.Mesh(boxGeometry([CHEST.x - CHEST.halfWidth, 0, ROOM.minZ], [CHEST.x + CHEST.halfWidth, CHEST.height, ROOM.minZ + CHEST.depth]), chestWood);
-  chestBase.userData.entityId = baseEntity.id;
+  const [boxModel, lidModel] = await Promise.all([tryLoad(loadModel, CHEST_MODEL), tryLoad(loadModel, CHEST_LID_MODEL)]);
   const lid = new THREE.Group();
-  lid.position.set(...lidEntity.position);
   lid.rotation.y = Math.PI;
   lid.userData.entityId = lidEntity.id;
-  const lidMesh = new THREE.Mesh(new THREE.BoxGeometry(CHEST.halfWidth * 2, 4, CHEST.lidDepth), chestWood);
-  lidMesh.position.set(0, 2, -CHEST.lidDepth / 2);
-  lid.add(lidMesh);
+  let chestBase;
+  if (boxModel && lidModel) {
+    // Back against the wall, front facing +Z into the room (yaw PI). The lid pivots on its own origin, offset from the
+    // box origin the same way as in the original maps.
+    const seated = seat(boxModel, { yaw: Math.PI, x: CHEST.x, wallZ: ROOM.minZ, wall: 'min' });
+    chestBase = new THREE.Group();
+    chestBase.add(seated.group);
+    chestBase.userData.entityId = baseEntity.id;
+    const origin = boxModel.getWorldPosition(new THREE.Vector3());
+    lid.position.set(origin.x + LID_OFFSET[0], origin.y + LID_OFFSET[1], origin.z - LID_OFFSET[2]);
+    lid.add(lidModel);
+    const top = seated.box.max.y, centerZ = (seated.box.min.z + seated.box.max.z) / 2;
+    orgEntity.position = [CHEST.x, top - 2, centerZ];
+  } else {
+    chestBase = new THREE.Mesh(boxGeometry([CHEST.x - CHEST.halfWidth, 0, ROOM.minZ], [CHEST.x + CHEST.halfWidth, CHEST.height, ROOM.minZ + CHEST.depth]), chestWood);
+    chestBase.userData.entityId = baseEntity.id;
+    lid.position.set(...lidEntity.position);
+    const lidMesh = new THREE.Mesh(new THREE.BoxGeometry(CHEST.halfWidth * 2, 4, CHEST.lidDepth), chestWood);
+    lidMesh.position.set(0, 2, -CHEST.lidDepth / 2);
+    lid.add(lidMesh);
+  }
+  lidEntity.position = lid.position.toArray();
   scene.add(chestBase, lid);
 
   const solids = [...WALLS, ...FLOORS, ...OBSTACLES.map(o => [o.min, o.max])];
