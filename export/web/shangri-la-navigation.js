@@ -4,6 +4,8 @@ import { AutoPaths } from './auto-paths.js';
 
 const REACH = 90; // a route "arrives" when it ends this close to the goal
 const MAP_RETRY_MS = 20000;
+const PATH_WINDOW_MS = 250;
+const PATH_BUDGET_MS = 6;
 const BACKGROUND_SLICE_MS = 2.5;
 const LOADING_SLICE_MS = 12;
 
@@ -24,6 +26,15 @@ export class SurvivalNavigation {
     this.health = null;
     this.version = 0;
     this.lastMapAt = -Infinity;
+    this.pathWindow = 0;
+    this.pathSpent = 0;
+    this.perf = { bakedCalls: 0, bakedMs: 0, denied: 0, autoCalls: 0, autoMs: 0 };
+  }
+
+  perfSnapshot() {
+    const out = Object.fromEntries(Object.entries(this.perf).map(([k, v]) => [k, Math.round(v * 10) / 10]));
+    this.perf = { bakedCalls: 0, bakedMs: 0, denied: 0, autoCalls: 0, autoMs: 0 };
+    return out;
   }
 
   async load() {
@@ -60,6 +71,19 @@ export class SurvivalNavigation {
   // Baked-mesh route only. Positions moved along it are snapped back onto the mesh by the caller.
   path(a, b) {
     if (!this.baked) return [];
+    const now = performance.now();
+    if (now - this.pathWindow > PATH_WINDOW_MS) { this.pathWindow = now; this.pathSpent = 0; }
+    if (this.pathSpent > PATH_BUDGET_MS) { this.perf.denied++; return []; }
+    const route = this.rawPath(a, b);
+    const spent = performance.now() - now;
+    this.pathSpent += spent;
+    this.perf.bakedCalls++;
+    this.perf.bakedMs += spent;
+    return route;
+  }
+
+  rawPath(a, b) {
+    if (!this.baked) return [];
     try {
       const r = this.query.computePath(a, b);
       return r.success ? r.path.map(p => new THREE.Vector3(p.x, p.y, p.z)) : [];
@@ -68,7 +92,13 @@ export class SurvivalNavigation {
 
   // Automatically mapped route; every edge was checked against walls and closed doors.
   autoPath(a, b) {
-    if (this.auto?.built) return this.auto.path(a, b);
+    if (this.auto?.built) {
+      const began = performance.now();
+      const route = this.auto.path(a, b);
+      this.perf.autoCalls++;
+      this.perf.autoMs += performance.now() - began;
+      return route;
+    }
     this.requestMap();
     return [];
   }
@@ -85,7 +115,7 @@ export class SurvivalNavigation {
 
   // Can something standing at `from` reach `goal` by either route?
   canReach(from, goal) {
-    if (this.arrives(this.path(from, goal), goal)) return true;
+    if (this.arrives(this.rawPath(from, goal), goal)) return true;
     return this.arrives(this.autoPath(from, goal), goal);
   }
 
@@ -118,7 +148,7 @@ export class SurvivalNavigation {
     const start = this.bakedStart() ?? this.start;
     const bakedResult = new Map();
     const baked = id => {
-      if (!bakedResult.has(id)) bakedResult.set(id, this.arrives(this.path(this.barriers.find(b => b.id === id).inside, start), start));
+      if (!bakedResult.has(id)) bakedResult.set(id, this.arrives(this.rawPath(this.barriers.find(b => b.id === id).inside, start), start));
       return bakedResult.get(id);
     };
     const total = this.barriers.length;

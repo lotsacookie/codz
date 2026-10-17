@@ -30,11 +30,13 @@ export class AutoPaths {
     this.grid = new Map(); // "ix,iz" -> node indices (several floors can share a column)
     this.built = false;
     this.fields = [];
-    this.stats = { nodes: 0, edges: 0, ms: 0, workMs: 0, truncated: false };
+    this.rays = 0;
+    this.stats = { nodes: 0, edges: 0, ms: 0, workMs: 0, rays: 0, truncated: false };
   }
 
   hit(origin, direction, far) {
     if (far <= 0) return false;
+    this.rays++;
     _ray.origin.copy(origin);
     _ray.direction.copy(direction);
     return this.world.raycast(_ray, 0, far);
@@ -137,7 +139,7 @@ export class AutoPaths {
     }
     worked += performance.now() - sliceStart;
     this.built = this.nodes.length > 1;
-    this.stats = { nodes: this.nodes.length, edges, ms: Math.round(performance.now() - began), workMs: Math.round(worked), truncated: this.stats.truncated };
+    this.stats = { nodes: this.nodes.length, edges, ms: Math.round(performance.now() - began), workMs: Math.round(worked), rays: this.rays, truncated: this.stats.truncated };
     return this.stats;
   }
 

@@ -5,6 +5,7 @@ const SPAWN_DELAY_FLOOR = .08;
 const LIFT = new THREE.Vector3(0, 30, 0);
 const FALLBACK_BUDGET_MS = 2;
 const TRAIL_CANDIDATES = 16;
+const HITCH_MS = 40;
 
 // Survival enemies use Kino's proven flow (Enemies base: barricade spawns, per-round population, auto round advance)
 // with the spawn decision made from a preflight instead of at the moment the round starts:
@@ -24,6 +25,7 @@ export class ShangriEnemies extends Enemies {
     this.seenSpawned = 0;
     this.trail = null;
     this.spent = 0;
+    this.lastHitchLog = -Infinity;
     this.fallbackPath = (z, goal) => this.fallbackRoute(z, goal);
   }
 
@@ -85,6 +87,16 @@ export class ShangriEnemies extends Enemies {
   }
 
   update(dt, player) {
+    const began = performance.now();
+    this.step(dt, player);
+    const took = performance.now() - began;
+    if (took > HITCH_MS && began - this.lastHitchLog > 1000) {
+      this.lastHitchLog = began;
+      console.warn('[perf] enemy update hitch', JSON.stringify({ ms: Math.round(took), zombies: this.list.length, fallbackMs: Math.round(this.spent * 10) / 10, ...this.world.navigation?.perfSnapshot?.() }));
+    }
+  }
+
+  step(dt, player) {
     const s = this.session;
     this.spent = 0;
     if (s.spawned !== this.seenSpawned) { this.seenSpawned = s.spawned; this.starve = 0; }

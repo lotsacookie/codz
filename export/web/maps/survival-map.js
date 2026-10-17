@@ -174,11 +174,14 @@ function capsuleIntersect(capsule) {
   }
   return false;
 }
+const rayEntry = new THREE.Vector3();
 function rayIntersect(ray, near = 0, far = Infinity) {
   let hit = collision.rayIntersect(ray, near, far);
   for (const part of parts.values()) {
     if (part.window || part.open) continue;
-    const contact = part.collider.rayIntersect(ray, near, hit ? Math.min(hit.distance, far) : far);
+    const limit = hit ? Math.min(hit.distance, far) : far;
+    if (!ray.intersectBox(part.box, rayEntry) || rayEntry.distanceTo(ray.origin) > limit + 1) continue;
+    const contact = part.collider.rayIntersect(ray, near, limit);
     if (contact) hit = contact;
   }
   return hit;
