@@ -1,7 +1,7 @@
 import { TouchControls } from './touch-controls.js';
 
 // Shared BO2 pointer controls, with the actions needed by both Zombies maps.
-export function createZombieTouch({ moon = false, minimal = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
+export function createZombieTouch({ ctx = null, moon = false, minimal = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
   const button = (kind, label, icon = '') => `<button type="button" class="touch-button touch-${kind}" data-touch="${kind}" aria-label="${label}">${icon}<span>${label}</span></button>`;
   const svg = content => `<svg viewBox="0 0 24 24" aria-hidden="true">${content}</svg>`;
   const root = document.createElement('div');
@@ -32,6 +32,8 @@ export function createZombieTouch({ moon = false, minimal = false, menuSettings 
     }
   };
   const controls = new TouchControls({ root, onLook, onAction, onReset, onModeChange: updateHints });
+  // The shell decides between pointer lock and tap-to-start from ctx.touch, so every map must hand it over.
+  if (ctx) ctx.touch = controls;
   if (controls.mode) updateHints();
   if (menuSettings) {
     const settings = document.createElement('div');

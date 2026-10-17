@@ -176,10 +176,16 @@ function renderPause({ title, resumeLabel, status = '', results = '', restart = 
   hud.root.hidden = true;
 }
 
+// Phones have no pointer lock: START must activate directly. Trust the map's touch controls, the
+// coarse-pointer media query, or a touch seen earlier (touch-controls adds body.touch-mode).
+function isTouch() {
+  return !!(session?.ctx.touch?.mode || body.classList.contains('touch-mode') || matchMedia('(pointer: coarse)').matches);
+}
+
 function lock() {
   if (!session || !session.ready || busy) return;
   try { session.api.prepare?.(); } catch (error) { console.error(error); }
-  if (session.ctx.touch?.mode) { activate(); return; }
+  if (isTouch()) { activate(); return; }
   try {
     const result = session.canvas.requestPointerLock?.();
     result?.catch?.(() => { pauseEls.status.textContent = 'Press the button to capture the mouse.'; });
@@ -194,6 +200,13 @@ function activate() {
   pause.hidden = true;
   hud.root.hidden = false;
   session.api.setActive?.(true);
+  if (isTouch()) enterLandscape();
+}
+
+// Best effort: full screen + landscape give touch play the room it needs. Unsupported on iPhone Safari.
+async function enterLandscape() {
+  try { if (!document.fullscreenElement && document.fullscreenEnabled) await document.documentElement.requestFullscreen({ navigationUI: 'hide' }); } catch {}
+  try { await screen.orientation?.lock?.('landscape'); } catch {}
 }
 
 function deactivate() {
@@ -236,7 +249,7 @@ pauseEls.quit.addEventListener('click', () => { quit(); });
 document.addEventListener('pointerlockchange', () => {
   if (!session || !session.ready) return;
   if (document.pointerLockElement === session.canvas) { activate(); return; }
-  if (!session.ctx.touch?.mode) deactivate();
+  if (!isTouch()) deactivate();
 });
 document.addEventListener('pointerlockerror', () => {
   if (session?.ready) pauseEls.status.textContent = 'Press the button to capture the mouse.';
@@ -244,7 +257,7 @@ document.addEventListener('pointerlockerror', () => {
 const interrupt = () => {
   if (!session?.active) return;
   document.exitPointerLock?.();
-  if (session.ctx.touch?.mode) deactivate();
+  if (isTouch()) deactivate();
 };
 addEventListener('blur', interrupt);
 document.addEventListener('visibilitychange', () => { if (document.hidden) interrupt(); });
@@ -305,7 +318,7 @@ function createContext(entry) {
       }
     },
     expose(name, value) { globalThis[name] = value; exposed.push(name); },
-    pause: () => { document.exitPointerLock?.(); if (session?.ctx.touch?.mode) deactivate(); },
+    pause: () => { document.exitPointerLock?.(); if (isTouch()) deactivate(); },
     gameOver({ title = 'GAME OVER', status = '', results = '' } = {}) {
       if (!live()) return;
       session.over = true;

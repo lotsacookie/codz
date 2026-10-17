@@ -93,7 +93,7 @@ const errors=[];
 let lastShot=null;
 let pendingMelee=null,lastReloadSerial=0,reloadShot=false;
 let mousePrimary=false,mouseAim=false;
-const touchControls=createZombieTouch({
+const touchControls=createZombieTouch({ctx,
   menuSettings:false,
   onLook:(x,y,sensitivity)=>{
     if(!active||session.phase==='reviving')return;

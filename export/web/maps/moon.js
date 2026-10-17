@@ -43,7 +43,7 @@ const labels = {nml_zone: 'No Man’s Land', bridge_zone: 'Receiving Bay', water
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
 let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;
-const touchControls=createZombieTouch({moon:true,menuSettings:false,
+const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
   onReset:()=>{touchFirePending=false;},
   onLook:(x,y,sensitivity)=>{
     if(!active||combat.enabled&&combat.session.phase==='reviving')return;

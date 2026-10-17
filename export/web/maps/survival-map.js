@@ -50,7 +50,7 @@ let disposed = false;
 const $ = id => document.getElementById(id), keys = new Set(), errors = [];
 const vector = a => new THREE.Vector3(...a);
 const coarse = matchMedia('(pointer: coarse)').matches;
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+const renderer = new THREE.WebGLRenderer({ antialias: !coarse, powerPreference: coarse ? 'default' : 'high-performance' });
 renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -89,6 +89,7 @@ function reportFault(error) {
 }
 
 const touchControls = createZombieTouch({
+  ctx,
   minimal: true, menuSettings: false,
   onReset: () => { touchFirePending = false; },
   onLook: (x, y, sensitivity) => {
