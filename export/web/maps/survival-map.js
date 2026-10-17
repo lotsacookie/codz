@@ -5,7 +5,7 @@ import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
-import { configureKinoAssets, assetManager } from '../runtime-assets.js';
+import { configureKinoAssets, assetManager, detectMobile } from '../runtime-assets.js';
 import { assets } from '../asset-loader.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
@@ -382,6 +382,13 @@ async function load() {
   // loadMapGltf registers the texture loader for baked maps; generated maps skip it, so models (machines, box, weapons)
   // would otherwise load their textures through the default loader and come out untextured.
   if (C.buildWorld) { configureKinoAssets(); assetManager.setURLModifier(assets.urlModifier); }
+  // Generated maps reuse real models (machines, box, Pack-a-Punch) whose textures live in the same asset packs Kino loads.
+  // Download those packs first (one request each, like Kino) instead of fetching every texture as a loose file.
+  if (C.buildWorld && C.packs?.length && !/[?&]pack=0\b/.test(location.search)) {
+    ctx.progress(`Loading ${C.label} textures…`, .04);
+    const mobile = detectMobile();
+    await Promise.all(C.packs.map(pack => assets.loadPack(typeof pack === 'function' ? pack(mobile) : pack)));
+  }
   const custom = C.buildWorld ? await C.buildWorld() : null;
   if (custom) data = custom.data;
   else {
