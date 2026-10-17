@@ -843,10 +843,14 @@ export class PlayerController {
     );
     _groundRay.origin.copy(_groundOrigin);
     const hit = this.worldOctree.rayIntersect(_groundRay);
-    if (!hit || hit.distance > this.groundProbeDistance + this.skin * 2) return false;
+    if (!hit) return false;
 
     hit.triangle.getNormal(_normal);
     if (_normal.y < this.floorNormalY) return false;
+    // Sloped terrain (Call of the Dead coast): include the gap between a sphere's lowest point and its tangent plane,
+    // or the probe flickers between air and ground. On flat floors normal.y is 1 and the gap is 0.
+    const tangentGap = this.radius * (1 / _normal.y - 1);
+    if (hit.distance > this.groundProbeDistance + tangentGap + this.skin * 2) return false;
     this._collisionNormal.copy(_normal);
     return true;
   }

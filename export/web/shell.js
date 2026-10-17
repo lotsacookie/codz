@@ -570,7 +570,7 @@ function preload() {
   const steps = [
     () => import('./animation.js'),
     () => import('./enemies.js'),
-    () => import('./moon-combat.js'),
+    () => import('./combat.js'),
     () => import('./audio.js'),
     () => import('@recast-navigation/core').then(core => core.init()),
     () => fetch('audio/manifest.json').then(r => r.ok ? r.arrayBuffer() : null),

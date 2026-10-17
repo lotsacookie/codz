@@ -6,7 +6,7 @@ import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { MoonState, contains, environmentAt } from '../moon-rules.js';
 import { MoonNavigation } from '../moon-navigation.js';
-import { MoonCombat } from '../moon-combat.js';
+import { Combat } from '../combat.js';
 import { MoonFeatures } from '../moon-features.js';
 import { MoonPresentation } from '../moon-presentation.js';
 import { loadMoonWater } from '../moon-water.js';
@@ -343,7 +343,7 @@ async function load() {
     lineClear:(a,b)=>{const d=b.clone().sub(a);return !rayIntersect(new THREE.Ray(a,d.clone().normalize()),1,Math.max(1,d.length()-4));},
     zoneAt:p=>environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon').zone,
     lowGravity:p=>{const env=environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon');return (features?.environment(env)??env).lowGravity;}};
-  combat=new MoonCombat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});await combat.load();combat.enabled=mode==='survival';
+  combat=new Combat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});await combat.load();combat.enabled=mode==='survival';
   showStatus('Preparing station systems and quest…');
   features=new MoonFeatures({data,state,combat,scene,camera,player,objects,opened,parts,navigation,notice:showNotice,raycast:rayIntersect});await features.load();
   for(const t of data.entities){

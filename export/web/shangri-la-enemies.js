@@ -18,7 +18,7 @@ const STALL_LIMIT = 4;
 //  - starvation: if nothing could spawn for a while, force a spawn at a verified barricade (any as a last resort);
 //  - routes: baked navmesh first, then the automatically mapped graph, then the player's breadcrumb trail, then a
 //    straight line when it is clear. Every one of the fallbacks is wall-checked (see Enemies.update stepClear).
-// Crash protection (spawn/update faults) is applied by guardEnemies() in MoonCombat.
+// Crash protection (spawn/update faults) is applied by guardEnemies() in Combat.
 export class ShangriEnemies extends Enemies {
   constructor(...args) {
     super(...args);

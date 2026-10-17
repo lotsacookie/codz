@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { loadMapGltf, settleTextures, textureWarning } from '../map-assets.js';
-import { CoastController } from '../coast-controller.js';
+import { PlayerController } from '../player-controller.js';
 import { loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
@@ -146,7 +146,7 @@ async function load() {
   wallGuns = createWallGuns({entities: data.entities, root: gltf.scene, camera, promptElement: document.getElementById('prompt')});
   optimization = optimizeStaticScene(gltf.scene, {cellSize: 768, verticalCellSize: 256});
   scene.add(gltf.scene);
-  player = new CoastController(camera, collision, {radius: 14, height: 70, eyeHeight: 60,
+  player = new PlayerController(camera, collision, {radius: 14, height: 70, eyeHeight: 60,
     moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 95, gravity: 800, jumpHeight: 39,
     stepHeight: 18, maxSubSteps: 12, groundProbeDistance: 4, groundSnapSpeed: 10});
   relocate();

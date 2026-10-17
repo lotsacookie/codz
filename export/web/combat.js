@@ -12,7 +12,7 @@ import { BloodFx } from './blood.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
-export class MoonCombat {
+export class Combat {
   constructor(scene,camera,world,{notice,end,feet,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
@@ -52,7 +52,7 @@ export class MoonCombat {
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
     this.blood?.clear();
   }
-  async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.lastRound=0;this.lastReload=0;await this.equip();}
+  async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
   damage(n){
     if(this.session.area==='earth'&&this.session.effects.pack_shield>this.session.time&&this.camera.position.distanceTo(new THREE.Vector3(...this.features.one('zombie_vending_upgrade').position))<220)return;
     if(!this.enabled||!this.session.damage(n))return;
@@ -150,13 +150,15 @@ export class MoonCombat {
     this.perkDrink.update(dt,s);this.view.pivot.visible=!s.pack&&!s.drinking&&s.phase!=='reviving';
     if(s.reloadLeft>0&&s.reloadSerial!==this.lastReload){this.lastReload=s.reloadSerial;this.view.reload(false,s.reloadDuration,s.reloadStage);}
     if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);}}
-    this.view.update(dt,{moving,sprint,ads:this.ads,reloading:s.reloadLeft>0,empty:s.weapon.mag===0,time:s.time});
+    const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(this.camera.rotation.y-this.lastLookYaw),Math.cos(this.camera.rotation.y-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:this.camera.rotation.x-this.lastLookPitch;this.lastLookYaw=this.camera.rotation.y;this.lastLookPitch=this.camera.rotation.x;
+    this.view.update(dt,{moving,sprint,ads:this.ads,reloading:s.reloadLeft>0,empty:s.weapon.mag===0,time:s.time,look:{yaw:lookYaw,pitch:lookPitch}});
     if(!sprint&&(this.pressed||this.primary&&s.def.automatic||this.burst>0)){if(this.shot()){if(this.burst>0)this.burst--;else if(s.def.fireType==='3-Round Burst')this.burst=2;}}
     this.pressed=false;
     if(!sprint&&s.def.dualWield&&(this.secondaryPressed||this.secondary&&s.def.automatic))this.shot('left');
     this.secondaryPressed=false;
     this.enemies.update(dt,this.feet());
     if(s.area==='moon'&&s.phase==='fighting'&&s.round!==this.lastRound){this.lastRound=s.round;this.notice('Round '+s.round,4);this.audio.play('round');}
+    if(s.phase!==this.lastPhase){if(s.phase==='preparing'&&s.round>1&&this.lastPhase==='fighting')this.audio.play('round_end');this.lastPhase=s.phase;}
     this.pickups.update(dt,this.feet(),!['gameover','reviving'].includes(s.phase)&&!this.features?.hack,(a,b)=>this.world.lineClear(a,b));
     for(const g of [...this.grenades]){
       g.life-=dt;if(!g.rocket)g.velocity.y-=(this.world.lowGravity(g.mesh.position)?136:650)*dt;

@@ -11,7 +11,7 @@ import { applyChalkTransparency } from '../chalk-transparency.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
 import { createZombieTouch } from '../zombies-touch.js';
-import { MoonCombat } from '../moon-combat.js';
+import { Combat } from '../combat.js';
 import { MOON_PERKS } from '../moon-session.js';
 import { ShangriSession } from '../shangri-la-session.js';
 import { ShangriEnemies } from '../shangri-la-enemies.js';
@@ -407,7 +407,9 @@ async function load() {
   showStatus(`Loading ${C.label}…`);
   const sharedAssets = preloadShared();
   const gltf = custom ? { scene: custom.scene } : await loadMapGltf(C.gltf, { label: C.label, onStatus: showStatus, pack: C.pack });
-  const textureReport = custom ? null : await settleTextures({ onStatus: showStatus });
+  // Generated maps still load real T5 models (machines, box, Pack-a-Punch) whose textures stream in asynchronously, so wait for
+  // them (and retry failures) exactly like baked maps; otherwise the map starts with flat untextured props.
+  const textureReport = await settleTextures({ onStatus: showStatus });
   showStatus(`Loading ${C.label} collision and sky…`);
   const [collider, sky] = await Promise.all([
     custom ? new CollisionWorld(custom.collisionGeometry, custom.collisionMetadata) : loadCollisionWorld({ metadataUrl: C.collisionMeta, onProgress: ({ loaded, total }) => showStatus(`Loading ${C.label} collision… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`) }),
@@ -478,7 +480,7 @@ async function load() {
     spawnBarriers: () => features.barriers,
     stepClear: (a, b) => navigation.stepClear(a, b),
   };
-  combat = new MoonCombat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
+  combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
   await combat.load();
   // Weapon and hand textures are requested by combat.load(), after the map's own settle pass above. Settle again so
   // any that failed (and got a flat placeholder) are retried and healed, for custom-world maps too.
