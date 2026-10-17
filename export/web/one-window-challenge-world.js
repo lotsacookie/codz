@@ -219,11 +219,11 @@ export async function buildWorld() {
   const perkModels = await Promise.all(PERK_IDS.map(id => tryLoad(loadModel, PERK_MODELS[id])));
   PERK_IDS.forEach((id, i) => {
     const x = MACHINE.firstX + i * MACHINE.pitch;
-    // Front faces -Z, into the room (yaw 0).
-    scene.add(perkModels[i] ? seat(perkModels[i], { yaw: 0, x, wallZ: ROOM.maxZ }).group : perkMachine(id, x));
+    // Machines face +Z at yaw PI, into the room from the +Z wall.
+    scene.add(perkModels[i] ? seat(perkModels[i], { yaw: Math.PI, x, wallZ: ROOM.maxZ }).group : perkMachine(id, x));
   });
   const packModel = await tryLoad(loadModel, PACK_MODEL);
-  scene.add(packModel ? seat(packModel, { yaw: 0, x: PACK.x, wallZ: ROOM.maxZ }).group : packMachine());
+  scene.add(packModel ? seat(packModel, { yaw: Math.PI, x: PACK.x, wallZ: ROOM.maxZ }).group : packMachine());
 
   const wood = material('owc_wood', 0x7a5a3a, null, { roughness: .95 });
   boardIds.forEach(id => {

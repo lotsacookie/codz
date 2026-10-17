@@ -5,6 +5,8 @@ import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { configureKinoAssets, assetManager } from '../runtime-assets.js';
+import { assets } from '../asset-loader.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
@@ -385,6 +387,9 @@ function prepareMaterials(root) {
 
 const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
 async function load() {
+  // loadMapGltf registers the texture loader for baked maps; generated maps skip it, so models (machines, box, weapons)
+  // would otherwise load their textures through the default loader and come out untextured.
+  if (C.buildWorld) { configureKinoAssets(); assetManager.setURLModifier(assets.urlModifier); }
   const custom = C.buildWorld ? await C.buildWorld() : null;
   if (custom) data = custom.data;
   else {
