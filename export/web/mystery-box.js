@@ -1,15 +1,19 @@
 import * as THREE from 'three';
 import { loadModel } from './animation.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
-import { disposeSkeletons } from './runtime-assets.js';
+import { registerWarm } from './load-flow.js';
 
 const cycleTime=3.9,offerTime=12;
 export class MysteryBox {
-  constructor(scene,world,data,session,audio,toast){Object.assign(this,{scene,world,data,session,audio,toast});this.boxes=new Map();this.models={};this.moves=0;this.uses=0;}
+  constructor(scene,world,data,session,audio,toast){Object.assign(this,{scene,world,data,session,audio,toast});this.boxes=new Map();this.models={};this.centers={};this.moves=0;this.uses=0;}
   async load(){
     await Promise.all(Object.entries(this.data.weapons).map(async([id,d])=>{this.models[id]=await loadModel(d.worldModel);}));
     if(this.data.equipment?.zombie_cymbal_monkey)this.models.zombie_cymbal_monkey=await loadModel(this.data.equipment.zombie_cymbal_monkey.projectileModel);
     this.models.teddy=await loadModel(this.data.boxTeddy);
+    // Measure every display model once. Box3.setFromObject on a skinned mesh walks every vertex,
+    // so doing it on each roll step (up to ~20 times a second) was the main source of the lag.
+    for(const id of Object.keys(this.models))this.measure(id);
+    registerWarm((renderer,scenes)=>this.warm(renderer,scenes));
     this.world.openBoxes=new Set();
     for(const e of this.world.boxLocations){
       const prefix=e.script_noteworthy,entity=this.data.entities.find(n=>n.targetname===prefix+'_org'),lidEntity=this.data.entities.find(n=>n.targetname===prefix+'_lid');
@@ -33,16 +37,49 @@ export class MysteryBox {
     b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00');this.audio.event('box/music_box/music_box_00',.7);return true;
   }
   take(e){const b=this.boxes.get(e.id);if(!b?.roll?.ready||b.roll.teddy)return null;const weapon=b.roll.weapon;this.close(b);return weapon;}
-  show(b,id){
-    if(b.shown===id)return;b.model?.removeFromParent();disposeSkeletons(b.model);b.shown=id;
-    const source=this.models[id];if(!source){b.model=null;return;}
-    b.model=clone(source);
-    for(const name of this.data.weapons[id]?.hideTags??[]){const bone=b.model.getObjectByName(name);if(bone)bone.scale.setScalar(.000001);}
-    const center=new THREE.Box3().setFromObject(b.model).getCenter(new THREE.Vector3());b.model.position.sub(center);b.float=new THREE.Group();b.float.add(b.model);
-    // Only the display wrapper moves; shared model bind transforms stay intact.
-    if(b.wrapper)b.wrapper.removeFromParent();b.wrapper=b.float;b.display.add(b.wrapper);
+  measure(id){
+    const source=this.models[id];if(!source)return null;
+    const probe=clone(source);
+    for(const name of this.data.weapons[id]?.hideTags??[]){const bone=probe.getObjectByName(name);if(bone)bone.scale.setScalar(.000001);}
+    this.centers[id]=new THREE.Box3().setFromObject(probe).getCenter(new THREE.Vector3());
+    return this.centers[id];
   }
-  close(b){b.roll=null;b.closing=.5;b.wrapper?.removeFromParent();disposeSkeletons(b.model);b.wrapper=null;b.model=null;b.shown=null;this.audio.event('box/close/close_00',.8);}
+  // Each box keeps one ready-made display per weapon, built the first time it is needed and then
+  // only shown or hidden. Rolling through the pool no longer clones, measures or disposes anything.
+  display_(b,id){
+    b.cache??=new Map();
+    let entry=b.cache.get(id);
+    if(entry)return entry;
+    const source=this.models[id];if(!source)return null;
+    const model=clone(source);
+    for(const name of this.data.weapons[id]?.hideTags??[]){const bone=model.getObjectByName(name);if(bone)bone.scale.setScalar(.000001);}
+    model.position.sub(this.centers[id]??this.measure(id)??new THREE.Vector3());
+    const float=new THREE.Group();float.add(model);float.visible=false;b.display.add(float);
+    entry={model,float};b.cache.set(id,entry);return entry;
+  }
+  show(b,id){
+    if(b.shown===id)return;
+    if(b.wrapper)b.wrapper.visible=false;
+    b.shown=id;
+    const entry=this.display_(b,id);
+    if(!entry){b.model=null;b.wrapper=null;return;}
+    b.model=entry.model;b.wrapper=entry.float;b.float=entry.float;b.wrapper.visible=true;
+  }
+  hide(b){if(b.wrapper)b.wrapper.visible=false;b.wrapper=null;b.model=null;b.float=null;b.shown=null;}
+  // Compile shaders and upload textures for every display model behind the loading screen.
+  async warm(renderer,scenes){
+    const holders=[];
+    try{
+      for(const b of this.boxes.values()){
+        for(const id of Object.keys(this.models)){const e=this.display_(b,id);if(e){e.float.visible=true;holders.push(e.float);}}
+        break; // materials and geometry are shared between boxes, one box warms them all
+      }
+      for(const [scene,camera] of scenes.slice(0,1))await Promise.race([renderer.compileAsync(scene,camera),new Promise(r=>setTimeout(r,6000))]);
+      const seen=new Set();
+      for(const f of holders)f.traverse(o=>{for(const m of [o.material].flat())if(m)for(const v of Object.values(m))if(v?.isTexture&&!seen.has(v.source)){seen.add(v.source);renderer.initTexture(v);}});
+    }catch(error){console.warn('Mystery box pre-warm skipped',error);}
+    finally{for(const f of holders)f.visible=false;}
+  }
   update(dt){
     const sale=this.session.effects.fire_sale>this.session.time;
     if(this.world.fireSale!==sale){this.world.fireSale=sale;this.world.updateBox();this.audio.fireSale(sale);}
@@ -61,6 +98,6 @@ export class MysteryBox {
       b.lid.quaternion.copy(b.closed).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),angle));b.glow.material.opacity=t*.2;
     }
   }
-  reset(){for(const b of this.boxes.values()){b.roll=null;b.opening=b.closing=0;b.wrapper?.removeFromParent();disposeSkeletons(b.model);b.wrapper=null;b.model=null;b.shown=null;b.lid.quaternion.copy(b.closed);b.glow.material.opacity=0;}this.moves=this.uses=0;this.world.openBoxes.clear();this.world.fireSale=false;this.world.updateBox();this.audio.fireSale(false);}
+  reset(){for(const b of this.boxes.values()){b.roll=null;b.opening=b.closing=0;this.hide(b);b.lid.quaternion.copy(b.closed);b.glow.material.opacity=0;}this.moves=this.uses=0;this.world.openBoxes.clear();this.world.fireSale=false;this.world.updateBox();this.audio.fireSale(false);}
   snapshot(){return [...this.boxes.values()].map(b=>({id:b.id,open:b.opening/.5,shown:b.shown,roll:b.roll?{weapon:b.roll.weapon,ready:b.roll.ready,teddy:b.roll.teddy,time:b.roll.time,expires:b.roll.expires}:null}));}
 }

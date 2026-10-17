@@ -48,12 +48,18 @@ export async function ensureTextures(ctx, { at = .89 } = {}) {
  * Compile shaders and upload textures behind the loading screen so the first frames don't hitch.
  * `scenes` is a list of [scene, camera]; `withTarget` optionally wraps compilation in a render target (Kino's grade pass).
  */
+// Features that own hidden objects (e.g. the mystery box's weapon displays) register a warm-up so the
+// shared prewarm compiles and uploads them too, instead of hitching the first time they appear.
+const warmers = new Set();
+export const registerWarm = fn => { warmers.add(fn); return () => warmers.delete(fn); };
+
 export async function prewarm({ ctx, renderer, scenes, mobile = detectMobile(), withTarget = null, from = .9, to = .99 }) {
   if (mobile || /[?&]prewarm=0\b/.test(location.search)) return;
   const sources = new Set(), textures = [], started = performance.now();
   for (const value of loadedTextures()) if (!sources.has(value.source)) { sources.add(value.source); textures.push(value); }
   try {
     withTarget?.begin();
+    for (const warm of [...warmers]) await warm(renderer, scenes).catch(error => console.warn('Warm-up skipped', error));
     await Promise.race([Promise.all(scenes.map(([scene, camera]) => renderer.compileAsync(scene, camera))), sleep(6000)]);
   } catch (error) {
     console.warn('Shader pre-compile skipped', error);
