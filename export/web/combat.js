@@ -9,6 +9,7 @@ import { loadModel } from './animation.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
+import { WallImpacts, fadeParticle } from './impact-fx.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
@@ -17,6 +18,7 @@ export class Combat {
     Object.assign(this,{scene,camera,world,notice,end,feet,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
     this.blood=blood?new BloodFx(scene):null;this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+    this.impacts=new WallImpacts(scene);
     this.audio=new MoonAudio();
     // Common combat cues are reusable; Kino's looping theater ambience is not.
     this.audio.music={stop(){}};
@@ -51,6 +53,7 @@ export class Combat {
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
     this.blood?.clear();
+    this.impacts.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
   damage(n){
@@ -96,7 +99,7 @@ export class Combat {
       const ray=new THREE.Ray(this.camera.position.clone(),direction),wall=this.world.raycast(ray,1,6000),hit=this.enemies.rayHit(ray,wall?.distance??6000);
       this.lastShot={target:hit?.z.id,head:hit?.head,wall:wall?.distance};
       if(hit)this.enemies.hurt(hit.z,s.def.id==='microwavegundw_zm'?hit.z.health:(hit.distance>s.def.range?s.def.minDamage:s.def.damage)*(hit.head?Math.max(1,s.def.headMultiplier):1),hit.head,false,s.def.id==='microwavegundw_zm'?'zap':'bullet');
-      else if(wall)this.effect(wall.position,0xbbb4a7,3);
+      else if(wall)this.impacts.strike(wall,ray,this.particles);
     }
     this.camera.rotation.x=Math.min(1.48,this.camera.rotation.x+(this.ads?.006:.012));return true;
   }
@@ -172,7 +175,7 @@ export class Combat {
         const d=this.camera.position.distanceTo(g.mesh.position);if(d<160&&!s.perks.has('specialty_flakjacket'))this.damage(180*(1-d/160));this.removeEffect(this.grenades,g);
       }
     }
-    for(const p of [...this.particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);if(p.life<=0)this.removeEffect(this.particles,p);}
+    for(const p of [...this.particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);fadeParticle(p);if(p.life<=0)this.removeEffect(this.particles,p);}
     this.muzzle.intensity=Math.max(0,this.muzzle.intensity-dt*2200);
     this.camera.fov=THREE.MathUtils.damp(this.camera.fov,this.ads&&!s.reloadLeft&&!s.meleeLeft?s.def.adsFov||56:78,12,dt);this.camera.updateProjectionMatrix();
   }

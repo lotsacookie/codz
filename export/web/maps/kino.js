@@ -15,6 +15,7 @@ import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } fro
 import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
+import { WallImpacts, fadeParticle } from '../impact-fx.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
 import { preloadShared } from '../shared-assets.js';
@@ -87,7 +88,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const impacts=new WallImpacts(scene);
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 const errors=[];
@@ -235,7 +236,7 @@ function shoot(){
     const ray=new THREE.Ray(camera.position.clone(),direction),wall=world.raycast(ray,1,6000),target=enemies.rayHit(ray,wall?.distance??6000);
     lastShot={origin:ray.origin.toArray(),direction:direction.toArray(),wallDistance:wall?.distance??null,target:target?{id:target.z.id,head:target.head,distance:target.distance}:null};
     if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');}
-    else if(wall)effect(wall.position,0xb8a388,3);
+    else if(wall)impacts.strike(wall,ray,particles);
     if(session.def.explosionRadius&&(target||wall)){
       const p=target?.point??wall.position,radius=session.def.explosionRadius;
       effect(p,session.weapon.id==='ray_gun_zm'?0x93ed62:0xffb44e,18);audio.play('explosion',.3);
@@ -267,7 +268,7 @@ function resolveMelee(){
   if(session.phase==='reviving'||session.phase==='gameover')return;
   const nearest=meleeTarget();
   if(nearest){enemies.hurt(nearest,strike.damage,false,true);audio.knife('hit',strike.bowie);}
-  else {const ray=new THREE.Ray(camera.position.clone(),camera.getWorldDirection(new THREE.Vector3())),wall=world.raycast(ray,0,94);if(wall){audio.knife('wall');effect(wall.position,0xb8a388,3);}}
+  else {const ray=new THREE.Ray(camera.position.clone(),camera.getWorldDirection(new THREE.Vector3())),wall=world.raycast(ray,0,94);if(wall){audio.knife('wall');impacts.dust(wall,ray,particles);}}
 }
 function throwGrenade(){
   if(!active||session.grenades<=0||session.busy||features.events.room)return false;session.grenades--;
@@ -359,6 +360,7 @@ function reset(){
   powerups.reset();perkDrink.stop();mysteryBox.reset();
   features?.reset();
   blood.clear();
+  impacts.clear();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
   started=false;chalk.reset();lastPoints=null;teleportPending=0;returnAt=0;linkUntil=0;cooldownUntil=0;repairLeft=0;burstLeft=0;lastPhase='';lastRound=0;ambient.intensity=lightLevels.ambient;view.currentId=null;equipView();ctx.setHint(touchControls.mode?'Tap to start':'Click to capture the mouse · Esc to pause');
@@ -411,7 +413,7 @@ function update(dt){
         if(hit){g.velocity.y=Math.abs(g.velocity.y)*.4;g.velocity.x*=-.4;g.velocity.z*=-.4;}else g.mesh.position.add(travel);
         if(g.life<=0){effect(g.mesh.position,0xffb347,30);audio.play('explosion');for(const z of [...enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<300&&world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))enemies.hurt(z,Math.max(75,1500*(1-d/300)),false,false,'explosion');}const d=camera.position.distanceTo(g.mesh.position);if(d<160)damage(180*(1-d/160));g.mesh.removeFromParent();g.mesh.geometry.dispose();g.mesh.material.dispose();grenades.splice(grenades.indexOf(g),1);}
       }
-      for(const p of [...particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);if(p.life<=0){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();particles.splice(particles.indexOf(p),1);}}
+      for(const p of [...particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);fadeParticle(p);if(p.life<=0){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();particles.splice(particles.indexOf(p),1);}}
     }
   }
   muzzle.intensity=Math.max(0,muzzle.intensity-dt*2200);camera.fov=THREE.MathUtils.damp(camera.fov,ads&&!session.def.dualWield&&!session.drinking&&!session.meleeLeft&&!session.reloadLeft?verticalFovFromCgFov(session.def.adsFov||56):hipFov,12,dt);camera.updateProjectionMatrix();

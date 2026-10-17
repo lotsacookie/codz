@@ -261,7 +261,7 @@ function hud() {
   $('reload-label').textContent = s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : touchControls.pad.active ? 'Press X to reload' : 'Reload') : '';
   $('weapon-status').textContent = s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '';
   $('hitmarker').style.opacity = combat.hitUntil > s.time ? 1 : 0;
-  $('power').textContent = s.power ? 'POWER ON' : 'POWER OFF';
+  $('power').textContent = C.hideHud?.includes('power') ? '' : s.power ? 'POWER ON' : 'POWER OFF';
   const seconds = performance.now() / 1000;
   for (const key of ['double_points', 'insta_kill', 'fire_sale']) {
     const slot = $('pu-' + key), left = (s.effects[key] ?? 0) - s.time, visible = left > 0 && powerupVisible(left, seconds);
@@ -505,8 +505,8 @@ async function load() {
   await prewarm({ ctx, renderer, scenes: [[scene, camera], [combat.viewScene, combat.viewCamera]] });
   player.enabled = false;
   ready = true;
-  $('mode-label').textContent = (C.modeLabel ?? C.label.toUpperCase() + ' / SOLO SURVIVAL');
-  $('location').textContent = C.label;
+  $('mode-label').textContent = C.hideHud?.includes('mode-label') ? '' : (C.modeLabel ?? C.label.toUpperCase() + ' / SOLO SURVIVAL');
+  $('location').textContent = C.hideHud?.includes('location') ? '' : C.label;
   ctx.hud.hidden('systems', false);
   ctx.hud.combat(true);
   ctx.hud.crosshair(true);
