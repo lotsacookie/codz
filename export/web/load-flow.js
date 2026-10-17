@@ -59,7 +59,9 @@ export async function prewarm({ ctx, renderer, scenes, mobile = detectMobile(), 
   for (const value of loadedTextures()) if (!sources.has(value.source)) { sources.add(value.source); textures.push(value); }
   try {
     withTarget?.begin();
-    for (const warm of [...warmers]) await warm(renderer, scenes).catch(error => console.warn('Warm-up skipped', error));
+    // Warmers belong to the map being loaded; drop them once run so a later load never warms a stale one.
+    const pending = [...warmers]; warmers.clear();
+    for (const warm of pending) await warm(renderer, scenes).catch(error => console.warn('Warm-up skipped', error));
     await Promise.race([Promise.all(scenes.map(([scene, camera]) => renderer.compileAsync(scene, camera))), sleep(6000)]);
   } catch (error) {
     console.warn('Shader pre-compile skipped', error);

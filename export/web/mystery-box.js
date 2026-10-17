@@ -66,6 +66,7 @@ export class MysteryBox {
     b.model=entry.model;b.wrapper=entry.float;b.float=entry.float;b.wrapper.visible=true;
   }
   hide(b){if(b.wrapper)b.wrapper.visible=false;b.wrapper=null;b.model=null;b.float=null;b.shown=null;}
+  close(b){b.roll=null;b.closing=.5;this.hide(b);this.audio.event('box/close/close_00',.8);}
   // Compile shaders and upload textures for every display model behind the loading screen.
   async warm(renderer,scenes){
     const holders=[];
