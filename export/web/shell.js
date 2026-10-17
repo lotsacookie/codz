@@ -169,6 +169,7 @@ function renderPause({ title, resumeLabel, status = '', results = '', restart = 
   pauseEls.resume.textContent = resumeLabel;
   pauseEls.restart.hidden = !restart;
   pauseEls.status.textContent = status;
+  if (isTouch()) pauseEls.status.textContent = (status ? status + ' · ' : '') + 'TAP START · build ' + BUILD;
   pauseEls.results.hidden = !results;
   pauseEls.results.textContent = results;
   pauseEls.controls.textContent = session.controls;
@@ -182,10 +183,13 @@ function isTouch() {
   return !!(session?.ctx.touch?.mode || body.classList.contains('touch-mode') || matchMedia('(pointer: coarse)').matches);
 }
 
+const BUILD = 'mobile-start-2';
+console.info('[shell] build', BUILD);
+
 function lock() {
   if (!session || !session.ready || busy) return;
   try { session.api.prepare?.(); } catch (error) { console.error(error); }
-  if (isTouch()) { activate(); return; }
+  if (isTouch()) { activate(); return; }  // phones: no pointer lock, the tap itself is the gesture
   try {
     const result = session.canvas.requestPointerLock?.();
     result?.catch?.(() => { pauseEls.status.textContent = 'Press the button to capture the mouse.'; });
@@ -199,7 +203,18 @@ function activate() {
   setState('playing');
   pause.hidden = true;
   hud.root.hidden = false;
-  session.api.setActive?.(true);
+  try {
+    session.api.setActive?.(true);
+  } catch (error) {
+    // Never leave a dead screen: go back to the menu and say why.
+    console.error(error);
+    session.active = false;
+    setState('paused');
+    pause.hidden = false;
+    hud.root.hidden = true;
+    pauseEls.status.textContent = `Could not start: ${error?.message ?? error}`;
+    return;
+  }
   if (isTouch()) enterLandscape();
 }
 
@@ -238,11 +253,18 @@ async function restart() {
   if (session && !session.over) lock();
 }
 
-pauseEls.resume.addEventListener('click', async () => {
+// Touch: act on pointerup as well as click, so a swallowed or delayed synthetic click cannot leave START dead.
+let lastStart = 0;
+async function pressStart() {
   if (!session) return;
+  const now = performance.now();
+  if (now - lastStart < 500) return;
+  lastStart = now;
   if (session.over) { await restart(); return; }
   lock();
-});
+}
+pauseEls.resume.addEventListener('click', pressStart);
+pauseEls.resume.addEventListener('pointerup', event => { if (event.pointerType === 'touch') pressStart(); });
 pauseEls.restart.addEventListener('click', () => { restart(); });
 pauseEls.quit.addEventListener('click', () => { quit(); });
 
@@ -395,7 +417,7 @@ async function boot(entry) {
     current.api = api ?? {};
     if (current.cancelled) return;
     if (!current.ready) current.ctx.ready();
-    if (!current.cancelled) lock();
+    if (!current.cancelled && !isTouch()) lock();  // phones wait for a tap on START (audio and fullscreen need the gesture)
   } catch (error) {
     if (current.cancelled) return;
     console.error(error);
