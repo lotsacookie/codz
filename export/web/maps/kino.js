@@ -103,6 +103,8 @@ const touchControls=createZombieTouch({ctx,
   onAction:action=>{
     if(!active||session.phase==='reviving')return;
     if(action==='reload')reload();if(action==='melee')melee();if(action==='grenade')throwGrenade();if(action==='use')interact();
+    // Controller X: use whatever is in reach, reload otherwise.
+    if(action==='usereload'){findPrompt();if(prompt)interact();else reload();}
     if(action==='weapon'){session.switchWeapon();equipView();}
     if(action==='claymore')features.placeClaymore();if(action==='equipment')features.throwMonkey();
     if(action==='attachment'&&session.toggleAttachment())equipView();
@@ -458,7 +460,7 @@ function hud(){
   hide('monkey',!s.monkeysOwned);text('monkey-count',s.monkeys);
   text('reload-label',!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'');
   opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
-  text('prompt',active&&promptText?bo1Prompt(promptText,touchControls.mode):'');
+  text('prompt',active&&promptText?bo1Prompt(promptText,touchControls.mode,touchControls.pad.active):'');
   if(toastUntil<s.time)text('toast','');if(announcementUntil<s.time)opacity('announcement',0);
   const nextPerkKey=[...s.perks].join();if(nextPerkKey!==perkKey){perkKey=nextPerkKey;$('perks').innerHTML=[...s.perks].filter(id=>perkIcons[id]).map(id=>`<img alt="${perkInfo[id].name}" src="textures/${perkIcons[id]}.png">`).join('');}
   const nowSeconds=performance.now()/1000;

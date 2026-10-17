@@ -70,6 +70,22 @@ The theater's Nazi flag emblems are censored in the game and map viewer: banners
 | M | Toggle sound |
 | F3 | Show frame rate and diagnostics |
 
+**Controller support.** Plug in an Xbox, PlayStation or other standard-mapping gamepad and press any button; the pause menu then shows a controller hint. The layout follows the Black Ops console defaults and works in Kino, Moon, Shangri-La and One Window Challenge. Ascension and Call of the Dead support movement, look and flight.
+
+| Button | Action |
+| --- | --- |
+| Left stick / L3 | Move / sprint (click while moving forward) |
+| Right stick / R3 | Look / knife |
+| RT / LT | Fire / aim down sights |
+| A / B | Jump / crouch (tap to toggle; A stands up from a crouch) |
+| X | Use or reload (uses if a prompt is in reach); hold to repair barricades or hack |
+| Y | Switch weapon |
+| LB / RB | Grenade / Monkey Bomb, Gersh Device, QED |
+| D-pad up / down | Alt fire or attachment / Claymore (Kino), P.E.S. suit (Moon) |
+| Back / Start | Objective (Moon) / pause |
+
+In menus, use the D-pad or left stick to move, A to select, B to go back, and Start to resume. A controller starts the game directly rather than capturing the mouse. Look sensitivity for the pad has its own setting in Options. If the first thing you press is a controller button, some browsers keep audio muted until a click or key press.
+
 Start in the lobby with 500 points and the M1911. Survive rounds and buy doors to reach the stage power switch. Link the stage teleporter, activate its partner pad in the lobby, then return to the stage to teleport. The projection room gives you 30 seconds to use Pack-a-Punch. Retrieve the weapon with F after processing. The return trip may briefly visit a hidden room with a film reel. Quick Revive works in solo before power and can be used three times.
 
 **Development and rebuilding**

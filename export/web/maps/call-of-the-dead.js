@@ -7,6 +7,7 @@ import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { createWallGuns } from '../wall-guns.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
+import { GamepadInput, padSettings } from '../gamepad.js';
 
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
@@ -15,6 +16,23 @@ const CONTROLS = 'WASD · Move   Mouse · Look   Shift · Sprint\nSpace · Jump 
 
 const status = document.querySelector('#status'), help = document.querySelector('#help');
 const keys = new Set(), errors = [];
+const PAD_CONTROLS = 'Left stick · Move   L3 · Sprint / fly faster   Right stick · Look\nA · Jump / ascend   B · Crouch / descend\nR3 · Fly or walk   X · Use wall gun\nBack · Return to spawn   Start · Pause';
+const pad = new GamepadInput({
+  onLook: (x, y) => {
+    if (!active) return;
+    camera.rotation.y -= x * .005 * padSettings.sensitivity;
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - y * .005 * padSettings.sensitivity, -1.55, 1.55);
+  },
+  onAction: action => {
+    if (!active) return;
+    if (action === 'melee') toggleFlight();
+    if (action === 'usereload') wallGuns?.interact();
+    if (action === 'journal') relocate();
+  },
+  onPause: () => ctx.pause(),
+});
+pad.attach(window);
+ctx.onDispose(() => pad.detach());
 const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(78, innerWidth/innerHeight, 1, 70000);
 camera.rotation.order = 'YXZ';
 scene.background = new THREE.Color(0x23313d);
@@ -139,21 +157,33 @@ async function load() {
   if (missingTextures) {errors.push(missingTextures); console.warn(missingTextures);}
   if (debug && query.has('landmark')) relocate(query.get('landmark'));
   ctx.setControls(CONTROLS);
+  ctx.setPadControls(PAD_CONTROLS);
   ctx.setHint('Click to capture the mouse · Esc to pause');
   renderer.setAnimationLoop(frame);
 }
 function frame(now) {
   if (disposed) return;
   const dt = Math.min((now-previous)/1000, .05); previous = now;
+  // Read every frame, even while paused, so a held button never looks like a fresh press on resume.
+  pad.setEnabled(ready && active);
+  const p = pad.read();
   if (ready && active) {
+    const clamp = value => Math.max(-1, Math.min(1, value));
+    const walk = clamp(Number(keys.has('KeyW'))-Number(keys.has('KeyS'))+p.forward), strafe = clamp(Number(keys.has('KeyD'))-Number(keys.has('KeyA'))+p.strafe);
     if (flying) {
       camera.getWorldDirection(forward); right.set(1,0,0).applyQuaternion(camera.quaternion);
-      wish.set(0,0,0).addScaledVector(forward, Number(keys.has('KeyW'))-Number(keys.has('KeyS')))
-        .addScaledVector(right, Number(keys.has('KeyD'))-Number(keys.has('KeyA')));
-      wish.y += Number(keys.has('Space'))-Number(keys.has('ControlLeft') || keys.has('ControlRight'));
-      if (wish.lengthSq()) camera.position.addScaledVector(wish.normalize(), dt*(keys.has('ShiftLeft') || keys.has('ShiftRight') ? 1800 : 600));
+      wish.set(0,0,0).addScaledVector(forward, walk).addScaledVector(right, strafe);
+      wish.y += Number(keys.has('Space') || p.jumpHeld)-Number(keys.has('ControlLeft') || keys.has('ControlRight') || p.crouchHeld);
+      if (wish.lengthSq()) camera.position.addScaledVector(wish.normalize(), dt*(keys.has('ShiftLeft') || keys.has('ShiftRight') || p.sprint ? 1800 : 600));
     } else {
-      player.update(dt, Object.fromEntries([...keys].map(key => [key, true])));
+      // The controller's fields are explicit and already include the keyboard's contribution. The
+      // controller reads the first field it finds for each input, so the opposite directions are
+      // zeroed (otherwise a held KeyA/KeyS would be subtracted a second time) and jump is spelled out
+      // (a defined jumpPressed would otherwise hide Space).
+      player.update(dt, {...Object.fromEntries([...keys].map(key => [key, true])), forward: walk, strafe, backward: 0, moveLeft: 0,
+        sprint: keys.has('ShiftLeft') || keys.has('ShiftRight') || p.sprint,
+        crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || p.crouch,
+        jump: keys.has('Space'), jumpPressed: p.jump});
       if (player.feetPosition.y < -500) {resetCount++; relocate();}
     }
   }

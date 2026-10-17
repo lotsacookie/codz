@@ -106,6 +106,8 @@ const touchControls = createZombieTouch({
     if (code) combat.key(code);
     if (action === 'weapon') combat.switchWeapon();
     if (action === 'use') interact();
+    // Controller X: use whatever is in reach, reload otherwise.
+    if (action === 'usereload') { features.findTarget(); if (features.target) interact(); else combat.key('KeyR'); }
   },
   onPause: () => ctx.pause(),
 });
@@ -212,13 +214,14 @@ function promptText() {
   target = t;
   if (!t) return '';
   const label = t.label.startsWith('Hold F') ? t.label : 'F · ' + t.label;
-  return touchControls.mode ? label.replace(/\bF\s*·/g, 'USE ·').replace('Hold F', 'Hold USE') : label;
+  if (touchControls.mode) return label.replace(/\bF\s*·/g, 'USE ·').replace('Hold F', 'Hold USE');
+  return touchControls.pad.active ? label.replace(/\bF\s*·/g, 'X ·').replace('Hold F', 'Hold X') : label;
 }
 
 function update(dt) {
   touchControls.setEnabled(active && !['reviving', 'gameover'].includes(combat.session.phase), active);
   const touch = touchControls.input.read();
-  if (!touchControls.enabled) touchFirePending = false;
+  if (!touchControls.enabled && !touchControls.pad.enabled) touchFirePending = false;
   touchFirePending ||= touch.firePressed;
   const touchWantsFire = touch.fire || touchFirePending;
   combat.primary = mousePrimary || touchWantsFire;
@@ -265,7 +268,7 @@ function hud() {
   renderAmmoIcons($('ammo-icons'), s.def, w.mag);
   $('weapon-name').textContent = s.def.name;
   $('grenade-count').textContent = s.grenades;
-  $('reload-label').textContent = s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : 'Reload') : '';
+  $('reload-label').textContent = s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : touchControls.pad.active ? 'Press X to reload' : 'Reload') : '';
   $('weapon-status').textContent = s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '';
   $('hitmarker').style.opacity = combat.hitUntil > s.time ? 1 : 0;
   $('power').textContent = s.power ? 'POWER ON' : 'POWER OFF';

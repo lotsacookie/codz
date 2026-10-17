@@ -7,6 +7,7 @@ import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { createWallGuns } from '../wall-guns.js';
 import { bindExploreGraphics } from '../explore-graphics.js';
+import { GamepadInput, padSettings } from '../gamepad.js';
 
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
@@ -17,6 +18,24 @@ const status = document.getElementById('status');
 const help = document.getElementById('help');
 const debug = document.getElementById('debug');
 const keys = new Set(), errors = [];
+const PAD_CONTROLS = 'Left stick · Move   L3 · Sprint / fly faster   Right stick · Look\nA · Jump / ascend   B · Crouch / descend\nR3 · Fly or walk   X · Use wall gun   D-pad up · Hide help\nBack · Return to spawn   Start · Pause';
+const pad = new GamepadInput({
+  onLook: (x, y) => {
+    if (!active) return;
+    camera.rotation.y -= x * .005 * padSettings.sensitivity;
+    camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x - y * .005 * padSettings.sensitivity, -1.55, 1.55);
+  },
+  onAction: action => {
+    if (!active) return;
+    if (action === 'melee') toggleFly();
+    if (action === 'usereload') wallGuns?.interact();
+    if (action === 'journal') reset();
+    if (action === 'attachment') { helpVisible = !helpVisible; updateHelp(); }
+  },
+  onPause: () => ctx.pause(),
+});
+pad.attach(window);
+ctx.onDispose(() => pad.detach());
 const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 1, 70000);
 camera.rotation.order = 'YXZ';
 const scene = new THREE.Scene();
@@ -160,6 +179,7 @@ async function load() {
   status.hidden = !missingTextures;
   updateHelp();
   ctx.setControls(CONTROLS);
+  ctx.setPadControls(PAD_CONTROLS);
   ctx.setHint('Click to capture the mouse · Esc to pause');
   ctx.expose('ascension', {
     ready, scene, camera, player, collision, renderer, data, world,
@@ -175,21 +195,25 @@ async function load() {
   renderer.setAnimationLoop(now => {
     if (disposed) return;
     const dt = Math.min((now - previous) / 1000, .25); previous = now;
+    // Read every frame, even while paused, so a held button never looks like a fresh press on resume.
+    pad.setEnabled(active);
+    const p = pad.read();
     if (active) {
-      const x = Number(keys.has('KeyD')) - Number(keys.has('KeyA'));
-      const z = Number(keys.has('KeyW')) - Number(keys.has('KeyS'));
-      const sprint = keys.has('ShiftLeft') || keys.has('ShiftRight');
+      const clamp = value => Math.max(-1, Math.min(1, value));
+      const x = clamp(Number(keys.has('KeyD')) - Number(keys.has('KeyA')) + p.strafe);
+      const z = clamp(Number(keys.has('KeyW')) - Number(keys.has('KeyS')) + p.forward);
+      const sprint = keys.has('ShiftLeft') || keys.has('ShiftRight') || p.sprint;
       if (flying) {
         camera.getWorldDirection(forward);
         right.setFromMatrixColumn(camera.matrix, 0);
         wish.copy(forward).multiplyScalar(z).addScaledVector(right, x);
-        wish.y += Number(keys.has('Space')) - Number(keys.has('ControlLeft') || keys.has('ControlRight'));
+        wish.y += Number(keys.has('Space') || p.jumpHeld) - Number(keys.has('ControlLeft') || keys.has('ControlRight') || p.crouchHeld);
         if (wish.lengthSq()) camera.position.addScaledVector(wish.normalize(), (sprint ? 1800 : 600) * dt);
       } else {
         for (let remaining = dt; remaining > 0;) {
           const step = Math.min(remaining, .05);
-          player.update(step, {forward: z, strafe: x, sprint, jump: keys.has('Space'),
-            crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC')});
+          player.update(step, {forward: z, strafe: x, sprint, jump: keys.has('Space'), jumpPressed: p.jump && remaining === dt,
+            crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC') || p.crouch});
           remaining -= step;
         }
         if (player.getFeetPosition().y < collision.metadata.bounds.min[1] - 600) reset();

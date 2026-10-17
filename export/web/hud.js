@@ -223,12 +223,12 @@ export function spawnScorePopup(container, value) {
 }
 
 // The extractor stores prompts as short phrases; Black Ops shows "Hold F to ..." hint strings.
-export function bo1Prompt(text, touch = false) {
+export function bo1Prompt(text, touch = false, pad = false) {
   if (!text) return '';
-  const key = touch ? 'USE' : 'F';
+  const key = touch ? 'USE' : pad ? 'X' : 'F';
   let m;
   let out = text;
-  if (/^Hold (F|USE) /.test(text)) out = text.replace(/^Hold (F|USE)/, 'Hold ' + key);
+  if (/^Hold (F|USE|X) /.test(text)) out = text.replace(/^Hold (F|USE|X)/, 'Hold ' + key);
   else if ((m = text.match(/^Open door · (\d+)$/))) out = `Hold ${key} to open the door [Cost: ${m[1]}]`;
   else if ((m = text.match(/^Mystery Box · (\d+)$/))) out = `Hold ${key} for Mystery Box [Cost: ${m[1]}]`;
   else if ((m = text.match(/^Bowie Knife · (\d+)$/))) out = `Hold ${key} to buy Bowie Knife [Cost: ${m[1]}]`;

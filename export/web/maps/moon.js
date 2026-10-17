@@ -63,6 +63,8 @@ const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
     if(code)combat.key(code);
     if(action==='weapon')combat.switchWeapon();
     if(action==='use')interact();
+    // Controller X: use whatever is in reach, reload otherwise.
+    if(action==='usereload'){findTarget();if(target)interact();else if(combat.enabled)combat.key('KeyR');}
     if(action==='suit'){state.toggleSuit();if(!state.hasSuit)showNotice('Find a P.E.S. station in Receiving Bay.');}
     if(action==='hack'&&combat.enabled){findTarget();if(!features.hackNearby(target))showNotice('Aim at a hackable target. Equip the Hacker first.');}
     if(action==='journal')$('journal').hidden=!$('journal').hidden;
@@ -223,7 +225,7 @@ function update(dt) {
   const touch=touchControls.input.read();
   // Keep a tap through the native sprint-out animation so a moving player
   // can fire a semi-automatic weapon as soon as it has been lowered.
-  if(!touchControls.enabled)touchFirePending=false;
+  if(!touchControls.enabled&&!touchControls.pad.enabled)touchFirePending=false;
   touchFirePending ||= touch.firePressed;
   const touchWantsFire=touch.fire||touchFirePending;
   combat.primary=mousePrimary||touchWantsFire;
@@ -259,15 +261,17 @@ function update(dt) {
   if(combat.enabled)features.update(dt,keys.has('KeyF')||keys.has('KeyE')||keys.has('KeyH')||touch.use||touch.hack);
   presentation.update(dt,environment);
   noticeLeft = Math.max(0, noticeLeft-dt);
-  $('toast').textContent = noticeLeft ? (touchControls.mode?notice.replace('F to equip','Tap USE to equip'):notice) : '';
+  $('toast').textContent = noticeLeft ? (touchControls.mode?notice.replace('F to equip','Tap USE to equip'):touchControls.pad.active?notice.replace('F to equip','X to equip'):notice) : '';
   $('prompt').textContent = state.teleport ? `Teleporting in ${(data.rules.teleportSeconds-state.teleport.elapsed).toFixed(1)}…` : findTarget();
   if(touchControls.mode)$('prompt').textContent=$('prompt').textContent.replace(/\bF\s*·/g,'USE ·').replace('Hold F','Hold USE').replace('H to hack','Hold HACK');
+  else if(touchControls.pad.active)$('prompt').textContent=$('prompt').textContent.replace(/\bF\s*·/g,'X ·').replace('Hold F','Hold X').replace('H to hack','Hold X to hack');
   $('visor').hidden = !state.suit;
   $('location').textContent = labels[environment.zone] || (environment.zone?.startsWith('airlock') ? 'Airlock' : onMoon ? 'Griffin Station' : 'No Man’s Land');
   $('gravity').textContent = environment.lowGravity ? 'LOW GRAVITY' : 'NORMAL GRAVITY';
   $('power').textContent = state.power ? 'POWER ON' : 'POWER OFF';
   $('suit').textContent = state.suit ? 'P.E.S. ACTIVE' : state.hasSuit ? 'P.E.S. OFF · Q TO EQUIP' : 'P.E.S. NOT ACQUIRED';
   if(touchControls.mode)$('suit').textContent=$('suit').textContent.replace('Q TO EQUIP','TAP P.E.S.');
+  else if(touchControls.pad.active)$('suit').textContent=$('suit').textContent.replace('Q TO EQUIP','D-PAD DOWN TO EQUIP');
   $('oxygen').hidden = environment.breathable || state.suit;
   $('air').value = data.rules.suffocationSeconds-state.exposure;
   $('hurt').style.opacity = active?Math.max(Math.min(.7, state.exposure/data.rules.suffocationSeconds*.7),combat.enabled?(1-combat.session.health/combat.session.maxHealth)*.8:0):0;
@@ -282,7 +286,7 @@ function update(dt) {
     $('mag').classList.toggle('low',!deathMachine&&w.mag<=Math.floor(cap/3));
     renderAmmoIcons($('ammo-icons'),s.def,w.mag);
     $('grenade-count').textContent=s.grenades;
-    $('reload-label').textContent=!deathMachine&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?(touchControls.mode?'Tap reload':'Reload'):'';
+    $('reload-label').textContent=!deathMachine&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?(touchControls.mode?'Tap reload':touchControls.pad.active?'Press X to reload':'Reload'):'';
     $('weapon-status').textContent=s.phase==='reviving'?'QUICK REVIVE…':s.pack?'WEAPON IN PACK-A-PUNCH':'';
     if(deathMachine){$('mag').textContent=Math.ceil(s.effects.death_machine-s.time)+'s';$('reserve').textContent='';}
     $('hitmarker').style.opacity=combat.hitUntil>s.time?1:0;

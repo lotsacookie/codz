@@ -1,4 +1,5 @@
 import { TouchControls } from './touch-controls.js';
+import { GamepadInput, mergeInput, padSettings } from './gamepad.js';
 
 // Shared BO2 pointer controls, with the actions needed by both Zombies maps.
 export function createZombieTouch({ ctx = null, moon = false, minimal = false, menuSettings = true, onLook, onAction, onPause, onReset }) {
@@ -32,6 +33,23 @@ export function createZombieTouch({ ctx = null, moon = false, minimal = false, m
     }
   };
   const controls = new TouchControls({ root, onLook, onAction, onReset, onModeChange: updateHints });
+  // A controller feeds the same input object, look callback and action names as the touch
+  // buttons, so every map that already supports touch supports a gamepad with no extra wiring.
+  const pad = new GamepadInput({
+    onLook: (x, y) => onLook(x, y, padSettings.sensitivity), onAction, onPause,
+  });
+  pad.attach(window);
+  const readTouch = controls.input.read.bind(controls.input);
+  controls.input.read = () => mergeInput(readTouch(), pad.read());
+  const setEnabled = controls.setEnabled.bind(controls);
+  controls.setEnabled = (enabled, visible = enabled) => { pad.setEnabled(enabled, visible); setEnabled(enabled, visible); };
+  const reset = controls.reset.bind(controls);
+  controls.reset = () => { pad.reset(); reset(); };
+  const destroy = controls.destroy.bind(controls);
+  controls.destroy = () => { pad.detach(); destroy(); };
+  const getState = controls.getState.bind(controls);
+  controls.getState = () => ({ ...getState(), pad: pad.getState() });
+  controls.pad = pad;
   // The shell decides between pointer lock and tap-to-start from ctx.touch, so every map must hand it over.
   if (ctx) ctx.touch = controls;
   if (controls.mode) updateHints();

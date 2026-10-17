@@ -107,3 +107,12 @@ body.touch-mode #pause h1{margin-bottom:18px}
 body.touch-mode #pause-controls{display:none}
 body.touch-mode #viewport canvas{position:fixed;inset:0;width:100%!important;height:100%!important}
 body.touch-mode #pause{touch-action:pan-y;overscroll-behavior:contain}
+
+/* Controller menu focus. Programmatic focus is not :focus-visible after a mouse click, so mirror those rules. */
+#launcher li button.pad-focus{background:#f3f3f1;color:#161412}
+#launcher li button.pad-focus span{color:#4a443b}
+#load-actions button.pad-focus{color:#fff;outline:0;text-shadow:var(--glow)}
+#pause .menu-list button.pad-focus{background:var(--menu-select-bg);color:var(--menu-select-text);outline:0}
+#pause-pad-controls{margin:calc(var(--u) * 12) 0 0;font-size:max(10px,calc(var(--u) * 10));line-height:1.9;letter-spacing:.04em;color:rgba(244,242,236,.5);white-space:pre-line}
+#pause-pad-controls:empty,#pause-pad-controls[hidden]{display:none}
+body.touch-mode #pause-pad-controls{display:none}

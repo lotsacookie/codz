@@ -5,6 +5,7 @@ import { resetMapAssets } from './map-assets.js';
 import { releaseModelCache } from './animation.js';
 import { createListeners, disposeRenderer } from './dispose.js';
 import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
+import { MenuNav, PAD_CONTROLS, getGamepads, padSettings } from './gamepad.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -29,6 +30,14 @@ if (!pauseEls.graphics) {
   (pauseEls.fullscreen ?? pauseEls.back)?.before(pauseEls.graphics);
 }
 const loadEls = { label: $('load-label'), bar: $('load-progress'), actions: $('load-actions') };
+// Controller hints sit under the keyboard ones and only appear once a pad has been seen.
+const padControls = document.createElement('p');
+padControls.id = 'pause-pad-controls';
+padControls.hidden = true;
+pauseEls.controls.after(padControls);
+// True while the most recent way of starting the game was the controller. A pad cannot request
+// pointer lock (it is not a click), so it starts the game directly, like touch does.
+let padPreferred = false;
 
 function createHud(root) {
   const pristine = root.innerHTML;
@@ -128,12 +137,13 @@ function syncGraphics() {
 function syncOptions() {
   syncGraphics();
   const touch = !!session?.ctx.touch?.mode;
+  const coarse = touch || !!session?.pad;  // touch and controller share a 0.4–2 scale
   const slider = pauseEls.slider;
-  slider.min = touch ? .4 : .25;
-  slider.max = touch ? 2 : 3;
-  slider.step = touch ? .1 : .05;
-  slider.value = touch ? session.ctx.touch.sensitivity : mouseSensitivity;
-  pauseEls.sliderValue.textContent = Number(slider.value).toFixed(touch ? 1 : 2) + '×';
+  slider.min = coarse ? .4 : .25;
+  slider.max = coarse ? 2 : 3;
+  slider.step = coarse ? .1 : .05;
+  slider.value = touch ? session.ctx.touch.sensitivity : session?.pad ? padSettings.sensitivity : mouseSensitivity;
+  pauseEls.sliderValue.textContent = Number(slider.value).toFixed(coarse ? 1 : 2) + '×';
   pauseEls.fullscreen.hidden = !(touch && document.fullscreenEnabled);
 }
 
@@ -141,12 +151,14 @@ pauseEls.slider.addEventListener('input', () => {
   const value = Number(pauseEls.slider.value);
   if (!(value > 0)) return;
   const touch = session?.ctx.touch;
+  const pad = !touch?.mode && !!session?.pad;
   if (touch?.mode) touch.setSensitivity(value);
+  else if (pad) padSettings.set(value);
   else {
     mouseSensitivity = value;
     try { localStorage.setItem(SENSITIVITY_KEY, String(value)); } catch {}
   }
-  pauseEls.sliderValue.textContent = value.toFixed(touch?.mode ? 1 : 2) + '×';
+  pauseEls.sliderValue.textContent = value.toFixed(touch?.mode || pad ? 1 : 2) + '×';
 });
 pauseEls.graphics.addEventListener('click', () => { graphics.cycle(); syncGraphics(); });
 pauseEls.options.addEventListener('click', () => showOptions(true));
@@ -170,9 +182,12 @@ function renderPause({ title, resumeLabel, status = '', results = '', restart = 
   pauseEls.restart.hidden = !restart;
   pauseEls.status.textContent = status;
   if (isTouch()) pauseEls.status.textContent = (status ? status + ' · ' : '') + 'TAP START · build ' + BUILD;
+  else if (padNav.seen) pauseEls.status.textContent = (status ? status + ' · ' : '') + 'Press A or Start';
   pauseEls.results.hidden = !results;
   pauseEls.results.textContent = results;
   pauseEls.controls.textContent = session.controls;
+  padControls.textContent = session.padControls || PAD_CONTROLS;
+  padControls.hidden = !padNav.seen;
   pause.hidden = false;
   hud.root.hidden = true;
 }
@@ -189,7 +204,7 @@ console.info('[shell] build', BUILD);
 function lock() {
   if (!session || !session.ready || busy) return;
   try { session.api.prepare?.(); } catch (error) { console.error(error); }
-  if (isTouch()) { activate(); return; }  // phones: no pointer lock, the tap itself is the gesture
+  if (isTouch() || padPreferred) { activate(); return; }  // phones and pads: no pointer lock to request
   try {
     const result = session.canvas.requestPointerLock?.();
     result?.catch?.(() => { pauseEls.status.textContent = 'Press the button to capture the mouse.'; });
@@ -200,6 +215,7 @@ function activate() {
   if (!session || !session.ready || session.over || session.active) return;
   session.active = true;
   session.started = true;
+  session.pad = padPreferred && !isTouch();
   setState('playing');
   pause.hidden = true;
   hud.root.hidden = false;
@@ -268,10 +284,61 @@ pauseEls.resume.addEventListener('pointerup', event => { if (event.pointerType =
 pauseEls.restart.addEventListener('click', () => { restart(); });
 pauseEls.quit.addEventListener('click', () => { quit(); });
 
+// Controller menus. The launcher, loading screen and pause menu are all plain buttons, so the pad
+// just moves focus between whichever of them is on screen and clicks the focused one.
+const padVisible = el => !el.disabled && !el.closest('[hidden]') && el.getClientRects().length > 0;
+function padItems() {
+  if (!launcher.hidden) return buttons.filter(button => !button.disabled);
+  if (!loading.hidden) return [...loadEls.actions.querySelectorAll('button')];
+  if (!pause.hidden) return [...pause.querySelectorAll('button, input[type="range"]')].filter(padVisible);
+  return [];
+}
+function padDefault(items) {
+  if (!launcher.hidden) return items.find(item => item.closest('li')?.classList.contains('selected')) ?? items[0];
+  return items.includes(pauseEls.resume) ? pauseEls.resume : items[0];
+}
+function padFocus(element) {
+  document.querySelector('.pad-focus')?.classList.remove('pad-focus');
+  element.classList.add('pad-focus');
+  element.focus({ preventScroll: true });
+}
+function padSelect(focused) {
+  padPreferred = true;
+  const items = padItems();
+  const target = focused ?? padDefault(items);
+  if (!target) return;
+  padFocus(target);
+  // Loading a map is heavy: on the launcher the first press only shows what is selected.
+  if (!focused && !launcher.hidden) return;
+  // START/RESUME goes through pressStart so a finished run restarts; everything else is a click.
+  if (target === pauseEls.resume) pressStart(); else target.click();
+}
+const padNav = new MenuNav({
+  getItems: padItems, getDefault: padDefault, focus: padFocus, onSelect: padSelect,
+  onBack: () => { if (!pause.hidden && !pauseEls.optionsView.hidden) showOptions(false); },
+  onStart: () => { if (!pause.hidden && pauseEls.optionsView.hidden) { padPreferred = true; pressStart(); } },
+  isBlocked: () => !!session?.active,
+});
+let padFrame = 0;
+function padTick() {
+  padNav.poll();
+  padFrame = getGamepads().length ? requestAnimationFrame(padTick) : 0;
+}
+function startPadLoop() {
+  if (!padFrame) padFrame = requestAnimationFrame(padTick);
+}
+addEventListener('gamepadconnected', startPadLoop);
+if (getGamepads().length) startPadLoop();
+// The mouse and keyboard hand control back: pointer lock is available again and the pad highlight goes.
+const leavePad = () => { padPreferred = false; document.querySelector('.pad-focus')?.classList.remove('pad-focus'); };
+document.addEventListener('pointerdown', leavePad, { capture: true, passive: true });
+document.addEventListener('keydown', leavePad, { capture: true, passive: true });
+document.addEventListener('mousemove', event => { if (event.movementX || event.movementY) leavePad(); }, { capture: true, passive: true });
+
 document.addEventListener('pointerlockchange', () => {
   if (!session || !session.ready) return;
   if (document.pointerLockElement === session.canvas) { activate(); return; }
-  if (!isTouch()) deactivate();
+  if (!isTouch() && !session.pad) deactivate();
 });
 document.addEventListener('pointerlockerror', () => {
   if (session?.ready) pauseEls.status.textContent = 'Press the button to capture the mouse.';
@@ -279,7 +346,7 @@ document.addEventListener('pointerlockerror', () => {
 const interrupt = () => {
   if (!session?.active) return;
   document.exitPointerLock?.();
-  if (isTouch()) deactivate();
+  if (isTouch() || session.pad) deactivate();
 };
 addEventListener('blur', interrupt);
 document.addEventListener('visibilitychange', () => { if (document.hidden) interrupt(); });
@@ -322,6 +389,7 @@ function createContext(entry) {
     // Maps that have shadows / god rays call this to get the shared Graphics setting and
     // to show the GRAPHICS row in the pause menu's options.
     useGraphics() { const own = live(); if (own) own.graphicsEnabled = true; return graphics; },
+    setPadControls(text) { const own = live(); if (own) own.padControls = text; },
     setControls(text) { const own = live(); if (!own) return; own.controls = text; pauseEls.controls.textContent = text; },
     setHint(text) { const own = live(); if (own) own.hint = text; },
     setButtons(items) {
@@ -340,7 +408,7 @@ function createContext(entry) {
       }
     },
     expose(name, value) { globalThis[name] = value; exposed.push(name); },
-    pause: () => { document.exitPointerLock?.(); if (isTouch()) deactivate(); },
+    pause: () => { document.exitPointerLock?.(); if (isTouch() || live()?.pad) deactivate(); },
     gameOver({ title = 'GAME OVER', status = '', results = '' } = {}) {
       if (!live()) return;
       session.over = true;
@@ -396,8 +464,8 @@ async function boot(entry) {
   await prepareLoadscreen(entry);
   const holder = createContext(entry);
   session = {
-    ...entry, ctx: holder.ctx, holder, styles, canvas: null, renderer: null, api: null, ready: false, active: false, over: false, started: false,
-    controls: '', hint: 'Click to capture the mouse · Esc to pause', pauseTitle: '', mounting: null, cancelled: false,
+    ...entry, ctx: holder.ctx, holder, styles, canvas: null, renderer: null, api: null, ready: false, active: false, over: false, started: false, pad: false,
+    controls: '', padControls: '', hint: 'Click to capture the mouse · Esc to pause', pauseTitle: '', mounting: null, cancelled: false,
   };
   document.title = entry.title || document.title;
   body.dataset.map = entry.map;
