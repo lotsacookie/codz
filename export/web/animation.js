@@ -24,37 +24,14 @@ export function makeClip(root, data, locomotion=false, options={}){
       if(b.rot)tracks.push(new THREE.QuaternionKeyframeTrack(node.uuid+'.quaternion',b.rot.frames.map(f=>f/data.fps),b.rot.values));
       if(b.pos){
         const values=b.pos.values.slice();
-        // M1911 slide: measure where the slide really travels once the keyed offset is applied, and if that
-        // is not toward the player (it dropped downward instead of back) steer the keyed offsets so it is.
-        if(options.boltFrame&&b.name==='j_bolt'&&node.parent){
-          const log={};
-          try{
-            root.updateWorldMatrix(true,true);
-            const skinned=[];root.traverse(o=>{if(o.isSkinnedMesh&&o.skeleton.bones.includes(node))skinned.push(o.name||'(unnamed)');});
-            log.parent=node.parent.name;log.sameNameNodes=nodes.get('j_bolt').length;log.skinnedMeshesUsingBolt=skinned;
-            let at=0,best=0;const base=new THREE.Vector3(values[0],values[1],values[2]),d=new THREE.Vector3();
-            for(let i=3;i<values.length;i+=3){const l=d.set(values[i],values[i+1],values[i+2]).sub(base).length();if(l>best){best=l;at=i;}}
-            if(best>1e-3){
-              const delta=new THREE.Vector3(values[at],values[at+1],values[at+2]).sub(base);
-              const saved=node.position.clone(),from=node.getWorldPosition(new THREE.Vector3());
-              node.position.add(delta);node.updateWorldMatrix(true,false);
-              const moved=node.getWorldPosition(new THREE.Vector3()).sub(from);node.position.copy(saved);node.updateWorldMatrix(true,false);
-              const back=new THREE.Vector3(0,0,1);// the viewmodel scene looks down -z, so back is toward the camera
-              const dot=moved.clone().normalize().dot(back);
-              const lin=node.parent.matrixWorld.clone().setPosition(0,0,0),det=lin.determinant();
-              log.travelDotBack=+dot.toFixed(2);log.moved=moved.toArray().map(x=>+x.toFixed(2));log.parentLinearDet=+det.toFixed(4);
-              log.parentScale=node.parent.getWorldScale(new THREE.Vector3()).toArray().map(x=>+x.toFixed(3));
-              if(moved.length()>1e-6&&dot<.5&&Math.abs(det)>1e-12){
-                // Work in world space with the parent's full linear transform (rotation, scale and any mirroring),
-                // so the correction holds even when the exported bone chain is scaled or flipped.
-                const world=new THREE.Quaternion().setFromUnitVectors(moved.clone().normalize(),back),inv=lin.clone().invert();
-                const v=new THREE.Vector3();
-                for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyMatrix4(lin).applyQuaternion(world).applyMatrix4(inv);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}
-                log.corrected=true;
-              }
-            }
-          }catch(error){log.error=String(error);}
-          if(!options.boltLogged){options.boltLogged=true;console.info('[viewmodel] M1911 j_bolt',JSON.stringify(log));}
+        // M1911 slide: the keyed slide offsets are absolute and start at ~0 (slide forward). If the exported
+        // slide bone rests elsewhere, firing snapped it to the parent origin (down, and stuck there on the
+        // last shot). Keep the keyed travel but anchor it to the bone's real rest position. A no-op when the
+        // rest position is already ~0, as on the other pistols.
+        if(options.boltFrame&&b.name==='j_bolt'){
+          const rest=node.position.clone();
+          if(!options.boltLogged){options.boltLogged=true;console.info('[viewmodel] M1911 j_bolt rest position',JSON.stringify(rest.toArray().map(x=>+x.toFixed(3))),'first key',JSON.stringify(values.slice(0,3).map(x=>+x.toFixed(3))));}
+          if(rest.length()>.05)for(let i=0;i<values.length;i+=3){values[i]+=rest.x;values[i+1]+=rest.y;values[i+2]+=rest.z;}
         }
         // T5 locomotion stores j_mainroot translations as displacement from
         // the bind pelvis, unlike the absolute viewmodel pose tracks.
