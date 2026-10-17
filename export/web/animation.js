@@ -41,11 +41,15 @@ export function makeClip(root, data, locomotion=false, options={}){
               const moved=node.getWorldPosition(new THREE.Vector3()).sub(from);node.position.copy(saved);node.updateWorldMatrix(true,false);
               const back=new THREE.Vector3(0,0,1);// the viewmodel scene looks down -z, so back is toward the camera
               const dot=moved.clone().normalize().dot(back);
-              log.travelDotBack=+dot.toFixed(2);
-              if(moved.length()>1e-6&&dot<.5){
-                const parentQ=node.parent.getWorldQuaternion(new THREE.Quaternion()),want=back.clone().applyQuaternion(parentQ.clone().invert());
-                const fix=new THREE.Quaternion().setFromUnitVectors(delta.clone().normalize(),want);
-                const v=new THREE.Vector3();for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyQuaternion(fix);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}
+              const lin=node.parent.matrixWorld.clone().setPosition(0,0,0),det=lin.determinant();
+              log.travelDotBack=+dot.toFixed(2);log.moved=moved.toArray().map(x=>+x.toFixed(2));log.parentLinearDet=+det.toFixed(4);
+              log.parentScale=node.parent.getWorldScale(new THREE.Vector3()).toArray().map(x=>+x.toFixed(3));
+              if(moved.length()>1e-6&&dot<.5&&Math.abs(det)>1e-12){
+                // Work in world space with the parent's full linear transform (rotation, scale and any mirroring),
+                // so the correction holds even when the exported bone chain is scaled or flipped.
+                const world=new THREE.Quaternion().setFromUnitVectors(moved.clone().normalize(),back),inv=lin.clone().invert();
+                const v=new THREE.Vector3();
+                for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyMatrix4(lin).applyQuaternion(world).applyMatrix4(inv);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}
                 log.corrected=true;
               }
             }
