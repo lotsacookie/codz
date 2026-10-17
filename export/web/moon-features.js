@@ -100,7 +100,7 @@ export class MoonFeatures {
       if(s.perks.has(t.perk))return p.name+' equipped'+(s.hacker&&!s.permanentPerks?' · Hold F to refund':'');
       if(t.perk==='specialty_quickrevive'&&s.revives>=3&&!s.permanentPerks)return 'Quick Revive exhausted';
       if(!s.power&&s.area!=='earth'&&t.perk!=='specialty_quickrevive')return p.name+' · Requires power';
-      return p.name+' · '+p.price+(s.perks.size>=4?' · Four-perk limit':'');
+      return p.name+' · '+p.price+(s.perks.size>=s.perkLimit?' · Four-perk limit':'');
     }
     if(t.kind==='box'){
       if(!this.box.available(t.e))return '';
@@ -139,7 +139,7 @@ export class MoonFeatures {
     if(t.kind==='perk'){
       if(s.hacker&&s.perks.has(t.perk)&&!s.permanentPerks)return this.startHack(t,5,()=>{s.losePerk(t.perk);s.points+=MOON_PERKS[t.perk].price;this.combat.equip().catch(console.error);});
       ok=s.buyPerk(t.perk);if(ok){this.combat.clearInput();this.combat.perkDrink.start(t.perk,this.combat.view);this.notice(MOON_PERKS[t.perk].name);a.play(t.perk);}
-      else this.notice(s.perks.size>=4?'You can buy four perks. Complete the quest to earn all eight.':'Cannot purchase: check points, power, and owned perks.');
+      else this.notice(s.perks.size>=s.perkLimit?'You can buy four perks. Complete the quest to earn all eight.':'Cannot purchase: check points, power, and owned perks.');
     }
     if(t.kind==='hacker'&&t.e.id===q.hackerId){s.hacker=true;this.state.hasSuit=false;this.state.suit=false;this.notice('Hacker equipped. You have no P.E.S. Return to a suit station before entering vacuum.');ok=true;}
     if(t.kind==='box'){

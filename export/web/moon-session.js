@@ -17,7 +17,7 @@ export class MoonSession extends Session {
   reset() {
     super.reset(); this.area = 'earth'; this.moonStarted = false; this.savedWave = null;
     this.earthTime = 0; this.phase = 'fighting'; this.total = 0; this.nextDogRound = Infinity;
-    this.equipment = null; this.equipmentAmmo = 0; this.permanentPerks = false;
+    this.equipment = null; this.equipmentAmmo = 0; this.permanentPerks = this.mods.has('keep_perks');
     this.hacker = false; this.earthVisits = 0; this.pack = null; this.hackedWeapons = new Set();
   }
   update(dt) { const reviving=this.phase==='reviving';super.update(dt);if(reviving&&this.phase==='fighting')this.health=this.maxHealth; if (this.area === 'earth' && this.phase !== 'gameover') this.earthTime += dt; }
@@ -43,7 +43,7 @@ export class MoonSession extends Session {
   get canAct(){return !['gameover','reviving'].includes(this.phase)&&!this.drinking&&!this.meleeLeft&&!this.pack&&!(this.effects.death_machine>this.time);}
   buyPerk(id,free=false){
     const p=MOON_PERKS[id];
-    if(!p||!this.canAct||this.perks.has(id)||(!free&&this.perks.size>=4)||
+    if(!p||!this.canAct||this.perks.has(id)||(!free&&this.perks.size>=this.perkLimit)||
        (!free&&id==='specialty_quickrevive'&&this.revives>=3)||
        (!free&&!this.power&&this.area!=='earth'&&id!=='specialty_quickrevive')||(!free&&this.points<p.price))return false;
     if(!this.drink(id))return false;

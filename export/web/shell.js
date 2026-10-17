@@ -6,6 +6,7 @@ import { releaseModelCache } from './animation.js';
 import { createListeners, disposeRenderer } from './dispose.js';
 import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
 import { MenuNav, PAD_CONTROLS, getGamepads, padSettings } from './gamepad.js';
+import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -13,6 +14,7 @@ const launcher = $('launcher'), list = $('map-list'), note = $('launcher-note'),
 const stage = $('stage'), viewport = $('viewport'), loading = $('loading'), pause = $('pause');
 const buttons = [...list.querySelectorAll('button[data-map]')];
 const IDLE_NOTE = note.textContent;
+const modOpen = $('modifiers-open'), modPanel = $('modifiers'), modList = $('modifier-list'), modCount = $('modifiers-count');
 const SENSITIVITY_KEY = 'kino.lookSensitivity';
 const pauseEls = {
   eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('start'), restart: $('pause-restart'),
@@ -288,7 +290,8 @@ pauseEls.quit.addEventListener('click', () => { quit(); });
 // just moves focus between whichever of them is on screen and clicks the focused one.
 const padVisible = el => !el.disabled && !el.closest('[hidden]') && el.getClientRects().length > 0;
 function padItems() {
-  if (!launcher.hidden) return buttons.filter(button => !button.disabled);
+  if (!launcher.hidden && !modPanel.hidden) return [...modPanel.querySelectorAll('input, button')];
+  if (!launcher.hidden) return [...buttons.filter(button => !button.disabled), modOpen];
   if (!loading.hidden) return [...loadEls.actions.querySelectorAll('button')];
   if (!pause.hidden) return [...pause.querySelectorAll('button, input[type="range"]')].filter(padVisible);
   return [];
@@ -615,3 +618,37 @@ if (requested) {
   if (entry) boot(entry);
   else showError(`There is no map called "${requested}". Choose one from the list.`);
 }
+
+modList.replaceChildren(...MODIFIERS.map(mod => {
+  const label = document.createElement('label'), input = document.createElement('input'), text = document.createElement('span');
+  const name = document.createElement('strong'), detail = document.createElement('em');
+  input.type = 'checkbox';
+  input.dataset.modifier = mod.id;
+  name.textContent = mod.label;
+  detail.textContent = mod.description;
+  text.append(name, detail);
+  label.append(input, text);
+  return label;
+}));
+function syncModifiers(active = activeModifiers()) {
+  for (const input of modList.querySelectorAll('input[data-modifier]')) input.checked = active.has(input.dataset.modifier);
+  modCount.textContent = active.size ? ` (${active.size})` : '';
+}
+function setModifiersOpen(open) {
+  modPanel.hidden = !open;
+  if (open) modList.querySelector('input')?.focus();
+  else modOpen.focus();
+}
+syncModifiers();
+onModifiersChange(syncModifiers);
+modOpen.addEventListener('click', () => setModifiersOpen(true));
+$('modifiers-close').addEventListener('click', () => setModifiersOpen(false));
+$('modifiers-clear').addEventListener('click', clearModifiers);
+modList.addEventListener('change', event => {
+  const input = event.target.closest('input[data-modifier]');
+  if (input) setModifier(input.dataset.modifier, input.checked);
+});
+modPanel.addEventListener('click', event => { if (event.target === modPanel) setModifiersOpen(false); });
+addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !modPanel.hidden) { event.preventDefault(); event.stopPropagation(); setModifiersOpen(false); }
+}, true);

@@ -1,8 +1,9 @@
+import { activeModifiers, hasModifier } from './modifiers.js';
 // Ported from the locally extracted T5 GSC and mp/zombiemode.csv.
 export function zombieHealth(round, rules = {}) {
   let health=rules.zombie_health_start??150;
   for(let i=2;i<=round;i++) health=i>=10?health+Math.trunc(health*(rules.zombie_health_increase_multiplier??.1)):Math.trunc(health+(rules.zombie_health_increase??100));
-  return health;
+  return hasModifier('tank_zombies')?health*3:health;
 }
 export function roundPopulation(round, rules = {}, players=1) {
   let multiplier=Math.max(1,round/5);
@@ -44,7 +45,10 @@ export function powerupVisible(age){
 }
 export class Session {
   constructor(data, random=Math.random) {this.data=data;this.random=random;this.reset();}
+  get perkLimit(){return this.mods.has('no_perk_limit')?Infinity:4;}
+  get quota(){return roundPopulation(this.round,this.data.rules);}
   reset() {
+    this.mods=activeModifiers();
     this.time=0;this.round=1;this.countdown=6;this.phase='preparing';this.health=100;
     this.points=this.data.rules.zombie_score_start_1p??500;this.kills=0;this.headshots=0;this.shots=0;this.hits=0;
     this.inventory=[makeWeapon(this.data.weapons.m1911_zm)];this.slot=0;this.reloadLeft=0;this.reloadStage=null;this.reloadSerial=0;this.reloadDuration=0;this.fireLeft=0;
@@ -53,18 +57,19 @@ export class Session {
     this.bowie=false;this.totalScore=this.points;this.drops=new PowerupDirector(this);this.drinking=null;this.drinkLeft=0;
     this.nextDogRound=5+Math.floor(this.random()*3);this.dogRound=false;this.dogRounds=0;this.total=roundPopulation(1,this.data.rules);
     this.teleporter='unlinked';this.teleportTime=0;this.lastEvent='Survive the night';this.doubleUntil=0;
+    if(this.mods.has('rich_start')){this.points+=50000;this.totalScore=this.points;this.drops=new PowerupDirector(this);}
   }
   get weapon(){return this.inventory[this.slot];}
   get def(){const d=this.data.weapons[this.weapon.id];return this.weapon.upgraded?{...d,...d.upgrade,upgraded:true,name:d.name+' • Pack-a-Punch'}:d;}
   get maxHealth(){return this.perks.has('specialty_armorvest')?250:100;}
-  addPoints(n){const value=n*(this.effects.double_points>this.time?2:1);this.points+=value;this.totalScore+=value;}
+  addPoints(n){const value=n*(this.effects.double_points>this.time?2:1)*(this.mods.has('double_points')?2:1);this.points+=value;this.totalScore+=value;}
   spend(n){if(this.points<n)return false;this.points-=n;return true;}
   damage(n){
     if(this.phase==='gameover'||this.phase==='reviving'||this.effects.invulnerable>this.time)return false;
-    this.health=Math.max(0,this.health-n);this.damageTime=this.time;
+    this.health=Math.max(0,this.health-(this.mods.has('glass_cannon')?this.maxHealth*4:n));this.damageTime=this.time;
     if(this.health<=0){
       this.drinking=null;this.drinkLeft=0;
-      if(this.perks.has('specialty_quickrevive')){this.perks.clear();this.phase='reviving';this.reviveLeft=4;this.revives++;this.lastEvent='Quick Revive';}
+      if(this.perks.has('specialty_quickrevive')){if(!this.mods.has('keep_perks'))this.perks.clear();this.phase='reviving';this.reviveLeft=4;this.revives++;this.lastEvent='Quick Revive';}
       else {this.phase='gameover';this.lastEvent='Game over';}
     } return true;
   }
@@ -72,6 +77,11 @@ export class Session {
     if(this.phase==='gameover')return;
     this.time+=dt;this.fireLeft=Math.max(0,this.fireLeft-dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     this.drops.observe(this);
+    if(this.mods.has('insta_kill'))this.effects.insta_kill=this.time+999;
+    if(this.mods.has('endless')&&this.phase==='fighting'&&this.area!=='earth'){
+      if(this.total<=this.spawned)this.total=this.spawned+1;
+      if(this.killed>=this.quota)this.nextRound();
+    }
     if(this.drinking){this.drinkLeft=Math.max(0,this.drinkLeft-dt);if(!this.drinkLeft){this.perks.add(this.drinking);this.drinking=null;this.health=this.maxHealth;}}
     let reloadDt=dt;
     while(this.reloadLeft>0&&reloadDt>=this.reloadLeft){reloadDt-=this.reloadLeft;this.finishReloadStage();}
@@ -82,7 +92,7 @@ export class Session {
   }
   fire(){
     if(this.phase==='gameover'||this.phase==='reviving'||this.drinking||this.meleeLeft>0||this.reloadLeft>0||this.fireLeft>0||this.weapon.mag===0)return false;
-    this.weapon.mag--;this.shots++;this.fireLeft=this.def.fireTime/(this.perks.has('specialty_rof')?1.33:1);return true;
+    if(!this.mods.has('infinite_ammo'))this.weapon.mag--;this.shots++;this.fireLeft=this.def.fireTime/(this.perks.has('specialty_rof')?1.33:1);return true;
   }
   reload(){
     if(this.phase==='gameover'||this.phase==='reviving'||this.drinking||this.meleeLeft>0||this.reloadLeft>0||this.weapon.reserve<=0||this.weapon.mag>=this.def.clipSize)return false;
@@ -121,10 +131,10 @@ export class Session {
     else this.addPoints(10);
   }
   nextRound(){
-    this.round++;this.dogRound=this.round===this.nextDogRound;
+    this.round++;this.dogRound=!this.mods.has('endless')&&this.round===this.nextDogRound;
     if(this.dogRound){this.nextDogRound=this.round+4+Math.floor(this.random()*2);this.dogRounds++;}
     this.total=this.dogRound?(this.dogRounds<3?6:8):roundPopulation(this.round,this.data.rules);
-    this.spawned=0;this.killed=0;this.phase='preparing';this.countdown=10;this.grenades=Math.min(4,this.grenades+2);
+    this.spawned=0;this.killed=0;this.phase='preparing';this.countdown=this.mods.has('endless')?.5:10;this.grenades=Math.min(4,this.grenades+2);
     this.lastEvent='Round survived';
   }
   powerup(type){

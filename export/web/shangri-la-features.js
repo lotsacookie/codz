@@ -116,7 +116,7 @@ export class ShangriFeatures {
       if (s.perks.has(t.perk)) return p.name + ' equipped';
       if (t.perk === 'specialty_quickrevive' && s.revives >= 3) return 'Quick Revive exhausted';
       if (!s.power && t.perk !== 'specialty_quickrevive') return p.name + ' · Requires power';
-      return p.name + ' · ' + p.price + (s.perks.size >= 4 ? ' · Four-perk limit' : '');
+      return p.name + ' · ' + p.price + (s.perks.size >= s.perkLimit ? ' · Four-perk limit' : '');
     }
     if (t.kind === 'wall') {
       const owned = s.inventory.find(w => w.id === t.weapon.id);
@@ -169,7 +169,7 @@ export class ShangriFeatures {
         this.combat.perkDrink.start(t.perk, this.combat.view);
         this.notice(MOON_PERKS[t.perk].name);
         a.play(t.perk);
-      } else this.notice(s.perks.size >= 4 ? 'You can carry four perks.' : 'Cannot purchase: check points, power, and owned perks.');
+      } else this.notice(s.perks.size >= s.perkLimit ? 'You can carry four perks.' : 'Cannot purchase: check points, power, and owned perks.');
     }
     if (t.kind === 'wall') ok = this.combat.buyWeapon(t.weapon.id);
     if (t.kind === 'box') {
