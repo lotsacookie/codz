@@ -145,7 +145,7 @@ export class ChalkHud {
     for (const g of this.groups) setFade(g, 1, { color: CHALK_DARK });
   }
 
-  // chalk_round_over(): turn white, flicker, then fade away until the next round.
+  // chalk_round_over(): turn white, flicker, then settle back to blood red and stay until the next round.
   async runRoundOver(countdown) {
     const token = ++this.token;
     let time = Math.max(BETWEEN_ROUND_TIME, countdown || 0);
@@ -160,7 +160,7 @@ export class ChalkHud {
       for (const g of visible) setFade(g, 0.5, { opacity: '1' });
       await sleep(0.5); if (token !== this.token) return;
     }
-    for (const g of visible) setFade(g, time * 0.25, { color: CHALK_DARK, opacity: '0' });
+    for (const g of visible) setFade(g, time * 0.25, { color: CHALK_DARK, opacity: '1' });
   }
 }
 
