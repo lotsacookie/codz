@@ -7,6 +7,7 @@ import { optimizeStaticScene } from '../scene-optimizer.js';
 import { MoonState, contains, environmentAt } from '../moon-rules.js';
 import { MoonNavigation } from '../moon-navigation.js';
 import { Combat } from '../combat.js';
+import { createPauseControl } from '../pause-control.js';
 import { MoonFeatures } from '../moon-features.js';
 import { MoonPresentation } from '../moon-presentation.js';
 import { loadMoonWater } from '../moon-water.js';
@@ -71,12 +72,13 @@ const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
   },
   onPause:()=>ctx.pause(),
 });
-function pause() { active = false; keys.clear(); mousePrimary=mouseSecondary=mouseAim=touchFirePending=false;touchControls.reset();touchControls.setEnabled(false);if (player) player.setEnabled(false); combat?.pause(); $('visor').hidden = true; $('hurt').style.opacity = 0; }
-function resume() {
-  if(!ready||combat.enabled&&combat.session.phase==='gameover')return;
-  touchControls.reset();touchControls.setEnabled(true);active=true;player.setEnabled(true);combat.resume();
-}
-function setActive(value){ if(value)resume(); else pause(); }
+const { pause, resume, setActive } = createPauseControl({
+  keys, touch: touchControls, player: () => player, combat: () => combat, ready: () => ready,
+  gameOver: () => combat.enabled && combat.session.phase === 'gameover',
+  setActive: value => { active = value; },
+  clearInput: () => { mousePrimary = mouseSecondary = mouseAim = touchFirePending = false; },
+  onPause: () => { $('visor').hidden = true; $('hurt').style.opacity = 0; },
+});
 function exploreMode(){mode='explore';combat.enabled=false;combat.enemies.reset();combat.pickups.reset();combat.clearTransient();syncWallGuns();camera.fov=78;camera.updateProjectionMatrix();setModeUi();}
 function setModeUi(){
   ctx.hud.combat(mode==='survival');

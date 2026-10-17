@@ -12,6 +12,7 @@ import { bindExploreGraphics } from '../explore-graphics.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
 import { createZombieTouch } from '../zombies-touch.js';
 import { Combat } from '../combat.js';
+import { createPauseControl } from '../pause-control.js';
 import { MOON_PERKS } from '../moon-session.js';
 import { ShangriSession } from '../shangri-la-session.js';
 import { ShangriEnemies } from '../shangri-la-enemies.js';
@@ -112,25 +113,13 @@ const touchControls = createZombieTouch({
   onPause: () => ctx.pause(),
 });
 
-function pause() {
-  active = false;
-  keys.clear();
-  mousePrimary = mouseSecondary = mouseAim = touchFirePending = false;
-  touchControls.reset();
-  touchControls.setEnabled(false);
-  player?.setEnabled(false);
-  combat?.pause();
-  $('hurt').style.opacity = 0;
-}
-function resume() {
-  if (!ready || combat.session.phase === 'gameover') return;
-  touchControls.reset();
-  touchControls.setEnabled(true);
-  active = true;
-  player.setEnabled(true);
-  combat.resume();
-}
-function setActive(value) { if (value) resume(); else pause(); }
+const { pause, resume, setActive } = createPauseControl({
+  keys, touch: touchControls, player: () => player, combat: () => combat, ready: () => ready,
+  gameOver: () => combat.session.phase === 'gameover',
+  setActive: value => { active = value; },
+  clearInput: () => { mousePrimary = mouseSecondary = mouseAim = touchFirePending = false; },
+  onPause: () => { $('hurt').style.opacity = 0; },
+});
 
 function endRun() {
   const s = combat.session;
