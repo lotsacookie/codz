@@ -3,6 +3,8 @@ import { Enemies } from './enemies.js';
 
 const SPAWN_DELAY_FLOOR = .08;
 const LIFT = new THREE.Vector3(0, 30, 0);
+const FALLBACK_BUDGET_MS = 2;
+const TRAIL_CANDIDATES = 16;
 
 // Survival enemies use Kino's proven flow (Enemies base: barricade spawns, per-round population, auto round advance)
 // with the spawn decision made from a preflight instead of at the moment the round starts:
@@ -21,16 +23,26 @@ export class ShangriEnemies extends Enemies {
     this.starve = 0;
     this.seenSpawned = 0;
     this.trail = null;
+    this.spent = 0;
     this.fallbackPath = (z, goal) => this.fallbackRoute(z, goal);
   }
 
   arrives(route, goal) { return route?.length > 1 && route.at(-1).distanceTo(goal) < 90; }
 
   fallbackRoute(z, goal) {
+    if (this.spent > FALLBACK_BUDGET_MS) { z.repath = .08 + (z.id % 5) * .03; return []; }
+    const began = performance.now();
+    const route = this.findFallback(z, goal);
+    this.spent += performance.now() - began;
+    if (!route.length) z.repath = 1 + (z.id % 5) * .1;
+    return route;
+  }
+
+  findFallback(z, goal) {
     const from = z.root.position, nav = this.world.navigation;
     const auto = nav?.autoPath?.(from, goal);
     if (this.arrives(auto, goal)) return auto;
-    const crumbs = this.trail?.route(from, goal, (a, b) => this.world.lineClear(a, b));
+    const crumbs = this.trail?.route(from, goal, (a, b) => this.world.lineClear(a, b), TRAIL_CANDIDATES);
     if (crumbs?.length) return crumbs;
     if (this.world.lineClear(from.clone().add(LIFT), goal.clone().add(LIFT))) return [goal.clone()];
     return [];
@@ -74,6 +86,7 @@ export class ShangriEnemies extends Enemies {
 
   update(dt, player) {
     const s = this.session;
+    this.spent = 0;
     if (s.spawned !== this.seenSpawned) { this.seenSpawned = s.spawned; this.starve = 0; }
     if (s.phase === 'fighting' && s.spawned < s.total && this.list.length < 24) {
       this.starve += dt;

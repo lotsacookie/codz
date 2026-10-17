@@ -3,6 +3,9 @@ import { init, importNavMesh, NavMeshQuery } from '@recast-navigation/core';
 import { AutoPaths } from './auto-paths.js';
 
 const REACH = 90; // a route "arrives" when it ends this close to the goal
+const MAP_RETRY_MS = 20000;
+const BACKGROUND_SLICE_MS = 2.5;
+const LOADING_SLICE_MS = 12;
 
 // Survival navigation = the baked Recast mesh plus an automatically mapped wall-safe graph.
 //
@@ -20,6 +23,7 @@ export class SurvivalNavigation {
     this.reachableIds = null;   // barrier ids that can reach the player's spawn right now; null until prepare() ran
     this.health = null;
     this.version = 0;
+    this.lastMapAt = -Infinity;
   }
 
   async load() {
@@ -71,8 +75,8 @@ export class SurvivalNavigation {
 
   // Start mapping in the background the first time something needs it.
   requestMap() {
-    if (!this.world || this.mapping || this.auto?.built) return;
-    this.mapping = this.prepare({ force: true }).finally(() => { this.mapping = null; });
+    if (!this.world || this.mapping || this.auto?.built || performance.now() - this.lastMapAt < MAP_RETRY_MS) return;
+    this.mapping = this.prepare({ force: true, background: true }).finally(() => { this.mapping = null; });
   }
 
   stepClear(a, b) { return this.probe ? this.probe.stepClear(a, b) : true; }
@@ -100,8 +104,8 @@ export class SurvivalNavigation {
   }
 
   // Map and verify before the first round. Returns a report; never throws.
-  async prepare({ onStatus = () => {}, force = false } = {}) {
-    try { return await this.evaluate({ onStatus, force }); } catch (error) {
+  async prepare({ onStatus = () => {}, force = false, background = false } = {}) {
+    try { return await this.evaluate({ onStatus, force, background }); } catch (error) {
       console.error('[navigation] preflight failed', error);
       this.health = { ...(this.health ?? {}), error: String(error?.message ?? error) };
       this.reachableIds ??= new Set(this.barriers.map(b => b.id));
@@ -109,23 +113,21 @@ export class SurvivalNavigation {
     }
   }
 
-  async evaluate({ onStatus = () => {}, force = false } = {}) {
+  async evaluate({ onStatus = () => {}, force = false, background = false } = {}) {
     const began = performance.now();
     const start = this.bakedStart() ?? this.start;
-    const baked = id => this.arrives(this.path(this.barriers.find(b => b.id === id).inside, start), start);
+    const bakedResult = new Map();
+    const baked = id => {
+      if (!bakedResult.has(id)) bakedResult.set(id, this.arrives(this.path(this.barriers.find(b => b.id === id).inside, start), start));
+      return bakedResult.get(id);
+    };
     const total = this.barriers.length;
     const bakedOk = this.barriers.filter(b => baked(b.id));
-    // Barriers behind a closed door are legitimately unreachable, so only a mostly-disconnected or missing mesh
-    // triggers mapping up front. Once the graph exists it is re-mapped whenever a door opens, and any zombie whose
-    // baked route fails asks for it on demand (autoPath).
-    const needsMap = force || !this.baked || !this.bakedStart() || bakedOk.length < total * .75 || !!this.auto?.built;
-    let autoStats = this.auto?.stats ?? null;
-    if (needsMap) {
-      onStatus('Mapping walkable paths…');
-      const next = new AutoPaths(this.world);
-      autoStats = await next.build(this.start, { onProgress: p => onStatus(`Mapping walkable paths… ${p.nodes} points`) });
-      this.auto = next;
-    }
+    onStatus('Mapping walkable paths…');
+    const next = new AutoPaths(this.world);
+    const autoStats = await next.build(this.start, { background, sliceMs: background ? BACKGROUND_SLICE_MS : LOADING_SLICE_MS, onProgress: p => onStatus(`Mapping walkable paths… ${p.nodes} points`) });
+    this.auto = next;
+    this.lastMapAt = performance.now();
     const reachable = new Set();
     for (const b of this.barriers) {
       if (baked(b.id) || (this.auto?.built && this.arrives(this.auto.path(b.inside, this.start), this.start))) reachable.add(b.id);
@@ -146,6 +148,9 @@ export class SurvivalNavigation {
   bakedStart() { return this.baked ? this.closest(this.start, { x: 120, y: 120, z: 120 }) : null; }
 
   setBlockers(boxes) {
+    const signature = boxes.map(b => [b.min.x, b.min.y, b.min.z, b.max.x, b.max.y, b.max.z].map(Math.round).join(',')).join('|');
+    const changed = signature !== this.blockerSignature;
+    this.blockerSignature = signature;
     if (this.baked) {
       try {
         for (const ref of this.disabled) this.navMesh.setPolyFlags(ref, 1);
@@ -160,7 +165,7 @@ export class SurvivalNavigation {
         for (const ref of this.disabled) this.navMesh.setPolyFlags(ref, 0);
       } catch (error) { console.warn('[navigation] could not update door blockers', error); }
     }
-    this.queueRefresh();
+    if (changed) this.queueRefresh();
   }
 
   // A door opened (or the run restarted): areas appear or vanish, so verify and re-map in the background.
@@ -169,7 +174,7 @@ export class SurvivalNavigation {
     this.dirty = true;
     if (this.refreshing) return;
     this.refreshing = (async () => {
-      while (this.dirty) { this.dirty = false; await this.prepare({}); }
+      while (this.dirty) { this.dirty = false; await this.prepare({ background: true }); }
     })().finally(() => { this.refreshing = null; });
   }
 

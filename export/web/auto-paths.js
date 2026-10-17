@@ -10,12 +10,17 @@ import * as THREE from 'three';
 // of those edges can not pass through them. Rays go through `world.raycast`, which includes runtime door colliders.
 const NEIGHBOURS = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
 const yieldTask = () => new Promise(resolve => setTimeout(resolve, 0));
+const nextFrame = () => new Promise(resolve => {
+  if (typeof requestAnimationFrame === 'function' && typeof document !== 'undefined' && !document.hidden) requestAnimationFrame(() => resolve());
+  else setTimeout(resolve, 0);
+});
 const _origin = new THREE.Vector3(), _dir = new THREE.Vector3(), _side = new THREE.Vector3(), _normal = new THREE.Vector3();
+const _ray = new THREE.Ray();
 
 export class AutoPaths {
   constructor(world, options = {}) {
     this.world = world;
-    this.opt = { cell: 88, maxNodes: 9000, stepUp: 20, drop: 64, knee: 22, chest: 42, radius: 12, minNormalY: .55, headroom: 56, budgetMs: 3500, ...options };
+    this.opt = { cell: 88, maxNodes: 9000, stepUp: 20, drop: 64, knee: 22, chest: 42, radius: 12, minNormalY: .55, headroom: 56, budgetMs: 3500, fields: 4, straight: .98, ...options };
     this.reset();
   }
 
@@ -24,12 +29,15 @@ export class AutoPaths {
     this.adj = [];         // neighbour indices per node
     this.grid = new Map(); // "ix,iz" -> node indices (several floors can share a column)
     this.built = false;
-    this.stats = { nodes: 0, edges: 0, ms: 0, truncated: false };
+    this.fields = [];
+    this.stats = { nodes: 0, edges: 0, ms: 0, workMs: 0, truncated: false };
   }
 
   hit(origin, direction, far) {
     if (far <= 0) return false;
-    return this.world.raycast(new THREE.Ray(origin.clone(), direction.clone()), 0, far);
+    _ray.origin.copy(origin);
+    _ray.direction.copy(direction);
+    return this.world.raycast(_ray, 0, far);
   }
 
   // Floor below (x, y, z), or null if there is none within climb/drop range, it is too steep, or there is no headroom.
@@ -81,13 +89,22 @@ export class AutoPaths {
     return true;
   }
 
-  async build(start, { budgetMs = this.opt.budgetMs, onProgress, sliceMs = 8 } = {}) {
+  async build(start, { budgetMs = this.opt.budgetMs, onProgress, sliceMs = 8, background = false } = {}) {
     const began = performance.now(), { cell, maxNodes } = this.opt;
+    const pause = background ? nextFrame : yieldTask;
     this.reset();
     const origin = new THREE.Vector3(start.x, start.y, start.z);
     const first = this.ground(origin.x, origin.y + 8, origin.z) ?? origin.clone();
     const key = (ix, iz) => ix + ',' + iz;
     const cellOf = v => [Math.round((v.x - origin.x) / cell), Math.round((v.z - origin.z) / cell)];
+    const floors = new Map();
+    const floorAt = (ix, iz, x, y, z) => {
+      const k = ix + ',' + iz + ',' + Math.round(y * 4);
+      if (floors.has(k)) return floors.get(k);
+      const floor = this.ground(x, y, z);
+      floors.set(k, floor);
+      return floor;
+    };
     const add = point => {
       const [ix, iz] = cellOf(point), index = this.nodes.length;
       this.nodes.push(point); this.adj.push([]);
@@ -96,30 +113,31 @@ export class AutoPaths {
       return index;
     };
     const queue = [add(first)];
-    let sliceStart = performance.now(), edges = 0;
+    let sliceStart = performance.now(), worked = 0, edges = 0;
     for (let head = 0; head < queue.length; head++) {
-      if (this.nodes.length >= maxNodes || performance.now() - began > budgetMs) { this.stats.truncated = true; break; }
+      if (this.nodes.length >= maxNodes || worked + performance.now() - sliceStart > budgetMs) { this.stats.truncated = true; break; }
       const from = queue[head], a = this.nodes[from], [ix, iz] = cellOf(a);
       for (const [ox, oz] of NEIGHBOURS) {
         const x = origin.x + (ix + ox) * cell, z = origin.z + (iz + oz) * cell;
-        const floor = this.ground(x, a.y, z);
+        const floor = floorAt(ix + ox, iz + oz, x, a.y, z);
         if (!floor) continue;
-        // Join an existing node of this column at the same floor height rather than creating a duplicate.
         const column = this.grid.get(key(ix + ox, iz + oz)) ?? [];
         let to = column.find(i => Math.abs(this.nodes[i].y - floor.y) < this.opt.stepUp);
         if (to === undefined) {
           if (!this.walkable(a, floor)) continue;
-          to = add(floor); queue.push(to);
+          to = add(floor.clone()); queue.push(to);
         } else if (this.adj[from].includes(to) || !this.walkable(a, this.nodes[to])) continue;
         this.adj[from].push(to); this.adj[to].push(from); edges++;
       }
       if (performance.now() - sliceStart > sliceMs) {
+        worked += performance.now() - sliceStart;
         onProgress?.({ nodes: this.nodes.length, queued: queue.length - head });
-        await yieldTask(); sliceStart = performance.now();
+        await pause(); sliceStart = performance.now();
       }
     }
+    worked += performance.now() - sliceStart;
     this.built = this.nodes.length > 1;
-    this.stats = { nodes: this.nodes.length, edges, ms: Math.round(performance.now() - began), truncated: this.stats.truncated };
+    this.stats = { nodes: this.nodes.length, edges, ms: Math.round(performance.now() - began), workMs: Math.round(worked), truncated: this.stats.truncated };
     return this.stats;
   }
 
@@ -143,30 +161,67 @@ export class AutoPaths {
 
   contains(point, maxDistance = 150) { return this.nearest(point, maxDistance) >= 0; }
 
-  route(from, to) {
-    const n = this.nodes.length, cost = new Float32Array(n).fill(Infinity), prev = new Int32Array(n).fill(-1), done = new Uint8Array(n);
-    const heap = [[0, from]];
-    cost[from] = 0;
-    const push = item => { heap.push(item); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } };
-    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === i) break; [heap[m], heap[i]] = [heap[i], heap[m]]; i = m; } } return top; };
-    const goal = this.nodes[to];
-    while (heap.length) {
-      const [, u] = pop();
-      if (done[u]) continue;
-      done[u] = 1;
-      if (u === to) break;
+  field(goal) {
+    const hit = this.fields.findIndex(f => f.goal === goal);
+    if (hit >= 0) {
+      const [f] = this.fields.splice(hit, 1);
+      this.fields.unshift(f);
+      return f;
+    }
+    const n = this.nodes.length;
+    const f = this.fields.length >= this.opt.fields ? this.fields.pop() : { dist: new Float32Array(n), next: new Int32Array(n) };
+    f.goal = goal;
+    f.dist.fill(Infinity);
+    f.next.fill(-1);
+    const keys = [], items = [];
+    const push = (k, v) => {
+      let i = keys.length;
+      keys.push(k); items.push(v);
+      while (i > 0) {
+        const p = (i - 1) >> 1;
+        if (keys[p] <= k) break;
+        keys[i] = keys[p]; items[i] = items[p]; i = p;
+      }
+      keys[i] = k; items[i] = v;
+    };
+    const pop = () => {
+      const top = items[0], lastKey = keys.pop(), lastItem = items.pop();
+      const size = keys.length;
+      if (size) {
+        let i = 0;
+        for (;;) {
+          const l = 2 * i + 1;
+          if (l >= size) break;
+          const r = l + 1, m = r < size && keys[r] < keys[l] ? r : l;
+          if (keys[m] >= lastKey) break;
+          keys[i] = keys[m]; items[i] = items[m]; i = m;
+        }
+        keys[i] = lastKey; items[i] = lastItem;
+      }
+      return top;
+    };
+    f.dist[goal] = 0;
+    push(0, goal);
+    while (keys.length) {
+      const u = pop(), du = f.dist[u], pu = this.nodes[u];
       for (const v of this.adj[u]) {
-        const c = cost[u] + this.nodes[u].distanceTo(this.nodes[v]);
-        if (c < cost[v]) { cost[v] = c; prev[v] = u; push([c + this.nodes[v].distanceTo(goal), v]); }
+        const c = du + pu.distanceTo(this.nodes[v]);
+        if (c < f.dist[v]) { f.dist[v] = c; f.next[v] = u; push(c, v); }
       }
     }
-    if (!done[to]) return [];
-    const out = [];
-    for (let at = to; at !== -1; at = prev[at]) out.push(at);
-    return out.reverse();
+    this.fields.unshift(f);
+    return f;
   }
 
-  // Wall-safe path from `from` to `to` as Vector3 points, or [] when the mapped area does not connect them.
+  route(from, to) {
+    if (from === to) return [from];
+    const f = this.field(to);
+    if (f.dist[from] === Infinity) return [];
+    const out = [];
+    for (let at = from; at !== -1; at = f.next[at]) out.push(at);
+    return out;
+  }
+
   path(from, to) {
     if (!this.built) return [];
     const a = this.nearest(from), b = this.nearest(to);
@@ -175,13 +230,16 @@ export class AutoPaths {
     if (!ids.length) return [];
     const points = [from.clone(), ...ids.map(i => this.nodes[i].clone())];
     if (to.distanceTo(points.at(-1)) > 1) points.push(to.clone());
-    // Pull the string: skip nodes while a straight, checked line still gets there.
     const out = [points[0]];
-    for (let at = 0; at < points.length - 1;) {
-      let next = at + 1;
-      for (let probe = Math.min(points.length - 1, at + 6); probe > at + 1; probe--) if (this.walkable(points[at], points[probe])) { next = probe; break; }
-      out.push(points[next]); at = next;
+    const before = new THREE.Vector3(), after = new THREE.Vector3();
+    for (let i = 1; i < points.length - 1; i++) {
+      before.subVectors(points[i], out.at(-1)).setY(0);
+      after.subVectors(points[i + 1], points[i]).setY(0);
+      const lengths = before.length() * after.length();
+      if (i > 1 && lengths > 1e-6 && before.dot(after) / lengths > this.opt.straight && Math.abs(points[i].y - out.at(-1).y) < this.opt.stepUp) continue;
+      out.push(points[i]);
     }
+    out.push(points.at(-1));
     return out;
   }
 }

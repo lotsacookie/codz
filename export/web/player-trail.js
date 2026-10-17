@@ -26,7 +26,14 @@ export class PlayerTrail {
   // Path from `from` to `goal` along the trail, or [] when no crumb is in line of sight (never walk through walls).
   route(from, goal, clear, candidates = 40) {
     if (!this.points.length) return [];
-    const near = this.points.map((p, i) => ({ i, d: p.distanceToSquared(from) })).sort((a, b) => a.d - b.d).slice(0, candidates);
+    const near = [];
+    for (let i = 0; i < this.points.length; i++) {
+      const d = this.points[i].distanceToSquared(from);
+      if (near.length === candidates && d >= near[candidates - 1].d) continue;
+      let at = near.length < candidates ? near.length : candidates - 1;
+      while (at > 0 && near[at - 1].d > d) { near[at] = near[at - 1]; at--; }
+      near[at] = { i, d };
+    }
     const start = from.clone().add(EYE);
     let best = -1;
     for (const c of near) if (c.i > best && clear(start, this.points[c.i].clone().add(EYE))) best = c.i;
