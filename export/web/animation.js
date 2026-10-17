@@ -24,18 +24,33 @@ export function makeClip(root, data, locomotion=false, options={}){
       if(b.rot)tracks.push(new THREE.QuaternionKeyframeTrack(node.uuid+'.quaternion',b.rot.frames.map(f=>f/data.fps),b.rot.values));
       if(b.pos){
         const values=b.pos.values.slice();
-        // The M1911 slide is keyed along the gun's own axis, but its exported parent bone can sit in a
-        // rotated frame, which sent the slide downward instead of back. Re-express the keyed offsets in
-        // the parent's frame so the slide travels along the same axis the animation was authored on.
+        // M1911 slide: measure where the slide really travels once the keyed offset is applied, and if that
+        // is not toward the player (it dropped downward instead of back) steer the keyed offsets so it is.
         if(options.boltFrame&&b.name==='j_bolt'&&node.parent){
-          const anchor=root.getObjectByName('j_gun');
-          if(anchor){
+          const log={};
+          try{
             root.updateWorldMatrix(true,true);
-            const fix=node.parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(anchor.getWorldQuaternion(new THREE.Quaternion()));
-            const angle=fix.angleTo(new THREE.Quaternion());
-            console.info('[viewmodel] j_bolt parent frame offset',(angle*180/Math.PI).toFixed(1)+'deg');
-            if(angle>.05){const v=new THREE.Vector3();for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyQuaternion(fix);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}}
-          }
+            const skinned=[];root.traverse(o=>{if(o.isSkinnedMesh&&o.skeleton.bones.includes(node))skinned.push(o.name||'(unnamed)');});
+            log.parent=node.parent.name;log.sameNameNodes=nodes.get('j_bolt').length;log.skinnedMeshesUsingBolt=skinned;
+            let at=0,best=0;const base=new THREE.Vector3(values[0],values[1],values[2]),d=new THREE.Vector3();
+            for(let i=3;i<values.length;i+=3){const l=d.set(values[i],values[i+1],values[i+2]).sub(base).length();if(l>best){best=l;at=i;}}
+            if(best>1e-3){
+              const delta=new THREE.Vector3(values[at],values[at+1],values[at+2]).sub(base);
+              const saved=node.position.clone(),from=node.getWorldPosition(new THREE.Vector3());
+              node.position.add(delta);node.updateWorldMatrix(true,false);
+              const moved=node.getWorldPosition(new THREE.Vector3()).sub(from);node.position.copy(saved);node.updateWorldMatrix(true,false);
+              const back=new THREE.Vector3(0,0,1);// the viewmodel scene looks down -z, so back is toward the camera
+              const dot=moved.clone().normalize().dot(back);
+              log.travelDotBack=+dot.toFixed(2);
+              if(moved.length()>1e-6&&dot<.5){
+                const parentQ=node.parent.getWorldQuaternion(new THREE.Quaternion()),want=back.clone().applyQuaternion(parentQ.clone().invert());
+                const fix=new THREE.Quaternion().setFromUnitVectors(delta.clone().normalize(),want);
+                const v=new THREE.Vector3();for(let i=0;i<values.length;i+=3){v.set(values[i],values[i+1],values[i+2]).applyQuaternion(fix);values[i]=v.x;values[i+1]=v.y;values[i+2]=v.z;}
+                log.corrected=true;
+              }
+            }
+          }catch(error){log.error=String(error);}
+          if(!options.boltLogged){options.boltLogged=true;console.info('[viewmodel] M1911 j_bolt',JSON.stringify(log));}
         }
         // T5 locomotion stores j_mainroot translations as displacement from
         // the bind pelvis, unlike the absolute viewmodel pose tracks.
@@ -119,7 +134,7 @@ export class ViewWeapon {
     for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);this.hiddenTags.push(name);}}
     this.root.matrixAutoUpdate=false;this.root.matrix.copy(cameraBasis);this.pivot.add(this.root);
     this.rig=new Rig(this.root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
-    this.rig.options={boltFrame:def.id==='m1911_zm'};
+    this.rig.options={boltFrame:def.id==='m1911_zm',boltLogged:false};
     for(const [key,clip] of [...entries,...meleeEntries])this.rig.add(key,clip);
     // ADS is a separate native animation of tag_torso. Its first frame also
     // defines each gun's HIP pose; the arms' bind torso is only right for M1911.
