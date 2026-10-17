@@ -6,6 +6,10 @@ const LIFT = new THREE.Vector3(0, 30, 0);
 const FALLBACK_BUDGET_MS = 2;
 const TRAIL_CANDIDATES = 16;
 const HITCH_MS = 40;
+const STALL_CHECK_S = 1.5;
+const STALL_MOVE = 12;
+const STALL_NEAR = 100;
+const STALL_LIMIT = 4;
 
 // Survival enemies use Kino's proven flow (Enemies base: barricade spawns, per-round population, auto round advance)
 // with the spawn decision made from a preflight instead of at the moment the round starts:
@@ -26,6 +30,7 @@ export class ShangriEnemies extends Enemies {
     this.trail = null;
     this.spent = 0;
     this.lastHitchLog = -Infinity;
+    this.lastStallLog = -Infinity;
     this.fallbackPath = (z, goal) => this.fallbackRoute(z, goal);
   }
 
@@ -96,6 +101,34 @@ export class ShangriEnemies extends Enemies {
     }
   }
 
+  watchStalls(dt, player) {
+    for (const z of [...this.list]) {
+      if (z.state !== 'chase') { z.watch = null; continue; }
+      const p = z.root.position;
+      z.watch ??= { at: 0, from: p.clone() };
+      z.watch.at += dt;
+      if (z.watch.at < STALL_CHECK_S) continue;
+      const moved = z.watch.from.distanceTo(p);
+      z.watch.at = 0;
+      z.watch.from.copy(p);
+      if (moved >= STALL_MOVE || p.distanceTo(player) < STALL_NEAR) { z.stalls = 0; z.forceFallback = false; continue; }
+      z.stalls = (z.stalls ?? 0) + 1;
+      z.heading = null;
+      z.path = [];
+      z.repath = 0;
+      z.forceFallback = true;
+      const now = performance.now();
+      if (now - this.lastStallLog > 1000) {
+        this.lastStallLog = now;
+        console.warn('[nav] zombie stalled', JSON.stringify({ id: z.id, stalls: z.stalls, at: p.toArray().map(Math.round), toPlayer: Math.round(p.distanceTo(player)), mapped: this.world.navigation?.auto?.nodes?.length ?? 0 }));
+      }
+      if (z.stalls >= STALL_LIMIT) {
+        this.remove(z);
+        this.session.spawned = Math.max(0, this.session.spawned - 1);
+      }
+    }
+  }
+
   step(dt, player) {
     const s = this.session;
     this.spent = 0;
@@ -107,6 +140,7 @@ export class ShangriEnemies extends Enemies {
     this.spawnStep(dt, player);
     if (s.dogRound && s.phase === 'fighting' && s.spawned >= s.total && !this.list.length) this.onDrop?.('full_ammo', this.lastDogDeath ?? player);
     super.update(dt, player);
+    this.watchStalls(dt, player);
   }
 
   reset() {

@@ -108,7 +108,7 @@ export class Enemies {
       if(z.repath<=0){
         z.path=this.world.path(z.root.position,goal);z.pathIndex=1;z.repath=.55+(z.id%5)*.07;z.trail=false;
         // Navmesh could not connect us to the goal: optionally follow the player's breadcrumb trail instead.
-        if(this.fallbackPath&&(z.path.length<2||z.path.at(-1).distanceTo(goal)>90)){const alt=this.fallbackPath(z,goal);if(alt?.length){z.path=alt;z.pathIndex=0;z.trail=true;}}
+        if(this.fallbackPath&&(z.forceFallback||z.path.length<2||z.path.at(-1).distanceTo(goal)>90)){const alt=this.fallbackPath(z,goal);if(alt?.length){z.path=alt;z.pathIndex=0;z.trail=true;}}
       }
       const target=z.path[z.pathIndex];
       if(target){
@@ -121,7 +121,7 @@ export class Enemies {
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
           if(!Number.isFinite(next.x+next.y+next.z)){z.heading=null;z.path=[];z.repath=0;continue;}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
-          if(z.trail){if(!this.world.stepClear||this.world.stepClear(z.root.position,next))z.root.position.copy(next);else{z.path=[];z.repath=0;}}else if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
+          if(z.trail){const here=z.root.position;if(!this.world.stepClear||this.world.stepClear(here,next))here.copy(next);else{const sx=new THREE.Vector3(next.x,next.y,here.z),sz=new THREE.Vector3(here.x,next.y,next.z);if(this.world.stepClear(here,sx))here.copy(sx);else if(this.world.stepClear(here,sz))here.copy(sz);else{z.repath=Math.min(z.repath,.25);z.heading=null;}}}else if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
         }
       }
