@@ -27,7 +27,7 @@ export function rollGait(round, rules = {}, random = Math.random) {
 }
 
 export class Enemies {
-  constructor(scene,world,data,session,{damage,kill,hit,sound}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};}
+  constructor(scene,world,data,session,{damage,kill,hit,sound,voice}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};}
   async load(){
     const chars=this.data.characters;
     this.templates=await Promise.all(['c_ger_honorguard_body1','c_ger_honorguard_body2'].map(k=>loadModel(chars[k])));
@@ -62,7 +62,7 @@ export class Enemies {
     if(this.anims[death])rig.add('death',this.anims[death],true);
     rig.play('walk');rig.update(.01);
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
-    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7};
+    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7,voice:null,voiceGap:Math.random()*1.5};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
@@ -83,6 +83,7 @@ export class Enemies {
     for(const z of [...this.list]){
       z.rig.update(dt);z.growl-=dt;
       if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
+      if(z.kind==='zombie'&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
       // Zombies from a distant spawn point walk to the window before tearing its boards.
       if(z.state==='approach'){
         z.approachTime+=dt;
@@ -149,6 +150,14 @@ export class Enemies {
     for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);this.dead.splice(this.dead.indexOf(d),1);}}
     if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
   }
+  speak(z,dt){
+    if(z.voice&&!z.voice.ended)return;
+    if(z.voice){z.voice=null;z.voiceGap=.5+Math.random()*1.8;}
+    z.voiceGap-=dt;if(z.voiceGap>0)return;
+    z.voice=this.onVoice?.(z,(z.baseSpeed??z.speed)>=80?'sprint':'walk')??null;
+    if(!z.voice)z.voiceGap=1.2;
+  }
+  silence(z){z.voice?.stop();z.voice=null;}
   spawnPointOf(b){
     const list=b.spawnPoints?.length?b.spawnPoints:(b.spawnPoint?[b.spawnPoint]:[]);if(!list.length)return null;
     const nav=this.world.navigation;let usable=list;
@@ -179,14 +188,14 @@ export class Enemies {
     z.lastPosition.copy(z.root.position);
     return true;
   }
-  remove(z){z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);this.list.splice(this.list.indexOf(z),1);}
+  remove(z){this.silence(z);z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);this.list.splice(this.list.indexOf(z),1);}
   hurt(z,damage,head=false,melee=false,cause='bullet',score=true){
     if(!this.list.includes(z))return;
     z.health-=this.session.effects.insta_kill>this.session.time?Math.max(damage,z.health):damage;
     this.onHit?.(z,head);
     if(z.health<=0){
       if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();
-      if(score)this.session.scoreHit(true,head,melee);else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.onKill?.(z);
+      if(score)this.session.scoreHit(true,head,melee);else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.onKill?.(z);
       if(this.dead.length>12){const old=this.dead.shift();old.root.removeFromParent();old.rig.mixer.uncacheRoot(old.root);disposeSkeletons(old.root);}
     }else if(score)this.session.scoreHit(false);
   }
@@ -202,7 +211,7 @@ export class Enemies {
     }return best;
   }
   headPosition(z){z.root.updateMatrixWorld(true);const bone=z.root.getObjectByName('j_head');return bone?bone.getWorldPosition(new THREE.Vector3()):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?63:28,0));}
-  nuke(onDeath){for(const z of [...this.list]){this.list.splice(this.list.indexOf(z),1);this.session.kills++;this.session.killed++;if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();z.state='dead';z.gasDeath=false;z.life=3;z.rig.play('death',false);this.dead.push(z);onDeath(z);this.onKill?.(z);}}
-  reset(){for(const z of [...this.list,...this.dead]){z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);}this.list=[];this.dead=[];this.nextSpawn=0;this.lastDogDeath=null;}
+  nuke(onDeath){for(const z of [...this.list]){this.list.splice(this.list.indexOf(z),1);this.session.kills++;this.session.killed++;if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();this.silence(z);z.state='dead';z.gasDeath=false;z.life=3;z.rig.play('death',false);this.dead.push(z);onDeath(z);this.onKill?.(z);}}
+  reset(){for(const z of [...this.list,...this.dead]){this.silence(z);z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);}this.list=[];this.dead=[];this.nextSpawn=0;this.lastDogDeath=null;}
   snapshot(){return this.list.map(z=>({id:z.id,kind:z.kind,health:z.health,state:z.state,position:z.root.position.toArray(),pathLength:z.path.length,animation:z.rig.current}));}
 }

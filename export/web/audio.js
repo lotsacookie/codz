@@ -4,13 +4,15 @@ const shotFolders={m1911:'pistol/m1911',m14:'assault/m14',rottweil72:'shotgun/ro
   galil:'assault/galil',commando:'assault/commando',hk21:'lmg/hk21',rpk:'lmg/rpk',python:'pistol/357',spas:'shotgun/spas',
   cz75:'pistol/cz75',cz75dw:'pistol/cz75',g11_lps:'smg/g11',famas:'assault/famas',spectre:'smg/spectre',hs10:'shotgun/hs10',aug_acog:'assault/aug',fnfal:'assault/fnfal',dragunov:'sniper/dragunov',l96a1:'sniper/l96a1',china_lake:'gren_launcher/china_lake',crossbow_explosive:'crossbow',knife_ballistic:'melee/ballistic_knife'};
 const SPATIAL={near:140,rolloff:1.6,far:6000};
+const ZOMBIE_VOICES={walk:['w1','w2','w3'],sprint:['s1','s2']};
+const VOICE_RANGE=1600,VOICE_LIMIT=14;
 export class GameAudio {
-  constructor(){this.camera=null;this.spatial=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();}
-  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();}
+  constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();}
+  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();for(const names of Object.values(ZOMBIE_VOICES))for(const name of names)this.manifest['zombies/'+name]??={url:'audio/zombies/'+name+'.ogg'};}
   get enabled(){return this._enabled;}
   set enabled(v){this._enabled=v;if(this.master)this.master.gain.value=v?.42:0;}
   start(){if(!this.ctx){const Context=globalThis.AudioContext??globalThis.webkitAudioContext;if(!Context){this.enabled=false;return;}this.ctx=new Context();this.master=this.ctx.createGain();this.master.gain.value=this.enabled?.42:0;this.master.connect(this.ctx.destination);
-    if(this.preload)for(const key of Object.keys(this.manifest))if(key.startsWith('resident/evt/zombie_global/')||['buy','nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music'].includes(key)||key.startsWith('specialty_'))this.buffer(key).catch(console.error);
+    if(this.preload)for(const key of Object.keys(this.manifest))if(key.startsWith('resident/evt/zombie_global/')||key.startsWith('zombies/')||['buy','nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music'].includes(key)||key.startsWith('specialty_'))this.buffer(key).catch(console.error);
   }this.ctx.resume();if(!this.music)this.playMusic('ambience');}
   select(prefix){
     if(!this.variants.has(prefix))this.variants.set(prefix,Object.keys(this.manifest).filter(k=>k.startsWith(prefix)));
@@ -56,7 +58,7 @@ export class GameAudio {
     if(on&&this.ctx)this.native('fire_sale_music',.35,true).then(source=>{if(token!==this.saleToken)source.stop();else this.saleMusic=source;}).catch(console.error);
   }
   pause(){this.ctx?.suspend();}
-  dispose(){this.musicToken++;try{this.music?.stop();}catch{}this.music=null;try{this.saleMusic?.stop();}catch{}this.saleMusic=null;this.buffers.clear();this.bufferSizes.clear();this.bufferBytes=0;this.variants.clear();const ctx=this.ctx;this.ctx=null;this.master=null;ctx?.close?.().catch(()=>{});}
+  dispose(){this.voices.clear();this.tracked.clear();this.musicToken++;try{this.music?.stop();}catch{}this.music=null;try{this.saleMusic?.stop();}catch{}this.saleMusic=null;this.buffers.clear();this.bufferSizes.clear();this.bufferBytes=0;this.variants.clear();const ctx=this.ctx;this.ctx=null;this.master=null;ctx?.close?.().catch(()=>{});}
   async buffer(key){
     if(this.buffers.has(key)){const cached=this.buffers.get(key);this.buffers.delete(key);this.buffers.set(key,cached);return cached;}
     const pending=fetch(this.manifest[key].url).then(r=>{if(!r.ok)throw new Error('Audio '+key+' HTTP '+r.status);return r.arrayBuffer();}).then(b=>this.ctx.decodeAudioData(b)).then(buffer=>{
@@ -70,11 +72,11 @@ export class GameAudio {
     }).catch(error=>{this.buffers.delete(key);throw error;});
     this.buffers.set(key,pending);return pending;
   }
-  async native(key,volume=1,loop=false,position=null){
+  async native(key,volume=1,loop=false,position=null,locate=null){
     const b=await this.buffer(key),source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=b;source.loop=loop;gain.gain.value=volume;source.connect(gain);
     const panner=position&&this.camera?this.panner(position):null;
-    if(panner){gain.connect(panner);panner.connect(this.master);this.spatial.add(source);this.syncListener();this.watchListener();}else gain.connect(this.master);
-    source.onended=()=>{this.spatial.delete(source);source.disconnect();gain.disconnect();panner?.disconnect();};
+    if(panner){gain.connect(panner);panner.connect(this.master);this.spatial.add(source);if(locate)this.tracked.set(source,{panner,locate});this.syncListener();this.watchListener();}else gain.connect(this.master);
+    source.onended=()=>{this.spatial.delete(source);this.tracked.delete(source);source.disconnect();gain.disconnect();panner?.disconnect();};
     source.start();this.played.push(key);if(this.played.length>30)this.played.shift();return source;
   }
   panner(position){
@@ -82,6 +84,26 @@ export class GameAudio {
     p.panningModel='equalpower';p.distanceModel='inverse';p.refDistance=SPATIAL.near;p.rolloffFactor=SPATIAL.rolloff;p.maxDistance=SPATIAL.far;
     if(p.positionX){p.positionX.value=x;p.positionY.value=y;p.positionZ.value=z;}else p.setPosition(x,y,z);
     return p;
+  }
+  place(p,position){
+    const [x,y,z]=Array.isArray(position)?position:[position.x,position.y,position.z];
+    if(p.positionX){p.positionX.value=x;p.positionY.value=y;p.positionZ.value=z;}else p.setPosition(x,y,z);
+  }
+  voice(gait,locate){
+    if(!this.enabled||!this.ctx||this.ctx.state!=='running'||!this.camera)return null;
+    const origin=locate(),m=this.camera.matrixWorld.elements;
+    if(Math.hypot(origin.x-m[12],origin.y-m[13],origin.z-m[14])>VOICE_RANGE||this.voices.size>=VOICE_LIMIT)return null;
+    const names=ZOMBIE_VOICES[gait]??ZOMBIE_VOICES.walk,key='zombies/'+names[Math.floor(Math.random()*names.length)];
+    if(!this.manifest[key])return null;
+    const handle={ended:false,stopped:false,source:null,key,stop(){this.stopped=true;try{this.source?.stop();}catch{}}};
+    const finish=()=>{handle.ended=true;this.voices.delete(handle);};
+    this.voices.add(handle);
+    this.native(key,gait==='sprint'?.8:.7,false,origin,locate).then(source=>{
+      handle.source=source;const previous=source.onended;
+      source.onended=()=>{previous?.call(source);finish();};
+      if(handle.stopped)source.stop();
+    }).catch(()=>finish());
+    return handle;
   }
   syncListener(){
     const cam=this.camera,l=this.ctx?.listener;if(!cam||!l)return;
@@ -91,7 +113,7 @@ export class GameAudio {
   }
   watchListener(){
     if(this.watching)return;this.watching=true;
-    const tick=()=>{if(!this.ctx||!this.spatial.size){this.watching=false;return;}this.syncListener();requestAnimationFrame(tick);};
+    const tick=()=>{if(!this.ctx||!this.spatial.size){this.watching=false;return;}this.syncListener();for(const t of this.tracked.values())this.place(t.panner,t.locate());requestAnimationFrame(tick);};
     requestAnimationFrame(tick);
   }
   async playMusic(key){if(!this.ctx)return;const token=++this.musicToken;this.music?.stop();this.music={stop(){}};let music;try{music=await this.native(key,key==='ambience'?.18:.65,key==='ambience');}catch(error){console.warn('Music '+key+' could not be decoded',error);return;}if(token!==this.musicToken){music.stop();return;}this.music=music;}
