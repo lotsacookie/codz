@@ -36,6 +36,34 @@ export const parseVector = (text, fallback = [0, 0, 0]) => {
   return parts.length >= 3 && parts.every(Number.isFinite) ? parts.slice(0, 3) : fallback;
 };
 
+// Transparent texels of "{" textures use palette index 255, which is pure blue. Mipmapping and filtering
+// blend that blue into the visible edge (a gate looks blue from an angle), so fill the transparent texels
+// with the colour of their nearest opaque neighbours. Alpha is left alone.
+function bleedMasked(rgba, width, height) {
+  const total = width * height;
+  let done = new Uint8Array(total), sumR = 0, sumG = 0, sumB = 0, opaque = 0;
+  for (let p = 0; p < total; p++) if (rgba[p * 4 + 3]) { done[p] = 1; sumR += rgba[p * 4]; sumG += rgba[p * 4 + 1]; sumB += rgba[p * 4 + 2]; opaque++; }
+  if (!opaque) { for (let p = 0; p < total; p++) rgba[p * 4] = rgba[p * 4 + 1] = rgba[p * 4 + 2] = 0; return; }
+  for (let pass = 0; pass < 32; pass++) {
+    const next = done.slice();
+    let filled = 0;
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const p = y * width + x;
+      if (done[p]) continue;
+      let r = 0, g = 0, b = 0, n = 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        const q = ((y + dy + height) % height) * width + ((x + dx + width) % width);
+        if (done[q]) { r += rgba[q * 4]; g += rgba[q * 4 + 1]; b += rgba[q * 4 + 2]; n++; }
+      }
+      if (n) { rgba[p * 4] = r / n; rgba[p * 4 + 1] = g / n; rgba[p * 4 + 2] = b / n; next[p] = 1; filled++; }
+    }
+    done = next;
+    if (!filled) break;
+  }
+  const mr = sumR / opaque, mg = sumG / opaque, mb = sumB / opaque;
+  for (let p = 0; p < total; p++) if (!done[p]) { rgba[p * 4] = mr; rgba[p * 4 + 1] = mg; rgba[p * 4 + 2] = mb; }
+}
+
 export function parseBsp(buffer) {
   const data = buffer instanceof ArrayBuffer ? buffer : buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
   const view = new DataView(data);
@@ -96,6 +124,7 @@ export function parseBsp(buffer) {
         rgba[p * 4 + 2] = palette[color * 3 + 2];
         rgba[p * 4 + 3] = masked && color === 255 ? 0 : 255;
       }
+      if (masked) bleedMasked(rgba, width, height);
       textures.push({ name, width, height, rgba });
     }
   }
