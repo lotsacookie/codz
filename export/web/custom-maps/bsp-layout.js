@@ -55,11 +55,24 @@ export function extractLayout(parsed, buildDoor = () => null) {
     if (role && entity.origin) layout.sites.push({ role, point: origin(entity), yaw: entityYaw(entity) });
   }
 
-  for (const entity of entities) {
-    if ((entity.classname === 'buy_weapon' || entity.classname === 'weapon_wall') && entity.origin) {
-      layout.walls.push({ point: origin(entity), yaw: entityYaw(entity), weapon: String(entity.weapon ?? entity.wep ?? entity.weapon_name ?? entity.type ?? '').toLowerCase() });
-    }
+  const displays = entities.filter(e => e.classname === 'weapon_wall' && e.origin);
+  const linked = new Set();
+  const facing = e => (e.angles || e.angle !== undefined ? entityYaw(e) : null);
+  for (const entity of entities.filter(e => e.classname === 'buy_weapon')) {
+    const match = /^\*(\d+)$/.exec(entity.model ?? '');
+    const model = match && models[Number(match[1])];
+    const display = entity.target ? displays.find(d => String(d.targetname ?? '').toLowerCase() === String(entity.target).toLowerCase()) : null;
+    if (display) linked.add(display);
+    let point = null;
+    if (model && model.faceCount) {
+      const box = boundsOf(model);
+      point = box.min.map((v, i) => (v + box.max[i]) / 2);
+      if (display) point[1] = origin(display)[1];
+    } else if (display) point = origin(display);
+    else if (entity.origin) point = origin(entity);
+    if (point) layout.walls.push({ point, yaw: display ? facing(display) : null });
   }
+  for (const display of displays) if (!linked.has(display)) layout.walls.push({ point: origin(display), yaw: facing(display) });
 
   const spawners = entities.filter(e => e.classname === 'spawn_zombie' && e.origin);
   layout.spawners = spawners.map(origin);

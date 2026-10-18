@@ -192,20 +192,22 @@ async function placeWallBuys(walls, grid, probe, add, scene) {
   };
   for (const wall of walls) {
     const [x, y, z] = wall.point;
-    const radians = wall.yaw * Math.PI / 180, fx = Math.cos(radians), fz = -Math.sin(radians);
-    let n = Math.abs(fx) >= Math.abs(fz) ? [Math.sign(fx) || 1, 0] : [0, Math.sign(fz) || 1];
     const at = { x, y: y - 30, z };
-    let behind = wallDistance(probe, at, -n[0], -n[1], 120);
-    if (behind > 70) {
-      let best = null;
-      for (const axis of AXES) {
-        const d = wallDistance(probe, at, axis[0], axis[1], 120);
-        const open = wallDistance(probe, at, -axis[0], -axis[1], 200);
-        if (d < 70 && open > 80 && (!best || d < best.d)) best = { axis, d };
-      }
-      if (best) { n = [-best.axis[0], -best.axis[1]]; behind = best.d; }
+    let best = null;
+    for (const axis of AXES) {
+      const d = wallDistance(probe, at, axis[0], axis[1], 160);
+      const open = wallDistance(probe, at, -axis[0], -axis[1], 200);
+      if (d < 150 && open > 80 && (!best || d < best.d)) best = { axis, d };
     }
-    const surface = behind <= 120 ? behind : 0;
+    let n = best ? [-best.axis[0], -best.axis[1]] : null, behind = best ? best.d : 0;
+    if (wall.yaw !== null && wall.yaw !== undefined) {
+      const radians = wall.yaw * Math.PI / 180, fx = Math.cos(radians), fz = -Math.sin(radians);
+      const given = Math.abs(fx) >= Math.abs(fz) ? [Math.sign(fx) || 1, 0] : [0, Math.sign(fz) || 1];
+      const d = wallDistance(probe, at, -given[0], -given[1], 160);
+      if (d < 150 && (!best || d <= best.d + 12)) { n = given; behind = d; }
+    }
+    if (!n) continue;
+    const surface = behind;
     const wx = x - n[0] * surface, wz = z - n[1] * surface;
     const floor = grid.nearest(wx + n[0] * 40, y - 40, wz + n[1] * 40, 4, 140);
     const floorY = floor >= 0 ? grid.nodes[floor].y : y - 40;
@@ -214,9 +216,9 @@ async function placeWallBuys(walls, grid, probe, add, scene) {
     add({ classname: 'trigger_use', targetname: 'weapon_upgrade', zombie_weapon_upgrade: weapon, position: [wx + n[0] * 30, floorY + 40, wz + n[1] * 30], yaw: Math.atan2(n[0], n[1]) });
     const material = await chalkMaterial(weapon);
     if (!material) continue;
-    const decal = new THREE.Mesh(new THREE.PlaneGeometry(72, 36), material);
+    const decal = new THREE.Mesh(new THREE.PlaneGeometry(52, 26), material);
     decal.rotation.y = Math.atan2(n[0], n[1]);
-    decal.position.set(wx + n[0] * 1.5, floorY + 62, wz + n[1] * 1.5);
+    decal.position.set(wx + n[0] * 1.5, floorY + Math.min(Math.max(y - floorY, 52), 84), wz + n[1] * 1.5);
     decal.renderOrder = 1;
     scene.add(decal);
   }
