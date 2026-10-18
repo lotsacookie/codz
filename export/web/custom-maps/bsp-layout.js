@@ -1,4 +1,5 @@
 import { parseVector } from './bsp-parse.js';
+import { lightsFromEntities } from './lights.js';
 
 // NZ:P entity classname -> the game's perk id.
 export const NZP_ROLES = {
@@ -32,7 +33,7 @@ function boundsOf(model) {
 export function extractLayout(parsed, buildDoor = () => null) {
   const { entities, models } = parsed;
   const origin = entity => toThree(parseVector(entity.origin));
-  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [] };
+  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], lights: lightsFromEntities(entities, parseVector, toThree) };
 
   const start = entities.find(e => e.classname === 'info_player_1_spawn') ?? entities.find(e => /^info_player/.test(e.classname));
   if (start) layout.spawn = { point: origin(start), yaw: entityYaw(start) };

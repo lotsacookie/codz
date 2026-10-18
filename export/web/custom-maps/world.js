@@ -3,6 +3,7 @@ import { MOON_PERKS } from '../moon-session.js';
 import { flattenObject, fitModel, applyFit, appendBoxes, addGround } from './geometry.js';
 import { createProbe, planLevel } from './analyze.js';
 import { planFromLayout } from './bsp-plan.js';
+import { addMapLights } from './lights.js';
 
 export const SKY_FACES = ['textures/sky-px.png', 'textures/sky-nx.png', 'textures/sky-py.png', 'textures/sky-ny.png', 'textures/sky-pz.png', 'textures/sky-nz.png'];
 export const PERK_IDS = Object.keys(MOON_PERKS);
@@ -185,6 +186,7 @@ function toWorldLayout(hints, fit) {
     spawn: hints.spawn && { point: point(hints.spawn.point), yaw: hints.spawn.yaw },
     sites: hints.sites.map(site => ({ ...site, point: point(site.point) })),
     windows: hints.windows.map(w => ({ ...w, point: point(w.point), spawner: w.spawner && point(w.spawner) })),
+    lights: (hints.lights ?? []).map(light => ({ ...light, point: point(light.point) })),
     doors: hints.doors.map(door => ({ ...door, min: point(door.min), max: point(door.max) })),
   };
 }
@@ -232,6 +234,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
     if (plan.failed) throw new Error('Could not find a walkable floor in this model.');
   }
 
+  addMapLights(scene, worldLayout?.lights);
   onStatus('Setting up windows, perks and the box…', .78);
   if (loadModel === undefined) {
     try { ({ loadModel } = await import('../animation.js')); } catch (error) { console.warn('[custom-map] model loader unavailable', error); loadModel = null; }
