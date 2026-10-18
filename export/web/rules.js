@@ -51,7 +51,7 @@ export class Session {
     this.mods=activeModifiers();
     this.time=0;this.round=1;this.countdown=6;this.phase='preparing';this.health=100;
     this.points=this.data.rules.zombie_score_start_1p??500;this.kills=0;this.headshots=0;this.shots=0;this.hits=0;
-    this.inventory=[makeWeapon(this.data.weapons.m1911_zm)];this.slot=0;this.reloadLeft=0;this.reloadStage=null;this.reloadSerial=0;this.reloadDuration=0;this.fireLeft=0;
+    this.inventory=[makeWeapon(this.data.weapons.m1911_zm)];this.slot=0;this.adsShot=false;this.reloadLeft=0;this.reloadStage=null;this.reloadSerial=0;this.reloadDuration=0;this.fireLeft=0;
     this.perks=new Set();this.flags=new Set(['always_on']);this.openDoors=new Set();this.power=false;this.revives=0;
     this.effects={};this.damageTime=-100;this.grenades=4;this.meleeLeft=0;this.spawned=0;this.killed=0;
     this.bowie=false;this.totalScore=this.points;this.drops=new PowerupDirector(this);this.drinking=null;this.drinkLeft=0;
@@ -128,7 +128,7 @@ export class Session {
   scoreHit(killed=false,head=false,melee=false){
     this.hits++;
     if(killed){this.kills++;this.killed++;if(head)this.headshots++;this.addPoints(melee?130:head?100:60);}
-    else this.addPoints(10);
+    else this.addPoints(this.adsShot?15:10);// zombie_damage_ads: Int(10*1.25) rounded up to 5
   }
   nextRound(){
     this.round++;this.dogRound=!this.mods.has('endless')&&this.round===this.nextDogRound;

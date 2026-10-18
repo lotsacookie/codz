@@ -224,7 +224,7 @@ function shoot(){
   if(!active||features.events.room||!view.ready||view.mode==='raise'||session.busy||session.weaponUnavailable)return false;
   if(session.reloadLeft>0&&session.def.segmentedReload&&session.weapon.mag>0){session.interruptReload();reloadShot=true;return false;}
   if(!session.fire()){if(session.weapon.mag===0&&primaryPressed){audio.weapon('empty',session.def);reload();}return false;}
-  view.shoot({ads:ads&&!session.def.dualWield,empty:session.weapon.mag===0,hand:session.def.dualWield&&session.shots%2?'left':'right'});audio.weapon('shot',session.def);muzzle.position.copy(camera.position);muzzle.intensity=160;camera.rotation.x=Math.min(1.48,camera.rotation.x+(ads?.008:.015));
+  session.adsShot=!!ads;view.shoot({ads:ads&&!session.def.dualWield,empty:session.weapon.mag===0,hand:session.def.dualWield&&session.shots%2?'left':'right'});audio.weapon('shot',session.def);muzzle.position.copy(camera.position);muzzle.intensity=160;camera.rotation.x=Math.min(1.48,camera.rotation.x+(ads?.008:.015));
   const forward=camera.getWorldDirection(new THREE.Vector3());
   if(session.weapon.id==='thundergun_zm'){
     for(const z of [...enemies.list]){const d=z.root.position.clone().add(new THREE.Vector3(0,40,0)).sub(camera.position);if(d.length()<600&&d.normalize().dot(forward)>.65&&world.lineClear(camera.position,z.root.position.clone().add(new THREE.Vector3(0,40,0))))enemies.hurt(z,100000,false,false,'thunder');}

@@ -81,7 +81,7 @@ export class Combat {
     if(!this.view.ready||['raise','melee','sprintIn','sprint','sprintOut'].includes(this.view.mode))return false;
     if(s.reloadLeft&&s.def.segmentedReload&&s.weapon.mag){s.interruptReload();return false;}
     if(!s.fire()){if(s.weapon.mag===0&&this.pressed)this.audio.weapon('empty',s.def);return false;}
-    this.view.shoot({ads:this.ads,empty:s.weapon.mag===0,hand});this.audio.weapon('shot',s.def);this.muzzle.position.copy(this.camera.position);this.muzzle.intensity=160;
+    s.adsShot=!!this.ads;this.view.shoot({ads:this.ads,empty:s.weapon.mag===0,hand});this.audio.weapon('shot',s.def);this.muzzle.position.copy(this.camera.position);this.muzzle.intensity=160;
     const forward=this.camera.getWorldDirection(new THREE.Vector3());
     this.features?.shot(new THREE.Ray(this.camera.position.clone(),forward),s.def.id.startsWith('microwavegun')?'wave':'bullet');
     if(s.def.id==='microwavegun_zm'){

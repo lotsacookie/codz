@@ -57,3 +57,14 @@ test('Speed Cola speeds each shotgun reload stage; switching cancels its transfe
  assert.equal(s.reloadDuration,s.def.reloadTime/2);const loaded=s.weapon.mag;s.switchWeapon(0);s.update(10);
  assert.equal(s.inventory[1].mag,loaded);assert.equal(s.reloadStage,null);assert.equal(s.weapon.mag,8);
 });
+
+test('ADS hits that do not kill award 15 points like zombie_damage_ads', () => {
+  const s = new Session(data);
+  s.scoreHit(false);
+  assert.equal(s.points, 510);
+  s.adsShot = true;
+  s.scoreHit(false);
+  assert.equal(s.points, 525);
+  s.scoreHit(true, false);
+  assert.equal(s.points, 585);
+});
