@@ -67,7 +67,7 @@ export function guardEnemies(enemies, { onFault = () => {}, maxRepeats = 3 } = {
       if (state.repeats >= maxRepeats) {
         // The same exception three frames in a row: some zombie is poisoning the update. Drop the ones that are not
         // mid-spawn so the loop recovers; the round counter is corrected so the round can still end.
-        for (const z of [...enemies.list]) if (!['barricade', 'entering'].includes(z.state)) drop(z);
+        for (const z of [...enemies.list]) if (!['barricade', 'entering', 'approach'].includes(z.state)) drop(z);
         state.repeats = 0;
       }
     }

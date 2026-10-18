@@ -49,7 +49,7 @@ export class Enemies {
       }
     }
     if(runtimeProfile.shadows)root.traverse(o=>{if(o.isMesh)o.castShadow=true;});
-    root.position.copy(position??barrier.outside);this.scene.add(root);
+    root.position.copy(position??barrier.spawnPoint??barrier.outside);this.scene.add(root);
     const rig=new Rig(root),round=this.session.round;
     const gait=kind==='dog'?'sprint':rollGait(round,this.data.rules,()=>this.session.random());
     const variant=Math.floor(this.session.random()*3),jitter=.94+this.session.random()*.12;
@@ -62,7 +62,7 @@ export class Enemies {
     if(this.anims[death])rig.add('death',this.anims[death],true);
     rig.play('walk');rig.update(.01);
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
-    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?'barricade':'chase',barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7};
+    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(barrier.spawnPoint&&!position?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
@@ -83,6 +83,12 @@ export class Enemies {
     for(const z of [...this.list]){
       z.rig.update(dt);z.growl-=dt;
       if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
+      // Zombies from a distant spawn point walk to the window before tearing its boards.
+      if(z.state==='approach'){
+        z.approachTime+=dt;
+        const to=z.barrier.outside,near=Math.hypot(to.x-z.root.position.x,to.z-z.root.position.z)<14&&Math.abs(to.y-z.root.position.y)<60;
+        if(near||z.approachTime>30){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
+      }
       if(z.state==='barricade'){
         z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
         z.tearLeft-=dt;
@@ -94,14 +100,14 @@ export class Enemies {
         z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);z.root.position.lerpVectors(z.enterFrom,z.barrier.inside,t*t*(3-2*t));z.root.position.y+=Math.sin(t*Math.PI)*12;
         if(t===1){z.state='chase';z.repath=0;}continue;
       }
-      const lure=this.lureTarget?.(z),goal=lure??player;
+      const approaching=z.state==='approach',lure=approaching?null:this.lureTarget?.(z),goal=approaching?z.barrier.outside:lure??player;
       const dist=z.root.position.distanceTo(player),at=z.root.position.clone().add(new THREE.Vector3(0,z.kind==='dog'?25:45,0)),eye=player.clone().add(new THREE.Vector3(0,40,0));
       if(z.state==='attack'){
         z.attackLeft-=dt;
         if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE);}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
-      if(!lure&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
+      if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
         z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
       }
       z.repath-=dt;

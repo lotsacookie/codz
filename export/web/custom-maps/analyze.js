@@ -353,6 +353,7 @@ export function finishWindow(w, inward) {
     inside: at(WINDOW_DEPTH.inside),
     outside: at(-WINDOW_DEPTH.outside),
     repair: at(WINDOW_DEPTH.repair, 60),
+    spawnPoint: w.spawnPoint ?? null,
   };
 }
 

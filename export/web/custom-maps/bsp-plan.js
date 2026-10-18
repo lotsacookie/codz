@@ -72,6 +72,11 @@ export async function planFromLayout(probe, box, layout, { roles = [], onStatus 
     else inward = (spawn.position[0] - x) * n[0] + (spawn.position[2] - z) * n[1] >= 0 ? n : [-n[0], -n[1]];
     const floor = grid.nearest(x + inward[0] * 50, y - 32, z + inward[1] * 50, 3, 90);
     const base = { x, y: floor >= 0 ? grid.nodes[floor].y : y - 32, z, n: inward, t, width: WINDOW_WIDTH };
+    // NZ:P zombies spawn at the spawn_zombie point tied to the barricade and walk to the window.
+    if (reference) {
+      const at = grid.nearest(reference[0], reference[1], reference[2], 3, 100);
+      if (at >= 0 && Math.hypot(reference[0] - x, reference[2] - z) > 120) base.spawnPoint = [grid.nodes[at].x, grid.nodes[at].y + 2, grid.nodes[at].z];
+    }
     windows.push(base);
   }
   for (const w of windows) footprint(grid, w);

@@ -60,7 +60,7 @@ export class ShangriEnemies extends Enemies {
     return nav?.viable ? nav.viable(this.barriers) : this.barriers;
   }
 
-  isFree(b) { return !this.list.some(z => z.barrier === b && ['barricade', 'entering'].includes(z.state)); }
+  isFree(b) { return !this.list.some(z => z.barrier === b && ['barricade', 'entering', 'approach'].includes(z.state)); }
 
   spawnStep(dt, player) {
     const s = this.session;

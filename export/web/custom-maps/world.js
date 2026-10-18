@@ -166,7 +166,7 @@ const UP = new THREE.Vector3(0, 1, 0);
 
 function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
-  add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair });
+  add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair, spawn: w.spawnPoint ?? undefined });
   add({ classname: 'script_struct', targetname: name, position: w.inside });
   const ku = (w.width + 8) / kino.width, ky = (WINDOW.top - WINDOW.sill) / kino.height;
   // Window frame: X along the wall, Y up, Z out of the window (away from the room).

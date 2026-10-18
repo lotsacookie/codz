@@ -16,8 +16,9 @@ export class CustomFeatures extends ShangriFeatures {
   async load() {
     await super.load();
     for (const barrier of this.barriers) {
-      const repair = this.data.entities[barrier.id]?.repair;
-      if (repair) barrier.position.set(...repair);
+      const entity = this.data.entities[barrier.id];
+      if (entity?.repair) barrier.position.set(...entity.repair);
+      if (entity?.spawn) barrier.spawnPoint = new THREE.Vector3(...entity.spawn);
     }
   }
 }
