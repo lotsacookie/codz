@@ -47,6 +47,17 @@ export function withDefaults(cfg) {
   };
 }
 
+// NZ:P BSP maps: worldspawn fog (linear, start/end/colour) and sky. The maps' own skybox files are not
+// bundled, so a fogged map fades into its fog colour, a flat r_skycolor / "black" sky is a solid colour,
+// and everything else keeps the stock sky.
+function applyMapEnvironment(scene, env) {
+  if (!env) return;
+  const rgb = ([r, g, b]) => new THREE.Color().setRGB(r, g, b, THREE.SRGBColorSpace);
+  if (env.fog) scene.fog = new THREE.Fog(rgb(env.fog.color), env.fog.near, env.fog.far);
+  const solid = env.sky === 'black' ? [0, 0, 0] : env.skyColor ?? env.fog?.color ?? null;
+  if (solid) scene.background = rgb(solid);
+}
+
 async function mountSurvival(ctx, C) {
 const LOG = '[' + C.id + ']';
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
@@ -411,6 +422,7 @@ async function load() {
   sky.colorSpace = THREE.SRGBColorSpace;
   scene.background = sky;
   scene.backgroundRotation.x = -Math.PI / 2;
+  applyMapEnvironment(scene, data.environment);
   collision = collider;
   showStatus(`Preparing ${C.label} scene…`);
   await nextTask();

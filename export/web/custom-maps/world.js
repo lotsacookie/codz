@@ -272,7 +272,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
   const data = {
     map: 'custom_map', title: label, stage: 'generated',
     spawn: { position: plan.spawn.position, yaw: plan.spawn.yaw, entity: 0 },
-    entities, worldspawn: {}, materialRules: {}, hiddenEntities: [], sky: { faces: SKY_FACES }, source: { generated: true, custom: true },
+    entities, worldspawn: {}, materialRules: {}, hiddenEntities: [], sky: { faces: SKY_FACES }, environment: hints?.environment ?? null, source: { generated: true, custom: true },
   };
   return {
     data, scene, collisionGeometry: geometry,

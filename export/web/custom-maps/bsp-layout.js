@@ -30,10 +30,22 @@ function boundsOf(model) {
   return { min: a.map((v, i) => Math.min(v, b[i])), max: a.map((v, i) => Math.max(v, b[i])) };
 }
 
+// worldspawn: `fog` is "start end r g b" (colour 0-255), `sky` names the skybox, `r_skycolor` a flat sky colour.
+export function extractEnvironment(entities) {
+  const world = entities.find(e => e.classname === 'worldspawn') ?? {};
+  const get = key => world[key] ?? world[` ${key}`];
+  const env = { sky: String(get('sky') ?? '').trim().toLowerCase() || null, fog: null, skyColor: null };
+  const fog = String(get('fog') ?? '').trim().split(/\s+/).map(Number);
+  if (fog.length >= 5 && fog.every(Number.isFinite) && fog[1] > fog[0]) env.fog = { near: fog[0], far: fog[1], color: fog.slice(2, 5).map(v => Math.min(255, Math.max(0, v)) / 255) };
+  const skyColor = String(get('r_skycolor') ?? '').trim().split(/\s+/).map(Number);
+  if (skyColor.length >= 3 && skyColor.slice(0, 3).every(Number.isFinite)) env.skyColor = skyColor.slice(0, 3).map(v => Math.min(255, Math.max(0, v)) / 255);
+  return env;
+}
+
 export function extractLayout(parsed, buildDoor = () => null) {
   const { entities, models } = parsed;
   const origin = entity => toThree(parseVector(entity.origin));
-  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], lights: lightsFromEntities(entities, parseVector, toThree) };
+  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], lights: lightsFromEntities(entities, parseVector, toThree), environment: extractEnvironment(entities) };
 
   const start = entities.find(e => e.classname === 'info_player_1_spawn') ?? entities.find(e => /^info_player/.test(e.classname));
   if (start) layout.spawn = { point: origin(start), yaw: entityYaw(start) };
