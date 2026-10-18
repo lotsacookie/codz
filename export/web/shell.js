@@ -7,12 +7,13 @@ import { createListeners, disposeRenderer } from './dispose.js';
 import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
 import { MenuNav, PAD_CONTROLS, getGamepads, padSettings } from './gamepad.js';
 import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
+import { createCustomMenu } from './custom-maps/menu.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
 const launcher = $('launcher'), list = $('map-list'), note = $('launcher-note'), errorBox = $('launcher-error');
 const stage = $('stage'), viewport = $('viewport'), loading = $('loading'), pause = $('pause');
-const buttons = [...list.querySelectorAll('button[data-map]')];
+const buttons = [...list.querySelectorAll('button[data-map], button[data-menu]')];
 const IDLE_NOTE = note.textContent;
 const modOpen = $('modifiers-open'), modPanel = $('modifiers'), modList = $('modifier-list'), modCount = $('modifiers-count');
 const SENSITIVITY_KEY = 'kino.lookSensitivity';
@@ -63,9 +64,15 @@ function createHud(root) {
 }
 
 const hud = createHud($('hud'));
-const registry = new Map(buttons.map(button => [button.dataset.map, { ...button.dataset, button }]));
+const registry = new Map(buttons.filter(button => button.dataset.map).map(button => [button.dataset.map, { ...button.dataset, button }]));
 let session = null;
 let busy = false;
+const customRoot = $('custom-maps');
+const customMenu = createCustomMenu({
+  root: customRoot,
+  onPlay: ({ label, params }) => boot({ map: 'custom-map', label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${label} — Zombies`, loadscreen: 'art/loadscreen_zombie_temple.webp', params, custom: true }),
+  onClose: () => { buttons.find(button => button.dataset.menu)?.focus({ preventScroll: true }); },
+});
 
 const setEnabled = enabled => { for (const b of buttons) b.disabled = !enabled; };
 const setState = state => { body.dataset.state = state; };
@@ -291,6 +298,7 @@ pauseEls.quit.addEventListener('click', () => { quit(); });
 const padVisible = el => !el.disabled && !el.closest('[hidden]') && el.getClientRects().length > 0;
 function padItems() {
   if (!launcher.hidden && !modPanel.hidden) return [...modPanel.querySelectorAll('input, button')];
+  if (!launcher.hidden && customMenu.isOpen()) return customMenu.items();
   if (!launcher.hidden) return [...buttons.filter(button => !button.disabled), modOpen];
   if (!loading.hidden) return [...loadEls.actions.querySelectorAll('button')];
   if (!pause.hidden) return [...pause.querySelectorAll('button, input[type="range"]')].filter(padVisible);
@@ -318,7 +326,7 @@ function padSelect(focused) {
 }
 const padNav = new MenuNav({
   getItems: padItems, getDefault: padDefault, focus: padFocus, onSelect: padSelect,
-  onBack: () => { if (!pause.hidden && !pauseEls.optionsView.hidden) showOptions(false); },
+  onBack: () => { if (customMenu.isOpen()) customMenu.close(); else if (!pause.hidden && !pauseEls.optionsView.hidden) showOptions(false); },
   onStart: () => { if (!pause.hidden && pauseEls.optionsView.hidden) { padPreferred = true; pressStart(); } },
   isBlocked: () => !!session?.active,
 });
@@ -365,6 +373,7 @@ function createContext(entry) {
   const ctx = {
     id: entry.map,
     label: entry.label,
+    params: entry.params ?? null,
     mobile: detectMobile(),
     touch: null,
     viewport,
@@ -537,6 +546,7 @@ async function quit() {
   launcher.hidden = false;
   note.textContent = IDLE_NOTE;
   setEnabled(true);
+  if (old.custom) customMenu.open();
   const params = new URLSearchParams(location.search);
   if (params.has('map')) { params.delete('map'); history.replaceState(null, '', location.pathname + (params.size ? `?${params}` : '')); }
 }
@@ -544,6 +554,8 @@ async function quit() {
 list.addEventListener('click', event => {
   const button = event.target.closest('button[data-map]');
   if (button && !button.disabled) boot(registry.get(button.dataset.map));
+  const menu = event.target.closest('button[data-menu]');
+  if (menu && !menu.disabled) customMenu.open();
 });
 
 function selectMap(button) {
@@ -552,7 +564,7 @@ function selectMap(button) {
 }
 for (const type of ['pointerover', 'focusin']) {
   list.addEventListener(type, event => {
-    const button = event.target.closest('button[data-map]');
+    const button = event.target.closest('button[data-map], button[data-menu]');
     if (button) selectMap(button);
   });
 }
