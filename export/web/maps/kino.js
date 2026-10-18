@@ -335,11 +335,11 @@ function interact(){
     if(mysteryBox.at(e)){if(session.pack?.weapon===session.weapon)return false;const weapon=mysteryBox.take(e);if(!weapon)return false;if(weapon==='zombie_cymbal_monkey'){session.giveMonkeys();toast('Monkey Bombs · X to throw');}else{session.giveWeapon(weapon);equipView();toast(data.weapons[weapon].name);}return true;}
     const cost=session.effects.fire_sale>session.time?10:950;
     if(session.points<cost){toast('Not enough points');return false;}
-    if(!mysteryBox.start(e))return false;session.spend(cost);return true;
+    if(!mysteryBox.start(e))return false;session.spend(cost);audio.play('buy');return true;
   }
   if(t==='zombie_vending_upgrade'){
     if(session.pack){if(!session.takePack())return false;equipView();toast(session.def.name);return true;}
-    if(!session.beginPack())return false;ads=false;primary=false;burstLeft=0;reloadShot=false;audio.play('packapunch');toast('Upgrading… retrieve your weapon when it is ready.');return true;
+    if(!session.beginPack())return false;ads=false;primary=false;burstLeft=0;reloadShot=false;audio.play('buy');audio.play('packapunch');toast('Upgrading… retrieve your weapon when it is ready.');return true;
   }
   if(t==='trigger_teleport_pad_0'&&session.power){
     if(session.teleporter==='unlinked'){session.teleporter='linking';linkUntil=session.time+30;toast('Link the mainframe pad in the lobby',5);return true;}

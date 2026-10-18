@@ -9,7 +9,7 @@ export class GameAudio {
   get enabled(){return this._enabled;}
   set enabled(v){this._enabled=v;if(this.master)this.master.gain.value=v?.42:0;}
   start(){if(!this.ctx){const Context=globalThis.AudioContext??globalThis.webkitAudioContext;if(!Context){this.enabled=false;return;}this.ctx=new Context();this.master=this.ctx.createGain();this.master.gain.value=this.enabled?.42:0;this.master.connect(this.ctx.destination);
-    if(this.preload)for(const key of Object.keys(this.manifest))if(key.startsWith('resident/evt/zombie_global/')||['nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music'].includes(key)||key.startsWith('specialty_'))this.buffer(key).catch(console.error);
+    if(this.preload)for(const key of Object.keys(this.manifest))if(key.startsWith('resident/evt/zombie_global/')||['buy','nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music'].includes(key)||key.startsWith('specialty_'))this.buffer(key).catch(console.error);
   }this.ctx.resume();if(!this.music)this.playMusic('ambience');}
   select(prefix){
     if(!this.variants.has(prefix))this.variants.set(prefix,Object.keys(this.manifest).filter(k=>k.startsWith(prefix)));

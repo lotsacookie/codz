@@ -1,4 +1,12 @@
 {
+  "buy": {
+    "url": "audio/buy.ogg",
+    "source": "audio/buy.ogg",
+    "sourceSha256": "0fdaca56ba19454d50cfb45383f9b272f084145c35cc3ffc8f610d84878e46b3",
+    "duration": 2.879,
+    "sampleRate": 44100,
+    "channels": 2
+  },
   "dog": {
     "url": "audio/dog.ogg",
     "source": "main/iw_15.iwd:sound/aml/dog/growl/growl_00.wav",

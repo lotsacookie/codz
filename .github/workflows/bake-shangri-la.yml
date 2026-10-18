@@ -1,4 +1,4 @@
-name: Bake Shangri-La data
+name: Rebake Shangri-La collision
 
 on:
   workflow_dispatch:
@@ -27,24 +27,20 @@ jobs:
       - name: Bake collision
         run: node --import ./.tools/lib/vendor-resolve.mjs .tools/bake-shangri-la.mjs
 
-      - name: Bake navigation
-        run: node --import ./.tools/lib/vendor-resolve.mjs .tools/bake-shangri-la-nav.mjs
-
       - name: Check baked files
         run: |
           test "$(stat -c %s export/web/shangri-la/collision.bin)" -gt 1000000
-          test "$(stat -c %s export/web/shangri-la/navigation.bin)" -gt 100000
-          node --test test/shangri-la.test.mjs
+          node --import ./.tools/lib/vendor-resolve.mjs --test test/shangri-la.test.mjs test/shangri-la-grid.test.mjs
 
       - name: Commit and push to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add export/web/shangri-la/collision.bin export/web/shangri-la/collision.json export/web/shangri-la/navigation.bin export/web/shangri-la/navigation.json
+          git add export/web/shangri-la/collision.bin export/web/shangri-la/collision.json
           if git diff --cached --quiet; then
             echo "Nothing to commit"
           else
-            git commit -m "Shangri-La: bake collision and navigation data"
+            git commit -m "Shangri-La: rebake collision data"
             git pull --rebase origin main
             git push origin HEAD:main
           fi

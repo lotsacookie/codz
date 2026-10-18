@@ -219,7 +219,7 @@ function interact() {
   if(combat.enabled&&!combat.session.canAct)return false;
   if (target.kind === 'suit') { state.equipSuit();combat.session.hacker=false;showNotice('P.E.S. equipped · Q to remove or replace the helmet.'); }
   if (target.kind === 'power') { state.power = true; combat.session.power=true;showNotice('Power restored. Pressurized rooms now have normal gravity.'); }
-  if (target.kind === 'door') { if(combat.enabled&&!combat.session.buyDoor(target.door)){showNotice('Not enough points.');return false;}opened.add(target.door.name); showNotice('Passage opened', 2); }
+  if (target.kind === 'door') { if(combat.enabled&&!combat.session.buyDoor(target.door)){showNotice('Not enough points.');return false;}if(combat.enabled)combat.audio.play('buy');opened.add(target.door.name); showNotice('Passage opened', 2); }
   if (target.kind === 'weapon') { const bought = combat.buyWeapon(target.weapon.id); if (bought) { boughtGuns.add(target.entity.id); syncWallGuns(); } return bought; }
   return true;
 }

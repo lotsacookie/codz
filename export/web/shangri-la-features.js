@@ -252,7 +252,7 @@ export class ShangriFeatures {
       if (s.buyDoor(t.group)) { this.openDoor(t.group); this.notice(t.group.kind === 'debris' ? 'Debris cleared' : 'Passage opened', 2); ok = true; }
       else this.notice('Not enough points.');
     }
-    if (ok) a.play('buy');
+    if (ok && t.kind !== 'wall' && t.kind !== 'power') a.play('buy');
     return ok;
   }
 
