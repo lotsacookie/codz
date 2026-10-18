@@ -64,7 +64,7 @@ body.no-fx #fx{display:none}
 #hud #status{top:calc(var(--u) * 14);left:calc(var(--u) * 14);max-width:calc(100% - var(--u) * 28);white-space:pre-wrap}
 #hud #debug{top:calc(var(--u) * 14);right:calc(var(--u) * 14);font:12px/1.5 monospace;white-space:pre}
 #hud #status[hidden],#hud #debug[hidden]{display:none}
-#location-panel{display:block;position:absolute;top:calc(var(--u) * 18);left:calc(var(--u) * 22);font-family:var(--hud-font);color:#fff;text-shadow:0 1px 3px #000}
+#location-panel{display:none!important;position:absolute;top:calc(var(--u) * 18);left:calc(var(--u) * 22);font-family:var(--hud-font);color:#fff;text-shadow:0 1px 3px #000}
 #location-panel #mode-label{display:block;font-size:calc(var(--u) * 9);letter-spacing:.24em;color:#bcb5a3;margin:0 0 4px}
 #location{font-size:calc(var(--u) * 17);font-weight:600}
 #systems{display:flex;position:absolute;top:calc(var(--u) * 18);right:calc(var(--u) * 22);flex-direction:column;text-align:right;gap:4px;font-size:calc(var(--u) * 9);letter-spacing:.13em;font-family:var(--hud-font);color:#e8e2d2;text-shadow:0 1px 3px #000}

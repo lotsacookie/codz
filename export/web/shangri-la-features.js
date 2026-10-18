@@ -7,28 +7,6 @@ const V = a => new THREE.Vector3(...a);
 const RANDOM_PERKS = ['specialty_armorvest', 'specialty_fastreload', 'specialty_rof', 'specialty_flakjacket', 'specialty_longersprint', 'specialty_deadshot'];
 const BOX_EXCLUDED = new Set(['microwavegun_zm', 'knife_ballistic_zm']);
 
-function perkSprite(perk) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 64;
-  const g = canvas.getContext('2d');
-  g.fillStyle = '#0b0d10cc';
-  g.fillRect(0, 0, 128, 64);
-  g.strokeStyle = perk.color;
-  g.lineWidth = 6;
-  g.strokeRect(3, 3, 122, 58);
-  g.fillStyle = perk.color;
-  g.font = 'bold 34px sans-serif';
-  g.textAlign = 'center';
-  g.textBaseline = 'middle';
-  g.fillText(perk.icon, 64, 34);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthWrite: false }));
-  sprite.scale.set(34, 17, 1);
-  return sprite;
-}
-
 export class ShangriFeatures {
   constructor({ data, combat, scene, camera, objects, notice, raycast, doors, openDoor }) {
     Object.assign(this, { data, combat, scene, camera, objects, notice, raycast, doors, openDoor });
@@ -69,11 +47,6 @@ export class ShangriFeatures {
     randoms.forEach((e, i) => { if (perks[i]) this.targets.push({ kind: 'perk', e, perk: perks[i] }); });
     for (const e of d.entities.filter(e => e.targetname === 'zombie_vending' && e.script_noteworthy === 'specialty_quickrevive')) this.targets.push({ kind: 'perk', e, perk: e.script_noteworthy });
     for (const e of d.entities.filter(e => e.targetname === 'zombie_vending_perk' && MOON_PERKS[e.script_noteworthy] && cd.perkDrinks[e.script_noteworthy])) this.targets.push({ kind: 'perk', e, perk: e.script_noteworthy });
-    for (const t of this.targets.filter(t => t.kind === 'perk')) {
-      const sprite = perkSprite(MOON_PERKS[t.perk]);
-      sprite.position.copy(V(t.e.position)).y += 62;
-      this.scene.add(sprite);
-    }
     for (const e of d.entities.filter(e => e.targetname === 'weapon_upgrade' && cd.weapons[e.zombie_weapon_upgrade])) this.targets.push({ kind: 'wall', e, weapon: cd.weapons[e.zombie_weapon_upgrade] });
     for (const e of locations) this.targets.push({ kind: 'box', e });
     for (const e of d.entities.filter(e => e.targetname === 'zombie_vending_upgrade')) this.targets.push({ kind: 'pack', e });

@@ -111,37 +111,45 @@ body.touch-mode #journal p:last-child { font-size: 10px; }
   body.touch-mode #menu #start { padding: 14px 18px; }
   body.touch-mode .touch-settings { margin-top: 10px; font-size: 11px; }
 }
+
+/* The auto-rotated portrait page is a short landscape page, but media queries still see the portrait screen. */
+  html.force-landscape body.touch-mode #menu h1 { font-size: 42px; }
+  html.force-landscape body.touch-mode #menu .chapter, html.force-landscape body.touch-mode #menu .eyebrow { margin: 10px 0; }
+  html.force-landscape body.touch-mode .tagline, html.force-landscape body.touch-mode .intro { margin: 10px 0; font-size: 14px; }
+  html.force-landscape body.touch-mode .description, html.force-landscape body.touch-mode .preview, html.force-landscape body.touch-mode .local-note { display: none; }
+  html.force-landscape body.touch-mode #menu #start { padding: 14px 18px; }
+  html.force-landscape body.touch-mode .touch-settings { margin-top: 10px; font-size: 11px; }
 @media (orientation: portrait) {
-  #touch-controls { --touch-left: max(8px, env(safe-area-inset-left)); --touch-right: max(10px, env(safe-area-inset-right)); --touch-size: 50px; }
-  .touch-stick { left: 60px; bottom: 30px; width: 116px; height: 116px; margin-left: -58px; }
-  .touch-stick[style*="top:"] { margin-top: -58px; }
-  .touch-knob { left: 34px; top: 34px; }
-  .touch-move { height: 38%; width: 38%; }
-  .touch-aim { right: calc(var(--touch-right) + 130px); bottom: calc(var(--touch-bottom) + 152px); }
-  .touch-fire { right: calc(var(--touch-right) + 43px); bottom: calc(var(--touch-bottom) + 88px); width: 76px; height: 76px; }
-  .touch-jump { bottom: calc(var(--touch-bottom) + 185px); }
-  .touch-crouch { right: var(--touch-right); bottom: calc(var(--touch-bottom) + 18px); }
-  .touch-reload { right: calc(var(--touch-right) + 74px); }
-  .touch-use { right: calc(var(--touch-right) + 66px); bottom: calc(var(--touch-bottom) + 224px); }
-  .touch-melee { right: var(--touch-right); bottom: calc(var(--touch-bottom) + 253px); }
-  .touch-toolbar { top: max(64px, calc(env(safe-area-inset-top) + 56px)); width: min(292px, 96%); flex-wrap: wrap; justify-content: center; }
-  body.touch-mode .vitals { top: 200px; }
-  body.touch-mode .systems { top: 163px; }
-  body.touch-mode .ammunition { top: 210px; }
-  body.touch-mode #hud #perks { top: 260px; left: 12px; }
-  body.touch-mode #announcement { top: 29%; }
-  body.touch-mode #journal { top: 158px; }
+  html:not(.force-landscape) #touch-controls { --touch-left: max(8px, env(safe-area-inset-left)); --touch-right: max(10px, env(safe-area-inset-right)); --touch-size: 50px; }
+  html:not(.force-landscape) .touch-stick { left: 60px; bottom: 30px; width: 116px; height: 116px; margin-left: -58px; }
+  html:not(.force-landscape) .touch-stick[style*="top:"] { margin-top: -58px; }
+  html:not(.force-landscape) .touch-knob { left: 34px; top: 34px; }
+  html:not(.force-landscape) .touch-move { height: 38%; width: 38%; }
+  html:not(.force-landscape) .touch-aim { right: calc(var(--touch-right) + 130px); bottom: calc(var(--touch-bottom) + 152px); }
+  html:not(.force-landscape) .touch-fire { right: calc(var(--touch-right) + 43px); bottom: calc(var(--touch-bottom) + 88px); width: 76px; height: 76px; }
+  html:not(.force-landscape) .touch-jump { bottom: calc(var(--touch-bottom) + 185px); }
+  html:not(.force-landscape) .touch-crouch { right: var(--touch-right); bottom: calc(var(--touch-bottom) + 18px); }
+  html:not(.force-landscape) .touch-reload { right: calc(var(--touch-right) + 74px); }
+  html:not(.force-landscape) .touch-use { right: calc(var(--touch-right) + 66px); bottom: calc(var(--touch-bottom) + 224px); }
+  html:not(.force-landscape) .touch-melee { right: var(--touch-right); bottom: calc(var(--touch-bottom) + 253px); }
+  html:not(.force-landscape) .touch-toolbar { top: max(64px, calc(env(safe-area-inset-top) + 56px)); width: min(292px, 96%); flex-wrap: wrap; justify-content: center; }
+  html:not(.force-landscape) body.touch-mode .vitals { top: 200px; }
+  html:not(.force-landscape) body.touch-mode .systems { top: 163px; }
+  html:not(.force-landscape) body.touch-mode .ammunition { top: 210px; }
+  html:not(.force-landscape) body.touch-mode #hud #perks { top: 260px; left: 12px; }
+  html:not(.force-landscape) body.touch-mode #announcement { top: 29%; }
+  html:not(.force-landscape) body.touch-mode #journal { top: 158px; }
 }
 @media (orientation: portrait) and (max-height: 650px) {
-  body.touch-mode .systems { top: 159px; font-size: 7px; line-height: 1.2; }
-  body.touch-mode .ammunition { top: 194px; }
-  body.touch-mode #notice, body.touch-mode #toast { top: 40%; font-size: 10px; }
+  html:not(.force-landscape) body.touch-mode .systems { top: 159px; font-size: 7px; line-height: 1.2; }
+  html:not(.force-landscape) body.touch-mode .ammunition { top: 194px; }
+  html:not(.force-landscape) body.touch-mode #notice, html:not(.force-landscape) body.touch-mode #toast { top: 40%; font-size: 10px; }
 }
 
 /* BO1 HUD on touch screens: same layout as desktop (chalk bottom-left, points over the ammo counter
    bottom-right); the ammo block just sits clear of the on-screen buttons instead of underneath them. */
 body.touch-mode #weapon-panel { right: calc(max(18px, env(safe-area-inset-right)) + 258px); bottom: max(18px, env(safe-area-inset-bottom)); }
 @media (orientation: portrait) {
-  body.touch-mode { --u: calc(calc(100 * var(--vw1)) / 560); }
-  body.touch-mode #weapon-panel { right: 12px; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 335px); }
+  html:not(.force-landscape) body.touch-mode { --u: calc(calc(100 * var(--vw1)) / 560); }
+  html:not(.force-landscape) body.touch-mode #weapon-panel { right: 12px; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 335px); }
 }
