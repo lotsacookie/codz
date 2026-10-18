@@ -20,6 +20,19 @@ function makeTexture(texture) {
   return map;
 }
 
+// +1 when the triangle a, b, c (counter-clockwise from the front) faces along `normal`, -1 when it faces
+// against it, 0 for a sliver too thin to tell. Used to prove a texture's faces all wind front-out.
+export function windingSide(a, b, c, normal, flip = false) {
+  const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+  const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+  const cx = uy * vz - uz * vy, cy = uz * vx - ux * vz, cz = ux * vy - uy * vx;
+  const length = Math.hypot(cx, cy, cz);
+  if (length < 1e-4) return 0;
+  const dot = (cx * normal[0] + cy * normal[1] + cz * normal[2]) / length;
+  if (Math.abs(dot) < 0.5) return 0;
+  return (dot > 0) !== flip ? 1 : -1;
+}
+
 function buildGroup(parsed, modelIndexes) {
   const { textures, texinfo, faces, models, vertices, entities } = parsed;
   const buckets = new Map();
@@ -37,7 +50,8 @@ function buildGroup(parsed, modelIndexes) {
       const light = parsed.faceLight(face, points);
       const shade = light ? light.map(v => Math.min(1, .35 + v * 1.3)) : [1, 1, 1];
       let bucket = buckets.get(info.texture);
-      if (!bucket) buckets.set(info.texture, bucket = { position: [], uv: [], color: [] });
+      if (!bucket) buckets.set(info.texture, bucket = { position: [], uv: [], color: [], front: 0, back: 0 });
+      const planeNormal = parsed.planes && face.plane !== undefined && face.plane * 3 + 2 < parsed.planes.length ? parsed.planes.subarray(face.plane * 3, face.plane * 3 + 3) : null;
       const corner = ([x, y, z]) => {
         // Z-up Quake space to Y-up three.js space (a rotation, so winding is kept).
         bucket.position.push(x, z, -y);
@@ -47,6 +61,12 @@ function buildGroup(parsed, modelIndexes) {
       for (let k = 1; k < points.length - 1; k++) {
         corner(points[0]); corner(points[k + 1]); corner(points[k]);
         triangles++;
+        if (!planeNormal) bucket.back++;
+        else {
+          const verdict = windingSide(points[0], points[k + 1], points[k], planeNormal, face.side !== 0);
+          if (verdict > 0) bucket.front++;
+          else if (verdict < 0) bucket.back++;
+        }
       }
     }
   }
@@ -60,7 +80,11 @@ function buildGroup(parsed, modelIndexes) {
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(bucket.color, 3));
     geometry.computeVertexNormals();
     const masked = texture.name.startsWith('{');
-    const material = new THREE.MeshStandardMaterial({ map: makeTexture(texture), vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide, alphaTest: masked ? .5 : 0 });
+    // Back faces of a closed brush can never be seen, so when every face of this texture provably winds
+    // front-out (checked against the map's own plane data) it is drawn single sided, which skips rasterising
+    // the far side of everything. Masked ("{") textures and anything unproven stay double sided as before.
+    const oneSided = !masked && bucket.front > 0 && bucket.back === 0;
+    const material = new THREE.MeshStandardMaterial({ map: makeTexture(texture), vertexColors: true, roughness: 1, metalness: 0, side: oneSided ? THREE.FrontSide : THREE.DoubleSide, alphaTest: masked ? .5 : 0 });
     material.name = texture.name;
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = `bsp_${texture.name}`;

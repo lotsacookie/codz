@@ -89,6 +89,7 @@ export function parseBsp(buffer) {
   const surfedgeLump = check('surfedge', LUMP.surfedges, 4);
   const texinfoLump = check('texinfo', LUMP.texinfo, 40);
   const faceLump = check('face', LUMP.faces, 20);
+  const planeLump = check('plane', LUMP.planes, 20);
   const modelLump = check('model', LUMP.models, 64);
   const lightingLump = lump(LUMP.lighting);
 
@@ -139,8 +140,12 @@ export function parseBsp(buffer) {
   const faces = [];
   for (let i = 0; i < faceLump.count; i++) {
     const o = faceLump.offset + i * 20;
-    faces.push({ firstEdge: view.getInt32(o + 4, true), edges: view.getInt16(o + 8, true), texinfo: view.getInt16(o + 10, true), lightOffset: view.getInt32(o + 16, true), style: bytes[o + 12] });
+    faces.push({ plane: view.getUint16(o, true), side: view.getInt16(o + 2, true), firstEdge: view.getInt32(o + 4, true), edges: view.getInt16(o + 8, true), texinfo: view.getInt16(o + 10, true), lightOffset: view.getInt32(o + 16, true), style: bytes[o + 12] });
   }
+
+  // Plane normals (x, y, z per plane) so the mesh builder can check face winding against the map's own data.
+  const planes = new Float32Array(planeLump.count * 3);
+  for (let i = 0; i < planeLump.count; i++) for (let k = 0; k < 3; k++) planes[i * 3 + k] = view.getFloat32(planeLump.offset + i * 20 + k * 4, true);
 
   const models = [];
   for (let i = 0; i < modelLump.count; i++) {
@@ -183,7 +188,7 @@ export function parseBsp(buffer) {
     return [r / size / 255, g / size / 255, b / size / 255];
   };
 
-  return { version, entities, vertices, textures, texinfo, faces, models, faceVertices, faceLight };
+  return { version, entities, vertices, textures, texinfo, faces, models, planes, faceVertices, faceLight };
 }
 
 // Brush models the level draws as static scenery (everything else is a door, trigger, lift, ...).

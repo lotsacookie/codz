@@ -74,7 +74,27 @@ const LOG = '[' + C.id + ']';
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
 let disposed = false;
 let culler = null, gltfRoot = null;
-const $ = id => document.getElementById(id), keys = new Set(), errors = [];
+const domCache = new Map();
+const $ = id => { let el = domCache.get(id); if (!el) domCache.set(id, el = document.getElementById(id)); return el; };
+const keys = new Set(), errors = [];
+// DOM writes cost style and layout work even when the value is the same, so the per-frame HUD only
+// writes when something changed.
+const textCache = new Map(), styleCache = new Map();
+function setText(id, value) {
+  value = String(value);
+  if (textCache.get(id) === value) return;
+  const el = $(id);
+  if (!el) return;
+  textCache.set(id, value);
+  el.textContent = value;
+}
+function setOpacity(id, value) {
+  if (styleCache.get(id) === value) return;
+  const el = $(id);
+  if (!el) return;
+  styleCache.set(id, value);
+  el.style.opacity = value;
+}
 const vector = a => new THREE.Vector3(...a);
 const coarse = matchMedia('(pointer: coarse)').matches;
 const renderer = new THREE.WebGLRenderer({ antialias: !coarse, powerPreference: coarse ? 'default' : 'high-performance' });
@@ -99,6 +119,7 @@ fill.position.set(...LT.fill[2]);
 scene.add(sun, fill);
 
 let data, player, collision, navigation, combat, features, groups = [], ready = false, active = false, lastPoints = null, perkKey = '';
+let promptWait = 0, promptShown = '', lowMag = null, mapLights = null;
 let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0, target = null;
 const trail = new PlayerTrail();
 const objects = new Map(), parts = new Map(), boughtGuns = new Set(), wallGuns = new Map();
@@ -142,7 +163,7 @@ const { pause, resume, setActive } = createPauseControl({
   gameOver: () => combat.session.phase === 'gameover',
   setActive: value => { active = value; },
   clearInput: () => { mousePrimary = mouseSecondary = mouseAim = touchFirePending = false; },
-  onPause: () => { $('hurt').style.opacity = 0; },
+  onPause: () => setOpacity('hurt', 0),
 });
 
 function endRun() {
@@ -262,29 +283,33 @@ function update(dt) {
   safely(() => combat.update(dt, { moving, sprint }));
   safely(() => features.update(dt, keys.has('KeyF') || keys.has('KeyE') || touch.use));
   noticeLeft = Math.max(0, noticeLeft - dt);
-  $('toast').textContent = noticeLeft ? notice : '';
-  $('prompt').textContent = promptText();
+  setText('toast', noticeLeft ? notice : '');
+  // The interact prompt searches every target with a few raycasts; 30 times a second is plenty for text.
+  promptWait -= dt;
+  if (promptWait <= 0) { promptWait = 1 / 30; promptShown = promptText(); }
+  setText('prompt', promptShown);
   hud();
 }
 
 function hud() {
   const s = combat.session, w = s.weapon;
-  $('hurt').style.opacity = active ? (1 - s.health / s.maxHealth) * .8 : 0;
+  setOpacity('hurt', active ? (1 - s.health / s.maxHealth) * .8 : 0);
   chalk.update(s, true);
   if (lastPoints === null || s.points === 0 && lastPoints > 0 && s.phase === 'gameover') lastPoints = s.points;
   if (s.points !== lastPoints) { spawnScorePopup($('score-popups'), s.points - lastPoints); lastPoints = s.points; }
-  $('points').textContent = s.points;
-  $('mag').textContent = w.mag;
-  $('reserve').textContent = w.reserve;
+  setText('points', s.points);
+  setText('mag', w.mag);
+  setText('reserve', w.reserve);
   const cap = s.def.magSize || s.def.clipSize || s.def.clip || s.def.ammoClip || s.def.mag || 8;
-  $('mag').classList.toggle('low', w.mag <= Math.floor(cap / 3));
+  const low = w.mag <= Math.floor(cap / 3);
+  if (low !== lowMag) { lowMag = low; $('mag').classList.toggle('low', low); }
   renderAmmoIcons($('ammo-icons'), s.def, w.mag);
-  $('weapon-name').textContent = s.def.name;
-  $('grenade-count').textContent = s.grenades;
-  $('reload-label').textContent = s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : touchControls.pad.active ? 'Press X to reload' : 'Reload') : '';
-  $('weapon-status').textContent = s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '';
-  $('hitmarker').style.opacity = combat.hitUntil > s.time ? 1 : 0;
-  $('power').textContent = C.hideHud?.includes('power') ? '' : s.power ? 'POWER ON' : 'POWER OFF';
+  setText('weapon-name', s.def.name);
+  setText('grenade-count', s.grenades);
+  setText('reload-label', s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : touchControls.pad.active ? 'Press X to reload' : 'Reload') : '');
+  setText('weapon-status', s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '');
+  setOpacity('hitmarker', combat.hitUntil > s.time ? 1 : 0);
+  setText('power', C.hideHud?.includes('power') ? '' : s.power ? 'POWER ON' : 'POWER OFF');
   const seconds = performance.now() / 1000;
   for (const key of ['double_points', 'insta_kill', 'fire_sale']) {
     const slot = $('pu-' + key), left = (s.effects[key] ?? 0) - s.time, visible = left > 0 && powerupVisible(left, seconds);
@@ -308,6 +333,7 @@ async function resetRun() {
   chalk.reset();
   lastPoints = null;
   perkKey = '';
+  textCache.clear(); styleCache.clear(); lowMag = null; promptWait = 0;
   for (const part of parts.values()) {
     part.open = part.opening = false;
     part.amount = 0;
@@ -560,25 +586,32 @@ if (!/[?&]cull=0\b/.test(location.search)) {
     withoutEntities(scene, () => { culler = new OcclusionCuller({ root: gltfRoot, lightDirection: travel, shadows: false }); });
   } catch (error) { console.warn(`${LOG} culling unavailable`, error); culler = null; }
 }
+mapLights = scene.getObjectByName('nzp_lights')?.userData.updateLights ?? null;
+const cullRoots = [];
 let previous = performance.now();
 renderer.setAnimationLoop(now => {
   if (disposed) return;
   const dt = Math.max(0, (now - previous) / 1000);
   previous = now;
   if (ready && active) gfx.sample(dt * 1000);
-  for (let remaining = Math.min(.25, dt); active && remaining > 0;) {
+  // A long frame must not queue up a pile of simulation steps: running them all makes the next frame even
+  // longer (a spiral that feels like the game and its input freezing), so catch-up is capped at two steps.
+  for (let remaining = Math.min(.1, dt); active && remaining > 0;) {
     const step = Math.min(.05, remaining);
     try { update(step); } catch (error) { reportFault(error); break; }
     remaining -= step;
   }
   if (!ready) { previous = now; return; }
+  camera.updateMatrixWorld();
   if (culler) {
     culler.update(camera);
-    const roots = [];
-    for (const z of combat.enemies.list) roots.push(z.root);
-    for (const z of combat.enemies.dead) roots.push(z.root);
-    culler.cullDynamic(roots, 100, 40, 1600, camera.position);
+    cullRoots.length = 0;
+    for (const z of combat.enemies.list) cullRoots.push(z.root);
+    for (const z of combat.enemies.dead) cullRoots.push(z.root);
+    culler.cullDynamic(cullRoots, 100, 40, 1600, camera.position);
   }
+  // Real lights go to the lights the camera is looking at (nearest first), then to the nearest of the rest.
+  if (mapLights) mapLights(camera);
   renderer.clear();
   renderer.render(scene, camera);
   if (active) { renderer.clearDepth(); renderer.render(combat.viewScene, combat.viewCamera); }
