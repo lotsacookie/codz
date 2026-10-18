@@ -92,7 +92,8 @@ test('providers turn Sketchfab and Khronos responses into pages of named maps', 
       : Array.from({ length: 30 }, (_, i) => ({ name: `Model${i}`, screenshot: 'screenshot/screenshot.jpg', tags: [], variants: { 'glTF-Binary': `Model${i}.glb` } })),
   });
   const first = await sketchfab.search({ query: 'bunker', fetchImpl });
-  assert.deepEqual([first.items[0].name, first.items[0].author, first.items[0].thumb, first.next], ['Bunker', 'Ann', 'big', 'c2']);
+  assert.deepEqual([first.items[0].name, first.items[0].author, first.items[0].thumb, first.next], ['Bunker', 'Ann', 'small', 'c2']);
+  assert.equal(first.items[0].art, 'big');
   const page = await khronos.search({ cursor: '12', fetchImpl });
   assert.equal(page.items.length, 12);
   assert.equal(page.next, '24');
