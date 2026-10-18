@@ -137,16 +137,19 @@ function placeChest(site, models, add, scene, solids) {
   });
 }
 
-// Kino der Toten's window boards (same sizes, layout and wood texture), fitted onto each window.
+// Kino der Toten's window boards (same plank sizes, tilt, layout and wood texture), fitted onto each window.
 let kinoBoards = null;
 async function loadKinoBoards() {
   if (kinoBoards) return kinoBoards;
   const template = await (await fetch(new URL('./window-boards.json', import.meta.url))).json();
-  const texture = new THREE.TextureLoader().load(template.texture);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
-  return kinoBoards = { ...template, material: material(0xffffff, { map: texture, roughness: .95 }) };
+  const { assetManager } = await import('../runtime-assets.js');
+  const texture = await new Promise(resolve => new THREE.TextureLoader(assetManager).load(template.texture, resolve, undefined, () => resolve(null)));
+  if (texture) {
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 4;
+  } else console.warn('[custom-map] Kino board texture unavailable');
+  return kinoBoards = { ...template, material: material(texture ? 0xffffff : 0x7a5a3a, { map: texture, roughness: .95 }) };
 }
 
 function boardGeometry(size) {
@@ -159,19 +162,26 @@ function boardGeometry(size) {
   return geometry;
 }
 
+const UP = new THREE.Vector3(0, 1, 0);
+
 function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
   add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair });
   add({ classname: 'script_struct', targetname: name, position: w.inside });
-  const alongX = w.t[0] !== 0;
   const ku = (w.width + 8) / kino.width, ky = (WINDOW.top - WINDOW.sill) / kino.height;
+  // Window frame: X along the wall, Y up, Z out of the window (away from the room).
+  const outward = new THREE.Vector3(-w.n[0], 0, -w.n[1]);
+  const along = new THREE.Vector3().crossVectors(UP, outward);
+  const frameQuat = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(along, UP, outward));
   kino.boards.forEach((spec, k) => {
-    const sizeU = spec.su * ku, sizeY = spec.sy * ky, sizeV = spec.sv;
+    const vertical = Math.abs(Math.sin(spec.angle * Math.PI / 180)) > .7;
+    const length = spec.length * (vertical ? ky : ku);
     const u = spec.u * ku, v = spec.v - 2.5;
-    const x = w.x + w.t[0] * u - w.n[0] * v, z = w.z + w.t[1] * u - w.n[1] * v;
+    const x = w.x + w.t[0] * u + outward.x * v, z = w.z + w.t[1] * u + outward.z * v;
     const y = w.y + WINDOW.sill + spec.y * ky;
-    const entity = add({ classname: 'script_model', targetname: name, script_parameters: 'board', script_noteworthy: String(k + 1), position: [x, y, z], yaw: 0, plank: sizeY });
-    const board = new THREE.Mesh(boardGeometry(alongX ? [sizeU, sizeY, sizeV] : [sizeV, sizeY, sizeU]), kino.material);
+    const entity = add({ classname: 'script_model', targetname: name, script_parameters: 'board', script_noteworthy: String(k + 1), position: [x, y, z], yaw: 0, plank: spec.width });
+    const board = new THREE.Mesh(boardGeometry([length, spec.width, spec.thick]), kino.material);
+    board.quaternion.copy(frameQuat).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), spec.angle * Math.PI / 180));
     board.position.set(x, y, z);
     board.userData.entityId = entity.id;
     scene.add(board);
