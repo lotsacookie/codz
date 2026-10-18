@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $shangriRoot = Split-Path -Parent $PSScriptRoot
-foreach ($shangriFile in @('index.html','map-assets.js','shell.js','shell.css','maps/shangri-la.js','hud.css','shangri-la/shangri-la.gltf','shangri-la/shangri-la.bin','shangri-la/collision.json','shangri-la/collision.bin','shangri-la/map-data.json')) {
+foreach ($shangriFile in @('index.html','map-assets.js','shell.js','shell.css','orientation.js','maps/shangri-la.js','hud.css','shangri-la/shangri-la.gltf','shangri-la/shangri-la.bin','shangri-la/collision.json','shangri-la/collision.bin','shangri-la/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $shangriRoot "export/web/$shangriFile"))) {
         throw "Missing Shangri-La asset: $shangriFile. Run npm run build:shangri-la."
     }

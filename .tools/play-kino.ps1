@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $kinoRoot = Split-Path -Parent $PSScriptRoot
-foreach ($kinoFile in @('index.html','kino.gltf','kino.bin','collision.bin','game-data.json','navigation.bin','kino-features.js','shell.js','shell.css','maps/kino.js','hud.css')) {
+foreach ($kinoFile in @('index.html','kino.gltf','kino.bin','collision.bin','game-data.json','navigation.bin','kino-features.js','shell.js','shell.css','orientation.js','maps/kino.js','hud.css')) {
     if (-not (Test-Path -LiteralPath (Join-Path $kinoRoot "export/web/$kinoFile"))) {
         throw "Missing Kino asset: $kinoFile. Run .tools/rebuild-kino.ps1."
     }
