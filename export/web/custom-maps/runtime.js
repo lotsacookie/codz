@@ -19,6 +19,7 @@ export class CustomFeatures extends ShangriFeatures {
       const entity = this.data.entities[barrier.id];
       if (entity?.repair) barrier.position.set(...entity.repair);
       if (entity?.spawn) barrier.spawnPoint = new THREE.Vector3(...entity.spawn);
+      if (entity?.spawns?.length) barrier.spawnPoints = entity.spawns.map(point => new THREE.Vector3(...point));
     }
   }
 }
@@ -141,6 +142,10 @@ export function createGridNavigation(getLayout) {
     }
 
     viable(barriers) {
+      if (this.reachableIds) {
+        const chosen = barriers.filter(barrier => this.reachableIds.has(barrier.id));
+        if (chosen.length) return chosen;
+      }
       const list = barriers.filter(barrier => {
         const i = this.node(barrier.inside);
         return i >= 0 && this.grid.comp[i] === this.home;
@@ -161,16 +166,27 @@ export function createGridNavigation(getLayout) {
       return new THREE.Vector3(node.x, node.y, node.z);
     }
 
+    // Component of the floor right under a point (tight match), or -1 when there is none.
+    compAt(p) {
+      const i = this.grid.nearest(p.x, p.y, p.z, 2, 40);
+      return i >= 0 ? this.grid.comp[i] : -1;
+    }
+
     async prepare() {
-      const reachable = this.viable(this.barriers).filter(b => {
+      const reachable = this.barriers.filter(b => {
         const i = this.node(b.inside);
         return i >= 0 && this.grid.comp[i] === this.home;
       });
-      this.reachableIds = new Set(reachable.map(b => b.id));
+      // Zombies start outside their window, so prefer windows whose outside is on floor that connects to
+      // the player's area; a ledge or pocket with no way down would leave them stranded there. Keep
+      // every window that can be reached when a map has too few of the connected kind.
+      const linked = reachable.filter(b => this.compAt(b.outside) === this.home);
+      const spawning = linked.length >= Math.min(3, reachable.length) ? linked : reachable;
+      this.reachableIds = new Set(spawning.map(b => b.id));
       this.version++;
       this.health = {
         baked: false, mapped: true, pathPoints: this.grid.count, links: this.grid.links.reduce((sum, l) => sum + l.length, 0) / 2,
-        barriers: this.barriers.length, reachable: reachable.length, unreachable: this.barriers.length - reachable.length, ms: 0,
+        barriers: this.barriers.length, reachable: spawning.length, unreachable: this.barriers.length - spawning.length, ms: 0,
       };
       this.onChange?.(this.health);
       return this.health;

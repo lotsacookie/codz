@@ -226,7 +226,7 @@ async function placeWallBuys(walls, grid, probe, add, scene) {
 
 function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
-  add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair, spawn: w.spawnPoint ?? undefined });
+  add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair, spawn: w.spawnPoint ?? undefined, spawns: w.spawnPoints?.length ? w.spawnPoints : undefined });
   add({ classname: 'script_struct', targetname: name, position: w.inside });
   const ku = (w.width + 8) / kino.width, ky = (WINDOW.top - WINDOW.sill) / kino.height;
   // Window frame: X along the wall, Y up, Z out of the window (away from the room).
@@ -255,7 +255,7 @@ function toWorldLayout(hints, fit) {
   return {
     spawn: hints.spawn && { point: point(hints.spawn.point), yaw: hints.spawn.yaw },
     sites: hints.sites.map(site => ({ ...site, point: point(site.point) })),
-    windows: hints.windows.map(w => ({ ...w, point: point(w.point), spawner: w.spawner && point(w.spawner) })),
+    windows: hints.windows.map(w => ({ ...w, point: point(w.point), spawner: w.spawner && point(w.spawner), spawners: (w.spawners ?? []).map(point) })),
     walls: (hints.walls ?? []).map(wall => ({ ...wall, point: point(wall.point) })),
     lights: (hints.lights ?? []).map(light => ({ ...light, point: point(light.point) })),
     doors: hints.doors.map(door => ({ ...door, min: point(door.min), max: point(door.max) })),
@@ -269,6 +269,15 @@ function placeDoor(door, fit, add, scene) {
   add({ classname: 'trigger_use', targetname: 'zombie_door', target: door.name, zombie_cost: String(door.cost), position: [cx, door.min[1] + 40, cz] });
   const part = add({ classname: 'script_model', targetname: door.name, position: [cx, door.min[1], cz], yaw: 0 });
   door.object.userData.entityId = part.id;
+  if (door.sealed) {
+    // Invisible plug that fills the rest of the opening, so the buy door cannot be walked around or hopped over.
+    const { min, max } = door.sealed;
+    const plug = new THREE.BoxGeometry(max[0] - min[0], max[1] - min[1], max[2] - min[2]);
+    plug.translate((min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2);
+    const blocker = new THREE.Mesh(plug, new THREE.MeshBasicMaterial({ visible: false }));
+    blocker.name = 'door_plug';
+    door.object.add(blocker);
+  }
   scene.add(door.object);
 }
 

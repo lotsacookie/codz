@@ -76,9 +76,34 @@ export function extractLayout(parsed, buildDoor = () => null) {
 
   const spawners = entities.filter(e => e.classname === 'spawn_zombie' && e.origin);
   layout.spawners = spawners.map(origin);
-  for (const entity of entities.filter(e => e.classname === 'item_barricade' && e.origin)) {
-    const spawner = entity.targetname ? spawners.find(s => s.target === entity.targetname) : null;
-    layout.windows.push({ point: origin(entity), yaw: entityYaw(entity), spawner: spawner ? origin(spawner) : null });
+  // NZ:P wires spawn_zombie -> path_corner -> ... -> item_barricade, so follow the chain of targets
+  // (a spawner may also target the barricade directly) instead of matching names one hop away.
+  const named = new Map();
+  for (const entity of entities) {
+    const key = String(entity.targetname ?? '').toLowerCase();
+    if (key) named.set(key, [...(named.get(key) ?? []), entity]);
+  }
+  const barricades = entities.filter(e => e.classname === 'item_barricade' && e.origin);
+  const barricadeOf = spawner => {
+    let name = String(spawner.target ?? '').toLowerCase();
+    const visited = new Set();
+    while (name && !visited.has(name) && visited.size < 12) {
+      visited.add(name);
+      const next = named.get(name) ?? [];
+      const hit = next.find(e => e.classname === 'item_barricade');
+      if (hit) return hit;
+      name = String(next.find(e => e.target)?.target ?? '').toLowerCase();
+    }
+    return null;
+  };
+  const feeding = new Map();
+  for (const spawner of spawners) {
+    const barricade = barricadeOf(spawner);
+    if (barricade) feeding.set(barricade, [...(feeding.get(barricade) ?? []), origin(spawner)]);
+  }
+  for (const entity of barricades) {
+    const points = feeding.get(entity) ?? [];
+    layout.windows.push({ point: origin(entity), yaw: entityYaw(entity), spawner: points[0] ?? null, spawners: points });
   }
 
   let doorIndex = 0;

@@ -150,11 +150,14 @@ export class Enemies {
     if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
   }
   spawnPointOf(b){
-    const sp=b.spawnPoint;if(!sp)return null;
-    const nav=this.world.navigation;if(!nav?.canReach)return sp;
-    const c=b.spawnCheck;if(c&&c.version===nav.version)return c.ok?sp:null;
-    let ok=true;try{ok=nav.canReach(sp,b.outside)!==false;}catch{ok=true;}
-    b.spawnCheck={version:nav.version,ok};return ok?sp:null;
+    const list=b.spawnPoints?.length?b.spawnPoints:(b.spawnPoint?[b.spawnPoint]:[]);if(!list.length)return null;
+    const nav=this.world.navigation;let usable=list;
+    if(nav?.canReach){
+      const c=b.spawnCheck;
+      if(c&&c.version===nav.version&&c.list===list)usable=c.usable;
+      else{usable=list.filter(sp=>{try{return nav.canReach(sp,b.outside)!==false;}catch{return true;}});b.spawnCheck={version:nav.version,list,usable};}
+    }
+    return usable.length?usable[Math.floor(this.session.random()*usable.length)]:null;
   }
   seen(z,player){
     const p=z.root.position;if(p.distanceTo(player)>900)return false;
