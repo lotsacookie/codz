@@ -174,10 +174,11 @@ html.force-landscape,html.force-landscape body{overflow:hidden}
 html.force-landscape body{position:fixed;inset:auto;top:0;left:0;width:var(--rot-w);height:var(--rot-h);transform-origin:0 0;transform:translateX(var(--rot-shift)) rotate(90deg)}
 
 /* Portrait is shown by rotating the page 90deg, so a menu's vertical scroll runs along the screen's horizontal axis.
-   touch-action is evaluated in screen space, so pan-y blocked the swipe that scrolls the rotated menu. Allow both axes. */
+   touch-action is evaluated in screen space, so native panning cannot scroll the rotated menu; orientation.js scrolls it
+   from the touch coordinates instead, so the browser must not also pan. */
 html.force-landscape body.touch-mode #pause,
 html.force-landscape #pause,
 html.force-landscape #launcher,
 html.force-landscape #custom-maps,
 html.force-landscape #menu,
-html.force-landscape .modifiers-card{touch-action:pan-x pan-y;overscroll-behavior:contain}
+html.force-landscape .modifiers-card{touch-action:none;overscroll-behavior:contain}
