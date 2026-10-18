@@ -127,3 +127,30 @@ test('BSP maps are laid out from their NZ:P entities', async () => {
   assert.equal(triggers.length, 12);
   assert(triggers.every(e => Number(e.zombie_cost) > 0));
 });
+
+test('BSP props: every shipped MDL parses and map entities place them', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { parseMdl } = await import('../export/web/custom-maps/mdl.js');
+  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
+  const { loadBspProps, propPlacement } = await import('../export/web/custom-maps/bsp-props.js');
+  const root = new URL('../export/web/maps/bsp/', import.meta.url);
+  const index = JSON.parse(readFileSync(new URL('maps.json', root), 'utf8'));
+  const entries = Object.values(index.models);
+  assert(entries.length > 50);
+  for (const entry of entries) {
+    const model = parseMdl(readFileSync(new URL(entry.path, root)));
+    assert(model.frames.length > 0 && model.triangles.length > 0, entry.path);
+  }
+
+  const read = async url => {
+    try { return new Uint8Array(readFileSync(new URL(url))); } catch { return null; }
+  };
+  const scene = loadBspBuffer(readFileSync(new URL('nzp_xmas2.bsp', root)));
+  const props = await loadBspProps(scene.entities, { baseUrl: root.href, read });
+  assert(props && props.userData.propCount > 100);
+  assert(props.children.every(mesh => mesh.isInstancedMesh && mesh.material.map));
+
+  const matrix = propPlacement({ origin: '10 20 30', angles: '0 90 0' });
+  const point = new THREE.Vector3(1, 0, 0).applyMatrix4(matrix);
+  assert.deepEqual(point.toArray().map(Math.round), [10, 30, -21]);
+});

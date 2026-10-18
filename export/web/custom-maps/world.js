@@ -187,6 +187,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
   fitted.scale.setScalar(fit.scale);
   fitted.position.copy(fit.offset);
   fitted.add(root);
+  if (root.userData?.bspProps) fitted.add(root.userData.bspProps);
   scene.add(fitted);
 
   onStatus('Building collision…', .08);

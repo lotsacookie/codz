@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { parseBsp, staticModelIndexes, HIDDEN_TEXTURES, isWaterTexture } from './bsp-parse.js';
 import { extractLayout } from './bsp-layout.js';
+import { attachBspProps } from './bsp-props.js';
 
 // Quake/GoldSrc units are about an inch, the same as the game, so BSP maps load at scale 1.
 export const BSP_SCALE = 1;
@@ -80,7 +81,15 @@ export function buildBspScene(parsed) {
 
 export const loadBspBuffer = buffer => buildBspScene(parseBsp(buffer));
 
-export async function loadBspFromUrl(url, onProgress) {
+// Props (misc_model / place_model .mdl entities) are loaded from models/ next to the map and
+// kept on root.userData.bspProps, apart from the map geometry so they never become collision.
+export async function loadBspWithProps(buffer, options = {}) {
+  const scene = loadBspBuffer(buffer);
+  await attachBspProps(scene.root, scene.entities, options);
+  return scene;
+}
+
+export async function loadBspFromUrl(url, onProgress, options = {}) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Could not download the map (${response.status}).`);
   const total = Number(response.headers.get('content-length')) || 0;
@@ -98,5 +107,6 @@ export async function loadBspFromUrl(url, onProgress) {
     }
     buffer = bytes.buffer;
   } else buffer = await response.arrayBuffer();
-  return loadBspBuffer(buffer).root;
+  const baseUrl = options.baseUrl ?? new URL('./', new URL(url, globalThis.location?.href ?? import.meta.url)).href;
+  return (await loadBspWithProps(buffer, { ...options, baseUrl })).root;
 }

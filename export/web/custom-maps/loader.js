@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { unzip } from './zip.js';
-import { loadBspBuffer, loadBspFromUrl } from './bsp.js';
+import { loadBspWithProps, loadBspFromUrl } from './bsp.js';
 
 const SKETCHFAB = 'https://api.sketchfab.com/v3';
 
@@ -58,7 +58,7 @@ export async function loadFromArchive(files) {
 }
 
 export async function loadFromFile(file) {
-  if (/\.bsp$/i.test(file.name)) return loadBspBuffer(await file.arrayBuffer()).root;
+  if (/\.bsp$/i.test(file.name)) return (await loadBspWithProps(await file.arrayBuffer())).root;
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (/\.zip$/i.test(file.name)) return loadFromArchive(await unzip(bytes));
   if (/\.gltf$/i.test(file.name)) return parse(new GLTFLoader(), new TextDecoder().decode(bytes));

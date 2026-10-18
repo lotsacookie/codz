@@ -37,5 +37,25 @@ for (const file of readdirSync(dir).filter(name => /\.bsp$/i.test(name)).sort())
     hasZones: existsSync(side('nsz')), hasWaypoints: existsSync(side('way')),
   });
 }
-writeFileSync(path.join(dir, 'maps.json'), JSON.stringify({ version: 1, maps }, null, 2) + '\n');
-console.log(`Wrote ${maps.length} maps to maps/bsp/maps.json`);
+const models = {};
+const modelsDir = path.join(dir, 'models');
+const walk = folder => {
+  const entries = readdirSync(path.join(dir, folder), { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  for (const entry of entries) {
+    const relative = `${folder}/${entry.name}`;
+    if (entry.isDirectory()) walk(relative);
+    else if (/\.mdl$/i.test(entry.name)) {
+      const prefix = `${entry.name}_`.toLowerCase();
+      const skins = [];
+      for (const other of entries) {
+        const match = other.name.toLowerCase().startsWith(prefix) && /^(\d+)\.(pcx|tga)$/.exec(other.name.slice(prefix.length).toLowerCase());
+        if (match) skins[Number(match[1])] = other.name;
+      }
+      models[relative.toLowerCase()] = { path: relative, ...(skins.length ? { skins: Array.from(skins, name => name ?? null) } : {}) };
+    }
+  }
+};
+if (existsSync(modelsDir)) walk('models');
+
+writeFileSync(path.join(dir, 'maps.json'), JSON.stringify({ version: 1, maps, models }, null, 2) + '\n');
+console.log(`Wrote ${maps.length} maps and ${Object.keys(models).length} models to maps/bsp/maps.json`);

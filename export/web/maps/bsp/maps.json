@@ -381,5 +381,329 @@
       "hasZones": false,
       "hasWaypoints": false
     }
-  ]
+  ],
+  "models": {
+    "models/props/barrel_m.mdl": {
+      "path": "models/props/Barrel_m.mdl"
+    },
+    "models/props/bath.mdl": {
+      "path": "models/props/bath.mdl"
+    },
+    "models/props/bed.mdl": {
+      "path": "models/props/bed.mdl"
+    },
+    "models/props/bodybag_back_wall.mdl": {
+      "path": "models/props/bodybag_back_wall.mdl"
+    },
+    "models/props/bodybag_flat.mdl": {
+      "path": "models/props/bodybag_flat.mdl"
+    },
+    "models/props/bodybag_head.mdl": {
+      "path": "models/props/bodybag_head.mdl"
+    },
+    "models/props/chandelier$.mdl": {
+      "path": "models/props/chandelier$.mdl",
+      "skins": [
+        "chandelier$.mdl_0.tga"
+      ]
+    },
+    "models/props/container.mdl": {
+      "path": "models/props/container.mdl"
+    },
+    "models/props/couch_res.mdl": {
+      "path": "models/props/couch_res.mdl"
+    },
+    "models/props/dentist_chair.mdl": {
+      "path": "models/props/dentist_chair.mdl"
+    },
+    "models/props/derped/ammo_can.mdl": {
+      "path": "models/props/derped/ammo_can.mdl",
+      "skins": [
+        "ammo_can.mdl_0.pcx"
+      ]
+    },
+    "models/props/derped/pumpkin_1.mdl": {
+      "path": "models/props/derped/pumpkin_1.mdl",
+      "skins": [
+        "pumpkin_1.mdl_0.pcx"
+      ]
+    },
+    "models/props/derped/pumpkin_2.mdl": {
+      "path": "models/props/derped/pumpkin_2.mdl",
+      "skins": [
+        "pumpkin_2.mdl_0.pcx"
+      ]
+    },
+    "models/props/derped/pumpkin_3.mdl": {
+      "path": "models/props/derped/pumpkin_3.mdl",
+      "skins": [
+        "pumpkin_3.mdl_0.pcx"
+      ]
+    },
+    "models/props/derped/tractor.mdl": {
+      "path": "models/props/derped/tractor.mdl",
+      "skins": [
+        "tractor.mdl_0.pcx",
+        "tractor.mdl_1.pcx"
+      ]
+    },
+    "models/props/dummy.mdl": {
+      "path": "models/props/dummy.mdl"
+    },
+    "models/props/flag_n_w_h.mdl": {
+      "path": "models/props/flag_n_w_h.mdl"
+    },
+    "models/props/flag_usa.mdl": {
+      "path": "models/props/flag_usa.mdl"
+    },
+    "models/props/flag.mdl": {
+      "path": "models/props/flag.mdl"
+    },
+    "models/props/flame.mdl": {
+      "path": "models/props/flame.mdl"
+    },
+    "models/props/fountain.mdl": {
+      "path": "models/props/fountain.mdl"
+    },
+    "models/props/fridge.mdl": {
+      "path": "models/props/fridge.mdl"
+    },
+    "models/props/gramophone_skip.mdl": {
+      "path": "models/props/gramophone_skip.mdl",
+      "skins": [
+        "gramophone_skip.mdl_0.pcx"
+      ]
+    },
+    "models/props/gramophone.mdl": {
+      "path": "models/props/gramophone.mdl",
+      "skins": [
+        "gramophone.mdl_0.pcx"
+      ]
+    },
+    "models/props/grenade_bag.mdl": {
+      "path": "models/props/grenade_bag.mdl"
+    },
+    "models/props/hammersickle.mdl": {
+      "path": "models/props/hammersickle.mdl",
+      "skins": [
+        "hammersickle.mdl_0.pcx",
+        "hammersickle.mdl_1.pcx"
+      ]
+    },
+    "models/props/jeep_hl.mdl": {
+      "path": "models/props/jeep_hl.mdl",
+      "skins": [
+        "jeep_hl.mdl_0.pcx"
+      ]
+    },
+    "models/props/jeep.mdl": {
+      "path": "models/props/jeep.mdl",
+      "skins": [
+        "jeep.mdl_0.pcx"
+      ]
+    },
+    "models/props/kino_box.mdl": {
+      "path": "models/props/Kino_box.mdl"
+    },
+    "models/props/kino_boxes2.mdl": {
+      "path": "models/props/Kino_boxes2.mdl"
+    },
+    "models/props/kino_boxes3.mdl": {
+      "path": "models/props/Kino_boxes3.mdl"
+    },
+    "models/props/kino_boxes4.mdl": {
+      "path": "models/props/Kino_boxes4.mdl"
+    },
+    "models/props/kino_chairset.mdl": {
+      "path": "models/props/kino_chairset.mdl"
+    },
+    "models/props/kino_couch.mdl": {
+      "path": "models/props/Kino_couch.mdl"
+    },
+    "models/props/kino_lounge.mdl": {
+      "path": "models/props/Kino_lounge.mdl"
+    },
+    "models/props/kino_stageprop.mdl": {
+      "path": "models/props/Kino_stageprop.mdl"
+    },
+    "models/props/kino_table.mdl": {
+      "path": "models/props/Kino_table.mdl"
+    },
+    "models/props/lamp_kino.mdl": {
+      "path": "models/props/lamp_kino.mdl",
+      "skins": [
+        "lamp_kino.mdl_0.pcx",
+        "lamp_kino.mdl_1.pcx"
+      ]
+    },
+    "models/props/lamp_ndu.mdl": {
+      "path": "models/props/lamp_ndu.mdl"
+    },
+    "models/props/lamp_ndu45.mdl": {
+      "path": "models/props/lamp_ndu45.mdl"
+    },
+    "models/props/lamp_oil.mdl": {
+      "path": "models/props/lamp_oil.mdl"
+    },
+    "models/props/lamp_wall.mdl": {
+      "path": "models/props/lamp_wall.mdl"
+    },
+    "models/props/mainframe_pad.mdl": {
+      "path": "models/props/mainframe_pad.mdl"
+    },
+    "models/props/metal_chair.mdl": {
+      "path": "models/props/metal_chair.mdl"
+    },
+    "models/props/mopbucket.mdl": {
+      "path": "models/props/MopBucket.mdl"
+    },
+    "models/props/mystery_debris.mdl": {
+      "path": "models/props/mystery_debris.mdl",
+      "skins": [
+        "mystery_debris.mdl_0.pcx"
+      ]
+    },
+    "models/props/oven.mdl": {
+      "path": "models/props/oven.mdl",
+      "skins": [
+        "oven.mdl_0.pcx"
+      ]
+    },
+    "models/props/perk_bottle.mdl": {
+      "path": "models/props/perk_bottle.mdl",
+      "skins": [
+        "perk_bottle.mdl_0.pcx",
+        "perk_bottle.mdl_1.pcx",
+        "perk_bottle.mdl_2.pcx",
+        "perk_bottle.mdl_3.pcx",
+        "perk_bottle.mdl_4.pcx",
+        "perk_bottle.mdl_5.pcx",
+        "perk_bottle.mdl_6.pcx",
+        "perk_bottle.mdl_7.pcx"
+      ]
+    },
+    "models/props/piano.mdl": {
+      "path": "models/props/piano.mdl"
+    },
+    "models/props/pisuar.mdl": {
+      "path": "models/props/pisuar.mdl"
+    },
+    "models/props/projector.mdl": {
+      "path": "models/props/projector.mdl"
+    },
+    "models/props/radiator.mdl": {
+      "path": "models/props/radiator.mdl"
+    },
+    "models/props/radio.mdl": {
+      "path": "models/props/radio.mdl"
+    },
+    "models/props/rebar.mdl": {
+      "path": "models/props/rebar.mdl"
+    },
+    "models/props/sandbags.mdl": {
+      "path": "models/props/sandbags.mdl",
+      "skins": [
+        "sandbags.mdl_0.pcx"
+      ]
+    },
+    "models/props/shelf.mdl": {
+      "path": "models/props/shelf.mdl"
+    },
+    "models/props/stand.mdl": {
+      "path": "models/props/stand.mdl"
+    },
+    "models/props/table_dinner.mdl": {
+      "path": "models/props/table_dinner.mdl"
+    },
+    "models/props/table_sq.mdl": {
+      "path": "models/props/table_sq.mdl"
+    },
+    "models/props/teddy.mdl": {
+      "path": "models/props/teddy.mdl"
+    },
+    "models/props/teleporter.mdl": {
+      "path": "models/props/teleporter.mdl"
+    },
+    "models/props/toilet.mdl": {
+      "path": "models/props/toilet.mdl"
+    },
+    "models/props/trash_con.mdl": {
+      "path": "models/props/trash_con.mdl"
+    },
+    "models/props/tree_ch.mdl": {
+      "path": "models/props/tree_ch.mdl"
+    },
+    "models/props/tree_swamp$.mdl": {
+      "path": "models/props/tree_swamp$.mdl",
+      "skins": [
+        "tree_swamp$.mdl_0.tga"
+      ]
+    },
+    "models/props/treesl.mdl": {
+      "path": "models/props/treeSL.mdl"
+    },
+    "models/props/treeth.mdl": {
+      "path": "models/props/treeTH.mdl"
+    },
+    "models/props/usflag.mdl": {
+      "path": "models/props/USflag.mdl",
+      "skins": [
+        "USflag.mdl_0.pcx",
+        "USflag.mdl_1.pcx"
+      ]
+    },
+    "models/props/vanity_table.mdl": {
+      "path": "models/props/vanity_table.mdl"
+    },
+    "models/props/xmas/bell.mdl": {
+      "path": "models/props/xmas/bell.mdl",
+      "skins": [
+        "bell.mdl_0.pcx"
+      ]
+    },
+    "models/props/xmas/dead_soldier.mdl": {
+      "path": "models/props/xmas/dead_soldier.mdl",
+      "skins": [
+        "dead_soldier.mdl_0.pcx",
+        "dead_soldier.mdl_1.pcx"
+      ]
+    },
+    "models/props/xmas/token_glasses.mdl": {
+      "path": "models/props/xmas/token_glasses.mdl",
+      "skins": [
+        "token_glasses.mdl_0.pcx"
+      ]
+    },
+    "models/props/xmas/token_scarf.mdl": {
+      "path": "models/props/xmas/token_scarf.mdl",
+      "skins": [
+        "token_scarf.mdl_0.pcx"
+      ]
+    },
+    "models/props/xmas/token_toy.mdl": {
+      "path": "models/props/xmas/token_toy.mdl",
+      "skins": [
+        "token_toy.mdl_0.pcx",
+        "token_toy.mdl_1.pcx"
+      ]
+    },
+    "models/props/xmas/wep_cart.mdl": {
+      "path": "models/props/xmas/wep_cart.mdl",
+      "skins": [
+        "wep_cart.mdl_0.pcx"
+      ]
+    },
+    "models/props/xmas/wep_energy.mdl": {
+      "path": "models/props/xmas/wep_energy.mdl",
+      "skins": [
+        "wep_energy.mdl_0.pcx"
+      ]
+    },
+    "models/props/xmas/wep_frame.mdl": {
+      "path": "models/props/xmas/wep_frame.mdl",
+      "skins": [
+        "wep_frame.mdl_0.pcx"
+      ]
+    }
+  }
 }
