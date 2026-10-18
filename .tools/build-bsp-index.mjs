@@ -8,6 +8,9 @@ const dir = path.resolve(import.meta.dirname, '..', 'export', 'web', 'maps', 'bs
 const unwrap = lines => lines.map(l => l.trim()).filter(Boolean).reduce((out, line) => (out.endsWith('-') ? out.slice(0, -1) + line : (out ? `${out} ${line}` : line)), '');
 const pretty = id => id.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
+const artDir = path.resolve(dir, '..', '..', 'art', 'bsp');
+const art = existsSync(artDir) ? new Map(readdirSync(artDir).map(name => [name.replace(/\.\w+$/, '').toLowerCase(), name])) : new Map();
+
 const maps = [];
 for (const file of readdirSync(dir).filter(name => /\.bsp$/i.test(name)).sort()) {
   const id = file.replace(/\.bsp$/i, '');
@@ -29,7 +32,7 @@ for (const file of readdirSync(dir).filter(name => /\.bsp$/i.test(name)).sort())
     continue;
   }
   maps.push({
-    id, title, author, description, file, size: statSync(path.join(dir, file)).size, faces,
+    id, title, author, description, file, art: art.has(id.toLowerCase()) ? `art/bsp/${art.get(id.toLowerCase())}` : '', size: statSync(path.join(dir, file)).size, faces,
     ...summary,
     hasZones: existsSync(side('nsz')), hasWaypoints: existsSync(side('way')),
   });
