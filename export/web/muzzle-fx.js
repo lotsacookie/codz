@@ -4,6 +4,9 @@ let starMap = null;
 let glowMap = null;
 let smokeMap = null;
 
+// Slightly larger flash; depth-tested so the gun model occludes it instead of it showing through.
+const FLASH_SCALE = 1.25;
+
 function paint(size, draw) {
   if (typeof document === 'undefined') return null;
   const canvas = document.createElement('canvas');
@@ -87,7 +90,7 @@ export function createMuzzleFlash(tag) {
   const group = new THREE.Group();
   group.visible = false;
   const sprite = map => new THREE.Sprite(new THREE.SpriteMaterial({
-    map, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, toneMapped: false, fog: false
+    map, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: true, toneMapped: false, fog: false
   }));
   const star = sprite(flashStar());
   const glow = sprite(flashGlow());
@@ -99,7 +102,7 @@ export function createMuzzleFlash(tag) {
   return {
     group,
     fire(profile, ads = false) {
-      const size = profile.size * (ads ? 0.72 : 1) * (0.85 + Math.random() * 0.35);
+      const size = profile.size * FLASH_SCALE * (ads ? 0.72 : 1) * (0.85 + Math.random() * 0.35);
       state.life = state.total = 0.045 + Math.random() * 0.03;
       star.scale.setScalar(size);
       star.material.rotation = Math.random() * Math.PI * 2;
