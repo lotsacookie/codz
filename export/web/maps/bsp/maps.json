@@ -400,6 +400,26 @@
       "powerSwitch": true,
       "hasZones": false,
       "hasWaypoints": false
+    },
+    {
+      "id": "superzombiebros",
+      "title": "Super Zombie Bros",
+      "author": "notrickzdumbo",
+      "description": "World Z-1",
+      "file": "SuperZombieBros.bsp",
+      "art": "art/bsp/SuperZombieBros.png",
+      "size": 399212,
+      "faces": 760,
+      "perks": 8,
+      "packAPunch": 1,
+      "mysteryBox": 1,
+      "zombieSpawns": 3,
+      "windows": 0,
+      "wallWeapons": 61,
+      "doors": 0,
+      "powerSwitch": true,
+      "hasZones": false,
+      "hasWaypoints": false
     }
   ],
   "models": {
