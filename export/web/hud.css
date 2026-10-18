@@ -74,16 +74,16 @@ body.no-fx #fx{display:none}
 #hazard{display:block;position:absolute;top:calc(var(--u) * 70);left:50%;transform:translateX(-50%);color:#ffd58c;text-align:center;font-size:calc(var(--u) * 12);max-width:70%;font-family:var(--hud-font);text-shadow:0 1px 3px #000}
 #hack-progress{position:absolute;left:40%;top:58%;width:20%;accent-color:#8bd6bb}
 #hack-progress[hidden]{display:none}
-#journal{display:block;position:absolute;left:calc(var(--u) * 22);top:calc(var(--u) * 100);width:min(390px,75vw);padding:20px;background:rgba(10,8,6,.78);border:1px solid #b0a58b60;border-radius:4px;font:calc(var(--u) * 13)/1.6 var(--hud-font);color:#f1ede2}
+#journal{display:block;position:absolute;left:calc(var(--u) * 22);top:calc(var(--u) * 100);width:min(390px,calc(75 * var(--vw1)));padding:20px;background:rgba(10,8,6,.78);border:1px solid #b0a58b60;border-radius:4px;font:calc(var(--u) * 13)/1.6 var(--hud-font);color:#f1ede2}
 #journal[hidden]{display:none}
 #journal strong{font-size:calc(var(--u) * 10);letter-spacing:2px;color:#d9c3a0}
 #journal-hint{font-size:calc(var(--u) * 11);color:#bcb5a3}
 #weapon-status{display:block;font-size:calc(var(--u) * 11);letter-spacing:.08em;color:#e8e2d2;min-height:0}
-#visor{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;border:min(3vw,30px) solid #05101888;border-radius:17%;box-shadow:inset 0 0 85px 24px #07121ddb}
+#visor{display:block;position:absolute;inset:0;z-index:2;pointer-events:none;border:min(calc(3 * var(--vw1)),30px) solid #05101888;border-radius:17%;box-shadow:inset 0 0 85px 24px #07121ddb}
 #earth-flash{display:block;position:fixed;inset:0;background:#fff2d6;pointer-events:none;z-index:3;opacity:0}
 #perks span{display:grid;place-items:center;width:calc(var(--u) * 24);height:calc(var(--u) * 24);border-radius:50%;color:#10141d;font-size:calc(var(--u) * 8);font-weight:900}
 body.touch-mode #location-panel{top:12px;left:12px;max-width:23%}
 body.touch-mode #location{font-size:13px}
 body.touch-mode #systems{top:62px;right:12px;gap:1px;font-size:8px}
-body.touch-mode #journal{top:58px;left:50%;transform:translateX(-50%);padding:12px;width:min(390px,85vw);font-size:12px}
+body.touch-mode #journal{top:58px;left:50%;transform:translateX(-50%);padding:12px;width:min(390px,calc(85 * var(--vw1)));font-size:12px}
 body.touch-mode #hazard{top:30%;font-size:11px}

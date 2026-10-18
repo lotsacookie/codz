@@ -57,7 +57,7 @@ body.touch-mode > canvas { position: fixed; inset: 0; width: 100% !important; he
 .touch-pause { right: var(--touch-right); }
 .touch-scores { right: calc(var(--touch-right) + 56px); }
 .touch-hint { position: absolute; right: calc(var(--touch-right) + 22px); bottom: calc(var(--touch-bottom) + 178px); color: #d6ebe59c; font-size: 9px; text-shadow: 0 1px 5px #000; }
-.touch-settings { width: min(360px, 90vw); font-size: 12px; }
+.touch-settings { width: min(360px, calc(90 * var(--vw1))); font-size: 12px; }
 .touch-settings label { display: flex; align-items: center; gap: 12px; }
 .touch-settings input { flex: 1; min-width: 80px; min-height: 44px; accent-color: var(--fe-accent); }
 .touch-settings select { flex: 1; min-width: 0; min-height: 44px; margin-left: auto; padding: 0 10px; border: 1px solid #b7dec955; border-radius: 5px; background: #14252e; color: #edf9f5; font: inherit; font-size: 16px; touch-action: manipulation; }
@@ -101,7 +101,7 @@ body.touch-mode #hud #perks { top: 114px; left: 92px; bottom: auto; gap: 4px; }
 body.touch-mode #hud #perks span { width: 24px; height: 24px; font-size: 8px; }
 body.touch-mode #hazard { top: 30%; font-size: 11px; }
 body.touch-mode #oxygen { bottom: auto; top: 42%; width: 240px; font-size: 10px; }
-body.touch-mode #journal { top: 58px; left: 50%; transform: translateX(-50%); padding: 12px; width: min(390px, 85vw); font-size: 12px; }
+body.touch-mode #journal { top: 58px; left: 50%; transform: translateX(-50%); padding: 12px; width: min(390px, calc(85 * var(--vw1))); font-size: 12px; }
 body.touch-mode #journal p:last-child { font-size: 10px; }
 @media (max-height: 500px) {
   body.touch-mode #menu h1 { font-size: 42px; }
@@ -142,6 +142,6 @@ body.touch-mode #journal p:last-child { font-size: 10px; }
    bottom-right); the ammo block just sits clear of the on-screen buttons instead of underneath them. */
 body.touch-mode #weapon-panel { right: calc(max(18px, env(safe-area-inset-right)) + 258px); bottom: max(18px, env(safe-area-inset-bottom)); }
 @media (orientation: portrait) {
-  body.touch-mode { --u: calc(100dvw / 560); }
+  body.touch-mode { --u: calc(calc(100 * var(--vw1)) / 560); }
   body.touch-mode #weapon-panel { right: 12px; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 335px); }
 }
