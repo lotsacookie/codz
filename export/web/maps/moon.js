@@ -13,6 +13,7 @@ import { MoonFeatures } from '../moon-features.js';
 import { MoonPresentation } from '../moon-presentation.js';
 import { loadMoonWater } from '../moon-water.js';
 import { createZombieTouch } from '../zombies-touch.js';
+import { TapReload } from '../tap-reload.js';
 import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
@@ -52,6 +53,7 @@ function reportFault(error) {
   if (n === 1) { console.error('[moon]', error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
 }
 let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;
+const tapReload=new TapReload();
 const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
   onReset:()=>{touchFirePending=false;},
   onLook:(x,y,sensitivity)=>{
@@ -66,7 +68,7 @@ const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
     if(action==='weapon')combat.switchWeapon();
     if(action==='use')interact();
     // Controller X: use whatever is in reach, reload otherwise.
-    if(action==='usereload'){findTarget();if(target)interact();else if(combat.enabled)combat.key('KeyR');}
+    if(action==='usereload'){findTarget();if(target?.kind==='barrier'&&combat.enabled)tapReload.press();else if(target)interact();else if(combat.enabled)combat.key('KeyR');}
     if(action==='suit'){state.toggleSuit();if(!state.hasSuit)showNotice('Find a P.E.S. station in Receiving Bay.');}
     if(action==='hack'&&combat.enabled){findTarget();if(!features.hackNearby(target))showNotice('Aim at a hackable target. Equip the Hacker first.');}
     if(action==='journal')$('journal').hidden=!$('journal').hidden;
@@ -226,6 +228,7 @@ function interact() {
 function update(dt) {
   touchControls.setEnabled(active&&(!combat.enabled||!['reviving','gameover'].includes(combat.session.phase)),active);
   const touch=touchControls.input.read();
+  if(tapReload.update(dt,touch.use)&&combat.enabled)combat.key('KeyR');
   // Keep a tap through the native sprint-out animation so a moving player
   // can fire a semi-automatic weapon as soon as it has been lowered.
   if(!touchControls.enabled&&!touchControls.pad.enabled)touchFirePending=false;

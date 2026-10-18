@@ -24,6 +24,7 @@ import { smoothingEnabled } from '../steering.js';
 import { AdaptiveResolution, createPerfOverlay } from '../quality.js';
 import { GradePass } from '../grade.js';
 import { prefetchOtherSlots, warmEntry } from '../viewmodel-cache.js';
+import { TapReload } from '../tap-reload.js';
 import { OcclusionCuller } from '../occlusion.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from '../vision.js';
 import { disposeObject } from '../dispose.js';
@@ -97,6 +98,7 @@ const errors=[];
 let lastShot=null;
 let pendingMelee=null,lastReloadSerial=0,reloadShot=false;
 let mousePrimary=false,mouseAim=false;
+const tapReload=new TapReload();
 const touchControls=createZombieTouch({ctx,
   menuSettings:false,
   onLook:(x,y,sensitivity)=>{
@@ -108,7 +110,7 @@ const touchControls=createZombieTouch({ctx,
     if(!active||session.phase==='reviving')return;
     if(action==='reload')reload();if(action==='melee')melee();if(action==='grenade')throwGrenade();if(action==='use')interact();
     // Controller X: use whatever is in reach, reload otherwise.
-    if(action==='usereload'){findPrompt();if(prompt)interact();else reload();}
+    if(action==='usereload'){findPrompt();if(prompt?.barrier)tapReload.press();else if(prompt)interact();else reload();}
     if(action==='weapon'){session.switchWeapon();equipView();}
     if(action==='claymore')features.placeClaymore();if(action==='equipment')features.throwMonkey();
     if(action==='attachment'&&session.toggleAttachment())equipView();
@@ -374,6 +376,7 @@ function update(dt){
   if(!ready)return;
   touchControls.setEnabled(active&&session.phase!=='reviving'&&session.phase!=='gameover',active&&session.phase!=='gameover');
   const touch=touchControls.input.read();
+  if(tapReload.update(dt,touch.use))reload();
   primary=mousePrimary||touch.fire;primaryPressed ||= touch.firePressed;ads=mouseAim||touch.aim;
   if(active){
     session.update(dt);

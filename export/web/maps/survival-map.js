@@ -22,6 +22,7 @@ import { ShangriEnemies } from '../shangri-la-enemies.js';
 import { ShangriFeatures } from '../shangri-la-features.js';
 import { SurvivalNavigation } from '../shangri-la-navigation.js';
 import { PlayerTrail } from '../player-trail.js';
+import { TapReload } from '../tap-reload.js';
 import { doorGroups, barrierGroups, movingEntityIds, boxLocations } from '../shangri-la-rules.js';
 
 /**
@@ -136,6 +137,7 @@ function reportFault(error) {
   if (n === 1) { console.error(LOG, error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
 }
 
+const tapReload = new TapReload();
 const touchControls = createZombieTouch({
   ctx,
   minimal: true, menuSettings: false,
@@ -153,7 +155,13 @@ const touchControls = createZombieTouch({
     if (action === 'weapon') combat.switchWeapon();
     if (action === 'use') interact();
     // Controller X: use whatever is in reach, reload otherwise.
-    if (action === 'usereload') { features.findTarget(); if (features.target) interact(); else combat.key('KeyR'); }
+    if (action === 'usereload') {
+      features.findTarget();
+      // A window is a hold to repair, so a quick tap there reloads instead of doing nothing.
+      if (features.target?.kind === 'barrier') tapReload.press();
+      else if (features.target) interact();
+      else combat.key('KeyR');
+    }
   },
   onPause: () => ctx.pause(),
 });
@@ -162,7 +170,7 @@ const { pause, resume, setActive } = createPauseControl({
   keys, touch: touchControls, player: () => player, combat: () => combat, ready: () => ready,
   gameOver: () => combat.session.phase === 'gameover',
   setActive: value => { active = value; },
-  clearInput: () => { mousePrimary = mouseSecondary = mouseAim = touchFirePending = false; },
+  clearInput: () => { tapReload.cancel(); mousePrimary = mouseSecondary = mouseAim = touchFirePending = false; },
   onPause: () => setOpacity('hurt', 0),
 });
 
@@ -258,6 +266,7 @@ function update(dt) {
   if (!touchControls.enabled && !touchControls.pad.enabled) touchFirePending = false;
   touchFirePending ||= touch.firePressed;
   const touchWantsFire = touch.fire || touchFirePending;
+  if (tapReload.update(dt, touch.use) && combat.session.canAct) combat.key('KeyR');
   combat.primary = mousePrimary || touchWantsFire;
   if (touchFirePending && combat.view.ready && !['raise', 'melee', 'sprintIn', 'sprint', 'sprintOut'].includes(combat.view.mode)) {
     combat.pressed = true;
