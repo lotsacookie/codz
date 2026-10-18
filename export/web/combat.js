@@ -153,7 +153,8 @@ export class Combat {
     this.perkDrink.update(dt,s);this.view.pivot.visible=!s.pack&&!s.drinking&&s.phase!=='reviving';
     if(s.reloadLeft>0&&s.reloadSerial!==this.lastReload){this.lastReload=s.reloadSerial;this.view.reload(false,s.reloadDuration,s.reloadStage);}
     if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);}}
-    const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(this.camera.rotation.y-this.lastLookYaw),Math.cos(this.camera.rotation.y-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:this.camera.rotation.x-this.lastLookPitch;this.lastLookYaw=this.camera.rotation.y;this.lastLookPitch=this.camera.rotation.x;
+    const base=this.view.lookBase(this.camera);
+    const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(base.yaw-this.lastLookYaw),Math.cos(base.yaw-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:base.pitch-this.lastLookPitch;this.lastLookYaw=base.yaw;this.lastLookPitch=base.pitch;
     this.view.update(dt,{moving,sprint,ads:this.ads,reloading:s.reloadLeft>0,empty:s.weapon.mag===0,time:s.time,look:{yaw:lookYaw,pitch:lookPitch},camera:this.camera,viewCamera:this.viewCamera,worldScene:this.scene});
     if(!sprint&&(this.pressed||this.primary&&s.def.automatic||this.burst>0)){if(this.shot()){if(this.burst>0)this.burst--;else if(s.def.fireType==='3-Round Burst')this.burst=2;}}
     this.pressed=false;

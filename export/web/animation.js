@@ -179,7 +179,7 @@ export class ViewWeapon {
   reload(empty,duration,stage='magazine'){
     if(!this.ready)return;const key=stage==='start'?'reloadStartAnim':stage==='end'?'reloadEndAnim':empty&&this.rig.actions.reloadEmptyAnim?'reloadEmptyAnim':'reloadAnim';
     this.mode='reload';this.aim=0;this.rig.play(key,false,this.clipSpeed(key,duration),.06);
-    this.cameraFx.reload(duration,stage);
+    this.cameraFx.reload(duration,stage,empty);
   }
   melee(type='knife',charge=false){
     if(!this.ready||this.meleeLeft>0)return null;
@@ -197,6 +197,7 @@ export class ViewWeapon {
     const delay=charge?def.chargeDelay:def.delay;this.cameraFx.melee(duration,delay);
     return {duration,delay,damage:def.damage};
   }
+  lookBase(camera){return this.cameraFx.lookBase(camera);}
   updateFx(dt,camera){
     if(camera)this.cameraFx.apply(camera,dt);
     for(const flash of this.flashes)flash?.update(dt);
