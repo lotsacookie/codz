@@ -100,3 +100,16 @@ test('providers turn Sketchfab and Khronos responses into pages of named maps', 
   assert.match(page.items[0].url, /glTF-Binary\/Model\d+\.glb$/);
   assert.ok(isModelUrl('https://x.test/a/b.glb?v=1') && !isModelUrl('bunker'));
 });
+
+test('BSP maps load as textured geometry and the index lists them', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
+  const index = JSON.parse(readFileSync(new URL('../export/web/maps/bsp/maps.json', import.meta.url), 'utf8'));
+  assert(index.maps.length > 0);
+  for (const map of index.maps) assert(readFileSync(new URL(`../export/web/maps/bsp/${map.file}`, import.meta.url)).length === map.size);
+  const scene = loadBspBuffer(readFileSync(new URL('../export/web/maps/bsp/boxxer.bsp', import.meta.url)));
+  assert(scene.triangles > 100 && scene.root.children.length > 0);
+  assert(!scene.root.children.some(mesh => /trigger|sky/i.test(mesh.name)));
+  const box = new THREE.Box3().setFromObject(scene.root);
+  assert(box.max.y - box.min.y > 50);
+});

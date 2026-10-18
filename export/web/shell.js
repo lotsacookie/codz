@@ -68,10 +68,11 @@ const registry = new Map(buttons.filter(button => button.dataset.map).map(button
 let session = null;
 let busy = false;
 const customRoot = $('custom-maps');
+let lastMenuSource;
 const customMenu = createCustomMenu({
   root: customRoot,
   onPlay: ({ label, params, art }) => boot({ map: 'custom-map', label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${label} — Zombies`, loadscreen: art || 'art/loadscreen_zombie_temple.webp', params, custom: true }),
-  onClose: () => { buttons.find(button => button.dataset.menu)?.focus({ preventScroll: true }); },
+  onClose: () => { (buttons.find(button => button.dataset.menu && button.dataset.source === lastMenuSource) ?? buttons.find(button => button.dataset.menu))?.focus({ preventScroll: true }); },
 });
 
 const setEnabled = enabled => { for (const b of buttons) b.disabled = !enabled; };
@@ -555,7 +556,7 @@ list.addEventListener('click', event => {
   const button = event.target.closest('button[data-map]');
   if (button && !button.disabled) boot(registry.get(button.dataset.map));
   const menu = event.target.closest('button[data-menu]');
-  if (menu && !menu.disabled) customMenu.open();
+  if (menu && !menu.disabled) { lastMenuSource = menu.dataset.source; customMenu.open(menu.dataset.source); }
 });
 
 function selectMap(button) {

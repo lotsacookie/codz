@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { unzip } from './zip.js';
+import { loadBspBuffer, loadBspFromUrl } from './bsp.js';
 
 const SKETCHFAB = 'https://api.sketchfab.com/v3';
 
@@ -57,14 +58,24 @@ export async function loadFromArchive(files) {
 }
 
 export async function loadFromFile(file) {
+  if (/\.bsp$/i.test(file.name)) return loadBspBuffer(await file.arrayBuffer()).root;
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (/\.zip$/i.test(file.name)) return loadFromArchive(await unzip(bytes));
   if (/\.gltf$/i.test(file.name)) return parse(new GLTFLoader(), new TextDecoder().decode(bytes));
   return parse(new GLTFLoader(), toBuffer(bytes));
 }
 
-export function loadFromUrl(url, onProgress) {
-  return new GLTFLoader(new THREE.LoadingManager()).loadAsync(url, event => onProgress?.(event.loaded, event.total)).then(gltf => gltf.scene);
+export function loadFromUrl(url, onProgress, include = null) {
+  const manager = new THREE.LoadingManager();
+  if (include) {
+    manager.setURLModifier(requested => {
+      let key = requested;
+      try { key = decodeURIComponent(requested); } catch { key = requested; }
+      const name = Object.keys(include).find(file => key === file || key.endsWith(`/${file}`));
+      return name ? include[name] : requested;
+    });
+  }
+  return new GLTFLoader(manager).loadAsync(url, event => onProgress?.(event.loaded, event.total)).then(gltf => gltf.scene);
 }
 
 export async function loadFromSketchfab({ uid, token }, onProgress, fetchImpl = globalThis.fetch.bind(globalThis)) {
@@ -82,6 +93,7 @@ export async function loadFromSketchfab({ uid, token }, onProgress, fetchImpl = 
 export function loadCustomModel(params, onProgress) {
   if (params?.source === 'file') return loadFromFile(params.file);
   if (params?.source === 'sketchfab') return loadFromSketchfab(params, onProgress);
-  if (params?.source === 'url') return loadFromUrl(params.url, onProgress);
+  if (params?.source === 'bsp') return loadBspFromUrl(params.url, onProgress);
+  if (params?.source === 'url') return loadFromUrl(params.url, onProgress, params.include);
   throw new Error('No model was selected.');
 }

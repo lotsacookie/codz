@@ -25,12 +25,12 @@ export function createCustomMenu({ root, onPlay, onClose }) {
   const source = el('select', { class: 'cm-source', 'aria-label': 'Model source' });
   for (const provider of PROVIDERS) source.append(el('option', { value: provider.id, text: provider.label }));
   source.value = state.provider.id;
-  const query = el('input', { class: 'cm-query', type: 'search', placeholder: 'Search maps, or paste a .glb / .gltf link', 'aria-label': 'Search' });
+  const query = el('input', { class: 'cm-query', type: 'search', placeholder: 'Search maps, or paste a .glb / .gltf / .bsp link', 'aria-label': 'Search' });
   const token = el('input', { class: 'cm-token', type: 'password', placeholder: 'Sketchfab API token', autocomplete: 'off', 'aria-label': 'Sketchfab API token' });
   token.value = store.get(TOKEN_KEY);
   const search = el('button', { type: 'submit', text: 'SEARCH' });
   const file = el('button', { type: 'button', class: 'cm-file', text: 'OPEN FILE…' });
-  const picker = el('input', { type: 'file', accept: '.glb,.gltf,.zip', hidden: '' });
+  const picker = el('input', { type: 'file', accept: '.glb,.gltf,.zip,.bsp', hidden: '' });
   const form = el('form', { class: 'cm-bar' }, source, query, token, search, file);
   const status = el('p', { class: 'cm-status', role: 'status' });
   const grid = el('ul', { class: 'cm-grid' });
@@ -96,7 +96,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     return go(0);
   }
 
-  function play(item) {
+  async function play(item) {
     const secret = token.value.trim();
     if (state.provider.needsToken && !secret) {
       setStatus('Paste your Sketchfab API token above to download models (sketchfab.com → Settings → Password & API).', true);
@@ -104,14 +104,23 @@ export function createCustomMenu({ root, onPlay, onClose }) {
       return;
     }
     store.set(TOKEN_KEY, secret);
-    onPlay({ label: item.name, art: item.art || item.thumb, params: { ...state.provider.play(item, secret), name: item.name } });
+    let params;
+    try {
+      setStatus(`Preparing ${item.name}…`);
+      params = await state.provider.play(item, secret);
+    } catch (error) {
+      setStatus(error?.message ?? String(error), true);
+      return;
+    }
+    onPlay({ label: item.name, art: item.art || item.thumb, params: { ...params, name: item.name } });
   }
 
   form.addEventListener('submit', event => {
     event.preventDefault();
     const text = query.value.trim();
     if (isModelUrl(text)) {
-      onPlay({ label: decodeURIComponent(text.split('?')[0].split('/').pop().replace(/\.(glb|gltf)$/i, '')) || 'Custom Map', params: { source: 'url', url: text } });
+      const bspLink = /\.bsp(?:\?|$)/i.test(text);
+      onPlay({ label: decodeURIComponent(text.split('?')[0].split('/').pop().replace(/\.(glb|gltf|bsp)$/i, '')) || 'Custom Map', params: { source: bspLink ? 'bsp' : 'url', url: text } });
       return;
     }
     store.set(TOKEN_KEY, token.value.trim());
@@ -126,7 +135,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
   picker.addEventListener('change', () => {
     const chosen = picker.files?.[0];
     picker.value = '';
-    if (chosen) onPlay({ label: chosen.name.replace(/\.(glb|gltf|zip)$/i, ''), params: { source: 'file', file: chosen } });
+    if (chosen) onPlay({ label: chosen.name.replace(/\.(glb|gltf|zip|bsp)$/i, ''), params: { source: 'file', file: chosen } });
   });
   grid.addEventListener('click', event => {
     const button = event.target.closest('button[data-index]');
@@ -156,8 +165,13 @@ export function createCustomMenu({ root, onPlay, onClose }) {
 
   function isOpen() { return !root.hidden; }
 
-  function open() {
+  function open(sourceId) {
     root.hidden = false;
+    if (typeof sourceId === 'string' && sourceId !== state.provider.id) {
+      state.provider = providerById(sourceId);
+      source.value = state.provider.id;
+      state.loaded = false;
+    }
     sync();
     if (!state.loaded) reset();
     (grid.querySelector('button') ?? query).focus({ preventScroll: true });

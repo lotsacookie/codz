@@ -24,6 +24,7 @@
     "start": "node .tools/serve.mjs 5173",
     "start:mobile": "node .tools/serve.mjs 5184 --lan",
     "build:assets": "py -3.11 .tools/build_game_assets.py",
+    "build:bsp-index": "node .tools/build-bsp-index.mjs",
     "build:pack": "node .tools/build-asset-pack.mjs",
     "verify:pack": "node .tools/build-asset-pack.mjs --verify",
     "build:world": "py -3.11 .tools/compose_scene_t5.py",

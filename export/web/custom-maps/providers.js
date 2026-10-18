@@ -5,7 +5,7 @@ const KHRONOS = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Asse
 
 const defaultFetch = (...args) => globalThis.fetch(...args);
 
-export const isModelUrl = text => /^https?:\/\/\S+\.(?:glb|gltf)(?:\?\S*)?$/i.test(String(text).trim());
+export const isModelUrl = text => /^https?:\/\/\S+\.(?:glb|gltf|bsp)(?:\?\S*)?$/i.test(String(text).trim());
 
 function thumbnail(images = [], target = 256) {
   const sorted = [...images].sort((a, b) => a.width - b.width);
@@ -83,5 +83,100 @@ export const khronos = {
   play: item => ({ source: 'url', url: item.url }),
 };
 
-export const PROVIDERS = [sketchfab, khronos];
+
+const BSP_INDEX = new URL('../maps/bsp/maps.json', import.meta.url).href;
+const POLY = 'https://api.polyhaven.com';
+let bspIndex = null, polyIndex = null;
+
+const sizeLabel = bytes => (bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`);
+const page = (list, cursor) => {
+  const offset = Number(cursor) || 0;
+  return { slice: list.slice(offset, offset + PAGE_SIZE), next: offset + PAGE_SIZE < list.length ? String(offset + PAGE_SIZE) : null };
+};
+
+// The NZ:P maps shipped in maps/bsp, listed by maps/bsp/maps.json (npm run build:bsp-index).
+export const bsp = {
+  id: 'bsp',
+  label: 'NZ:P maps (BSP, built in)',
+  needsToken: false,
+  async search({ query = '', cursor = null, fetchImpl = defaultFetch, signal } = {}) {
+    bspIndex ??= fetchImpl(BSP_INDEX, { signal })
+      .then(response => {
+        if (!response.ok) throw new Error(`Map list failed (${response.status}).`);
+        return response.json();
+      })
+      .catch(error => {
+        bspIndex = null;
+        throw error;
+      });
+    const all = (await bspIndex).maps ?? [];
+    const needle = query.trim().toLowerCase();
+    const matches = all.filter(map => !needle || [map.title, map.id, map.author, map.description].some(text => String(text ?? '').toLowerCase().includes(needle)));
+    const { slice, next } = page(matches, cursor);
+    return {
+      items: slice.map(map => ({
+        id: map.id,
+        name: map.title,
+        author: map.author,
+        license: '',
+        detail: [map.description, `${map.perks ?? 0} perks`, sizeLabel(map.size)].filter(Boolean).join(' · '),
+        thumb: '',
+        art: '',
+        url: new URL(`../maps/bsp/${map.file}`, import.meta.url).href,
+        source: 'bsp',
+      })),
+      next,
+    };
+  },
+  play: item => ({ source: 'bsp', url: item.url }),
+};
+
+// Poly Haven: CC0 glTF models, no key and no sign-up.
+export const polyhaven = {
+  id: 'polyhaven',
+  label: 'Poly Haven (CC0, no key needed)',
+  needsToken: false,
+  async search({ query = '', cursor = null, fetchImpl = defaultFetch, signal } = {}) {
+    polyIndex ??= fetchImpl(`${POLY}/assets?t=models`, { signal })
+      .then(response => {
+        if (!response.ok) throw new Error(`Poly Haven search failed (${response.status}).`);
+        return response.json();
+      })
+      .catch(error => {
+        polyIndex = null;
+        throw error;
+      });
+    const all = Object.entries(await polyIndex).map(([id, asset]) => ({ id, ...asset }));
+    const needle = query.trim().toLowerCase();
+    const matches = all
+      .filter(asset => !needle || [asset.name, asset.id, ...(asset.tags ?? []), ...(asset.categories ?? [])].some(text => String(text ?? '').toLowerCase().includes(needle)))
+      .sort((a, b) => (b.download_count ?? 0) - (a.download_count ?? 0));
+    const { slice, next } = page(matches, cursor);
+    return {
+      items: slice.map(asset => ({
+        id: asset.id,
+        name: asset.name ?? asset.id,
+        author: Object.keys(asset.authors ?? {}).join(', ') || 'Poly Haven',
+        license: 'CC0',
+        detail: (asset.categories ?? []).slice(0, 2).join(', '),
+        thumb: `https://cdn.polyhaven.com/asset_img/thumbs/${asset.id}.png?width=256&height=144`,
+        art: `https://cdn.polyhaven.com/asset_img/thumbs/${asset.id}.png?width=1024&height=576`,
+        source: 'polyhaven',
+      })),
+      next,
+    };
+  },
+  async play(item, token, fetchImpl = defaultFetch) {
+    const response = await fetchImpl(`${POLY}/files/${encodeURIComponent(item.id)}`);
+    if (!response.ok) throw new Error(`Poly Haven file lookup failed (${response.status}).`);
+    const files = await response.json();
+    const resolution = ['1k', '2k', '4k'].find(key => files.gltf?.[key]?.gltf?.url);
+    const entry = resolution && files.gltf[resolution].gltf;
+    if (!entry) throw new Error('This Poly Haven model has no glTF download.');
+    const include = Object.fromEntries(Object.entries(entry.include ?? {}).map(([name, file]) => [name, file.url]));
+    return { source: 'url', url: entry.url, include };
+  },
+};
+
+export const PROVIDERS = [bsp, polyhaven, khronos, sketchfab];
 export const providerById = id => PROVIDERS.find(provider => provider.id === id) ?? PROVIDERS[0];
