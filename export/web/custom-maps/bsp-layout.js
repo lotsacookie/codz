@@ -45,7 +45,7 @@ export function extractEnvironment(entities) {
 export function extractLayout(parsed, buildDoor = () => null) {
   const { entities, models } = parsed;
   const origin = entity => toThree(parseVector(entity.origin));
-  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], lights: lightsFromEntities(entities, parseVector, toThree), environment: extractEnvironment(entities) };
+  const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], walls: [], lights: lightsFromEntities(entities, parseVector, toThree), environment: extractEnvironment(entities) };
 
   const start = entities.find(e => e.classname === 'info_player_1_spawn') ?? entities.find(e => /^info_player/.test(e.classname));
   if (start) layout.spawn = { point: origin(start), yaw: entityYaw(start) };
@@ -53,6 +53,12 @@ export function extractLayout(parsed, buildDoor = () => null) {
   for (const entity of entities) {
     const role = NZP_ROLES[entity.classname];
     if (role && entity.origin) layout.sites.push({ role, point: origin(entity), yaw: entityYaw(entity) });
+  }
+
+  for (const entity of entities) {
+    if ((entity.classname === 'buy_weapon' || entity.classname === 'weapon_wall') && entity.origin) {
+      layout.walls.push({ point: origin(entity), yaw: entityYaw(entity), weapon: String(entity.weapon ?? entity.wep ?? entity.weapon_name ?? entity.type ?? '').toLowerCase() });
+    }
   }
 
   const spawners = entities.filter(e => e.classname === 'spawn_zombie' && e.origin);

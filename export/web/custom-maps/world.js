@@ -164,6 +164,30 @@ function boardGeometry(size) {
 
 const UP = new THREE.Vector3(0, 1, 0);
 
+const WALL_POOL = ['m14_zm', 'rottweil72_zm', 'ithaca_zm', 'mp40_zm', 'mp5k_zm', 'mpl_zm', 'pm63_zm', 'ak74u_zm', 'm16_zm', 'galil_zm', 'commando_zm', 'fnfal_zm', 'python_zm', 'spas_zm', 'aug_acog_zm', 'dragunov_zm'];
+
+function placeWallBuys(walls, grid, add, scene) {
+  const bag = [];
+  const draw = () => {
+    if (!bag.length) bag.push(...WALL_POOL.slice().sort(() => Math.random() - .5));
+    return bag.pop();
+  };
+  for (const wall of walls) {
+    const [x, y, z] = wall.point;
+    const radians = wall.yaw * Math.PI / 180, fx = Math.cos(radians), fz = -Math.sin(radians);
+    const n = Math.abs(fx) >= Math.abs(fz) ? [Math.sign(fx) || 1, 0] : [0, Math.sign(fz) || 1];
+    const floor = grid.nearest(x + n[0] * 40, y - 40, z + n[1] * 40, 4, 140);
+    const floorY = floor >= 0 ? grid.nodes[floor].y : y - 40;
+    const named = String(wall.weapon ?? '').replace(/_zm$/, '') + '_zm';
+    const weapon = WALL_POOL.includes(named) ? named : draw();
+    add({ classname: 'trigger_use', targetname: 'weapon_upgrade', zombie_weapon_upgrade: weapon, position: [x + n[0] * 22, floorY + 40, z + n[1] * 22], yaw: Math.atan2(n[0], n[1]) });
+    const alongX = n[0] !== 0;
+    const plaque = new THREE.Mesh(new THREE.BoxGeometry(alongX ? 2 : 44, 26, alongX ? 44 : 2), material(0x2a2c2f, { roughness: .6, metalness: .3, emissive: 0x3a2f12, emissiveIntensity: .6 }));
+    plaque.position.set(x + n[0], floorY + 56, z + n[1]);
+    scene.add(plaque);
+  }
+}
+
 function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
   add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair, spawn: w.spawnPoint ?? undefined });
@@ -196,6 +220,7 @@ function toWorldLayout(hints, fit) {
     spawn: hints.spawn && { point: point(hints.spawn.point), yaw: hints.spawn.yaw },
     sites: hints.sites.map(site => ({ ...site, point: point(site.point) })),
     windows: hints.windows.map(w => ({ ...w, point: point(w.point), spawner: w.spawner && point(w.spawner) })),
+    walls: (hints.walls ?? []).map(wall => ({ ...wall, point: point(wall.point) })),
     lights: (hints.lights ?? []).map(light => ({ ...light, point: point(light.point) })),
     doors: hints.doors.map(door => ({ ...door, min: point(door.min), max: point(door.max) })),
   };
@@ -268,6 +293,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
     if (site.role === 'chest') placeChest(site, loaded[i], add, scene, solids);
     else placeMachine(site, loaded[i], add, scene, solids);
   });
+  if (worldLayout?.walls?.length) placeWallBuys(worldLayout.walls, plan.grid, add, scene);
   if (!entities.some(e => e.targetname === 'treasure_chest_use')) console.warn('[custom-map] no spot found for the Mystery Box');
 
   plan.grid.kill((node, i) => i !== plan.spawn.index && solids.some(b => node.x > b.min.x - 18 && node.x < b.max.x + 18 && node.z > b.min.z - 18 && node.z < b.max.z + 18 && node.y > b.min.y - 40 && node.y < b.max.y + 20));
