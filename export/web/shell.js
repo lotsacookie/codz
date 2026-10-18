@@ -70,7 +70,7 @@ let busy = false;
 const customRoot = $('custom-maps');
 const customMenu = createCustomMenu({
   root: customRoot,
-  onPlay: ({ label, params }) => boot({ map: 'custom-map', label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${label} — Zombies`, loadscreen: 'art/loadscreen_zombie_temple.webp', params, custom: true }),
+  onPlay: ({ label, params, art }) => boot({ map: 'custom-map', label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${label} — Zombies`, loadscreen: art || 'art/loadscreen_zombie_temple.webp', params, custom: true }),
   onClose: () => { buttons.find(button => button.dataset.menu)?.focus({ preventScroll: true }); },
 });
 

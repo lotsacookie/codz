@@ -59,7 +59,8 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     grid.replaceChildren(...state.items.map((item, index) => {
       const thumb = item.thumb ? el('img', { src: item.thumb, alt: '', loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer' }) : el('i');
       const meta = [item.author, item.license, item.detail].filter(Boolean).join(' · ');
-      const button = el('button', { type: 'button', class: 'cm-card', 'data-index': String(index) }, thumb, el('strong', { text: item.name }), el('span', { text: meta }));
+      const text = el('div', { class: 'cm-text' }, el('strong', { text: item.name }), el('span', { text: meta }));
+      const button = el('button', { type: 'button', class: 'cm-card', 'data-index': String(index) }, thumb, text);
       return el('li', {}, button);
     }));
     sync();
@@ -103,7 +104,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
       return;
     }
     store.set(TOKEN_KEY, secret);
-    onPlay({ label: item.name, params: { ...state.provider.play(item, secret), name: item.name } });
+    onPlay({ label: item.name, art: item.art || item.thumb, params: { ...state.provider.play(item, secret), name: item.name } });
   }
 
   form.addEventListener('submit', event => {

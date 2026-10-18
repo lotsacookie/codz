@@ -12,6 +12,8 @@ function thumbnail(images = [], target = 256) {
   return (sorted.find(image => image.width >= target) ?? sorted.at(-1))?.url ?? '';
 }
 
+const largest = (images = []) => [...images].sort((a, b) => b.width - a.width)[0]?.url ?? '';
+
 export const sketchfab = {
   id: 'sketchfab',
   label: 'Sketchfab',
@@ -30,7 +32,8 @@ export const sketchfab = {
       author: model.user?.displayName ?? model.user?.username ?? '',
       license: model.license?.label ?? model.license?.slug ?? '',
       detail: model.faceCount ? `${model.faceCount >= 1000 ? Math.round(model.faceCount / 1000) + 'k' : model.faceCount} faces` : '',
-      thumb: thumbnail(model.thumbnails?.images),
+      thumb: thumbnail(model.thumbnails?.images, 160),
+      art: largest(model.thumbnails?.images),
       source: 'sketchfab',
     }));
     return { items, next };
@@ -70,6 +73,7 @@ export const khronos = {
         license: '',
         detail: (entry.tags ?? []).slice(0, 2).join(', '),
         thumb: entry.screenshot || entry.thumbnail ? `${KHRONOS}/${entry.name}/${entry.screenshot ?? entry.thumbnail}` : '',
+        art: entry.screenshot || entry.thumbnail ? `${KHRONOS}/${entry.name}/${entry.screenshot ?? entry.thumbnail}` : '',
         url: variant ? `${KHRONOS}/${entry.name}/${variant}/${entry.variants[variant]}` : '',
         source: 'khronos',
       };
