@@ -136,21 +136,45 @@ function placeChest(site, models, add, scene, solids) {
   });
 }
 
-function placeWindow(w, index, add, scene, wood) {
+// Kino der Toten's window boards (same sizes, layout and wood texture), fitted onto each window.
+let kinoBoards = null;
+async function loadKinoBoards() {
+  if (kinoBoards) return kinoBoards;
+  const template = await (await fetch(new URL('./window-boards.json', import.meta.url))).json();
+  const texture = new THREE.TextureLoader().load(template.texture);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return kinoBoards = { ...template, material: material(0xffffff, { map: texture, roughness: .95 }) };
+}
+
+function boardGeometry(size) {
+  const geometry = new THREE.BoxGeometry(...size);
+  const position = geometry.attributes.position, normal = geometry.attributes.normal, uv = geometry.attributes.uv;
+  for (let i = 0; i < uv.count; i++) {
+    const axes = [0, 1, 2].filter(a => Math.abs(normal.getComponent(i, a)) < .5);
+    uv.setXY(i, position.getComponent(i, axes[0]) / 96, position.getComponent(i, axes[1]) / 96);
+  }
+  return geometry;
+}
+
+function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
   add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair });
   add({ classname: 'script_struct', targetname: name, position: w.inside });
   const alongX = w.t[0] !== 0;
-  const plank = (WINDOW.top - WINDOW.sill) / WINDOW.boards;
-  for (let k = 0; k < WINDOW.boards; k++) {
-    const y = w.y + WINDOW.sill + plank * (k + .5);
-    const entity = add({ classname: 'script_model', targetname: name, script_parameters: 'board', script_noteworthy: String(k + 1), position: [w.x, y, w.z], yaw: 0, plank: plank - 2 });
-    const size = alongX ? [w.width + 8, plank - 2, WINDOW.thickness] : [WINDOW.thickness, plank - 2, w.width + 8];
-    const board = new THREE.Mesh(new THREE.BoxGeometry(...size), wood);
-    board.position.set(w.x, y, w.z);
+  const ku = (w.width + 8) / kino.width, ky = (WINDOW.top - WINDOW.sill) / kino.height;
+  kino.boards.forEach((spec, k) => {
+    const sizeU = spec.su * ku, sizeY = spec.sy * ky, sizeV = spec.sv;
+    const u = spec.u * ku, v = spec.v - 2.5;
+    const x = w.x + w.t[0] * u - w.n[0] * v, z = w.z + w.t[1] * u - w.n[1] * v;
+    const y = w.y + WINDOW.sill + spec.y * ky;
+    const entity = add({ classname: 'script_model', targetname: name, script_parameters: 'board', script_noteworthy: String(k + 1), position: [x, y, z], yaw: 0, plank: sizeY });
+    const board = new THREE.Mesh(boardGeometry(alongX ? [sizeU, sizeY, sizeV] : [sizeV, sizeY, sizeU]), kino.material);
+    board.position.set(x, y, z);
     board.userData.entityId = entity.id;
     scene.add(board);
-  }
+  });
 }
 
 
@@ -220,8 +244,8 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
   };
   add({ classname: 'info_player_start', position: plan.spawn.position, yaw: plan.spawn.yaw });
   const solids = [];
-  const wood = material(0x7a5a3a, { roughness: .95 });
-  plan.windows.forEach((w, i) => placeWindow(w, i, add, scene, wood));
+  const kino = plan.windows.length ? await loadKinoBoards() : null;
+  plan.windows.forEach((w, i) => placeWindow(w, i, add, scene, kino));
   for (const door of plan.doors ?? []) placeDoor(door, fit, add, scene);
   const loaded = await Promise.all(plan.sites.map(site => {
     if (site.role === 'chest') return Promise.all([tryLoad(loadModel, CHEST_MODEL), tryLoad(loadModel, CHEST_LID_MODEL)]);
