@@ -64,3 +64,9 @@ test('turnToward wraps across the +-pi seam instead of spinning the long way', (
   const y = turnToward(3.0, -3.0, 1 / 60);
   assert.ok(y > 3.0, 'continues increasing through pi, not back through zero');
 });
+
+test('explore maps share one pixel ratio cap and a gentle adaptive floor', async () => {
+  const { EXPLORE_MAX_PIXEL_RATIO, EXPLORE_MIN_SCALE } = await import('../export/web/explore-graphics.js');
+  assert.ok(EXPLORE_MAX_PIXEL_RATIO < 1.5 && EXPLORE_MAX_PIXEL_RATIO >= 1);
+  assert.ok(EXPLORE_MIN_SCALE >= .7 && EXPLORE_MIN_SCALE < 1);
+});

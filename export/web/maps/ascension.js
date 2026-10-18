@@ -8,7 +8,7 @@ import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { createWallGuns } from '../wall-guns.js';
-import { bindExploreGraphics } from '../explore-graphics.js';
+import { bindExploreGraphics, EXPLORE_MAX_PIXEL_RATIO } from '../explore-graphics.js';
 import { GamepadInput, padSettings } from '../gamepad.js';
 
 export async function mount(ctx) {
@@ -126,14 +126,14 @@ function prepareMaterials(root) {
 
 async function load() {
   renderer = new THREE.WebGLRenderer({antialias: true, powerPreference: 'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, EXPLORE_MAX_PIXEL_RATIO));
   renderer.setSize(innerWidth, innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.55;
   renderer.domElement.setAttribute('aria-label', 'Ascension map');
   ctx.attach(renderer);
-  gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, 1.5), baseFar: 70000});
+  gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, EXPLORE_MAX_PIXEL_RATIO), baseFar: 70000});
 
   const response = await fetch('./ascension/map-data.json');
   if (!response.ok) throw new Error(`Map data failed to load (${response.status})`);

@@ -16,7 +16,7 @@ import { createZombieTouch } from '../zombies-touch.js';
 import { disposeObject } from '../dispose.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
 import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../hud.js';
-import { bindExploreGraphics } from '../explore-graphics.js';
+import { bindExploreGraphics, EXPLORE_MAX_PIXEL_RATIO } from '../explore-graphics.js';
 
 export async function mount(ctx) {
 const CONTROLS='WASD · Move   Mouse · Fire / Aim   Shift · Sprint\nSpace · Jump   Ctrl / C · Crouch   F / E · Interact\nR · Reload   V · Knife   G · Grenade   1 / 2 / 3 · Weapon\nQ · P.E.S.   X · Gersh / QED   B · Wave Gun mode   H · Hack\nTab · Objective   M · Sound   Esc · Pause   F3 · Diagnostics';
@@ -24,7 +24,7 @@ const addEventListener=(type,handler,options)=>ctx.listen(window,type,handler,op
 const $ = id => document.getElementById(id), keys = new Set(), errors = [];
 const vector = a => new THREE.Vector3(...a);
 const renderer = new THREE.WebGLRenderer({antialias: true, powerPreference: 'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1 : 1.5)); renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1 : EXPLORE_MAX_PIXEL_RATIO)); renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.45;
 renderer.autoClear = false;
 ctx.attach(renderer);
@@ -33,7 +33,7 @@ scene.add(new THREE.AmbientLight(0xb4c6d7, 1.1), new THREE.HemisphereLight(0xc6d
 const sun = new THREE.DirectionalLight(0xe7efff, 2.4); sun.position.set(-.6, 1, -.3); scene.add(sun);
 const fill = new THREE.DirectionalLight(0x8191b3, .6); fill.position.set(1, .3, .5); scene.add(fill);
 const camera = new THREE.PerspectiveCamera(78, innerWidth/innerHeight, 1, 70000); camera.rotation.order = 'YXZ';
-const gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1 : 1.5), baseFar: 70000, targetMs: matchMedia('(pointer: coarse)').matches ? 1000 / 30 : 1000 / 60});
+const gfx = bindExploreGraphics({ctx, renderer, camera, maxPixelRatio: Math.min(devicePixelRatio, matchMedia('(pointer: coarse)').matches ? 1 : EXPLORE_MAX_PIXEL_RATIO), baseFar: 70000, targetMs: matchMedia('(pointer: coarse)').matches ? 1000 / 30 : 1000 / 60});
 let data, state, player, collision, ready = false, active = false, onMoon = false, checkpoint = 'area51', environment, target;
 let navigation, combat, features, presentation, water, mode = new URLSearchParams(location.search).get('mode') === 'explore' ? 'explore' : 'survival';
 const chalk = new ChalkHud();
