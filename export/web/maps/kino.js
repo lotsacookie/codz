@@ -23,6 +23,7 @@ import { ensureTextures as sharedEnsureTextures, prewarm as sharedPrewarm, kinoP
 import { smoothingEnabled } from '../steering.js';
 import { AdaptiveResolution, createPerfOverlay } from '../quality.js';
 import { GradePass } from '../grade.js';
+import { prefetchOtherSlots, warmEntry } from '../viewmodel-cache.js';
 import { OcclusionCuller } from '../occlusion.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from '../vision.js';
 import { disposeObject } from '../dispose.js';
@@ -248,7 +249,7 @@ function shoot(){
   return true;
 }
 function warmViewAudio(){if(view?.ready)audio.warmWeapon(session.def,Object.values(view.rig.data).flatMap(d=>(d.notifies??[]).map(n=>n.name)));}
-async function equipView(){reloadShot=false;await view.equip(session.def);warmViewAudio();}
+async function equipView(){reloadShot=false;await view.equip(session.def);warmViewAudio();if(view.ready)prefetchOtherSlots(session,view,{onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry)});}
 function reload(){if(!view.ready)return;const empty=session.weapon.mag===0;if(session.reload()){burstLeft=0;ads=false;lastReloadSerial=session.reloadSerial;view.reload(empty,session.reloadDuration,session.reloadStage);}}
 function melee(){
   if(!active||session.busy||session.weaponUnavailable||features.events.room||!view.ready)return false;

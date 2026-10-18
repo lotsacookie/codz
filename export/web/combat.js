@@ -6,6 +6,7 @@ import { MoonSession } from './moon-session.js';
 import { MoonEnemies } from './moon-enemies.js';
 import { PerkDrink } from './perk-drink.js';
 import { loadModel } from './animation.js';
+import { prefetchOtherSlots, warmEntry } from './viewmodel-cache.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
@@ -41,8 +42,11 @@ export class Combat {
   async equip(){
     const suit=!!this.features?.state.suit;
     if(suit!==this.handSuit){this.view.currentId=null;this.handSuit=suit;}
-    const def={...this.session.def};if(suit)def.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;
-    await this.view.equip(def);if(this.view.ready)this.audio.warmWeapon(this.session.def);
+    const adjust=d=>{if(suit)d.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;return d;};
+    const def=adjust({...this.session.def});
+    await this.view.equip(def);if(this.view.ready){this.audio.warmWeapon(this.session.def);
+      // Build the guns that are equipped but not in hand now, so switching to them later does not stall.
+      prefetchOtherSlots(this.session,this.view,{adjust,onBuilt:entry=>this.renderer&&warmEntry(this.renderer,this.viewScene,this.viewCamera,entry)});}
   }
   clearInput(){this.primary=false;this.pressed=false;this.secondary=false;this.secondaryPressed=false;this.ads=false;this.burst=0;}
   pause(){this.clearInput();this.audio.pause();}
@@ -55,7 +59,7 @@ export class Combat {
     this.blood?.clear();
     this.impacts.clear();
   }
-  async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
+  async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.view.clearCache();this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
   damage(n){
     if(this.session.area==='earth'&&this.session.effects.pack_shield>this.session.time&&this.camera.position.distanceTo(new THREE.Vector3(...this.features.one('zombie_vending_upgrade').position))<220)return;
     if(!this.enabled||!this.session.damage(n))return;

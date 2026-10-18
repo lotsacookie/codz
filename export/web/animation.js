@@ -6,6 +6,7 @@ import { assets, rfetch } from './asset-loader.js';
 import { CameraEffects } from './camera-effects.js';
 import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
+import { ViewmodelCache } from './viewmodel-cache.js';
 
 const loader=new GLTFLoader(assetManager), models=new Map(), clips=new Map();
 export async function loadModel(url){if(!url)return null;if(!models.has(url))models.set(url,assets.buffer(url).then(bytes=>loader.parseAsync(bytes,THREE.LoaderUtils.extractUrlBase(assets.abs(url)))).then(gltf=>gltf.scene));return clone(await models.get(url));}
@@ -86,13 +87,43 @@ const basis=new THREE.Matrix4().makeBasis(new THREE.Vector3(0,0,-1),new THREE.Ve
 export class ViewWeapon {
   constructor(scene,data,onSound=()=>{}){
     this.scene=scene;this.data=data;this.onSound=onSound;this.pivot=new THREE.Group();scene.add(this.pivot);
-    this.token=0;this.currentId=null;this.recoil=0;this.aim=0;this.mode='idle';this.meleeLeft=0;this.sprintBlend=0;
+    this.token=0;this.currentId=null;this.activeEntry=null;this.activeKey=null;this.cache=new ViewmodelCache(6,built=>{built.then(entry=>this.releaseEntry(entry)).catch(()=>{});});this.recoil=0;this.aim=0;this.mode='idle';this.meleeLeft=0;this.sprintBlend=0;
     this.cameraFx=new CameraEffects();this.smoke=null;this.flashes=[];this.pendingFx=null;
+  }
+  // Built viewmodels are cached per weapon (and hands model) so switching back and forth is instant, and the
+  // other equipped guns are built in the background (prepare) before they are ever switched to.
+  modelKey(def){return def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'')+'|'+(def.handsModel??'');}
+  keyOfEntry(entry){return entry.key;}
+  cacheable(def){return !def.id.startsWith('zombie_perk_bottle_');}
+  prepare(def){
+    const key=this.modelKey(def);let built=this.cache.get(key);
+    if(!built){
+      built=this.build(def).then(entry=>{entry.key=key;return entry;});
+      if(this.cacheable(def))this.cache.set(key,built,new Set([this.activeKey]));
+      built.catch(()=>{if(this.cache.get(key)===built)this.cache.delete(key);});
+    }
+    return built;
+  }
+  clearCache(){this.cache.clear();}
+  releaseEntry(entry){
+    if(!entry||entry.released||entry===this.activeEntry)return;
+    entry.released=true;
+    try{entry.rig.mixer.uncacheRoot(entry.rig.root);}catch{}
+    for(const flash of entry.flashes)flash?.dispose();
+    for(const model of [entry.hands,entry.gun,entry.leftGun,...Object.values(entry.knives)])disposeSkeletons(model);
   }
   async equip(def){
     const key=def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'');
     if(this.currentId===key&&this.ready)return;this.currentId=key;this.ready=false;const token=++this.token;
     this.pivot.visible=false;
+    let entry=await this.prepare(def);
+    // The cache may have pushed this entry out while it loaded (many quick switches): build it again.
+    for(let tries=0;entry.released&&tries<2;tries++)entry=await this.prepare(def);
+    // A newer switch won while this one loaded: the entry stays cached for the next time it is needed.
+    if(token!==this.token||entry.released)return;
+    this.activate(entry,def,this.modelKey(def));
+  }
+  async build(def){
     const [hands,gun,leftGun,...knives]=await Promise.all([
       loadModel(def.handsModel??this.data.characters.viewmodel_usa_pow_arms??this.data.characters.viewhands_usmc),loadModel(def.model),
       def.leftModel?loadModel(def.leftModel):Promise.resolve(null),
@@ -106,18 +137,12 @@ export class ViewWeapon {
     }
     const meleeEntries=await Promise.all(Object.entries(this.data.melee).flatMap(([type,d])=>
       Object.entries(d.animations).filter(([k])=>k.startsWith('melee')).map(async([key,url])=>[type+':'+key,await loadAnimation(url)])));
-    if(token!==this.token){for(const model of [hands,gun,leftGun,...knives])disposeSkeletons(model);return;}
-    if(this.rig)this.rig.mixer.uncacheRoot(this.rig.root);
-    disposeSkeletons(this.root);
     if(!hands||!gun)throw new Error('Missing viewmodel for '+def.id);
-    this.def=def;this.pivot.clear();this.pivot.position.set(0,0,0);this.pivot.rotation.set(0,0,0);
-    // Assemble outside the scene. Using matrixWorld under the previous gun's
-    // ADS/recoil pivot baked that pose into every subsequent weapon attachment.
-    this.root=new THREE.Group();this.root.add(hands);this.gun=gun;this.hands=hands;
+    const root=new THREE.Group();root.add(hands);
     const view=hands.getObjectByName('tag_view'),tag=hands.getObjectByName('tag_weapon');
     if(!view||!tag)throw new Error('Missing viewmodel attachment bones');
     view.userData.animationAnchor=true;
-    this.root.updateMatrixWorld(true);
+    root.updateMatrixWorld(true);
     const cameraBasis=new THREE.Matrix4().multiplyMatrices(basis,view.matrixWorld.clone().invert());
     const attach=(model,parent,boneName)=>{
       model.updateMatrixWorld(true);
@@ -127,34 +152,45 @@ export class ViewWeapon {
       model.matrixAutoUpdate=false;model.matrix.copy(bone.matrixWorld).invert();parent.add(model);
     };
     attach(gun,tag,'j_gun');
-    this.leftGun=leftGun;
     if(leftGun){const leftTag=hands.getObjectByName('tag_weapon1');if(leftTag)attach(leftGun,leftTag,leftGun.getObjectByName('j_gun1')?'j_gun1':'j_gun');}
-    for(const flash of this.flashes)flash?.dispose();
-    this.pendingFx=null;
-    this.flashes=[gun.getObjectByName('tag_flash'),leftGun?(leftGun.getObjectByName('tag_flash1')??leftGun.getObjectByName('tag_flash')):null].map(tag=>tag?createMuzzleFlash(tag):null);
+    const flashes=[gun.getObjectByName('tag_flash'),leftGun?(leftGun.getObjectByName('tag_flash1')??leftGun.getObjectByName('tag_flash')):null].map(tag=>tag?createMuzzleFlash(tag):null);
     // Bottles animate j_gun relative to tag_weapon throughout opening/drinking.
     // Freezing that root leaves the bottle behind while the hands move away.
     if(def.id.startsWith('zombie_perk_bottle_')){gun.getObjectByName('j_gun').userData.animationAnchor=false;gun.matrix.identity();}
-    this.knives={};const knifeTag=hands.getObjectByName('tag_knife_attach');
-    if(knifeTag)Object.keys(this.data.melee).forEach((type,i)=>{attach(knives[i],knifeTag,'tag_knife');knives[i].visible=false;this.knives[type]=knives[i];});
-    this.hiddenTags=[];
-    for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);this.hiddenTags.push(name);}}
-    this.root.matrixAutoUpdate=false;this.root.matrix.copy(cameraBasis);this.pivot.add(this.root);
-    this.rig=new Rig(this.root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
-    this.rig.options={};
-    for(const [key,clip] of [...entries,...meleeEntries])this.rig.add(key,clip);
+    const knives_={};const knifeTag=hands.getObjectByName('tag_knife_attach');
+    if(knifeTag)Object.keys(this.data.melee).forEach((type,i)=>{attach(knives[i],knifeTag,'tag_knife');knives[i].visible=false;knives_[type]=knives[i];});
+    const hiddenTags=[];
+    for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);hiddenTags.push(name);}}
+    root.matrixAutoUpdate=false;root.matrix.copy(cameraBasis);
+    const rig=new Rig(root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
+    rig.options={};
+    for(const [key,clip] of [...entries,...meleeEntries])rig.add(key,clip);
     // ADS is a separate native animation of tag_torso. Its first frame also
     // defines each gun's HIP pose; the arms' bind torso is only right for M1911.
     const aimData=entries.find(([key])=>key==='adsUpAnim')?.[1];
-    this.aimTracks=[];this.aimDuration=aimData?.duration??0;
+    const aimTracks=[];const aimDuration=aimData?.duration??0;
     for(const b of aimData?.bones??[]){const node=hands.getObjectByName(b.name);if(!node)continue;
-      if(b.pos)this.aimTracks.push({node,property:'position',sample:new THREE.VectorKeyframeTrack('',b.pos.frames.map(f=>f/aimData.fps),b.pos.values).createInterpolant()});
-      if(b.rot)this.aimTracks.push({node,property:'quaternion',sample:new THREE.QuaternionKeyframeTrack('',b.rot.frames.map(f=>f/aimData.fps),b.rot.values).createInterpolant()});
+      if(b.pos)aimTracks.push({node,property:'position',sample:new THREE.VectorKeyframeTrack('',b.pos.frames.map(f=>f/aimData.fps),b.pos.values).createInterpolant()});
+      if(b.rot)aimTracks.push({node,property:'quaternion',sample:new THREE.QuaternionKeyframeTrack('',b.rot.frames.map(f=>f/aimData.fps),b.rot.values).createInterpolant()});
     }
+    root.traverse(o=>{o.frustumCulled=false;});
+    return {root,hands,gun,leftGun,flashes,knives:knives_,hiddenTags,rig,aimTracks,aimDuration,released:false};
+  }
+  activate(entry,def,cacheKey){
+    const previous=this.activeEntry;
+    previous?.rig.mixer.stopAllAction();entry.rig.mixer.stopAllAction();
+    // A reused rig still names its last animation; clear it so idle and raise really restart from the rest pose.
+    entry.rig.current=null;entry.rig.elapsed=0;
+    for(const flash of entry.flashes)flash?.update(1);
+    for(const knife of Object.values(entry.knives))knife.visible=false;
+    this.def=def;this.pivot.clear();this.pivot.position.set(0,0,0);this.pivot.rotation.set(0,0,0);
+    this.activeEntry=entry;this.activeKey=cacheKey;
+    Object.assign(this,{root:entry.root,gun:entry.gun,hands:entry.hands,leftGun:entry.leftGun,flashes:entry.flashes,knives:entry.knives,hiddenTags:entry.hiddenTags,rig:entry.rig,aimTracks:entry.aimTracks,aimDuration:entry.aimDuration});
+    this.pendingFx=null;this.pivot.add(entry.root);
+    if(previous&&previous!==entry&&!this.cache.has(this.keyOfEntry(previous)))this.releaseEntry(previous);
     this.aim=0;this.recoil=0;this.meleeLeft=0;this.meleeType=null;this.sprintBlend=0;this.applyAim();
     this.rig.play('idleAnim',true,1,0);this.rig.update(0);
     this.mode=this.rig.play('raiseAnim',false,this.clipSpeed('raiseAnim',def.raiseTime),.04)?'raise':'idle';
-    this.root.traverse(o=>{o.frustumCulled=false;});
     this.ready=true;this.pivot.visible=true;
   }
   clipSpeed(key,duration){return duration>0?(this.rig.data[key]?.duration??duration)/duration:1;}

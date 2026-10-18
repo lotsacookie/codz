@@ -529,6 +529,7 @@ async function load() {
     stepClear: (a, b) => navigation.stepClear(a, b),
   };
   combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
+  combat.renderer = renderer;
   await combat.load();
   showStatus('Preparing perks, box and barricades…');
   features = new C.classes.features({ data, combat, scene, camera, objects, notice: showNotice, raycast: rayIntersect, doors: groups, openDoor });
