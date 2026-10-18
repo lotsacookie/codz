@@ -6,7 +6,7 @@ import { disposeSkeletons, runtimeProfile } from './runtime-assets.js';
 import { turnToward, steerDirection, smoothingEnabled } from './steering.js';
 
 const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
-const STEER_RATE = smoothingEnabled() ? 8 : Infinity;   // path-direction easing; Infinity = old behaviour
+const STEER_RATE = smoothingEnabled() ? 12 : Infinity;   // path-direction easing; Infinity = old behaviour
 
 export const MELEE_DAMAGE = 60;
 export const MELEE_ATTACK_DIST = 64;
@@ -94,11 +94,11 @@ export class Enemies {
         z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
         z.tearLeft-=dt;
         if(z.barrier.count>0){z.rig.play('attack',true,1,BLEND);if(z.tearLeft<=0){this.world.setBoards(z.barrier,z.barrier.count-1,true);z.tearLeft=1.1;this.onSound?.('board',z.root.position);}}
-        else{z.state='entering';z.enterFrom=z.root.position.clone();z.enterTime=0;z.rig.play('walk',true,1,BLEND);}
+        else{z.state='entering';z.enterFrom=z.root.position.clone();z.enterTo=null;z.enterTime=0;z.rig.play('walk',true,1,BLEND);}
         continue;
       }
       if(z.state==='entering'){
-        z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);z.root.position.lerpVectors(z.enterFrom,z.barrier.inside,t*t*(3-2*t));z.root.position.y+=Math.sin(t*Math.PI)*12;
+        z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);if(!z.enterTo){const g=this.world.closest(z.barrier.inside,{x:40,y:100,z:40});z.enterTo=g&&Math.hypot(g.x-z.barrier.inside.x,g.z-z.barrier.inside.z)<70?g:z.barrier.inside;}z.root.position.lerpVectors(z.enterFrom,z.enterTo,t*t*(3-2*t));z.root.position.y+=Math.sin(t*Math.PI)*12;
         if(t===1){z.state='chase';z.repath=0;}continue;
       }
       const approaching=z.state==='approach',lure=approaching?null:this.lureTarget?.(z),goal=approaching?z.barrier.outside:lure??player;
@@ -120,7 +120,7 @@ export class Enemies {
       const target=z.path[z.pathIndex];
       if(target){
         const delta=target.clone().sub(z.root.position),horizontal=Math.hypot(delta.x,delta.z);
-        if(horizontal<10){z.pathIndex++;}
+        if(horizontal<(z.pathIndex>=z.path.length-1?10:18)){z.pathIndex++;}
         else{
           const want={x:delta.x/horizontal,y:Math.max(-2,Math.min(2,delta.y/horizontal)),z:delta.z/horizontal};
           z.heading=z.heading?steerDirection(z.heading,want,dt,STEER_RATE):want;
@@ -128,7 +128,17 @@ export class Enemies {
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
           if(!Number.isFinite(next.x+next.y+next.z)){z.heading=null;z.path=[];z.repath=0;continue;}
           const safe=this.world.closest(next,{x:22,y:36,z:22});
-          if(z.trail){const here=z.root.position;if(!this.world.stepClear||this.world.stepClear(here,next))here.copy(next);else{const sx=new THREE.Vector3(next.x,next.y,here.z),sz=new THREE.Vector3(here.x,next.y,next.z);if(this.world.stepClear(here,sx))here.copy(sx);else if(this.world.stepClear(here,sz))here.copy(sz);else{z.repath=Math.min(z.repath,.25);z.heading=null;}}}else if(safe&&safe.distanceTo(next)<38)z.root.position.copy(safe);
+          if(z.trail){const here=z.root.position;if(!this.world.stepClear||this.world.stepClear(here,next))here.copy(next);else{const sx=new THREE.Vector3(next.x,next.y,here.z),sz=new THREE.Vector3(here.x,next.y,next.z);if(this.world.stepClear(here,sx))here.copy(sx);else if(this.world.stepClear(here,sz))here.copy(sz);else{z.repath=Math.min(z.repath,.25);z.heading=null;}}}else{
+            let ground=safe&&safe.distanceTo(next)<38?safe:null;
+            if(!ground){const wide=this.world.closest(next,{x:40,y:90,z:40});if(wide&&Math.hypot(wide.x-next.x,wide.z-next.z)<48)ground=wide;}
+            if(ground){
+              z.noGround=0;const here=z.root.position,rise=ground.y-here.y;
+              here.x=ground.x;here.z=ground.z;here.y=Math.abs(rise)<.4?ground.y:here.y+rise*Math.min(1,dt*(rise>0?9:14));
+            }else{
+              z.noGround=(z.noGround??0)+dt;
+              if(z.noGround>.4){const rescue=this.world.closest(z.root.position,{x:120,y:160,z:120});if(rescue&&rescue.distanceTo(z.root.position)<200)z.root.position.copy(rescue);z.noGround=0;z.repath=0;}
+            }
+          }
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
         }
       }
