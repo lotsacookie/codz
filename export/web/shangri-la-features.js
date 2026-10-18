@@ -222,7 +222,7 @@ export class ShangriFeatures {
         this.combat.clearInput();
         this.combat.perkDrink.start(t.perk, this.combat.view);
         this.notice(MOON_PERKS[t.perk].name);
-        a.play(t.perk);
+        a.play(t.perk, 1, t.e.position);
       } else this.notice(s.perks.size >= s.perkLimit ? 'You can carry four perks.' : 'Cannot purchase: check points, power, and owned perks.');
     }
     if (t.kind === 'wall') ok = this.combat.buyWeapon(t.weapon.id);

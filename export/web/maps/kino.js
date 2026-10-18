@@ -60,6 +60,7 @@ if(profile.shadows){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THRE
 const fill=new THREE.DirectionalLight(0x8cabc9,lightLevels.fill);fill.position.set(-1,.5,-.5);scene.add(fill);
 const cgFov=Math.min(120,Math.max(30,Number(/[?&]fov=(\d+(?:\.\d+)?)/.exec(location.search)?.[1])||THEATER_WORLD.cgFov)),hipFov=verticalFovFromCgFov(cgFov);
 const camera=new THREE.PerspectiveCamera(hipFov,innerWidth/innerHeight,1,14000);camera.rotation.order='YXZ';camera.position.set(-101,168,1256);camera.lookAt(160,170,850);
+audio.camera=camera;
 if(profile.shadows){csm=new CSM({camera,parent:scene,lightDirection:keyDirection.clone(),lightIntensity:lightLevels.sun,...SHADOW_CASCADES});csm.fade=true;csm.lights.forEach(l=>{l.color.setRGB(...THEATER_WORLD.sunColor);l.shadow.normalBias=1.5;l.shadow.radius=3;});profile.csm=csm;}
 // Graphics setting (Auto / High / Medium / Low) from the pause menu drives shadows, god rays and sun brightness.
 const autoGraphics=new AutoGraphics({targetMs:profile.mobile?1000/30:1000/60});
@@ -326,7 +327,7 @@ function interact(){
   if(t==='zombie_vending'){
     const id=e.script_noteworthy,p=perkInfo[id];if(!p||session.perks.has(id)||(!session.power&&id!=='specialty_quickrevive'))return false;
     if(id==='specialty_quickrevive'&&session.revives>=3){toast('Quick Revive is depleted');return false;}if(!pay(p.price))return false;
-    if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id);return true;
+    if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id,1,e.position);return true;
   }
   if(t==='use_elec_switch'&&!session.power){
     session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=lightLevels.powered;audio.play('round');return true;

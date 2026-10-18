@@ -138,7 +138,7 @@ export class MoonFeatures {
     const s=this.s,q=this.quest,a=this.combat.audio;let ok=false;
     if(t.kind==='perk'){
       if(s.hacker&&s.perks.has(t.perk)&&!s.permanentPerks)return this.startHack(t,5,()=>{s.losePerk(t.perk);s.points+=MOON_PERKS[t.perk].price;this.combat.equip().catch(console.error);});
-      ok=s.buyPerk(t.perk);if(ok){this.combat.clearInput();this.combat.perkDrink.start(t.perk,this.combat.view);this.notice(MOON_PERKS[t.perk].name);a.play(t.perk);}
+      ok=s.buyPerk(t.perk);if(ok){this.combat.clearInput();this.combat.perkDrink.start(t.perk,this.combat.view);this.notice(MOON_PERKS[t.perk].name);a.play(t.perk,1,t.e.position);}
       else this.notice(s.perks.size>=s.perkLimit?'You can buy four perks. Complete the quest to earn all eight.':'Cannot purchase: check points, power, and owned perks.');
     }
     if(t.kind==='hacker'&&t.e.id===q.hackerId){s.hacker=true;this.state.hasSuit=false;this.state.suit=false;this.notice('Hacker equipped. You have no P.E.S. Return to a suit station before entering vacuum.');ok=true;}

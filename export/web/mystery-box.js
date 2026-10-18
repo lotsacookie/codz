@@ -34,7 +34,7 @@ export class MysteryBox {
     const chance=this.uses<4?0:this.uses<8?.15:!this.moves?1:this.uses<13?.3:.5;
     const teddy=!sale&&this.world.boxLocations.length>1&&this.session.random()<chance;
     b.roll={weapon:pool[Math.floor(this.session.random()*pool.length)],ready:false,time:this.session.time+cycleTime,expires:this.session.time+cycleTime+offerTime,started:this.session.time,sale,teddy,pool};
-    b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00');this.audio.event('box/music_box/music_box_00',.7);return true;
+    b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00',1,b.display.position);this.audio.event('box/music_box/music_box_00',.7,b.display.position);return true;
   }
   take(e){const b=this.boxes.get(e.id);if(!b?.roll?.ready||b.roll.teddy)return null;const weapon=b.roll.weapon;this.close(b);return weapon;}
   measure(id){
@@ -66,7 +66,7 @@ export class MysteryBox {
     b.model=entry.model;b.wrapper=entry.float;b.float=entry.float;b.wrapper.visible=true;
   }
   hide(b){if(b.wrapper)b.wrapper.visible=false;b.wrapper=null;b.model=null;b.float=null;b.shown=null;}
-  close(b){b.roll=null;b.closing=.5;this.hide(b);this.audio.event('box/close/close_00',.8);}
+  close(b){b.roll=null;b.closing=.5;this.hide(b);this.audio.event('box/close/close_00',.8,b.display.position);}
   // Compile shaders and upload textures for every display model behind the loading screen.
   async warm(renderer,scenes){
     const holders=[];
@@ -88,7 +88,7 @@ export class MysteryBox {
       if(b.roll){
         const r=b.roll,age=this.session.time-r.started;b.opening=Math.min(.5,b.opening+dt);
         if(this.session.time>=r.time&&!r.ready){r.ready=true;this.show(b,r.teddy?'teddy':r.weapon);this.toast(r.teddy?'The Mystery Box is moving…':(this.data.weapons[r.weapon]??this.data.equipment[r.weapon]).name+' — press F to take',4);
-          if(r.teddy){this.session.points+=950;this.audio.event('box/whoosh/whoosh_00');}}
+          if(r.teddy){this.session.points+=950;this.audio.event('box/whoosh/whoosh_00',1,b.display.position);}}
         if(!r.ready){const step=age<1?Math.floor(age/.05):age<2?20+Math.floor((age-1)/.1):age<3?30+Math.floor((age-2)/.2):35+Math.floor((age-3)/.3);this.show(b,r.pool[step%r.pool.length]);}
         if(b.wrapper){const sink=THREE.MathUtils.clamp((this.session.time-r.time)/offerTime,0,1);b.wrapper.position.y=r.teddy&&r.ready?40+Math.max(0,this.session.time-r.time-1)*80:r.ready?40*(1-sink*sink*(3-2*sink)):Math.min(64,age/3*64);}
         if(r.teddy&&this.session.time>r.time+5){this.close(b);this.moves++;this.uses=0;const choices=this.world.boxLocations.filter(e=>e.id!==this.world.activeBox.id);this.world.activeBox=choices[Math.floor(this.session.random()*choices.length)];this.world.updateBox();this.toast('The Mystery Box has moved');}

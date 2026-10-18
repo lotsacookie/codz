@@ -19,7 +19,7 @@ export class Combat {
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
     this.blood=blood?new BloodFx(scene):null;this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
-    this.audio=new MoonAudio();
+    this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
     this.audio.music={stop(){}};
     this.viewScene=new THREE.Scene();this.viewCamera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
