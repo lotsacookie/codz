@@ -3,6 +3,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { assetManager, disposeSkeletons } from './runtime-assets.js';
 import { assets, rfetch } from './asset-loader.js';
+import { CameraEffects } from './camera-effects.js';
+import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
+import { weaponFxProfile } from './fx-profile.js';
 
 const loader=new GLTFLoader(assetManager), models=new Map(), clips=new Map();
 export async function loadModel(url){if(!url)return null;if(!models.has(url))models.set(url,assets.buffer(url).then(bytes=>loader.parseAsync(bytes,THREE.LoaderUtils.extractUrlBase(assets.abs(url)))).then(gltf=>gltf.scene));return clone(await models.get(url));}
@@ -84,6 +87,7 @@ export class ViewWeapon {
   constructor(scene,data,onSound=()=>{}){
     this.scene=scene;this.data=data;this.onSound=onSound;this.pivot=new THREE.Group();scene.add(this.pivot);
     this.token=0;this.currentId=null;this.recoil=0;this.aim=0;this.mode='idle';this.meleeLeft=0;this.sprintBlend=0;
+    this.cameraFx=new CameraEffects();this.smoke=null;this.flashes=[];this.pendingFx=null;
   }
   async equip(def){
     const key=def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'');
@@ -125,6 +129,9 @@ export class ViewWeapon {
     attach(gun,tag,'j_gun');
     this.leftGun=leftGun;
     if(leftGun){const leftTag=hands.getObjectByName('tag_weapon1');if(leftTag)attach(leftGun,leftTag,leftGun.getObjectByName('j_gun1')?'j_gun1':'j_gun');}
+    for(const flash of this.flashes)flash?.dispose();
+    this.pendingFx=null;
+    this.flashes=[gun.getObjectByName('tag_flash'),leftGun?(leftGun.getObjectByName('tag_flash1')??leftGun.getObjectByName('tag_flash')):null].map(tag=>tag?createMuzzleFlash(tag):null);
     // Bottles animate j_gun relative to tag_weapon throughout opening/drinking.
     // Freezing that root leaves the bottle behind while the hands move away.
     if(def.id.startsWith('zombie_perk_bottle_')){gun.getObjectByName('j_gun').userData.animationAnchor=false;gun.matrix.identity();}
@@ -163,26 +170,48 @@ export class ViewWeapon {
     let key=ads?(empty?'adsLastShotAnim':'adsFireAnim'):(empty?'lastShotAnim':'fireAnim');
     if(hand==='left'&&this.rig.actions.leftFireAnim)key='leftFireAnim';
     if(!this.rig.actions[key])key='fireAnim';this.recoil=1;this.mode='fire';this.rig.play(key,false,1,0);
+    const profile=weaponFxProfile(this.def);
+    if(profile){
+      const index=hand==='left'&&this.flashes[1]?1:0;
+      this.cameraFx.fire();this.flashes[index]?.fire(profile,ads);this.pendingFx={profile,ads,index};
+    }
   }
   reload(empty,duration,stage='magazine'){
     if(!this.ready)return;const key=stage==='start'?'reloadStartAnim':stage==='end'?'reloadEndAnim':empty&&this.rig.actions.reloadEmptyAnim?'reloadEmptyAnim':'reloadAnim';
     this.mode='reload';this.aim=0;this.rig.play(key,false,this.clipSpeed(key,duration),.06);
+    this.cameraFx.reload(duration,stage);
   }
   melee(type='knife',charge=false){
     if(!this.ready||this.meleeLeft>0)return null;
     if(this.def.melee){
       const d=this.def.melee,key=charge?'meleeChargeAnim':'meleeAnim',duration=Math.max(charge?d.meleeChargeTime:d.meleeTime,this.rig.data[key]?.duration??0);
       this.meleeType=null;this.meleeLeft=duration;this.mode='melee';this.aim=0;this.rig.play(key,false,this.clipSpeed(key,duration),0);
-      return {duration,delay:charge?d.meleeChargeDelay:d.meleeDelay,damage:d.meleeDamage};
+      const delay=charge?d.meleeChargeDelay:d.meleeDelay;this.cameraFx.melee(duration,delay);
+      return {duration,delay,damage:d.meleeDamage};
     }
     const def=this.data.melee[type],key=type+':'+(charge?'meleeChargeAnim':'meleeAnim');
     const duration=Math.max(charge?def.chargeTime:def.time,this.rig.data[key].duration);
     this.meleeType=type;this.meleeLeft=duration;this.mode='melee';this.aim=0;
     for(const [k,model] of Object.entries(this.knives))model.visible=k===type;
     this.rig.play(key,false,this.clipSpeed(key,duration),0);
-    return {duration,delay:charge?def.chargeDelay:def.delay,damage:def.damage};
+    const delay=charge?def.chargeDelay:def.delay;this.cameraFx.melee(duration,delay);
+    return {duration,delay,damage:def.damage};
   }
-  update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0,look=null}={}){
+  updateFx(dt,camera){
+    if(camera)this.cameraFx.apply(camera,dt);
+    for(const flash of this.flashes)flash?.update(dt);
+    this.smoke?.update(dt);
+  }
+  emitFx(camera,viewCamera,worldScene){
+    const fx=this.pendingFx;if(!fx||!camera||!viewCamera||!worldScene)return;
+    this.pendingFx=null;
+    const flash=this.flashes[fx.index]??this.flashes[0];
+    const ndc=flash?flash.ndc(viewCamera):new THREE.Vector3(.2,-.14,0);
+    if(!this.smoke||this.smoke.scene!==worldScene){this.smoke?.dispose();this.smoke=new MuzzleSmoke(worldScene);}
+    this.smoke.emit(ndc,camera,fx.profile,fx.ads);
+  }
+  update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0,look=null,camera=null,viewCamera=null,worldScene=null}={}){
+    this.updateFx(dt,camera);
     if(!this.ready)return;
     this.rig.update(dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     const action=this.rig.actions[this.rig.current],finished=!action?.isRunning();
@@ -213,6 +242,7 @@ export class ViewWeapon {
     this.pivot.rotation.z+=this.swayYaw*.5;
     this.pivot.position.x+=this.swayYaw*.5;this.pivot.position.y+=this.swayPitch*.35;
     this.root.updateMatrixWorld(true);
+    this.emitFx(camera,viewCamera,worldScene);
   }
   snapshot(){
     const position=name=>this.root?.getObjectByName(name)?.getWorldPosition(new THREE.Vector3()).toArray();

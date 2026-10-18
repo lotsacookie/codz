@@ -383,7 +383,7 @@ function update(dt){
       const moving=Math.hypot(forward,strafe)>.01,sprint=((keys.has('ShiftLeft')||keys.has('ShiftRight'))&&keys.has('KeyW')||touch.sprint)&&!ads&&!session.reloadLeft&&!session.meleeLeft&&!session.drinking;
       player.update(dt,session.phase==='reviving'?{}:{forward,strafe,sprint,crouch:keys.has('ControlLeft')||keys.has('ControlRight')||keys.has('KeyC')||touch.crouch,jump:keys.has('Space'),jumpPressed:touch.jump});
       const lookYaw=Math.atan2(Math.sin(camera.rotation.y-lastLookYaw),Math.cos(camera.rotation.y-lastLookYaw)),lookPitch=camera.rotation.x-lastLookPitch;lastLookYaw=camera.rotation.y;lastLookPitch=camera.rotation.x;
-      view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch}});
+      view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch},camera,viewCamera,worldScene:scene});
       view.pivot.visible=!session.weaponUnavailable&&!features.events.room;
       perkDrink.update(dt,session);
       if(!sprint&&session.phase!=='reviving'&&(primaryPressed||(primary&&session.def.automatic)||burstLeft>0||reloadShot)){
