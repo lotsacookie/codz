@@ -65,7 +65,8 @@
   const drag = { el: null, id: null, y: 0, last: 0, velocity: 0, moved: false, frame: 0 };
   let ignoreClickUntil = 0;
   const stopMomentum = () => { cancelAnimationFrame(drag.frame); drag.frame = 0; };
-  const touchById = (list, id) => { for (const t of list) if (t.identifier === id) return t; return null; };
+  // TouchList is not iterable on phones, so walk it by index.
+  const touchById = (list, id) => { for (let i = 0; i < (list?.length ?? 0); i++) if (list[i].identifier === id) return list[i]; return null; };
   addEventListener('touchstart', event => {
     stopMomentum();
     if (!rotated() || event.touches.length !== 1) { drag.el = null; return; }
