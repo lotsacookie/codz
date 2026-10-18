@@ -490,7 +490,7 @@ async function load() {
   // One texture check for the map, its props and the weapons (Kino's retry / play-anyway flow).
   showStatus('Checking textures…');
   await ensureTextures(ctx);
-  worldApi.setBoards = (b, n) => features.setBoards(b, n);
+  worldApi.setBoards = (b, n, animate) => features.setBoards(b, n, animate);
   combat.enemies.barriers = features.barriers;
   combat.enemies.trail = trail;
   combat.enemies.candidates = navigation.metadata.candidates.map(c => ({ ...c, point: vector(c.position) }));

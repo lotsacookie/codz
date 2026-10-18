@@ -85,9 +85,63 @@ export class ShangriFeatures {
 
   setAllBoards() { for (const b of this.barriers) this.setBoards(b, b.boards.length); }
 
-  setBoards(b, n) {
-    b.count = n;
-    b.boards.forEach((id, i) => { const o = this.objects.get(id); if (o) o.visible = i < n; });
+  // Boards fly off when a zombie tears one away and snap back in when they are rebuilt, like Kino's.
+  setBoards(b, n, animate = false) {
+    const before = b.count;
+    b.count = Math.max(0, Math.min(b.boards.length, n));
+    let changed = 0;
+    b.boards.forEach((id, i) => {
+      const o = this.objects.get(id);
+      if (!o) return;
+      const shown = i < b.count, was = i < before;
+      if (animate && shown !== was) this.animateBoard(b, o, shown, changed++ * .07);
+      else { this.cancelBoardFx(o); this.restoreBoard(o); o.visible = shown; }
+    });
+  }
+
+  boardHome(o) { return o.userData.boardHome ??= { p: o.position.clone(), q: o.quaternion.clone() }; }
+  restoreBoard(o) { const home = o.userData.boardHome; if (home) { o.position.copy(home.p); o.quaternion.copy(home.q); } }
+  cancelBoardFx(o) { const i = this.boardFx?.findIndex(f => f.o === o) ?? -1; if (i >= 0) this.boardFx.splice(i, 1); }
+
+  animateBoard(barrier, o, entering, delay = 0) {
+    this.cancelBoardFx(o);
+    this.restoreBoard(o);
+    const home = this.boardHome(o);
+    const out = barrier.outside.clone().sub(barrier.inside);
+    out.y = 0;
+    if (out.lengthSq() < 1e-6) out.set(1, 0, 0);
+    out.normalize();
+    const side = new THREE.Vector3(-out.z, 0, out.x), sign = Math.random() < .5 ? -1 : 1;
+    const offset = out.clone().multiplyScalar(entering ? 46 + Math.random() * 18 : 58 + Math.random() * 26).addScaledVector(side, sign * (8 + Math.random() * 16));
+    offset.y = entering ? -16 - Math.random() * 10 : -8;
+    const tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random() - .5) * 1.1, (Math.random() - .5) * .7, (Math.random() - .5) * 1.6));
+    (this.boardFx ??= []).push({ o, entering, t: -delay, dur: entering ? .34 : .42, home, offset, away: home.q.clone().multiply(tilt), started: false });
+    if (entering) o.visible = false;
+  }
+
+  updateBoards(dt) {
+    if (!this.boardFx?.length) return;
+    for (const fx of [...this.boardFx]) {
+      fx.t += dt;
+      if (fx.t < 0) continue;
+      const k = Math.min(1, fx.t / fx.dur), o = fx.o;
+      if (!fx.started) { fx.started = true; o.visible = true; }
+      if (fx.entering) {
+        const c1 = 1.4, c3 = c1 + 1, e = 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2), r = 1 - Math.pow(1 - k, 3);
+        o.position.copy(fx.home.p).addScaledVector(fx.offset, 1 - e);
+        o.quaternion.copy(fx.away).slerp(fx.home.q, r);
+      } else {
+        const e = k * k;
+        o.position.copy(fx.home.p).addScaledVector(fx.offset, e);
+        o.position.y -= 70 * k * k;
+        o.quaternion.copy(fx.home.q).slerp(fx.away, Math.min(1, e * 1.4));
+      }
+      if (k >= 1) {
+        this.boardFx.splice(this.boardFx.indexOf(fx), 1);
+        this.restoreBoard(o);
+        o.visible = fx.entering;
+      }
+    }
   }
 
   repairAll() { this.setAllBoards(); }
@@ -204,6 +258,7 @@ export class ShangriFeatures {
 
   update(dt, held) {
     this.box.update(dt);
+    this.updateBoards(dt);
     const t = held ? this.findTarget() : null;
     if (!held || t?.kind !== 'barrier' || !this.s.canAct) return;
     const b = t.barrier, s = this.s;
@@ -211,7 +266,7 @@ export class ShangriFeatures {
     b.repairTime += dt;
     if (b.repairTime >= .7 && b.count < b.boards.length) {
       b.repairTime = 0;
-      this.setBoards(b, b.count + 1);
+      this.setBoards(b, b.count + 1, true);
       if (b.reward < Math.min(500, 40 + (s.round - 1) * 50)) { s.addPoints(10); b.reward += 10; }
       this.combat.audio.play('board');
     }
