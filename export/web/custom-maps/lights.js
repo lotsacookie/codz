@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-// NZ:P maps place `light` / `light_spot` entities (and props with a `_light` key). Every one is drawn
-// as an additive glow, and the nearest few also cast real light, since hundreds of dynamic lights
-// would be far too expensive.
+// NZ:P maps place `light` / `light_spot` entities (and props with a `_light` key). They emit light
+// only (no visible dots, since many hang in mid air on purpose); the nearest few to the camera cast
+// real light, because hundreds of dynamic lights would be far too expensive.
 const POOL = 8;
 const RE_ENV = /environment/;
 
@@ -20,42 +20,19 @@ export function lightsFromEntities(entities, parseVector, toThree) {
   return lights;
 }
 
-function glowTexture() {
-  const size = 64, canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  gradient.addColorStop(0, 'rgba(255,255,255,1)');
-  gradient.addColorStop(.25, 'rgba(255,255,255,.55)');
-  gradient.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, size, size);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
 export function addMapLights(scene, lights) {
   if (!lights?.length) return null;
   const group = new THREE.Group();
   group.name = 'nzp_lights';
 
-  const position = new Float32Array(lights.length * 3), color = new Float32Array(lights.length * 3);
-  lights.forEach((light, k) => {
-    position.set(light.point, k * 3);
-    // Strong lights glow brighter; the colour is kept as-is so oranges and blues stay distinct.
-    const boost = .55 + Math.min(1, light.intensity / 400) * .45;
-    color.set(light.color.map(v => v * boost), k * 3);
-  });
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(position, 3));
-  geometry.setAttribute('color', new THREE.BufferAttribute(color, 3));
-  const glow = new THREE.Points(geometry, new THREE.PointsMaterial({
-    size: 26, sizeAttenuation: true, map: glowTexture(), vertexColors: true, transparent: true,
-    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
-  }));
-  glow.frustumCulled = false;
-  group.add(glow);
+  // No visible glow sprites: lights only illuminate. This single invisible point just gives the scene a
+  // per-frame callback so the real lights can follow the nearest light entities to the camera.
+  const hook = new THREE.Points(
+    new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3)),
+    new THREE.PointsMaterial({ size: 1, transparent: true, opacity: 0, depthWrite: false }),
+  );
+  hook.frustumCulled = false;
+  group.add(hook);
 
   const pool = Array.from({ length: Math.min(POOL, lights.length) }, () => {
     const light = new THREE.PointLight(0xffffff, 0, 1, 2);
@@ -64,7 +41,7 @@ export function addMapLights(scene, lights) {
   });
   const last = new THREE.Vector3(Infinity, Infinity, Infinity), at = new THREE.Vector3();
   const order = lights.map((_, k) => k);
-  glow.onBeforeRender = (renderer, _scene, camera) => {
+  hook.onBeforeRender = (renderer, _scene, camera) => {
     camera.getWorldPosition(at);
     if (at.distanceToSquared(last) < 400) return;
     last.copy(at);
