@@ -1,6 +1,6 @@
-:root{color-scheme:dark;--vh1:1dvh;--vw1:1vw;--u:calc(calc(100 * var(--vh1)) / 480);--hud-font:'Bahnschrift','DIN Alternate','Arial Narrow',Arial,Helvetica,sans-serif;--shell-font:'Bahnschrift SemiCondensed','Bahnschrift','DIN Alternate','Arial Narrow','Roboto Condensed',Arial,Helvetica,sans-serif;--menu-font:var(--shell-font);--menu-text:#f4f2ec;--menu-select-bg:#f3f3f1;--menu-select-text:#161412;--menu-row-bg:rgba(0,0,0,.62);--menu-backdrop:linear-gradient(180deg,rgba(24,19,15,.52),rgba(10,8,6,.72));--menu-fill:rgba(255,255,255,.2);--load-fill:#e6e6e6;--shade:0 0 4px #000,1px 1px 1px #000;--glow:0 0 8px #ff3b2b,0 0 2px #000}
+:root{color-scheme:dark;--vh1:1dvh;--vw1:1vw;--u:calc(calc(100 * var(--vh1)) / 480);--hud-font:'Helvetica Neue Medium Condensed 67','Helvetica Neue LT Std 67 Medium Condensed','HelveticaNeue-MediumCond','Helvetica Neue','Arial Narrow','Roboto Condensed',Arial,Helvetica,sans-serif;--shell-font:var(--hud-font);--menu-font:var(--shell-font);--menu-text:#f4f2ec;--menu-select-bg:#f3f3f1;--menu-select-text:#161412;--menu-row-bg:rgba(0,0,0,.62);--menu-backdrop:linear-gradient(180deg,rgba(24,19,15,.52),rgba(10,8,6,.72));--menu-fill:rgba(255,255,255,.2);--load-fill:#e6e6e6;--shade:0 0 4px #000,1px 1px 1px #000;--glow:0 0 8px #ff3b2b,0 0 2px #000}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080909;color:#eee8dc;font-family:Arial,Helvetica,sans-serif}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080909;color:#eee8dc;font-family:var(--hud-font)}
 button{font:inherit;color:inherit;cursor:pointer}
 button:disabled{cursor:wait;opacity:.45}
 canvas{display:block;outline:none}

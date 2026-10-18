@@ -11,7 +11,7 @@ body.touch-mode > canvas { position: fixed; inset: 0; width: 100% !important; he
   --touch-left: max(18px, env(safe-area-inset-left));
   --touch-right: max(18px, env(safe-area-inset-right));
   --touch-bottom: max(18px, env(safe-area-inset-bottom));
-  --fe-ui: Arial, sans-serif; --fe-accent: #e1c399;
+  --fe-ui: 'Helvetica Neue Medium Condensed 67','Helvetica Neue LT Std 67 Medium Condensed','HelveticaNeue-MediumCond','Helvetica Neue','Arial Narrow','Roboto Condensed',Arial,Helvetica,sans-serif; --fe-accent: #e1c399;
   position: fixed; inset: 0; z-index: 6; pointer-events: none;
   color: #eaf9f2; font: 600 10px/1 var(--fe-ui); letter-spacing: .08em;
   -webkit-touch-callout: none;
