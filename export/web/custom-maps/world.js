@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { MOON_PERKS } from '../moon-session.js';
 import { flattenObject, fitModel, applyFit, appendBoxes, addGround } from './geometry.js';
-import { createProbe, planLevel } from './analyze.js';
+import { createProbe, planLevel, wallDistance } from './analyze.js';
 import { planFromLayout } from './bsp-plan.js';
 import { addMapLights } from './lights.js';
 
@@ -164,9 +164,27 @@ function boardGeometry(size) {
 
 const UP = new THREE.Vector3(0, 1, 0);
 
-const WALL_POOL = ['m14_zm', 'rottweil72_zm', 'ithaca_zm', 'mp40_zm', 'mp5k_zm', 'mpl_zm', 'pm63_zm', 'ak74u_zm', 'm16_zm', 'galil_zm', 'commando_zm', 'fnfal_zm', 'python_zm', 'spas_zm', 'aug_acog_zm', 'dragunov_zm'];
+const CHALK = { m14_zm: 'm14', rottweil72_zm: 'rottweil72', ithaca_zm: 'ithaca', mp40_zm: 'mp40', mp5k_zm: 'mp5', mpl_zm: 'mpl', pm63_zm: 'pm63', ak74u_zm: 'ak74u', m16_zm: 'm16' };
+const WALL_POOL = Object.keys(CHALK);
+const AXES = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+const chalkCache = new Map();
 
-function placeWallBuys(walls, grid, add, scene) {
+async function chalkMaterial(weapon) {
+  const name = CHALK[weapon];
+  if (!chalkCache.has(name)) {
+    chalkCache.set(name, (async () => {
+      const { assetManager } = await import('../runtime-assets.js');
+      const texture = await new Promise(resolve => new THREE.TextureLoader(assetManager).load(`textures/chalk_weapon_${name}_c.png`, resolve, undefined, () => resolve(null)));
+      if (!texture) return null;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 4;
+      return new THREE.MeshBasicMaterial({ map: texture, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, toneMapped: false });
+    })());
+  }
+  return chalkCache.get(name);
+}
+
+async function placeWallBuys(walls, grid, probe, add, scene) {
   const bag = [];
   const draw = () => {
     if (!bag.length) bag.push(...WALL_POOL.slice().sort(() => Math.random() - .5));
@@ -175,16 +193,32 @@ function placeWallBuys(walls, grid, add, scene) {
   for (const wall of walls) {
     const [x, y, z] = wall.point;
     const radians = wall.yaw * Math.PI / 180, fx = Math.cos(radians), fz = -Math.sin(radians);
-    const n = Math.abs(fx) >= Math.abs(fz) ? [Math.sign(fx) || 1, 0] : [0, Math.sign(fz) || 1];
-    const floor = grid.nearest(x + n[0] * 40, y - 40, z + n[1] * 40, 4, 140);
+    let n = Math.abs(fx) >= Math.abs(fz) ? [Math.sign(fx) || 1, 0] : [0, Math.sign(fz) || 1];
+    const at = { x, y: y - 30, z };
+    let behind = wallDistance(probe, at, -n[0], -n[1], 120);
+    if (behind > 70) {
+      let best = null;
+      for (const axis of AXES) {
+        const d = wallDistance(probe, at, axis[0], axis[1], 120);
+        const open = wallDistance(probe, at, -axis[0], -axis[1], 200);
+        if (d < 70 && open > 80 && (!best || d < best.d)) best = { axis, d };
+      }
+      if (best) { n = [-best.axis[0], -best.axis[1]]; behind = best.d; }
+    }
+    const surface = behind <= 120 ? behind : 0;
+    const wx = x - n[0] * surface, wz = z - n[1] * surface;
+    const floor = grid.nearest(wx + n[0] * 40, y - 40, wz + n[1] * 40, 4, 140);
     const floorY = floor >= 0 ? grid.nodes[floor].y : y - 40;
     const named = String(wall.weapon ?? '').replace(/_zm$/, '') + '_zm';
     const weapon = WALL_POOL.includes(named) ? named : draw();
-    add({ classname: 'trigger_use', targetname: 'weapon_upgrade', zombie_weapon_upgrade: weapon, position: [x + n[0] * 22, floorY + 40, z + n[1] * 22], yaw: Math.atan2(n[0], n[1]) });
-    const alongX = n[0] !== 0;
-    const plaque = new THREE.Mesh(new THREE.BoxGeometry(alongX ? 2 : 44, 26, alongX ? 44 : 2), material(0x2a2c2f, { roughness: .6, metalness: .3, emissive: 0x3a2f12, emissiveIntensity: .6 }));
-    plaque.position.set(x + n[0], floorY + 56, z + n[1]);
-    scene.add(plaque);
+    add({ classname: 'trigger_use', targetname: 'weapon_upgrade', zombie_weapon_upgrade: weapon, position: [wx + n[0] * 30, floorY + 40, wz + n[1] * 30], yaw: Math.atan2(n[0], n[1]) });
+    const material = await chalkMaterial(weapon);
+    if (!material) continue;
+    const decal = new THREE.Mesh(new THREE.PlaneGeometry(72, 36), material);
+    decal.rotation.y = Math.atan2(n[0], n[1]);
+    decal.position.set(wx + n[0] * 1.5, floorY + 62, wz + n[1] * 1.5);
+    decal.renderOrder = 1;
+    scene.add(decal);
   }
 }
 
@@ -293,7 +327,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
     if (site.role === 'chest') placeChest(site, loaded[i], add, scene, solids);
     else placeMachine(site, loaded[i], add, scene, solids);
   });
-  if (worldLayout?.walls?.length) placeWallBuys(worldLayout.walls, plan.grid, add, scene);
+  if (worldLayout?.walls?.length) await placeWallBuys(worldLayout.walls, plan.grid, probe, add, scene);
   if (!entities.some(e => e.targetname === 'treasure_chest_use')) console.warn('[custom-map] no spot found for the Mystery Box');
 
   plan.grid.kill((node, i) => i !== plan.spawn.index && solids.some(b => node.x > b.min.x - 18 && node.x < b.max.x + 18 && node.z > b.min.z - 18 && node.z < b.max.z + 18 && node.y > b.min.y - 40 && node.y < b.max.y + 20));
