@@ -28,6 +28,7 @@ export class ShangriEnemies extends Enemies {
     this.starve = 0;
     this.seenSpawned = 0;
     this.trail = null;
+    this.focus = null;
     this.spent = 0;
     this.lastHitchLog = -Infinity;
     this.lastStallLog = -Infinity;
@@ -57,7 +58,7 @@ export class ShangriEnemies extends Enemies {
 
   pool() {
     const nav = this.world.navigation;
-    return nav?.viable ? nav.viable(this.barriers) : this.barriers;
+    return nav?.viable ? nav.viable(this.barriers, this.focus) : this.barriers;
   }
 
   isFree(b) { return !this.list.some(z => z.barrier === b && ['barricade', 'entering', 'approach'].includes(z.state)); }
@@ -132,6 +133,7 @@ export class ShangriEnemies extends Enemies {
   step(dt, player) {
     const s = this.session;
     this.spent = 0;
+    this.focus = player;
     if (s.spawned !== this.seenSpawned) { this.seenSpawned = s.spawned; this.starve = 0; }
     if (s.phase === 'fighting' && s.spawned < s.total && this.list.length < 24) {
       this.starve += dt;

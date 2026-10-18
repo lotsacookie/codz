@@ -480,6 +480,10 @@ async function load() {
   const optimization = custom ? null : optimizeStaticScene(gltf.scene, { cellSize: C.cellSize, verticalCellSize: C.verticalCellSize });
   showStatus(`Loading ${C.label} navigation…`);
   await nextTask();
+  if (C.scanLayout) {
+    let lastStatus = '';
+    await C.scanLayout({ collision, data, barriers, doorParts: [...parts.values()].filter(part => part.door), onStatus: text => { if (text !== lastStatus) { lastStatus = text; showStatus(text); } } });
+  }
   navigation = new C.classes.navigation(C.base);
   await navigation.load();
   syncNavigation();

@@ -21,6 +21,8 @@ playable.expandByScalar(512);
 const moving = movingEntityIds(data.entities);
 const clipPoints = doorGroups(data.entities).flatMap(g => g.clips.map(id => data.entities[id].position));
 const CLIP_RADIUS = 90;
+const NON_SOLID = /sky|shadowcaster|hdrportal|portal_nodraw|decal|lightshaft|blood|zombie_eye/i;
+const THIN_FOLIAGE = /leaf|leaves|card|gobo|fern|ivy|vine|tallgrass|grass_leafy|grndcover|flowers|crop_|shrub|bush_dense|brush|plants|aerial|treewall|foliage_null/i;
 const p = new THREE.Vector3(), matrix = new THREE.Matrix4();
 let skippedNodes = 0, removedHelperComponents = 0, removedHelperTriangles = 0;
 const triBounds = new THREE.Box3(), positions = [], indices = [];
@@ -65,7 +67,7 @@ for (const node of doc.nodes) {
     const material = doc.materials[prim.material];
     const name = material.extras?.sourceMaterialNames?.[0] || material.name;
     const base = name.startsWith('*') ? (name.match(/\(([^:)]+)/)?.[1] ?? name) : name.replace(/^[^:]+:(?=[mw]c\/)/, '');
-    if (/sky|shadowcaster|hdrportal|portal_nodraw|decal|foliage|ivy|grass|fern|bamboo_leav|vine|lightshaft|water|blood|zombie_eye/i.test(base)) continue;
+    if (NON_SOLID.test(base) || THIN_FOLIAGE.test(base)) continue;
     const src = accessor(prim.attributes.POSITION), ix = accessor(prim.indices);
     const transformed = new Float32Array(src.length);
     for (let i = 0; i < src.length; i += 3) p.fromArray(src, i).applyMatrix4(matrix).toArray(transformed, i);

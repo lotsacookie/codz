@@ -17,6 +17,10 @@ export function createProbe(positions, index) {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setIndex(new THREE.BufferAttribute(index, 1));
   const bvh = new MeshBVH(geometry, { targetLeafSize: 12 });
+  return { ...bvhProbe(bvh, positions, index), geometry };
+}
+
+export function bvhProbe(bvh, positions, index) {
   const ray = new THREE.Ray();
   const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
   const cast = (x, y, z, dx, dy, dz, far) => {
@@ -35,7 +39,7 @@ export function createProbe(positions, index) {
     const length = b.length();
     return length > 1e-12 ? Math.abs(b.y) / length : 0;
   };
-  return { cast, normalY, positions, index, bvh, geometry };
+  return { cast, normalY, positions, index, bvh };
 }
 
 function standable(probe, x, y, z) {
@@ -44,10 +48,10 @@ function standable(probe, x, y, z) {
   return true;
 }
 
-export async function scanWalkable(probe, box, { cell = 40, onProgress = null } = {}) {
+export async function scanWalkable(probe, box, { cell = 40, maxColumns = MAX_COLUMNS, onProgress = null } = {}) {
   const width = box.max.x - box.min.x, depth = box.max.z - box.min.z;
   let size = cell;
-  while ((width / size) * (depth / size) > MAX_COLUMNS) size *= 1.15;
+  while ((width / size) * (depth / size) > maxColumns) size *= 1.15;
   const cols = Math.max(1, Math.ceil(width / size)), rows = Math.max(1, Math.ceil(depth / size));
   const top = box.max.y + 4, bottom = box.min.y - 4;
   const nodes = [];
@@ -73,7 +77,8 @@ export async function scanWalkable(probe, box, { cell = 40, onProgress = null } 
 }
 
 export class Grid {
-  constructor({ nodes, cell, cols, rows, minX, minZ }) {
+  constructor({ nodes, cell, cols, rows, minX, minZ }, tolerance = {}) {
+    this.tolerance = { step: PLAYER.step, slope: .9, mid: 10, diagonal: 2, ...tolerance };
     this.nodes = nodes;
     this.cell = cell;
     this.cols = cols;
@@ -119,19 +124,21 @@ export class Grid {
   }
 
   connects(probe, i, j, dc, dr) {
-    const a = this.nodes[i], b = this.nodes[j];
+    const a = this.nodes[i], b = this.nodes[j], t = this.tolerance;
     const dy = Math.abs(b.y - a.y), run = Math.hypot(b.x - a.x, b.z - a.z);
-    if (dy > Math.max(PLAYER.step, run * .9)) return false;
+    if (dy > Math.max(t.step, run * t.slope)) return false;
     const mid = (a.y + b.y) / 2;
     if (dy > PLAYER.step) {
       const ground = probe.cast((a.x + b.x) / 2, Math.max(a.y, b.y) + 40, (a.z + b.z) / 2, 0, -1, 0, 90);
-      if (!ground || Math.abs(ground.point.y - mid) > 10) return false;
+      if (!ground || Math.abs(ground.point.y - mid) > t.mid) return false;
     }
     if (probe.cast(a.x, mid + PLAYER.wallProbe, a.z, (b.x - a.x) / run, 0, (b.z - a.z) / run, run)) return false;
     if (dc !== 0 && dr !== 0) {
+      let open = 0;
       for (const list of [this.at(a.col + dc, a.row), this.at(a.col, a.row + dr)]) {
-        if (!list?.some(k => Math.abs(this.nodes[k].y - a.y) <= 30)) return false;
+        if (list?.some(k => Math.abs(this.nodes[k].y - a.y) <= 30)) open++;
       }
+      if (open < t.diagonal) return false;
     }
     return true;
   }
@@ -182,7 +189,7 @@ export class Grid {
     for (const i of ids) this.alive[i] = 1;
   }
 
-  nearest(x, y, z, rings = 3, drop = 80) {
+  nearest(x, y, z, rings = 3, drop = 80, minSize = 0) {
     const col = Math.floor((x - this.minX) / this.cell), row = Math.floor((z - this.minZ) / this.cell);
     let best = -1, bestCost = Infinity;
     for (let r = 0; r <= rings; r++) {
@@ -192,7 +199,7 @@ export class Grid {
           const list = this.at(col + dc, row + dr);
           if (!list) continue;
           for (const i of list) {
-            if (!this.alive[i]) continue;
+            if (!this.alive[i] || (minSize && this.sizes[this.comp[i]] < minSize)) continue;
             const node = this.nodes[i], dy = Math.abs(node.y - y);
             if (dy > drop) continue;
             const cost = Math.hypot(node.x - x, node.z - z) + dy * 1.5;

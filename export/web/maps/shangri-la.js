@@ -1,12 +1,14 @@
 import { createSurvivalMap } from './survival-map.js';
-
-// Shangri-La is entirely data: the shared survival runtime (survival-map.js) does the rest.
-// To add a map with the same entity conventions, copy this file, change the values below
-// and add one button to index.html (or run `node .tools/new-map.mjs <id> "<Label>"`).
+import { buildShangriLayout, createShangriNavigation } from '../shangri-la-grid.js';
+let layout = null;
 const map = createSurvivalMap({
   id: 'shangri-la',
   label: 'Shangri-La',
   base: './shangri-la',
+  scanLayout: async ({ collision, data, barriers, doorParts, onStatus }) => {
+    layout = await buildShangriLayout({ collision, entities: data.entities, spawn: data.spawn.position, barriers, doorParts, onStatus });
+  },
+  classes: { navigation: createShangriNavigation(() => layout) },
 });
 
 export async function mount(ctx) { return map.mount(ctx); }
