@@ -113,3 +113,17 @@ test('BSP maps load as textured geometry and the index lists them', async () => 
   const box = new THREE.Box3().setFromObject(scene.root);
   assert(box.max.y - box.min.y > 50);
 });
+
+test('BSP maps are laid out from their NZ:P entities', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
+  const { createCustomWorld } = await import('../export/web/custom-maps/world.js');
+  const root = loadBspBuffer(readFileSync(new URL('../export/web/maps/bsp/4all.bsp', import.meta.url))).root;
+  const world = await createCustomWorld(root, { scale: 1, loadModel: null });
+  assert.equal(world.layout.windows.length, 17);
+  assert.equal(world.layout.doors.length, 12);
+  assert(world.layout.sites.some(site => site.role === 'pack') && world.layout.sites.some(site => site.role === 'chest'));
+  const triggers = world.data.entities.filter(e => e.targetname === 'zombie_door');
+  assert.equal(triggers.length, 12);
+  assert(triggers.every(e => Number(e.zombie_cost) > 0));
+});

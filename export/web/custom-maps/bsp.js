@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { parseBsp, staticModelIndexes, HIDDEN_TEXTURES, isWaterTexture } from './bsp-parse.js';
+import { extractLayout } from './bsp-layout.js';
 
 // Quake/GoldSrc units are about an inch, the same as the game, so BSP maps load at scale 1.
 export const BSP_SCALE = 1;
@@ -18,11 +19,10 @@ function makeTexture(texture) {
   return map;
 }
 
-export function buildBspScene(parsed) {
+function buildGroup(parsed, modelIndexes) {
   const { textures, texinfo, faces, models, vertices, entities } = parsed;
   const buckets = new Map();
   let triangles = 0;
-  const modelIndexes = staticModelIndexes(entities, models.length);
   for (const modelIndex of modelIndexes) {
     const { firstFace, faceCount } = models[modelIndex];
     for (let f = firstFace; f < firstFace + faceCount && f < faces.length; f++) {
@@ -67,6 +67,15 @@ export function buildBspScene(parsed) {
   }
   if (!triangles) throw new Error('This BSP file has no drawable geometry.');
   return { root, triangles, textures: buckets.size, entities };
+}
+
+export function buildBspScene(parsed) {
+  const scene = buildGroup(parsed, staticModelIndexes(parsed.entities, parsed.models.length));
+  // NZ:P entities (spawn, perks, box, barricades, buyable doors) in the model's own coordinates.
+  scene.root.userData.bspLayout = extractLayout(parsed, index => {
+    try { return buildGroup(parsed, [index]).root; } catch { return null; }
+  });
+  return scene;
 }
 
 export const loadBspBuffer = buffer => buildBspScene(parseBsp(buffer));

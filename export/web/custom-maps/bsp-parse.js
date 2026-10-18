@@ -116,7 +116,7 @@ export function parseBsp(buffer) {
   const models = [];
   for (let i = 0; i < modelLump.count; i++) {
     const o = modelLump.offset + i * 64;
-    models.push({ firstFace: view.getInt32(o + 56, true), faceCount: view.getInt32(o + 60, true) });
+    models.push({ firstFace: view.getInt32(o + 56, true), faceCount: view.getInt32(o + 60, true), mins: [0, 4, 8].map(k => view.getFloat32(o + k, true)), maxs: [12, 16, 20].map(k => view.getFloat32(o + k, true)) });
   }
 
   const faceVertices = face => {

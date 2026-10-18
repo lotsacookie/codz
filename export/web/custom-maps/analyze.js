@@ -243,7 +243,7 @@ export function findChokes(probe, grid, main, { minWidth = 70, maxWidth = 260, o
 
 const flat = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 
-function footprint(grid, w) {
+export function footprint(grid, w) {
   const half = w.width / 2 + 20;
   return grid.kill(node => {
     if (Math.abs(node.y - w.y) > 60) return false;
@@ -345,7 +345,7 @@ export function assignSites(grid, comp, spawn, roles, wallSites, spacing = 104) 
   return placed;
 }
 
-function finishWindow(w, inward) {
+export function finishWindow(w, inward) {
   const n = [inward[0] + 0, inward[1] + 0];
   const at = (k, lift = 0) => [w.x + n[0] * k, w.y + lift, w.z + n[1] * k];
   return {

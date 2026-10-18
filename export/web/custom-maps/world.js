@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { MOON_PERKS } from '../moon-session.js';
 import { flattenObject, fitModel, applyFit, appendBoxes, addGround } from './geometry.js';
 import { createProbe, planLevel } from './analyze.js';
+import { planFromLayout } from './bsp-plan.js';
 
 export const SKY_FACES = ['textures/sky-px.png', 'textures/sky-nx.png', 'textures/sky-py.png', 'textures/sky-ny.png', 'textures/sky-pz.png', 'textures/sky-nz.png'];
 export const PERK_IDS = Object.keys(MOON_PERKS);
@@ -152,6 +153,28 @@ function placeWindow(w, index, add, scene, wood) {
   }
 }
 
+
+// NZ:P layout points are in the model's raw space; move them into the fitted world.
+function toWorldLayout(hints, fit) {
+  const point = ([x, y, z]) => [x * fit.scale + fit.offset.x, y * fit.scale + fit.offset.y, z * fit.scale + fit.offset.z];
+  return {
+    spawn: hints.spawn && { point: point(hints.spawn.point), yaw: hints.spawn.yaw },
+    sites: hints.sites.map(site => ({ ...site, point: point(site.point) })),
+    windows: hints.windows.map(w => ({ ...w, point: point(w.point), spawner: w.spawner && point(w.spawner) })),
+    doors: hints.doors.map(door => ({ ...door, min: point(door.min), max: point(door.max) })),
+  };
+}
+
+function placeDoor(door, fit, add, scene) {
+  const matrix = new THREE.Matrix4().compose(fit.offset, new THREE.Quaternion(), new THREE.Vector3(fit.scale, fit.scale, fit.scale));
+  door.object.traverse(node => { if (node.isMesh) node.geometry.applyMatrix4(matrix); });
+  const [cx, , cz] = door.center;
+  add({ classname: 'trigger_use', targetname: 'zombie_door', target: door.name, zombie_cost: String(door.cost), position: [cx, door.min[1] + 40, cz] });
+  const part = add({ classname: 'script_model', targetname: door.name, position: [cx, door.min[1], cz], yaw: 0 });
+  door.object.userData.entityId = part.id;
+  scene.add(door.object);
+}
+
 export async function createCustomWorld(root, { onStatus = () => {}, scale = null, loadModel, label = 'Custom Map' } = {}) {
   onStatus('Reading the model…', .06);
   let flat = flattenObject(root);
@@ -168,7 +191,10 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
 
   onStatus('Building collision…', .08);
   let probe = createProbe(flat.positions, flat.index);
-  let plan = await planLevel(probe, flat.box, { roles: ROLES, onStatus });
+  const hints = root.userData?.bspLayout ?? null;
+  const worldLayout = hints ? toWorldLayout(hints, fit) : null;
+  const makePlan = async () => (worldLayout && await planFromLayout(probe, flat.box, worldLayout, { roles: ROLES, onStatus })) || planLevel(probe, flat.box, { roles: ROLES, onStatus });
+  let plan = await makePlan();
   if (plan.failed) {
     onStatus('No floor found, adding ground…', .1);
     flat = addGround(flat);
@@ -177,7 +203,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
     ground.position.copy(slab.getCenter(new THREE.Vector3()));
     scene.add(ground);
     probe = createProbe(flat.positions, flat.index);
-    plan = await planLevel(probe, flat.box, { roles: ROLES, onStatus });
+    plan = await makePlan();
     if (plan.failed) throw new Error('Could not find a walkable floor in this model.');
   }
 
@@ -195,6 +221,7 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
   const solids = [];
   const wood = material(0x7a5a3a, { roughness: .95 });
   plan.windows.forEach((w, i) => placeWindow(w, i, add, scene, wood));
+  for (const door of plan.doors ?? []) placeDoor(door, fit, add, scene);
   const loaded = await Promise.all(plan.sites.map(site => {
     if (site.role === 'chest') return Promise.all([tryLoad(loadModel, CHEST_MODEL), tryLoad(loadModel, CHEST_LID_MODEL)]);
     return tryLoad(loadModel, site.role === 'pack' ? PACK_MODEL : PERK_MODELS[site.role]);
@@ -222,6 +249,6 @@ export async function createCustomWorld(root, { onStatus = () => {}, scale = nul
   return {
     data, scene, collisionGeometry: geometry,
     collisionMetadata: { format: 'runtime-bvh', bounds: { min: bounds.min.toArray(), max: bounds.max.toArray() } },
-    layout: { grid: plan.grid, spawn: plan.spawn, windows: plan.windows, sites: plan.sites, fit, triangles: flat.triangles },
+    layout: { grid: plan.grid, spawn: plan.spawn, windows: plan.windows, sites: plan.sites, fit, triangles: flat.triangles, doors: (plan.doors ?? []).map(door => ({ ids: door.ids, center: new THREE.Vector3(...door.center), closed: true })) },
   };
 }

@@ -175,7 +175,27 @@ export function createGridNavigation(getLayout) {
       return this.health;
     }
 
-    setBlockers() {}
+    homeComponent() {
+      const p = this.layout.spawn.position;
+      const home = this.grid.nearest(p[0], p[1], p[2], 3, 120);
+      return home >= 0 ? this.grid.comp[home] : this.grid.largest();
+    }
+
+    // Closed buyable doors cut the walkable grid; opening one rejoins the areas behind it.
+    setBlockers(boxes = []) {
+      let changed = false;
+      for (const door of this.layout.doors ?? []) {
+        const closed = boxes.some(box => box.containsPoint(door.center));
+        if (closed || !door.closed) continue;
+        door.closed = false;
+        this.grid.revive(door.ids);
+        changed = true;
+      }
+      if (!changed) return;
+      this.grid.recompute();
+      this.home = this.homeComponent();
+      this.prepare();
+    }
 
     queueRefresh() {}
   };
