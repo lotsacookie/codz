@@ -577,7 +577,7 @@ renderer.setAnimationLoop(now => {
     const roots = [];
     for (const z of combat.enemies.list) roots.push(z.root);
     for (const z of combat.enemies.dead) roots.push(z.root);
-    culler.cullDynamic(roots, 100, 40, 700, camera.position);
+    culler.cullDynamic(roots, 100, 40, 1600, camera.position);
   }
   renderer.clear();
   renderer.render(scene, camera);

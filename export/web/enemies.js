@@ -88,7 +88,7 @@ export class Enemies {
         z.approachTime+=dt;
         const to=z.barrier.outside,near=Math.hypot(to.x-z.root.position.x,to.z-z.root.position.z)<14&&Math.abs(to.y-z.root.position.y)<60;
         z.approachMark??={t:0,p:z.root.position.clone()};z.approachMark.t+=dt;let jam=false;if(z.approachMark.t>=4){jam=z.approachMark.p.distanceTo(z.root.position)<20;z.approachMark.t=0;z.approachMark.p.copy(z.root.position);}
-        if(near||z.approachTime>30||jam||(z.approachTime>1.5&&z.path.length<2)){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
+        if(near||z.approachTime>30||((jam||(z.approachTime>1.5&&z.path.length<2))&&!this.seen(z,player))){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
       }
       if(z.state==='barricade'){
         z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
@@ -144,7 +144,7 @@ export class Enemies {
       }
       if(z.root.position.y<player.y-900&&this.relocate(z,player))continue;
       z.stuck+=dt;
-      if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=2&&this.relocate(z,player))z.stuckCount=0;else if(z.stuckCount>=4){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
+      if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=2&&this.relocate(z,player))z.stuckCount=0;else if(z.stuckCount>=4&&!this.seen(z,player)){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
     }
     for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);this.dead.splice(this.dead.indexOf(d),1);}}
     if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
@@ -156,7 +156,12 @@ export class Enemies {
     let ok=true;try{ok=nav.canReach(sp,b.outside)!==false;}catch{ok=true;}
     b.spawnCheck={version:nav.version,ok};return ok?sp:null;
   }
+  seen(z,player){
+    const p=z.root.position;if(p.distanceTo(player)>900)return false;
+    return this.world.lineClear(p.clone().add(new THREE.Vector3(0,45,0)),player.clone().add(new THREE.Vector3(0,40,0)));
+  }
   relocate(z,player){
+    if(this.seen(z,player))return false;
     const s=this.session,pool=this.pool?this.pool():(this.world.spawnBarriers?.(s)??this.barriers??[]);
     const list=pool.filter(b=>b.inside);if(!list.length)return false;
     const far=list.filter(b=>b.inside.distanceTo(player)>300),pick=[...(far.length?far:list)];

@@ -125,7 +125,7 @@ export class ShangriEnemies extends Enemies {
       }
       if (z.stalls >= STALL_LIMIT) {
         if (this.relocate(z, player)) continue;
-        if (z.stalls >= STALL_LIMIT * 3) {
+        if (z.stalls >= STALL_LIMIT * 3 && !this.seen(z, player)) {
           this.remove(z);
           this.session.spawned = Math.max(0, this.session.spawned - 1);
         }
