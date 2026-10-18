@@ -6,6 +6,8 @@ import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
+import { chunkWorldMeshes } from '../world-chunks.js';
+import { OcclusionCuller } from '../occlusion.js';
 import { configureKinoAssets, assetManager, assetDiagnostics } from '../runtime-assets.js';
 import { assets } from '../asset-loader.js';
 import { applyChalkTransparency } from '../chalk-transparency.js';
@@ -47,6 +49,15 @@ export function withDefaults(cfg) {
   };
 }
 
+// Runs fn with every entity-tagged subtree (doors, boards, chests... which the game moves or toggles)
+// hidden, so chunking and culling only ever touch the static world.
+function withoutEntities(root, fn) {
+  const hidden = [];
+  root.traverse(o => { if (o.userData?.entityId !== undefined && o.visible) hidden.push(o); });
+  for (const o of hidden) o.visible = false;
+  try { return fn(); } finally { for (const o of hidden) o.visible = true; }
+}
+
 // NZ:P BSP maps: worldspawn fog (linear, start/end/colour) and sky. The maps' own skybox files are not
 // bundled, so a fogged map fades into its fog colour, a flat r_skycolor / "black" sky is a solid colour,
 // and everything else keeps the stock sky.
@@ -62,6 +73,7 @@ async function mountSurvival(ctx, C) {
 const LOG = '[' + C.id + ']';
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
 let disposed = false;
+let culler = null, gltfRoot = null;
 const $ = id => document.getElementById(id), keys = new Set(), errors = [];
 const vector = a => new THREE.Vector3(...a);
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -353,6 +365,7 @@ addEventListener('error', e => errors.push(e.message));
 addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
 ctx.onDispose(() => {
   disposed = true;
+  try { culler?.dispose?.(); } catch {}
   renderer.setAnimationLoop(null);
   try { touchControls.destroy(); } catch {}
   try { combat?.audio.dispose(); } catch {}
@@ -461,6 +474,9 @@ async function load() {
   }
   showStatus(`Optimizing ${C.label}…`);
   await nextTask();
+  gltfRoot = gltf.scene;
+  // Split big static meshes into spatial chunks so the camera frustum can skip what is off screen.
+  try { withoutEntities(gltf.scene, () => chunkWorldMeshes(gltf.scene)); } catch (error) { console.warn(`${LOG} chunking skipped`, error); }
   const optimization = custom ? null : optimizeStaticScene(gltf.scene, { cellSize: C.cellSize, verticalCellSize: C.verticalCellSize });
   showStatus(`Loading ${C.label} navigation…`);
   await nextTask();
@@ -534,6 +550,12 @@ async function load() {
 }
 
 await load();
+if (!/[?&]cull=0\b/.test(location.search)) {
+  try {
+    const travel = new THREE.Vector3(...C.lighting.sun[2]).normalize().negate();
+    withoutEntities(scene, () => { culler = new OcclusionCuller({ root: gltfRoot, lightDirection: travel, shadows: false }); });
+  } catch (error) { console.warn(`${LOG} culling unavailable`, error); culler = null; }
+}
 let previous = performance.now();
 renderer.setAnimationLoop(now => {
   if (disposed) return;
@@ -546,6 +568,13 @@ renderer.setAnimationLoop(now => {
     remaining -= step;
   }
   if (!ready) { previous = now; return; }
+  if (culler) {
+    culler.update(camera);
+    const roots = [];
+    for (const z of combat.enemies.list) roots.push(z.root);
+    for (const z of combat.enemies.dead) roots.push(z.root);
+    culler.cullDynamic(roots, 80, 40);
+  }
   renderer.clear();
   renderer.render(scene, camera);
   if (active) { renderer.clearDepth(); renderer.render(combat.viewScene, combat.viewCamera); }
