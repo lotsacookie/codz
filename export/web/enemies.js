@@ -49,7 +49,7 @@ export class Enemies {
       }
     }
     if(runtimeProfile.shadows)root.traverse(o=>{if(o.isMesh)o.castShadow=true;});
-    root.position.copy(position??barrier.spawnPoint??barrier.outside);this.scene.add(root);
+    const spawnAt=barrier&&!position?this.spawnPointOf(barrier):null;root.position.copy(position??spawnAt??barrier.outside);this.scene.add(root);
     const rig=new Rig(root),round=this.session.round;
     const gait=kind==='dog'?'sprint':rollGait(round,this.data.rules,()=>this.session.random());
     const variant=Math.floor(this.session.random()*3),jitter=.94+this.session.random()*.12;
@@ -62,7 +62,7 @@ export class Enemies {
     if(this.anims[death])rig.add('death',this.anims[death],true);
     rig.play('walk');rig.update(.01);
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
-    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(barrier.spawnPoint&&!position?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7};
+    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
@@ -87,7 +87,8 @@ export class Enemies {
       if(z.state==='approach'){
         z.approachTime+=dt;
         const to=z.barrier.outside,near=Math.hypot(to.x-z.root.position.x,to.z-z.root.position.z)<14&&Math.abs(to.y-z.root.position.y)<60;
-        if(near||z.approachTime>30){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
+        z.approachMark??={t:0,p:z.root.position.clone()};z.approachMark.t+=dt;let jam=false;if(z.approachMark.t>=4){jam=z.approachMark.p.distanceTo(z.root.position)<20;z.approachMark.t=0;z.approachMark.p.copy(z.root.position);}
+        if(near||z.approachTime>30||jam||(z.approachTime>1.5&&z.path.length<2)){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
       }
       if(z.state==='barricade'){
         z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-(z.barrier.inside.z-z.root.position.z),z.barrier.inside.x-z.root.position.x),dt,{rate:12});
@@ -131,11 +132,34 @@ export class Enemies {
           z.root.rotation.y=turnToward(z.root.rotation.y,Math.atan2(-z.heading.z,z.heading.x),dt,{rate:14});
         }
       }
+      if(z.root.position.y<player.y-900&&this.relocate(z,player))continue;
       z.stuck+=dt;
-      if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=3){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
+      if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=2&&this.relocate(z,player))z.stuckCount=0;else if(z.stuckCount>=4){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
     }
     for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);this.dead.splice(this.dead.indexOf(d),1);}}
     if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
+  }
+  spawnPointOf(b){
+    const sp=b.spawnPoint;if(!sp)return null;
+    const nav=this.world.navigation;if(!nav?.canReach)return sp;
+    const c=b.spawnCheck;if(c&&c.version===nav.version)return c.ok?sp:null;
+    let ok=true;try{ok=nav.canReach(sp,b.outside)!==false;}catch{ok=true;}
+    b.spawnCheck={version:nav.version,ok};return ok?sp:null;
+  }
+  relocate(z,player){
+    const s=this.session,pool=this.pool?this.pool():(this.world.spawnBarriers?.(s)??this.barriers??[]);
+    const list=pool.filter(b=>b.inside);if(!list.length)return false;
+    const far=list.filter(b=>b.inside.distanceTo(player)>300),pick=[...(far.length?far:list)];
+    let target=null;
+    for(let tries=0;tries<4&&pick.length&&!target;tries++){
+      const b=pick.splice(Math.floor(s.random()*pick.length),1)[0],p=this.world.path(b.inside,player);
+      if(p.length>1&&p.at(-1).distanceTo(player)<150)target=b;
+    }
+    if(!target)return false;
+    z.root.position.copy(target.inside);
+    z.state='chase';z.heading=null;z.path=[];z.pathIndex=0;z.repath=0;z.stuck=0;z.stuckCount=0;z.stalls=0;z.forceFallback=false;z.watch=null;z.trail=false;
+    z.lastPosition.copy(z.root.position);
+    return true;
   }
   remove(z){z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);this.list.splice(this.list.indexOf(z),1);}
   hurt(z,damage,head=false,melee=false,cause='bullet',score=true){

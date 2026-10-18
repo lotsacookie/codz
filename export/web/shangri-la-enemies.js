@@ -124,8 +124,11 @@ export class ShangriEnemies extends Enemies {
         console.warn('[nav] zombie stalled', JSON.stringify({ id: z.id, stalls: z.stalls, at: p.toArray().map(Math.round), toPlayer: Math.round(p.distanceTo(player)), mapped: this.world.navigation?.auto?.nodes?.length ?? 0 }));
       }
       if (z.stalls >= STALL_LIMIT) {
-        this.remove(z);
-        this.session.spawned = Math.max(0, this.session.spawned - 1);
+        if (this.relocate(z, player)) continue;
+        if (z.stalls >= STALL_LIMIT * 3) {
+          this.remove(z);
+          this.session.spawned = Math.max(0, this.session.spawned - 1);
+        }
       }
     }
   }

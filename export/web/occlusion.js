@@ -314,7 +314,7 @@ export class OcclusionCuller {
     return false;
   }
 
-  cullDynamic(roots, radius, lift) {
+  cullDynamic(roots, radius, lift, keepWithin = 0, origin = null) {
     if (!this.enabled || !this.hasView) return;
     const range = {};
     let hidden = 0;
@@ -328,7 +328,8 @@ export class OcclusionCuller {
       const p = root.position;
       const x0 = p.x - radius, x1 = p.x + radius, y0 = p.y + lift - radius, y1 = p.y + lift + radius, z0 = p.z - radius, z1 = p.z + radius;
       let mask = 1;
-      if (!this.testBox(x0, y0, z0, x1, y1, z1)) {
+      const close = origin && keepWithin > 0 && p.distanceToSquared(origin) < keepWithin * keepWithin;
+      if (!close && !this.testBox(x0, y0, z0, x1, y1, z1)) {
         this.lightRange(x0, y0, z0, x1, y1, z1, range);
         this.assignCells(range);
         if (!this.receivesFrom(range)) mask = 0;
