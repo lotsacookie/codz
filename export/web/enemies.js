@@ -4,6 +4,7 @@ import { Rig, loadModel, loadAnimation } from './animation.js';
 import { zombieHealth } from './rules.js';
 import { disposeSkeletons, runtimeProfile } from './runtime-assets.js';
 import { turnToward, steerDirection, smoothingEnabled } from './steering.js';
+import { nearestTarget } from './net/coop.js';
 
 const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
 const STEER_RATE = smoothingEnabled() ? 12 : Infinity;   // path-direction easing; Infinity = old behaviour
@@ -80,7 +81,10 @@ export class Enemies {
         else this.nextSpawn=1;
       }
     }
+    const localPlayer=player,remotes=this.remoteTargets?.();
     for(const z of [...this.list]){
+      // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
+      const player=remotes?.length?nearestTarget(z.root.position,remotes,localPlayer):localPlayer,onRemote=player!==localPlayer;
       z.rig.update(dt);z.growl-=dt;
       if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
       if(z.kind==='zombie'&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
@@ -106,7 +110,7 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=z.root.position.clone().add(new THREE.Vector3(0,z.kind==='dog'?25:45,0)),eye=player.clone().add(new THREE.Vector3(0,40,0));
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE);}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&!onRemote&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE);}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
