@@ -158,6 +158,7 @@ html.force-landscape body.touch-mode #pause,
 html.force-landscape #pause,
 html.force-landscape #launcher,
 html.force-landscape #custom-maps,
+html.force-landscape #multiplayer,
 html.force-landscape #menu,
 html.force-landscape .modifiers-card{touch-action:none;overscroll-behavior:contain}
 
@@ -191,3 +192,23 @@ html.force-landscape .modifiers-card{touch-action:none;overscroll-behavior:conta
 #multiplayer .mp-roster li span{font-size:12px;letter-spacing:.12em;color:#cfc7b4}
 #multiplayer .mp-roster li.ready span{color:#9fe0a0}
 #multiplayer .mp-actions{display:flex;flex-direction:column;gap:6px}
+
+/* Real landscape on a phone: menus pan natively and stay inside their own box. */
+html:not(.force-landscape) #launcher,html:not(.force-landscape) #custom-maps,html:not(.force-landscape) #multiplayer{touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
+/* Short landscape screens (phones turned sideways): tighten the launcher so every entry, Multiplayer included, is
+   on screen at once instead of hiding below the fold. */
+@media (max-height:520px) and (min-aspect-ratio:1/1){
+#launcher,#multiplayer,#custom-maps{padding:max(8px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+#launcher .launcher-eyebrow,#multiplayer .mp-eyebrow{display:none}
+#launcher h1,#custom-maps h2{margin:0 0 8px;font-size:26px}
+#multiplayer h2{margin:0 0 8px;font-size:24px}
+#map-list{gap:3px}
+#launcher li button{padding:7px 14px;gap:0}
+#launcher li button strong{font-size:15px}
+#launcher li button span{display:none}
+#launcher-note{margin:8px 0 0;font-size:11px}
+#multiplayer .mp-body{gap:5px;margin:6px 0 8px}
+#multiplayer input,#multiplayer select,#multiplayer button{min-height:36px}
+#multiplayer .mp-list,#multiplayer .mp-roster{max-height:calc(40 * var(--vh1))}
+}

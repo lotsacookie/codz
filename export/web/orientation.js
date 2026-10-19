@@ -48,6 +48,7 @@
     }
     if (on !== was) {
       was = on;
+      drag.el = null; cancelAnimationFrame(drag.frame); drag.frame = 0;
       setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
     }
   };
