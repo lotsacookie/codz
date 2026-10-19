@@ -4,6 +4,8 @@ import { parseIwmap } from '../export/web/custom-maps/iwmap-parse.js';
 import { brushPolygons } from '../export/web/custom-maps/iwmap-brush.js';
 import { flattenIwmap, createResolver } from '../export/web/custom-maps/iwmap-flatten.js';
 import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/custom-maps/iwmap-layout.js';
+import { patchPolygons } from '../export/web/custom-maps/iwmap-brush.js';
+import { parseGithubMapUrl, isGithubRepoUrl, fetchPrefabs } from '../export/web/custom-maps/iwmap-remote.js';
 
 const face = (a, b, c, material = 'wall') => ` ( ${a.join(' ')} ) ( ${b.join(' ')} ) ( ${c.join(' ')} ) ${material} 16 16 0 0 0 0 lightmap_gray 16384 16384 0 0 0 0`;
 
@@ -160,4 +162,153 @@ test('play area crops to the perks and box and moves a far-away intro spawn into
   const near = playArea({ ...layout, spawn: { point: [200, 0, 200], yaw: 0 } });
   assert.equal(near.relocated, false);
   assert.equal(playArea({ ...layout, sites: [], windows: [] }), null);
+});
+
+const MESH = `iwmap 4
+// entity 0
+{
+"classname" "worldspawn"
+// brush 0
+ {
+  guid "{M}"
+  mesh
+  {
+  contents nonColliding;
+  toolFlags;
+   ayz_wall
+   lightmap_gray
+   3 3 0 8
+   (
+\tv 0 0 0 t 0 0 0 0
+\tv 64 0 32 t 1 0 0 0
+\tv 128 0 0 t 2 0 0 0
+   )
+   (
+\tv 0 64 0 t 0 1 0 0
+\tv 64 64 32 t 1 1 0 0
+\tv 128 64 0 t 2 1 0 0
+   )
+   (
+\tv 0 128 0 t 0 2 0 0
+\tv 64 128 32 t 1 2 0 0
+\tv 128 128 0 t 2 2 0 0
+   )
+  }
+ }
+}`;
+
+test('reads BO3 mesh blocks as control point grids', () => {
+  const map = parseIwmap(MESH);
+  const world = map.entities[0];
+  assert.equal(world.brushes.length, 0);
+  assert.equal(world.patches.length, 1);
+  assert.equal(world.patches[0].material, 'ayz_wall');
+  assert.equal(world.patches[0].rows.length, 3);
+  assert.deepEqual(world.patches[0].rows[1][1], [64, 64, 32]);
+});
+
+test('reads patchDef grids and keeps brushes next to them', () => {
+  const text = `${world([cube([0, 0, 0], [64, 64, 64], 'ayz_floor')])}`.replace(/}$/, `{
+patchDef3
+{
+"ayz_floor"
+( 3 3 0 0 0 0 0 0 )
+(
+( ( 0 0 0 0 0 ) ( 1 0 1 0 0 ) ( 2 0 0 0 0 ) )
+( ( 0 1 0 0 0 ) ( 1 1 1 0 0 ) ( 2 1 0 0 0 ) )
+( ( 0 2 0 0 0 ) ( 1 2 1 0 0 ) ( 2 2 0 0 0 ) )
+)
+}
+}
+}`);
+  const entity = parseIwmap(text).entities[0];
+  assert.equal(entity.brushes.length, 1);
+  assert.equal(entity.patches.length, 1);
+  assert.equal(entity.patches[0].rows[2][2][0], 2);
+});
+
+test('3x3 patches bend smoothly while 2x2 patches stay flat', () => {
+  const curved = parseIwmap(MESH).entities[0].patches[0];
+  const polygons = patchPolygons(curved, { detail: 4 });
+  assert.equal(polygons.length, 16);
+  const tops = polygons.flatMap(p => p.points).map(p => p[2]);
+  assert.ok(Math.max(...tops) > 15 && Math.max(...tops) < 32, 'the bezier surface peaks below the control point');
+  const finer = patchPolygons(curved, { detail: 8 }).flatMap(p => p.points).map(p => Math.round(p[2] * 100));
+  assert.ok(new Set(finer).size > 4, 'more than a few distinct heights means a real curve');
+  const flat = patchPolygons({ material: 'ayz_floor', rows: [[[0, 0, 0], [8, 0, 0]], [[0, 8, 0], [8, 8, 0]]] });
+  assert.equal(flat.length, 1);
+  assert.deepEqual(patchPolygons({ material: 'clip', rows: curved.rows }), []);
+});
+
+test('curved geometry flattens with its prefab transform', () => {
+  const main = parseIwmap(`${MESH}
+// entity 1
+{
+"classname" "misc_prefab"
+"model" "_prefabs/curve.map"
+"origin" "1000 0 0"
+"angles" "0 0 0"
+}`);
+  const resolve = () => parseIwmap(MESH);
+  const flat = flattenIwmap(main, { resolve });
+  assert.equal(flat.stats.patches, 2);
+  const xs = flat.polygons.flatMap(p => p.points.map(q => q[0]));
+  assert.ok(Math.max(...xs) >= 1128);
+});
+
+test('a missing stock prefab still marks its barricade, wall buy and box', () => {
+  const entity = (model, at) => `{\n"classname" "misc_prefab"\n"model" "${model}"\n"origin" "${at}"\n"angles" "0 90 0"\n}`;
+  const text = `iwmap 4\n{\n"classname" "worldspawn"\n}\n${entity('_prefabs/zm/zm_core/barricade_reciever_wood.map', '100 0 0')}\n${entity('_prefabs/zm/zm_core/spawnable_weapon_shotgun_pump.map', '0 200 0')}\n${entity('_prefabs/zm/zm_giant/geo/zm_giant_magicbox_platform.map', '5 5 5')}`;
+  const flat = flattenIwmap(parseIwmap(text), { resolve: () => null });
+  const layout = extractIwmapLayout(flat.entities);
+  assert.equal(layout.windows.length, 1);
+  assert.equal(layout.walls.length, 1);
+  assert.equal(layout.sites.length, 0, 'a platform is level geometry, not a box location');
+  assert.equal(Math.round(layout.windows[0].yaw), 90);
+});
+
+test('box locations come from treasure chest structs and the same spot is counted once', () => {
+  const layout = extractIwmapLayout([
+    { classname: 'zbarrier_zmcore_MagicBox', origin: [10, 20, 0], yaw: 0 },
+    { classname: 'script_struct', targetname: 'treasure_chest_use', origin: [12, 20, 0], yaw: 0 },
+    { classname: 'script_struct', targetname: 'treasure_chest_use', origin: [900, 900, 0], yaw: 0 },
+    { classname: 'script_struct', script_noteworthy: 'riser_location', targetname: 'start_zone_spawners', origin: [0, 0, 0] },
+    { classname: 'script_struct', script_noteworthy: 'dog_location', origin: [5, 5, 0] },
+  ]);
+  assert.equal(layout.sites.filter(s => s.role === 'chest').length, 2);
+  assert.equal(layout.spawners.length, 1);
+});
+
+test('spawners that sit near the perks widen the play area; distant sections are left out', () => {
+  const layout = {
+    spawn: { point: [0, 0, 0], yaw: 0 },
+    sites: [{ role: 'pack', point: [0, 0, 0] }],
+    windows: [], walls: [], doors: [], lights: [],
+    spawners: [[4000, 0, 0], [40000, 0, 0]],
+  };
+  const area = playArea(layout);
+  assert.ok(area.max[0] >= 7000 && area.max[0] < 10000);
+});
+
+test('GitHub links resolve to a repository or a single map file', () => {
+  assert.deepEqual(parseGithubMapUrl('https://github.com/MattFiler/zm_alien_isolation'), { owner: 'MattFiler', repo: 'zm_alien_isolation', ref: null, path: null });
+  assert.equal(isGithubRepoUrl('https://github.com/MattFiler/zm_alien_isolation/'), true);
+  const file = parseGithubMapUrl('https://github.com/a/b/blob/main/map_source/zm/x.map');
+  assert.deepEqual(file, { owner: 'a', repo: 'b', ref: 'main', path: 'map_source/zm/x.map' });
+  assert.equal(isGithubRepoUrl('https://github.com/a/b/blob/main/map_source/zm/x.map'), false);
+  assert.equal(parseGithubMapUrl('https://example.com/x.map'), null);
+});
+
+test('prefabs are fetched recursively and a 404 is skipped', async () => {
+  const prefab = (...models) => `iwmap 4\n${models.map(m => `{\n"classname" "misc_prefab"\n"model" "${m}"\n}`).join('\n')}`;
+  const store = { '_prefabs/a.map': prefab('_prefabs/b.map', '_prefabs/zm/stock.map'), '_prefabs/b.map': prefab() };
+  const asked = [];
+  const fetchImpl = async url => {
+    asked.push(url);
+    const body = store[url.replace('https://x/', '')];
+    return { ok: body !== undefined, status: body === undefined ? 404 : 200, text: async () => body ?? '' };
+  };
+  const files = await fetchPrefabs(prefab('_prefabs/a.map'), name => `https://x/${name}`, { fetchImpl });
+  assert.deepEqual([...files.keys()].sort(), ['_prefabs/a.map', '_prefabs/b.map']);
+  assert.ok(asked.includes('https://x/_prefabs/zm/stock.map'));
 });

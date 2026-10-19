@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { unzip } from './zip.js';
 import { loadBspWithProps, loadBspFromUrl } from './bsp.js';
 import { loadIwmapText, loadIwmapFiles } from './iwmap.js';
+import { parseGithubMapUrl, loadGithubMap } from './iwmap-remote.js';
 
 const SKETCHFAB = 'https://api.sketchfab.com/v3';
 
@@ -96,6 +97,11 @@ export async function loadFromSketchfab({ uid, token }, onProgress, fetchImpl = 
 }
 
 export async function loadIwmapFromUrl(url, onProgress, fetchImpl = globalThis.fetch.bind(globalThis)) {
+  const github = parseGithubMapUrl(url);
+  if (github) {
+    const { text, files } = await loadGithubMap(github, { fetchImpl, onProgress: (done, total) => onProgress?.(done, total) });
+    return loadIwmapText(text, files);
+  }
   const bytes = await download(url, onProgress, fetchImpl);
   if (bytes[0] === 0x50 && bytes[1] === 0x4b) return loadIwmapFiles(await unzip(bytes));
   return loadIwmapText(new TextDecoder().decode(bytes));

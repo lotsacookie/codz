@@ -15,7 +15,9 @@ export const PERK_ROLES = {
 };
 
 const lower = value => String(value ?? '').toLowerCase();
-const RISER = /^(?:riser_location|spawn_location)$/;
+const RISER = /^(?:riser_location|spawn_location|zombie_spawn_location|find_flesh_spawn)$/;
+const ZONE_SPAWNER = /(?:^|_)zone_spawners?(?:_|$)|(?:^|_)spawners?$/;
+const dedupe = (list, within) => list.filter((item, i) => !list.slice(0, i).some(other => Math.hypot(other.point[0] - item.point[0], other.point[2] - item.point[2]) < within && Math.abs(other.point[1] - item.point[1]) < 120));
 const WINDOW_CLASS = /^zbarrier_.*(?:window|barricade|board)/i;
 
 function lightOf(entity) {
@@ -58,15 +60,20 @@ export function extractIwmapLayout(entities) {
       if (role) layout.sites.push({ role, point: point(entity), yaw: yaw(entity) });
     } else if (/^zbarrier_zmcore_packapunch/.test(classname) || targetname === 'zm_pack_a_punch') {
       layout.sites.push({ role: 'pack', point: point(entity), yaw: yaw(entity) });
-    } else if (/^zbarrier_zmcore_magicbox/.test(classname)) {
+    } else if (/^zbarrier_zmcore_magicbox/.test(classname) || (classname === 'script_struct' && targetname === 'treasure_chest_use')) {
       layout.sites.push({ role: 'chest', point: point(entity), yaw: yaw(entity) });
-    } else if (classname === 'script_struct' && RISER.test(noteworthy)) {
+    } else if (classname === 'weapon_wall' || (classname === 'script_struct' && /^weapon_upgrade|^wallbuy|^zm_weapon_wall/.test(targetname))) {
+      layout.walls.push({ point: point(entity), yaw: yaw(entity) });
+    } else if (classname === 'script_struct' && (RISER.test(noteworthy) || (ZONE_SPAWNER.test(targetname) && /^(?:riser|spawn)/.test(noteworthy)))) {
       layout.spawners.push(point(entity));
     } else if ((classname === 'script_struct' && targetname === 'exterior_goal') || WINDOW_CLASS.test(classname)) {
       layout.windows.push({ point: point(entity), yaw: yaw(entity), spawner: null, spawners: [] });
     }
   }
 
+  layout.sites = dedupeSites(layout.sites);
+  layout.windows = dedupe(layout.windows.map(w => ({ ...w })), 60);
+  layout.walls = dedupe(layout.walls, 40);
   for (const window of layout.windows) {
     const hit = nearest(window.point, layout.spawners, 900);
     if (hit) {
@@ -77,11 +84,25 @@ export function extractIwmapLayout(entities) {
   return layout;
 }
 
+// The stock mod-tools prefab and the map's own struct both mark a box spot: keep one of each.
+function dedupeSites(sites) {
+  const out = [];
+  for (const site of sites) {
+    const twin = out.find(o => o.role === site.role && Math.hypot(o.point[0] - site.point[0], o.point[2] - site.point[2]) < (site.role === 'chest' ? 140 : 80) && Math.abs(o.point[1] - site.point[1]) < 120);
+    if (!twin) out.push(site);
+  }
+  return out;
+}
+
 const flat2 = (a, b) => Math.hypot(a[0] - b[0], a[2] - b[2]);
 
-export function playArea(layout, { margin = 3000, spawnReach = 9000, height = 3000 } = {}) {
+export function playArea(layout, { margin = 3000, spawnReach = 9000, linkReach = 4500, height = 3000 } = {}) {
   const anchors = [...layout.sites.map(s => s.point), ...layout.windows.map(w => w.point)];
   if (!anchors.length) return null;
+  // Zombie spawners and wall buys near the perks belong to the same level: they widen the box so the
+  // outer rooms are drawn too. A spawner far from every anchor is another section of the map.
+  const linked = [...layout.spawners].filter(p => anchors.some(a => flat2(a, p) < linkReach && Math.abs(a[1] - p[1]) < height));
+  anchors.push(...linked);
   const spawnNear = layout.spawn && anchors.some(a => flat2(a, layout.spawn.point) < spawnReach && Math.abs(a[1] - layout.spawn.point[1]) < height);
   const points = spawnNear ? [...anchors, layout.spawn.point] : anchors;
   const min = [0, 1, 2].map(i => Math.min(...points.map(p => p[i])) - (i === 1 ? height : margin));
@@ -106,6 +127,7 @@ export function restrictLayout(layout, area) {
     spawn: area.spawn,
     spawners: layout.spawners.filter(p => inArea(area, p)),
     windows: layout.windows.filter(w => inArea(area, w.point)),
+    walls: (layout.walls ?? []).filter(w => inArea(area, w.point)),
     lights: layout.lights.filter(l => inArea(area, l.point, 1500)),
   };
 }

@@ -18,8 +18,9 @@ export function buildIwmapGroup(polygons) {
   const buckets = new Map();
   let triangles = 0;
   for (const polygon of polygons) {
-    let bucket = buckets.get(polygon.material);
-    if (!bucket) buckets.set(polygon.material, bucket = []);
+    const key = polygon.double ? `${polygon.material}\u0000double` : polygon.material;
+    let bucket = buckets.get(key);
+    if (!bucket) buckets.set(key, bucket = []);
     const points = polygon.points.map(toThree);
     for (let k = 1; k < points.length - 1; k++) {
       bucket.push(...points[0], ...points[k], ...points[k + 1]);
@@ -29,14 +30,15 @@ export function buildIwmapGroup(polygons) {
   if (!triangles) throw new Error('This map has no drawable brush geometry.');
   const root = new THREE.Group();
   root.name = 'iwmap';
-  for (const [name, positions] of buckets) {
+  for (const [key, positions] of buckets) {
+    const [name, double] = key.split('\u0000');
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.computeVertexNormals();
-    const material = new THREE.MeshStandardMaterial({ color: materialColor(name), roughness: 1, metalness: 0, side: THREE.FrontSide });
+    const material = new THREE.MeshStandardMaterial({ color: materialColor(name), roughness: 1, metalness: 0, side: double ? THREE.DoubleSide : THREE.FrontSide });
     material.name = name;
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = `iwmap_${name}`;
+    mesh.name = double ? `iwmap_${name}_curve` : `iwmap_${name}`;
     root.add(mesh);
   }
   return { root, triangles };

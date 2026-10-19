@@ -1,5 +1,5 @@
 import { parseIwmap, parseVector } from './iwmap-parse.js';
-import { brushPolygons } from './iwmap-brush.js';
+import { brushPolygons, patchPolygons } from './iwmap-brush.js';
 
 const MAX_DEPTH = 8;
 const IDENTITY = { m: [1, 0, 0, 0, 1, 0, 0, 0, 1], t: [0, 0, 0] };
@@ -79,10 +79,32 @@ export function createResolver(files) {
   };
 }
 
+// The mod tools ship these prefabs, so a map's own folder rarely has them. What they stand for is clear
+// from the name, so a missing one still leaves a marker at its place.
+const STOCK_PREFABS = [
+  [/(?:barricade|window)(?!.*(?:shutter|clip))/i, 'exterior_goal'],
+  [/spawnable_weapon|wallbuy|weapon_wall/i, 'weapon_wall'],
+  [/(?:^|[/_])packapunch/i, 'pack'],
+  [/(?:^|[/_])magicbox(?!_platform)|(?:^|[/_])treasure_chest/i, 'chest'],
+];
+
+export function stockMarker(model, placed) {
+  const name = normalizeName(model);
+  const hit = STOCK_PREFABS.find(([pattern]) => pattern.test(name));
+  if (!hit) return null;
+  const base = { origin: placed.t, yaw: yawOf(placed), stock: name };
+  switch (hit[1]) {
+    case 'exterior_goal': return { ...base, classname: 'script_struct', targetname: 'exterior_goal' };
+    case 'weapon_wall': return { ...base, classname: 'weapon_wall' };
+    case 'pack': return { ...base, classname: 'zbarrier_zmcore_packapunch' };
+    default: return { ...base, classname: 'zbarrier_zmcore_MagicBox' };
+  }
+}
+
 export function flattenIwmap(map, { resolve = () => null, all = false } = {}) {
   const polygons = [];
   const entities = [];
-  const stats = { brushes: 0, prefabs: 0, missingPrefabs: new Set(), models: 0 };
+  const stats = { brushes: 0, patches: 0, prefabs: 0, missingPrefabs: new Set(), models: 0 };
   const polygonCache = new WeakMap();
 
   const walk = (parsed, transform, depth, chain) => {
@@ -92,12 +114,13 @@ export function flattenIwmap(map, { resolve = () => null, all = false } = {}) {
       if (classname === 'worldspawn') {
         let local = polygonCache.get(entity);
         if (!local) {
-          local = entity.brushes.flatMap(brush => brushPolygons(brush, { all }));
+          local = [...entity.brushes.flatMap(brush => brushPolygons(brush, { all })), ...(entity.patches ?? []).flatMap(patch => patchPolygons(patch, { all }))];
           polygonCache.set(entity, local);
         }
         stats.brushes += entity.brushes.length;
+        stats.patches += entity.patches?.length ?? 0;
         for (const polygon of local) {
-          polygons.push({ material: polygon.material, points: transform === IDENTITY ? polygon.points : polygon.points.map(p => applyTransform(transform, p)) });
+          polygons.push({ material: polygon.material, double: polygon.double, points: transform === IDENTITY ? polygon.points : polygon.points.map(p => applyTransform(transform, p)) });
         }
         continue;
       }
@@ -109,6 +132,8 @@ export function flattenIwmap(map, { resolve = () => null, all = false } = {}) {
         const child = chain.has(model) ? null : resolve(model);
         if (!child) {
           if (!chain.has(model)) stats.missingPrefabs.add(model);
+          const marker = stockMarker(model, compose(transform, origin, angles));
+          if (marker) entities.push(marker);
           continue;
         }
         stats.prefabs++;

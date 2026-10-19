@@ -1,4 +1,5 @@
 import { PROVIDERS, providerById, isModelUrl } from './providers.js';
+import { isGithubRepoUrl } from './iwmap-remote.js';
 
 const TOKEN_KEY = 'zombies.sketchfabToken';
 const SOURCE_KEY = 'zombies.customSource';
@@ -124,7 +125,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     event.preventDefault();
     const text = query.value.trim();
     if (isModelUrl(text)) {
-      const kind = /\.bsp(?:\?|$)/i.test(text) ? 'bsp' : /\.map(?:\?|$)/i.test(text) ? 'iwmap' : 'url';
+      const kind = /\.bsp(?:\?|$)/i.test(text) ? 'bsp' : /\.map(?:\?|$)/i.test(text) || isGithubRepoUrl(text) ? 'iwmap' : 'url';
       onPlay({ label: decodeURIComponent(text.split('?')[0].split('/').pop().replace(/\.(glb|gltf|bsp|map)$/i, '')) || 'Custom Map', params: { source: kind, url: text } });
       return;
     }
