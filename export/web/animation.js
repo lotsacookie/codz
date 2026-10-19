@@ -127,6 +127,7 @@ export class ViewWeapon {
     if(!this.rig.playReverse('raiseAnim',speed,.05))return null;
     this.aim=0;this.recoil=0;this.meleeLeft=0;this.meleeType=null;this.sprintBlend=0;this.pendingFx=null;this.mode='putaway';
     for(const model of Object.values(this.knives))model.visible=false;
+    this.switching=true;this.cameraFx.switchOut(raise.duration/speed);
     const lowering={left:raise.duration/speed+.3};
     lowering.done=new Promise(resolve=>{lowering.resolve=resolve;});
     this.lowering=lowering;return lowering.done;
@@ -225,6 +226,7 @@ export class ViewWeapon {
     this.aim=0;this.recoil=0;this.meleeLeft=0;this.meleeType=null;this.sprintBlend=0;this.applyAim();
     this.rig.play('idleAnim',true,1,0);this.rig.update(0);
     this.mode=this.rig.play('raiseAnim',false,this.clipSpeed('raiseAnim',def.raiseTime),.04)?'raise':'idle';
+    if(this.switching){this.switching=false;if(this.mode==='raise')this.cameraFx.switchIn(this.rig.data.raiseAnim.duration/this.clipSpeed('raiseAnim',def.raiseTime));}
     this.ready=true;this.pivot.visible=true;
   }
   clipSpeed(key,duration){return duration>0?(this.rig.data[key]?.duration??duration)/duration:1;}

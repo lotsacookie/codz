@@ -155,8 +155,32 @@ export class CameraEffects {
     }
   }
 
+  switchOut(duration = 0.4, hold = 0.6) {
+    const lower = Math.max(0.2, duration);
+    const total = lower + hold;
+    const peak = lower * 0.9 / total;
+    this.switchSide = this.random() < 0.5 ? -1 : 1;
+    this.cancel('switch');
+    this.track('switch', 'roll', total, [[0, 0], [peak, TILT.reloadGun * 0.8], [1, TILT.reloadGun * 0.8]]);
+    this.track('switch', 'pitch', total, [[0, 0], [peak, TILT.reloadDip * 0.8], [1, TILT.reloadDip * 0.8]]);
+    this.track('switch', 'yaw', total, [[0, 0], [peak, this.switchSide * TILT.reloadSway * 0.6], [1, this.switchSide * TILT.reloadSway * 0.6]]);
+    this.schedule('switch', lower * 0.2, { trauma: 0.14, pitch: -0.008 });
+  }
+
+  switchIn(duration = 0.5) {
+    const total = Math.max(0.3, duration);
+    const side = this.switchSide ?? (this.random() < 0.5 ? -1 : 1);
+    const left = TILT.reloadLeftMin + this.random() * TILT.reloadLeftRange;
+    this.cancel('switch');
+    this.track('switch', 'roll', total, [[0, TILT.reloadGun * 0.8], [0.4, left * 0.6], [0.75, left * -0.15], [1, 0]]);
+    this.track('switch', 'pitch', total, [[0, TILT.reloadDip * 0.8], [0.35, TILT.reloadLift], [0.7, TILT.reloadDip * 0.3], [1, 0]]);
+    this.track('switch', 'yaw', total, [[0, side * TILT.reloadSway * 0.6], [0.45, -side * TILT.reloadSway * 0.5], [1, 0]]);
+    this.schedule('switch', total * 0.45, { trauma: 0.3, pitch: -0.014, roll: side * 0.004 });
+    this.schedule('switch', total * 0.85, { trauma: 0.15, pitch: -0.006 });
+  }
+
   fire() {
-    this.kick += (this.random() - 0.5) * TILT.fireKick;
+    this.kick +=(this.random() - 0.5) * TILT.fireKick;
   }
 
   cancel(kind) {
