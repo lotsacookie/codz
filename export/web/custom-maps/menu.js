@@ -25,12 +25,12 @@ export function createCustomMenu({ root, onPlay, onClose }) {
   const source = el('select', { class: 'cm-source', 'aria-label': 'Model source' });
   for (const provider of PROVIDERS) source.append(el('option', { value: provider.id, text: provider.label }));
   source.value = state.provider.id;
-  const query = el('input', { class: 'cm-query', type: 'search', placeholder: 'Search maps, or paste a .glb / .gltf / .bsp link', 'aria-label': 'Search' });
+  const query = el('input', { class: 'cm-query', type: 'search', placeholder: 'Search maps, or paste a .glb / .gltf / .bsp / .map link', 'aria-label': 'Search' });
   const token = el('input', { class: 'cm-token', type: 'password', placeholder: 'Sketchfab API token', autocomplete: 'off', 'aria-label': 'Sketchfab API token' });
   token.value = store.get(TOKEN_KEY);
   const search = el('button', { type: 'submit', text: 'SEARCH' });
   const file = el('button', { type: 'button', class: 'cm-file', text: 'OPEN FILE…' });
-  const picker = el('input', { type: 'file', accept: '.glb,.gltf,.zip,.bsp', hidden: '' });
+  const picker = el('input', { type: 'file', accept: '.glb,.gltf,.zip,.bsp,.map', hidden: '' });
   const form = el('form', { class: 'cm-bar' }, source, query, token, search, file);
   const status = el('p', { class: 'cm-status', role: 'status' });
   const grid = el('ul', { class: 'cm-grid' });
@@ -124,8 +124,8 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     event.preventDefault();
     const text = query.value.trim();
     if (isModelUrl(text)) {
-      const bspLink = /\.bsp(?:\?|$)/i.test(text);
-      onPlay({ label: decodeURIComponent(text.split('?')[0].split('/').pop().replace(/\.(glb|gltf|bsp)$/i, '')) || 'Custom Map', params: { source: bspLink ? 'bsp' : 'url', url: text } });
+      const kind = /\.bsp(?:\?|$)/i.test(text) ? 'bsp' : /\.map(?:\?|$)/i.test(text) ? 'iwmap' : 'url';
+      onPlay({ label: decodeURIComponent(text.split('?')[0].split('/').pop().replace(/\.(glb|gltf|bsp|map)$/i, '')) || 'Custom Map', params: { source: kind, url: text } });
       return;
     }
     store.set(TOKEN_KEY, token.value.trim());

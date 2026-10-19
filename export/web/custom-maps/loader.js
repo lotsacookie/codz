@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { unzip } from './zip.js';
 import { loadBspWithProps, loadBspFromUrl } from './bsp.js';
+import { loadIwmapText, loadIwmapFiles } from './iwmap.js';
 
 const SKETCHFAB = 'https://api.sketchfab.com/v3';
 
@@ -38,7 +39,10 @@ const toBuffer = bytes => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset 
 export async function loadFromArchive(files) {
   const names = [...files.keys()];
   const entry = names.find(n => /\.glb$/i.test(n)) ?? names.find(n => /(^|\/)scene\.gltf$/i.test(n)) ?? names.find(n => /\.gltf$/i.test(n));
-  if (!entry) throw new Error('The archive has no glTF or GLB model in it.');
+  if (!entry) {
+    if (names.some(n => /\.map$/i.test(n))) return loadIwmapFiles(files);
+    throw new Error('The archive has no glTF, GLB or .map file in it.');
+  }
   const directory = entry.includes('/') ? entry.slice(0, entry.lastIndexOf('/') + 1) : '';
   const blobs = new Map();
   for (const [name, bytes] of files) if (name !== entry) blobs.set(name, URL.createObjectURL(new Blob([bytes])));
@@ -59,6 +63,7 @@ export async function loadFromArchive(files) {
 
 export async function loadFromFile(file) {
   if (/\.bsp$/i.test(file.name)) return (await loadBspWithProps(await file.arrayBuffer())).root;
+  if (/\.map$/i.test(file.name)) return loadIwmapText(await file.text());
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (/\.zip$/i.test(file.name)) return loadFromArchive(await unzip(bytes));
   if (/\.gltf$/i.test(file.name)) return parse(new GLTFLoader(), new TextDecoder().decode(bytes));
@@ -90,10 +95,17 @@ export async function loadFromSketchfab({ uid, token }, onProgress, fetchImpl = 
   return loadFromArchive(await unzip(archive));
 }
 
+export async function loadIwmapFromUrl(url, onProgress, fetchImpl = globalThis.fetch.bind(globalThis)) {
+  const bytes = await download(url, onProgress, fetchImpl);
+  if (bytes[0] === 0x50 && bytes[1] === 0x4b) return loadIwmapFiles(await unzip(bytes));
+  return loadIwmapText(new TextDecoder().decode(bytes));
+}
+
 export function loadCustomModel(params, onProgress) {
   if (params?.source === 'file') return loadFromFile(params.file);
   if (params?.source === 'sketchfab') return loadFromSketchfab(params, onProgress);
   if (params?.source === 'bsp') return loadBspFromUrl(params.url, onProgress);
+  if (params?.source === 'iwmap') return loadIwmapFromUrl(params.url, onProgress);
   if (params?.source === 'url') return loadFromUrl(params.url, onProgress, params.include);
   throw new Error('No model was selected.');
 }

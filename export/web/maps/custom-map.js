@@ -16,7 +16,7 @@ export async function mount(ctx) {
       const root = await loadCustomModel(params, (loaded, total) => {
         if (total) ctx.progress(`Downloading ${ctx.label}… ${(loaded / 1048576).toFixed(0)} / ${(total / 1048576).toFixed(0)} MB`, .05 + .15 * Math.min(1, loaded / total));
       });
-      const world = await createCustomWorld(root, { label: ctx.label, scale: params.scale ?? (params.source === 'bsp' || /\.bsp$/i.test(params.file?.name ?? '') ? 1 : null), onStatus: (text, fraction) => ctx.progress(`${text}`, fraction) });
+      const world = await createCustomWorld(root, { label: ctx.label, scale: params.scale ?? (params.source === 'bsp' || params.source === 'iwmap' || /\.(?:bsp|map)$/i.test(params.file?.name ?? '') ? 1 : null), onStatus: (text, fraction) => ctx.progress(`${text}`, fraction) });
       layout = world.layout;
       return world;
     },

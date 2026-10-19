@@ -1,0 +1,163 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { parseIwmap } from '../export/web/custom-maps/iwmap-parse.js';
+import { brushPolygons } from '../export/web/custom-maps/iwmap-brush.js';
+import { flattenIwmap, createResolver } from '../export/web/custom-maps/iwmap-flatten.js';
+import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/custom-maps/iwmap-layout.js';
+
+const face = (a, b, c, material = 'wall') => ` ( ${a.join(' ')} ) ( ${b.join(' ')} ) ( ${c.join(' ')} ) ${material} 16 16 0 0 0 0 lightmap_gray 16384 16384 0 0 0 0`;
+
+function cube(min, max, material = 'wall') {
+  const [x0, y0, z0] = min, [x1, y1, z1] = max;
+  return [
+    face([x0, y0, z1], [x1, y1, z1], [x1, y0, z1], material),
+    face([x0, y0, z0], [x1, y1, z0], [x0, y1, z0], material),
+    face([x0, y0, z0], [x0, y0, z1], [x1, y0, z1], material),
+    face([x1, y1, z0], [x1, y1, z1], [x0, y1, z1], material),
+    face([x0, y1, z0], [x0, y1, z1], [x0, y0, z1], material),
+    face([x1, y0, z0], [x1, y0, z1], [x1, y1, z1], material),
+  ].join('\n');
+}
+
+const world = brushes => `iwmap 4
+"000_Global" flags active
+// entity 0
+{
+guid "{A}"
+"classname" "worldspawn"
+${brushes.map((b, i) => `// brush ${i}\n{\n guid "{B${i}}"\n${b}\n}`).join('\n')}
+}`;
+
+test('parses entities, keys and brush faces and skips patches', () => {
+  const text = `${world([cube([0, 0, 0], [64, 64, 64], 'ayz_floor')])}
+// entity 1
+{
+"classname" "script_struct"
+"origin" "1 2 3"
+"targetname" "zm_perk_machine"
+"script_noteworthy" "specialty_armorvest"
+{
+patchDef3
+{
+"ayz_floor"
+( 3 3 0 0 0 0 0 0 )
+(
+( ( 0 0 0 0 0 ) ( 1 0 0 0 0 ) ( 2 0 0 0 0 ) )
+)
+}
+}
+}`;
+  const map = parseIwmap(text);
+  assert.equal(map.version, 4);
+  assert.equal(map.entities.length, 2);
+  assert.equal(map.entities[0].brushes[0].faces.length, 6);
+  assert.equal(map.entities[0].brushes[0].faces[0].material, 'ayz_floor');
+  assert.equal(map.entities[1].keys.script_noteworthy, 'specialty_armorvest');
+  assert.equal(map.entities[1].brushes.length, 0);
+  assert.throws(() => parseIwmap('hello'), /Radiant/);
+});
+
+test('brush faces point out of the brush and close into a box', () => {
+  const map = parseIwmap(world([cube([-32, -16, 0], [32, 16, 48])]));
+  const polygons = brushPolygons(map.entities[0].brushes[0]);
+  assert.equal(polygons.length, 6);
+  const centre = [0, 0, 24];
+  for (const polygon of polygons) {
+    assert.ok(polygon.points.length >= 4);
+    const mean = [0, 1, 2].map(i => polygon.points.reduce((sum, p) => sum + p[i], 0) / polygon.points.length);
+    const out = [0, 1, 2].map(i => mean[i] - centre[i]);
+    assert.ok(out[0] * polygon.normal[0] + out[1] * polygon.normal[1] + out[2] * polygon.normal[2] > 0);
+    const [a, b, c] = polygon.points;
+    const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+    const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+    assert.ok(n[0] * polygon.normal[0] + n[1] * polygon.normal[1] + n[2] * polygon.normal[2] > 0);
+  }
+  const xs = polygons.flatMap(p => p.points.map(q => q[0]));
+  assert.equal(Math.min(...xs), -32);
+  assert.equal(Math.max(...xs), 32);
+});
+
+test('hidden materials are dropped unless asked for', () => {
+  const map = parseIwmap(world([cube([0, 0, 0], [8, 8, 8], 'clip_player_32'), cube([0, 0, 0], [8, 8, 8], 'nodraw'), cube([0, 0, 0], [8, 8, 8], 'ayz_clip_wall')]));
+  assert.equal(map.entities[0].brushes.flatMap(b => brushPolygons(b)).length, 0);
+  assert.equal(map.entities[0].brushes.flatMap(b => brushPolygons(b, { all: true })).length, 18);
+});
+
+test('prefabs are placed, rotated and recursed, and missing ones are reported', () => {
+  const prefab = `${world([cube([0, 0, 0], [10, 10, 10], 'prefab_wall')])}
+// entity 1
+{
+"classname" "script_struct"
+"origin" "10 0 0"
+"script_noteworthy" "specialty_armorvest"
+"targetname" "zm_perk_machine"
+}`;
+  const main = parseIwmap(`${world([cube([0, 0, 0], [4, 4, 4])])}
+// entity 1
+{
+"classname" "misc_prefab"
+"model" "_prefabs/zm/perk.map"
+"origin" "100 200 0"
+"angles" "0 90 0"
+}
+// entity 2
+{
+"classname" "misc_prefab"
+"model" "_prefabs/zm/missing.map"
+}`);
+  const flat = flattenIwmap(main, { resolve: createResolver(new Map([['map_source/_prefabs/zm/perk.map', prefab]])) });
+  assert.equal(flat.stats.prefabs, 1);
+  assert.deepEqual(flat.stats.missingPrefabs, ['_prefabs/zm/missing.map']);
+  const placed = flat.polygons.filter(p => p.material === 'prefab_wall').flatMap(p => p.points);
+  const xs = placed.map(p => p[0]), ys = placed.map(p => p[1]);
+  assert.ok(Math.abs(Math.min(...xs) - 90) < 1e-6 && Math.abs(Math.max(...xs) - 100) < 1e-6);
+  assert.ok(Math.abs(Math.min(...ys) - 200) < 1e-6 && Math.abs(Math.max(...ys) - 210) < 1e-6);
+  const perk = flat.entities.find(e => e.script_noteworthy === 'specialty_armorvest');
+  assert.ok(Math.abs(perk.origin[0] - 100) < 1e-6 && Math.abs(perk.origin[1] - 210) < 1e-6);
+  assert.ok(Math.abs(perk.yaw - 90) < 1e-6);
+});
+
+test('layout finds the player start, perks, box, Pack-a-Punch, spawners and windows', () => {
+  const entities = [
+    { classname: 'info_player_start', origin: [9, 9, 9], yaw: 0 },
+    { classname: 'script_struct', targetname: 'initial_spawn_points', script_noteworthy: 'initial_spawn', origin: [10, 20, 30], yaw: 45 },
+    { classname: 'script_struct', targetname: 'zm_perk_machine', script_noteworthy: 'specialty_doubletap2', origin: [1, 2, 3], yaw: 0 },
+    { classname: 'script_struct', targetname: 'zm_perk_machine', script_noteworthy: 'specialty_widowswine', origin: [1, 2, 3], yaw: 0 },
+    { classname: 'zbarrier_zmcore_packapunch', origin: [4, 5, 6], yaw: 0 },
+    { classname: 'zbarrier_zmcore_MagicBox', origin: [7, 8, 9], yaw: 0 },
+    { classname: 'script_struct', script_noteworthy: 'riser_location', origin: [100, 100, 0] },
+    { classname: 'script_struct', script_noteworthy: 'dog_location', origin: [500, 500, 0] },
+    { classname: 'script_struct', targetname: 'exterior_goal', origin: [110, 100, 0], yaw: 90 },
+    { classname: 'light', origin: [0, 0, 50], _color: '1 0 0', radius: '200' },
+  ];
+  const layout = extractIwmapLayout(entities);
+  assert.deepEqual(layout.spawn, { point: [10, 30, -20], yaw: 45 });
+  assert.deepEqual(layout.sites.map(s => s.role), ['specialty_rof', 'pack', 'chest']);
+  assert.deepEqual(layout.sites[0].point, [1, 3, -2]);
+  assert.equal(layout.spawners.length, 1);
+  assert.equal(layout.windows.length, 1);
+  assert.deepEqual(layout.windows[0].spawner, [100, 0, -100]);
+  assert.deepEqual(layout.lights[0].color, [1, 0, 0]);
+  assert.ok(layout.lights[0].intensity >= 90);
+});
+
+test('play area crops to the perks and box and moves a far-away intro spawn into it', () => {
+  const layout = {
+    spawn: { point: [-26000, 11800, 12800], yaw: 0 },
+    sites: [{ role: 'chest', point: [0, 0, 0], yaw: 90 }, { role: 'pack', point: [600, 0, -300], yaw: 0 }],
+    windows: [{ point: [300, 0, 500], yaw: 0, spawner: null, spawners: [] }],
+    spawners: [[100, 0, 100], [30000, 0, 0]],
+    lights: [{ point: [200, 50, 0], color: [1, 1, 1], intensity: 100 }, { point: [-26000, 11800, 12800], color: [1, 1, 1], intensity: 100 }],
+    doors: [], walls: [], environment: {},
+  };
+  const area = playArea(layout);
+  assert.equal(area.relocated, true);
+  assert.ok(area.min[0] < 0 && area.max[0] > 600);
+  const cropped = restrictLayout(layout, area);
+  assert.equal(cropped.spawners.length, 1);
+  assert.equal(cropped.lights.length, 1);
+  assert.ok(cropped.spawn.point[1] < 100 && Math.abs(cropped.spawn.point[0]) < 1000);
+  const near = playArea({ ...layout, spawn: { point: [200, 0, 200], yaw: 0 } });
+  assert.equal(near.relocated, false);
+  assert.equal(playArea({ ...layout, sites: [], windows: [] }), null);
+});

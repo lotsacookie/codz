@@ -5,7 +5,7 @@ const KHRONOS = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Asse
 
 const defaultFetch = (...args) => globalThis.fetch(...args);
 
-export const isModelUrl = text => /^https?:\/\/\S+\.(?:glb|gltf|bsp)(?:\?\S*)?$/i.test(String(text).trim());
+export const isModelUrl = text => /^https?:\/\/\S+\.(?:glb|gltf|bsp|map)(?:\?\S*)?$/i.test(String(text).trim());
 
 function thumbnail(images = [], target = 256) {
   const sorted = [...images].sort((a, b) => a.width - b.width);
