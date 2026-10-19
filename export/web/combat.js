@@ -45,6 +45,7 @@ export class Combat {
     const adjust=d=>{if(suit)d.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;return d;};
     const def=adjust({...this.session.def});
     await this.view.equip(def,{lower});if(this.view.ready){this.audio.warmWeapon(this.session.def);
+      for(const w of this.session.inventory){const d=this.data.weapons[w.id];if(d)this.audio.warmWeapon(d);}
       // Build the guns that are equipped but not in hand now, so switching to them later does not stall.
       prefetchOtherSlots(this.session,this.view,{adjust,onBuilt:entry=>this.renderer&&warmEntry(this.renderer,this.viewScene,this.viewCamera,entry)});}
   }

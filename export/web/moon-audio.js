@@ -4,17 +4,26 @@ export class MoonAudio extends GameAudio {
   constructor(){super();this.music={stop(){}};this.ambientKey=null;this.ambientToken=0;}
   async load(){await super.load();const r=await fetch('moon/audio/manifest.json');if(!r.ok)throw new Error('Missing Moon audio. Run build:moon.');Object.assign(this.manifest,await r.json());}
   cue(path,volume=1){this.play('moon/evt/zombie_moon/'+path,volume);}
-  weapon(kind,def){
-    const special=def.id==='microwavegun_zm'?'moon/wpn/microwave/rifle/plr/microwave_rifle_shot':def.id==='microwavegundw_zm'?'moon/wpn/microwave/dw/plr/microwave_shot':null;
-    if(kind==='shot'&&special){this.play(special,.8);return;}
-    if(kind==='shot'){
+  shotKey(def){
+    this.shotKeys??=new Map();
+    if(this.shotKeys.has(def.id))return this.shotKeys.get(def.id);
+    let key=def.id==='microwavegun_zm'?'moon/wpn/microwave/rifle/plr/microwave_rifle_shot':def.id==='microwavegundw_zm'?'moon/wpn/microwave/dw/plr/microwave_shot':null;
+    if(!key){
       const alias=def.sounds?.fireSound??def.sounds?.fireSoundPlayer,name=alias?.replace(/_plr$/,'');
-      const native=name&&Object.keys(this.manifest).find(k=>k.endsWith('/'+name)||k.endsWith('/'+name+'_00'));
-      if(native){this.play(native,.8);return;}
-      const base=def.id.replace(/_zm$/,'').replace(/_acog|_lps|dw/g,'');
-      const found=Object.keys(this.manifest).find(k=>k.startsWith('moon/wpn/')&&k.includes('/'+base+'/')&&k.includes('/plr/shot/'));
-      if(found){this.play(found,.8);return;}
+      key=name&&Object.keys(this.manifest).find(k=>k.endsWith('/'+name)||k.endsWith('/'+name+'_00'))||null;
     }
+    if(!key){
+      const base=def.id.replace(/_zm$/,'').replace(/_acog|_lps|dw/g,'');
+      key=Object.keys(this.manifest).find(k=>k.startsWith('moon/wpn/')&&k.includes('/'+base+'/')&&k.includes('/plr/shot/'))||null;
+    }
+    this.shotKeys.set(def.id,key);return key;
+  }
+  warmWeapon(def,notifies=[]){
+    super.warmWeapon(def,notifies);
+    const key=this.ctx&&this.shotKey(def);if(key)this.buffer(key).catch(()=>{});
+  }
+  weapon(kind,def){
+    if(kind==='shot'){const key=this.shotKey(def);if(key){this.play(key,.8);return;}}
     super.weapon(kind,def);
   }
   environment(env){

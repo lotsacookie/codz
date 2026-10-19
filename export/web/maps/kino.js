@@ -250,7 +250,7 @@ function shoot(){
   }
   return true;
 }
-function warmViewAudio(){if(view?.ready)audio.warmWeapon(session.def,Object.values(view.rig.data).flatMap(d=>(d.notifies??[]).map(n=>n.name)));}
+function warmViewAudio(){if(view?.ready){audio.warmWeapon(session.def,Object.values(view.rig.data).flatMap(d=>(d.notifies??[]).map(n=>n.name)));for(const w of session.inventory){const d=data.weapons[w.id];if(d)audio.warmWeapon(d);}}}
 async function equipView(lower=false){reloadShot=false;await view.equip(session.def,{lower});warmViewAudio();if(view.ready)prefetchOtherSlots(session,view,{onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry)});}
 function reload(){if(!view.ready)return;const empty=session.weapon.mag===0;if(session.reload()){burstLeft=0;ads=false;lastReloadSerial=session.reloadSerial;view.reload(empty,session.reloadDuration,session.reloadStage);}}
 function melee(){
