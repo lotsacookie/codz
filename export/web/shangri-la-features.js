@@ -212,7 +212,7 @@ export class ShangriFeatures {
     }
     if (t.kind === 'pack') {
       ok = s.power && (s.pack ? s.takePack() : s.beginPack());
-      if (ok) { a.play('packapunch'); this.combat.equip().catch(console.error); this.notice(s.pack ? 'Weapon inserted. Retrieve it after five seconds.' : 'Weapon upgraded.'); }
+      if (ok) { a.play('packapunch', 1, t.e.position); this.combat.equip().catch(console.error); this.notice(s.pack ? 'Weapon inserted. Retrieve it after five seconds.' : 'Weapon upgraded.'); }
       else this.notice(!s.power ? 'The machine needs power.' : s.pack ? 'The machine is still working.' : 'Pack-a-Punch requires 5000 points and an unupgraded weapon.');
     }
     if (t.kind === 'bowie' && !s.bowie && s.spend(3000)) { s.bowie = true; ok = true; this.notice('Bowie Knife equipped.'); }

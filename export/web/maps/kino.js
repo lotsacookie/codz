@@ -343,7 +343,7 @@ function interact(){
   }
   if(t==='zombie_vending_upgrade'){
     if(session.pack){if(!session.takePack())return false;equipView();toast(session.def.name);return true;}
-    if(!session.beginPack())return false;ads=false;primary=false;burstLeft=0;reloadShot=false;audio.play('buy');audio.play('packapunch');toast('Upgrading… retrieve your weapon when it is ready.');return true;
+    if(!session.beginPack())return false;ads=false;primary=false;burstLeft=0;reloadShot=false;audio.play('buy');audio.play('packapunch',1,e.position);toast('Upgrading… retrieve your weapon when it is ready.');return true;
   }
   if(t==='trigger_teleport_pad_0'&&session.power){
     if(session.teleporter==='unlinked'){session.teleporter='linking';linkUntil=session.time+30;toast('Link the mainframe pad in the lobby',5);return true;}
