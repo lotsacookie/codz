@@ -4,7 +4,7 @@ import { parseIwmap } from '../export/web/custom-maps/iwmap-parse.js';
 import { brushPolygons } from '../export/web/custom-maps/iwmap-brush.js';
 import { flattenIwmap, createResolver } from '../export/web/custom-maps/iwmap-flatten.js';
 import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/custom-maps/iwmap-layout.js';
-import { parseGdtMaterials, describeMaterial, imageIndex, boxUv, createMaterialLibrary } from '../export/web/custom-maps/iwmap-material.js';
+import { parseGdtMaterials, describeMaterial, packTextureFor, imageIndex, boxUv, createMaterialLibrary } from '../export/web/custom-maps/iwmap-material.js';
 import { patchPolygons } from '../export/web/custom-maps/iwmap-brush.js';
 import { parseGithubMapUrl, isGithubRepoUrl, fetchPrefabs } from '../export/web/custom-maps/iwmap-remote.js';
 
@@ -403,4 +403,14 @@ test('box projection uses the two axes across the dominant normal', () => {
   assert.deepEqual(boxUv([256, 128, 64], [0, 0, 1]), [2, 1]);
   assert.deepEqual(boxUv([256, 128, 64], [1, 0, 0]), [1, 0.5]);
   assert.deepEqual(boxUv([256, 128, 64], [0, 1, 0]), [2, 0.5]);
+});
+
+test('World at War stand-in textures only cover real tile and metal colour maps', () => {
+  assert.equal(packTextureFor('dark_grey_floortile', { colorMap: 'dark_grey_floortile_c_new' }, 'tile'), 'tile.webp');
+  assert.equal(packTextureFor('tow_floor', { colorMap: 'tow_floor_c' }, 'tile'), 'tile.webp');
+  assert.equal(packTextureFor('some_metal', { colorMap: 'some_metal_c' }, 'metal'), 'metal.webp');
+  assert.equal(packTextureFor('black1_plaster', { colorMap: 'black1' }, 'plaster'), null);
+  assert.equal(packTextureFor('darkblue1_metaldirty', { colorMap: 'darkblue1' }, 'metal'), null);
+  assert.equal(packTextureFor('ayz_floor', { colorMap: 'clip', usage: 'clip' }, 'tile'), null);
+  assert.equal(packTextureFor('poster', { colorMap: 'poster_c' }, 'plaster'), null);
 });

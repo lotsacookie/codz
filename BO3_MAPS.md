@@ -52,4 +52,6 @@ site widen the box, so the outer rooms are drawn; spawners in another section fa
   (`_prefabs/zm/...`) are only resolved when they are in the zip.
 - Fetching a map from the Steam Workshop is a separate step.
 
+World at War stand-ins (`custom-maps/textures/waw`, from `arrowsv/T5-WaW-Textures`) cover tile and metal materials that have a real colour map but no image in the zip. Flat colours (`black1`, `white1`), clip and tool materials stay plain.
+
 Code: `export/web/custom-maps/iwmap-*.js` and `iwmap.js`; tests: `test/iwmap.test.mjs`.

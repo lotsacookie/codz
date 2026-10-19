@@ -7,6 +7,18 @@ import { SOLID_CLIP } from './iwmap-brush.js';
 // texture is drawn only if the person supplied it (png, jpg, webp, tga) and otherwise a plain surface in the
 // material's colour with a light pattern is used.
 
+// Generic World at War stand-ins (textures/waw/README.md), used when the zip holds no image for a material.
+const PACK = new URL('./textures/waw/', import.meta.url);
+const PACK_BY_COLORMAP = { dark_grey_floortile_c_new: 'tile.webp' };
+const PACK_BY_KIND = { tile: 'tile.webp', metal: 'metal.webp' };
+// Flat colour maps (black1, white1, darkblue1, $white_diffuse) and tool materials stay a plain tint.
+const FLAT_COLORMAP = /^(?:\$.*|(?:black|white|grey|gray|darkblue)\d*)$/i;
+export function packTextureFor(name, info, kind) {
+  const colorMap = String(info?.colorMap ?? '');
+  if (!colorMap || FLAT_COLORMAP.test(colorMap) || /^clip/i.test(colorMap) || /^(?:clip|tools?)$/i.test(String(info?.usage ?? ''))) return null;
+  return PACK_BY_COLORMAP[colorMap.toLowerCase()] ?? PACK_BY_KIND[kind] ?? null;
+}
+
 const BLOCK = /\n\t"([^"]+)" \( "material\.gdf" \)\n\t\{\n([\s\S]*?)\n\t\}/g;
 const PAIR = /"([^"]+)" "([^"]*)"/g;
 const KEEP = new Set(['colorMap', 'normalMap', 'colorTint', 'surfaceType', 'materialType', 'usage', 'glossRangeMax']);
@@ -145,6 +157,22 @@ export function createMaterialLibrary({ files = null, gdt = null } = {}) {
       material.needsUpdate = true;
     });
   };
+  const packed = new Map();
+  const loadPack = (file, material) => {
+    if (typeof document === 'undefined') return;
+    if (!packed.has(file)) {
+      packed.set(file, new THREE.TextureLoader().loadAsync(new URL(file, PACK).href).then(texture => {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        return texture;
+      }).catch(() => null));
+    }
+    packed.get(file).then(texture => {
+      if (!texture) return;
+      material.map = texture;
+      material.needsUpdate = true;
+    });
+  };
   return {
     imagesFound: images.size,
     get(name, { double = false } = {}) {
@@ -165,6 +193,8 @@ export function createMaterialLibrary({ files = null, gdt = null } = {}) {
         const image = info.colorMap && images.get(info.colorMap.toLowerCase());
         if (image) loadImage(info.colorMap.toLowerCase(), image, material);
         else if (info.kind !== 'glass' && info.kind !== 'light') {
+          const stand = packTextureFor(name, gdt?.get(name), info.kind);
+          if (stand) loadPack(stand, material);
           if (!patterns.has(info.kind)) patterns.set(info.kind, patternTexture(info.kind, hash(info.kind)));
           const texture = patterns.get(info.kind);
           if (texture) material.map = texture;
