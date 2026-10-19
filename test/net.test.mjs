@@ -137,3 +137,41 @@ test('the launcher offers Multiplayer, wires its menu, and only co-op maps can b
   assert.ok(html.includes('data-menu="multiplayer"') && html.includes('id="multiplayer"'));
   assert.ok(shell.includes("createMultiplayerMenu") && shell.includes('no rounds'), 'exploration maps without rounds are excluded');
 });
+
+import { PoseSender, RemotePlayers, cleanPose } from '../export/web/net/players.js';
+
+test('poses are clamped and nonsense is dropped', () => {
+  assert.equal(cleanPose({ x: 1e9, y: 0, z: 0 }), null);
+  assert.equal(cleanPose('x'), null);
+  const pose = cleanPose({ x: '2', y: NaN, z: 3, yaw: 1, pitch: 99, hp: 5 });
+  assert.deepEqual([pose.x, pose.y, pose.pitch, pose.hp], [2, 0, 1.6, 1]);
+});
+
+test('PoseSender throttles to its rate and only repeats an unchanged pose as a slow keep-alive', () => {
+  let now = 0; const sent = [];
+  const sender = new PoseSender({ send: (t, d) => sent.push(d) }, { hz: 10, now: () => now });
+  const pose = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0, w: 'm1911', a: 0, hp: 1 };
+  assert.ok(sender.update(pose));
+  now = 50; assert.equal(sender.update({ ...pose, x: 1 }), false);
+  now = 120; assert.ok(sender.update({ ...pose, x: 1 }));
+  now = 300; assert.equal(sender.update({ ...pose, x: 1 }), false);
+  now = 1200; assert.ok(sender.update({ ...pose, x: 1 }));
+  assert.equal(sent.length, 3);
+});
+
+test('RemotePlayers interpolates between samples, wraps yaw the short way and drops silent players', () => {
+  let now = 0;
+  const remote = new RemotePlayers({ now: () => now, delay: 100, timeout: 1000 });
+  remote.setRoster([{ id: 'me', name: 'Me' }, { id: 'p2', name: 'Two' }], 'me');
+  assert.equal(remote.players.has('me'), false);
+  remote.receive('p2', { x: 0, y: 0, z: 0, yaw: Math.PI - 0.1 });
+  now = 100; remote.receive('p2', { x: 10, y: 0, z: 0, yaw: -Math.PI + 0.1 });
+  now = 150;                                           // render time 50 → halfway between the samples
+  const [p] = remote.sample();
+  assert.ok(Math.abs(p.x - 5) < 1e-9);
+  assert.ok(Math.abs(Math.abs(p.yaw) - Math.PI) < 1e-9, 'yaw crosses ±π instead of spinning the long way');
+  assert.equal(remote.receive('stranger', { x: 1 }), false);
+  now = 5000; assert.equal(remote.sample().length, 0);
+  remote.setRoster([{ id: 'me' }], 'me');
+  assert.equal(remote.players.size, 0);
+});
