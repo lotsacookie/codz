@@ -50,7 +50,17 @@ site widen the box, so the outer rooms are drawn; spawners in another section fa
   entity (or has a volume of its own); maps that script their doors in GSC under other names (like
   `zm_alien_isolation`) are not detected. Buyable areas are not wired up, and prefabs from the stock mod tools
   (`_prefabs/zm/...`) are only resolved when they are in the zip.
-- Fetching a map from the Steam Workshop is a separate step.
+- The Steam Workshop itself cannot be downloaded or read here: Black Ops 3 Workshop items are compiled zone files that
+  need a Steam account that owns the game, and this engine loads Radiant `.map` source or NZ:P BSP. What works is the
+  source an author links in the item's description.
+
+## Workshop menu
+
+The Black Ops 3 Workshop menu searches Steam live through `/api/workshop` (Cloudflare Pages Function, also served by
+`npm start`) and falls back to the saved list `maps/workshop/index.json` on static hosts. The saved list is rebuilt by
+the "Workshop index" action, which also searches for "cheese tower" and "zombies". When an item's description links a
+GitHub repo or `.map` file, the card says `source repo: loads here` and opens it as a map; every other item, and the
+"Search Steam for ..." card at the top of a search, opens Steam so you can subscribe in Black Ops 3.
 
 World at War stand-ins (`custom-maps/textures/waw`, from `arrowsv/T5-WaW-Textures`) cover tile and metal materials that have a real colour map but no image in the zip. Flat colours (`black1`, `white1`), clip and tool materials stay plain.
 

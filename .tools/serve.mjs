@@ -7,6 +7,7 @@ import { createReadStream, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, resolve, sep } from 'node:path';
 import { networkInterfaces } from 'node:os';
+import { workshopResponse } from '../functions/api/workshop.js';
 
 const ROOT = process.env.KINO_WEB_ROOT ? resolve(process.env.KINO_WEB_ROOT) : resolve(import.meta.dirname, '..', 'export', 'web');
 const PORT = Number(process.argv[2]) || 5173;
@@ -34,6 +35,14 @@ createServer((req, res) => {
   let url;
   try {url=decodeURIComponent(new URL(req.url,'http://localhost').pathname);}catch{res.writeHead(400).end('bad request');return;}
   if(url==='/__health'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(req.method==='HEAD'?undefined:JSON.stringify({app:'kino-browser-zombies',version:'0.1.0',root:ROOT}));return;}
+
+  if (url === '/api/workshop') {
+    workshopResponse(new URL(req.url, 'http://localhost')).then(async response => {
+      res.writeHead(response.status, Object.fromEntries(response.headers));
+      res.end(req.method === 'HEAD' ? undefined : await response.text());
+    }, () => res.writeHead(502).end());
+    return;
+  }
 
   // The page ships no icon; answering avoids a console error on every load.
   if (url === '/favicon.ico') {

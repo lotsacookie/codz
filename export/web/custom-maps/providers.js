@@ -179,16 +179,62 @@ export const polyhaven = {
 };
 
 const WORKSHOP_INDEX = new URL('../maps/workshop/index.json', import.meta.url).href;
+const WORKSHOP_API = new URL('../api/workshop', import.meta.url).href;
+const STEAM_PAGE = id => `https://steamcommunity.com/sharedfiles/filedetails/?id=${encodeURIComponent(id)}`;
+const STEAM_SEARCH = query => `https://steamcommunity.com/workshop/browse/?${new URLSearchParams({ appid: '311210', searchtext: query, browsesort: 'textsearch', section: 'readytouseitems' })}`;
 let workshopIndex = null;
+let liveWorks = null;
 
 const compact = value => (value >= 1000000 ? `${(value / 1000000).toFixed(1)}M` : value >= 1000 ? `${Math.round(value / 100) / 10}k` : String(value));
 
+const workshopItem = entry => ({
+  id: entry.id,
+  name: entry.name,
+  author: entry.author ?? '',
+  license: '',
+  detail: [
+    entry.source ? 'source repo: loads here' : '',
+    (entry.tags ?? []).slice(0, 2).join(', '),
+    entry.subscribers ? `${compact(entry.subscribers)} subscribers` : '',
+    entry.size ? sizeLabel(entry.size) : '',
+  ].filter(Boolean).join(' · '),
+  thumb: entry.thumb ?? '',
+  art: entry.thumb ?? '',
+  repo: entry.source ?? '',
+  source: 'workshop',
+});
+
+// Live Steam search through /api/workshop where the host runs it; static hosts answer 404 and the saved list is used.
+async function liveSearch(query, page, fetchImpl, signal) {
+  if (liveWorks === false) return null;
+  try {
+    const response = await fetchImpl(`${WORKSHOP_API}?${new URLSearchParams({ q: query.trim(), page: String(page) })}`, { signal });
+    const body = response.ok && /json/i.test(response.headers?.get?.('content-type') ?? 'json') ? await response.json() : null;
+    if (!Array.isArray(body?.items) || typeof body.pages !== 'number') {
+      if (response.status === 404 || response.ok) liveWorks = false;
+      return null;
+    }
+    liveWorks = true;
+    return body;
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error;
+    return null;
+  }
+}
+
 export const workshop = {
   id: 'workshop',
-  label: 'Black Ops 3 Workshop (no key needed)',
+  label: 'Black Ops 3 Workshop (Steam search, no key needed)',
   needsToken: false,
-  hint: 'Pick a map to open it on the Steam Workshop, then subscribe to it in Black Ops 3.',
+  hint: 'Maps with a linked source repo load right here. For the rest, Steam opens so you can subscribe in Black Ops 3.',
   async search({ query = '', cursor = null, fetchImpl = defaultFetch, signal } = {}) {
+    const text = query.trim();
+    const steam = text && !cursor ? [{ id: 'steam-search', name: `Search Steam for \u201c${text}\u201d`, author: 'steamcommunity.com', license: '', detail: 'Opens the Black Ops 3 Workshop search', thumb: '', art: '', external: STEAM_SEARCH(text), source: 'workshop' }] : [];
+    const livePage = String(cursor ?? '').startsWith('live:') ? Number(String(cursor).slice(5)) || 1 : 1;
+    const live = !cursor || String(cursor).startsWith('live:') ? await liveSearch(text, livePage, fetchImpl, signal) : null;
+    if (live) {
+      return { items: [...live.items.map(workshopItem), ...steam], next: livePage < (live.pages ?? 1) ? `live:${livePage + 1}` : null };
+    }
     workshopIndex ??= fetchImpl(WORKSHOP_INDEX, { signal })
       .then(response => {
         if (!response.ok) throw new Error(`Workshop list failed (${response.status}).`);
@@ -203,29 +249,19 @@ export const workshop = {
       workshopIndex = null;
       throw new Error('The Workshop list has not been generated yet. Run the "Workshop index" action on GitHub once.');
     }
-    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const words = text.toLowerCase().split(/\s+/).filter(Boolean);
     const matches = all.filter(entry => {
       const haystack = [entry.name, entry.author, ...(entry.tags ?? [])].join(' ').toLowerCase();
       return words.every(word => haystack.includes(word));
-    });
+    }).sort((a, b) => Number(Boolean(b.source)) - Number(Boolean(a.source)));
     const { slice, next } = page(matches, cursor);
-    const items = slice.map(entry => ({
-      id: entry.id,
-      name: entry.name,
-      author: entry.author ?? '',
-      license: '',
-      detail: [
-        (entry.tags ?? []).slice(0, 2).join(', '),
-        entry.subscribers ? `${compact(entry.subscribers)} subscribers` : '',
-        entry.size ? sizeLabel(entry.size) : '',
-      ].filter(Boolean).join(' · '),
-      thumb: entry.thumb ?? '',
-      art: entry.thumb ?? '',
-      source: 'workshop',
-    }));
-    return { items, next };
+    return { items: [...slice.map(workshopItem), ...steam], next };
   },
-  play: item => ({ external: `https://steamcommunity.com/sharedfiles/filedetails/?id=${encodeURIComponent(item.id)}` }),
+  play(item) {
+    if (item.external) return { external: item.external };
+    if (item.repo) return { source: /\.map(?:\?|$)/i.test(item.repo) || /github\.com/i.test(item.repo) ? 'iwmap' : 'url', url: item.repo };
+    return { external: STEAM_PAGE(item.id) };
+  },
 };
 
 export const PROVIDERS = [bsp, workshop, polyhaven, khronos, sketchfab];

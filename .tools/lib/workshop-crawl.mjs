@@ -3,6 +3,8 @@ export const PER_PAGE = 30;
 export const LISTS = [
   { sort: 'trend', pages: 30 },
   { sort: 'mostrecent', pages: 20 },
+  { query: 'cheese tower', pages: 3 },
+  { query: 'zombies', pages: 10 },
 ];
 
 const BROWSE = 'https://steamcommunity.com/workshop/browse/';
@@ -136,7 +138,7 @@ async function getPage(url, { fetchImpl, sleep, retries = 4 }) {
   }
 }
 
-async function fetchDetails(ids, { fetchImpl, sleep }) {
+export async function fetchDetails(ids, { fetchImpl, sleep }) {
   const map = new Map();
   for (let at = 0; at < ids.length; at += DETAIL_BATCH) {
     const batch = ids.slice(at, at + DETAIL_BATCH);
@@ -158,6 +160,19 @@ async function fetchDetails(ids, { fetchImpl, sleep }) {
   return map;
 }
 
+// A Workshop item ships compiled zone files, which this game cannot read. Authors who publish the Radiant source
+// (a GitHub repo or a .map link) often say so in the description; that link is what can be loaded in the browser.
+export function sourceLink(description) {
+  const text = decode(String(description ?? '')).replace(/\[url=([^\]]+)\]/gi, ' $1 ').replace(/\[\/?[a-z*]+[^\]]*\]/gi, ' ');
+  const links = [...text.matchAll(/https?:\/\/(?:www\.)?(?:github\.com|raw\.githubusercontent\.com)\/[^\s<>"'\])\[]+/gi)]
+    .map(match => match[0].replace(/[.,;:!?]+$/, '').replace(/\/$/, ''));
+  const map = links.find(link => /\.map(?:$|\?)/i.test(link) && !/\/_prefabs\//i.test(link));
+  if (map) return map;
+  const repo = links.map(link => /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/#?]+?)(?:\.git)?(?:\/tree\/([^/#?]+))?(?:[/#?].*)?$/i.exec(link))
+    .find(match => match && !/^(?:sponsors|orgs|topics|settings|features|about|marketplace)$/i.test(match[1]));
+  return repo ? `https://github.com/${repo[1]}/${repo[2]}${repo[3] ? `/tree/${repo[3]}` : ''}` : '';
+}
+
 export function merge(entry, details) {
   const more = details.get(entry.id);
   const app = Number(more?.consumer_app_id);
@@ -172,7 +187,19 @@ export function merge(entry, details) {
     size: Number(more?.file_size) || 0,
     updated: Number(more?.time_updated) || 0,
     tags: (more?.tags ?? []).map(tag => tag.tag).filter(Boolean).slice(0, 6),
+    ...(sourceLink(more?.description) ? { source: sourceLink(more.description) } : {}),
   };
+}
+
+// One live search page, for the optional /api/workshop endpoint.
+export async function searchLive({ query = '', page = 1, fetchImpl = globalThis.fetch.bind(globalThis), sleep = defaultSleep } = {}) {
+  const tools = { fetchImpl, sleep, retries: 1 };
+  const result = await getPage(browseUrl({ query, page }), tools);
+  const parsed = parseBrowse(result.html);
+  const details = await fetchDetails(parsed.items.map(item => item.id), tools);
+  const items = parsed.items.map(entry => merge(entry, details)).filter(item => item?.name);
+  const pages = Math.max(parsed.linkedPages, parsed.total ? Math.ceil(parsed.total / PER_PAGE) : 0, page);
+  return { items, pages };
 }
 
 export async function crawl({
@@ -189,20 +216,20 @@ export async function crawl({
     for (let page = 1; page <= list.pages; page++) {
       let result;
       try {
-        result = await getPage(browseUrl({ sort: list.sort, page }), tools);
+        result = await getPage(browseUrl({ sort: list.sort, query: list.query, page }), tools);
       } catch (error) {
-        log(`${list.sort} page ${page}: ${error.message}`);
+        log(`${list.query ?? list.sort} page ${page}: ${error.message}`);
         break;
       }
       const parsed = parseBrowse(result.html);
       if (!parsed.items.length) {
-        log(`${list.sort} page ${page}: no items found.\n${describePage(result.html, result.status, result.url)}`);
-        dump({ sort: list.sort, page, html: result.html });
+        log(`${list.query ?? list.sort} page ${page}: no items found.\n${describePage(result.html, result.status, result.url)}`);
+        dump({ sort: list.query ?? list.sort, page, html: result.html });
         break;
       }
       const fresh = parsed.items.filter(item => !found.has(item.id));
       for (const item of fresh) found.set(item.id, item);
-      log(`${list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${found.size} unique`);
+      log(`${list.query ?? list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${found.size} unique`);
       if (!fresh.length || (parsed.linkedPages && page >= parsed.linkedPages)) break;
       await sleep(delay);
     }

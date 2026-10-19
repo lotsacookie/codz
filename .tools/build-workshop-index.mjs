@@ -12,7 +12,7 @@ const items = await crawl({
   log: message => console.log(message),
   dump: ({ sort, page, html }) => {
     mkdirSync(debugDir, { recursive: true });
-    writeFileSync(path.join(debugDir, `${sort}-page${page}.html`), html.slice(0, 500000));
+    writeFileSync(path.join(debugDir, `${String(sort).replace(/\W+/g, "-")}-page${page}.html`), html.slice(0, 500000));
   },
 });
 

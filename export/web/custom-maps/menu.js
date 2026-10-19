@@ -115,7 +115,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     }
     if (params?.external) {
       el('a', { href: params.external, target: '_blank', rel: 'noopener noreferrer' }).click();
-      setStatus(`Opened ${item.name} on the Steam Workshop. Subscribe there to add it to Black Ops 3.`);
+      setStatus(item.id === 'steam-search' ? 'Opened the Steam Workshop search. Workshop downloads are compiled for Black Ops 3, so this game can only load maps whose source repo is linked.' : `Opened ${item.name} on the Steam Workshop. It has no linked source repo, so it cannot be loaded here; subscribe in Black Ops 3 to play it there.`);
       return;
     }
     onPlay({ label: item.name, art: item.art || item.thumb, params: { ...params, name: item.name } });

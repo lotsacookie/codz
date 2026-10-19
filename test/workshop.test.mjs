@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { browseUrl, parseBrowse, crawl, merge, describePage } from '../.tools/lib/workshop-crawl.mjs';
+import { browseUrl, parseBrowse, crawl, merge, describePage, sourceLink, searchLive, LISTS } from '../.tools/lib/workshop-crawl.mjs';
+import { workshopResponse, normalizeParams } from '../functions/api/workshop.js';
 import { workshop, PROVIDERS } from '../export/web/custom-maps/providers.js';
 
 const card = (id, title, author, rating = 5) => `<div class="workshopItem"><a data-panel="{&quot;focusable&quot;:false}" href="https://steamcommunity.com/sharedfiles/filedetails/?id=${id}&amp;searchtext=zombies" class="ugc" data-publishedfileid="${id}"><div class="workshopItemPreviewHolder  "><img class="workshopItemPreviewImage " src="https://images.steamusercontent.com/ugc/${id}/?imw=268&amp;imh=268&amp;ima=fit"></div><div class="workshopItemTitle ellipsis">${title}</div></a><div class="workshopItemAuthorName ellipsis">by&nbsp;<a class="workshop_author_link" href="https://steamcommunity.com/id/x/myworkshopfiles/">${author}</a></div><img class="fileRating" src="https://community.fastly.steamstatic.com/public/images/sharedfiles/${rating}-star_large.png"></div>`;
@@ -123,6 +124,71 @@ const INDEX = {
   items: Array.from({ length: 15 }, (_, i) => ({ id: String(1000000 + i), name: i === 0 ? 'Kino Remix' : `Map ${i}`, author: i === 0 ? 'Ann' : 'Bob', thumb: `img${i}`, subscribers: i === 0 ? 1500 : 0, size: i === 0 ? 2097152 : 0, tags: i === 0 ? ['Map', 'Zombies', 'Extra'] : ['Mod'] })),
 };
 
+test('source links are read from Workshop descriptions', () => {
+  assert.equal(sourceLink('Source: [url=https://github.com/MattFiler/zm_alien_isolation]repo[/url]'), 'https://github.com/MattFiler/zm_alien_isolation');
+  assert.equal(sourceLink('https://github.com/Ann/zm_cheese/tree/dev. Enjoy!'), 'https://github.com/Ann/zm_cheese/tree/dev');
+  assert.equal(sourceLink('map https://github.com/Ann/zm_cheese/blob/main/maps/zm_cheese.map and https://github.com/Ann/zm_cheese'), 'https://github.com/Ann/zm_cheese/blob/main/maps/zm_cheese.map');
+  assert.equal(sourceLink('Follow me https://github.com/sponsors/Ann or https://steamcommunity.com/id/ann'), '');
+  assert.equal(sourceLink(undefined), '');
+  const entry = { id: '1', name: 'Cheese Tower', author: 'A', thumb: 't', rating: 0 };
+  assert.equal(merge(entry, new Map([['1', { consumer_app_id: 311210, description: 'src https://github.com/Ann/zm_cheese' }]])).source, 'https://github.com/Ann/zm_cheese');
+  assert.ok(!('source' in merge(entry, new Map([['1', { consumer_app_id: 311210, description: 'no link' }]]))));
+});
+
+test('the index crawl searches for cheese tower and a live search reads one page', async () => {
+  assert.ok(LISTS.some(list => list.query === 'cheese tower'));
+  const seen = [];
+  const { fetchImpl } = fakeSteam((sort, page) => HTML);
+  const wrapped = async (url, options) => { seen.push(String(url)); return fetchImpl(url, options); };
+  await crawl({ lists: [{ query: 'cheese tower', pages: 1 }], fetchImpl: wrapped, sleep: async () => {} });
+  assert.equal(new URL(seen[0]).searchParams.get('searchtext'), 'cheese tower');
+  const live = await searchLive({ query: 'cheese tower', page: 1, fetchImpl, sleep: async () => {} });
+  assert.deepEqual(live.items.map(item => item.id), ['1111111', '2222222']);
+  assert.equal(live.pages, 120);
+});
+
+test('the live endpoint normalises input, caches, and backs off after a failure', async () => {
+  assert.deepEqual(normalizeParams({ query: '  cheese   tower ', page: '3' }), { query: 'cheese tower', page: 3 });
+  assert.deepEqual(normalizeParams({ query: 'x'.repeat(200), page: -4 }), { query: 'x'.repeat(80), page: 1 });
+  let calls = 0;
+  const search = async () => { calls++; return { items: [{ id: '9', name: 'Cheese Tower' }], pages: 1 }; };
+  const url = new URL('http://localhost/api/workshop?q=cheese+tower&page=1');
+  const first = await workshopResponse(url, { search, now: 1_000 });
+  await workshopResponse(url, { search, now: 2_000 });
+  assert.equal(first.status, 200);
+  assert.equal(calls, 1);
+  assert.equal((await first.json()).items[0].name, 'Cheese Tower');
+  const failing = async () => { throw new Error('Steam kept answering 429.'); };
+  const bad = await workshopResponse(new URL('http://localhost/api/workshop?q=other'), { search: failing, now: 10_000_000 });
+  assert.equal(bad.status, 502);
+  const blocked = await workshopResponse(new URL('http://localhost/api/workshop?q=another'), { search, now: 10_000_500 });
+  assert.equal(blocked.status, 503);
+});
+
+test('the Workshop provider uses live Steam search when available, adds a Steam search card, and loads source repos', async () => {
+  const seen = [];
+  const fetchImpl = async url => {
+    seen.push(String(url));
+    return { ok: true, status: 200, headers: new Headers({ 'content-type': 'application/json' }), json: async () => ({ pages: 2, items: [
+      { id: '77', name: 'Cheese Tower', author: 'Ann', tags: ['Map'], subscribers: 2500, source: 'https://github.com/Ann/zm_cheese' },
+      { id: '78', name: 'Cheese Tower Remix', author: 'Bob' },
+    ] }) };
+  };
+  const result = await workshop.search({ query: 'cheese tower', fetchImpl });
+  assert.match(seen[0], /\/api\/workshop\?q=cheese\+tower&page=1$/);
+  assert.deepEqual(result.items.map(item => item.name), ['Cheese Tower', 'Cheese Tower Remix', 'Search Steam for \u201ccheese tower\u201d']);
+  assert.equal(result.next, 'live:2');
+  assert.match(result.items[0].detail, /source repo: loads here/);
+  assert.deepEqual(workshop.play(result.items[0]), { source: 'iwmap', url: 'https://github.com/Ann/zm_cheese' });
+  assert.deepEqual(workshop.play(result.items[1]), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=78' });
+  const external = workshop.play(result.items[2]).external;
+  assert.equal(new URL(external).searchParams.get('searchtext'), 'cheese tower');
+  assert.equal(new URL(external).searchParams.get('appid'), '311210');
+  const second = await workshop.search({ query: 'cheese tower', cursor: 'live:2', fetchImpl });
+  assert.match(seen[1], /page=2$/);
+  assert.equal(second.items.some(item => item.id === 'steam-search'), false);
+});
+
 test('the Workshop provider reports a missing or empty list, then searches and pages the index', async () => {
   assert.ok(PROVIDERS.includes(workshop) && !workshop.needsToken);
   await assert.rejects(workshop.search({ fetchImpl: async () => ({ ok: false, status: 404 }) }), /failed \(404\)/);
@@ -142,7 +208,7 @@ test('the Workshop provider reports a missing or empty list, then searches and p
   assert.deepEqual([second.items.length, second.next], [3, null]);
   assert.equal(seen.length, 1);
   const found = await workshop.search({ query: ' zombies  KINO ', fetchImpl });
-  assert.deepEqual(found.items.map(item => item.name), ['Kino Remix']);
-  assert.deepEqual((await workshop.search({ query: 'nothing here', fetchImpl })).items, []);
+  assert.deepEqual(found.items.filter(item => item.id !== 'steam-search').map(item => item.name), ['Kino Remix']);
+  assert.deepEqual((await workshop.search({ query: 'nothing here', fetchImpl })).items.map(item => item.id), ['steam-search']);
   assert.deepEqual(workshop.play({ id: '1000000' }), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=1000000' });
 });

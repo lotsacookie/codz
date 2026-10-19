@@ -13,6 +13,7 @@
 !/*.cmd
 !/.tools/
 !/test/
+!/functions/
 !/export/
 /export/*
 !/export/web/
