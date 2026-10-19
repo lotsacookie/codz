@@ -196,19 +196,21 @@ html.force-landscape .modifiers-card{touch-action:none;overscroll-behavior:conta
 /* Real landscape on a phone: menus pan natively and stay inside their own box. */
 html:not(.force-landscape) #launcher,html:not(.force-landscape) #custom-maps,html:not(.force-landscape) #multiplayer{touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 
-/* Short landscape screens (phones turned sideways): tighten the launcher so every entry, Multiplayer included, is
-   on screen at once instead of hiding below the fold. */
-@media (max-height:520px) and (min-aspect-ratio:1/1){
-#launcher,#multiplayer,#custom-maps{padding:max(8px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-#launcher .launcher-eyebrow,#multiplayer .mp-eyebrow{display:none}
-#launcher h1,#custom-maps h2{margin:0 0 8px;font-size:26px}
-#multiplayer h2{margin:0 0 8px;font-size:24px}
-#map-list{gap:3px}
-#launcher li button{padding:7px 14px;gap:0}
-#launcher li button strong{font-size:15px}
-#launcher li button span{display:none}
-#launcher-note{margin:8px 0 0;font-size:11px}
-#multiplayer .mp-body{gap:5px;margin:6px 0 8px}
-#multiplayer input,#multiplayer select,#multiplayer button{min-height:36px}
-#multiplayer .mp-list,#multiplayer .mp-roster{max-height:calc(40 * var(--vh1))}
-}
+/* Short screens (a phone held sideways, or a portrait phone shown rotated): no scrolling needed. The detail panel is
+   dropped and the map list becomes two columns so every entry, Multiplayer included, is on screen at once.
+   orientation.js sets .short-screen from the effective (possibly rotated) height, which media queries cannot see. */
+html.short-screen #launcher,html.short-screen #multiplayer,html.short-screen #custom-maps{align-items:flex-start;padding:max(8px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+html.short-screen #launcher .launcher-panel{grid-template-columns:minmax(0,1fr);gap:0;margin:0 auto}
+html.short-screen #map-detail{display:none}
+html.short-screen #launcher .launcher-eyebrow,html.short-screen #multiplayer .mp-eyebrow{display:none}
+html.short-screen #launcher h1,html.short-screen #custom-maps h2{margin:0 0 8px;font-size:24px}
+html.short-screen #multiplayer h2{margin:0 0 8px;font-size:22px}
+html.short-screen #map-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+html.short-screen #launcher li button{padding:9px 14px;gap:0}
+html.short-screen #launcher li button strong{font-size:15px}
+html.short-screen #launcher li button span{display:none}
+html.short-screen #modifiers-open{margin-top:6px}
+html.short-screen #launcher-note{margin:8px 0 0;font-size:11px}
+html.short-screen #multiplayer .mp-body{gap:5px;margin:6px 0 8px}
+html.short-screen #multiplayer input,html.short-screen #multiplayer select,html.short-screen #multiplayer button{min-height:36px}
+html.short-screen #multiplayer .mp-list,html.short-screen #multiplayer .mp-roster{max-height:calc(40 * var(--vh1))}

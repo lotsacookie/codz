@@ -36,6 +36,7 @@
   const apply = () => {
     const on = rotated();
     root.classList.toggle('force-landscape', on);
+    root.classList.toggle('short-screen', window.innerHeight <= 520);
     if (on) {
       const w = realWidth(), h = realHeight();
       root.style.setProperty('--rot-w', `${h}px`);
