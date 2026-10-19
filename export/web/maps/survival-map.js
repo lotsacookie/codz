@@ -1,3 +1,5 @@
+import { createCoop } from '../net/coop-client.js';
+import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { loadMapGltf } from '../map-assets.js';
 import { loadManifest, loadPacks, ensureTextures, prewarm } from '../load-flow.js';
@@ -403,6 +405,7 @@ ctx.onDispose(() => {
   try { culler?.dispose?.(); } catch {}
   renderer.setAnimationLoop(null);
   try { touchControls.destroy(); } catch {}
+  try { combat?.coop?.dispose(); } catch {}
   try { combat?.audio.dispose(); } catch {}
   try { combat?.clearTransient(); combat?.enemies.reset(); combat?.pickups.reset(); } catch {}
   try { navigation?.dispose(); } catch {}
@@ -540,6 +543,7 @@ async function load() {
   combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
   combat.renderer = renderer;
   await combat.load();
+  combat.attachCoop(createCoop({ scene, camera, feet: () => player.getFeetPosition(), points: () => combat.session.points, health: () => coopHealth(combat.session) }));
   showStatus('Preparing perks, box and barricades…');
   features = new C.classes.features({ data, combat, scene, camera, objects, notice: showNotice, raycast: rayIntersect, doors: groups, openDoor });
   await features.load();

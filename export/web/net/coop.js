@@ -50,6 +50,8 @@ export class Scoreboard {
     });
     for (const id of [...this.entries.keys()]) if (!keep.has(id)) this.entries.delete(id);
   }
+  /** Set our starting total without reporting it as a gain. */
+  prime(points) { const entry = this.entries.get(this.selfId); if (entry) entry.points = points; }
   /** Returns the message to broadcast, or null if nothing changed. */
   setLocal(points) {
     const entry = this.entries.get(this.selfId);
@@ -66,4 +68,11 @@ export class Scoreboard {
     return true;
   }
   list() { return [...this.entries.values()]; }
+}
+
+/** 0..1 health for the pose we send. 0 while downed or dead so teammates' zombies stop chasing a player who cannot be hurt. */
+export function coopHealth(session) {
+  if (!session || session.phase === 'gameover' || session.phase === 'reviving') return 0;
+  const max = Number(session.maxHealth) || 1, now = Number(session.health);
+  return Number.isFinite(now) ? Math.max(0, Math.min(1, now / max)) : 1;
 }

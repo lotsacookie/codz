@@ -150,8 +150,10 @@ export class Combat {
     if(!this.session.buyWeapon(id)){this.notice(this.session.inventory.some(w=>w.id===id)?'Not enough points or ammunition already full.':'Not enough points.');return false;}
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
+  /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
+  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;}
   update(dt,{moving,sprint}){
-    this.blood?.update(dt);
+    this.blood?.update(dt);this.coop?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);

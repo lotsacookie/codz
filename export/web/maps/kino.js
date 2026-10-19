@@ -1,3 +1,5 @@
+import { createCoop } from '../net/coop-client.js';
+import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { PlayerController } from '../player-controller.js';
 import { World, vector, zoneNames } from '../world.js';
@@ -88,7 +90,7 @@ viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.Direction
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
 let culler=null,cullReady=false;
 const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
-let data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
+let coop=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
 const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const impacts=new WallImpacts(scene);
@@ -123,6 +125,7 @@ ctx.onDispose(()=>{
   try{stopProgress();}catch{}
   try{touchControls.destroy();}catch{}
   try{audio.dispose();}catch{}
+  try{coop?.dispose();}catch{}
   try{enemies?.reset();}catch{}
   try{blood.clear();}catch{}
   try{chalk.reset();}catch{}
@@ -422,6 +425,7 @@ function update(dt){
       for(const p of [...particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);fadeParticle(p);if(p.life<=0){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();particles.splice(particles.indexOf(p),1);}}
     }
   }
+  coop?.update(dt);
   muzzle.intensity=Math.max(0,muzzle.intensity-dt*2200);camera.fov=THREE.MathUtils.damp(camera.fov,ads&&!session.def.dualWield&&!session.drinking&&!session.meleeLeft&&!session.reloadLeft?verticalFovFromCgFov(session.def.adsFov||56):hipFov,12,dt);camera.updateProjectionMatrix();
   hud();
 }
@@ -495,6 +499,7 @@ try{
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
+  coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;

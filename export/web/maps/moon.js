@@ -1,3 +1,5 @@
+import { createCoop } from '../net/coop-client.js';
+import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { loadMapGltf } from '../map-assets.js';
 import { ensureTextures, prewarm } from '../load-flow.js';
@@ -122,6 +124,7 @@ addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
 ctx.onDispose(() => {
   disposed = true; renderer.setAnimationLoop(null);
   try { touchControls.destroy(); } catch {}
+  try { combat?.coop?.dispose(); } catch {}
   try { combat?.audio.dispose(); } catch {}
   try { combat?.clearTransient(); combat?.enemies.reset(); combat?.pickups.reset(); } catch {}
   try { presentation?.dispose?.(); water?.dispose?.(); navigation?.dispose?.(); } catch {}
@@ -346,7 +349,7 @@ async function load() {
     lineClear:(a,b)=>{const d=b.clone().sub(a);return !rayIntersect(new THREE.Ray(a,d.clone().normalize()),1,Math.max(1,d.length()-4));},
     zoneAt:p=>environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon').zone,
     lowGravity:p=>{const env=environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon');return (features?.environment(env)??env).lowGravity;}};
-  combat=new Combat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});combat.renderer=renderer;await combat.load();combat.enabled=mode==='survival';
+  combat=new Combat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});combat.renderer=renderer;await combat.load();combat.enabled=mode==='survival';combat.attachCoop(createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>combat.session.points,health:()=>coopHealth(combat.session)}));
   showStatus('Preparing station systems and quest…');
   features=new MoonFeatures({data,state,combat,scene,camera,player,objects,opened,parts,navigation,notice:showNotice,raycast:rayIntersect});await features.load();
   for(const t of data.entities){

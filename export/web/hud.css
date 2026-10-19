@@ -22,11 +22,17 @@
 #perks img{width:calc(var(--u) * 24);height:calc(var(--u) * 24);display:block}
 #player-panel{position:relative;align-self:flex-end;margin-bottom:calc(var(--u) * 10);z-index:3;pointer-events:none;font-family:var(--hud-font)}
 .points{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:calc(var(--u) * 92);height:calc(var(--u) * 28);padding:0 calc(var(--u) * 14);isolation:isolate}
-.points::before{content:'';position:absolute;inset:-25% -8%;z-index:-1;background:#000;opacity:.55;-webkit-mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat;mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat}
-#points{font-weight:700;font-size:calc(var(--u) * 24);color:#fff;text-shadow:0 1px 2px #000}
+.points::before{content:'';position:absolute;inset:-25% -8%;z-index:-1;background:#c40d0d;opacity:.8;-webkit-mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat;mask:url(textures/scorebar_zom_1.png) center/100% 100% no-repeat}
+#points{font-weight:700;font-size:calc(var(--u) * 24);color:var(--points-color,#fff);text-shadow:0 1px 2px #000}
 #score-popups{position:absolute;left:50%;top:50%;width:0;height:0}
 .score-popup{position:absolute;white-space:nowrap;font-weight:700;font-size:calc(var(--u) * 20);transform:translate(0,-50%);text-shadow:0 1px 2px #000}
-.score-popup.gain{color:#e6e600}.score-popup.loss{color:#a01010}
+.score-popup.gain{color:var(--popup-color,#e6e600)}.score-popup.loss{color:#a01010}
+/* Co-op: one row per teammate with their live points in their tab colour. */
+#coop-scores{position:fixed;left:calc(var(--u) * 84);bottom:calc(var(--u) * 104);z-index:3;display:flex;flex-direction:column-reverse;align-items:flex-start;gap:calc(var(--u) * 12);pointer-events:none;font-family:var(--hud-font)}
+.coop-row{min-width:calc(var(--u) * 150);justify-content:space-between;gap:calc(var(--u) * 14);--popup-color:var(--c)}
+.coop-name{font-size:calc(var(--u) * 14);font-weight:700;letter-spacing:.04em;text-shadow:0 1px 2px #000;max-width:calc(var(--u) * 110);overflow:hidden;text-overflow:ellipsis}
+.coop-pts{font-size:calc(var(--u) * 22);font-weight:700;text-shadow:0 1px 2px #000}
+.coop-popups{position:absolute;left:0;top:50%;width:0;height:0}
 #weapon-panel{position:fixed;right:calc(var(--u) * 30);bottom:calc(var(--u) * 24);z-index:3;display:flex;align-items:flex-end;justify-content:flex-end;gap:calc(var(--u) * 22);text-align:right;pointer-events:none;color:#fff;text-shadow:0 1px 3px #000;font-family:var(--hud-font)}
 #ammo-block{display:flex;flex-direction:column;align-items:flex-end}
 #ammo{display:flex;align-items:baseline;justify-content:flex-end;gap:calc(var(--u) * 6);font-family:var(--hud-font);transform:scaleX(1.16);transform-origin:100% 50%;letter-spacing:calc(var(--u) * 1)}
