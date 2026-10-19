@@ -237,7 +237,7 @@ test('3x3 patches bend smoothly while 2x2 patches stay flat', () => {
   assert.ok(new Set(finer).size > 4, 'more than a few distinct heights means a real curve');
   const flat = patchPolygons({ material: 'ayz_floor', rows: [[[0, 0, 0], [8, 0, 0]], [[0, 8, 0], [8, 8, 0]]] });
   assert.equal(flat.length, 1);
-  assert.deepEqual(patchPolygons({ material: 'clip', rows: curved.rows }), []);
+  assert.deepEqual(patchPolygons({ material: 'clip_ai', rows: curved.rows }), []);
 });
 
 test('curved geometry flattens with its prefab transform', () => {
@@ -311,4 +311,43 @@ test('prefabs are fetched recursively and a 404 is skipped', async () => {
   const files = await fetchPrefabs(prefab('_prefabs/a.map'), name => `https://x/${name}`, { fetchImpl });
   assert.deepEqual([...files.keys()].sort(), ['_prefabs/a.map', '_prefabs/b.map']);
   assert.ok(asked.includes('https://x/_prefabs/zm/stock.map'));
+});
+
+test('player clip is drawn as a shell while AI, physics and shadow clip stay hidden', () => {
+  const text = world([cube([0, 0, 0], [64, 64, 64], 'clip_player'), cube([100, 0, 0], [164, 64, 64], 'clip'), cube([200, 0, 0], [264, 64, 64], 'clip_ai'), cube([300, 0, 0], [364, 64, 64], 'clip_physics'), cube([400, 0, 0], [464, 64, 64], 'caulk_shadow')]);
+  const flat = flattenIwmap(parseIwmap(text));
+  assert.equal(flat.polygons.length, 12);
+  assert.deepEqual([...new Set(flat.polygons.map(p => p.material))].sort(), ['clip', 'clip_player']);
+});
+
+test('buyable doors and debris take the brushes of the entity their trigger names', () => {
+  const text = `${world([cube([0, 0, 0], [8, 8, 8])])}
+// entity 1
+{
+"classname" "script_brushmodel"
+"targetname" "noodlebar_door"
+// brush 0
+{
+${cube([100, 0, 0], [140, 20, 96], 'clip')}
+}
+}
+// entity 2
+{
+"classname" "trigger_use"
+"targetname" "zombie_door"
+"target" "noodlebar_door"
+"zombie_cost" "950"
+}
+// entity 3
+{
+"classname" "trigger_use"
+"targetname" "zombie_debris"
+"target" "nothing_here"
+}`;
+  const flat = flattenIwmap(parseIwmap(text));
+  const layout = extractIwmapLayout(flat.entities, flat.brushModels);
+  assert.equal(layout.doors.length, 1);
+  assert.equal(layout.doors[0].cost, 950);
+  assert.deepEqual(layout.doors[0].min.map(v => v + 0), [100, 0, -20]);
+  assert.deepEqual(layout.doors[0].max.map(v => v + 0), [140, 96, 0]);
 });

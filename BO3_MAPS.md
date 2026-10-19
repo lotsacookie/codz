@@ -8,8 +8,9 @@ folder, or paste a `.map` link, or a GitHub repository or `.map` link (the `_pre
 ## What is read
 
 - Brushes from `worldspawn`, including those inside nested `misc_prefab` entities (placed with
-  their origin, angles and model scale). Clip, nodraw, trigger, sky, shadow caster and traverse
-  materials are skipped.
+  their origin, angles and model scale). Player clip (`clip`, `clip_player`) is drawn as a plain dark shell: in BO3 it is what outlines
+  the rooms and props whose models are not in the source map. AI, physics and shadow clip, nodraw,
+  trigger, sky and traverse materials are skipped.
 - Curves: `mesh` (BO3) and `patchDef` blocks are read as control point grids and drawn as smooth
   quadratic Bezier surfaces (3 wide spans share edge points; 2 wide grids stay flat), two sided.
 - Player start: `initial_spawn_points` structs, else `info_player_start`.
@@ -35,7 +36,9 @@ site widen the box, so the outer rooms are drawn; spawners in another section fa
   the source map, so props are not drawn. `zm_alien_isolation` is mostly models (about 4000 of them
   against about 1000 brushes), so its rooms show as the bare brush shells. Surfaces use a flat colour
   per material.
-- Doors, debris and buyable areas are not wired up, and prefabs from the stock mod tools
+- Buyable doors and debris are read when a `zombie_door` / `zombie_debris` trigger names a brush
+  entity (or has a volume of its own); maps that script their doors in GSC under other names (like
+  `zm_alien_isolation`) are not detected. Buyable areas are not wired up, and prefabs from the stock mod tools
   (`_prefabs/zm/...`) are only resolved when they are in the zip.
 - Fetching a map from the Steam Workshop is a separate step.
 

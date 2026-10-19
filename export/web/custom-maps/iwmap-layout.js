@@ -40,7 +40,7 @@ function nearest(point, list, within = Infinity) {
   return best;
 }
 
-export function extractIwmapLayout(entities) {
+export function extractIwmapLayout(entities, brushModels = new Map()) {
   const layout = { spawn: null, sites: [], windows: [], doors: [], spawners: [], walls: [], lights: [], environment: { sky: null, fog: null, skyColor: null } };
   const point = entity => toThree(entity.origin);
   const yaw = entity => entity.yaw ?? 0;
@@ -74,6 +74,7 @@ export function extractIwmapLayout(entities) {
   layout.sites = dedupeSites(layout.sites);
   layout.windows = dedupe(layout.windows.map(w => ({ ...w })), 60);
   layout.walls = dedupe(layout.walls, 40);
+  layout.doors = extractDoors(entities, brushModels);
   for (const window of layout.windows) {
     const hit = nearest(window.point, layout.spawners, 900);
     if (hit) {
@@ -92,6 +93,26 @@ function dedupeSites(sites) {
     if (!twin) out.push(site);
   }
   return out;
+}
+
+// Buyable doors and debris: a `zombie_door` / `zombie_debris` trigger names the brush entity it opens.
+const DOOR_TRIGGER = /^zombie_(?:door|debris)$/;
+export function extractDoors(entities, brushModels) {
+  const doors = [];
+  for (const entity of entities) {
+    if (!DOOR_TRIGGER.test(lower(entity.targetname)) || !entity.target) continue;
+    const polygons = [];
+    for (const name of String(entity.target).split(/[\s,]+/).filter(Boolean)) polygons.push(...(brushModels.get(name.toLowerCase()) ?? []));
+    // Doors that are models have no brushes of their own: the trigger's volume stands in for the opening.
+    if (!polygons.length && entity.shape?.length) polygons.push(...entity.shape);
+    if (!polygons.length) continue;
+    const points = polygons.flatMap(p => p.points.map(toThree));
+    const min = [0, 1, 2].map(i => Math.min(...points.map(p => p[i])));
+    const max = [0, 1, 2].map(i => Math.max(...points.map(p => p[i])));
+    if (doors.some(d => d.target === entity.target && d.min.every((v, i) => Math.abs(v - min[i]) < 1))) continue;
+    doors.push({ name: `iwmap_door_${doors.length}`, target: entity.target, debris: /debris/i.test(entity.targetname), cost: Number(entity.zombie_cost) || 750, min, max, polygons });
+  }
+  return doors;
 }
 
 const flat2 = (a, b) => Math.hypot(a[0] - b[0], a[2] - b[2]);
@@ -128,6 +149,7 @@ export function restrictLayout(layout, area) {
     spawners: layout.spawners.filter(p => inArea(area, p)),
     windows: layout.windows.filter(w => inArea(area, w.point)),
     walls: (layout.walls ?? []).filter(w => inArea(area, w.point)),
+    doors: (layout.doors ?? []).filter(d => inArea(area, d.min.map((v, i) => (v + d.max[i]) / 2))),
     lights: layout.lights.filter(l => inArea(area, l.point, 1500)),
   };
 }

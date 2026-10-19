@@ -106,11 +106,23 @@ export function flattenIwmap(map, { resolve = () => null, all = false } = {}) {
   const entities = [];
   const stats = { brushes: 0, patches: 0, prefabs: 0, missingPrefabs: new Set(), models: 0 };
   const polygonCache = new WeakMap();
+  const brushModels = new Map();
 
   const walk = (parsed, transform, depth, chain) => {
     for (const entity of parsed.entities) {
       const keys = entity.keys;
       const classname = keys.classname;
+      let shape = null;
+      if (classname !== 'worldspawn' && (entity.brushes.length || entity.patches?.length) && keys.targetname) {
+        // Brush entities (doors, debris) are kept apart from the level so they can be bought away.
+        const name = keys.targetname.toLowerCase();
+        const list = brushModels.get(name) ?? [];
+        for (const polygon of [...entity.brushes.flatMap(brush => brushPolygons(brush, { all: true })), ...(entity.patches ?? []).flatMap(patch => patchPolygons(patch, { all: true }))]) {
+          list.push({ material: polygon.material, double: polygon.double, points: polygon.points.map(p => applyTransform(transform, p)) });
+        }
+        brushModels.set(name, list);
+        if (/^trigger_/.test(classname)) shape = list.slice(-entity.brushes.length * 6 || undefined);
+      }
       if (classname === 'worldspawn') {
         let local = polygonCache.get(entity);
         if (!local) {
@@ -143,11 +155,11 @@ export function flattenIwmap(map, { resolve = () => null, all = false } = {}) {
       }
       if (classname === 'misc_model' || classname === 'script_model') stats.models++;
       const placed = compose(transform, origin, angles);
-      entities.push({ ...keys, classname, origin: placed.t, yaw: yawOf(placed) });
+      entities.push({ ...keys, classname, origin: placed.t, yaw: yawOf(placed), ...(shape ? { shape } : {}) });
     }
   };
 
   walk(map, IDENTITY, 0, new Set());
   stats.missingPrefabs = [...stats.missingPrefabs];
-  return { polygons, entities, stats };
+  return { polygons, entities, stats, brushModels };
 }

@@ -1,11 +1,15 @@
 import * as THREE from 'three';
 import { parseIwmap } from './iwmap-parse.js';
+import { SOLID_CLIP } from './iwmap-brush.js';
 import { flattenIwmap, createResolver, normalizeName } from './iwmap-flatten.js';
 import { extractIwmapLayout, playArea, restrictLayout } from './iwmap-layout.js';
 
 const toThree = ([x, y, z]) => [x, z, -y];
 
 function materialColor(name) {
+  if (SOLID_CLIP.test(name)) return new THREE.Color(0x3d4046);
+  if (name === 'zm_door') return new THREE.Color(0x6b5133);
+  if (name === 'zm_debris') return new THREE.Color(0x57504a);
   let hash = 2166136261;
   for (let i = 0; i < name.length; i++) hash = Math.imul(hash ^ name.charCodeAt(i), 16777619) >>> 0;
   const lowered = name.toLowerCase();
@@ -46,7 +50,7 @@ export function buildIwmapGroup(polygons) {
 
 export function buildIwmapScene(map, { files = new Map() } = {}) {
   const flat = flattenIwmap(map, { resolve: createResolver(files) });
-  let layout = extractIwmapLayout(flat.entities);
+  let layout = extractIwmapLayout(flat.entities, flat.brushModels);
   const area = playArea(layout);
   let polygons = flat.polygons;
   if (area) {
@@ -63,6 +67,7 @@ export function buildIwmapScene(map, { files = new Map() } = {}) {
     layout = restrictLayout(layout, area);
   }
   const { root, triangles } = buildIwmapGroup(polygons);
+  layout = { ...layout, doors: layout.doors.map(({ polygons: parts, ...door }) => ({ ...door, object: buildIwmapGroup(parts.map(p => ({ ...p, material: door.debris ? 'zm_debris' : 'zm_door' }))).root })) };
   root.userData.bspLayout = layout;
   root.userData.iwmap = { triangles, ...flat.stats, croppedTo: area && { min: area.min, max: area.max }, spawnRelocated: Boolean(area?.relocated) };
   return root;

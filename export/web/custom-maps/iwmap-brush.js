@@ -1,5 +1,10 @@
 export const HIDDEN_MATERIAL = /(?:^|[_/])(?:clip|nodraw|caulk|skip|hint|portal|trigger|origin|sky|mantle|lightgrid|nolight|collision|umbra|zone|shadowcaster|shadow_caster|traverse|invisible)(?:[_/]|\d|$)|^ai_|volume|^reflection_probe/i;
 
+// Player clip is what holds the player in the real game: the walls, floors and prop outlines the compiled
+// models do not exist for here. It is drawn as a plain shell. AI, physics, bullet, shadow and sky stay hidden.
+export const SOLID_CLIP = /^clip(?:_player(?:_full)?|_full)?$/i;
+export const isHiddenMaterial = material => !SOLID_CLIP.test(material) && HIDDEN_MATERIAL.test(material);
+
 const EPSILON = 0.05;
 const BIG = 65536;
 
@@ -47,7 +52,7 @@ export function brushPolygons(brush, { all = false } = {}) {
   for (let i = 0; i < planes.length; i++) {
     const plane = planes[i];
     const material = brush.faces[i].material;
-    if (!plane || (!all && HIDDEN_MATERIAL.test(material))) continue;
+    if (!plane || (!all && isHiddenMaterial(material))) continue;
     let duplicate = false;
     for (let j = 0; j < i && !duplicate; j++) {
       const other = planes[j];
@@ -76,7 +81,7 @@ function spans(count) {
 const sample = (points, kind, t) => (kind === 3 ? bezier2(points[0], points[1], points[2], t) : lerp(points[0], points[1], t));
 
 export function patchPolygons(patch, { detail = 8, all = false } = {}) {
-  if (!all && HIDDEN_MATERIAL.test(patch.material)) return [];
+  if (!all && isHiddenMaterial(patch.material)) return [];
   const { rows } = patch;
   const rowSpans = spans(rows.length), colSpans = spans(rows[0].length);
   const polygons = [];
