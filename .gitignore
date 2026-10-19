@@ -12,6 +12,7 @@
 !/wrangler.jsonc
 !/*.cmd
 !/.tools/
+!/functions/
 !/test/
 !/export/
 /export/*

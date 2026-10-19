@@ -178,5 +178,39 @@ export const polyhaven = {
   },
 };
 
-export const PROVIDERS = [bsp, polyhaven, khronos, sketchfab];
+const WORKSHOP_API = new URL('../api/workshop', import.meta.url).href;
+
+const compact = value => (value >= 1000000 ? `${(value / 1000000).toFixed(1)}M` : value >= 1000 ? `${Math.round(value / 100) / 10}k` : String(value));
+
+export const workshop = {
+  id: 'workshop',
+  label: 'Black Ops 3 Workshop (no key needed)',
+  needsToken: false,
+  hint: 'Pick a map to open it on the Steam Workshop, then subscribe to it in Black Ops 3.',
+  async search({ query = '', cursor = null, fetchImpl = defaultFetch, signal } = {}) {
+    const page = Math.max(1, Number(cursor) || 1);
+    const params = new URLSearchParams({ q: query.trim(), page: String(page) });
+    const response = await fetchImpl(`${WORKSHOP_API}?${params}`, { signal });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error ?? `Workshop search failed (${response.status}).`);
+    const items = (body.items ?? []).map(entry => ({
+      id: entry.id,
+      name: entry.name,
+      author: entry.author ?? '',
+      license: '',
+      detail: [
+        (entry.tags ?? []).slice(0, 2).join(', '),
+        entry.subscribers ? `${compact(entry.subscribers)} subscribers` : '',
+        entry.size ? sizeLabel(entry.size) : '',
+      ].filter(Boolean).join(' · '),
+      thumb: entry.thumb ?? '',
+      art: entry.thumb ?? '',
+      source: 'workshop',
+    }));
+    return { items, next: page < (body.pages ?? 1) ? String(page + 1) : null };
+  },
+  play: item => ({ external: `https://steamcommunity.com/sharedfiles/filedetails/?id=${encodeURIComponent(item.id)}` }),
+};
+
+export const PROVIDERS = [bsp, workshop, polyhaven, khronos, sketchfab];
 export const providerById = id => PROVIDERS.find(provider => provider.id === id) ?? PROVIDERS[0];

@@ -79,7 +79,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
       if (result.next) state.cursors[page + 1] = result.next;
       state.loaded = true;
       render();
-      setStatus(result.items.length ? 'Pick a map to play. Perks, box and windows are placed automatically.' : 'Nothing found. Try another search.');
+      setStatus(result.items.length ? (state.provider.hint ?? 'Pick a map to play. Perks, box and windows are placed automatically.') : 'Nothing found. Try another search.');
     } catch (error) {
       if (run !== state.run) return;
       state.items = [];
@@ -110,6 +110,11 @@ export function createCustomMenu({ root, onPlay, onClose }) {
       params = await state.provider.play(item, secret);
     } catch (error) {
       setStatus(error?.message ?? String(error), true);
+      return;
+    }
+    if (params?.external) {
+      el('a', { href: params.external, target: '_blank', rel: 'noopener noreferrer' }).click();
+      setStatus(`Opened ${item.name} on the Steam Workshop. Subscribe there to add it to Black Ops 3.`);
       return;
     }
     onPlay({ label: item.name, art: item.art || item.thumb, params: { ...params, name: item.name } });
