@@ -23,6 +23,16 @@ folder, or paste a `.map` link, or a GitHub repository or `.map` link (the `_pre
   and window or barricade zbarriers, each linked to the nearest spawn.
 - `light` entities, by `_color` and `radius`.
 
+## Materials and textures
+
+Radiant maps name their materials but do not hold the images. With a zip that has the map's
+`texture_assets/*.gdt` files, each material gets its tint, surface type (metal, glass, plaster, cloth)
+and light or transparent settings from them. Any `png`, `jpg`, `webp` or `tga` in the zip whose file
+name matches a material's colour map (for example `black1.png` for `black1_plaster`) is used as its
+texture, so real textures can be extracted from a game install you own (Greyhound or Wraith export
+images) and zipped beside the map. Without an image, a plain surface with a light pattern in the
+material's colour is used. Faces are box projected, 128 map units per repeat.
+
 ## Play area
 
 BO3 maps often keep an intro room far from the real map, so the map is cropped to a box around

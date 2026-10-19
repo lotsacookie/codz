@@ -4,6 +4,7 @@ import { parseIwmap } from '../export/web/custom-maps/iwmap-parse.js';
 import { brushPolygons } from '../export/web/custom-maps/iwmap-brush.js';
 import { flattenIwmap, createResolver } from '../export/web/custom-maps/iwmap-flatten.js';
 import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/custom-maps/iwmap-layout.js';
+import { parseGdtMaterials, describeMaterial, imageIndex, boxUv, createMaterialLibrary } from '../export/web/custom-maps/iwmap-material.js';
 import { patchPolygons } from '../export/web/custom-maps/iwmap-brush.js';
 import { parseGithubMapUrl, isGithubRepoUrl, fetchPrefabs } from '../export/web/custom-maps/iwmap-remote.js';
 
@@ -350,4 +351,56 @@ ${cube([100, 0, 0], [140, 20, 96], 'clip')}
   assert.equal(layout.doors[0].cost, 950);
   assert.deepEqual(layout.doors[0].min.map(v => v + 0), [100, 0, -20]);
   assert.deepEqual(layout.doors[0].max.map(v => v + 0), [140, 96, 0]);
+});
+
+const GDT = `{
+\t"dark_grey_floortile" ( "material.gdf" )
+\t{
+\t\t"colorMap" "dark_grey_floortile_c_new"
+\t\t"colorTint" "0.380392 0.380392 0.380392 1"
+\t\t"surfaceType" "plaster"
+\t\t"materialType" "lit_plus"
+\t\t"cg00_x" "0"
+\t}
+\t"ayz_glass" ( "material.gdf" )
+\t{
+\t\t"colorMap" "ayz_glass"
+\t\t"surfaceType" "glass"
+\t\t"materialType" "lit_transparent"
+\t}
+}`;
+
+test('material definitions come out of .gdt files, only for the materials the map uses', () => {
+  const all = parseGdtMaterials(GDT);
+  assert.equal(all.size, 2);
+  assert.equal(all.get('dark_grey_floortile').colorMap, 'dark_grey_floortile_c_new');
+  assert.equal(all.get('dark_grey_floortile').cg00_x, undefined);
+  assert.equal(parseGdtMaterials(GDT, new Set(['ayz_glass'])).size, 1);
+});
+
+test('materials are classed by surface type and name, with the GDT tint applied', () => {
+  const tile = describeMaterial('dark_grey_floortile', parseGdtMaterials(GDT).get('dark_grey_floortile'));
+  assert.equal(tile.kind, 'tile');
+  assert.ok(Math.abs(tile.tint[0] - 0.38) < 0.01);
+  assert.equal(describeMaterial('ayz_glass', parseGdtMaterials(GDT).get('ayz_glass')).transparent, true);
+  assert.equal(describeMaterial('elevator_backlit_light').kind, 'light');
+  assert.equal(describeMaterial('t7_metal_duct_insulation_01_grey').kind, 'metal');
+  assert.equal(describeMaterial('$default').colorMap, null);
+});
+
+test('supplied images are found by their colour map name in any folder and format', () => {
+  const index = imageIndex(new Map([['maps/images/Dark_Grey_Floortile_C_New.TGA', new Uint8Array(4)], ['x/readme.txt', new Uint8Array(1)], ['a/b.png', new Uint8Array(1)]]));
+  assert.ok(index.has('dark_grey_floortile_c_new'));
+  assert.ok(index.has('b'));
+  assert.equal(index.size, 2);
+  const library = createMaterialLibrary({ files: new Map(), gdt: parseGdtMaterials(GDT) });
+  const glass = library.get('ayz_glass');
+  assert.equal(glass.transparent, true);
+  assert.equal(library.get('ayz_glass'), glass, 'a material is built once');
+});
+
+test('box projection uses the two axes across the dominant normal', () => {
+  assert.deepEqual(boxUv([256, 128, 64], [0, 0, 1]), [2, 1]);
+  assert.deepEqual(boxUv([256, 128, 64], [1, 0, 0]), [1, 0.5]);
+  assert.deepEqual(boxUv([256, 128, 64], [0, 1, 0]), [2, 0.5]);
 });

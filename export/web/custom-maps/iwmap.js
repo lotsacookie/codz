@@ -1,47 +1,43 @@
 import * as THREE from 'three';
 import { parseIwmap } from './iwmap-parse.js';
-import { SOLID_CLIP } from './iwmap-brush.js';
+import { createMaterialLibrary, gdtMaterialsFromFiles, boxUv } from './iwmap-material.js';
 import { flattenIwmap, createResolver, normalizeName } from './iwmap-flatten.js';
 import { extractIwmapLayout, playArea, restrictLayout } from './iwmap-layout.js';
 
 const toThree = ([x, y, z]) => [x, z, -y];
 
-function materialColor(name) {
-  if (SOLID_CLIP.test(name)) return new THREE.Color(0x3d4046);
-  if (name === 'zm_door') return new THREE.Color(0x6b5133);
-  if (name === 'zm_debris') return new THREE.Color(0x57504a);
-  let hash = 2166136261;
-  for (let i = 0; i < name.length; i++) hash = Math.imul(hash ^ name.charCodeAt(i), 16777619) >>> 0;
-  const lowered = name.toLowerCase();
-  const hue = (hash % 360) / 360;
-  const lightness = /floor|ground|dirt/.test(lowered) ? .3 : /ceil/.test(lowered) ? .42 : .5;
-  return new THREE.Color().setHSL(hue, .22, lightness);
-}
+const faceNormal = points => {
+  const [a, b, c] = points;
+  const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+  return [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+};
 
-export function buildIwmapGroup(polygons) {
+export function buildIwmapGroup(polygons, { library = createMaterialLibrary() } = {}) {
   const buckets = new Map();
   let triangles = 0;
   for (const polygon of polygons) {
     const key = polygon.double ? `${polygon.material}\u0000double` : polygon.material;
     let bucket = buckets.get(key);
-    if (!bucket) buckets.set(key, bucket = []);
+    if (!bucket) buckets.set(key, bucket = { positions: [], uvs: [] });
+    const normal = polygon.normal ?? faceNormal(polygon.points);
+    const uv = polygon.points.map(p => boxUv(p, normal));
     const points = polygon.points.map(toThree);
     for (let k = 1; k < points.length - 1; k++) {
-      bucket.push(...points[0], ...points[k], ...points[k + 1]);
+      bucket.positions.push(...points[0], ...points[k], ...points[k + 1]);
+      bucket.uvs.push(...uv[0], ...uv[k], ...uv[k + 1]);
       triangles++;
     }
   }
   if (!triangles) throw new Error('This map has no drawable brush geometry.');
   const root = new THREE.Group();
   root.name = 'iwmap';
-  for (const [key, positions] of buckets) {
+  for (const [key, bucket] of buckets) {
     const [name, double] = key.split('\u0000');
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(bucket.positions, 3));
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(bucket.uvs, 2));
     geometry.computeVertexNormals();
-    const material = new THREE.MeshStandardMaterial({ color: materialColor(name), roughness: 1, metalness: 0, side: double ? THREE.DoubleSide : THREE.FrontSide });
-    material.name = name;
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new THREE.Mesh(geometry, library.get(name, { double: Boolean(double) }));
     mesh.name = double ? `iwmap_${name}_curve` : `iwmap_${name}`;
     root.add(mesh);
   }
@@ -66,10 +62,12 @@ export function buildIwmapScene(map, { files = new Map() } = {}) {
     });
     layout = restrictLayout(layout, area);
   }
-  const { root, triangles } = buildIwmapGroup(polygons);
-  layout = { ...layout, doors: layout.doors.map(({ polygons: parts, ...door }) => ({ ...door, object: buildIwmapGroup(parts.map(p => ({ ...p, material: door.debris ? 'zm_debris' : 'zm_door' }))).root })) };
+  const used = new Set(polygons.map(p => p.material));
+  const library = createMaterialLibrary({ files, gdt: gdtMaterialsFromFiles(files, used) });
+  const { root, triangles } = buildIwmapGroup(polygons, { library });
+  layout = { ...layout, doors: layout.doors.map(({ polygons: parts, ...door }) => ({ ...door, object: buildIwmapGroup(parts.map(p => ({ ...p, material: door.debris ? 'zm_debris' : 'zm_door' })), { library }).root })) };
   root.userData.bspLayout = layout;
-  root.userData.iwmap = { triangles, ...flat.stats, croppedTo: area && { min: area.min, max: area.max }, spawnRelocated: Boolean(area?.relocated) };
+  root.userData.iwmap = { triangles, ...flat.stats, croppedTo: area && { min: area.min, max: area.max }, spawnRelocated: Boolean(area?.relocated), materials: library.imagesFound };
   return root;
 }
 
