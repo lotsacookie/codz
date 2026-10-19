@@ -160,3 +160,34 @@ html.force-landscape #launcher,
 html.force-landscape #custom-maps,
 html.force-landscape #menu,
 html.force-landscape .modifiers-card{touch-action:none;overscroll-behavior:contain}
+
+/* Multiplayer menu: host, server browser, join by code, lobby */
+#multiplayer{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:calc(5 * var(--vh1)) calc(6 * var(--vw1));background:radial-gradient(ellipse at 20% 30%,#2a1110 0,#050404 72%);font-family:var(--shell-font);color:var(--menu-text)}
+#multiplayer .mp-panel{width:min(560px,100%);margin:auto}
+#multiplayer .mp-eyebrow{margin:0 0 8px;font-size:12px;letter-spacing:.28em;color:#cfc7b4}
+#multiplayer h2{margin:0 0 20px;font-weight:700;font-size:clamp(30px,calc(5 * var(--vw1)),52px);letter-spacing:.04em;text-transform:uppercase;color:#f4f2ec}
+#multiplayer .mp-body{display:flex;flex-direction:column;gap:8px;margin:10px 0 14px}
+#multiplayer input,#multiplayer select,#multiplayer button{min-height:42px;border:0;border-radius:0;padding:0 14px;background:rgba(255,255,255,.09);color:var(--menu-text);font:700 14px var(--shell-font);letter-spacing:.06em;text-align:left}
+#multiplayer select option{color:#161412}
+#multiplayer input::placeholder{color:#a9a392;font-weight:400}
+#multiplayer .mp-name{width:100%;box-sizing:border-box;margin-bottom:4px}
+#multiplayer .mp-code{font-size:26px;letter-spacing:.3em;text-transform:uppercase;text-align:center;min-height:56px}
+#multiplayer button{cursor:pointer;text-transform:uppercase}
+#multiplayer button.mp-big{min-height:50px;font-size:16px}
+#multiplayer button:hover:not(:disabled),#multiplayer button:focus-visible,#multiplayer button.pad-focus{background:var(--menu-select-bg);color:var(--menu-select-text);outline:0}
+#multiplayer button:disabled{opacity:.45;cursor:default}
+#multiplayer button.on{background:#e8c46a;color:#161412}
+#multiplayer .mp-back{width:100%}
+#multiplayer .mp-status{min-height:1.5em;margin:10px 0 0;font-size:13px;letter-spacing:.05em;color:#cfc7b4}
+#multiplayer .mp-status.error{color:#ffb4a8}
+#multiplayer .mp-note{margin:6px 0;font-size:13px;line-height:1.5;color:#cfc7b4}
+#multiplayer .mp-list,#multiplayer .mp-roster{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:calc(46 * var(--vh1));overflow-y:auto}
+#multiplayer .mp-game{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 14px;background:rgba(255,255,255,.06)}
+#multiplayer .mp-game-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+#multiplayer .mp-game-info strong,#multiplayer .mp-game-info span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#multiplayer .mp-game-info span{font-size:12px;color:#cfc7b4}
+#multiplayer .mp-count{font-size:15px;letter-spacing:.08em}
+#multiplayer .mp-roster li{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;background:rgba(255,255,255,.06)}
+#multiplayer .mp-roster li span{font-size:12px;letter-spacing:.12em;color:#cfc7b4}
+#multiplayer .mp-roster li.ready span{color:#9fe0a0}
+#multiplayer .mp-actions{display:flex;flex-direction:column;gap:6px}

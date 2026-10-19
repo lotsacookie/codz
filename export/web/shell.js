@@ -8,6 +8,7 @@ import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
 import { MenuNav, PAD_CONTROLS, getGamepads, padSettings } from './gamepad.js';
 import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
 import { createCustomMenu } from './custom-maps/menu.js';
+import { createMultiplayerMenu } from './net/menu.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -73,6 +74,21 @@ const customMenu = createCustomMenu({
   root: customRoot,
   onPlay: ({ label, params, art }) => boot({ map: 'custom-map', label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${label} — Zombies`, loadscreen: art || 'art/loadscreen_zombie_temple.webp', params, custom: true }),
   onClose: () => { (buttons.find(button => button.dataset.menu && button.dataset.source === lastMenuSource) ?? buttons.find(button => button.dataset.menu))?.focus({ preventScroll: true }); },
+});
+
+const mpRoot = $('multiplayer');
+// Only maps with rounds make sense for co-op; Ascension and Call of the Dead are free exploration.
+const coopMaps = () => [...registry.values()].filter(entry => !/no rounds/i.test(entry.info ?? '')).map(entry => ({ id: entry.map, label: entry.label }));
+const mpMenu = createMultiplayerMenu({
+  root: mpRoot,
+  get maps() { return coopMaps(); },
+  onStart: ({ map, lobby, ...multiplayer }) => {
+    const entry = registry.get(map);
+    if (!entry) { showError(`This build has no map called "${map}".`); return; }
+    globalThis.zombies.multiplayer = { ...multiplayer, lobby };
+    boot({ ...entry, params: { multiplayer: { ...multiplayer, lobby } }, multiplayer: true });
+  },
+  onClose: () => { buttons.find(button => button.dataset.menu === 'multiplayer')?.focus({ preventScroll: true }); },
 });
 
 const setEnabled = enabled => { for (const b of buttons) b.disabled = !enabled; };
@@ -300,6 +316,7 @@ const padVisible = el => !el.disabled && !el.closest('[hidden]') && el.getClient
 function padItems() {
   if (!launcher.hidden && !modPanel.hidden) return [...modPanel.querySelectorAll('input, button')];
   if (!launcher.hidden && customMenu.isOpen()) return customMenu.items();
+  if (!launcher.hidden && mpMenu.isOpen()) return mpMenu.items();
   if (!launcher.hidden) return [...buttons.filter(button => !button.disabled), modOpen];
   if (!loading.hidden) return [...loadEls.actions.querySelectorAll('button')];
   if (!pause.hidden) return [...pause.querySelectorAll('button, input[type="range"]')].filter(padVisible);
@@ -327,7 +344,7 @@ function padSelect(focused) {
 }
 const padNav = new MenuNav({
   getItems: padItems, getDefault: padDefault, focus: padFocus, onSelect: padSelect,
-  onBack: () => { if (customMenu.isOpen()) customMenu.close(); else if (!pause.hidden && !pauseEls.optionsView.hidden) showOptions(false); },
+  onBack: () => { if (mpMenu.isOpen()) mpMenu.back(); else if (customMenu.isOpen()) customMenu.close(); else if (!pause.hidden && !pauseEls.optionsView.hidden) showOptions(false); },
   onStart: () => { if (!pause.hidden && pauseEls.optionsView.hidden) { padPreferred = true; pressStart(); } },
   isBlocked: () => !!session?.active,
 });
@@ -548,6 +565,7 @@ async function quit() {
   note.textContent = IDLE_NOTE;
   setEnabled(true);
   if (old.custom) customMenu.open();
+  if (globalThis.zombies.multiplayer) { globalThis.zombies.multiplayer.lobby?.close?.().catch?.(() => {}); globalThis.zombies.multiplayer = null; }
   const params = new URLSearchParams(location.search);
   if (params.has('map')) { params.delete('map'); history.replaceState(null, '', location.pathname + (params.size ? `?${params}` : '')); }
 }
@@ -556,6 +574,7 @@ list.addEventListener('click', event => {
   const button = event.target.closest('button[data-map]');
   if (button && !button.disabled) boot(registry.get(button.dataset.map));
   const menu = event.target.closest('button[data-menu]');
+  if (menu?.dataset.menu === 'multiplayer' && !menu.disabled) { mpMenu.open(); return; }
   if (menu && !menu.disabled) { lastMenuSource = menu.dataset.source; customMenu.open(menu.dataset.source); }
 });
 

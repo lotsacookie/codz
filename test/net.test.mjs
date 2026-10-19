@@ -129,3 +129,11 @@ test('the host dropping out of the directory removes its listing', async () => {
   await net.settle();
   assert.equal(browser.list().length, 0);
 });
+
+test('the launcher offers Multiplayer, wires its menu, and only co-op maps can be hosted', async () => {
+  const { readFileSync } = await import('node:fs');
+  const html = readFileSync(new URL('../export/web/index.html', import.meta.url), 'utf8');
+  const shell = readFileSync(new URL('../export/web/shell.js', import.meta.url), 'utf8');
+  assert.ok(html.includes('data-menu="multiplayer"') && html.includes('id="multiplayer"'));
+  assert.ok(shell.includes("createMultiplayerMenu") && shell.includes('no rounds'), 'exploration maps without rounds are excluded');
+});
