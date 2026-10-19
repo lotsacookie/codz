@@ -3,10 +3,18 @@ import path from 'node:path';
 import { APP_ID, crawl } from './lib/workshop-crawl.mjs';
 
 const MIN_ITEMS = 30;
-const file = path.resolve(import.meta.dirname, '..', 'export', 'web', 'maps', 'workshop', 'index.json');
+const root = path.resolve(import.meta.dirname, '..');
+const file = path.join(root, 'export', 'web', 'maps', 'workshop', 'index.json');
+const debugDir = path.join(root, '.work', 'workshop-debug');
 
 const previous = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : { items: [] };
-const items = await crawl({ log: message => console.log(message) });
+const items = await crawl({
+  log: message => console.log(message),
+  dump: ({ sort, page, html }) => {
+    mkdirSync(debugDir, { recursive: true });
+    writeFileSync(path.join(debugDir, `${sort}-page${page}.html`), html.slice(0, 500000));
+  },
+});
 
 if (items.length < MIN_ITEMS) {
   console.error(`Only ${items.length} Workshop items were read; keeping the existing index.`);

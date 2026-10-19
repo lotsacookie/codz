@@ -28,6 +28,14 @@ jobs:
       - name: Build the Black Ops 3 Workshop index
         run: node .tools/build-workshop-index.mjs
 
+      - name: Keep the Steam pages that could not be read
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workshop-debug
+          path: .work/workshop-debug
+          if-no-files-found: ignore
+
       - name: Commit the index when it changed
         run: |
           if git diff --quiet -- export/web/maps/workshop/index.json; then

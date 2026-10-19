@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { browseUrl, parseBrowse, crawl } from '../.tools/lib/workshop-crawl.mjs';
+import { browseUrl, parseBrowse, crawl, merge, describePage } from '../.tools/lib/workshop-crawl.mjs';
 import { workshop, PROVIDERS } from '../export/web/custom-maps/providers.js';
 
 const card = (id, title, author, rating = 5) => `<div class="workshopItem"><a data-panel="{&quot;focusable&quot;:false}" href="https://steamcommunity.com/sharedfiles/filedetails/?id=${id}&amp;searchtext=zombies" class="ugc" data-publishedfileid="${id}"><div class="workshopItemPreviewHolder  "><img class="workshopItemPreviewImage " src="https://images.steamusercontent.com/ugc/${id}/?imw=268&amp;imh=268&amp;ima=fit"></div><div class="workshopItemTitle ellipsis">${title}</div></a><div class="workshopItemAuthorName ellipsis">by&nbsp;<a class="workshop_author_link" href="https://steamcommunity.com/id/x/myworkshopfiles/">${author}</a></div><img class="fileRating" src="https://community.fastly.steamstatic.com/public/images/sharedfiles/${rating}-star_large.png"></div>`;
@@ -86,7 +86,35 @@ test('an age check page is reported and yields nothing', async () => {
   const log = [];
   const items = await crawl({ lists: [{ sort: 'trend', pages: 2 }], fetchImpl, sleep: async () => {}, log: message => log.push(message) });
   assert.deepEqual(items, []);
-  assert.ok(log.some(message => /age check/.test(message)));
+  assert.ok(log.some(message => /no items found/.test(message) && /agegate=1/.test(message)));
+});
+
+test('the parser still finds items when Steam changes its class names', () => {
+  const html = `<html><body><div id="results">
+    <div class="item"><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=5555555"><img src="https://images.steamusercontent.com/ugc/5555555/?x=1&amp;y=2" alt="Alt Title"></a><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=5555555">Anchor Title</a><span>By <a href="https://steamcommunity.com/id/zed/myworkshopfiles/?appid=311210">Zed</a></span></div>
+    <div class="item"><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=6666666"><img data-src="https://images.steamusercontent.com/ugc/6666666/" src="blank.gif" alt="Only Alt"></a><span>By <a class="author_link" href="https://steamcommunity.com/profiles/76561198000000000/">Yan</a></span></div>
+    </div><div>3,572 entries matching filters</div><a href="?appid=311210&amp;p=2">2</a></body></html>`;
+  const parsed = parseBrowse(html);
+  assert.deepEqual(parsed.items.map(item => [item.id, item.name, item.author, item.thumb]), [
+    ['5555555', 'Anchor Title', 'Zed', 'https://images.steamusercontent.com/ugc/5555555/?x=1&y=2'],
+    ['6666666', 'Only Alt', 'Yan', 'https://images.steamusercontent.com/ugc/6666666/'],
+  ]);
+  assert.deepEqual([parsed.total, parsed.linkedPages], [3572, 2]);
+});
+
+test('items from other games are dropped and missing details fall back to the page', () => {
+  const entry = { id: '1', name: 'Scraped', author: 'A', thumb: 't', rating: 0 };
+  assert.equal(merge(entry, new Map([['1', { consumer_app_id: 123 }]])), null);
+  assert.equal(merge(entry, new Map([['1', { consumer_app_id: 311210, subscriptions: 5 }]])).subscribers, 5);
+  assert.deepEqual([merge(entry, new Map()).name, merge({ ...entry, name: '' }, new Map([['1', { title: 'From details' }]])).name], ['Scraped', 'From details']);
+});
+
+test('the page report shows status, markers and the markup around the first item link', () => {
+  const report = describePage('<html><head><title>Steam Workshop</title></head><body><div class="x"><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1234567">hi</a></div></body></html>', 200, 'https://steamcommunity.com/workshop/browse/');
+  assert.match(report, /status 200/);
+  assert.match(report, /title: Steam Workshop/);
+  assert.match(report, /filedetails=1/);
+  assert.match(report, /sample: .*filedetails\/\?id=1234567/);
 });
 
 const INDEX = {
