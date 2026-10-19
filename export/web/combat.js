@@ -39,12 +39,12 @@ export class Combat {
     await Promise.all([this.audio.load(),this.enemies.load(),this.pickups.load(),this.equip(),this.perkDrink.load(),
       ...Object.entries(this.data.equipment).map(async([id,d])=>this.equipmentModels[id]=await loadModel(d.worldModel))]);
   }
-  async equip(){
+  async equip(lower=false){
     const suit=!!this.features?.state.suit;
     if(suit!==this.handSuit){this.view.currentId=null;this.handSuit=suit;}
     const adjust=d=>{if(suit)d.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;return d;};
     const def=adjust({...this.session.def});
-    await this.view.equip(def);if(this.view.ready){this.audio.warmWeapon(this.session.def);
+    await this.view.equip(def,{lower});if(this.view.ready){this.audio.warmWeapon(this.session.def);
       // Build the guns that are equipped but not in hand now, so switching to them later does not stall.
       prefetchOtherSlots(this.session,this.view,{adjust,onBuilt:entry=>this.renderer&&warmEntry(this.renderer,this.viewScene,this.viewCamera,entry)});}
   }
@@ -77,7 +77,7 @@ export class Combat {
     if(!this.enabled)return;
     const previous=this.session.slot;this.session.switchWeapon(slot);
     if(previous===this.session.slot)return;
-    this.pendingMelee=null;this.burst=0;this.equip().catch(console.error);
+    this.pendingMelee=null;this.burst=0;this.equip(true).catch(console.error);
   }
   reload(){if(!this.view.ready)return;const empty=this.session.weapon.mag===0;if(this.session.reload()){this.burst=0;this.ads=false;this.lastReload=this.session.reloadSerial;this.view.reload(empty,this.session.reloadDuration,this.session.reloadStage);}}
   shot(hand='right'){

@@ -109,8 +109,16 @@ export class World {
   }
   updateBox(){
     this.boxBeam.position.copy(vector(this.activeBox.position)).add(new THREE.Vector3(0,800,0));
-    for(const location of this.boxLocations){const prefix=location.script_noteworthy,visible=!!this.fireSale||location.id===this.activeBox.id||this.openBoxes?.has(location.id);
-      for(const e of this.data.entities.filter(e=>e.classname==='script_model'&&(e.targetname?.startsWith(prefix+'_')||e.script_noteworthy===prefix+'_rubble'))){const o=this.entities.get(e.id);if(o)o.visible=e.script_noteworthy===prefix+'_rubble'?!visible:visible;}
+    this.boxParts??=new Map();
+    for(const location of this.boxLocations){
+      let parts=this.boxParts.get(location.id);
+      if(!parts){
+        const prefix=location.script_noteworthy;parts=[];
+        for(const e of this.data.entities)if(e.classname==='script_model'&&(e.targetname?.startsWith(prefix+'_')||e.script_noteworthy===prefix+'_rubble'))parts.push({id:e.id,rubble:e.script_noteworthy===prefix+'_rubble'});
+        this.boxParts.set(location.id,parts);
+      }
+      const visible=!!(this.fireSale||location.id===this.activeBox.id||this.openBoxes?.has(location.id));
+      for(const p of parts){const o=this.entities.get(p.id);if(o)o.visible=p.rubble?!visible:visible;}
     }
   }
   closest(p,extents){const r=this.query.findClosestPoint({x:p.x,y:p.y,z:p.z},extents?{halfExtents:extents}:undefined);return r.success?new THREE.Vector3(r.point.x,r.point.y,r.point.z):null;}

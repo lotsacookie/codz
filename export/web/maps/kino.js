@@ -111,7 +111,7 @@ const touchControls=createZombieTouch({ctx,
     if(action==='reload')reload();if(action==='melee')melee();if(action==='grenade')throwGrenade();if(action==='use')interact();
     // Controller X: use whatever is in reach, reload otherwise.
     if(action==='usereload'){findPrompt();if(prompt?.barrier)tapReload.press();else if(prompt)interact();else reload();}
-    if(action==='weapon'){session.switchWeapon();equipView();}
+    if(action==='weapon'){session.switchWeapon();equipView(true);}
     if(action==='claymore')features.placeClaymore();if(action==='equipment')features.throwMonkey();
     if(action==='attachment'&&session.toggleAttachment())equipView();
   },
@@ -175,14 +175,14 @@ addEventListener('keydown',e=>{
   if(e.code==='KeyR')reload();if(e.code==='KeyV')melee();if(e.code==='KeyG')throwGrenade();if(e.code==='KeyF'||e.code==='KeyE')interact();
   if(e.code==='Digit4')features.placeClaymore();if(e.code==='KeyX')features.throwMonkey();
   if(e.code==='Digit5'&&session.toggleAttachment())equipView();
-  if(e.code==='Digit1'||e.code==='Digit2'){session.switchWeapon(e.code==='Digit1'?0:1);equipView();}
-  if(e.code==='KeyQ'){session.switchWeapon();equipView();}
+  if(e.code==='Digit1'||e.code==='Digit2'){session.switchWeapon(e.code==='Digit1'?0:1);equipView(true);}
+  if(e.code==='KeyQ'){session.switchWeapon();equipView(true);}
   if(e.code==='KeyM'){audio.enabled=!audio.enabled;toast(audio.enabled?'Sound on':'Sound off');}
   if(e.code==='F3'){debugVisible=!debugVisible;$('debug').hidden=!debugVisible;}
   if(e.code==='Escape')ctx.pause();
 });
 addEventListener('keyup',e=>keys.delete(e.code));
-addEventListener('wheel',()=>{if(active){session.switchWeapon();equipView();}});
+addEventListener('wheel',()=>{if(active){session.switchWeapon();equipView(true);}});
 addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const width=innerWidth,height=innerHeight,current=renderer.getSize(new THREE.Vector2());if(current.x===width&&current.y===height)return;camera.aspect=viewCamera.aspect=width/height;camera.updateProjectionMatrix();viewCamera.updateProjectionMatrix();if(csm)csm.updateFrustums();renderer.setSize(width,height);},profile.mobile?150:0);});
 
 function damage(n){
@@ -251,7 +251,7 @@ function shoot(){
   return true;
 }
 function warmViewAudio(){if(view?.ready)audio.warmWeapon(session.def,Object.values(view.rig.data).flatMap(d=>(d.notifies??[]).map(n=>n.name)));}
-async function equipView(){reloadShot=false;await view.equip(session.def);warmViewAudio();if(view.ready)prefetchOtherSlots(session,view,{onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry)});}
+async function equipView(lower=false){reloadShot=false;await view.equip(session.def,{lower});warmViewAudio();if(view.ready)prefetchOtherSlots(session,view,{onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry)});}
 function reload(){if(!view.ready)return;const empty=session.weapon.mag===0;if(session.reload()){burstLeft=0;ads=false;lastReloadSerial=session.reloadSerial;view.reload(empty,session.reloadDuration,session.reloadStage);}}
 function melee(){
   if(!active||session.busy||session.weaponUnavailable||features.events.room||!view.ready)return false;

@@ -76,6 +76,13 @@ export class Rig {
     a.stop().reset().setEffectiveWeight(1).setLoop(loop?THREE.LoopRepeat:THREE.LoopOnce,loop?Infinity:1);
     a.clampWhenFinished=!loop;a.timeScale=speed;if(fade)a.fadeIn(fade);a.play();this.current=key;this.elapsed=-1e-6;return true;
   }
+  playReverse(key,speed=1,fade=.05){
+    const a=this.actions[key];if(!a)return false;
+    const old=this.actions[this.current],duration=a.getClip().duration;
+    if(old&&old!==a){if(fade)old.fadeOut(fade);else old.stop();}
+    a.stop().reset().setEffectiveWeight(1).setLoop(THREE.LoopOnce,1);
+    a.clampWhenFinished=true;a.timeScale=-speed;a.time=duration;if(fade)a.fadeIn(fade);a.play();this.current=key;this.elapsed=duration;return true;
+  }
   update(dt){
     const action=this.actions[this.current],data=this.data[this.current],before=this.elapsed;
     if(action){this.elapsed+=dt*action.timeScale;for(const n of data.notifies??[])if(n.time>before&&n.time<=this.elapsed)this.onNotify(n.name,this.current);}
@@ -112,11 +119,35 @@ export class ViewWeapon {
     for(const flash of entry.flashes)flash?.dispose();
     for(const model of [entry.hands,entry.gun,entry.leftGun,...Object.values(entry.knives)])disposeSkeletons(model);
   }
-  async equip(def){
+  lower(){
+    if(this.lowering)return this.lowering.done;
+    const raise=this.ready&&this.rig?.data.raiseAnim;
+    if(!raise)return null;
+    const speed=this.clipSpeed('raiseAnim',this.def.raiseTime)*1.3;
+    if(!this.rig.playReverse('raiseAnim',speed,.05))return null;
+    this.aim=0;this.recoil=0;this.meleeLeft=0;this.meleeType=null;this.sprintBlend=0;this.pendingFx=null;this.mode='putaway';
+    for(const model of Object.values(this.knives))model.visible=false;
+    const lowering={left:raise.duration/speed+.3};
+    lowering.done=new Promise(resolve=>{lowering.resolve=resolve;});
+    this.lowering=lowering;return lowering.done;
+  }
+  tickLowering(dt){
+    const lowering=this.lowering,action=this.rig.actions.raiseAnim;
+    this.pivot.position.set(0,0,0);this.pivot.rotation.set(0,0,0);
+    this.rig.update(dt);this.applyAim(true);lowering.left-=dt;
+    this.root.updateMatrixWorld(true);
+    if(lowering.left<=0||!action||!action.isRunning())this.finishLowering();
+  }
+  finishLowering(){
+    const lowering=this.lowering;if(!lowering)return;
+    this.lowering=null;this.root.visible=false;this.mode='idle';lowering.resolve();
+  }
+  async equip(def,{lower=false}={}){
     const key=def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'');
-    if(this.currentId===key&&this.ready)return;this.currentId=key;this.ready=false;const token=++this.token;
-    this.pivot.visible=false;
-    let entry=await this.prepare(def);
+    if(this.currentId===key&&this.ready)return;this.currentId=key;const token=++this.token;
+    const lowered=lower?this.lower():null;
+    this.ready=false;if(!lowered)this.pivot.visible=false;
+    let [entry]=await Promise.all([this.prepare(def),lowered]);
     // The cache may have pushed this entry out while it loaded (many quick switches): build it again.
     for(let tries=0;entry.released&&tries<2;tries++)entry=await this.prepare(def);
     // A newer switch won while this one loaded: the entry stays cached for the next time it is needed.
@@ -177,6 +208,8 @@ export class ViewWeapon {
     return {root,hands,gun,leftGun,flashes,knives:knives_,hiddenTags,rig,aimTracks,aimDuration,released:false};
   }
   activate(entry,def,cacheKey){
+    if(this.lowering){const lowering=this.lowering;this.lowering=null;lowering.resolve();}
+    entry.root.visible=true;
     const previous=this.activeEntry;
     previous?.rig.mixer.stopAllAction();entry.rig.mixer.stopAllAction();
     // A reused rig still names its last animation; clear it so idle and raise really restart from the rest pose.
@@ -249,6 +282,7 @@ export class ViewWeapon {
   }
   update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0,look=null,camera=null,viewCamera=null,worldScene=null}={}){
     this.updateFx(dt,camera);
+    if(this.lowering){this.tickLowering(dt);return;}
     if(!this.ready)return;
     this.rig.update(dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     const action=this.rig.actions[this.rig.current],finished=!action?.isRunning();

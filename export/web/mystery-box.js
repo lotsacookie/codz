@@ -66,26 +66,36 @@ export class MysteryBox {
     b.model=entry.model;b.wrapper=entry.float;b.float=entry.float;b.wrapper.visible=true;
   }
   hide(b){if(b.wrapper)b.wrapper.visible=false;b.wrapper=null;b.model=null;b.float=null;b.shown=null;}
+  fill(){
+    if(!this.queue){
+      const active=this.world.activeBox?.id,order=[...this.boxes.values()].sort((a,b)=>(b.id===active)-(a.id===active));
+      this.queue=[];for(const b of order)for(const id of Object.keys(this.models))this.queue.push([b,id]);this.queue.reverse();
+    }
+    while(this.queue.length){const [b,id]=this.queue.pop();if(!b.cache?.has(id)){this.display_(b,id);return;}}
+  }
   close(b){b.roll=null;b.closing=.5;this.hide(b);this.audio.event('box/close/close_00',.8,b.display.position);}
   // Compile shaders and upload textures for every display model behind the loading screen.
   async warm(renderer,scenes){
-    const holders=[];
+    const holders=[],culled=[];
     try{
-      for(const b of this.boxes.values()){
-        for(const id of Object.keys(this.models)){const e=this.display_(b,id);if(e){e.float.visible=true;holders.push(e.float);}}
-        break; // materials and geometry are shared between boxes, one box warms them all
+      for(const b of this.boxes.values())for(const id of Object.keys(this.models)){const e=this.display_(b,id);if(e){e.float.visible=true;holders.push(e.float);}}
+      for(const f of holders)f.traverse(o=>{if(o.frustumCulled){o.frustumCulled=false;culled.push(o);}});
+      for(const [scene,camera] of scenes.slice(0,1)){
+        await Promise.race([renderer.compileAsync(scene,camera),new Promise(r=>setTimeout(r,6000))]);
+        renderer.render(scene,camera);
       }
-      for(const [scene,camera] of scenes.slice(0,1))await Promise.race([renderer.compileAsync(scene,camera),new Promise(r=>setTimeout(r,6000))]);
       const seen=new Set();
       for(const f of holders)f.traverse(o=>{for(const m of [o.material].flat())if(m)for(const v of Object.values(m))if(v?.isTexture&&!seen.has(v.source)){seen.add(v.source);renderer.initTexture(v);}});
     }catch(error){console.warn('Mystery box pre-warm skipped',error);}
-    finally{for(const f of holders)f.visible=false;}
+    finally{for(const o of culled)o.frustumCulled=true;for(const f of holders)f.visible=false;}
   }
   update(dt){
     const sale=this.session.effects.fire_sale>this.session.time;
     if(this.world.fireSale!==sale){this.world.fireSale=sale;this.world.updateBox();this.audio.fireSale(sale);}
+    let busy=false;
     for(const b of this.boxes.values()){
       if(b.roll){
+        busy=true;
         const r=b.roll,age=this.session.time-r.started;b.opening=Math.min(.5,b.opening+dt);
         if(this.session.time>=r.time&&!r.ready){r.ready=true;this.show(b,r.teddy?'teddy':r.weapon);this.toast(r.teddy?'The Mystery Box is moving…':(this.data.weapons[r.weapon]??this.data.equipment[r.weapon]).name+' — press F to take',4);
           if(r.teddy){this.session.points+=950;this.audio.event('box/whoosh/whoosh_00',1,b.display.position);}}
@@ -98,6 +108,7 @@ export class MysteryBox {
       const t=b.opening/.5,angle=t*t*(3-2*t)*105*Math.PI/180;
       b.lid.quaternion.copy(b.closed).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),angle));b.glow.material.opacity=t*.2;
     }
+    if(!busy)this.fill();
   }
   reset(){for(const b of this.boxes.values()){b.roll=null;b.opening=b.closing=0;this.hide(b);b.lid.quaternion.copy(b.closed);b.glow.material.opacity=0;}this.moves=this.uses=0;this.world.openBoxes.clear();this.world.fireSale=false;this.world.updateBox();this.audio.fireSale(false);}
   snapshot(){return [...this.boxes.values()].map(b=>({id:b.id,open:b.opening/.5,shown:b.shown,roll:b.roll?{weapon:b.roll.weapon,ready:b.roll.ready,teddy:b.roll.teddy,time:b.roll.time,expires:b.roll.expires}:null}));}
