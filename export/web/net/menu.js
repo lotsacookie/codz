@@ -83,7 +83,11 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
         const map = maps.find(m => m.id === select.value);
         host = new HostLobby(network, { name: label.value, playerName: playerName(), map: map.id, mapLabel: map.label, password: password.value.trim() }).open();
         lobbyView({ code: host.code, map: map.label, isHost: true, locked: !!password.value.trim() });
-      } catch { create.disabled = false; }
+      } catch (error) {
+        console.error(error);
+        if (net) { await teardown(); say(`Could not start the game: ${error?.message ?? 'unknown error'}`, true); }
+        create.disabled = false;
+      }
     }, 'mp-big');
     body.replaceChildren(label, select, password, create);
   }

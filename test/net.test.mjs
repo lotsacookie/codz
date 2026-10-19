@@ -175,3 +175,27 @@ test('RemotePlayers interpolates between samples, wraps yaw the short way and dr
   remote.setRoster([{ id: 'me' }], 'me');
   assert.equal(remote.players.size, 0);
 });
+
+test('lobbies work with the real browser timer functions, which throw Illegal invocation when called as methods of another object', async () => {
+  const saved = { si: globalThis.setInterval, ci: globalThis.clearInterval, st: globalThis.setTimeout, ct: globalThis.clearTimeout };
+  const strict = native => function (...args) {
+    if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
+    return native.apply(globalThis, args);
+  };
+  globalThis.setInterval = strict(saved.si); globalThis.clearInterval = strict(saved.ci);
+  globalThis.setTimeout = strict(saved.st); globalThis.clearTimeout = strict(saved.ct);
+  try {
+    const net = fakeNetwork();
+    const host = new HostLobby(net.makeNet('host1'), { name: 'Real timers', playerName: 'Hosty', map: 'kino', mapLabel: 'Kino der Toten', code: 'TIMR2' }).open();
+    const browser = new ServerBrowser(net.makeNet('viewer')).open();
+    const client = new ClientLobby(net.makeNet('guest1'), { code: 'TIMR2', playerName: 'Guesty' });
+    const welcome = await client.connect();
+    assert.equal(welcome.code, 'TIMR2');
+    await net.settle();
+    assert.equal(browser.list().length, 1);
+    await client.close(); await browser.close(); await host.close();
+  } finally {
+    globalThis.setInterval = saved.si; globalThis.clearInterval = saved.ci;
+    globalThis.setTimeout = saved.st; globalThis.clearTimeout = saved.ct;
+  }
+});

@@ -7,7 +7,7 @@ import { openChannel } from './transport.js';
  * players into its own game room and keeps the roster. The host is authoritative for who is in the game.
  */
 export class HostLobby {
-  constructor(net, { name, playerName, map, mapLabel, max = MAX_PLAYERS, password = '', code = makeCode(), setInterval: si = globalThis.setInterval, clearInterval: ci = globalThis.clearInterval } = {}) {
+  constructor(net, { name, playerName, map, mapLabel, max = MAX_PLAYERS, password = '', code = makeCode(), setInterval: si = (...args) => globalThis.setInterval(...args), clearInterval: ci = (...args) => globalThis.clearInterval(...args) } = {}) {
     this.net = net; this.code = normalizeCode(code); this.password = password || '';
     this.info = { name, map, mapLabel, max, host: cleanName(playerName), locked: !!password };
     this.started = false; this.round = 0; this.listeners = new Set(); this.timers = { si, ci };
@@ -66,7 +66,7 @@ export class HostLobby {
 
 /** Joins a lobby by code (or from a browser entry) and follows the host's roster and start message. */
 export class ClientLobby {
-  constructor(net, { code, playerName, password = '', timeoutMs = 15000, setTimeout: st = globalThis.setTimeout, clearTimeout: ct = globalThis.clearTimeout } = {}) {
+  constructor(net, { code, playerName, password = '', timeoutMs = 15000, setTimeout: st = (...args) => globalThis.setTimeout(...args), clearTimeout: ct = (...args) => globalThis.clearTimeout(...args) } = {}) {
     this.net = net; this.code = normalizeCode(code); this.password = password || ''; this.playerName = cleanName(playerName);
     this.timeoutMs = timeoutMs; this.timers = { st, ct };
     this.roster = []; this.hostId = null; this.welcome = null; this.channel = null; this.listeners = new Set();
@@ -105,7 +105,7 @@ export class ServerBrowser {
   constructor(net, directory = new Directory()) {
     this.net = net; this.directory = directory; this.channel = null; this.pruneTimer = null;
   }
-  open({ setInterval: si = globalThis.setInterval } = {}) {
+  open({ setInterval: si = (...args) => globalThis.setInterval(...args) } = {}) {
     this.channel = openChannel(this.net, DIRECTORY_ROOM);
     this.channel.on('listing', (raw, from) => this.directory.announce(from, raw));
     this.channel.onLeave(id => this.directory.remove(id));
@@ -114,7 +114,7 @@ export class ServerBrowser {
   }
   list() { return this.directory.list(); }
   onChange(fn) { return this.directory.onChange(fn); }
-  async close() { clearInterval(this.pruneTimer); await this.channel?.leave(); }
+  async close() { globalThis.clearInterval(this.pruneTimer); await this.channel?.leave(); }
 }
 
 export const newLobbyName = playerName => `${cleanName(playerName)}'s game`;
