@@ -7,6 +7,7 @@ import { CameraEffects } from './camera-effects.js';
 import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
+import { applyScopeLens, updateScopeLens } from './scope-lens.js';
 
 const loader=new GLTFLoader(assetManager), models=new Map(), clips=new Map();
 export async function loadModel(url){if(!url)return null;if(!models.has(url))models.set(url,assets.buffer(url).then(bytes=>loader.parseAsync(bytes,THREE.LoaderUtils.extractUrlBase(assets.abs(url)))).then(gltf=>gltf.scene));return clone(await models.get(url));}
@@ -206,6 +207,7 @@ export class ViewWeapon {
       if(b.pos)aimTracks.push({node,property:'position',sample:new THREE.VectorKeyframeTrack('',b.pos.frames.map(f=>f/aimData.fps),b.pos.values).createInterpolant()});
       if(b.rot)aimTracks.push({node,property:'quaternion',sample:new THREE.QuaternionKeyframeTrack('',b.rot.frames.map(f=>f/aimData.fps),b.rot.values).createInterpolant()});
     }
+    applyScopeLens(gun);if(leftGun)applyScopeLens(leftGun);
     root.traverse(o=>{o.frustumCulled=false;});
     return {root,hands,gun,leftGun,flashes,knives:knives_,hiddenTags,rig,aimTracks,aimDuration,released:false};
   }
@@ -300,6 +302,7 @@ export class ViewWeapon {
     const aiming=ads&&['idle','fire'].includes(this.mode);
     this.aim=THREE.MathUtils.clamp(this.aim+(aiming?dt/Math.max(.01,this.def.adsInTime):-dt/Math.max(.01,this.def.adsOutTime)),0,1);
     this.applyAim(!['idle','fire'].includes(this.mode));
+    updateScopeLens(this.aim,viewCamera?.aspect);
     this.recoil=Math.max(0,this.recoil-dt*8);
     const bob=moving&&this.mode!=='melee'?(1-this.aim)*.13:0;
     this.pivot.position.set(Math.sin(time*(sprint?13:9))*bob,Math.cos(time*(sprint?26:18))*bob*.7,this.recoil*.25);
