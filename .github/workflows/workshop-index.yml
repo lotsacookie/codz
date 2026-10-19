@@ -1,0 +1,41 @@
+name: Workshop index
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: workshop-index
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Build the Black Ops 3 Workshop index
+        run: node .tools/build-workshop-index.mjs
+
+      - name: Commit the index when it changed
+        run: |
+          if git diff --quiet -- export/web/maps/workshop/index.json; then
+            echo "Index unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add export/web/maps/workshop/index.json
+          git commit -m "Update Black Ops 3 Workshop index"
+          git push

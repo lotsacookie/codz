@@ -1,29 +1,31 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { browseUrl, parseBrowse, searchWorkshop, clearWorkshopCache, normalizeParams, workshopResponse, WorkshopError } from '../functions/api/workshop.js';
+import { browseUrl, parseBrowse, crawl } from '../.tools/lib/workshop-crawl.mjs';
 import { workshop, PROVIDERS } from '../export/web/custom-maps/providers.js';
 
 const card = (id, title, author, rating = 5) => `<div class="workshopItem"><a data-panel="{&quot;focusable&quot;:false}" href="https://steamcommunity.com/sharedfiles/filedetails/?id=${id}&amp;searchtext=zombies" class="ugc" data-publishedfileid="${id}"><div class="workshopItemPreviewHolder  "><img class="workshopItemPreviewImage " src="https://images.steamusercontent.com/ugc/${id}/?imw=268&amp;imh=268&amp;ima=fit"></div><div class="workshopItemTitle ellipsis">${title}</div></a><div class="workshopItemAuthorName ellipsis">by&nbsp;<a class="workshop_author_link" href="https://steamcommunity.com/id/x/myworkshopfiles/">${author}</a></div><img class="fileRating" src="https://community.fastly.steamstatic.com/public/images/sharedfiles/${rating}-star_large.png"></div>`;
 
-const listing = items => `<html><body><div class="workshopBrowsePagingInfo">1-18 of 3,572 entries</div><div class="workshopBrowseItems">${items.join('')}</div><div class="workshopBrowsePagingControls"><a class='pagelink' href="x&amp;p=2">2</a><a class='pagelink' href="x&amp;p=199">199</a></div></body></html>`;
+const listing = items => `<html><body><div class="workshopBrowsePagingInfo">1-30 of 3,572 entries</div><div class="workshopBrowseItems">${items.join('')}</div><div class="workshopBrowsePagingControls"><a class='pagelink' href="x&amp;p=2">2</a><a class='pagelink' href="x&amp;p=120">120</a></div></body></html>`;
 
 const HTML = listing([card('1111111', 'Zombies &amp; Co', 'Ann'), card('2222222', 'Bunker Run', 'Bob', 3)]);
 
-function fakeSteam({ html = HTML, details = [], browseStatus = 200, detailsFail = false } = {}) {
+const DETAILS = [{ publishedfileid: '1111111', result: 1, title: 'Fallback', subscriptions: 1500, file_size: '2097152', time_updated: 1700000000, tags: [{ tag: 'Map' }, { tag: 'Zombies' }] }];
+
+function fakeSteam(pages) {
   const calls = [];
-  const fetchImpl = async url => {
+  const fetchImpl = async (url, options = {}) => {
     calls.push(String(url));
     if (String(url).includes('GetPublishedFileDetails')) {
-      if (detailsFail) throw new Error('offline');
-      return { ok: true, json: async () => ({ response: { publishedfiledetails: details } }) };
+      const ids = [...new URLSearchParams(options.body).entries()].filter(([key]) => key.startsWith('publishedfileids')).map(([, id]) => id);
+      return { ok: true, json: async () => ({ response: { publishedfiledetails: DETAILS.filter(entry => ids.includes(entry.publishedfileid)) } }) };
     }
-    if (browseStatus !== 200) return { ok: false, status: browseStatus, headers: new Headers({ 'retry-after': '30' }), text: async () => '' };
-    return { ok: true, status: 200, url: String(url), text: async () => html };
+    const query = new URL(url).searchParams;
+    const reply = pages(query.get('browsesort'), Number(query.get('p')), calls.length);
+    if (typeof reply === 'number') return { ok: false, status: reply, headers: new Headers({ 'retry-after': '7' }), text: async () => '' };
+    return { ok: true, status: 200, text: async () => reply };
   };
   return { fetchImpl, calls };
 }
-
-const DETAILS = [{ publishedfileid: '1111111', result: 1, title: 'Fallback', subscriptions: 1500, file_size: '2097152', time_updated: 1700000000, tags: [{ tag: 'Map' }, { tag: 'Zombies' }] }];
 
 test('browse URLs target Black Ops 3 and need no key', () => {
   const searched = new URL(browseUrl({ query: 'kino der', page: 3 }));
@@ -34,8 +36,7 @@ test('browse URLs target Black Ops 3 and need no key', () => {
   assert.ok(!searched.searchParams.has('key'));
   const popular = new URL(browseUrl({ page: 1 }));
   assert.deepEqual([popular.searchParams.get('browsesort'), popular.searchParams.get('days'), popular.searchParams.has('searchtext')], ['trend', '-1', false]);
-  assert.deepEqual(normalizeParams({ query: '  a   b ', page: '9999' }), { query: 'a b', page: 500 });
-  assert.deepEqual(normalizeParams({ query: null, page: 'x' }), { query: '', page: 1 });
+  assert.equal(new URL(browseUrl({ sort: 'mostrecent' })).searchParams.get('browsesort'), 'mostrecent');
 });
 
 test('the browse page parser reads ids, titles, authors, art, rating and paging', () => {
@@ -43,77 +44,77 @@ test('the browse page parser reads ids, titles, authors, art, rating and paging'
   assert.deepEqual(parsed.items.map(item => [item.id, item.name, item.author, item.rating]), [['1111111', 'Zombies & Co', 'Ann', 5], ['2222222', 'Bunker Run', 'Bob', 3]]);
   assert.equal(parsed.items[0].thumb, 'https://images.steamusercontent.com/ugc/1111111/?imw=268&imh=268&ima=fit');
   assert.equal(parsed.total, 3572);
-  assert.equal(parsed.linkedPages, 199);
+  assert.equal(parsed.linkedPages, 120);
   assert.deepEqual(parseBrowse('<html></html>').items, []);
 });
 
-test('searches merge public file details, page, and are served from cache the second time', async () => {
-  clearWorkshopCache();
-  const { fetchImpl, calls } = fakeSteam({ details: DETAILS });
-  const result = await searchWorkshop({ query: 'zombies', page: 1 }, { fetchImpl });
-  assert.equal(result.pages, 199);
-  assert.equal(result.total, 3572);
-  assert.deepEqual([result.items[0].subscribers, result.items[0].size, result.items[0].tags], [1500, 2097152, ['Map', 'Zombies']]);
-  assert.equal(result.items[1].subscribers, 0);
-  assert.equal(calls.length, 2);
-  await searchWorkshop({ query: 'ZOMBIES', page: 1 }, { fetchImpl });
-  assert.equal(calls.length, 2);
-  await Promise.all([searchWorkshop({ query: 'other' }, { fetchImpl }), searchWorkshop({ query: 'other' }, { fetchImpl })]);
-  assert.equal(calls.length, 4);
+test('the crawler merges lists, dedupes, adds public details and stops at an empty page', async () => {
+  const { fetchImpl, calls } = fakeSteam((sort, page) => {
+    if (sort === 'trend') return page === 1 ? HTML : page === 2 ? listing([card('3333333', 'Third', 'Cy')]) : listing([]);
+    return listing([card('3333333', 'Third', 'Cy'), card('4444444', 'Fourth', 'Di')]);
+  });
+  const sleeps = [];
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 5 }, { sort: 'mostrecent', pages: 1 }], fetchImpl, sleep: async ms => sleeps.push(ms), delay: 5 });
+  assert.deepEqual(items.map(item => item.id), ['1111111', '2222222', '3333333', '4444444']);
+  assert.deepEqual([items[0].subscribers, items[0].size, items[0].tags], [1500, 2097152, ['Map', 'Zombies']]);
+  assert.equal(items[1].subscribers, 0);
+  assert.equal(calls.filter(url => url.includes('steamcommunity.com')).length, 4);
+  assert.equal(calls.filter(url => url.includes('GetPublishedFileDetails')).length, 1);
+  assert.ok(sleeps.every(ms => ms === 5));
 });
 
-test('a failed details lookup still returns the scraped results', async () => {
-  clearWorkshopCache();
-  const { fetchImpl } = fakeSteam({ detailsFail: true });
-  const result = await searchWorkshop({ query: 'zombies' }, { fetchImpl });
-  assert.deepEqual(result.items.map(item => item.name), ['Zombies & Co', 'Bunker Run']);
+test('a rate limit waits for the Retry-After time, then carries on', async () => {
+  const { fetchImpl } = fakeSteam((sort, page, call) => (call === 1 ? 429 : HTML));
+  const sleeps = [];
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 1 }], fetchImpl, sleep: async ms => sleeps.push(ms) });
+  assert.equal(items.length, 2);
+  assert.equal(sleeps[0], 7000);
 });
 
-test('a rate limit is reported once and not hammered again for a minute', async () => {
-  clearWorkshopCache();
-  let clock = 0;
-  const limited = fakeSteam({ browseStatus: 429 });
-  await assert.rejects(searchWorkshop({ query: 'zombies' }, { fetchImpl: limited.fetchImpl, now: () => clock }), error => error instanceof WorkshopError && error.status === 503 && error.retryAfter === 30);
-  await assert.rejects(searchWorkshop({ query: 'zombies' }, { fetchImpl: limited.fetchImpl, now: () => clock }), WorkshopError);
-  assert.equal(limited.calls.length, 1);
-  clock = 61000;
-  const healthy = fakeSteam();
-  assert.equal((await searchWorkshop({ query: 'zombies' }, { fetchImpl: healthy.fetchImpl, now: () => clock })).items.length, 2);
+test('a Steam outage backs off, gives up on that list and keeps what it has', async () => {
+  const { fetchImpl } = fakeSteam((sort, page) => (page === 1 ? HTML : 500));
+  const sleeps = [];
+  const log = [];
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 3 }], fetchImpl, sleep: async ms => sleeps.push(ms), delay: 1, log: message => log.push(message) });
+  assert.equal(items.length, 2);
+  assert.deepEqual(sleeps.filter(ms => ms > 1000), [7000, 7000, 7000, 7000]);
+  assert.ok(log.some(message => /kept answering 500/.test(message)));
 });
 
-test('an age check page becomes a readable error', async () => {
-  clearWorkshopCache();
-  const { fetchImpl } = fakeSteam({ html: '<html><body><div id="agegate">Please enter your birth date</div></body></html>' });
-  await assert.rejects(searchWorkshop({ query: 'zombies' }, { fetchImpl }), /age check/);
+test('an age check page is reported and yields nothing', async () => {
+  const { fetchImpl } = fakeSteam(() => '<html><body><div id="agegate">Please enter your birth date</div></body></html>');
+  const log = [];
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 2 }], fetchImpl, sleep: async () => {}, log: message => log.push(message) });
+  assert.deepEqual(items, []);
+  assert.ok(log.some(message => /age check/.test(message)));
 });
 
-test('the endpoint answers JSON with cache headers, and errors without caching', async () => {
-  clearWorkshopCache();
-  const ok = await workshopResponse(new URL('http://x.test/api/workshop?q=zombies&page=1'), { fetchImpl: fakeSteam().fetchImpl });
-  assert.equal(ok.status, 200);
-  assert.match(ok.headers.get('cache-control'), /max-age=600/);
-  assert.equal((await ok.json()).items.length, 2);
-  clearWorkshopCache();
-  const limited = await workshopResponse(new URL('http://x.test/api/workshop?q=zombies'), { fetchImpl: fakeSteam({ browseStatus: 429 }).fetchImpl });
-  assert.deepEqual([limited.status, limited.headers.get('cache-control'), limited.headers.get('retry-after')], [503, 'no-store', '30']);
-  assert.match((await limited.json()).error, /rate limiting/);
-});
+const INDEX = {
+  appId: 311210,
+  generated: '2026-10-18T06:17:00.000Z',
+  items: Array.from({ length: 15 }, (_, i) => ({ id: String(1000000 + i), name: i === 0 ? 'Kino Remix' : `Map ${i}`, author: i === 0 ? 'Ann' : 'Bob', thumb: `img${i}`, subscribers: i === 0 ? 1500 : 0, size: i === 0 ? 2097152 : 0, tags: i === 0 ? ['Map', 'Zombies', 'Extra'] : ['Mod'] })),
+};
 
-test('the Workshop provider lists maps, pages through results and opens the Steam page', async () => {
+test('the Workshop provider reports a missing or empty list, then searches and pages the index', async () => {
   assert.ok(PROVIDERS.includes(workshop) && !workshop.needsToken);
+  await assert.rejects(workshop.search({ fetchImpl: async () => ({ ok: false, status: 404 }) }), /failed \(404\)/);
+  await assert.rejects(workshop.search({ fetchImpl: async () => ({ ok: true, json: async () => ({ items: [] }) }) }), /has not been generated/);
   const seen = [];
-  const body = { items: [{ id: '1111111', name: 'Zombies & Co', author: 'Ann', thumb: 'img', subscribers: 1500, size: 2097152, tags: ['Map', 'Zombies', 'Extra'] }], page: 1, pages: 2 };
   const fetchImpl = async url => {
     seen.push(String(url));
-    return { ok: true, json: async () => body };
+    return { ok: true, json: async () => INDEX };
   };
-  const first = await workshop.search({ query: ' kino ', fetchImpl });
-  assert.match(seen[0], /\/api\/workshop\?q=kino&page=1$/);
-  assert.deepEqual([first.items[0].name, first.items[0].author, first.items[0].thumb, first.next], ['Zombies & Co', 'Ann', 'img', '2']);
+  const first = await workshop.search({ fetchImpl });
+  assert.match(seen[0], /\/maps\/workshop\/index\.json$/);
+  assert.equal(first.items.length, 12);
+  assert.equal(first.next, '12');
+  assert.deepEqual([first.items[0].name, first.items[0].author, first.items[0].thumb, first.items[0].source], ['Kino Remix', 'Ann', 'img0', 'workshop']);
   assert.equal(first.items[0].detail, 'Map, Zombies · 1.5k subscribers · 2.0 MB');
-  const last = await workshop.search({ query: 'kino', cursor: '2', fetchImpl });
-  assert.equal(last.next, null);
-  assert.deepEqual(workshop.play({ id: '1111111' }), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=1111111' });
-  await assert.rejects(workshop.search({ fetchImpl: async () => ({ ok: false, status: 503, json: async () => ({ error: 'Slow down.' }) }) }), /Slow down\./);
-  await assert.rejects(workshop.search({ fetchImpl: async () => ({ ok: false, status: 500, json: async () => { throw new Error('bad'); } }) }), /failed \(500\)/);
+  const second = await workshop.search({ cursor: '12', fetchImpl });
+  assert.deepEqual([second.items.length, second.next], [3, null]);
+  assert.equal(seen.length, 1);
+  const found = await workshop.search({ query: ' zombies  KINO ', fetchImpl });
+  assert.deepEqual(found.items.map(item => item.name), ['Kino Remix']);
+  assert.deepEqual((await workshop.search({ query: 'nothing here', fetchImpl })).items, []);
+  assert.deepEqual(workshop.play({ id: '1000000' }), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=1000000' });
 });
