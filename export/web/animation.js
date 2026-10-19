@@ -51,7 +51,7 @@ export function makeClip(root, data, locomotion=false, options={}){
         // as absolute values they snap the bone to its parent's origin instead of its real rest position, which
         // dropped the slide and left every gun's magazine out of its well and out of the hand. Keep the keyed
         // motion and anchor it to the bone's rest position. A no-op when the rest position is already ~0.
-        if(gun&&values.length>=3&&Math.hypot(values[0],values[1],values[2])<.01&&node.position.length()>.05){
+        if(gun&&values.length>=3&&(Math.hypot(values[0],values[1],values[2])<.01||options.offsetBones?.has(b.name))&&node.position.length()>.05){
           const rest=node.position;
           for(let i=0;i<values.length;i+=3){values[i]+=rest.x;values[i+1]+=rest.y;values[i+2]+=rest.z;}
           noteAnchored(options,b.name+'.pos');
@@ -194,7 +194,8 @@ export class ViewWeapon {
     for(const name of def.hideTags??[]){const bone=gun.getObjectByName(name);if(bone){bone.scale.setScalar(.000001);hiddenTags.push(name);}}
     root.matrixAutoUpdate=false;root.matrix.copy(cameraBasis);
     const rig=new Rig(root,(name)=>this.onSound(name,this.meleeType?this.data.melee[this.meleeType]:this.def));
-    rig.options={};
+    rig.options={offsetBones:new Set()};
+    for(const [,clip] of entries)for(const b of clip.bones??[])if(b.pos&&b.pos.values.length>=3&&Math.hypot(b.pos.values[0],b.pos.values[1],b.pos.values[2])<.01)rig.options.offsetBones.add(b.name);
     for(const [key,clip] of [...entries,...meleeEntries])rig.add(key,clip);
     // ADS is a separate native animation of tag_torso. Its first frame also
     // defines each gun's HIP pose; the arms' bind torso is only right for M1911.
