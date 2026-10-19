@@ -559,9 +559,19 @@ list.addEventListener('click', event => {
   if (menu && !menu.disabled) { lastMenuSource = menu.dataset.source; customMenu.open(menu.dataset.source); }
 });
 
+const detailEls = { art: document.querySelector('#map-detail img'), title: document.querySelector('#map-detail .detail-title'), desc: document.querySelector('#map-detail .detail-desc'), info: document.querySelector('#map-detail .detail-info') };
+function showMapDetail(button) {
+  const art = button.dataset.loadscreen || button.dataset.art || '';
+  detailEls.art.hidden = !art;
+  if (art && detailEls.art.getAttribute('src') !== art) detailEls.art.src = art;
+  detailEls.title.textContent = button.dataset.label || button.querySelector('strong')?.textContent || '';
+  detailEls.desc.textContent = button.querySelector('span')?.textContent ?? '';
+  detailEls.info.textContent = button.dataset.info ?? '';
+}
 function selectMap(button) {
   const chosen = button.closest('li');
   for (const item of list.children) item.classList.toggle('selected', item === chosen);
+  showMapDetail(button);
 }
 for (const type of ['pointerover', 'focusin']) {
   list.addEventListener(type, event => {

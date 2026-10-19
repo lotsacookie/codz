@@ -31,4 +31,4 @@ fs.writeFileSync(indexPath, html);
 const packPath = path.resolve(import.meta.dirname, 'build-asset-pack.mjs');
 const pack = fs.readFileSync(packPath, 'utf8');
 if (!pack.includes(`'${id}'`)) fs.writeFileSync(packPath, pack.replace(/(MAP_PACKS = \[)([^\]]*)\]/, (_, a, b) => `${a}${b}, '${id}']`));
-console.log(`Added ${id}. Next: bake data into export/web/${id}/, run npm run build:pack, add art/mapselect-* images if wanted, update test/map-list.test.mjs.`);
+console.log(`Added ${id}. Next: bake data into export/web/${id}/, run npm run build:pack, update test/map-list.test.mjs.`);

@@ -45,7 +45,7 @@ function includeModule(relative) {
 includeModule('shell.js');
 includeModule('maps/kino.js');
 for (const file of ['shell.css', 'touch-controls.css', 'hud.css', 'game-data.json', 'navigation.bin',
-  'art/mapselect-supported.webp', 'art/mapselect-row-kino.webp', 'art/mapselect-hl-kino.webp', 'art/mapselect-panel-kino.webp', 'art/loadscreen_zombie_theater.webp']) copy(file);
+  'art/loadscreen_zombie_theater.webp']) copy(file);
 const kinoOnlyPage = readFileSync(path.join(source, 'index.html'), 'utf8')
   .replace(/\s*<li><button type="button" data-map="(?!kino")[^"]*"[\s\S]*?<\/li>/g, '');
 assert(kinoOnlyPage.includes('data-map="kino"') && !/data-map="(?!kino")/.test(kinoOnlyPage), 'Staged map list must contain only Kino');

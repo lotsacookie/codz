@@ -62,3 +62,11 @@ test('the loader fixes hold: Moon uses the resilient map loader and viewers keep
   const runtime = readFileSync(path.join(web, 'runtime-assets.js'), 'utf8');
   assert.ok(!runtime.includes(".replace('/textures/', '/textures-mobile/')"));
 });
+
+test('the launcher is a flat button list with one Custom Maps entry and a detail panel, and no image rows', () => {
+  assert.ok(!html.includes('mapselect-'), 'old image menu is gone');
+  assert.deepEqual([...html.matchAll(/<button type="button" data-menu="([^"]+)"/g)].map(match => match[1]), ['custom-maps']);
+  assert.ok(!/NZ:P Maps<\/strong>|Black Ops 3 Workshop<\/strong>/.test(html), 'NZ:P and Workshop live inside Custom Maps');
+  assert.ok(html.includes('id="map-detail"'));
+  assert.ok(!existsSync(path.join(web, 'art', 'mapselect-supported.webp')));
+});

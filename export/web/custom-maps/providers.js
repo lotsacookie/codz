@@ -119,7 +119,8 @@ export const bsp = {
         name: map.title,
         author: map.author,
         license: '',
-        detail: [map.description, `${map.perks ?? 0} perks`, sizeLabel(map.size)].filter(Boolean).join(' · '),
+        description: map.description ?? '',
+        detail: [`${map.perks ?? 0} perks`, sizeLabel(map.size)].filter(Boolean).join(' · '),
         thumb: map.art ? new URL(`../${map.art}`, import.meta.url).href : '',
         art: map.art ? new URL(`../${map.art}`, import.meta.url).href : '',
         url: new URL(`../maps/bsp/${map.file}`, import.meta.url).href,
@@ -192,6 +193,7 @@ const workshopItem = entry => ({
   name: entry.name,
   author: entry.author ?? '',
   license: '',
+  description: entry.description ?? '',
   detail: [
     entry.source ? 'source repo: loads here' : '',
     (entry.tags ?? []).slice(0, 2).join(', '),

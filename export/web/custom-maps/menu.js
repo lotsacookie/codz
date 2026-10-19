@@ -3,6 +3,7 @@ import { isGithubRepoUrl } from './iwmap-remote.js';
 
 const TOKEN_KEY = 'zombies.sketchfabToken';
 const SOURCE_KEY = 'zombies.customSource';
+const SHORT_LABELS = { bsp: 'NZ:P Maps', workshop: 'BO3 Workshop', polyhaven: 'Poly Haven', khronos: 'glTF Samples', sketchfab: 'Sketchfab' };
 
 const store = {
   get(key) { try { return localStorage.getItem(key) ?? ''; } catch { return ''; } },
@@ -23,25 +24,42 @@ function el(tag, props = {}, ...children) {
 export function createCustomMenu({ root, onPlay, onClose }) {
   const state = { provider: providerById(store.get(SOURCE_KEY)), cursors: [null], page: 0, items: [], run: 0, loaded: false };
 
-  const source = el('select', { class: 'cm-source', 'aria-label': 'Model source' });
-  for (const provider of PROVIDERS) source.append(el('option', { value: provider.id, text: provider.label }));
-  source.value = state.provider.id;
+  const tabs = el('div', { class: 'cm-tabs', role: 'group', 'aria-label': 'Map source' });
+  for (const provider of PROVIDERS) tabs.append(el('button', { type: 'button', class: 'cm-tab', 'data-source': provider.id, text: SHORT_LABELS[provider.id] ?? provider.label }));
   const query = el('input', { class: 'cm-query', type: 'search', placeholder: 'Search maps, or paste a .glb / .gltf / .bsp / .map link', 'aria-label': 'Search' });
   const token = el('input', { class: 'cm-token', type: 'password', placeholder: 'Sketchfab API token', autocomplete: 'off', 'aria-label': 'Sketchfab API token' });
   token.value = store.get(TOKEN_KEY);
   const search = el('button', { type: 'submit', text: 'SEARCH' });
   const file = el('button', { type: 'button', class: 'cm-file', text: 'OPEN FILE…' });
   const picker = el('input', { type: 'file', accept: '.glb,.gltf,.zip,.bsp,.map', hidden: '' });
-  const form = el('form', { class: 'cm-bar' }, source, query, token, search, file);
+  const form = el('form', { class: 'cm-bar' }, query, token, search, file);
   const status = el('p', { class: 'cm-status', role: 'status' });
-  const grid = el('ul', { class: 'cm-grid' });
+  const grid = el('ul', { class: 'cm-list' });
   const prev = el('button', { type: 'button', text: '◀ PREV' });
   const next = el('button', { type: 'button', text: 'NEXT ▶' });
   const back = el('button', { type: 'button', class: 'cm-back', text: 'BACK' });
   const pageLabel = el('span', { class: 'cm-page' });
   const pager = el('div', { class: 'cm-pager' }, prev, pageLabel, next, back);
-  const panel = el('div', { class: 'cm-panel' }, el('p', { class: 'cm-eyebrow', text: 'ZOMBIES / CUSTOM MAPS' }), el('h2', { text: 'CUSTOM MAPS' }), form, status, grid, pager, picker);
+  const detailImage = el('img', { alt: '', decoding: 'async', referrerpolicy: 'no-referrer' });
+  const detailTitle = el('h3', { class: 'detail-title' });
+  const detailDesc = el('p', { class: 'detail-desc' });
+  const detailInfo = el('p', { class: 'detail-info' });
+  const detail = el('aside', { class: 'cm-detail', 'aria-live': 'polite' }, el('div', { class: 'detail-art' }, detailImage), detailTitle, detailDesc, detailInfo);
+  const menu = el('div', { class: 'cm-menu' }, el('p', { class: 'cm-eyebrow', text: 'ZOMBIES / CUSTOM MAPS' }), el('h2', { text: 'CUSTOM MAPS' }), tabs, form, status, grid, pager);
+  const panel = el('div', { class: 'cm-panel' }, menu, detail, picker);
   root.replaceChildren(panel);
+
+  function showDetail(item) {
+    const art = item?.art || item?.thumb || '';
+    detail.classList.toggle('empty', !item);
+    detailImage.hidden = !art;
+    if (art && detailImage.getAttribute('src') !== art) detailImage.src = art;
+    if (!art) detailImage.removeAttribute('src');
+    detailTitle.textContent = item?.name ?? '';
+    detailDesc.textContent = item ? (item.description || 'No description provided.') : 'Hover a map to see its details.';
+    detailInfo.textContent = item ? [item.author && `By ${item.author}`, item.license, item.detail].filter(Boolean).join(' · ') : '';
+  }
+  showDetail(null);
 
   const setStatus = (text, error = false) => {
     status.textContent = text;
@@ -54,16 +72,15 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     prev.disabled = state.page === 0;
     next.disabled = !state.cursors[state.page + 1];
     pageLabel.textContent = `PAGE ${state.page + 1}`;
+    for (const tab of tabs.children) tab.classList.toggle('active', tab.dataset.source === state.provider.id);
   }
 
   function render() {
     grid.replaceChildren(...state.items.map((item, index) => {
-      const thumb = item.thumb ? el('img', { src: item.thumb, alt: '', loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer' }) : el('i');
-      const meta = [item.author, item.license, item.detail].filter(Boolean).join(' · ');
-      const text = el('div', { class: 'cm-text' }, el('strong', { text: item.name }), el('span', { text: meta }));
-      const button = el('button', { type: 'button', class: 'cm-card', 'data-index': String(index) }, thumb, text);
+      const button = el('button', { type: 'button', class: 'cm-item', 'data-index': String(index) }, el('strong', { text: item.name }));
       return el('li', {}, button);
     }));
+    showDetail(null);
     sync();
   }
 
@@ -132,10 +149,22 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     store.set(TOKEN_KEY, token.value.trim());
     reset();
   });
-  source.addEventListener('change', () => {
-    state.provider = providerById(source.value);
+  tabs.addEventListener('click', event => {
+    const tab = event.target.closest('button[data-source]');
+    if (!tab || tab.dataset.source === state.provider.id) return;
+    state.provider = providerById(tab.dataset.source);
     store.set(SOURCE_KEY, state.provider.id);
     reset();
+  });
+  const preview = event => {
+    const button = event.target.closest?.('button[data-index]');
+    if (button) showDetail(state.items[Number(button.dataset.index)]);
+  };
+  grid.addEventListener('mouseover', preview);
+  grid.addEventListener('focusin', preview);
+  grid.addEventListener('mouseleave', () => {
+    const focused = document.activeElement?.closest?.('button[data-index]');
+    showDetail(focused && grid.contains(focused) ? state.items[Number(focused.dataset.index)] : null);
   });
   file.addEventListener('click', () => picker.click());
   picker.addEventListener('change', () => {
@@ -175,16 +204,17 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     root.hidden = false;
     if (typeof sourceId === 'string' && sourceId !== state.provider.id) {
       state.provider = providerById(sourceId);
-      source.value = state.provider.id;
       state.loaded = false;
     }
     sync();
     if (!state.loaded) reset();
     (grid.querySelector('button') ?? query).focus({ preventScroll: true });
+    document.body.classList.add('custom-open');
   }
 
   function close() {
     root.hidden = true;
+    document.body.classList.remove('custom-open');
     onClose?.();
   }
 
