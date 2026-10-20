@@ -1,5 +1,6 @@
 import { HostLobby, ClientLobby, ServerBrowser, newLobbyName } from './lobby.js';
 import { loadJoinRoom } from './transport.js';
+import { listBuiltinBsp } from '../custom-maps/providers.js';
 import { MAX_PLAYERS, CUSTOM_MAP_ID, cleanName, normalizeCode, cleanCustomMap } from './protocol.js';
 
 const NAME_KEY = 'zombies.playerName';
@@ -75,16 +76,35 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
     show('host'); title.textContent = 'HOST A GAME'; say('');
     const label = el('input', { type: 'text', maxlength: '32', 'aria-label': 'Game name', placeholder: 'Game name' });
     label.value = newLobbyName(playerName());
-    const select = el('select', { 'aria-label': 'Map' }, ...maps.map(m => el('option', { value: m.id, text: m.label })), el('option', { value: CUSTOM_MAP_ID, text: 'Custom map (link)…' }));
+    const select = el('select', { 'aria-label': 'Map' }, ...maps.map(m => el('option', { value: m.id, text: m.label })), el('option', { value: CUSTOM_MAP_ID, text: 'Custom map…' }));
+    const LINK = '__link__';
+    const builtin = el('select', { 'aria-label': 'Custom map', hidden: '' }, el('option', { value: '', text: 'Loading maps…' }));
     const mapUrl = el('input', { type: 'url', maxlength: '500', placeholder: 'Link to a .glb / .gltf / .bsp / .map or GitHub map repo', 'aria-label': 'Custom map link', autocomplete: 'off', hidden: '' });
-    const mapName = el('input', { type: 'text', maxlength: '40', placeholder: 'Map name (optional)', 'aria-label': 'Custom map name', autocomplete: 'off', hidden: '' });
-    select.addEventListener('change', () => { const custom = select.value === CUSTOM_MAP_ID; mapUrl.hidden = mapName.hidden = !custom; if (custom) mapUrl.focus(); });
+    let builtinMaps = null;
+    const syncCustom = () => { mapUrl.hidden = select.value !== CUSTOM_MAP_ID || builtin.value !== LINK; };
+    const loadBuiltin = async () => {
+      if (builtinMaps) return;
+      try {
+        builtinMaps = await listBuiltinBsp();
+        builtin.replaceChildren(...builtinMaps.map(m => el('option', { value: m.id, text: m.title })), el('option', { value: LINK, text: 'Paste a link instead…' }));
+      } catch (error) {
+        console.error(error);
+        builtinMaps = [];
+        builtin.replaceChildren(el('option', { value: LINK, text: 'Paste a link…' }));
+      }
+      syncCustom();
+    };
+    select.addEventListener('change', () => { const custom = select.value === CUSTOM_MAP_ID; builtin.hidden = !custom; syncCustom(); if (custom) loadBuiltin(); });
+    builtin.addEventListener('change', syncCustom);
     const password = el('input', { type: 'text', maxlength: '32', placeholder: 'Password (optional, makes the game private)', 'aria-label': 'Password', autocomplete: 'off' });
     const create = button('CREATE GAME', async () => {
       let customMap = null;
       if (select.value === CUSTOM_MAP_ID) {
-        customMap = cleanCustomMap({ url: mapUrl.value, label: mapName.value.trim() || customMapLabel(mapUrl.value) });
-        if (!customMap) { say('Paste a direct http(s) link to a .glb, .gltf, .bsp or .map file, or a GitHub map repository. Players download it from that link.', true); return; }
+        const chosen = builtinMaps?.find(m => m.id === builtin.value);
+        customMap = chosen
+          ? cleanCustomMap({ builtin: chosen.id, label: chosen.title })
+          : cleanCustomMap({ url: mapUrl.value, label: customMapLabel(mapUrl.value) });
+        if (!customMap) { say(builtinMaps ? 'Pick a map from the list, or paste a direct http(s) link to a .glb, .gltf, .bsp or .map file or a GitHub map repository.' : 'The map list is still loading.', true); return; }
       }
       create.disabled = true;
       try {
@@ -98,7 +118,7 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
         create.disabled = false;
       }
     }, 'mp-big');
-    body.replaceChildren(label, select, mapUrl, mapName, password, create);
+    body.replaceChildren(label, select, builtin, mapUrl, password, create);
   }
 
   function joinForm() {

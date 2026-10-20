@@ -9,6 +9,7 @@ import { MenuNav, getGamepads, padSettings } from './gamepad.js';
 import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
 import { createCustomMenu } from './custom-maps/menu.js';
 import { createMultiplayerMenu } from './net/menu.js';
+import { builtinBspUrl } from './custom-maps/providers.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -86,9 +87,12 @@ const mpMenu = createMultiplayerMenu({
   root: mpRoot,
   get maps() { return coopMaps(); },
   onStart: ({ map, customMap, lobby, ...multiplayer }) => {
-    if (customMap) {   // everyone downloads the host's shared link and builds the same level
+    if (customMap) {   // everyone builds the host's map: built-in maps from their own copy, links by downloading
       globalThis.zombies.multiplayer = { ...multiplayer, lobby };
-      boot({ map: 'custom-map', label: customMap.label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${customMap.label} — Zombies`, loadscreen: 'art/loadscreen_zombie_temple.webp', params: { source: customMap.source, url: customMap.url, multiplayer: { ...multiplayer, lobby } }, custom: true, multiplayer: true });
+      Promise.resolve(customMap.builtin ? builtinBspUrl(customMap.builtin) : customMap.url).then(url => {
+        if (!url) throw new Error(`This build does not have the map "${customMap.label}".`);
+        boot({ map: 'custom-map', label: customMap.label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${customMap.label} — Zombies`, loadscreen: 'art/loadscreen_zombie_temple.webp', params: { source: customMap.source, url, multiplayer: { ...multiplayer, lobby } }, custom: true, multiplayer: true });
+      }).catch(error => { globalThis.zombies.multiplayer = null; lobby?.close?.().catch?.(() => {}); showError(error?.message ?? 'Could not load the map.'); });
       return;
     }
     const entry = registry.get(map);

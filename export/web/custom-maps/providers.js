@@ -132,6 +132,23 @@ export const bsp = {
   play: item => ({ source: 'bsp', url: item.url }),
 };
 
+/** Every built-in NZ:P map as { id, title, file, art }, across all pages of the listing. */
+export async function listBuiltinBsp({ fetchImpl = defaultFetch, signal } = {}) {
+  const out = [];
+  let cursor = null;
+  do {
+    const { items, next } = await bsp.search({ cursor, fetchImpl, signal });
+    out.push(...items.map(item => ({ id: item.id, title: item.name, url: item.url, art: item.art })));
+    cursor = next;
+  } while (cursor);
+  return out;
+}
+
+/** This client's own URL for a built-in map id, or null when this build does not ship it. */
+export async function builtinBspUrl(id, options) {
+  return (await listBuiltinBsp(options)).find(map => map.id === id)?.url ?? null;
+}
+
 // Poly Haven: CC0 glTF models, no key and no sign-up.
 export const polyhaven = {
   id: 'polyhaven',

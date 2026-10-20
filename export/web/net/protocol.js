@@ -38,6 +38,11 @@ export function inferMapSource(url) {
  */
 export function cleanCustomMap(raw) {
   if (!raw || typeof raw !== 'object') return null;
+  // A map that ships with the game is shared by id; each player resolves it to their own copy.
+  if (raw.builtin != null) {
+    const id = String(raw.builtin);
+    return /^[A-Za-z0-9_-]{1,40}$/.test(id) ? { source: 'bsp', builtin: id, label: cleanText(raw.label, 40) || id } : null;
+  }
   const url = String(raw.url ?? '').trim();
   if (url.length > 500 || /[\u0000-\u0020\u007f<>"']/.test(url)) return null;
   const source = inferMapSource(url);

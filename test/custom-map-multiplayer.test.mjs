@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cleanCustomMap, inferMapSource, makeListing, CUSTOM_MAP_ID } from '../export/web/net/protocol.js';
+import { listBuiltinBsp, builtinBspUrl } from '../export/web/custom-maps/providers.js';
 import { HostLobby, ClientLobby } from '../export/web/net/lobby.js';
 
 // Same in-memory Trystero stand-in as net.test.mjs, trimmed to what a host and one client need.
@@ -102,5 +103,33 @@ test('normal maps still start without a custom map', async () => {
   const payload = await started;
   assert.equal(payload.map, 'kino');
   assert.equal(payload.customMap, null);
+  await host.close(); await client.close();
+});
+
+test('built-in maps are shared by id and unsafe ids are dropped', () => {
+  assert.deepEqual(cleanCustomMap({ builtin: '4all', label: 'F4ll' }), { source: 'bsp', builtin: '4all', label: 'F4ll' });
+  assert.equal(cleanCustomMap({ builtin: '../etc/passwd' }), null);
+  assert.equal(cleanCustomMap({ builtin: '<b>' }), null);
+  assert.equal(cleanCustomMap({ builtin: 'a'.repeat(60) }), null);
+});
+
+test('the built-in list is read across pages and ids resolve to this client\'s own copy', async () => {
+  const maps = Array.from({ length: 30 }, (_, i) => ({ id: `m${i}`, title: `Map ${i}`, file: `m${i}.bsp`, size: 1000 }));
+  const fetchImpl = async () => ({ ok: true, json: async () => ({ maps }) });
+  const list = await listBuiltinBsp({ fetchImpl });
+  assert.equal(list.length, 30);
+  assert.match(await builtinBspUrl('m29', { fetchImpl }), /maps\/bsp\/m29\.bsp$/);
+  assert.equal(await builtinBspUrl('nope', { fetchImpl }), null);
+});
+
+test('a built-in map reaches joiners as an id, not a host URL', async () => {
+  const network = fakeNetwork();
+  const host = new HostLobby(network.makeNet('host'), { name: 'F4ll', playerName: 'Ann', map: 'kino', mapLabel: 'Kino', customMap: { builtin: '4all', label: 'F4ll' }, code: 'ABCDE', ...noTimers }).open();
+  const client = new ClientLobby(network.makeNet('guest'), { code: 'ABCDE', playerName: 'Bo' });
+  const started = new Promise(resolve => { client.onStart = resolve; });
+  const joining = client.connect();
+  await network.settle(); await joining;
+  host.start(); await network.settle();
+  assert.deepEqual((await started).customMap, { source: 'bsp', builtin: '4all', label: 'F4ll' });
   await host.close(); await client.close();
 });
