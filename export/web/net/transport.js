@@ -1,16 +1,14 @@
 import { APP_ID, packMessage, unpackMessage } from './protocol.js';
-import { RELAY_REDUNDANCY, buildIce } from './ice.js';
 
 /**
  * A thin, testable wrapper over one Trystero room. `joinRoom` is injected so tests can use a fake network and the
  * real build lazily imports the vendored bundle (WebRTC peers matched through public BitTorrent trackers: no
- * account, API key or server of our own). `turnConfig` adds relay servers so peers on different networks (strict
- * NATs, mobile data, school or office networks) can still connect and see each other's games.
+ * account, API key or server of our own). Games are same-network only: there is no TURN relay, so peers must be able
+ * to reach each other directly (same Wi-Fi/LAN).
  */
 export async function loadJoinRoom() {
   const mod = await import('../vendor/trystero.js');
-  const { servers, source } = await buildIce();
-  return { joinRoom: mod.joinRoom, selfId: mod.selfId, turnConfig: servers, iceSource: source };
+  return { joinRoom: mod.joinRoom, selfId: mod.selfId };
 }
 
 export class Channel {
@@ -45,9 +43,8 @@ export class Channel {
   }
 }
 
-export function openChannel({ joinRoom, selfId, turnConfig }, roomId, { password, onJoinError } = {}) {
-  const config = { appId: APP_ID, relayConfig: { redundancy: RELAY_REDUNDANCY } };
-  if (turnConfig?.length) config.turnConfig = turnConfig;
+export function openChannel({ joinRoom, selfId }, roomId, { password, onJoinError } = {}) {
+  const config = { appId: APP_ID };
   if (password) config.password = password;
   const room = joinRoom(config, roomId, onJoinError ? { onJoinError } : undefined);
   return new Channel(room, selfId);

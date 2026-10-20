@@ -1,6 +1,5 @@
 import { HostLobby, ClientLobby, ServerBrowser, newLobbyName } from './lobby.js';
 import { loadJoinRoom } from './transport.js';
-import { describeProbe, probeIce } from './ice.js';
 import { MAX_PLAYERS, cleanName, normalizeCode } from './protocol.js';
 
 const NAME_KEY = 'zombies.playerName';
@@ -67,24 +66,8 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
       button('HOST A GAME', hostForm, 'mp-big'),
       button('SERVER BROWSER', openBrowser, 'mp-big'),
       button('JOIN WITH CODE', joinForm, 'mp-big'),
-      button('NETWORK CHECK', networkCheck),
-      el('p', { class: 'mp-note', text: `Up to ${MAX_PLAYERS} players. Games connect between browsers on any network, with no account needed.` }),
+      el('p', { class: 'mp-note', text: `Up to ${MAX_PLAYERS} players. Games connect directly between browsers on the same network, with no account needed.` }),
     );
-  }
-
-  async function networkCheck(event) {
-    const trigger = event?.currentTarget;
-    if (trigger) trigger.disabled = true;
-    try {
-      const network = await ensureNet();
-      say('Checking your network…');
-      const result = await probeIce({ servers: network.turnConfig ?? [] });
-      const verdict = describeProbe(result, network.iceSource);
-      say(verdict.text, !verdict.ok);
-    } catch {
-      say('Network check could not run.', true);
-    }
-    if (trigger?.isConnected) trigger.disabled = false;
   }
 
   function hostForm() {
@@ -144,13 +127,13 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
     body.replaceChildren(list, empty);
     try {
       const network = await ensureNet();
-      browser = new ServerBrowser(network).open({ onJoinError: () => say('Found a game but could not connect through your network. Run NETWORK CHECK on the multiplayer menu.', true) });
+      browser = new ServerBrowser(network).open({ onJoinError: () => say('Found a game but could not connect. Multiplayer only works between devices on the same network.', true) });
     } catch { return; }
     say('');
     const render = () => {
       const games = browser?.list() ?? [];
       empty.hidden = games.length > 0;
-      empty.textContent = 'No public games right now. Games on any network show up here within a few seconds. Host one and share the code, or check again in a moment.';
+      empty.textContent = 'No public games right now. Games on your network show up here within a few seconds. Host one and share the code, or check again in a moment.';
       list.replaceChildren(...games.map(game => {
         const full = game.players >= game.max || game.started;
         const join = button(game.started ? 'IN PROGRESS' : full ? 'FULL' : 'JOIN', async () => {
