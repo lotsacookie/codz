@@ -63,3 +63,33 @@ test('coopHealth is zero while downed so teammates are not chased', () => {
   assert.equal(coopHealth({ phase: 'gameover', health: 0, maxHealth: 100 }), 0);
   assert.equal(coopHealth(null), 0);
 });
+
+function fakeEl(tag = 'div') {
+  const el = {
+    tag, id: '', className: '', children: [], parent: null, textContent: '', style: { setProperty() {} },
+    classList: { add(name) { if (!el.className.split(' ').includes(name)) el.className = `${el.className} ${name}`.trim(); } },
+    append(...nodes) { for (const n of nodes) { n.parent?.children.splice(n.parent.children.indexOf(n), 1); n.parent = el; el.children.push(n); } },
+    insertBefore(node, ref) { node.parent?.children.splice(node.parent.children.indexOf(node), 1); node.parent = el; el.children.splice(el.children.indexOf(ref), 0, node); },
+    remove() { el.parent?.children.splice(el.parent.children.indexOf(el), 1); el.parent = null; },
+    closest(sel) { return sel === '.points' && el.className.split(' ').includes('points') ? el : el.parent?.closest?.(sel) ?? null; },
+    get parentElement() { return el.parent; },
+  };
+  return el;
+}
+
+test('teammate points stack in a column above our own points bubble in the bottom-right panel', () => {
+  const hud = fakeEl(), panel = fakeEl(), bubble = fakeEl(), value = fakeEl('strong');
+  panel.id = 'player-panel'; bubble.className = 'points'; value.id = 'points';
+  bubble.append(value); panel.append(bubble); hud.append(panel);
+  const byId = { hud, 'player-panel': panel, points: value };
+  const doc = { getElementById: id => byId[id] ?? null, createElement: fakeEl, body: hud };
+  const { lobby } = fakeLobby();
+  const coop = createCoop({ scene: new THREE.Scene(), camera: new THREE.PerspectiveCamera(), feet: () => new THREE.Vector3(), points: () => 500, config: { lobby, selfId: 'me', roster }, doc });
+  const scores = panel.children.find(c => c.id === 'coop-scores');
+  assert.ok(scores, 'the teammate column lives inside the player panel');
+  assert.equal(scores.children.length, 2, 'one row per teammate');
+  assert.ok(panel.children.indexOf(scores) < panel.children.indexOf(bubble), 'teammates sit above our own points, which stay at the bottom');
+  assert.ok(panel.className.includes('has-coop'));
+  coop.dispose();
+  assert.ok(!panel.children.includes(scores), 'the column is removed on dispose');
+});

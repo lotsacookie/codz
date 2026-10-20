@@ -65,7 +65,10 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       panel.append(row);
       rows.set(entry.id, { row, popups, pts });
     }
-    hudRoot.append(panel);
+    // Teammates stack in a column right above our own points bubble (bottom right), ours staying the bottom one.
+    const own = doc.getElementById?.('points')?.closest?.('.points'), home = own?.parentElement;
+    if (own && home) { home.classList.add('has-coop'); home.insertBefore(panel, own); }
+    else hudRoot.append(panel);
     paintSelfColor();
   }
   const stopPopups = board.onPopup((entry, delta) => { const ui = rows.get(entry.id); if (ui) spawnScorePopup(ui.popups, delta); });
