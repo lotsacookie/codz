@@ -4,6 +4,10 @@ import { Enemies } from './enemies.js';
 const SPAWN_DELAY_FLOOR = .08;
 const LIFT = new THREE.Vector3(0, 30, 0);
 const FALLBACK_BUDGET_MS = 2;
+// Grid routes on big maps can take several ms each; several zombies often come due on the same frame, which
+// used to stack into a visible freeze. Once this much routing time is spent in a frame the remaining zombies
+// keep walking their old path and re-route on the next frame.
+const ROUTE_BUDGET_MS = 3;
 const TRAIL_CANDIDATES = 16;
 const HITCH_MS = 40;
 const STALL_CHECK_S = 1.5;
@@ -23,6 +27,7 @@ export class ShangriEnemies extends Enemies {
   constructor(...args) {
     super(...args);
     this.autoSpawn = false;
+    this.routeBudgetMs = ROUTE_BUDGET_MS;
     this.barriers = [];
     this.candidates = [];
     this.starve = 0;

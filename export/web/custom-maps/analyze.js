@@ -8,6 +8,7 @@ const NEIGHBOURS = [[1, 0], [0, 1], [1, 1], [1, -1]];
 const RING = [[1, 0], [.7071, .7071], [0, 1], [-.7071, .7071], [-1, 0], [-.7071, -.7071], [0, -1], [.7071, -.7071]];
 const MAX_COLUMNS = 14000;
 const MAX_LAYERS = 12;
+const FLAT_LIMIT = 4000000;
 const WINDOW_DEPTH = { outside: 78, inside: 42, repair: 24 };
 
 export const tick = () => new Promise(resolve => setTimeout(resolve, 0));
@@ -96,11 +97,15 @@ export class Grid {
       const list = this.columns.get(key);
       if (list) list.push(i); else this.columns.set(key, [i]);
     });
+    // Flat lookup used by the hot path (nearest / walkable run thousands of times per route); a plain
+    // array read is several times cheaper than a Map.get. Skipped for absurdly large footprints.
+    this.flat = cols * rows <= FLAT_LIMIT ? new Array(cols * rows).fill(null) : null;
+    if (this.flat) for (const [key, list] of this.columns) this.flat[key] = list;
   }
 
   at(col, row) {
     if (col < 0 || row < 0 || col >= this.cols || row >= this.rows) return null;
-    return this.columns.get(row * this.cols + col) ?? null;
+    return this.flat ? this.flat[row * this.cols + col] : (this.columns.get(row * this.cols + col) ?? null);
   }
 
   async link(probe, onProgress = null) {
@@ -190,19 +195,23 @@ export class Grid {
   }
 
   nearest(x, y, z, rings = 3, drop = 80, minSize = 0) {
-    const col = Math.floor((x - this.minX) / this.cell), row = Math.floor((z - this.minZ) / this.cell);
+    const cell = this.cell, col = Math.floor((x - this.minX) / cell), row = Math.floor((z - this.minZ) / cell);
+    const nodes = this.nodes, alive = this.alive, comp = this.comp, sizes = this.sizes;
     let best = -1, bestCost = Infinity;
     for (let r = 0; r <= rings; r++) {
       for (let dr = -r; dr <= r; dr++) {
-        for (let dc = -r; dc <= r; dc++) {
-          if (Math.max(Math.abs(dc), Math.abs(dr)) !== r) continue;
+        // Only the border of the ring: every column when on the top/bottom row, else just the two ends.
+        const step = dr === -r || dr === r ? 1 : 2 * r || 1;
+        for (let dc = -r; dc <= r; dc += step) {
           const list = this.at(col + dc, row + dr);
           if (!list) continue;
-          for (const i of list) {
-            if (!this.alive[i] || (minSize && this.sizes[this.comp[i]] < minSize)) continue;
-            const node = this.nodes[i], dy = Math.abs(node.y - y);
+          for (let k = 0; k < list.length; k++) {
+            const i = list[k];
+            if (!alive[i] || (minSize && sizes[comp[i]] < minSize)) continue;
+            const node = nodes[i], dy = Math.abs(node.y - y);
             if (dy > drop) continue;
-            const cost = Math.hypot(node.x - x, node.z - z) + dy * 1.5;
+            const ex = node.x - x, ez = node.z - z;
+            const cost = Math.sqrt(ex * ex + ez * ez) + dy * 1.5;
             if (cost < bestCost) {
               bestCost = cost;
               best = i;
@@ -210,7 +219,7 @@ export class Grid {
           }
         }
       }
-      if (best >= 0 && bestCost <= (r + .5) * this.cell) break;
+      if (best >= 0 && bestCost <= (r + .5) * cell) break;
     }
     return best;
   }

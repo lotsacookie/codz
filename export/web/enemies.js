@@ -10,6 +10,10 @@ import { nearestTarget } from './net/coop.js';
 const BLEND = .18;                       // seconds to cross-fade walk/attack (was .1)
 const STEER_RATE = smoothingEnabled() ? 12 : Infinity;   // path-direction easing; Infinity = old behaviour
 
+// Scratch vectors for the per-zombie update loop (it runs for every zombie every frame, so allocating here
+// feeds the garbage collector, which shows up as short random freezes).
+const _at = new THREE.Vector3(), _eye = new THREE.Vector3(), _next = new THREE.Vector3(), _iter = [];
+
 export const MELEE_DAMAGE = 60;
 export const MELEE_ATTACK_DIST = 64;
 const SPAWN_DELAY_FLOOR = .08;
@@ -29,6 +33,7 @@ export function rollGait(round, rules = {}, random = Math.random) {
 }
 
 export class Enemies {
+  routeBudgetMs=Infinity;routeSpent=0;
   constructor(scene,world,data,session,{damage,kill,hit,sound,voice}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
   async load(){
     const chars=this.data.characters;
@@ -84,7 +89,9 @@ export class Enemies {
       }
     }
     const localPlayer=player,remotes=this.remoteTargets?.();
-    for(const z of [...this.list]){
+    this.routeSpent=0;
+    _iter.length=0;for(const z of this.list)_iter.push(z);
+    for(let zi=0;zi<_iter.length;zi++){const z=_iter[zi];
       // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
       const player=remotes?.length?nearestTarget(z.root.position,remotes,localPlayer):localPlayer,onRemote=player!==localPlayer;
       z.rig.update(dt);z.growl-=dt;
@@ -109,7 +116,7 @@ export class Enemies {
         if(t===1){z.state='chase';z.repath=0;}continue;
       }
       const approaching=z.state==='approach',lure=approaching?null:this.lureTarget?.(z),goal=approaching?z.barrier.outside:lure??player;
-      const dist=z.root.position.distanceTo(player),at=z.root.position.clone().add(new THREE.Vector3(0,z.kind==='dog'?25:45,0)),eye=player.clone().add(new THREE.Vector3(0,40,0));
+      const dist=z.root.position.distanceTo(player),at=_at.copy(z.root.position),eye=_eye.copy(player);at.y+=z.kind==='dog'?25:45;eye.y+=40;
       if(z.state==='attack'){
         z.attackLeft-=dt;
         if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(!onRemote)this.onDamage(amount);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
@@ -119,19 +126,22 @@ export class Enemies {
         z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
       }
       z.repath-=dt;
-      if(z.repath<=0){
+      if(z.repath<=0&&this.routeSpent>=this.routeBudgetMs){z.repath=.016;}// out of routing time this frame: keep walking the old path and try again next frame
+      else if(z.repath<=0){
+        const routeStart=this.routeBudgetMs<Infinity?performance.now():0;
         z.path=this.world.path(z.root.position,goal);z.pathIndex=1;z.repath=.55+(z.id%5)*.07;z.trail=false;
+        if(routeStart)this.routeSpent+=performance.now()-routeStart;
         // Navmesh could not connect us to the goal: optionally follow the player's breadcrumb trail instead.
         if(this.fallbackPath&&(z.forceFallback||z.path.length<2||z.path.at(-1).distanceTo(goal)>90)){const alt=this.fallbackPath(z,goal);if(alt?.length){z.path=alt;z.pathIndex=0;z.trail=true;}}
       }
       const target=z.path[z.pathIndex];
       if(target){
-        const delta=target.clone().sub(z.root.position),horizontal=Math.hypot(delta.x,delta.z);
+        const rp=z.root.position,delta={x:target.x-rp.x,y:target.y-rp.y,z:target.z-rp.z},horizontal=Math.sqrt(delta.x*delta.x+delta.z*delta.z);
         if(horizontal<(z.pathIndex>=z.path.length-1?10:18)){z.pathIndex++;}
         else{
           const want={x:delta.x/horizontal,y:Math.max(-2,Math.min(2,delta.y/horizontal)),z:delta.z/horizontal};
           z.heading=z.heading?steerDirection(z.heading,want,dt,STEER_RATE):want;
-          const next=z.root.position.clone().addScaledVector(new THREE.Vector3(z.heading.x,z.heading.y,z.heading.z),Math.min(z.speed*dt,horizontal));
+          const stride=Math.min(z.speed*dt,horizontal),next=_next.set(rp.x+z.heading.x*stride,rp.y+z.heading.y*stride,rp.z+z.heading.z*stride);
           for(const other of this.list){if(other===z||other.state==='barricade')continue;const op=other.root.position,sx=next.x-op.x,sz=next.z-op.z,d=Math.sqrt(sx*sx+sz*sz);if(d<29&&d>.01){const k=(29-d)/d*dt*2;next.x+=sx*k;next.z+=sz*k;}}
           if(!Number.isFinite(next.x+next.y+next.z)){z.heading=null;z.path=[];z.repath=0;continue;}
           const safe=this.world.closest(next,{x:22,y:36,z:22});

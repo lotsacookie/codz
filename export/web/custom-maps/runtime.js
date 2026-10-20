@@ -24,39 +24,60 @@ export class CustomFeatures extends ShangriFeatures {
   }
 }
 
+// Binary min-heap over parallel typed arrays (no per-entry allocation). Sifting uses the exact same
+// comparisons as the tuple version it replaces, so equal priorities pop in the same order.
 class Heap {
-  constructor() { this.items = []; }
+  constructor(capacity = 1024) {
+    this.prio = new Float64Array(capacity);
+    this.node = new Int32Array(capacity);
+    this.size = 0;
+  }
 
-  get size() { return this.items.length; }
+  clear() { this.size = 0; }
 
   push(node, priority) {
-    const items = this.items;
-    items.push([priority, node]);
-    let i = items.length - 1;
+    if (this.size === this.prio.length) this.grow();
+    const prio = this.prio, nodes = this.node;
+    let i = this.size++;
     while (i > 0) {
       const parent = (i - 1) >> 1;
-      if (items[parent][0] <= items[i][0]) break;
-      [items[parent], items[i]] = [items[i], items[parent]];
+      if (prio[parent] <= priority) break;
+      prio[i] = prio[parent];
+      nodes[i] = nodes[parent];
       i = parent;
     }
+    prio[i] = priority;
+    nodes[i] = node;
   }
 
   pop() {
-    const items = this.items, top = items[0], last = items.pop();
-    if (items.length) {
-      items[0] = last;
+    const prio = this.prio, nodes = this.node, top = nodes[0];
+    const n = --this.size;
+    if (n > 0) {
+      const lastPriority = prio[n], lastNode = nodes[n];
       let i = 0;
       for (;;) {
         const l = i * 2 + 1, r = l + 1;
-        let m = i;
-        if (l < items.length && items[l][0] < items[m][0]) m = l;
-        if (r < items.length && items[r][0] < items[m][0]) m = r;
-        if (m === i) break;
-        [items[m], items[i]] = [items[i], items[m]];
+        let m = -1, best = lastPriority;
+        if (l < n && prio[l] < best) { m = l; best = prio[l]; }
+        if (r < n && prio[r] < best) m = r;
+        if (m < 0) break;
+        prio[i] = prio[m];
+        nodes[i] = nodes[m];
         i = m;
       }
+      prio[i] = lastPriority;
+      nodes[i] = lastNode;
     }
-    return top[1];
+    return top;
+  }
+
+  grow() {
+    const prio = new Float64Array(this.prio.length * 2), nodes = new Int32Array(this.node.length * 2);
+    prio.set(this.prio);
+    nodes.set(this.node);
+    this.prio = prio;
+    this.node = nodes;
   }
 }
 
@@ -89,12 +110,18 @@ export function createGridNavigation(getLayout) {
     route(a, b) {
       const grid = this.grid, start = this.node(a), goal = this.node(b);
       if (start < 0 || goal < 0 || grid.comp[start] !== grid.comp[goal]) return [];
-      const token = ++this.token, nodes = grid.nodes, heap = new Heap();
+      const token = ++this.token, nodes = grid.nodes, alive = grid.alive, links = grid.links;
+      const seen = this.seen, cost = this.cost, from = this.from;
+      const heap = this.heap ??= new Heap();
+      heap.clear();
       const gx = nodes[goal].x, gy = nodes[goal].y, gz = nodes[goal].z;
-      const h = i => Math.hypot(nodes[i].x - gx, nodes[i].y - gy, nodes[i].z - gz);
-      this.seen[start] = token;
-      this.cost[start] = 0;
-      this.from[start] = -1;
+      const h = i => {
+        const n = nodes[i], dx = n.x - gx, dy = n.y - gy, dz = n.z - gz;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+      };
+      seen[start] = token;
+      cost[start] = 0;
+      from[start] = -1;
       heap.push(start, h(start));
       let found = false;
       for (let steps = 0; heap.size && steps < 40000; steps++) {
@@ -103,22 +130,24 @@ export function createGridNavigation(getLayout) {
           found = true;
           break;
         }
-        const here = nodes[current];
-        for (const next of grid.links[current]) {
-          if (!grid.alive[next]) continue;
-          const there = nodes[next];
-          const step = this.cost[current] + Math.hypot(there.x - here.x, there.y - here.y, there.z - here.z);
-          if (this.seen[next] !== token || step < this.cost[next]) {
-            this.seen[next] = token;
-            this.cost[next] = step;
-            this.from[next] = current;
+        const here = nodes[current], base = cost[current], around = links[current];
+        for (let k = 0; k < around.length; k++) {
+          const next = around[k];
+          if (!alive[next]) continue;
+          const there = nodes[next], dx = there.x - here.x, dy = there.y - here.y, dz = there.z - here.z;
+          const step = base + Math.sqrt(dx * dx + dy * dy + dz * dz);
+          if (seen[next] !== token || step < cost[next]) {
+            seen[next] = token;
+            cost[next] = step;
+            from[next] = current;
             heap.push(next, step + h(next));
           }
         }
       }
       if (!found) return [];
       const chain = [];
-      for (let i = goal; i >= 0; i = this.from[i]) chain.unshift(new THREE.Vector3(nodes[i].x, nodes[i].y, nodes[i].z));
+      for (let i = goal; i >= 0; i = from[i]) chain.push(new THREE.Vector3(nodes[i].x, nodes[i].y, nodes[i].z));
+      chain.reverse();
       const points = [a.clone(), ...chain, b.clone()];
       const pulled = [points[0]];
       for (let i = 0; i < points.length - 1;) {
