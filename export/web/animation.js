@@ -8,6 +8,7 @@ import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
+import { ViewmodelBob } from './viewmodel-bob.js';
 
 const BLOOD_COLOR = new THREE.Color(0x5a0707);
 
@@ -321,9 +322,10 @@ export class ViewWeapon {
     this.applyAim(!['idle','fire'].includes(this.mode));
     updateScopeLens(this.aim,viewCamera?.aspect);
     this.recoil=Math.max(0,this.recoil-dt*8);
-    const bob=moving&&this.mode!=='melee'?(1-this.aim)*.13:0;
-    this.pivot.position.set(Math.sin(time*(sprint?13:9))*bob,Math.cos(time*(sprint?26:18))*bob*.7,this.recoil*.25);
-    this.pivot.rotation.set(this.recoil*.012,0,0);
+    this.walkBob??=new ViewmodelBob();
+    const bob=this.walkBob.update(dt,{moving:moving&&!['melee','reload'].includes(this.mode),sprint,aim:this.aim});
+    this.pivot.position.set(bob.x,bob.y,this.recoil*.25+bob.z);
+    this.pivot.rotation.set(this.recoil*.012+bob.rx,bob.ry,bob.rz);
     // Ray Gun uses authored weapon offsets in place of sprint XAnims.
     const offsetSprint=sprint&&!this.rig.actions.sprintLoopAnim&&this.mode==='sprint';
     this.sprintBlend=THREE.MathUtils.damp(this.sprintBlend,offsetSprint?1:0,16,dt);
