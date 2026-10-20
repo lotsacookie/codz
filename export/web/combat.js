@@ -11,7 +11,8 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
 import { KnifeBlood } from './knife-blood.js';
-import { popHead } from './gore.js';
+import { popHead, popLimb } from './gore.js';
+import { LimbDebris } from './limbs.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -20,7 +21,7 @@ export class Combat {
   constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,teleport,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
-    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
     this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
@@ -64,7 +65,7 @@ export class Combat {
     this.perkDrink?.stop();
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
-    this.blood?.clear();
+    this.blood?.clear();this.limbDebris.clear();
     this.impacts.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.view.clearCache();this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
@@ -111,7 +112,7 @@ export class Combat {
       const ray=new THREE.Ray(this.camera.position.clone(),direction),wall=this.world.raycast(ray,1,6000),hit=this.enemies.rayHit(ray,wall?.distance??6000);
       this.lastShot={target:hit?.z.id,head:hit?.head,wall:wall?.distance};
       if(hit)this.enemies.hurt(hit.z,s.def.id==='microwavegundw_zm'?hit.z.health:(hit.distance>s.def.range?s.def.minDamage:s.def.damage)*(hit.head?Math.max(1,s.def.headMultiplier):1),hit.head,false,s.def.id==='microwavegundw_zm'?'zap':'bullet');
-      if(hit?.head&&this.blood&&!this.enemies.list.includes(hit.z))popHead({blood:this.blood,enemies:this.enemies,zombie:hit.z,def:s.def,distance:hit.distance});
+      if(hit?.head&&this.blood&&!this.enemies.list.includes(hit.z))popHead({blood:this.blood,enemies:this.enemies,zombie:hit.z,def:s.def,distance:hit.distance});else if(hit?.limb&&this.blood)popLimb({blood:this.blood,enemies:this.enemies,debris:this.limbDebris,zombie:hit.z,limb:hit.limb,cut:hit.cut,def:s.def,distance:hit.distance,awayFrom:this.camera.position});
       else if(wall)this.impacts.strike(wall,ray,this.particles);
     }
     this.camera.rotation.x=Math.min(1.48,this.camera.rotation.x+(this.ads?.006:.012));return true;
@@ -170,7 +171,7 @@ export class Combat {
   remoteHit(z,head){const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
   puppetKill(z){if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});}
   update(dt,{moving,sprint}){
-    this.blood?.update(dt);this.coop?.update(dt);
+    this.blood?.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);

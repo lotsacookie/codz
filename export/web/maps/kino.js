@@ -18,7 +18,8 @@ import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
 import { KnifeBlood } from '../knife-blood.js';
-import { popHead } from '../gore.js';
+import { popHead, popLimb } from '../gore.js';
+import { LimbDebris } from '../limbs.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
@@ -94,7 +95,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let coop=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const impacts=new WallImpacts(scene);
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 const errors=[];
@@ -128,7 +129,7 @@ ctx.onDispose(()=>{
   try{audio.dispose();}catch{}
   try{coop?.dispose();}catch{}
   try{enemies?.reset();}catch{}
-  try{blood.clear();}catch{}
+  try{blood.clear();limbDebris.clear();}catch{}
   try{chalk.reset();}catch{}
   try{grade?.dispose?.();}catch{}
   try{if(!noFxQuery)document.body.classList.remove('no-fx');}catch{}
@@ -248,7 +249,7 @@ function shoot(){
     const direction=forward.clone();if(pellets>1||!ads){const spread=pellets>1?.055:.012;direction.x+=(Math.random()-.5)*spread;direction.y+=(Math.random()-.5)*spread;direction.z+=(Math.random()-.5)*spread;direction.normalize();}
     const ray=new THREE.Ray(camera.position.clone(),direction),wall=world.raycast(ray,1,6000),target=enemies.rayHit(ray,wall?.distance??6000);
     lastShot={origin:ray.origin.toArray(),direction:direction.toArray(),wallDistance:wall?.distance??null,target:target?{id:target.z.id,head:target.head,distance:target.distance}:null};
-    if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');if(target.head&&!enemies.list.includes(target.z))popHead({blood,enemies,zombie:target.z,def:session.def,distance:target.distance});}
+    if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');if(target.head&&!enemies.list.includes(target.z))popHead({blood,enemies,zombie:target.z,def:session.def,distance:target.distance});else if(target.limb)popLimb({blood,enemies,debris:limbDebris,zombie:target.z,limb:target.limb,cut:target.cut,def:session.def,distance:target.distance,awayFrom:camera.position});}
     else if(wall)impacts.strike(wall,ray,particles);
     if(session.def.explosionRadius&&(target||wall)){
       const p=target?.point??wall.position,radius=session.def.explosionRadius;
@@ -379,7 +380,7 @@ function reset(){
   session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
   powerups.reset();perkDrink.stop();mysteryBox.reset();
   features?.reset();
-  blood.clear();
+  blood.clear();limbDebris.clear();
   impacts.clear();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
@@ -531,7 +532,7 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(ratio()*scale);if(graphics.setting==='auto'&&autoGraphics.sample(dt*1000,adapt.scale<adapt.max-.15))graphics.stepDown();}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],100,40,1600,camera.position);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);limbDebris.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],100,40,1600,camera.position);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
 return {setActive,prepare,restart:async()=>{reset();}};

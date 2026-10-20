@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
+import { boneOf, findArmHit } from './gore.js';
 import { Rig, loadModel, loadAnimation } from './animation.js';
 import { zombieHealth } from './rules.js';
 import { disposeSkeletons, runtimeProfile } from './runtime-assets.js';
@@ -212,12 +213,14 @@ export class Enemies {
       const base=z.root.position,headPos=this.headPosition(z);
       const headPoint=ray.intersectSphere(new THREE.Sphere(headPos,z.kind==='dog'?12:10),new THREE.Vector3());
       const bodyPoint=ray.intersectBox(new THREE.Box3(base.clone().add(new THREE.Vector3(-18,4,-18)),base.clone().add(new THREE.Vector3(18,z.kind==='zombie'?58:36,18))),new THREE.Vector3());
-      let head=!!headPoint;let point=headPoint??bodyPoint;if(!point)continue;
+      let head=!!headPoint;let point=headPoint??bodyPoint;let limb=null;
+      if(!headPoint&&z.kind==='zombie'){const arm=findArmHit(ray,z,far);if(arm&&(!bodyPoint||arm.distance<bodyPoint.distanceTo(ray.origin))){point=arm.point;limb=arm;}}
+      if(!point)continue;
       if(headPoint&&bodyPoint&&bodyPoint.distanceTo(ray.origin)+12<headPoint.distanceTo(ray.origin)){point=bodyPoint;head=false;}
-      const distance=point.distanceTo(ray.origin);if(distance>far||best&&best.distance<distance)continue;best={z,head,point,distance};
+      const distance=point.distanceTo(ray.origin);if(distance>far||best&&best.distance<distance)continue;best={z,head,point,distance,limb:limb?.limb??null,cut:limb?.cut??null};
     }return best;
   }
-  headPosition(z){z.root.updateMatrixWorld(true);const bone=z.root.getObjectByName('j_head');return bone?bone.getWorldPosition(new THREE.Vector3()):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?63:28,0));}
+  headPosition(z){z.root.updateMatrixWorld(true);const bone=boneOf(z,'j_head');return bone?bone.getWorldPosition(new THREE.Vector3()):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?63:28,0));}
   nuke(onDeath){for(const z of [...this.list]){this.list.splice(this.list.indexOf(z),1);this.session.kills++;this.session.killed++;if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();this.silence(z);z.state='dead';z.gasDeath=false;z.life=3;z.rig.play('death',false);this.dead.push(z);this.net?.dead(z,'nuke');onDeath(z);this.onKill?.(z);}}
   reset(){for(const z of [...this.list,...this.dead]){this.silence(z);z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);}this.list=[];this.dead=[];this.nextSpawn=0;this.lastDogDeath=null;}
   snapshot(){return this.list.map(z=>({id:z.id,kind:z.kind,health:z.health,state:z.state,position:z.root.position.toArray(),pathLength:z.path.length,animation:z.rig.current}));}
