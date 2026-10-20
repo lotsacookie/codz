@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ViewmodelBob } from '../export/web/viewmodel-bob.js';
+import { BOB, ViewmodelBob } from '../export/web/viewmodel-bob.js';
 
 const run = (bob, seconds, input, dt = 1 / 60) => {
   const samples = [];
@@ -16,15 +16,25 @@ test('standing still produces no bob', () => {
 
 test('walking bobs side to side, up and down and rolls the gun', () => {
   const s = run(new ViewmodelBob(), 3, { moving: true });
-  assert.ok(range(s, 'x') > 0.03);
-  assert.ok(range(s, 'y') > 0.02);
-  assert.ok(range(s, 'rz') > 0.02);
+  assert.ok(range(s, 'x') > 0.12);
+  assert.ok(range(s, 'y') > 0.04);
+  assert.ok(range(s, 'rz') > 0.05);
+});
+
+test('walking sways at a natural pace of about two steps per second', () => {
+  const bob = new ViewmodelBob();
+  run(bob, 2, { moving: true });
+  const s = run(bob, 4, { moving: true });
+  let crossings = 0;
+  for (let i = 1; i < s.length; i++) if (Math.sign(s[i].x) !== Math.sign(s[i - 1].x)) crossings++;
+  assert.ok(crossings >= 7 && crossings <= 10, `${crossings} crossings in four seconds`);
+  assert.ok(BOB.walk.rate < 1.3);
 });
 
 test('the gun drops twice per sway cycle (a figure of eight)', () => {
   const bob = new ViewmodelBob();
   run(bob, 2, { moving: true }); // reach full amplitude
-  const s = run(bob, 1 / 1.9, { moving: true }); // one full cycle at walk rate
+  const s = run(bob, 1 / BOB.walk.rate, { moving: true });
   let lows = 0;
   for (let i = 1; i < s.length - 1; i++) if (s[i].y < s[i - 1].y && s[i].y < s[i + 1].y) lows++;
   assert.equal(lows, 2);
@@ -47,7 +57,7 @@ test('stopping settles smoothly back to rest without a snap', () => {
   run(bob, 2, { moving: true });
   const s = run(bob, 1.5, { moving: false });
   const first = s[0];
-  assert.ok(Math.abs(first.x) < 0.06);
+  assert.ok(Math.abs(first.x) < BOB.walk.x);
   assert.equal(s.at(-1).x, 0);
   for (let i = 1; i < s.length; i++) assert.ok(Math.abs(s[i].x - s[i - 1].x) < 0.01, 'no jump');
 });

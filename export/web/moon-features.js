@@ -201,7 +201,7 @@ export class MoonFeatures {
       return this.startHack(t,5,()=>{this.packHackVisit=s.earthVisits;s.addPoints(1000);s.effects.pack_shield=s.time+20;this.notice('Pack-a-Punch protection active for 20 seconds. +1000 points.');});
     }
     const pickup=this.combat.pickups.items.find(p=>p.root.position.distanceTo(this.camera.position)<120);
-    if(pickup&&s.points>=5000){
+    if(pickup&&s.points>=5000&&!this.combat.pickups.net){
       const e={id:'pickup-hack',position:pickup.root.position.toArray()};
       if(this.startHack({e,kind:'pickup'},5,()=>{if(!this.combat.pickups.items.includes(pickup)||!s.spend(5000))return;const at=pickup.root.position.clone().add(new THREE.Vector3(0,-40,0));this.combat.pickups.remove(pickup);this.combat.pickups.spawn(pickup.type==='full_ammo'?'fire_sale':'full_ammo',at);this.notice('Power-up converted.');})){this.hack.remote=true;return true;}
     }

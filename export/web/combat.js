@@ -37,7 +37,7 @@ export class Combat {
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
     this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:n=>this.damage(n),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait)=>this.audio.voice(gait,()=>z.root.position)});
     guardEnemies(this.enemies,{onFault:(where,error)=>this.faultNotice?.(where,error)});
-    this.pickups=new Powerups(this.scene,this.data,this.audio,type=>this.collect(type));
+    this.pickups=new Powerups(this.scene,this.data,this.audio,(type,position,info)=>this.collect(type,info));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};
     await Promise.all([this.audio.load(),this.enemies.load(),this.pickups.load(),this.equip(),this.perkDrink.load(),
       ...Object.entries(this.data.equipment).map(async([id,d])=>this.equipmentModels[id]=await loadModel(d.worldModel))]);
@@ -156,20 +156,24 @@ export class Combat {
     const type=this.session.drops.tryDrop(this.session,{kind:z.kind,playable:true,destroyedWindows:this.features?.brokenWindows??0,boxMoves:this.features?.box?.moves??0});
     if(type&&this.data.powerups[type])this.pickups.spawn(type,z.root.position);
   }
-  collect(type){
+  collect(type,info={}){
+    const authority=info.host!==false;
     this.session.powerup(type);this.audio.play(type);this.notice(pickupNames[type]);
-    if(type==='nuke'){this.nuking=true;this.enemies.nuke(z=>this.effect(z.root.position,0xe3e7b9));this.nuking=false;}
-    if(type==='carpenter')this.features?.repairAll();
+    if(type==='nuke'&&authority){this.nuking=true;this.enemies.nuke(z=>this.effect(z.root.position,0xe3e7b9));this.nuking=false;}
+    if(type==='carpenter'&&authority)this.features?.repairAll();
   }
   buyWeapon(id){
     if(!this.session.buyWeapon(id)){this.notice(this.session.inventory.some(w=>w.id===id)?'Not enough points or ammunition already full.':'Not enough points.');return false;}
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
   /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
-  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
+  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});coop.attachPowerups(this.pickups,{area:()=>this.session.area});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
   idle(dt){if(!this.enabled||!this.coop)return;this.coop.update(dt);this.coop.idle(dt);}
   remoteHit(z,head){const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
-  puppetKill(z){if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});}
+  puppetKill(z){
+    if(z?.root&&z.deathCause==='nuke')this.effect(z.root.position,0xe3e7b9);
+    if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});
+  }
   update(dt,{moving,sprint}){
     this.blood?.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;

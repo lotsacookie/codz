@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { RemoteAvatars } from '../export/web/net/avatars.js';
 import { createCoop } from '../export/web/net/coop-client.js';
 import { PLAYER_COLORS, coopHealth } from '../export/web/net/coop.js';
+import { Powerups } from '../export/web/powerups.js';
 
 const roster = [{ id: 'me', name: 'Me' }, { id: 'p2', name: 'Bo' }, { id: 'p3', name: 'Cy' }];
 const sample = (id, x, hp = 1) => ({ id, name: id, x, y: 0, z: 0, yaw: 0, pitch: 0, hp });
@@ -55,6 +56,29 @@ test('co-op client sends our pose and points, exposes living teammates as zombie
   coop.dispose();
   assert.equal(handlers.size, 0);
   assert.equal(scene.children.length, 0);
+});
+
+test('power-ups are shared: the host\'s drops appear for us, its grabs hit us too, strangers are ignored', () => {
+  const { lobby, handlers, sent } = fakeLobby(), scene = new THREE.Scene();
+  lobby.hostId = 'p2';
+  const collected = [];
+  const powerups = new Powerups(scene, { powerups: {} }, { event() {} }, (type, position, info) => collected.push({ type, info }));
+  powerups.templates.full_ammo = new THREE.Group();
+  const coop = createCoop({ scene, camera: new THREE.PerspectiveCamera(), feet: () => new THREE.Vector3(), points: () => 500, config: { lobby, selfId: 'me', role: 'client', roster }, now: () => 0, doc: null });
+  coop.attachPowerups(powerups);
+  const drop = { i: 4, t: 'full_ammo', x: 10, y: 0, z: 10, a: '' };
+  handlers.get('pdrop')(drop, 'stranger');
+  assert.equal(powerups.items.length, 0);
+  handlers.get('pdrop')(drop, 'p2');
+  assert.equal(powerups.items.length, 1);
+  powerups.update(.016, powerups.items[0].root.position.clone(), true, () => true);
+  assert.deepEqual(sent.at(-1), { type: 'ptake', data: { i: 4 } });
+  handlers.get('pgrab')({ i: 4, t: 'full_ammo', x: 10, y: 40, z: 10, b: 'p3' }, 'p2');
+  assert.equal(powerups.items.length, 0);
+  assert.deepEqual(collected.map(c => [c.type, c.info.by, c.info.host]), [['full_ammo', 'p3', false]]);
+  coop.dispose();
+  assert.equal(handlers.has('pdrop'), false);
+  assert.equal(powerups.net, null);
 });
 
 test('coopHealth is zero while downed so teammates are not chased', () => {

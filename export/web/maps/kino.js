@@ -209,7 +209,7 @@ function effect(position,color=0x9e3023,count=7){
 }
 function hit(z,head){hitUntil=session.time+.12;$('hitmarker').style.color=head?'#db5140':'#eee';{const p=head?enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(blood.ready())blood.spray(p,camera.position,{head});else effect(p);}}
 function remoteHit(z,head){const p=head?enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(blood.ready())blood.spray(p,camera.position,{head});else effect(p);}
-function puppetKill(z){if(z?.root&&blood.ready())blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),camera.position,{kill:true});}
+function puppetKill(z){if(z?.root&&z.deathCause==='nuke')effect(z.root.position,0xc7dba4);if(z?.root&&blood.ready())blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),camera.position,{kill:true});}
 function kill(z,force,position){
   if(z?.root&&blood.ready())blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),camera.position,{kill:true});
   if(z?.gasDeath){
@@ -225,13 +225,14 @@ function kill(z,force,position){
 function dropPowerup(type,position){
   return powerups.spawn(type,position);
 }
-function collect(type){
+function collect(type,position,info={}){
   if(!powerupNames[type])return;
+  const authority=info.host!==false;
   session.powerup(type);toast(powerupNames[type],3);audio.event('powerup/grab/grab_00',.75);
   audio.play(type);
   if(type==='full_ammo')audio.event('powerup/max_ammo/max_ammo_00',.7);
-  if(type==='nuke'){flashUntil=session.time+.8;audio.event('nuke/nuke_flash',.8);enemies.nuke(z=>effect(z.root.position,0xc7dba4));}
-  if(type==='carpenter'){for(const b of world.barriers)world.setBoards(b,b.boards.length||6,true);audio.event('powerup/carpenter/end/end_00',.7);}
+  if(type==='nuke'){flashUntil=session.time+.8;audio.event('nuke/nuke_flash',.8);if(authority)enemies.nuke(z=>effect(z.root.position,0xc7dba4));}
+  if(type==='carpenter'){if(authority)for(const b of world.barriers)world.setBoards(b,b.boards.length||6,true);audio.event('powerup/carpenter/end/end_00',.7);}
 }
 function shoot(){
   if(!active||features.events.room||!view.ready||view.mode==='raise'||session.busy||session.weaponUnavailable)return false;
@@ -515,7 +516,7 @@ try{
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage,teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
-  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
+  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();

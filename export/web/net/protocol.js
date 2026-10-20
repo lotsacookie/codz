@@ -82,7 +82,7 @@ export class Directory {
 }
 
 /** Messages inside a game room are `{ t: type, d: data }`. Unknown or malformed ones are dropped. */
-export const MESSAGE_TYPES = new Set(['listing', 'hello', 'welcome', 'reject', 'roster', 'ready', 'start', 'pose', 'event', 'chat', 'state', 'zsnap', 'zhit', 'zdead', 'award', 'hurt', 'boards', 'shot', 'box']);
+export const MESSAGE_TYPES = new Set(['listing', 'hello', 'welcome', 'reject', 'roster', 'ready', 'start', 'pose', 'event', 'chat', 'state', 'zsnap', 'zhit', 'zdead', 'award', 'hurt', 'boards', 'shot', 'box', 'pdrop', 'ptake', 'pgrab']);
 export function packMessage(type, data) { return { t: type, d: data ?? null }; }
 export function unpackMessage(raw) {
   if (!raw || typeof raw !== 'object' || !MESSAGE_TYPES.has(raw.t)) return null;

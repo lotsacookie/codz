@@ -227,6 +227,25 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     return boxHandle;
   }
 
+  let powerupHandle = null;
+
+  function attachPowerups(powerups, { area = () => '' } = {}) {
+    if (powerupHandle) return powerupHandle;
+    powerups.attachNet({
+      selfId,
+      role,
+      hostId: () => lobby.hostId ?? (role === 'host' ? selfId : null),
+      area,
+      send: (type, data, target) => channel.send(type, data, target),
+    });
+    const stops = ['pdrop', 'ptake', 'pgrab'].map(type => channel.on(type, (raw, from) => {
+      if (from === selfId || !currentRoster().some(p => p.id === from)) return;
+      powerups.receiveNet(type, from, raw);
+    }));
+    powerupHandle = { dispose() { for (const stop of stops) { try { stop?.(); } catch {} } powerups.attachNet(null); powerupHandle = null; } };
+    return powerupHandle;
+  }
+
   function attachAudio(audio, { weapons = {} } = {}) {
     if (audioHandle) return audioHandle;
     const original = audio.weapon;
@@ -266,6 +285,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     attachEnemies,
     attachAudio,
     attachBox,
+    attachPowerups,
     update,
     /** Positions (THREE.Vector3, feet level) of living teammates, for zombie targeting. */
     targets: () => targetList,
@@ -283,6 +303,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       zombieHandle = null; simulation = null;
       try { audioHandle?.dispose(); } catch {}
       try { boxHandle?.dispose(); } catch {}
+      try { powerupHandle?.dispose(); } catch {}
       avatars.dispose();
       panel?.remove();
     },
