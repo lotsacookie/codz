@@ -1,6 +1,6 @@
 import { HostLobby, ClientLobby, ServerBrowser, newLobbyName } from './lobby.js';
 import { loadJoinRoom } from './transport.js';
-import { MAX_PLAYERS, cleanName, normalizeCode } from './protocol.js';
+import { MAX_PLAYERS, CUSTOM_MAP_ID, cleanName, normalizeCode, cleanCustomMap } from './protocol.js';
 
 const NAME_KEY = 'zombies.playerName';
 const store = {
@@ -18,6 +18,7 @@ function el(tag, props = {}, ...children) {
   node.append(...children);
   return node;
 }
+const customMapLabel = url => { try { return decodeURIComponent(new URL(url).pathname.split('/').filter(Boolean).pop() ?? '').replace(/\.(?:glb|gltf|bsp|map)$/i, '') || 'Custom map'; } catch { return 'Custom map'; } };
 const button = (text, onClick, cls = '') => { const b = el('button', { type: 'button', class: cls, text }); b.addEventListener('click', onClick); return b; };
 
 /**
@@ -74,14 +75,22 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
     show('host'); title.textContent = 'HOST A GAME'; say('');
     const label = el('input', { type: 'text', maxlength: '32', 'aria-label': 'Game name', placeholder: 'Game name' });
     label.value = newLobbyName(playerName());
-    const select = el('select', { 'aria-label': 'Map' }, ...maps.map(m => el('option', { value: m.id, text: m.label })));
+    const select = el('select', { 'aria-label': 'Map' }, ...maps.map(m => el('option', { value: m.id, text: m.label })), el('option', { value: CUSTOM_MAP_ID, text: 'Custom map (link)…' }));
+    const mapUrl = el('input', { type: 'url', maxlength: '500', placeholder: 'Link to a .glb / .gltf / .bsp / .map or GitHub map repo', 'aria-label': 'Custom map link', autocomplete: 'off', hidden: '' });
+    const mapName = el('input', { type: 'text', maxlength: '40', placeholder: 'Map name (optional)', 'aria-label': 'Custom map name', autocomplete: 'off', hidden: '' });
+    select.addEventListener('change', () => { const custom = select.value === CUSTOM_MAP_ID; mapUrl.hidden = mapName.hidden = !custom; if (custom) mapUrl.focus(); });
     const password = el('input', { type: 'text', maxlength: '32', placeholder: 'Password (optional, makes the game private)', 'aria-label': 'Password', autocomplete: 'off' });
     const create = button('CREATE GAME', async () => {
+      let customMap = null;
+      if (select.value === CUSTOM_MAP_ID) {
+        customMap = cleanCustomMap({ url: mapUrl.value, label: mapName.value.trim() || customMapLabel(mapUrl.value) });
+        if (!customMap) { say('Paste a direct http(s) link to a .glb, .gltf, .bsp or .map file, or a GitHub map repository. Players download it from that link.', true); return; }
+      }
       create.disabled = true;
       try {
         const network = await ensureNet();
-        const map = maps.find(m => m.id === select.value);
-        host = new HostLobby(network, { name: label.value, playerName: playerName(), map: map.id, mapLabel: map.label, password: password.value.trim() }).open();
+        const map = customMap ? { id: CUSTOM_MAP_ID, label: customMap.label } : maps.find(m => m.id === select.value);
+        host = new HostLobby(network, { name: label.value, playerName: playerName(), map: map.id, mapLabel: map.label, customMap, password: password.value.trim() }).open();
         lobbyView({ code: host.code, map: map.label, isHost: true, locked: !!password.value.trim() });
       } catch (error) {
         console.error(error);
@@ -89,7 +98,7 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
         create.disabled = false;
       }
     }, 'mp-big');
-    body.replaceChildren(label, select, password, create);
+    body.replaceChildren(label, select, mapUrl, mapName, password, create);
   }
 
   function joinForm() {
@@ -181,7 +190,7 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
 
   function launch(payload, role) {
     const lobby = host ?? client;
-    const entry = { map: payload.map, role, code: lobby.code, seed: payload.seed, roster: payload.roster, selfId: net.selfId, lobby };
+    const entry = { map: payload.map, customMap: payload.customMap ?? null, role, code: lobby.code, seed: payload.seed, roster: payload.roster, selfId: net.selfId, lobby };
     closing = true;                 // keep the connection: the game uses it
     host = client = browser = null;
     close();

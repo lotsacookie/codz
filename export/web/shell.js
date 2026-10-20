@@ -85,7 +85,12 @@ const coopMaps = () => [...registry.values()].filter(entry => !/no rounds/i.test
 const mpMenu = createMultiplayerMenu({
   root: mpRoot,
   get maps() { return coopMaps(); },
-  onStart: ({ map, lobby, ...multiplayer }) => {
+  onStart: ({ map, customMap, lobby, ...multiplayer }) => {
+    if (customMap) {   // everyone downloads the host's shared link and builds the same level
+      globalThis.zombies.multiplayer = { ...multiplayer, lobby };
+      boot({ map: 'custom-map', label: customMap.label, module: './maps/custom-map.js', styles: 'touch-controls.css hud.css', title: `${customMap.label} — Zombies`, loadscreen: 'art/loadscreen_zombie_temple.webp', params: { source: customMap.source, url: customMap.url, multiplayer: { ...multiplayer, lobby } }, custom: true, multiplayer: true });
+      return;
+    }
     const entry = registry.get(map);
     if (!entry) { showError(`This build has no map called "${map}".`); return; }
     globalThis.zombies.multiplayer = { ...multiplayer, lobby };

@@ -21,8 +21,32 @@ export const gameRoomId = code => `game-${normalizeCode(code)}`;
 export const cleanText = (value, max) => String(value ?? '').replace(/[\u0000-\u001f\u007f<>]/g, '').trim().slice(0, max);
 export const cleanName = value => cleanText(value, 20) || 'Player';
 
+export const CUSTOM_MAP_ID = 'custom-map';
+
+/** Which loader a shared map link needs. Local files and Sketchfab tokens cannot be shared, so only links qualify. */
+export function inferMapSource(url) {
+  const text = String(url ?? '').trim();
+  if (/^https?:\/\/\S+\.bsp(?:\?\S*)?$/i.test(text)) return 'bsp';
+  if (/^https?:\/\/\S+\.map(?:\?\S*)?$/i.test(text) || /^https?:\/\/github\.com\/[^/\s]+\/[^/\s]+(?:\/tree\/[^/\s]+)?\/?$/i.test(text)) return 'iwmap';
+  if (/^https?:\/\/\S+\.(?:glb|gltf)(?:\?\S*)?$/i.test(text)) return 'url';
+  return null;
+}
+
+/**
+ * A custom map the host shares with the lobby. Players download it themselves from the link, so this is only ever
+ * a source kind, an http(s) URL and a label; anything else a remote peer sends is dropped.
+ */
+export function cleanCustomMap(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const url = String(raw.url ?? '').trim();
+  if (url.length > 500 || /[\u0000-\u0020\u007f<>"']/.test(url)) return null;
+  const source = inferMapSource(url);
+  if (!source) return null;
+  return { source, url, label: cleanText(raw.label, 40) || 'Custom map' };
+}
+
 /** What a host announces. Anything a remote peer sends is clamped here before it reaches the UI. */
-export function makeListing({ code, name, map, mapLabel, players = 1, max = MAX_PLAYERS, locked = false, round = 0, host = 'Host', started = false }) {
+export function makeListing({ code, name, map, mapLabel, players = 1, max = MAX_PLAYERS, locked = false, round = 0, host = 'Host', started = false, custom = false }) {
   return {
     v: NET_VERSION,
     code: normalizeCode(code),
@@ -35,6 +59,7 @@ export function makeListing({ code, name, map, mapLabel, players = 1, max = MAX_
     round: clampInt(round, 0, 999),
     host: cleanName(host),
     started: !!started,
+    custom: !!custom,
   };
 }
 

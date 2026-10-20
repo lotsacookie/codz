@@ -1,4 +1,4 @@
-import { ANNOUNCE_MS, DIRECTORY_ROOM, Directory, MAX_PLAYERS, NET_VERSION, cleanName, gameRoomId, makeCode, makeListing, normalizeCode } from './protocol.js';
+import { ANNOUNCE_MS, DIRECTORY_ROOM, Directory, MAX_PLAYERS, NET_VERSION, cleanName, gameRoomId, makeCode, makeListing, normalizeCode, cleanCustomMap, CUSTOM_MAP_ID } from './protocol.js';
 import { openChannel } from './transport.js';
 
 
@@ -7,9 +7,11 @@ import { openChannel } from './transport.js';
  * players into its own game room and keeps the roster. The host is authoritative for who is in the game.
  */
 export class HostLobby {
-  constructor(net, { name, playerName, map, mapLabel, max = MAX_PLAYERS, password = '', code = makeCode(), setInterval: si = (...args) => globalThis.setInterval(...args), clearInterval: ci = (...args) => globalThis.clearInterval(...args) } = {}) {
+  constructor(net, { name, playerName, map, mapLabel, customMap = null, max = MAX_PLAYERS, password = '', code = makeCode(), setInterval: si = (...args) => globalThis.setInterval(...args), clearInterval: ci = (...args) => globalThis.clearInterval(...args) } = {}) {
     this.net = net; this.code = normalizeCode(code); this.password = password || '';
-    this.info = { name, map, mapLabel, max, host: cleanName(playerName), locked: !!password };
+    this.customMap = cleanCustomMap(customMap);
+    if (this.customMap) { map = CUSTOM_MAP_ID; mapLabel = this.customMap.label; }
+    this.info = { name, map, mapLabel, custom: !!this.customMap, max, host: cleanName(playerName), locked: !!password };
     this.started = false; this.round = 0; this.listeners = new Set(); this.timers = { si, ci };
     this.roster = new Map([[net.selfId, { id: net.selfId, name: cleanName(playerName), host: true, ready: true }]]);
     this.game = null; this.directory = null; this.timer = null;
@@ -39,7 +41,7 @@ export class HostLobby {
     if (this.started) return reject('Game already started');
     if (this.roster.size >= this.info.max) return reject('Game is full');
     this.roster.set(from, { id: from, name: cleanName(hello.name), host: false, ready: false });
-    this.game.send('welcome', { you: from, host: this.net.selfId, code: this.code, map: this.info.map, mapLabel: this.info.mapLabel, name: this.info.name, roster: this.players() }, from);
+    this.game.send('welcome', { you: from, host: this.net.selfId, code: this.code, map: this.info.map, mapLabel: this.info.mapLabel, customMap: this.customMap, name: this.info.name, roster: this.players() }, from);
     this.pushRoster();
   }
   pushRoster() { this.game.send('roster', this.players()); this.announce(); this.emit(); }
@@ -48,7 +50,7 @@ export class HostLobby {
   start() {
     if (this.started) return null;
     this.started = true;
-    const payload = { map: this.info.map, seed: (Math.random() * 2 ** 32) >>> 0, roster: this.players() };
+    const payload = { map: this.info.map, customMap: this.customMap, seed: (Math.random() * 2 ** 32) >>> 0, roster: this.players() };
     this.game.send('start', payload);
     this.announce();
     this.emit();
@@ -87,11 +89,11 @@ export class ClientLobby {
       const hello = () => this.channel.send('hello', { v: NET_VERSION, name: this.playerName });
       this.channel.on('welcome', (data, from) => {
         if (this.hostId) return;                       // only the first host answer counts
-        this.hostId = from; this.welcome = data; this.roster = data.roster ?? []; this.emit(); done(resolve, data);
+        this.hostId = from; this.welcome = { ...data, customMap: cleanCustomMap(data?.customMap) }; this.roster = data.roster ?? []; this.emit(); done(resolve, this.welcome);
       });
       this.channel.on('reject', reason => done(reject, new Error(reason?.reason ?? 'Could not join')));
       this.channel.on('roster', (roster, from) => { if (from === this.hostId) { this.roster = roster; this.emit(); } });
-      this.channel.on('start', (payload, from) => { if (from === this.hostId) this.onStart?.(payload); });
+      this.channel.on('start', (payload, from) => { if (from === this.hostId) this.onStart?.({ ...payload, customMap: cleanCustomMap(payload?.customMap) }); });
       this.channel.onJoin(hello);                      // say hello to every peer that appears; only the host answers
       this.channel.onLeave(id => { if (id === this.hostId) this.onHostLeft?.(); });
     });
