@@ -75,25 +75,27 @@ export class Enemies {
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
   update(dt,player){
-    const s=this.session;
+    const s=this.session,remotes=this.remoteTargets?.();
+    const localDown=!!remotes?.length&&(s.spectating||s.phase==='reviving'||s.phase==='gameover');
+    const anchor=localDown?nearestTarget(player,remotes,null):player;
     if(this.autoSpawn!==false&&(s.corePhase??s.phase)==='fighting'&&s.spawned<s.total&&this.list.length<24){
       this.nextSpawn-=dt;
       if(this.nextSpawn<=0){
-        const candidates=this.world.spawnBarriers(s).filter(b=>{const p=this.world.path(b.inside,player);return p.length>1&&p.at(-1).distanceTo(player)<150;});
+        const candidates=this.world.spawnBarriers(s).filter(b=>{const p=this.world.path(b.inside,anchor);return p.length>1&&p.at(-1).distanceTo(anchor)<150;});
         if(candidates.length){
-          const b=candidates[Math.floor(s.random()*candidates.length)],nova=s.power&&!s.dogRound&&s.spawned%5===4&&['foyer_zone','foyer2_zone','theater_zone','stage_zone','dining_zone'].includes(this.world.zoneAt(player.clone().add(new THREE.Vector3(0,35,0))));
+          const b=candidates[Math.floor(s.random()*candidates.length)],nova=s.power&&!s.dogRound&&s.spawned%5===4&&['foyer_zone','foyer2_zone','theater_zone','stage_zone','dining_zone'].includes(this.world.zoneAt(anchor.clone().add(new THREE.Vector3(0,35,0))));
           this.spawn(s.dogRound||nova?b.inside:null,s.dogRound||nova?null:b,s.dogRound?'dog':nova?'nova':'zombie');
           this.nextSpawn=Math.max(SPAWN_DELAY_FLOOR,(this.data.rules.zombie_spawn_delay??2)*Math.pow(.95,s.round-1));
         }
         else this.nextSpawn=1;
       }
     }
-    const localPlayer=player,remotes=this.remoteTargets?.();
+    const localPlayer=player;
     this.routeSpent=0;
     _iter.length=0;for(const z of this.list)_iter.push(z);
     for(let zi=0;zi<_iter.length;zi++){const z=_iter[zi];
       // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
-      const player=remotes?.length?nearestTarget(z.root.position,remotes,localPlayer):localPlayer,onRemote=player!==localPlayer;
+      const player=remotes?.length?nearestTarget(z.root.position,remotes,localDown?null:localPlayer):localPlayer,onRemote=player!==localPlayer;
       z.rig.update(dt);z.growl-=dt;
       if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
       if(z.kind==='zombie'&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
