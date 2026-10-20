@@ -13,10 +13,10 @@ on:
         default: kino
         options: [kino, ascension, cotd, moon, riese]
       kinds:
-        description: What to extract (comma separated: images,sounds,scripts,fx)
+        description: 'What to extract (comma separated: images,sounds,scripts,fx)'
         default: images,sounds,scripts,fx
       only:
-        description: Optional regex on entry names (e.g. fx_|muzzle|blood). Empty = everything
+        description: 'Optional regex on entry names (e.g. fx_|muzzle|blood). Empty = everything'
         default: ''
       out_dir:
         description: Output folder in this repo
