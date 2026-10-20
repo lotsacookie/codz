@@ -105,8 +105,8 @@ export class ServerBrowser {
   constructor(net, directory = new Directory()) {
     this.net = net; this.directory = directory; this.channel = null; this.pruneTimer = null;
   }
-  open({ setInterval: si = (...args) => globalThis.setInterval(...args) } = {}) {
-    this.channel = openChannel(this.net, DIRECTORY_ROOM);
+  open({ setInterval: si = (...args) => globalThis.setInterval(...args), onJoinError } = {}) {
+    this.channel = openChannel(this.net, DIRECTORY_ROOM, onJoinError ? { onJoinError } : undefined);
     this.channel.on('listing', (raw, from) => this.directory.announce(from, raw));
     this.channel.onLeave(id => this.directory.remove(id));
     this.pruneTimer = si(() => this.directory.prune(), 2000);

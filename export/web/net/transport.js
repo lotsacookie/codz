@@ -1,5 +1,5 @@
 import { APP_ID, packMessage, unpackMessage } from './protocol.js';
-import { RELAY_REDUNDANCY, buildTurnConfig } from './ice.js';
+import { RELAY_REDUNDANCY, buildIce } from './ice.js';
 
 /**
  * A thin, testable wrapper over one Trystero room. `joinRoom` is injected so tests can use a fake network and the
@@ -9,8 +9,8 @@ import { RELAY_REDUNDANCY, buildTurnConfig } from './ice.js';
  */
 export async function loadJoinRoom() {
   const mod = await import('../vendor/trystero.js');
-  const turnConfig = await buildTurnConfig();
-  return { joinRoom: mod.joinRoom, selfId: mod.selfId, turnConfig };
+  const { servers, source } = await buildIce();
+  return { joinRoom: mod.joinRoom, selfId: mod.selfId, turnConfig: servers, iceSource: source };
 }
 
 export class Channel {

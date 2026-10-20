@@ -92,6 +92,8 @@ Start in the lobby with 500 points and the M1911. Survive rounds and buy doors t
 
 For Cloudflare Pages, run `npm run cloudflare:stage`, then `npm run test:pages` to check the packaged game locally. `npm run cloudflare:deploy` rebuilds and publishes it to the existing `kino-der-toten` Pages project (Cloudflare login required). The build in `.work/cloudflare-pages` includes only Kino and splits map geometry and collision data into files below Pages' 25 MiB limit. Staging verifies every glTF buffer view, deduplicates identical collision positions, and verifies every triangle corner and the unchanged BVH. Python 3.11 with Pillow builds the mobile texture variants. Reports and browser screenshots are in `artifacts/cloudflare` and `artifacts/mobile-memory`. To check production, run `$env:KINO_URL='https://kino-der-toten.pages.dev/'; npm run test:pages` in PowerShell.
 
+**Multiplayer across networks.** Games connect peer to peer, and players on different networks usually need a TURN relay to reach each other. The game asks `/api/turn` (`functions/api/turn.js`) for short-lived [Cloudflare TURN](https://developers.cloudflare.com/realtime/turn/) credentials. To enable it, create a TURN key in the Cloudflare dashboard (Realtime, TURN) and add `TURN_KEY_ID` and `TURN_KEY_API_TOKEN` as secrets on the Pages project; the token never reaches the browser. Without them the game falls back to the free Open Relay server. You can also set `window.CODZ_ICE_SERVERS` to your own STUN/TURN list. The **NETWORK CHECK** button in the multiplayer menu reports whether a relay is reachable.
+
 Run commands from this folder:
 
 ```powershell
