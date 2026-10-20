@@ -36,6 +36,7 @@ export class ShangriFeatures {
     const weapons = Object.fromEntries(pool.map(id => [id, cd.weapons[id]]));
     this.box = new MysteryBox(this.scene, world, { ...cd, weapons, equipment: {}, boxPool: pool, entities: d.entities }, this.s, this.combat.audio, this.notice);
     await this.box.load();
+    this.combat.coop?.attachBox(this.box);
     world.updateBox();
     this.barriers = barrierGroups(d.entities).map(b => {
       const outside = V(b.outside), inside = V(b.inside);
@@ -153,7 +154,7 @@ export class ShangriFeatures {
     if (t.kind === 'box') {
       if (!this.box.available(t.e)) return '';
       const roll = this.box.at(t.e);
-      return roll ? roll.ready && !roll.teddy ? 'Take ' + this.box.data.weapons[roll.weapon].name : roll.teddy ? 'The box is moving…' : 'Mystery Box rolling…' : 'Mystery Box · ' + (s.effects.fire_sale > s.time ? 10 : 950);
+      return roll ? roll.ready && !roll.teddy ? this.box.takeLabel(roll, this.box.data.weapons[roll.weapon].name) : roll.teddy ? 'The box is moving…' : 'Mystery Box rolling…' : 'Mystery Box · ' + (s.effects.fire_sale > s.time ? 10 : 950);
     }
     if (t.kind === 'pack') {
       if (!s.power) return 'Pack-a-Punch · Requires power';

@@ -122,7 +122,22 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     }, BACKGROUND_MS);
   }
 
-  let audioHandle = null;
+  let audioHandle = null, boxHandle = null;
+
+  function attachBox(box) {
+    if (boxHandle) return boxHandle;
+    box.attachNet({
+      selfId,
+      send: data => channel.send('box', data),
+      nameOf: id => currentRoster().find(p => p.id === id)?.name ?? 'Another player',
+    });
+    const stop = channel.on('box', (raw, from) => {
+      if (from === selfId || !currentRoster().some(p => p.id === from)) return;
+      box.receiveNet(from, raw);
+    });
+    boxHandle = { dispose() { stop?.(); box.attachNet(null); boxHandle = null; } };
+    return boxHandle;
+  }
 
   function attachAudio(audio, { weapons = {} } = {}) {
     if (audioHandle) return audioHandle;
@@ -158,6 +173,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     idle,
     attachEnemies,
     attachAudio,
+    attachBox,
     update,
     /** Positions (THREE.Vector3, feet level) of living teammates, for zombie targeting. */
     targets: () => targetList,
@@ -170,6 +186,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       try { zombieHandle?.dispose(); } catch {}
       zombieHandle = null; simulation = null;
       try { audioHandle?.dispose(); } catch {}
+      try { boxHandle?.dispose(); } catch {}
       avatars.dispose();
       panel?.remove();
     },

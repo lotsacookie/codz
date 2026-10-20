@@ -31,7 +31,7 @@ export class MoonFeatures {
     const boxWeapons=Object.fromEntries(Object.entries(this.combat.data.weapons).filter(([id])=>this.combat.data.boxPool.includes(id)));
     Object.assign(boxWeapons,this.combat.data.equipment);
     this.box=new MysteryBox(this.scene,world,{...this.combat.data,weapons:boxWeapons,entities},this.s,this.combat.audio,this.notice);
-    await this.box.load();world.updateBox();
+    await this.box.load();world.updateBox();this.combat.coop?.attachBox(this.box);
     for(const e of this.all('zombie_vending'))this.targets.push({e,kind:'perk',perk:e.script_noteworthy});
     // Mule Kick is spawned by the DLC perk scripts, rather than a BSP trigger.
     const mule={id:'mule',targetname:'zombie_vending',script_noteworthy:'specialty_additionalprimaryweapon',position:[-760,-8,-550],yaw:Math.PI/2};
@@ -104,7 +104,7 @@ export class MoonFeatures {
     }
     if(t.kind==='box'){
       if(!this.box.available(t.e))return '';
-      const roll=this.box.at(t.e);return roll?roll.ready&&!roll.teddy?'Take '+this.box.data.weapons[roll.weapon].name:roll.teddy?'The box is moving…':'Mystery Box rolling…':'Mystery Box · '+(s.effects.fire_sale>s.time?10:950);
+      const roll=this.box.at(t.e);return roll?roll.ready&&!roll.teddy?this.box.takeLabel(roll,this.box.data.weapons[roll.weapon].name):roll.teddy?'The box is moving…':'Mystery Box rolling…':'Mystery Box · '+(s.effects.fire_sale>s.time?10:950);
     }
     if(t.kind==='pack')return s.pack?s.time>=s.pack.readyAt?'Retrieve '+s.def.name+' · Pack-a-Punch':'Upgrading weapon…':s.weapon.upgraded?'Weapon already upgraded':'Pack-a-Punch · 5000';
     if(t.kind==='hacker')return t.e.id===q.hackerId&&!s.hacker?'Take Hacker · replaces P.E.S.':'';
@@ -185,7 +185,7 @@ export class MoonFeatures {
     if(!this.s.hacker||!this.s.canAct||this.hack)return false;
     const t=this.findTarget(),s=this.s;
     if(t?.kind==='box'){
-      const b=this.box.boxes.get(t.e.id),roll=b?.roll;if(!roll?.ready||roll.teddy||roll.hacked||s.points<600)return false;
+      const b=this.box.boxes.get(t.e.id),roll=b?.roll;if(!roll?.ready||roll.teddy||roll.hacked||s.points<600||!this.box.isOwner(roll))return false;
       return this.startHack(t,3,()=>{if(b.roll!==roll||s.points<600)return;s.spend(600);roll.hacked=true;roll.ready=false;roll.weapon=roll.pool[Math.floor(s.random()*roll.pool.length)];roll.started=s.time;roll.time=s.time+3.9;roll.expires=s.time+15.9;this.notice('Mystery Box rerolled.');});
     }
     if(t?.kind==='perk'&&s.perks.has(t.perk))return this.interact(t);

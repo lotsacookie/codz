@@ -304,7 +304,7 @@ function findPrompt(){
   if(e.targetname==='use_elec_switch')promptText='Turn on the power';
   if(e.targetname==='meteor_egg_trigger')promptText='Listen to the meteor fragment';
   if(e.targetname==='bowie_upgrade')promptText=session.bowie?'Bowie Knife equipped':'Bowie Knife · 3000';
-  if(e.targetname==='treasure_chest_use'){const roll=mysteryBox.at(e);promptText=roll?(roll.ready?(roll.teddy?'The Mystery Box is moving…':'Take '+(data.weapons[roll.weapon]??data.equipment[roll.weapon]).name):'Choosing your weapon…'):'Mystery Box · '+(session.effects.fire_sale>session.time?10:950);}
+  if(e.targetname==='treasure_chest_use'){const roll=mysteryBox.at(e);promptText=roll?(roll.ready?(roll.teddy?'The Mystery Box is moving…':mysteryBox.takeLabel(roll,(data.weapons[roll.weapon]??data.equipment[roll.weapon]).name)):'Choosing your weapon…'):'Mystery Box · '+(session.effects.fire_sale>session.time?10:950);}
   if(e.targetname==='trigger_teleport_pad_0')promptText=!session.power?'The power must be activated':session.teleporter==='linked'?'Teleport to the projection room':session.teleporter==='cooldown'?'Teleporter cooling down':session.teleporter==='linking'?'Link the pad in the lobby':'Initiate teleporter link';
   if(e.targetname==='pf16_auto1')promptText=session.teleporter==='linking'?'Link with the mainframe':'Link the teleporter on the stage first';
   if(e.targetname==='zombie_vending_upgrade')promptText=session.pack?(session.time>=session.pack.readyAt?'Take '+data.weapons[session.pack.weapon.id].upgrade.name+' · '+Math.ceil(session.pack.expires-session.time)+'s':'Upgrading weapon…'):session.weapon.upgraded?'Weapon already upgraded':'Pack-a-Punch · 5000';
@@ -502,7 +502,7 @@ try{
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
-  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);
+  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();

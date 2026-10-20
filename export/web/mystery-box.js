@@ -2,10 +2,28 @@ import * as THREE from 'three';
 import { loadModel } from './animation.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { registerWarm } from './load-flow.js';
+import { cleanBoxMessage, packBoxStart } from './net/box-sync.js';
 
 const cycleTime=3.9,offerTime=12;
 export class MysteryBox {
-  constructor(scene,world,data,session,audio,toast){Object.assign(this,{scene,world,data,session,audio,toast});this.boxes=new Map();this.models={};this.centers={};this.moves=0;this.uses=0;}
+  constructor(scene,world,data,session,audio,toast){Object.assign(this,{scene,world,data,session,audio,toast});this.boxes=new Map();this.models={};this.centers={};this.moves=0;this.uses=0;this.net=null;}
+  attachNet(net){this.net=net;}
+  isOwner(roll){return !this.net||!roll?.owner||roll.owner===this.net.selfId;}
+  ownerLabel(roll){return roll?.owner&&this.net?this.net.nameOf(roll.owner):'Another player';}
+  takeLabel(roll,name){return this.isOwner(roll)?'Take '+name:this.ownerLabel(roll)+"'s "+name;}
+  boxFor(id){for(const [key,box] of this.boxes)if(String(key)===String(id))return box;return null;}
+  receiveNet(from,raw){
+    const message=cleanBoxMessage(raw);if(!message)return false;
+    const b=this.boxFor(message.box);if(!b)return false;
+    if(message.type==='take'){if(!b.roll||b.roll.owner!==from)return false;this.close(b);return true;}
+    if(b.roll||b.closing)return false;
+    const pool=message.pool.filter(k=>k!=='teddy'&&this.models[k]),weapon=this.models[message.weapon]&&message.weapon!=='teddy'?message.weapon:pool[0];
+    if(!weapon||!pool.length)return false;
+    const t=this.session.time;
+    b.roll={weapon,ready:false,time:t+cycleTime,expires:t+cycleTime+offerTime,started:t,sale:message.sale,teddy:message.teddy,pool,dest:message.dest,owner:from};
+    if(message.uses!==undefined)this.uses=message.uses;
+    b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00',1,b.display.position);this.audio.event('box/music_box/music_box_00',.7,b.display.position);return true;
+  }
   async load(){
     await Promise.all(Object.entries(this.data.weapons).map(async([id,d])=>{this.models[id]=await loadModel(d.worldModel);}));
     if(this.data.equipment?.zombie_cymbal_monkey)this.models.zombie_cymbal_monkey=await loadModel(this.data.equipment.zombie_cymbal_monkey.projectileModel);
@@ -34,9 +52,14 @@ export class MysteryBox {
     const chance=this.uses<4?0:this.uses<8?.15:!this.moves?1:this.uses<13?.3:.5;
     const teddy=!sale&&this.world.boxLocations.length>1&&this.session.random()<chance;
     b.roll={weapon:pool[Math.floor(this.session.random()*pool.length)],ready:false,time:this.session.time+cycleTime,expires:this.session.time+cycleTime+offerTime,started:this.session.time,sale,teddy,pool};
+    if(this.net){const choices=this.world.boxLocations.filter(l=>l.id!==this.world.activeBox.id);b.roll.dest=teddy?choices[Math.floor(this.session.random()*choices.length)]?.id:undefined;b.roll.owner=this.net.selfId;this.net.send(packBoxStart({box:b.id,roll:b.roll,uses:this.uses}));}
     b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00',1,b.display.position);this.audio.event('box/music_box/music_box_00',.7,b.display.position);return true;
   }
-  take(e){const b=this.boxes.get(e.id);if(!b?.roll?.ready||b.roll.teddy)return null;const weapon=b.roll.weapon;this.close(b);return weapon;}
+  take(e){
+    const b=this.boxes.get(e.id);if(!b?.roll?.ready||b.roll.teddy)return null;
+    if(!this.isOwner(b.roll)){this.toast(this.ownerLabel(b.roll)+' bought this weapon',3);return null;}
+    const weapon=b.roll.weapon;this.close(b);this.net?.send({a:'take',b:b.id});return weapon;
+  }
   measure(id){
     const source=this.models[id];if(!source)return null;
     const probe=clone(source);
@@ -97,11 +120,11 @@ export class MysteryBox {
       if(b.roll){
         busy=true;
         const r=b.roll,age=this.session.time-r.started;b.opening=Math.min(.5,b.opening+dt);
-        if(this.session.time>=r.time&&!r.ready){r.ready=true;this.show(b,r.teddy?'teddy':r.weapon);this.toast(r.teddy?'The Mystery Box is moving…':(this.data.weapons[r.weapon]??this.data.equipment[r.weapon]).name+' — press F to take',4);
-          if(r.teddy){this.session.points+=950;this.audio.event('box/whoosh/whoosh_00',1,b.display.position);}}
+        if(this.session.time>=r.time&&!r.ready){r.ready=true;this.show(b,r.teddy?'teddy':r.weapon);this.toast(r.teddy?'The Mystery Box is moving…':this.isOwner(r)?(this.data.weapons[r.weapon]??this.data.equipment[r.weapon]).name+' — press F to take':this.ownerLabel(r)+"'s "+(this.data.weapons[r.weapon]??this.data.equipment[r.weapon]).name,4);
+          if(r.teddy){if(this.isOwner(r))this.session.points+=950;this.audio.event('box/whoosh/whoosh_00',1,b.display.position);}}
         if(!r.ready){const step=age<1?Math.floor(age/.05):age<2?20+Math.floor((age-1)/.1):age<3?30+Math.floor((age-2)/.2):35+Math.floor((age-3)/.3);this.show(b,r.pool[step%r.pool.length]);}
         if(b.wrapper){const sink=THREE.MathUtils.clamp((this.session.time-r.time)/offerTime,0,1);b.wrapper.position.y=r.teddy&&r.ready?40+Math.max(0,this.session.time-r.time-1)*80:r.ready?40*(1-sink*sink*(3-2*sink)):Math.min(64,age/3*64);}
-        if(r.teddy&&this.session.time>r.time+5){this.close(b);this.moves++;this.uses=0;const choices=this.world.boxLocations.filter(e=>e.id!==this.world.activeBox.id);this.world.activeBox=choices[Math.floor(this.session.random()*choices.length)];this.world.updateBox();this.toast('The Mystery Box has moved');}
+        if(r.teddy&&this.session.time>r.time+5){this.close(b);this.moves++;this.uses=0;const choices=this.world.boxLocations.filter(e=>e.id!==this.world.activeBox.id);this.world.activeBox=(r.dest!==undefined&&this.world.boxLocations.find(l=>String(l.id)===String(r.dest)))||choices[Math.floor(this.session.random()*choices.length)];this.world.updateBox();this.toast('The Mystery Box has moved');}
         else if(this.session.time>r.expires)this.close(b);
       }
       if(b.closing){b.closing=Math.max(0,b.closing-dt);b.opening=b.closing;if(!b.closing){this.world.openBoxes.delete(b.id);this.world.updateBox();}}
