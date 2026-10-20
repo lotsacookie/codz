@@ -50,6 +50,27 @@ export function prefetchOtherSlots(session, view, { adjust = def => def, onBuilt
   return defs.length;
 }
 
+// Builds one gun's viewmodel in the background (off the current task) and hands the built entry to `onBuilt`
+// so its shaders and textures can be warmed. Resolves to the entry, or null if it could not be built.
+export function prefetchWeapon(def, view, { onBuilt = null } = {}) {
+  return new Promise(resolve => setTimeout(resolve, 0))
+    .then(() => view.prepare(def))
+    .then(entry => { onBuilt?.(entry); return entry; })
+    .catch(() => null);
+}
+
+// Returns a function that, given a weapon id the Mystery Box just rolled for the player, builds and warms that
+// gun's viewmodel while the box is still rolling, so taking it does not freeze the game. Unknown ids (such as
+// equipment) are ignored. `weapons` maps ids to defs; `adjust` matches what equipping does to a def.
+export function createOfferPrefetch({ weapons, view, adjust = def => def, onBuilt = null, warmAudio = null }) {
+  return id => {
+    const base = weapons?.[id];
+    if (!base || !view) return null;
+    try { warmAudio?.(base); } catch {}
+    return prefetchWeapon(adjust({ ...base }), view, { onBuilt });
+  };
+}
+
 // Compiles the shaders and uploads the textures of a built viewmodel ahead of its first frame in hand.
 export function warmEntry(renderer, scene, camera, entry) {
   if (!renderer || !entry?.root) return;

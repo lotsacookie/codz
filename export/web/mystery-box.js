@@ -53,7 +53,7 @@ export class MysteryBox {
     const teddy=!sale&&this.world.boxLocations.length>1&&this.session.random()<chance;
     b.roll={weapon:pool[Math.floor(this.session.random()*pool.length)],ready:false,time:this.session.time+cycleTime,expires:this.session.time+cycleTime+offerTime,started:this.session.time,sale,teddy,pool};
     if(this.net){const choices=this.world.boxLocations.filter(l=>l.id!==this.world.activeBox.id);b.roll.dest=teddy?choices[Math.floor(this.session.random()*choices.length)]?.id:undefined;b.roll.owner=this.net.selfId;this.net.send(packBoxStart({box:b.id,roll:b.roll,uses:this.uses}));}
-    b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00',1,b.display.position);this.audio.event('box/music_box/music_box_00',.7,b.display.position);return true;
+    b.opening=0;this.world.openBoxes.add(b.id);this.world.updateBox();this.audio.event('box/open/open_00',1,b.display.position);this.audio.event('box/music_box/music_box_00',.7,b.display.position);if(!teddy)this.onOffer?.(b.roll.weapon);return true;
   }
   take(e){
     const b=this.boxes.get(e.id);if(!b?.roll?.ready||b.roll.teddy)return null;

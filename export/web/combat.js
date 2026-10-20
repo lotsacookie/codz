@@ -6,7 +6,7 @@ import { MoonSession } from './moon-session.js';
 import { MoonEnemies } from './moon-enemies.js';
 import { PerkDrink } from './perk-drink.js';
 import { loadModel } from './animation.js';
-import { prefetchOtherSlots, warmEntry } from './viewmodel-cache.js';
+import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel-cache.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
@@ -48,6 +48,11 @@ export class Combat {
       for(const w of this.session.inventory){const d=this.data.weapons[w.id];if(d)this.audio.warmWeapon(d);}
       // Build the guns that are equipped but not in hand now, so switching to them later does not stall.
       prefetchOtherSlots(this.session,this.view,{adjust,onBuilt:entry=>this.renderer&&warmEntry(this.renderer,this.viewScene,this.viewCamera,entry)});}
+  }
+  prefetchWeapon(id){
+    const suit=!!this.features?.state.suit;
+    const adjust=d=>{if(suit)d.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;return d;};
+    return createOfferPrefetch({weapons:this.data.weapons,view:this.view,adjust,onBuilt:entry=>this.renderer&&warmEntry(this.renderer,this.viewScene,this.viewCamera,entry),warmAudio:def=>this.audio.warmWeapon(def)})(id);
   }
   clearInput(){this.primary=false;this.pressed=false;this.secondary=false;this.secondaryPressed=false;this.ads=false;this.burst=0;}
   pause(){this.clearInput();this.audio.pause();}

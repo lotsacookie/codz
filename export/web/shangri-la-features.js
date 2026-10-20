@@ -35,6 +35,7 @@ export class ShangriFeatures {
     };
     const weapons = Object.fromEntries(pool.map(id => [id, cd.weapons[id]]));
     this.box = new MysteryBox(this.scene, world, { ...cd, weapons, equipment: {}, boxPool: pool, entities: d.entities }, this.s, this.combat.audio, this.notice);
+    this.box.onOffer = id => this.combat.prefetchWeapon(id);
     await this.box.load();
     this.combat.coop?.attachBox(this.box);
     world.updateBox();

@@ -25,7 +25,7 @@ import { ensureTextures as sharedEnsureTextures, prewarm as sharedPrewarm, kinoP
 import { smoothingEnabled } from '../steering.js';
 import { AdaptiveResolution, createPerfOverlay } from '../quality.js';
 import { GradePass } from '../grade.js';
-import { prefetchOtherSlots, warmEntry } from '../viewmodel-cache.js';
+import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from '../viewmodel-cache.js';
 import { TapReload } from '../tap-reload.js';
 import { OcclusionCuller } from '../occlusion.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from '../vision.js';
@@ -502,7 +502,7 @@ try{
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
-  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);
+  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();

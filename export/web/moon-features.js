@@ -31,7 +31,7 @@ export class MoonFeatures {
     const boxWeapons=Object.fromEntries(Object.entries(this.combat.data.weapons).filter(([id])=>this.combat.data.boxPool.includes(id)));
     Object.assign(boxWeapons,this.combat.data.equipment);
     this.box=new MysteryBox(this.scene,world,{...this.combat.data,weapons:boxWeapons,entities},this.s,this.combat.audio,this.notice);
-    await this.box.load();world.updateBox();this.combat.coop?.attachBox(this.box);
+    this.box.onOffer=id=>this.combat.prefetchWeapon(id);await this.box.load();world.updateBox();this.combat.coop?.attachBox(this.box);
     for(const e of this.all('zombie_vending'))this.targets.push({e,kind:'perk',perk:e.script_noteworthy});
     // Mule Kick is spawned by the DLC perk scripts, rather than a BSP trigger.
     const mule={id:'mule',targetname:'zombie_vending',script_noteworthy:'specialty_additionalprimaryweapon',position:[-760,-8,-550],yaw:Math.PI/2};
