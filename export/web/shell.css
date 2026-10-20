@@ -102,8 +102,6 @@ body.custom-open .launcher-panel{visibility:hidden}
 #pause-status{margin:calc(var(--u) * 10) 0 0;font-size:max(10px,calc(var(--u) * 10));letter-spacing:.06em;text-transform:uppercase;color:rgba(244,242,236,.55)}
 #pause-status:empty{display:none}
 #pause-results{margin:calc(var(--u) * 4) 0 0;font-size:max(11px,calc(var(--u) * 12));line-height:1.6;color:rgba(244,242,236,.8)}
-#pause-controls{margin:calc(var(--u) * 18) 0 0;font-size:max(10px,calc(var(--u) * 10));line-height:1.9;letter-spacing:.04em;color:rgba(244,242,236,.5);white-space:pre-line}
-#pause-controls:empty{display:none}
 @media(max-width:700px){#pause .menu-content{margin-left:16px}}
 
 body[data-state="playing"] #hud{display:block}
@@ -111,7 +109,6 @@ body[data-state="playing"] #visor{display:block}
 body.touch-mode #pause{--row-h:44px;--row-font:max(14px,calc(var(--u) * 15))}
 body.touch-mode #pause .menu-content{margin:auto;width:min(360px,100%)}
 body.touch-mode #pause h1{margin-bottom:18px}
-body.touch-mode #pause-controls{display:none}
 body.touch-mode #viewport canvas{position:fixed;inset:0;width:100%!important;height:100%!important}
 body.touch-mode #pause{touch-action:pan-y;overscroll-behavior:contain}
 
@@ -120,9 +117,6 @@ body.touch-mode #pause{touch-action:pan-y;overscroll-behavior:contain}
 #launcher li button.pad-focus span{color:#4a443b}
 #load-actions button.pad-focus{color:#fff;outline:0;text-shadow:var(--glow)}
 #pause .menu-list button.pad-focus{background:var(--menu-select-bg);color:var(--menu-select-text);outline:0}
-#pause-pad-controls{margin:calc(var(--u) * 12) 0 0;font-size:max(10px,calc(var(--u) * 10));line-height:1.9;letter-spacing:.04em;color:rgba(244,242,236,.5);white-space:pre-line}
-#pause-pad-controls:empty,#pause-pad-controls[hidden]{display:none}
-body.touch-mode #pause-pad-controls{display:none}
 
 #modifiers-open{position:relative;display:flex;align-items:center;gap:10px;width:100%;margin:6px 0 0;padding:15px 20px;border:0;border-radius:0;background:rgba(255,255,255,.07);color:#f4f2ec;font:inherit;font-size:19px;letter-spacing:.04em;text-transform:uppercase;text-align:left;transition:background .08s,color .08s}
 #modifiers-open:hover,#modifiers-open:focus-visible{background:#f3f3f1;color:#161412;outline:0}

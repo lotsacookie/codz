@@ -22,7 +22,6 @@ import { ChalkHud, powerupVisible, spawnScorePopup, renderAmmoIcons } from '../h
 import { bindExploreGraphics, EXPLORE_MAX_PIXEL_RATIO } from '../explore-graphics.js';
 
 export async function mount(ctx) {
-const CONTROLS='WASD · Move   Mouse · Fire / Aim   Shift · Sprint\nSpace · Jump   Ctrl / C · Crouch   F / E · Interact\nR · Reload   V · Knife   G · Grenade   1 / 2 / 3 · Weapon\nQ · P.E.S.   X · Gersh / QED   B · Wave Gun mode   H · Hack\nTab · Objective   M · Sound   Esc · Pause   F3 · Diagnostics';
 const addEventListener=(type,handler,options)=>ctx.listen(window,type,handler,options);let disposed=false;
 const $ = id => document.getElementById(id), keys = new Set(), errors = [];
 const vector = a => new THREE.Vector3(...a);
@@ -54,7 +53,7 @@ function reportFault(error) {
   faults.set(key, n);
   if (n === 1) { console.error('[moon]', error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
 }
-let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;
+let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;const aimToggle=ctx.useAimToggle();
 const tapReload=new TapReload();
 const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
   onReset:()=>{touchFirePending=false;},
@@ -101,8 +100,8 @@ async function resetRun(){
 }
 function endRun(){const s=combat.session;ctx.gameOver({status:`Game over · ${s.kills} kills · ${s.moonStarted?'Round '+s.round:'No Man’s Land'} · ${Math.floor(s.time)} seconds`});}
 addEventListener('mousemove', e => { if (active&&document.pointerLockElement===renderer.domElement) { const sensitivity=combat?.enabled&&combat.ads?.0012:.002;camera.rotation.y -= e.movementX*sensitivity; camera.rotation.x = THREE.MathUtils.clamp(camera.rotation.x-e.movementY*sensitivity, -1.5, 1.5); } });
-addEventListener('mousedown',e=>{if(!active||!combat.enabled||e.sourceCapabilities?.firesTouchEvents||e.target.closest('#touch-controls'))return;if(e.button===0){mousePrimary=combat.primary=true;combat.pressed=true;}if(e.button===2){if(combat.session.def.dualWield){mouseSecondary=combat.secondary=true;combat.secondaryPressed=true;}else mouseAim=combat.ads=true;}});
-addEventListener('mouseup',e=>{if(!combat||e.sourceCapabilities?.firesTouchEvents)return;if(e.button===0)mousePrimary=combat.primary=false;if(e.button===2){mouseAim=combat.ads=false;mouseSecondary=combat.secondary=false;}});
+addEventListener('mousedown',e=>{if(!active||!combat.enabled||e.sourceCapabilities?.firesTouchEvents||e.target.closest('#touch-controls'))return;if(e.button===0){mousePrimary=combat.primary=true;combat.pressed=true;}if(e.button===2){if(combat.session.def.dualWield){mouseSecondary=combat.secondary=true;combat.secondaryPressed=true;}else if(aimToggle())mouseAim=combat.ads=!mouseAim;else mouseAim=combat.ads=true;}});
+addEventListener('mouseup',e=>{if(!combat||e.sourceCapabilities?.firesTouchEvents)return;if(e.button===0)mousePrimary=combat.primary=false;if(e.button===2){if(!aimToggle())mouseAim=combat.ads=false;mouseSecondary=combat.secondary=false;}});
 addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('wheel',()=>{if(active)combat.switchWeapon();});
 addEventListener('keydown', e => {
@@ -366,7 +365,7 @@ async function load() {
   await prewarm({ ctx, renderer, scenes: [[scene, camera], ...(combat.viewScene ? [[combat.viewScene, combat.viewCamera]] : [])] });
   player.enabled = false; ready = true;setModeUi();
   ctx.setHint(mode==='survival'?'500 points. M1911. Reach the teleporter and survive.':'Exploration: free doors and destination shortcuts.');
-  ctx.hud.crosshair(true);ctx.setControls(CONTROLS);
+  ctx.hud.crosshair(true);
   ctx.expose('moon', {ready: true, data, state, player, camera, scene, renderer, collision, parts, opened, errors, optimization,combat,navigation,features,presentation,
     debug: {relocate, interact, update, resetRun, pause, resume, environment: () => environment, target: () => target,
       snapshot: () => ({input:{touch:touchControls.getState(),primary:combat.primary,ads:combat.ads},player:{...player.state,rotation:camera.rotation.toArray().slice(0,3)},position: player.getFeetPosition().toArray(), grounded: player.isGrounded, active, mode, checkpoint, environment, power: state.power, hasSuit: state.hasSuit, suit: state.suit, exposure: state.exposure, doors: [...opened], combat:combat.snapshot(), fps, drawCalls: renderer.info.render.calls, errors: [...errors]})}});

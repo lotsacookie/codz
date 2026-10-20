@@ -32,16 +32,6 @@ export const LOOK_DEADZONE = 0.15;
 export const LOOK_SPEED = 560;
 const LOOK_CURVE = 1.6;
 
-export const PAD_CONTROLS = [
-  'CONTROLLER',
-  'Left stick · Move   L3 · Sprint   Right stick · Look   R3 · Knife',
-  'RT · Fire   LT · Aim   A · Jump   B · Crouch',
-  'X · Use / Reload (hold to repair)   Y · Switch weapon',
-  'LB · Grenade   RB · Monkey Bomb / Gersh / QED',
-  'D-pad up · Alt fire / attachment   D-pad down · Claymore / P.E.S.',
-  'Back · Objective (Moon)   Start · Pause',
-].join('\n');
-
 const SENSITIVITY_KEY = 'zombies.padSensitivity';
 
 function readSensitivity() {

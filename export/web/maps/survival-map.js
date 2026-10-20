@@ -48,7 +48,6 @@ export function withDefaults(cfg) {
     player: { radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4, ...cfg.player },
     classes: { session: ShangriSession, enemies: ShangriEnemies, features: ShangriFeatures, navigation: SurvivalNavigation, ...cfg.classes },
     startHint: cfg.startHint ?? '500 points. M1911. Buy a door, throw both power switches and survive.',
-    controls: cfg.controls ?? 'WASD · Move   Mouse · Fire / Aim   Shift · Sprint\nSpace · Jump   Ctrl / C · Crouch   F / E · Interact (hold to repair)\nR · Reload   V · Knife   G · Grenade   1 / 2 / 3 · Weapon\nM · Sound   Esc · Pause   F3 · Diagnostics',
   };
 }
 
@@ -128,6 +127,7 @@ const trail = new PlayerTrail();
 const objects = new Map(), parts = new Map(), boughtGuns = new Set(), wallGuns = new Map();
 const chalk = new ChalkHud();
 let mousePrimary = false, mouseSecondary = false, mouseAim = false, touchFirePending = false;
+const aimToggle = ctx.useAimToggle();
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
 // One bad frame must not freeze the whole game: log it once, surface it in the diagnostics (F3) and keep rendering.
@@ -371,13 +371,14 @@ addEventListener('mousedown', e => {
   if (!active || e.sourceCapabilities?.firesTouchEvents || e.target.closest('#touch-controls')) return;
   if (e.button === 0) { mousePrimary = combat.primary = true; combat.pressed = true; }
   if (e.button === 2) {
-    if (combat.session.def.dualWield) { mouseSecondary = combat.secondary = true; combat.secondaryPressed = true; } else mouseAim = combat.ads = true;
+    if (combat.session.def.dualWield) { mouseSecondary = combat.secondary = true; combat.secondaryPressed = true; } else if (aimToggle()) mouseAim = combat.ads = !mouseAim;
+    else mouseAim = combat.ads = true;
   }
 });
 addEventListener('mouseup', e => {
   if (!combat || e.sourceCapabilities?.firesTouchEvents) return;
   if (e.button === 0) mousePrimary = combat.primary = false;
-  if (e.button === 2) { mouseAim = combat.ads = false; mouseSecondary = combat.secondary = false; }
+  if (e.button === 2) { if (!aimToggle()) mouseAim = combat.ads = false; mouseSecondary = combat.secondary = false; }
 });
 addEventListener('contextmenu', e => e.preventDefault());
 addEventListener('wheel', () => { if (active) combat.switchWeapon(); });
@@ -582,7 +583,6 @@ async function load() {
   ctx.hud.hidden('systems', false);
   ctx.hud.combat(true);
   ctx.hud.crosshair(true);
-  ctx.setControls(C.controls);
   ctx.setHint(C.startHint);
   ctx.expose(C.expose ?? C.id.replace(/-(\w)/g, (_, c) => c.toUpperCase()), {
     ready: true, data, player, camera, scene, renderer, collision, parts, errors, optimization, combat, navigation, features,

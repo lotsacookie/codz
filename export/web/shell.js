@@ -5,7 +5,7 @@ import { resetMapAssets } from './map-assets.js';
 import { releaseModelCache } from './animation.js';
 import { createListeners, disposeRenderer } from './dispose.js';
 import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
-import { MenuNav, PAD_CONTROLS, getGamepads, padSettings } from './gamepad.js';
+import { MenuNav, getGamepads, padSettings } from './gamepad.js';
 import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
 import { createCustomMenu } from './custom-maps/menu.js';
 import { createMultiplayerMenu } from './net/menu.js';
@@ -21,8 +21,8 @@ const SENSITIVITY_KEY = 'kino.lookSensitivity';
 const pauseEls = {
   eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('start'), restart: $('pause-restart'),
   extra: $('pause-extra'), options: $('pause-options'), quit: $('pause-quit'), status: $('pause-status'), results: $('pause-results'),
-  controls: $('pause-controls'), optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
-  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'),
+  optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
+  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'), aim: $('pause-aim-toggle'),
 };
 // A cached older index.html (common on mobile) has no GRAPHICS button; create it so the rest of
 // the shell never fails to start because of it.
@@ -33,12 +33,15 @@ if (!pauseEls.graphics) {
   pauseEls.graphics.hidden = true;
   (pauseEls.fullscreen ?? pauseEls.back)?.before(pauseEls.graphics);
 }
+// Same for the AIM TOGGLE button.
+if (!pauseEls.aim) {
+  pauseEls.aim = document.createElement('button');
+  pauseEls.aim.id = 'pause-aim-toggle';
+  pauseEls.aim.type = 'button';
+  pauseEls.aim.hidden = true;
+  (pauseEls.fullscreen ?? pauseEls.back)?.before(pauseEls.aim);
+}
 const loadEls = { label: $('load-label'), bar: $('load-progress'), actions: $('load-actions') };
-// Controller hints sit under the keyboard ones and only appear once a pad has been seen.
-const padControls = document.createElement('p');
-padControls.id = 'pause-pad-controls';
-padControls.hidden = true;
-pauseEls.controls.after(padControls);
 // True while the most recent way of starting the game was the controller. A pad cannot request
 // pointer lock (it is not a click), so it starts the game directly, like touch does.
 let padPreferred = false;
@@ -104,6 +107,9 @@ function readSensitivity() {
 }
 let mouseSensitivity = readSensitivity();
 const graphics = new GraphicsSettings({ lowEnd: detectLowEndBrowser() });
+const AIM_TOGGLE_KEY = 'codz.aimToggle';
+let aimToggle = false;
+try { aimToggle = localStorage.getItem(AIM_TOGGLE_KEY) === '1'; } catch {}
 
 function loadStyle(href) {
   return new Promise((resolve, reject) => {
@@ -160,8 +166,14 @@ function syncGraphics() {
   if (supported) pauseEls.graphics.textContent = `GRAPHICS: ${graphics.label()}`;
 }
 
+function syncAimToggle() {
+  pauseEls.aim.hidden = !session?.aimToggleEnabled;
+  pauseEls.aim.textContent = `AIM TOGGLE: ${aimToggle ? 'ON' : 'OFF'}`;
+}
+
 function syncOptions() {
   syncGraphics();
+  syncAimToggle();
   const touch = !!session?.ctx.touch?.mode;
   const coarse = touch || !!session?.pad;  // touch and controller share a 0.4–2 scale
   const slider = pauseEls.slider;
@@ -187,6 +199,11 @@ pauseEls.slider.addEventListener('input', () => {
   pauseEls.sliderValue.textContent = value.toFixed(touch?.mode || pad ? 1 : 2) + '×';
 });
 pauseEls.graphics.addEventListener('click', () => { graphics.cycle(); syncGraphics(); });
+pauseEls.aim.addEventListener('click', () => {
+  aimToggle = !aimToggle;
+  try { localStorage.setItem(AIM_TOGGLE_KEY, aimToggle ? '1' : '0'); } catch {}
+  syncAimToggle();
+});
 pauseEls.options.addEventListener('click', () => showOptions(true));
 pauseEls.back.addEventListener('click', () => showOptions(false));
 pauseEls.fullscreen.addEventListener('click', async () => {
@@ -211,9 +228,6 @@ function renderPause({ title, resumeLabel, status = '', results = '', restart = 
   else if (padNav.seen) pauseEls.status.textContent = (status ? status + ' · ' : '') + 'Press A or Start';
   pauseEls.results.hidden = !results;
   pauseEls.results.textContent = results;
-  pauseEls.controls.textContent = session.controls;
-  padControls.textContent = session.padControls || PAD_CONTROLS;
-  padControls.hidden = !padNav.seen;
   pause.hidden = false;
   hud.root.hidden = true;
 }
@@ -419,8 +433,9 @@ function createContext(entry) {
     // Maps that have shadows / god rays call this to get the shared Graphics setting and
     // to show the GRAPHICS row in the pause menu's options.
     useGraphics() { const own = live(); if (own) own.graphicsEnabled = true; return graphics; },
-    setPadControls(text) { const own = live(); if (own) own.padControls = text; },
-    setControls(text) { const own = live(); if (!own) return; own.controls = text; pauseEls.controls.textContent = text; },
+    // Maps with aiming call this to show the AIM TOGGLE row and get a live reader of the setting
+    // (off by default: hold right click to aim; on: right click toggles aim).
+    useAimToggle() { const own = live(); if (own) own.aimToggleEnabled = true; return () => aimToggle; },
     setHint(text) { const own = live(); if (own) own.hint = text; },
     setButtons(items) {
       pauseEls.extra.replaceChildren();
@@ -495,7 +510,7 @@ async function boot(entry) {
   const holder = createContext(entry);
   session = {
     ...entry, ctx: holder.ctx, holder, styles, canvas: null, renderer: null, api: null, ready: false, active: false, over: false, started: false, pad: false,
-    controls: '', padControls: '', hint: 'Click to capture the mouse · Esc to pause', pauseTitle: '', mounting: null, cancelled: false,
+    hint: 'Click to capture the mouse · Esc to pause', pauseTitle: '', mounting: null, cancelled: false,
   };
   document.title = entry.title || document.title;
   body.dataset.map = entry.map;

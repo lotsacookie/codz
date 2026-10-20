@@ -32,7 +32,6 @@ import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirect
 import { disposeObject } from '../dispose.js';
 
 export async function mount(ctx){
-const CONTROLS='WASD · Move   Mouse · Fire / Aim   Shift · Sprint\nSpace · Jump   Ctrl / C · Crouch   F / E · Interact\nR · Reload   V · Knife   G · Grenade   1 / 2 / Q · Weapon\n4 · Claymore   X · Monkey Bomb   5 · Alt fire   M · Sound   Esc · Pause';
 const addEventListener=(type,handler,options)=>ctx.listen(window,type,handler,options);let disposed=false;
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
 const chalk=new ChalkHud();let lastPoints=null,perkKey='';
@@ -99,7 +98,7 @@ const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Po
 const errors=[];
 let lastShot=null;
 let pendingMelee=null,lastReloadSerial=0,reloadShot=false;
-let mousePrimary=false,mouseAim=false;
+let mousePrimary=false,mouseAim=false;const aimToggle=ctx.useAimToggle();
 const tapReload=new TapReload();
 const touchControls=createZombieTouch({ctx,
   menuSettings:false,
@@ -169,8 +168,8 @@ renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDef
 renderer.domElement.addEventListener('webglcontextrestored',()=>{contextLost=false;ctx.setHint('Graphics restored · tap to resume');resumeRendering();});
 addEventListener('blur',()=>{keys.clear();primary=false;ads=false;});
 addEventListener('mousemove',e=>{if(!active||document.pointerLockElement!==renderer.domElement)return;const sensitivity=(ads?.0012:.002)*ctx.sensitivity();camera.rotation.y-=e.movementX*sensitivity;camera.rotation.x=THREE.MathUtils.clamp(camera.rotation.x-e.movementY*sensitivity,-1.5,1.5);});
-addEventListener('mousedown',e=>{if(!active||e.sourceCapabilities?.firesTouchEvents||e.target.closest('#touch-controls'))return;if(e.button===0){mousePrimary=primary=true;primaryPressed=true;}if(e.button===2)mouseAim=ads=true;});
-addEventListener('mouseup',e=>{if(e.sourceCapabilities?.firesTouchEvents)return;if(e.button===0)mousePrimary=primary=false;if(e.button===2)mouseAim=ads=false;});
+addEventListener('mousedown',e=>{if(!active||e.sourceCapabilities?.firesTouchEvents||e.target.closest('#touch-controls'))return;if(e.button===0){mousePrimary=primary=true;primaryPressed=true;}if(e.button===2){if(aimToggle())mouseAim=ads=!mouseAim;else mouseAim=ads=true;}});
+addEventListener('mouseup',e=>{if(e.sourceCapabilities?.firesTouchEvents)return;if(e.button===0)mousePrimary=primary=false;if(e.button===2&&!aimToggle())mouseAim=ads=false;});
 addEventListener('contextmenu',e=>e.preventDefault());
 addEventListener('keydown',e=>{
   if(['Space','Tab','F3'].includes(e.code))e.preventDefault();
@@ -508,7 +507,7 @@ try{
   progress('Checking textures',88);await ensureTextures();
   progress('Preparing graphics',90);await prewarm();
   if(!/[?&]cull=0\b/.test(location.search)&&world.staticRoot){try{culler=new OcclusionCuller({root:world.staticRoot,lightDirection:keyDirection,shadows:!!profile.shadows&&graphics.preset.shadows});}catch(error){console.warn('[kino] culling unavailable',error);culler=null;}}cullReady=true;
-  progress('Ready',100);ctx.hud.combat(true);ctx.hud.crosshair(true);ctx.setControls(CONTROLS);
+  progress('Ready',100);ctx.hud.combat(true);ctx.hud.crosshair(true);
   {let hint=contextLost?'Graphics paused. Waiting for Safari to restore the game…':touchControls.mode?'Tap to enter the theater':'Click to capture the mouse · Esc to pause';const missing=assetDiagnostics().failedTextures;if(missing)hint+=` · ${missing} texture${missing>1?'s':''} could not be loaded (see console)`;ctx.setHint(hint);}
 }catch(error){console.error(error);errors.push(String(error));byteProgress=false;throw error;}
 renderer.info.autoReset=false;

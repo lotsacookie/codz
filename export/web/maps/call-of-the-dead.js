@@ -13,11 +13,9 @@ import { GamepadInput, padSettings } from '../gamepad.js';
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
 let disposed = false;
-const CONTROLS = 'WASD · Move   Mouse · Look   Shift · Sprint\nSpace · Jump   Ctrl · Crouch   V · Fly or walk\nR · Return to spawn   Esc · Pause';
 
 const status = document.querySelector('#status'), help = document.querySelector('#help');
 const keys = new Set(), errors = [];
-const PAD_CONTROLS = 'Left stick · Move   L3 · Sprint / fly faster   Right stick · Look\nA · Jump / ascend   B · Crouch / descend\nR3 · Fly or walk   X · Use wall gun\nBack · Return to spawn   Start · Pause';
 const pad = new GamepadInput({
   onLook: (x, y) => {
     if (!active) return;
@@ -155,8 +153,6 @@ async function load() {
   player.setEnabled(true); for (let i = 0; i < 120; i++) player.update(1/120, {}); player.setEnabled(false);
   ready = true;
   if (debug && query.has('landmark')) relocate(query.get('landmark'));
-  ctx.setControls(CONTROLS);
-  ctx.setPadControls(PAD_CONTROLS);
   ctx.setHint('Click to capture the mouse · Esc to pause');
   renderer.setAnimationLoop(frame);
 }

@@ -14,13 +14,11 @@ import { GamepadInput, padSettings } from '../gamepad.js';
 export async function mount(ctx) {
 const addEventListener = (type, handler, options) => ctx.listen(window, type, handler, options);
 let disposed = false;
-const CONTROLS = 'WASD · Move   Mouse · Look   Shift · Sprint / fly faster\nSpace · Jump / ascend   Ctrl · Crouch / descend\nF · Fly or walk   R · Return to spawn   H · Hide help\nF3 · Diagnostics   Esc · Pause';
 
 const status = document.getElementById('status');
 const help = document.getElementById('help');
 const debug = document.getElementById('debug');
 const keys = new Set(), errors = [];
-const PAD_CONTROLS = 'Left stick · Move   L3 · Sprint / fly faster   Right stick · Look\nA · Jump / ascend   B · Crouch / descend\nR3 · Fly or walk   X · Use wall gun   D-pad up · Hide help\nBack · Return to spawn   Start · Pause';
 const pad = new GamepadInput({
   onLook: (x, y) => {
     if (!active) return;
@@ -180,8 +178,6 @@ async function load() {
   if (failedTextures) status.textContent = `${failedTextures} texture${failedTextures > 1 ? 's' : ''} could not be loaded (see console).`;
   status.hidden = !failedTextures;
   updateHelp();
-  ctx.setControls(CONTROLS);
-  ctx.setPadControls(PAD_CONTROLS);
   ctx.setHint('Click to capture the mouse · Esc to pause');
   ctx.expose('ascension', {
     ready, scene, camera, player, collision, renderer, data, world,
