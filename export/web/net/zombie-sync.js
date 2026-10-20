@@ -1,8 +1,12 @@
 export const ZOMBIE_HZ = 15;
 export const MAX_ZOMBIES = 64;
 export const MAX_BOARDS = 128;
-export const PUPPET_DELAY_MS = 110;
+export const PUPPET_DELAY_MS = 120;
 export const PUPPET_TIMEOUT_MS = 4000;
+export const PUPPET_EXTRAPOLATE_MS = 120;
+export const PUPPET_OFFSET_DRIFT_MS = .5;
+export const PUPPET_FOLLOW_RATE = 22;
+export const PUPPET_SNAP_DIST = 180;
 export const KINDS = ['zombie', 'dog', 'nova', 'astronaut'];
 export const STATES = ['chase', 'attack', 'barricade', 'entering', 'approach'];
 export const MAX_HIT_DAMAGE = 1e6;
@@ -31,9 +35,10 @@ export function packZombie(z) {
   ];
 }
 
-export function packSnapshot({ seq, session, zombies, boards = null }) {
+export function packSnapshot({ seq, session, zombies, boards = null, time = null }) {
   return {
     q: seq | 0,
+    h: time === null || !Number.isFinite(Number(time)) ? undefined : Math.round(Number(time) * 10) / 10,
     r: finite(session.round) | 0,
     p: (session.corePhase ?? session.phase) === 'preparing' ? 0 : 1,
     t: finite(session.total) | 0,
@@ -70,6 +75,7 @@ export function cleanSnapshot(raw) {
   }
   return {
     seq: finite(raw.q) | 0,
+    time: raw.h !== undefined && raw.h !== null && Number.isFinite(Number(raw.h)) ? Number(raw.h) : null,
     round: clamp(finite(raw.r, 1) | 0, 0, 9999),
     phase: finite(raw.p) === 0 ? 'preparing' : 'fighting',
     total: clamp(finite(raw.t) | 0, 0, 9999),
@@ -129,20 +135,30 @@ export function cleanBoardRequest(raw) {
 
 export class PuppetTracker {
   constructor({ now = () => performance.now(), delay = PUPPET_DELAY_MS, timeout = PUPPET_TIMEOUT_MS } = {}) {
-    this.now = now; this.delay = delay; this.timeout = timeout; this.entries = new Map(); this.lastSeq = -1;
+    this.now = now; this.delay = delay; this.timeout = timeout; this.entries = new Map(); this.lastSeq = -1; this.offset = null;
+  }
+
+  timeline(snapshot, t) {
+    if (snapshot.time === null || snapshot.time === undefined) return t;
+    const offset = t - snapshot.time;
+    if (this.offset === null || offset < this.offset) this.offset = offset;
+    else this.offset += Math.min(offset - this.offset, PUPPET_OFFSET_DRIFT_MS);
+    return snapshot.time + this.offset;
   }
 
   receive(snapshot, t = this.now()) {
     if (!snapshot) return { gone: [] };
     if (snapshot.seq < this.lastSeq && this.lastSeq - snapshot.seq < 1000) return { gone: [] };
     this.lastSeq = snapshot.seq;
+    const when = this.timeline(snapshot, t);
     const present = new Set();
     for (const z of snapshot.zombies) {
       present.add(z.id);
       let entry = this.entries.get(z.id);
       if (!entry) { entry = { id: z.id, samples: [] }; this.entries.set(z.id, entry); }
       entry.kind = z.kind; entry.state = z.state; entry.hp = z.hp; entry.seen = t;
-      entry.samples.push({ t, x: z.x, y: z.y, z: z.z, yaw: z.yaw });
+      const last = entry.samples[entry.samples.length - 1];
+      entry.samples.push({ t: last && when <= last.t ? last.t + 1 : when, x: z.x, y: z.y, z: z.z, yaw: z.yaw });
       while (entry.samples.length > 10 || (entry.samples.length > 2 && entry.samples[1].t < t - 1500)) entry.samples.shift();
     }
     const gone = [];
@@ -151,7 +167,7 @@ export class PuppetTracker {
   }
 
   forget(id) { this.entries.delete(id); }
-  clear() { this.entries.clear(); this.lastSeq = -1; }
+  clear() { this.entries.clear(); this.lastSeq = -1; this.offset = null; }
   ids() { return [...this.entries.keys()]; }
   get(id) { return this.entries.get(id) ?? null; }
 
@@ -167,7 +183,25 @@ export class PuppetTracker {
     const s = entry.samples, at = t - this.delay;
     let a = s[0], b = s[s.length - 1];
     for (let i = s.length - 1; i > 0; i--) if (s[i - 1].t <= at) { a = s[i - 1]; b = s[i]; break; }
-    const span = b.t - a.t, k = span > 0 ? clamp((at - a.t) / span, 0, 1) : 1;
+    const span = b.t - a.t;
+    if (span >= 20 && at > b.t && a !== b) {
+      const ahead = Math.min(at - b.t, PUPPET_EXTRAPOLATE_MS) / span;
+      const jump = Math.hypot(b.x - a.x, b.z - a.z);
+      if (jump < PUPPET_SNAP_DIST) return { x: b.x + (b.x - a.x) * ahead, y: b.y + (b.y - a.y) * ahead, z: b.z + (b.z - a.z) * ahead, yaw: b.yaw };
+    }
+    const k = span > 0 ? clamp((at - a.t) / span, 0, 1) : 1;
     return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), z: lerp(a.z, b.z, k), yaw: lerpAngle(a.yaw, b.yaw, k) };
   }
+}
+
+export function followFactor(dt, rate = PUPPET_FOLLOW_RATE) {
+  return 1 - Math.exp(-Math.max(0, Number(dt) || 0) * rate);
+}
+
+export function followPosition(position, target, dt, { rate = PUPPET_FOLLOW_RATE, snap = PUPPET_SNAP_DIST } = {}) {
+  const dx = target.x - position.x, dy = target.y - position.y, dz = target.z - position.z;
+  if (Math.hypot(dx, dz) > snap || Math.abs(dy) > snap) { position.set(target.x, target.y, target.z); return true; }
+  const k = followFactor(dt, rate);
+  position.set(position.x + dx * k, position.y + dy * k, position.z + dz * k);
+  return false;
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { PuppetTracker, STATES, cleanAward, cleanBoardRequest, cleanDead, cleanHit, cleanHurt, cleanSnapshot, packSnapshot } from './zombie-sync.js';
+import { PuppetTracker, STATES, cleanAward, cleanBoardRequest, cleanDead, cleanHit, cleanHurt, cleanSnapshot, followPosition, packSnapshot } from './zombie-sync.js';
 
 const BLEND = .18;
 const MAX_NEW_PER_FRAME = 4;
@@ -21,6 +21,7 @@ export function attachZombieNet(enemies, { net, session, world = enemies.world, 
       const barriers = barrierList();
       net.broadcast(packSnapshot({
         seq: net.nextSeq(),
+        time: net.now(),
         session,
         zombies: enemies.list.filter(z => z.state !== 'dead'),
         boards: barriers.length ? barriers.map(b => b.count ?? 0) : null,
@@ -161,7 +162,7 @@ export function attachZombieNet(enemies, { net, session, world = enemies.world, 
         }
         const at = tracker.sample(id, t);
         if (!at) continue;
-        z.root.position.set(at.x, at.y, at.z);
+        followPosition(z.root.position, at, dt);
         z.root.rotation.y = at.yaw;
         const state = STATES[entry.state] ?? 'chase';
         if (state !== z.state) {

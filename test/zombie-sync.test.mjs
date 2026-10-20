@@ -63,7 +63,9 @@ test('PuppetTracker blends between snapshots a little in the past and reports zo
   tracker.receive(snap(1, zombie(1, 0), zombie(2, 50)), 0);
   tracker.receive(snap(2, zombie(1, 100), zombie(2, 50)), 100);
   assert.ok(Math.abs(tracker.sample(1, 150).x - 50) < .2, 'halfway between the two samples');
-  assert.equal(tracker.sample(1, 400).x, 100, 'holds the last known position');
+  assert.equal(tracker.sample(1, 400).x, 220, 'glides on for a moment then holds instead of running away');
+  assert.equal(tracker.sample(2, 400).x, 50, 'a standing zombie stays put');
+  assert.equal(tracker.sample(1, 4000).x, 220);
   const { gone } = tracker.receive(snap(3, zombie(1, 120)), 200);
   assert.deepEqual(gone, [2]);
   assert.equal(tracker.get(2), null);
