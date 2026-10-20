@@ -18,6 +18,7 @@ import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
 import { KnifeBlood } from '../knife-blood.js';
+import { popHead } from '../gore.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
@@ -247,7 +248,7 @@ function shoot(){
     const direction=forward.clone();if(pellets>1||!ads){const spread=pellets>1?.055:.012;direction.x+=(Math.random()-.5)*spread;direction.y+=(Math.random()-.5)*spread;direction.z+=(Math.random()-.5)*spread;direction.normalize();}
     const ray=new THREE.Ray(camera.position.clone(),direction),wall=world.raycast(ray,1,6000),target=enemies.rayHit(ray,wall?.distance??6000);
     lastShot={origin:ray.origin.toArray(),direction:direction.toArray(),wallDistance:wall?.distance??null,target:target?{id:target.z.id,head:target.head,distance:target.distance}:null};
-    if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');}
+    if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');if(target.head&&!enemies.list.includes(target.z))popHead({blood,enemies,zombie:target.z,def:session.def,distance:target.distance});}
     else if(wall)impacts.strike(wall,ray,particles);
     if(session.def.explosionRadius&&(target||wall)){
       const p=target?.point??wall.position,radius=session.def.explosionRadius;

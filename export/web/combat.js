@@ -11,6 +11,7 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
 import { KnifeBlood } from './knife-blood.js';
+import { popHead } from './gore.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -110,6 +111,7 @@ export class Combat {
       const ray=new THREE.Ray(this.camera.position.clone(),direction),wall=this.world.raycast(ray,1,6000),hit=this.enemies.rayHit(ray,wall?.distance??6000);
       this.lastShot={target:hit?.z.id,head:hit?.head,wall:wall?.distance};
       if(hit)this.enemies.hurt(hit.z,s.def.id==='microwavegundw_zm'?hit.z.health:(hit.distance>s.def.range?s.def.minDamage:s.def.damage)*(hit.head?Math.max(1,s.def.headMultiplier):1),hit.head,false,s.def.id==='microwavegundw_zm'?'zap':'bullet');
+      if(hit?.head&&this.blood&&!this.enemies.list.includes(hit.z))popHead({blood:this.blood,enemies:this.enemies,zombie:hit.z,def:s.def,distance:hit.distance});
       else if(wall)this.impacts.strike(wall,ray,this.particles);
     }
     this.camera.rotation.x=Math.min(1.48,this.camera.rotation.x+(this.ads?.006:.012));return true;

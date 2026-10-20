@@ -5,10 +5,12 @@ const TEXTURES = {
   burstTall: 'textures/fxt_bio_bloodburst_c.png',
   gush: 'textures/fxt_bio_bloodgush.png',
   drops: 'textures/fxt_bio_blooddrops.png',
-  trail: 'textures/fxt_bio_bloodtrail.png'
+  trail: 'textures/fxt_bio_bloodtrail.png',
+  cloud: 'textures/fxt_bio_blood_cloud.png',
+  splat: 'textures/fxt_bio_bloodburst.png'
 };
 
-const MAX_SPRITES = 140;
+const MAX_SPRITES = 260;
 const GRAVITY = 360;
 // World units are Black Ops inches: a zombie is ~72 tall and its head ~10 across, and the
 // game only plays a small neck/hit spurt. Sizes below are tuned to that, not to the
@@ -18,6 +20,7 @@ export class BloodFx {
   constructor(scene) {
     this.scene = scene;
     this.items = [];
+    this.fountains = [];
     this.textures = {};
     const loader = new THREE.TextureLoader();
     for (const [key, url] of Object.entries(TEXTURES)) {
@@ -137,6 +140,31 @@ export class BloodFx {
     }
   }
 
+  // A head blowing apart: a tight column of blood thrown straight up from the neck, a red mist, and
+  // a fountain that keeps pumping for a moment. `at` returns the neck position (it follows the body).
+  headBurst(at, { power = 1 } = {}) {
+    if (!this.ready()) return;
+    const origin = typeof at === 'function' ? at() : at;
+    const p = Math.min(3, Math.max(1, power));
+    const up = key => this.textures[key] ? key : 'burst';
+    this.sprite(up('cloud'), origin, 20 * p, 0.55, { grow: 2.2, velocity: new THREE.Vector3(0, 40, 0), opacity: 0.7, spin: 0.4 });
+    this.sprite(up('splat'), origin, 16 * p, 0.35, { grow: 1.8, velocity: new THREE.Vector3(0, 30, 0), opacity: 0.95 });
+    const column = Math.round(14 + 6 * p);
+    for (let i = 0; i < column; i++) {
+      const jitter = new THREE.Vector3((Math.random() - 0.5) * 3, Math.random() * 4, (Math.random() - 0.5) * 3);
+      const velocity = new THREE.Vector3((Math.random() - 0.5) * 22, 110 + Math.random() * 110 * p, (Math.random() - 0.5) * 22);
+      this.sprite(Math.random() < 0.6 ? up('gush') : up('burstTall'), origin.clone().add(jitter), (4 + Math.random() * 4) * (0.8 + 0.3 * p), 0.7 + Math.random() * 0.5, {
+        velocity, gravity: 300, grow: 1.5, opacity: 0.85, spin: (Math.random() - 0.5) * 2
+      });
+    }
+    const drops = Math.round(26 + 12 * p);
+    for (let i = 0; i < drops; i++) {
+      const velocity = new THREE.Vector3((Math.random() - 0.5) * 50, 90 + Math.random() * 150 * p, (Math.random() - 0.5) * 50);
+      this.sprite('drops', origin.clone(), 1.2 + Math.random() * 2.2, 0.8 + Math.random() * 0.7, { velocity, gravity: GRAVITY, grow: 0.6, opacity: 0.95 });
+    }
+    this.fountains.push({ at, age: 0, life: 0.8 + 0.2 * p, rate: 55 * p, carry: 0 });
+  }
+
   release(item) {
     item.sprite.removeFromParent();
     item.material.dispose();
@@ -145,6 +173,22 @@ export class BloodFx {
   }
 
   update(dt) {
+    for (let i = this.fountains.length - 1; i >= 0; i--) {
+      const f = this.fountains[i];
+      f.age += dt;
+      if (f.age >= f.life) { this.fountains.splice(i, 1); continue; }
+      // The heart pumps, so the spurt pulses and weakens.
+      const pulse = 0.55 + 0.45 * Math.sin(f.age * 22);
+      f.carry += f.rate * pulse * (1 - f.age / f.life) * dt;
+      const origin = typeof f.at === 'function' ? f.at() : f.at;
+      while (f.carry >= 1) {
+        f.carry -= 1;
+        const velocity = new THREE.Vector3((Math.random() - 0.5) * 18, 70 + Math.random() * 80, (Math.random() - 0.5) * 18);
+        this.sprite(Math.random() < 0.5 ? 'drops' : (this.textures.gush ? 'gush' : 'burst'), origin.clone(), 2 + Math.random() * 3, 0.5 + Math.random() * 0.4, {
+          velocity, gravity: 280, grow: 1.3, opacity: 0.85
+        });
+      }
+    }
     const items = this.items;
     for (let i = items.length - 1; i >= 0; i--) {
       const item = items[i];
@@ -161,6 +205,7 @@ export class BloodFx {
   }
 
   clear() {
+    this.fountains.length = 0;
     for (const item of [...this.items]) this.release(item);
   }
 }
