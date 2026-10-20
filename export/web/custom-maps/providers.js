@@ -144,9 +144,14 @@ export async function listBuiltinBsp({ fetchImpl = defaultFetch, signal } = {}) 
   return out;
 }
 
+/** This client's own copy of a built-in map ({ id, title, url, art }), or null when this build does not ship it. */
+export async function builtinBspMap(id, options) {
+  return (await listBuiltinBsp(options)).find(map => map.id === id) ?? null;
+}
+
 /** This client's own URL for a built-in map id, or null when this build does not ship it. */
 export async function builtinBspUrl(id, options) {
-  return (await listBuiltinBsp(options)).find(map => map.id === id)?.url ?? null;
+  return (await builtinBspMap(id, options))?.url ?? null;
 }
 
 // Poly Haven: CC0 glTF models, no key and no sign-up.

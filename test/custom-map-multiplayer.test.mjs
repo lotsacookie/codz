@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cleanCustomMap, inferMapSource, makeListing, CUSTOM_MAP_ID } from '../export/web/net/protocol.js';
-import { listBuiltinBsp, builtinBspUrl } from '../export/web/custom-maps/providers.js';
+import { listBuiltinBsp, builtinBspUrl, builtinBspMap } from '../export/web/custom-maps/providers.js';
 import { HostLobby, ClientLobby } from '../export/web/net/lobby.js';
 
 // Same in-memory Trystero stand-in as net.test.mjs, trimmed to what a host and one client need.
@@ -132,4 +132,14 @@ test('a built-in map reaches joiners as an id, not a host URL', async () => {
   host.start(); await network.settle();
   assert.deepEqual((await started).customMap, { source: 'bsp', builtin: '4all', label: 'F4ll' });
   await host.close(); await client.close();
+});
+
+test('a built-in map resolves with its own art for the loading screen, and without it when it has none', async () => {
+  const maps = [{ id: 'a', title: 'A', file: 'a.bsp', art: 'art/bsp/a.png' }, { id: 'b', title: 'B', file: 'b.bsp' }];
+  const fetchImpl = async () => ({ ok: true, json: async () => ({ maps }) });
+  const a = await builtinBspMap('a', { fetchImpl }), b = await builtinBspMap('b', { fetchImpl });
+  assert.match(a.art, /art\/bsp\/a\.png$/);
+  assert.match(a.url, /maps\/bsp\/a\.bsp$/);
+  assert.equal(b.art, '', 'the shell falls back to the default loading art');
+  assert.equal(await builtinBspMap('zzz', { fetchImpl }), null);
 });
