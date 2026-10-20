@@ -615,6 +615,7 @@ renderer.setAnimationLoop(now => {
     try { update(step); } catch (error) { reportFault(error); break; }
     remaining -= step;
   }
+  if (ready && !active) { try { combat.idle(Math.min(.1, dt)); } catch (error) { reportFault(error); } }
   if (!ready) { previous = now; return; }
   camera.updateMatrixWorld();
   if (culler) {

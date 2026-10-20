@@ -5,18 +5,25 @@ import { PoseSender, RemotePlayers } from './players.js';
 import { Scoreboard } from './coop.js';
 import { RemoteAvatars } from './avatars.js';
 import { spawnScorePopup } from '../hud.js';
+import { ZombieNet } from './zombie-net.js';
+import { attachZombieNet } from './zombie-bridge.js';
 
 const SCORE_KEEPALIVE_MS = 2000;
+const BACKGROUND_MS = 250;
+const BACKGROUND_STEP = .05;
+const BACKGROUND_MAX_CATCHUP = 2;
+const realTimers = { setInterval: (...args) => globalThis.setInterval(...args), clearInterval: (...args) => globalThis.clearInterval(...args) };
 
 /**
  * Returns null in single player. `feet()` is the local player's feet position, `points()` their score and
  * `health()` a 0..1 value (0 while downed, so zombies stop chasing a teammate who cannot be hurt any more).
  */
-export function createCoop({ scene, camera, feet, points, health = () => 1, config = globalThis.zombies?.multiplayer, now = () => performance.now(), doc = globalThis.document }) {
+export function createCoop({ scene, camera, feet, points, health = () => 1, config = globalThis.zombies?.multiplayer, now = () => performance.now(), doc = globalThis.document, timers = realTimers }) {
   const lobby = config?.lobby, channel = lobby?.game ?? lobby?.channel;
   if (!config || !channel) return null;
 
   const selfId = config.selfId;
+  const role = config.role === 'host' ? 'host' : config.role === 'client' ? 'client' : (lobby.hostId ? 'client' : 'host');
   const currentRoster = () => lobby.players?.() ?? lobby.roster ?? config.roster ?? [];
   const board = new Scoreboard(currentRoster(), selfId);
   board.prime(points());
@@ -80,7 +87,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     for (const s of samples) {
       if (s.hp <= 0) continue;                                  // downed teammates are not chased
       let v = vectors.get(s.id);
-      if (!v) vectors.set(s.id, v = new THREE.Vector3());
+      if (!v) { vectors.set(s.id, v = new THREE.Vector3()); v.peerId = s.id; }
       v.set(s.x, s.y, s.z); targetList.push(v);
     }
 
@@ -95,7 +102,38 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     }
   }
 
+  let zombieHandle = null, simulation = null, backgroundTimer = null, lastBackground = now();
+
+  function idle(dt) {
+    if (!simulation) return;
+    if (role === 'host') simulation.session.update(dt);
+    simulation.enemies.update(dt, feet());
+  }
+
+  function startBackground() {
+    if (role !== 'host' || backgroundTimer !== null) return;
+    lastBackground = now();
+    backgroundTimer = timers.setInterval(() => {
+      const t = now(), elapsed = Math.min(BACKGROUND_MAX_CATCHUP, (t - lastBackground) / 1000);
+      lastBackground = t;
+      if (!doc?.hidden || !simulation) return;
+      for (let left = elapsed; left > 0; left -= BACKGROUND_STEP) idle(Math.min(BACKGROUND_STEP, left));
+    }, BACKGROUND_MS);
+  }
+
+  function attachEnemies(enemies, { session, damage = () => {}, onAward = null }) {
+    if (zombieHandle) return zombieHandle;
+    const net = new ZombieNet({ channel, role, selfId, hostId: () => lobby.hostId ?? null, now });
+    simulation = { enemies, session };
+    zombieHandle = attachZombieNet(enemies, { net, session, damage, onAward, isMember: id => currentRoster().some(p => p.id === id) });
+    startBackground();
+    return zombieHandle;
+  }
+
   return {
+    role,
+    idle,
+    attachEnemies,
     update,
     /** Positions (THREE.Vector3, feet level) of living teammates, for zombie targeting. */
     targets: () => targetList,
@@ -104,6 +142,9 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     dispose() {
       for (const stop of stops) { try { stop?.(); } catch {} }
       stopPopups();
+      if (backgroundTimer !== null) { timers.clearInterval(backgroundTimer); backgroundTimer = null; }
+      try { zombieHandle?.dispose(); } catch {}
+      zombieHandle = null; simulation = null;
       avatars.dispose();
       panel?.remove();
     },

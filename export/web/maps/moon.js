@@ -380,6 +380,7 @@ renderer.setAnimationLoop(now => {
   if (ready && active) gfx.sample(dt * 1000);
   // Preserve real-time timers on slower GPUs while keeping collision steps small.
   for(let remaining=Math.min(.25,dt);active&&remaining>0;){const step=Math.min(.05,remaining);try{update(step);}catch(error){reportFault(error);break;}remaining-=step;}
+  if(ready&&!active){try{combat.idle(Math.min(.25,dt));}catch(error){reportFault(error);}}
   if(!ready){previous=now;return;}
   renderer.clear();renderer.render(scene, camera);
   if(ready&&active&&combat.enabled){renderer.clearDepth();renderer.render(combat.viewScene,combat.viewCamera);}

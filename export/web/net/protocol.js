@@ -1,6 +1,6 @@
 // Multiplayer wire format and the server-browser directory. Pure logic (no DOM, no network) so it is unit tested.
 
-export const NET_VERSION = 1;
+export const NET_VERSION = 2;
 export const APP_ID = 'codz-zombies-v1';          // namespaces every room so we never collide with other Trystero apps
 export const DIRECTORY_ROOM = 'directory';        // everyone who opens the browser joins this room
 export const MAX_PLAYERS = 4;
@@ -82,7 +82,7 @@ export class Directory {
 }
 
 /** Messages inside a game room are `{ t: type, d: data }`. Unknown or malformed ones are dropped. */
-export const MESSAGE_TYPES = new Set(['listing', 'hello', 'welcome', 'reject', 'roster', 'ready', 'start', 'pose', 'event', 'chat', 'state']);
+export const MESSAGE_TYPES = new Set(['listing', 'hello', 'welcome', 'reject', 'roster', 'ready', 'start', 'pose', 'event', 'chat', 'state', 'zsnap', 'zhit', 'zdead', 'award', 'hurt', 'boards', 'shot', 'box']);
 export function packMessage(type, data) { return { t: type, d: data ?? null }; }
 export function unpackMessage(raw) {
   if (!raw || typeof raw !== 'object' || !MESSAGE_TYPES.has(raw.t)) return null;

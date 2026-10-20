@@ -151,7 +151,10 @@ export class Combat {
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
   /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
-  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;}
+  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n)});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
+  idle(dt){if(!this.enabled||!this.coop)return;this.coop.update(dt);this.coop.idle(dt);}
+  remoteHit(z,head){const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
+  puppetKill(z){if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});}
   update(dt,{moving,sprint}){
     this.blood?.update(dt);this.coop?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;

@@ -28,7 +28,7 @@ export function rollGait(round, rules = {}, random = Math.random) {
 }
 
 export class Enemies {
-  constructor(scene,world,data,session,{damage,kill,hit,sound,voice}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};}
+  constructor(scene,world,data,session,{damage,kill,hit,sound,voice}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
   async load(){
     const chars=this.data.characters;
     this.templates=await Promise.all(['c_ger_honorguard_body1','c_ger_honorguard_body2'].map(k=>loadModel(chars[k])));
@@ -110,7 +110,7 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=z.root.position.clone().add(new THREE.Vector3(0,z.kind==='dog'?25:45,0)),eye=player.clone().add(new THREE.Vector3(0,40,0));
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&!onRemote&&dist<76&&this.world.lineClear(at,eye))this.onDamage(z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE);}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(!onRemote)this.onDamage(amount);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
@@ -151,9 +151,11 @@ export class Enemies {
       z.stuck+=dt;
       if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=2&&this.relocate(z,player))z.stuckCount=0;else if(z.stuckCount>=4&&!this.seen(z,player)){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
     }
-    for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);this.dead.splice(this.dead.indexOf(d),1);}}
+    this.updateDead(dt);
     if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
   }
+  updateDead(dt){for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){this.discardDead(d);this.dead.splice(this.dead.indexOf(d),1);}}}
+  discardDead(d){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);}
   speak(z,dt){
     if(z.voice&&!z.voice.ended)return;
     if(z.voice){z.voice=null;z.voiceGap=.5+Math.random()*1.8;}
@@ -195,13 +197,14 @@ export class Enemies {
   remove(z){this.silence(z);z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);this.list.splice(this.list.indexOf(z),1);}
   hurt(z,damage,head=false,melee=false,cause='bullet',score=true){
     if(!this.list.includes(z))return;
+    const shooter=this.currentShooter;
     z.health-=this.session.effects.insta_kill>this.session.time?Math.max(damage,z.health):damage;
-    this.onHit?.(z,head);
+    if(shooter)this.onRemoteHit?.(z,head);else this.onHit?.(z,head);
     if(z.health<=0){
       if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();
-      if(score)this.session.scoreHit(true,head,melee);else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.onKill?.(z);
+      if(score){if(shooter){this.session.killed++;this.net?.award(shooter,{killed:true,head,melee});}else this.session.scoreHit(true,head,melee);}else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.net?.dead(z,cause);this.onKill?.(z);
       if(this.dead.length>12){const old=this.dead.shift();old.root.removeFromParent();old.rig.mixer.uncacheRoot(old.root);disposeSkeletons(old.root);}
-    }else if(score)this.session.scoreHit(false);
+    }else if(score){if(shooter)this.net?.award(shooter,{killed:false});else this.session.scoreHit(false);}
   }
   rayHit(ray,far){
     let best=null;
@@ -215,7 +218,7 @@ export class Enemies {
     }return best;
   }
   headPosition(z){z.root.updateMatrixWorld(true);const bone=z.root.getObjectByName('j_head');return bone?bone.getWorldPosition(new THREE.Vector3()):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?63:28,0));}
-  nuke(onDeath){for(const z of [...this.list]){this.list.splice(this.list.indexOf(z),1);this.session.kills++;this.session.killed++;if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();this.silence(z);z.state='dead';z.gasDeath=false;z.life=3;z.rig.play('death',false);this.dead.push(z);onDeath(z);this.onKill?.(z);}}
+  nuke(onDeath){for(const z of [...this.list]){this.list.splice(this.list.indexOf(z),1);this.session.kills++;this.session.killed++;if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();this.silence(z);z.state='dead';z.gasDeath=false;z.life=3;z.rig.play('death',false);this.dead.push(z);this.net?.dead(z,'nuke');onDeath(z);this.onKill?.(z);}}
   reset(){for(const z of [...this.list,...this.dead]){this.silence(z);z.root.removeFromParent();z.rig.mixer.uncacheRoot(z.root);disposeSkeletons(z.root);}this.list=[];this.dead=[];this.nextSpawn=0;this.lastDogDeath=null;}
   snapshot(){return this.list.map(z=>({id:z.id,kind:z.kind,health:z.health,state:z.state,position:z.root.position.toArray(),pathLength:z.path.length,animation:z.rig.current}));}
 }
