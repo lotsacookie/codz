@@ -1,0 +1,100 @@
+name: Extract reference assets
+
+# Manual only. Pulls one map's pack from UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies (sparse, that map's folder only),
+# verifies it against its manifest, then extracts textures (IWI -> PNG), sounds, scripts (GSC/CSC source from the zones) and an FX name index into one fixed folder.
+# Re-running never replaces a file that already exists in that folder; only new files are added and committed.
+
+on:
+  workflow_dispatch:
+    inputs:
+      map:
+        description: Reference map folder to pull
+        type: choice
+        default: kino
+        options: [kino, ascension, cotd, moon, riese]
+      kinds:
+        description: What to extract (comma separated: images,sounds,scripts,fx)
+        default: images,sounds,scripts,fx
+      only:
+        description: Optional regex on entry names (e.g. fx_|muzzle|blood). Empty = everything
+        default: ''
+      out_dir:
+        description: Output folder in this repo
+        default: export/web/reference
+
+permissions:
+  contents: write
+
+concurrency:
+  group: extract-reference
+  cancel-in-progress: false
+
+env:
+  REFERENCE_REPO: UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies
+
+jobs:
+  extract:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Validate inputs
+        env:
+          OUT_DIR: ${{ inputs.out_dir }}
+        run: |
+          case "$OUT_DIR" in
+            ''|/*|*..*|.git*|.github*|.tools*|node_modules*) echo "Unsafe out_dir: $OUT_DIR"; exit 1 ;;
+          esac
+
+      - name: Sparse-fetch the map folder only
+        env:
+          MAP: ${{ inputs.map }}
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse "https://github.com/$REFERENCE_REPO.git" ref
+          git -C ref sparse-checkout set "$MAP"
+          du -sh "ref/$MAP"
+
+      - name: Verify pack against manifest
+        env:
+          MAP: ${{ inputs.map }}
+        run: node .tools/reference-pack/fetch.mjs --source ref --map "$MAP" --out .work/reference
+
+      - name: Extract (existing files are kept, never replaced)
+        env:
+          KINDS: ${{ inputs.kinds }}
+          ONLY: ${{ inputs.only }}
+          OUT_DIR: ${{ inputs.out_dir }}
+        run: |
+          args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract --kinds "$KINDS")
+          if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
+          node .tools/reference-pack/extract.mjs "${args[@]}"
+
+      - name: Commit new files only
+        env:
+          OUT_DIR: ${{ inputs.out_dir }}
+          MAP: ${{ inputs.map }}
+        run: |
+          git add -- "$OUT_DIR"
+          if git diff --cached --quiet; then echo "Nothing new to commit."; exit 0; fi
+          git diff --cached --stat | tail -1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "reference: extract new $MAP assets into $OUT_DIR"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: extract-report
+          path: .work/extract
+          if-no-files-found: ignore
