@@ -33,7 +33,10 @@ export const TILT = {
   tremorRoll: 0.003,
   tremorPitch: 0.0035,
   tremorYaw: 0.0035,
-  fireKick: 0.011
+  fireKick: 0.011,
+  buildTrauma: 0.5,
+  buildPitch: -0.012,
+  buildRoll: 0.004
 };
 
 class Spring {
@@ -110,6 +113,14 @@ export class CameraEffects {
     this.track('melee', 'yaw', total, [[0, 0], [0.16, -TILT.meleeSweep], [hit, TILT.meleeSweep * 1.4], [follow, TILT.meleeSweep * 0.3], [1, 0]]);
     this.schedule('melee', delay, { trauma: 0.62, pitch: TILT.meleeImpact, yaw: -0.01, roll: -0.008 });
     this.trauma = Math.max(this.trauma, 0.18);
+  }
+
+  // A soft thud for each board nailed onto a window: a gentle shake plus a small downward nudge.
+  build(strength = 1) {
+    const k = clamp(strength, 0, 2);
+    const side = this.random() < 0.5 ? -1 : 1;
+    this.trigger({ trauma: TILT.buildTrauma * k, pitch: TILT.buildPitch * k, roll: side * TILT.buildRoll * k, yaw: -side * TILT.buildRoll * 0.5 * k });
+    this.schedule('build', 0.09, { trauma: TILT.buildTrauma * 0.5 * k, pitch: TILT.buildPitch * 0.4 * k });
   }
 
   reload(duration = 2, stage = 'magazine', empty = false) {

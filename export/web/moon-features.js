@@ -178,7 +178,7 @@ export class MoonFeatures {
     }else if(held&&this.target?.kind==='sq_charge_terminal'&&this.s.canAct)this.quest.chargeDevice(dt);
     else if(held&&this.target?.kind==='barrier'&&this.s.canAct){const b=this.target.barrier;
       if(b.rewardRound!==this.s.round){b.rewardRound=this.s.round;b.reward=0;}
-      b.repairTime+=dt;if(b.repairTime>=.7&&b.count<b.boards.length){b.repairTime=0;this.setBoards(b,b.count+1);if(b.reward<Math.min(500,40+(this.s.round-1)*50)){this.s.addPoints(10);b.reward+=10;}this.combat.audio.play('board');}
+      b.repairTime+=dt;if(b.repairTime>=.7&&b.count<b.boards.length){b.repairTime=0;this.setBoards(b,b.count+1);this.combat.view?.cameraFx?.build();if(b.reward<Math.min(500,40+(this.s.round-1)*50)){this.s.addPoints(10);b.reward+=10;}this.combat.audio.play('board');}
     }
   }
   hackNearby(baseTarget){

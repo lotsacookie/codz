@@ -274,3 +274,22 @@ test('shotguns flash bigger and smoke more than pistols, and upgraded weapons ar
   const upgraded = weaponFxProfile({ id: 'm14_zm', upgraded: true });
   assert.ok(upgraded.size > rifle.size && upgraded.puffs > rifle.puffs);
 });
+
+test('building a window gives a soft shake that fades quickly', () => {
+  const fx = new CameraEffects(() => 0.25);
+  fx.build();
+  const out = runAxes(fx, 1.5);
+  const peak = Math.max(...out.roll.map(Math.abs), ...out.pitch.map(Math.abs));
+  assert.ok(peak > 0.006, 'visible shake');
+  assert.ok(peak < 0.03, 'but soft, well under a melee or reload kick');
+  assert.ok(out.trauma[0] > 0);
+  assert.equal(out.trauma.at(-1), 0);
+  assert.ok(Math.abs(out.roll.at(-1)) < 1e-3);
+});
+
+test('each board adds a thud and a stronger build hits harder', () => {
+  const soft = new CameraEffects(() => 0.25), hard = new CameraEffects(() => 0.25);
+  soft.build(0.5); hard.build(1.5);
+  const peak = fx => Math.max(...runAxes(fx, 0.6).pitch.map(Math.abs));
+  assert.ok(peak(hard) > peak(soft));
+});
