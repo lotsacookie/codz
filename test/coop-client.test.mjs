@@ -93,3 +93,19 @@ test('teammate points stack in a column above our own points bubble in the botto
   coop.dispose();
   assert.ok(!panel.children.includes(scores), 'the column is removed on dispose');
 });
+
+test('a hidden tab keeps sending our pose and points from the background timer so we do not vanish for the others', () => {
+  const ticks = [];
+  const timers = { setInterval: fn => { ticks.push(fn); return ticks.length; }, clearInterval() {} };
+  const { lobby, sent } = fakeLobby();
+  let t = 0;
+  const doc = { hidden: false, getElementById: () => null, createElement: fakeEl, body: fakeEl() };
+  const coop = createCoop({ scene: new THREE.Scene(), camera: new THREE.PerspectiveCamera(), feet: () => new THREE.Vector3(4, 0, 5), points: () => 500, config: { lobby, selfId: 'me', roster }, now: () => t, doc, timers });
+  assert.equal(ticks.length, 1, 'a background timer starts with the co-op client');
+  t = 5000; ticks[0]();
+  assert.equal(sent.filter(m => m.type === 'pose').length, 0, 'nothing extra is sent while the tab is visible (the frame loop does it)');
+  doc.hidden = true; t = 6000; ticks[0]();
+  assert.ok(sent.some(m => m.type === 'pose' && m.data.x === 4 && m.data.z === 5), 'the hidden tab still announces where we are');
+  assert.ok(sent.some(m => m.type === 'state' && m.data.score.points === 500), 'and keeps our points alive');
+  coop.dispose();
+});

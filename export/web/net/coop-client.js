@@ -7,19 +7,19 @@ import { RemoteAvatars } from './avatars.js';
 import { spawnScorePopup } from '../hud.js';
 import { ZombieNet } from './zombie-net.js';
 import { attachZombieNet } from './zombie-bridge.js';
+import { createTickTimers } from './ticker.js';
 import { ShotLimiter, cleanShot, packShot, shotGain } from './gunfire.js';
 
 const SCORE_KEEPALIVE_MS = 2000;
-const BACKGROUND_MS = 250;
+const BACKGROUND_MS = 100;
 const BACKGROUND_STEP = .05;
 const BACKGROUND_MAX_CATCHUP = 2;
-const realTimers = { setInterval: (...args) => globalThis.setInterval(...args), clearInterval: (...args) => globalThis.clearInterval(...args) };
 
 /**
  * Returns null in single player. `feet()` is the local player's feet position, `points()` their score and
  * `health()` a 0..1 value (0 while downed, so zombies stop chasing a teammate who cannot be hurt any more).
  */
-export function createCoop({ scene, camera, feet, points, health = () => 1, config = globalThis.zombies?.multiplayer, now = () => performance.now(), doc = globalThis.document, timers = realTimers }) {
+export function createCoop({ scene, camera, feet, points, health = () => 1, config = globalThis.zombies?.multiplayer, now = () => performance.now(), doc = globalThis.document, timers = createTickTimers() }) {
   const lobby = config?.lobby, channel = lobby?.game ?? lobby?.channel;
   if (!config || !channel) return null;
 
@@ -79,10 +79,20 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
   lobby.onChange?.(refreshRoster);
   buildRows();
 
-  // ---- per frame -------------------------------------------------------------------------------------------------
-  function update() {
+  function sendPose() {
     const f = feet();
     sender.update({ x: f.x, y: f.y, z: f.z, yaw: camera.rotation.y, pitch: camera.rotation.x, w: '', a: 0, hp: health() });
+  }
+  function sendScore() {
+    const total = points(), message = board.setLocal(total), t = now();
+    if (message) { channel.send('state', { score: message }); lastScoreSent = t; }
+    else if (t - lastScoreSent > SCORE_KEEPALIVE_MS) { channel.send('state', { score: { points: total, delta: 0 } }); lastScoreSent = t; }
+    return total;
+  }
+
+  // ---- per frame -------------------------------------------------------------------------------------------------
+  function update() {
+    sendPose();
 
     const samples = remote.sample();
     avatars.sync(samples, board.roster, camera);
@@ -94,9 +104,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       v.set(s.x, s.y, s.z); targetList.push(v);
     }
 
-    const total = points(), message = board.setLocal(total), t = now();
-    if (message) { channel.send('state', { score: message }); lastScoreSent = t; }
-    else if (t - lastScoreSent > SCORE_KEEPALIVE_MS) { channel.send('state', { score: { points: total, delta: 0 } }); lastScoreSent = t; }
+    const total = sendScore();
 
     if (total !== lastPoints) { lastPoints = total; paintSelfColor(); }
     for (const entry of board.list()) {
@@ -113,13 +121,18 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     simulation.enemies.update(dt, feet());
   }
 
+  // A hidden tab gets no animation frames, so this timer (a Worker, see ticker.js) stands in for them: it keeps
+  // our pose and points flowing so we do not vanish for the others, and the host keeps running the zombies and
+  // broadcasting them so the game goes on until the host comes back.
   function startBackground() {
-    if (role !== 'host' || backgroundTimer !== null) return;
+    if (backgroundTimer !== null) return;
     lastBackground = now();
     backgroundTimer = timers.setInterval(() => {
       const t = now(), elapsed = Math.min(BACKGROUND_MAX_CATCHUP, (t - lastBackground) / 1000);
       lastBackground = t;
-      if (!doc?.hidden || !simulation) return;
+      if (!doc?.hidden) return;
+      try { sendPose(); sendScore(); } catch {}
+      if (role !== 'host' || !simulation) return;
       for (let left = elapsed; left > 0; left -= BACKGROUND_STEP) idle(Math.min(BACKGROUND_STEP, left));
     }, BACKGROUND_MS);
   }
@@ -169,6 +182,8 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     startBackground();
     return zombieHandle;
   }
+
+  startBackground();
 
   return {
     role,
