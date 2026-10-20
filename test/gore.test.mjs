@@ -41,10 +41,8 @@ test('decapitating shrinks the head bone once', () => {
 });
 
 function fakeBlood() {
-  const blood = Object.create(BloodFx.prototype);
   const tex = { image: { width: 64, height: 64 } };
-  Object.assign(blood, { scene: new THREE.Scene(), items: [], fountains: [], textures: { burst: tex, drops: tex, gush: tex, burstTall: tex, cloud: tex, splat: tex, trail: tex } });
-  return blood;
+  return new BloodFx(new THREE.Scene(), { textures: { burst: tex, drops: tex, gush: tex, burstTall: tex, cloud: tex, splat: tex, trail: tex } });
 }
 
 test('a head burst throws a bunched column of blood upward and keeps pumping', () => {
