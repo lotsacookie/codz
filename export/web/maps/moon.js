@@ -43,6 +43,12 @@ let lastPoints = null;
 let notice = '', noticeLeft = 0, debugVisible = false, frames = 0, frameTime = 0, fps = 0;
 const objects = new Map(), parts = new Map(), opened = new Set(), wallGuns = new Map(), boughtGuns = new Set();
 function syncWallGuns(){for(const [id,o] of wallGuns)o.visible=!combat.enabled||boughtGuns.has(id);}
+let worldNet=null;
+function remoteDoor(name,who){
+  const door=data.doors.find(d=>d.name===name);if(!door||opened.has(name)||!combat.enabled)return;
+  combat.session.openDoors.add(name);if(door.flag)combat.session.flags.add(door.flag);opened.add(name);showNotice(who+' opened a door',2);
+}
+function remoteWall(id){for(const key of wallGuns.keys())if(String(key)===id){boughtGuns.add(key);syncWallGuns();}}
 const labels = {nml_zone: 'No Man’s Land', bridge_zone: 'Receiving Bay', water_zone: 'Lunar Surface', cata_left_start_zone: 'Tunnel 6', cata_left_middle_zone: 'Tunnel 6', cata_right_start_zone: 'Tunnel 11', cata_right_middle_zone: 'Tunnel 11', cata_right_end_zone: 'Tunnel 11', generator_zone: 'Power / MPD', generator_exit_east_zone: 'Laboratories', enter_forest_east_zone: 'Upper Laboratories', forest_zone: 'Biodome', tower_zone_east: 'Laboratories', tower_zone_east2: 'Laboratories'};
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
@@ -93,7 +99,7 @@ function setModeUi(){
 }
 async function resetRun(){
   if(!ready)return;
-  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();boughtGuns.clear();syncWallGuns();chalk.reset();lastPoints=null;Object.assign(state,new MoonState(data.rules));
+  pause();ready=false;mode='survival';combat.enabled=true;opened.clear();boughtGuns.clear();worldNet?.reset();syncWallGuns();chalk.reset();lastPoints=null;Object.assign(state,new MoonState(data.rules));
   for(const part of parts.values()){part.amount=0;part.delta.set(0,0,0);if(part.object)part.object.position.copy(part.origin);}
   navigation.setDoors(parts);await combat.reset();features.reset();presentation.reset();relocate('area51');setModeUi();ready=true;
   ctx.setHint('500 points. M1911. Reach the teleporter and survive.');
@@ -223,8 +229,8 @@ function interact() {
   if(combat.enabled&&!combat.session.canAct)return false;
   if (target.kind === 'suit') { state.equipSuit();combat.session.hacker=false;showNotice('P.E.S. equipped · Q to remove or replace the helmet.'); }
   if (target.kind === 'power') { state.power = true; combat.session.power=true;showNotice('Power restored. Pressurized rooms now have normal gravity.'); }
-  if (target.kind === 'door') { if(combat.enabled&&!combat.session.buyDoor(target.door)){showNotice('Not enough points.');return false;}if(combat.enabled)combat.audio.play('buy');opened.add(target.door.name); showNotice('Passage opened', 2); }
-  if (target.kind === 'weapon') { const bought = combat.buyWeapon(target.weapon.id); if (bought) { boughtGuns.add(target.entity.id); syncWallGuns(); } return bought; }
+  if (target.kind === 'door') { if(combat.enabled&&!combat.session.buyDoor(target.door)){showNotice('Not enough points.');return false;}if(combat.enabled)combat.audio.play('buy');opened.add(target.door.name);worldNet?.door(target.door.name); showNotice('Passage opened', 2); }
+  if (target.kind === 'weapon') { const bought = combat.buyWeapon(target.weapon.id); if (bought) { boughtGuns.add(target.entity.id); syncWallGuns(); worldNet?.wall(target.entity.id); } return bought; }
   return true;
 }
 function update(dt) {
@@ -357,6 +363,7 @@ async function load() {
     if(o)wallGuns.set(t.id,o);
   }
   syncWallGuns();
+  worldNet=combat.coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;
   presentation=new MoonPresentation(scene,camera,features);await presentation.load();
   showStatus('Checking textures…'); await ensureTextures(ctx);
   showStatus('Preparing Moon graphics…'); await nextTask();

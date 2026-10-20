@@ -92,7 +92,7 @@ viewScene.add(new THREE.AmbientLight(0xe1d9c7,2.0));const vl=new THREE.Direction
 const muzzle=new THREE.PointLight(0xffc276,0,240,1);scene.add(muzzle);
 let culler=null,cullReady=false;
 const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
-let coop=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
+let coop=null,worldNet=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
 const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
@@ -324,18 +324,24 @@ function findPrompt(){
   if(e.targetname?.endsWith('_room_trap'))promptText=!session.power?'The power must be activated':'Activate electric trap · 1000';
   promptText=features.prompt(e)??promptText;
 }
+function revealWall(e){world.revealWallGun(e);worldNet?.wall(e.id);}
+function remoteDoor(name,who){
+  const d=world.doors.get(name);if(!d||d.electric||session.openDoors.has(name))return;
+  session.openDoors.add(name);if(d.flag)session.flags.add(d.flag);world.setDoors(session);toast(who+' opened a door');
+}
+function remoteWall(id){const e=world.interactions.find(t=>String(t.id)===id);if(e)world.revealWallGun(e);}
 function interact(){
   if(!active||session.busy)return false;findPrompt();if(!prompt)return false;
   if(prompt.barrier)return repair(prompt.barrier);
   const e=prompt,t=e.targetname;
-  if(t==='claymore_purchase'){const ok=features.interact(e);if(ok)world.revealWallGun(e);return ok;}
+  if(t==='claymore_purchase'){const ok=features.interact(e);if(ok)revealWall(e);return ok;}
   if(e.script_noteworthy==='auto_turret_trigger'||t?.startsWith('trigger_movie_reel_')||t==='trigger_change_projector_reels')return features.interact(e);
   if(t==='meteor_egg_trigger'){meteors.add(e.id);audio.play('buy');toast('Meteor fragment '+meteors.size+' / 3');if(meteors.size===3){audio.playMusic('115');announce('115','MUSICAL EASTER EGG');}return true;}
   const pay=n=>{if(!session.spend(n)){toast('Not enough points');return false;}audio.play('buy');return true;};
   if(t==='bowie_upgrade'){if(session.bowie||!pay(3000))return false;session.bowie=true;toast('Bowie Knife');return true;}
   if(t==='zombie_door'){
     const d=world.doors.get(e.target);if(d.electric){toast('Turn on the power');return false;}if(session.openDoors.has(e.target)||!pay(d.cost))return false;
-    session.openDoors.add(e.target);if(d.flag)session.flags.add(d.flag);world.setDoors(session);toast('Door opened');return true;
+    session.openDoors.add(e.target);if(d.flag)session.flags.add(d.flag);world.setDoors(session);worldNet?.door(e.target);toast('Door opened');return true;
   }
   if(t==='weapon_upgrade'){
     const d=data.weapons[e.zombie_weapon_upgrade];if(!d||session.pack?.weapon===session.weapon)return false;
@@ -343,7 +349,7 @@ function interact(){
     const cost=owned?(owned.upgraded?4500:d.ammoPrice??Math.ceil(d.price/2)):d.price;
     if(!pay(cost))return false;
     if(owned)owned.reserve=owned.upgraded?d.upgrade?.maxAmmo??d.maxAmmo:d.maxAmmo;
-    else {session.giveWeapon(d.id);equipView();}world.revealWallGun(e);toast(owned?'Ammo replenished':d.name);return true;
+    else {session.giveWeapon(d.id);equipView();}revealWall(e);toast(owned?'Ammo replenished':d.name);return true;
   }
   if(t==='zombie_vending'){
     const id=e.script_noteworthy,p=perkInfo[id];if(!p||session.perks.has(id)||(!session.power&&id!=='specialty_quickrevive'))return false;
@@ -379,7 +385,7 @@ function reset(){
   pendingMelee=null;lastReloadSerial=0;reloadShot=false;
   touchControls.reset();mousePrimary=mouseAim=false;toastUntil=0;announcementUntil=0;hitUntil=0;flashUntil=0;primary=false;primaryPressed=false;ads=false;keys.clear();
   session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
-  powerups.reset();perkDrink.stop();mysteryBox.reset();
+  powerups.reset();perkDrink.stop();mysteryBox.reset();worldNet?.reset();
   features?.reset();
   blood.clear();limbDebris.clear();
   impacts.clear();
@@ -516,7 +522,7 @@ try{
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage,teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
-  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
+  powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();

@@ -191,7 +191,7 @@ export class MoonFeatures {
     if(t?.kind==='perk'&&s.perks.has(t.perk))return this.interact(t);
     if(t?.kind==='barrier')return this.startHack(t,5,()=>{this.setBoards(t.barrier,t.barrier.boards.length);s.addPoints(100);this.notice('Barricade restored. +100 points.');});
     if(baseTarget?.kind==='door'&&s.points>=200){const d=baseTarget.door,e=baseTarget.entity;
-      if(this.startHack({e,kind:'door'},30,()=>{if(s.openDoors.has(d.name)||!s.spend(200))return;s.openDoors.add(d.name);if(d.flag)s.flags.add(d.flag);this.opened.add(d.name);this.notice('Door hacked for 200 points.');})){this.hack.remote=true;return true;}
+      if(this.startHack({e,kind:'door'},30,()=>{if(s.openDoors.has(d.name)||!s.spend(200))return;s.openDoors.add(d.name);if(d.flag)s.flags.add(d.flag);this.opened.add(d.name);this.combat.coop?.world()?.door(d.name);this.notice('Door hacked for 200 points.');})){this.hack.remote=true;return true;}
     }
     if(baseTarget?.kind==='weapon'&&s.points>=3000&&!s.hackedWeapons.has(baseTarget.weapon.id)){
       const id=baseTarget.weapon.id;

@@ -9,6 +9,7 @@ import { ZombieNet } from './zombie-net.js';
 import { attachZombieNet } from './zombie-bridge.js';
 import { createTickTimers } from './ticker.js';
 import { ShotLimiter, cleanShot, packShot, shotGain } from './gunfire.js';
+import { WorldSync } from './world-sync.js';
 
 const SCORE_KEEPALIVE_MS = 2000;
 const BACKGROUND_MS = 100;
@@ -246,6 +247,29 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     return powerupHandle;
   }
 
+  let worldHandle = null;
+
+  function attachWorld({ applyDoor, applyWall } = {}) {
+    if (worldHandle) return worldHandle;
+    const nameOf = id => currentRoster().find(p => p.id === id)?.name ?? 'A teammate';
+    const sync = new WorldSync({
+      send: data => channel.send('unlock', data),
+      applyDoor: (key, from) => applyDoor?.(key, nameOf(from)),
+      applyWall: (key, from) => applyWall?.(key, nameOf(from)),
+    });
+    const stop = channel.on('unlock', (raw, from) => {
+      if (from === selfId || !currentRoster().some(p => p.id === from)) return;
+      sync.receive(raw, from);
+    });
+    worldHandle = {
+      door: key => sync.door(key),
+      wall: key => sync.wall(key),
+      reset: () => sync.reset(),
+      dispose() { try { stop?.(); } catch {} worldHandle = null; },
+    };
+    return worldHandle;
+  }
+
   function attachAudio(audio, { weapons = {} } = {}) {
     if (audioHandle) return audioHandle;
     const original = audio.weapon;
@@ -286,6 +310,8 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     attachAudio,
     attachBox,
     attachPowerups,
+    attachWorld,
+    world: () => worldHandle,
     update,
     /** Positions (THREE.Vector3, feet level) of living teammates, for zombie targeting. */
     targets: () => targetList,
@@ -304,6 +330,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       try { audioHandle?.dispose(); } catch {}
       try { boxHandle?.dispose(); } catch {}
       try { powerupHandle?.dispose(); } catch {}
+      try { worldHandle?.dispose(); } catch {}
       avatars.dispose();
       panel?.remove();
     },

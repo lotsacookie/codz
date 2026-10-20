@@ -188,6 +188,19 @@ function spawnPlayer() {
 
 function syncWallGuns() { for (const [id, list] of wallGuns) for (const o of list) o.visible = boughtGuns.has(id); }
 
+let worldNet = null;
+function remoteDoor(name, who) {
+  const group = groups.find(g => g.name === name), s = combat?.session;
+  if (!group || !s || s.openDoors.has(name)) return;
+  s.openDoors.add(name);
+  if (group.flag) s.flags.add(group.flag);
+  openDoor(group);
+  showNotice(`${who} ${group.kind === 'debris' ? 'cleared debris' : 'opened a door'}`, 2);
+}
+function remoteWall(id) {
+  for (const key of wallGuns.keys()) if (String(key) === id) { boughtGuns.add(key); syncWallGuns(); }
+}
+
 function makePart(entity, object, extra = {}) {
   if (!object) return null;
   object.updateWorldMatrix(true, true);
@@ -340,6 +353,7 @@ async function resetRun() {
   pause();
   ready = false;
   boughtGuns.clear();
+  worldNet?.reset();
   syncWallGuns();
   chalk.reset();
   lastPoints = null;
@@ -563,10 +577,12 @@ async function load() {
   if (navigation.health && !navigation.health.reachable) showNotice('No verified zombie route found. Using fallback movement.', 8);
   combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
   for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) wallGuns.set(triggerId, [o]); }
+  worldNet = combat.coop?.attachWorld({ applyDoor: remoteDoor, applyWall: remoteWall }) ?? null;
   const buy = features.interact.bind(features);
   features.interact = t => {
     const ok = buy(t);
-    if (ok && t?.kind === 'wall') { boughtGuns.add(t.e.id); syncWallGuns(); }
+    if (ok && t?.kind === 'wall') { boughtGuns.add(t.e.id); syncWallGuns(); worldNet?.wall(t.e.id); }
+    if (ok && t?.kind === 'door') worldNet?.door(t.group.name);
     return ok;
   };
   syncWallGuns();
