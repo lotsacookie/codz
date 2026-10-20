@@ -22,12 +22,18 @@ export function headBurstPower(def, distance = 0) {
   return Math.min(3, perShot / HEAD_POP_DAMAGE);
 }
 
-// Shrinks the head bone out of sight. Animation clips only drive position/rotation, so it stays gone.
+// Removes the head. Zombie heads are a separate model mounted on the body, so hide that model; if a
+// zombie has no separate head, shrink its head bone instead. Either way it stays gone through the
+// death animation (clips only drive position and rotation).
 export function decapitate(zombie) {
   if (!zombie?.root || zombie.headless) return false;
-  const bone = boneOf(zombie, 'j_head');
-  if (!bone) return false;
-  bone.scale.setScalar(0.001);
+  if (zombie.headModel) {
+    zombie.headModel.visible = false;
+  } else {
+    const bone = boneOf(zombie, 'j_head');
+    if (!bone) return false;
+    bone.scale.setScalar(0.001);
+  }
   zombie.headless = true;
   return true;
 }

@@ -79,7 +79,7 @@ test('popLimb throws a stump spray and a flying arm, but not for weak guns or th
   assert.equal(debris.items.length, 0);
   assert.equal(popLimb({ ...args, def: gun(300) }), true);
   assert.equal(debris.items.length, 1);
-  assert.ok(blood.items.length > 40, 'lots of blood');
+  assert.ok(blood.items.length > 80, 'lots of blood');
   assert.ok(blood.fountains.length >= 2, 'stump keeps pumping and the arm drips');
   assert.equal(popLimb({ ...args, def: gun(300) }), false);
   assert.equal(debris.items.length, 1);
@@ -125,7 +125,7 @@ test('with real randomness the pool stays bounded and fully returns when idle', 
     blood.headBurst(new THREE.Vector3(0, 60, 0), { power: 1 + Math.random() * 2 });
     for (let t = 0; t < 3; t += 0.05) blood.update(0.05);
   }
-  assert.ok(blood.group.children.length <= 260);
+  assert.ok(blood.group.children.length <= 400);
   assert.equal(blood.items.length, 0);
   assert.equal(blood.pool.length, blood.group.children.length);
 });
@@ -134,6 +134,6 @@ test('the sprite cap holds under a pile-up of bursts', () => {
   const blood = fakeBlood();
   for (let i = 0; i < 30; i++) blood.headBurst(new THREE.Vector3(0, 60, 0), { power: 3 });
   blood.update(0.016);
-  assert.ok(blood.items.length <= 260);
-  assert.ok(blood.group.children.length <= 261);
+  assert.ok(blood.items.length <= 400);
+  assert.ok(blood.group.children.length <= 401);
 });

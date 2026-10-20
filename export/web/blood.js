@@ -10,7 +10,7 @@ const TEXTURES = {
   splat: 'textures/fxt_bio_bloodburst.png'
 };
 
-const MAX_SPRITES = 260;
+const MAX_SPRITES = 400;
 const GRAVITY = 360;
 const UP = Object.freeze(new THREE.Vector3(0, 1, 0));
 // World units are Black Ops inches: a zombie is ~72 tall and its head ~10 across, and the
@@ -156,22 +156,25 @@ export class BloodFx {
     const pick = (a, b) => (this.textures[a] ? a : b);
     this.emit(pick('cloud', 'burst'), x, y, z, 20 * p, 0.55, dx * 40, dy * 40, dz * 40, 0, 2.2, 0.7, 0.4);
     this.emit(pick('splat', 'burst'), x, y, z, 16 * p, 0.35, dx * 30, dy * 30, dz * 30, 0, 1.8, 0.95);
-    const column = Math.round(14 + 6 * p);
+    // Lots of blood, but it stays low: peak heights come out around 25-55 world units (a zombie is ~72).
+    this.emit(pick('cloud', 'burst'), x, y, z, 14 * p, 0.5, dx * 20, dy * 20, dz * 20, 0, 2.2, 0.6, -0.3);
+    const strength = 0.6 + 0.4 * p;
+    const column = Math.round(26 + 10 * p);
     for (let i = 0; i < column; i++) {
-      const speed = 110 + Math.random() * 110 * p;
+      const speed = 70 + Math.random() * 60 * strength;
       this.emit(Math.random() < 0.6 ? pick('gush', 'burst') : pick('burstTall', 'burst'),
-        x + (Math.random() - 0.5) * 3, y + Math.random() * 4, z + (Math.random() - 0.5) * 3,
-        (4 + Math.random() * 4) * (0.8 + 0.3 * p), 0.7 + Math.random() * 0.5,
-        dx * speed + (Math.random() - 0.5) * 22, dy * speed + (Math.random() - 0.5) * 22, dz * speed + (Math.random() - 0.5) * 22,
-        300, 1.5, 0.85, (Math.random() - 0.5) * 2);
+        x + (Math.random() - 0.5) * 4, y + Math.random() * 4, z + (Math.random() - 0.5) * 4,
+        (4.5 + Math.random() * 4.5) * (0.8 + 0.3 * p), 0.7 + Math.random() * 0.5,
+        dx * speed + (Math.random() - 0.5) * 30, dy * speed + (Math.random() - 0.5) * 22, dz * speed + (Math.random() - 0.5) * 30,
+        300, 1.5, 0.88, (Math.random() - 0.5) * 2);
     }
-    const drops = Math.round(26 + 12 * p);
+    const drops = Math.round(50 + 20 * p);
     for (let i = 0; i < drops; i++) {
-      const speed = 90 + Math.random() * 150 * p;
-      this.emit('drops', x, y, z, 1.2 + Math.random() * 2.2, 0.8 + Math.random() * 0.7,
-        dx * speed + (Math.random() - 0.5) * 50, dy * speed + (Math.random() - 0.5) * 50, dz * speed + (Math.random() - 0.5) * 50, GRAVITY, 0.6, 0.95);
+      const speed = 50 + Math.random() * 70 * strength;
+      this.emit('drops', x, y, z, 1.3 + Math.random() * 2.4, 0.8 + Math.random() * 0.7,
+        dx * speed + (Math.random() - 0.5) * 70, dy * speed + (Math.random() - 0.5) * 50, dz * speed + (Math.random() - 0.5) * 70, GRAVITY, 0.6, 0.95);
     }
-    this.fountains.push({ at, age: 0, life: 0.8 + 0.2 * p, rate: 55 * p, carry: 0, dx, dy, dz, speed: 70 });
+    this.fountains.push({ at, age: 0, life: 0.8 + 0.2 * p, rate: 95 * p, carry: 0, dx, dy, dz, speed: 55 });
   }
 
   headBurst(at, { power = 1 } = {}) {

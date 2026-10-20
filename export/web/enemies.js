@@ -40,12 +40,13 @@ export class Enemies {
   }
   spawn(position=null,barrier=null,kind=this.session.dogRound?'dog':'zombie'){
     const id=++this.serial,root=new THREE.Group();root.name=kind+'_'+id;
+    let headModel=null;
     if(kind==='dog'&&this.dog)root.add(clone(this.dog));
     else{
       const body=clone(kind==='nova'?this.quad:this.templates[id%this.templates.length]);root.add(body);
       const sourceHead=kind==='nova'?this.quadHead:this.heads[id%this.heads.length];
       if(sourceHead){
-        const head=clone(sourceHead);root.add(head);root.updateMatrixWorld(true);
+        const head=clone(sourceHead);headModel=head;root.add(head);root.updateMatrixWorld(true);
         const mount=body.getObjectByName('j_spine4'),anchor=head.getObjectByName('j_spine4');
         if(mount&&anchor){head.matrixAutoUpdate=false;head.matrix.copy(anchor.matrixWorld).invert();mount.add(head);anchor.userData.animationAnchor=true;}
       }
@@ -64,7 +65,7 @@ export class Enemies {
     if(this.anims[death])rig.add('death',this.anims[death],true);
     rig.play('walk');rig.update(.01);
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
-    const z={id,kind,root,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7,voice:null,voiceGap:Math.random()*1.5};
+    const z={id,kind,root,headModel,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7,voice:null,voiceGap:Math.random()*1.5};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
