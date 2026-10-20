@@ -1,8 +1,9 @@
 // Extracts vfx/sfx source assets from fetched reference packs (see fetch.mjs, which writes resolved.json).
+// Existing output files are never replaced unless --overwrite is passed. --report-dir keeps reports out of the output tree.
 //   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,raw]
 // images: IWI -> PNG (decodeIwi). sounds: IWD .wav/.flac and KSPK clips, copied as-is (decode with ffmpeg later).
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
-import { mkdir, writeFile, readFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, decodeIwi, encodePng, safeRelative } from './lib.mjs';
@@ -25,42 +26,56 @@ export function fxNames(names) {
   return [...names].filter(name => FX_PATTERN.test(name)).sort();
 }
 
-async function put(out, relative, data) {
+const exists = file => access(file).then(() => true, () => false);
+
+// Never replaces a file that is already there (unless --overwrite): returns { file, existed }.
+export async function put(out, relative, data, overwrite = false) {
   const safe = safeRelative(relative);
-  if (!safe) return null;
+  if (!safe) return { file: null, existed: false };
   const file = join(out, safe);
+  if (!overwrite && await exists(file)) return { file: safe, existed: true };
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, data);
-  return safe;
+  return { file: safe, existed: false };
 }
 
-export async function extractArchive(file, { out, kinds, only, report }) {
+// Where an archive entry lands, so existing outputs can be skipped before any reading or decoding.
+export function targetFor(kind, name) {
+  return kind === 'images' ? `images/${name.replace(/^images\//i, '').replace(/\.iwi$/i, '.png')}` : `${kind}/${name}`;
+}
+
+export async function extractArchive(file, { out, kinds, only, report, overwrite }) {
   const zip = await openZip(file);
   try {
     for (const entry of zip.entries) {
       const kind = classifyEntry(entry.name);
       if (kind === 'dir' || !kinds.has(kind) || (only && !only.test(entry.name))) continue;
+      const target = safeRelative(targetFor(kind, entry.name));
+      if (target && !overwrite && await exists(join(out, target))) { report.push({ archive: file, entry: entry.name, kind, file: target, status: 'exists' }); continue; }
       const raw = await zip.read(entry);
       const record = { archive: file, entry: entry.name, kind, sha256: createHash('sha256').update(raw).digest('hex') };
+      let data = raw;
       if (kind === 'images') {
         const result = iwiToPng(raw);
         if (result.error) { report.push({ ...record, status: result.error, format: result.format }); continue; }
-        record.file = await put(out, `images/${entry.name.replace(/^images\//i, '').replace(/\.iwi$/i, '.png')}`, result.png);
+        data = result.png;
         Object.assign(record, { width: result.width, height: result.height, format: result.format });
-      } else record.file = await put(out, `${kind}/${entry.name}`, raw);
-      report.push({ ...record, status: record.file ? 'ok' : 'rejected-path' });
+      }
+      const saved = await put(out, targetFor(kind, entry.name), data, overwrite);
+      report.push({ ...record, file: saved.file, status: !saved.file ? 'rejected-path' : saved.existed ? 'exists' : 'ok' });
     }
   } finally { await zip.close(); }
 }
 
-export async function extractSoundPack(file, { out, only, report }) {
+export async function extractSoundPack(file, { out, only, report, overwrite }) {
   const pack = await openKspk(file);
   try {
     for (const record of pack.records) {
       if (only && !only.test(record.name)) continue;
-      const data = await pack.read(record);
-      const saved = await put(out, `sounds/${record.name}`, data);
-      report.push({ archive: file, entry: record.name, kind: 'sounds', sha256: record.sha256, file: saved, status: saved ? 'ok' : 'rejected-path' });
+      const target = safeRelative(`sounds/${record.name}`);
+      if (target && !overwrite && await exists(join(out, target))) { report.push({ archive: file, entry: record.name, kind: 'sounds', file: target, status: 'exists' }); continue; }
+      const saved = await put(out, `sounds/${record.name}`, await pack.read(record), overwrite);
+      report.push({ archive: file, entry: record.name, kind: 'sounds', sha256: record.sha256, file: saved.file, status: !saved.file ? 'rejected-path' : saved.existed ? 'exists' : 'ok' });
     }
   } finally { await pack.close(); }
 }
@@ -77,18 +92,20 @@ async function main() {
   const resolvedFile = resolve(option('resolved', '.work/reference/resolved.json'));
   const out = resolve(option('out', '.work/extracted'));
   const kinds = new Set(String(option('kinds', 'images,sounds,fx')).split(',').map(value => value.trim()));
+  const overwrite = argv.includes('--overwrite');
+  const reportDir = resolve(option('report-dir', out));
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
   const report = [], zones = [];
   for (const item of resolved.entries) {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
-    if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report });
-    else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report });
+    if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
+    else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
     else if (item.kind === 'zone' && kinds.has('fx')) zones.push(await indexZone(item.path, await readFile(item.file)));
   }
-  await mkdir(out, { recursive: true });
-  await writeFile(join(out, 'extract-report.json'), JSON.stringify(report, null, 1));
-  if (zones.length) await writeFile(join(out, 'fx-index.json'), JSON.stringify(zones, null, 1));
+  await mkdir(reportDir, { recursive: true });
+  await writeFile(join(reportDir, 'extract-report.json'), JSON.stringify(report, null, 1));
+  if (zones.length) await writeFile(join(reportDir, 'fx-index.json'), JSON.stringify(zones, null, 1));
   const counts = {};
   for (const row of report) counts[`${row.kind}:${row.status}`] = (counts[`${row.kind}:${row.status}`] ?? 0) + 1;
   console.log(counts, `zones indexed: ${zones.length}`);

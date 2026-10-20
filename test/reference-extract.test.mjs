@@ -21,3 +21,18 @@ test('entries classify and fx names filter', () => {
   assert.equal(classifyEntry('maps/x.gsc'), 'raw');
   assert.deepEqual(fxNames(new Set(['fx/maps/zombie/fx_muzzle_flash', 'weapon_ak47'])), ['fx/maps/zombie/fx_muzzle_flash']);
 });
+
+test('put never replaces an existing file unless overwrite is set', async () => {
+  const { mkdtemp, readFile, writeFile } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { put, targetFor } = await import('../.tools/reference-pack/extract.mjs');
+  const out = await mkdtemp(join(tmpdir(), 'extract-'));
+  assert.deepEqual(await put(out, 'images/a.png', Buffer.from('one')), { file: 'images/a.png', existed: false });
+  assert.deepEqual(await put(out, 'images/a.png', Buffer.from('two')), { file: 'images/a.png', existed: true });
+  assert.equal((await readFile(join(out, 'images/a.png'))).toString(), 'one');
+  await put(out, 'images/a.png', Buffer.from('three'), true);
+  assert.equal((await readFile(join(out, 'images/a.png'))).toString(), 'three');
+  assert.equal(targetFor('images', 'images/fx_smoke.iwi'), 'images/fx_smoke.png');
+  assert.equal((await put(out, '../escape.txt', Buffer.from('x'))).file, null);
+});
