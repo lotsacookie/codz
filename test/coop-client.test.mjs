@@ -87,7 +87,7 @@ test('teammate points stack in a column above our own points bubble in the botto
   const coop = createCoop({ scene: new THREE.Scene(), camera: new THREE.PerspectiveCamera(), feet: () => new THREE.Vector3(), points: () => 500, config: { lobby, selfId: 'me', roster }, doc });
   const scores = panel.children.find(c => c.id === 'coop-scores');
   assert.ok(scores, 'the teammate column lives inside the player panel');
-  assert.equal(scores.children.length, 2, 'one row per teammate');
+  assert.equal(scores.children.length, 2, 'one points label per teammate');
   assert.ok(panel.children.indexOf(scores) < panel.children.indexOf(bubble), 'teammates sit above our own points, which stay at the bottom');
   assert.ok(panel.className.includes('has-coop'));
   coop.dispose();

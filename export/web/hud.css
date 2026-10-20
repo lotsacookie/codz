@@ -30,10 +30,9 @@
 /* Co-op: one row per teammate with their live points in their tab colour, stacked above our own points (bottom right). */
 #coop-scores{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u) * 12);margin-bottom:calc(var(--u) * 12);pointer-events:none;font-family:var(--hud-font)}
 #player-panel.has-coop{text-align:right}
-.coop-row{min-width:calc(var(--u) * 150);justify-content:space-between;gap:calc(var(--u) * 14);--popup-color:var(--c)}
-.coop-name{font-size:calc(var(--u) * 14);font-weight:700;letter-spacing:.04em;text-shadow:0 1px 2px #000;max-width:calc(var(--u) * 110);overflow:hidden;text-overflow:ellipsis}
-.coop-pts{font-size:calc(var(--u) * 22);font-weight:700;text-shadow:0 1px 2px #000}
-.coop-popups{position:absolute;left:0;top:50%;width:0;height:0}
+.coop-pts{font-size:calc(var(--u) * 24);font-weight:700;text-shadow:0 1px 2px #000}
+.coop-row{--popup-color:var(--c)}
+.coop-popups{position:absolute;left:50%;top:50%;width:0;height:0}
 #weapon-panel{position:fixed;right:calc(var(--u) * 30);bottom:calc(var(--u) * 24);z-index:3;display:flex;align-items:flex-end;justify-content:flex-end;gap:calc(var(--u) * 22);text-align:right;pointer-events:none;color:#fff;text-shadow:0 1px 3px #000;font-family:var(--hud-font)}
 #ammo-block{display:flex;flex-direction:column;align-items:flex-end}
 #ammo{display:flex;align-items:baseline;justify-content:flex-end;gap:calc(var(--u) * 6);font-family:var(--hud-font);transform:scaleX(1.16);transform-origin:100% 50%;letter-spacing:calc(var(--u) * 1)}

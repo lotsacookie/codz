@@ -59,9 +59,8 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       if (entry.self) continue;
       const row = doc.createElement('div'); row.className = 'points coop-row'; row.style.setProperty('--c', entry.color);
       const popups = doc.createElement('span'); popups.className = 'coop-popups';
-      const name = doc.createElement('span'); name.className = 'coop-name'; name.textContent = entry.name; name.style.color = entry.color;
       const pts = doc.createElement('strong'); pts.className = 'coop-pts'; pts.style.color = entry.color; pts.textContent = String(entry.points);
-      row.append(popups, name, pts);
+      row.append(popups, pts);
       panel.append(row);
       rows.set(entry.id, { row, popups, pts });
     }
