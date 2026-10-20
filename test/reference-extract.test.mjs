@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import zlib from 'node:zlib';
 import { classifyEntry, iwiToPng, fxNames } from '../.tools/reference-pack/extract.mjs';
+import { scanRawFiles, inflateZone } from '../.tools/reference-pack/lib.mjs';
 
 const header = (format, w, h) => { const b = Buffer.alloc(48); b.write('IWi', 0, 'latin1'); b[3] = 13; b[4] = format; b.writeUInt16LE(w, 6); b.writeUInt16LE(h, 8); b.writeUInt16LE(1, 10); return b; };
 
@@ -35,4 +37,18 @@ test('put never replaces an existing file unless overwrite is set', async () => 
   assert.equal((await readFile(join(out, 'images/a.png'))).toString(), 'three');
   assert.equal(targetFor('images', 'images/fx_smoke.iwi'), 'images/fx_smoke.png');
   assert.equal((await put(out, '../escape.txt', Buffer.from('x'))).file, null);
+});
+
+test('raw-file scripts are found by name in an uncompressed IWffr100 zone', () => {
+  const source = Buffer.from('#include maps\\_utility;\r\nmain()\r\n{\r\n}\r\n');
+  const packed = zlib.deflateSync(source);
+  const head = Buffer.alloc(8); head.writeUInt32LE(source.length, 0); head.writeUInt32LE(packed.length, 4);
+  const body = Buffer.concat([Buffer.alloc(32, 0xff), Buffer.from('maps/zombie_test.gsc\0'), head, packed, Buffer.alloc(16)]);
+  const zone = Buffer.concat([Buffer.from('IWffr100'), Buffer.alloc(4), body]);
+  const inflated = inflateZone(zone);
+  assert.ok(inflated.data);
+  const files = scanRawFiles(inflated.data);
+  assert.equal(files.length, 1);
+  assert.equal(files[0].name, 'maps/zombie_test.gsc');
+  assert.equal(files[0].data.toString(), source.toString());
 });

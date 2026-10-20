@@ -498,11 +498,14 @@ class PendingRef:
 class T5Zone:
     def __init__(self, path):
         raw = open(path, "rb").read()
-        if raw[:8] != b"IWffu100":
+        if raw[:8] not in (b"IWffu100", b"IWffr100"):
             raise ZoneError("not a T5 fastfile")
         self.version, = struct.unpack_from("<I", raw, 8)
-        d = zlib.decompressobj()
-        self.data = d.decompress(raw[12:])
+        if raw[:8] == b"IWffr100":
+            self.data = raw[12:]  # reference-pack zones are stored uncompressed
+        else:
+            d = zlib.decompressobj()
+            self.data = d.decompress(raw[12:])
         self.pos = 8
         self.block_sizes = struct.unpack_from("<7I", self.data, self.pos)
         self.pos += 28

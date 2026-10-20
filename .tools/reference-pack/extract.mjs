@@ -1,12 +1,13 @@
 // Extracts vfx/sfx source assets from fetched reference packs (see fetch.mjs, which writes resolved.json).
 // Existing output files are never replaced unless --overwrite is passed. --report-dir keeps reports out of the output tree.
-//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,raw]
+//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,raw]
 // images: IWI -> PNG (decodeIwi). sounds: IWD .wav/.flac and KSPK clips, copied as-is (decode with ffmpeg later).
+// scripts: GSC/CSC/other raw files stored in .ff zones (zlib payloads), written as plain text under scripts/.
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
 import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, decodeIwi, encodePng, safeRelative } from './lib.mjs';
+import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, scanRawFiles, decodeIwi, encodePng, safeRelative } from './lib.mjs';
 
 export function classifyEntry(name) {
   const lower = name.toLowerCase();
@@ -80,10 +81,17 @@ export async function extractSoundPack(file, { out, only, report, overwrite }) {
   } finally { await pack.close(); }
 }
 
-export async function indexZone(file, buffer) {
-  const zone = inflateZone(buffer);
-  if (zone.error) return { zone: file, error: zone.error };
-  return { zone: file, names: fxNames(scanNames(zone.data)) };
+export async function indexZone(file, zone) {
+  return { zone: file, names: fxNames(scanNames(zone)) };
+}
+
+export async function extractScripts(file, zone, { out, report, overwrite }) {
+  for (const script of scanRawFiles(zone)) {
+    const sha256 = createHash('sha256').update(script.data).digest('hex');
+    const relative = script.name ? `scripts/${script.name}` : `scripts/unnamed/${sha256.slice(0, 16)}.bin`;
+    const saved = await put(out, relative, script.data, overwrite);
+    report.push({ archive: file, entry: script.name, kind: 'scripts', sha256, file: saved.file, status: !saved.file ? 'rejected-path' : saved.existed ? 'exists' : 'ok' });
+  }
 }
 
 async function main() {
@@ -91,7 +99,7 @@ async function main() {
   const option = (name, fallback) => { const at = argv.indexOf(`--${name}`); return at < 0 ? fallback : argv[at + 1]; };
   const resolvedFile = resolve(option('resolved', '.work/reference/resolved.json'));
   const out = resolve(option('out', '.work/extracted'));
-  const kinds = new Set(String(option('kinds', 'images,sounds,fx')).split(',').map(value => value.trim()));
+  const kinds = new Set(String(option('kinds', 'images,sounds,fx,scripts')).split(',').map(value => value.trim()));
   const overwrite = argv.includes('--overwrite');
   const reportDir = resolve(option('report-dir', out));
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
@@ -101,7 +109,12 @@ async function main() {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
     if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
-    else if (item.kind === 'zone' && kinds.has('fx')) zones.push(await indexZone(item.path, await readFile(item.file)));
+    else if (item.kind === 'zone' && (kinds.has('fx') || kinds.has('scripts'))) {
+      const zone = inflateZone(await readFile(item.file));
+      if (zone.error) { report.push({ archive: item.path, kind: 'zone', status: zone.error }); continue; }
+      if (kinds.has('fx')) zones.push(await indexZone(item.path, zone.data));
+      if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out, report, overwrite });
+    }
   }
   await mkdir(reportDir, { recursive: true });
   await writeFile(join(reportDir, 'extract-report.json'), JSON.stringify(report, null, 1));

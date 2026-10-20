@@ -152,6 +152,8 @@ export function parseKsixNames(buffer) {
 
 export function inflateZone(buffer) {
   const magic = buffer.toString('latin1', 0, 8);
+  // IWffr100 (reference-pack zones) stores the zone body uncompressed right after the 12-byte header.
+  if (magic === 'IWffr100') return { data: buffer.subarray(12) };
   if (magic !== 'IWffu100') return { error: `unsupported fastfile variant ${JSON.stringify(magic)}` };
   try {
     return { data: zlib.inflateSync(buffer.subarray(12), { finishFlush: zlib.constants.Z_SYNC_FLUSH }) };
@@ -334,4 +336,29 @@ export function decodeIwi(buffer) {
     }
   }
   return { ...info, rgba };
+}
+
+// Finds script/raw-file payloads in a decompressed T5 zone without walking asset structs (the walker loses sync on some zones).
+// A RawFile body is [u32 length][u32 compressedLength][zlib stream]; its name is the C string just before that header.
+export function scanRawFiles(data, maxLength = 1 << 26) {
+  const files = [];
+  let at = 16;
+  while ((at = data.indexOf(0x78, at)) >= 0) {
+    const start = at++;
+    const level = data[start + 1];
+    if (level !== 0x01 && level !== 0x5e && level !== 0x9c && level !== 0xda) continue;
+    const length = data.readUInt32LE(start - 8), packed = data.readUInt32LE(start - 4);
+    if (!length || !packed || length > maxLength || packed > maxLength || start + packed > data.length) continue;
+    let text;
+    try { text = zlib.inflateSync(data.subarray(start, start + packed), { maxOutputLength: length + 1 }); } catch { continue; }
+    if (text.length !== length) continue;
+    let end = start - 8;
+    while (end > 0 && data[end - 1] === 0) end--;
+    let first = end;
+    while (first > 0 && data[first - 1] >= 0x21 && data[first - 1] < 0x7f) first--;
+    const name = data.toString('latin1', first, end).replace(/\\/g, '/').replace(/^[^\w]+/, '');
+    files.push({ name: /^[\w./-]+\.\w+$/.test(name) ? name : null, data: text });
+    at = start + packed;
+  }
+  return files;
 }

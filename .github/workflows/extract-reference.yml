@@ -1,7 +1,7 @@
 name: Extract reference assets
 
 # Manual only. Pulls one map's pack from UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies (sparse, that map's folder only),
-# verifies it against its manifest, then extracts textures (IWI -> PNG), sounds and an FX name index into one fixed folder.
+# verifies it against its manifest, then extracts textures (IWI -> PNG), sounds, scripts (GSC/CSC source from the zones) and an FX name index into one fixed folder.
 # Re-running never replaces a file that already exists in that folder; only new files are added and committed.
 
 on:
@@ -13,8 +13,8 @@ on:
         default: kino
         options: [kino, ascension, cotd, moon, riese]
       kinds:
-        description: What to extract (comma separated)
-        default: images,sounds,fx
+        description: What to extract (comma separated: images,sounds,scripts,fx)
+        default: images,sounds,scripts,fx
       only:
         description: Optional regex on entry names (e.g. fx_|muzzle|blood). Empty = everything
         default: ''
