@@ -9,6 +9,8 @@ import { weaponFxProfile } from './fx-profile.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
 
+const BLOOD_COLOR = new THREE.Color(0x5a0707);
+
 const loader=new GLTFLoader(assetManager), models=new Map(), clips=new Map();
 export async function loadModel(url){if(!url)return null;if(!models.has(url))models.set(url,assets.buffer(url).then(bytes=>loader.parseAsync(bytes,THREE.LoaderUtils.extractUrlBase(assets.abs(url)))).then(gltf=>gltf.scene));return clone(await models.get(url));}
 export async function releaseModelCache(){
@@ -277,6 +279,21 @@ export class ViewWeapon {
     for(const flash of this.flashes)flash?.update(dt);
     this.smoke?.update(dt);
   }
+  // World-space blade position (the viewmodel is drawn by its own camera, so it is projected out).
+  knifeTip(camera,viewCamera,distance=26){
+    const knife=this.meleeType?this.knives?.[this.meleeType]:null;if(!knife||!knife.visible||!camera||!viewCamera)return null;
+    knife.updateWorldMatrix(true,false);const ndc=knife.getWorldPosition(new THREE.Vector3()).project(viewCamera);
+    camera.updateMatrixWorld();const ray=new THREE.Vector3(ndc.x,ndc.y,.5).unproject(camera).sub(camera.position).normalize();
+    return camera.position.clone().addScaledVector(ray,distance);
+  }
+  // Darken the blade with blood (0 clean .. 1 soaked); materials are cloned once so cached models stay clean.
+  tintKnife(level){
+    const knife=this.meleeType?this.knives?.[this.meleeType]:null;if(!knife)return;
+    knife.traverse(o=>{if(!o.material)return;const list=Array.isArray(o.material)?o.material:[o.material];
+      o.material=Array.isArray(o.material)?list.map(m=>this.bloodMaterial(m)):this.bloodMaterial(list[0]);
+      for(const m of (Array.isArray(o.material)?o.material:[o.material])){if(m.color&&m.userData.cleanColor)m.color.copy(m.userData.cleanColor).lerp(BLOOD_COLOR,level*.75);}});
+  }
+  bloodMaterial(m){if(m.userData?.bloodClone)return m;const c=m.clone();c.userData={...m.userData,bloodClone:true,cleanColor:m.color?m.color.clone():null};return c;}
   emitFx(camera,viewCamera,worldScene){
     const fx=this.pendingFx;if(!fx||!camera||!viewCamera||!worldScene)return;
     this.pendingFx=null;

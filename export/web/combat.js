@@ -10,6 +10,7 @@ import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel-
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
+import { KnifeBlood } from './knife-blood.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -18,7 +19,7 @@ export class Combat {
   constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,teleport,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
-    this.blood=blood?new BloodFx(scene):null;this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
     this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
@@ -118,9 +119,15 @@ export class Combat {
     for(const z of this.enemies.list){const delta=z.root.position.clone().add(new THREE.Vector3(0,44,0)).sub(this.camera.position);if(delta.length()<94&&delta.clone().normalize().dot(forward)>.4&&this.world.lineClear(this.camera.position,z.root.position.clone().add(new THREE.Vector3(0,44,0))))if(!best||delta.length()<best.distance)best={z,distance:delta.length()};}
     return best?.z;
   }
+  bloodyKnife(){
+    this.knifeBlood.soak();this.view.tintKnife(1);
+    const tip=this.view.knifeTip(this.camera,this.viewCamera);if(!tip||!this.blood?.ready())return;
+    this.blood.slash(tip,new THREE.Vector3(-1,-.25,0).applyQuaternion(this.camera.quaternion));
+  }
   melee(){
     const s=this.session;if(!this.view.ready||!s.canAct)return false;
     const strike=this.view.melee(s.bowie?'bowie':'knife',!!this.meleeTarget());if(!strike)return false;
+    this.knifeBlood.reset();this.view.tintKnife(0);
     s.cancelReload();s.meleeLeft=strike.duration;this.burst=0;this.ads=false;this.pressed=false;
     this.pendingMelee={at:s.time+strike.delay,damage:strike.damage};this.audio.knife('swing',false);return true;
   }
@@ -167,7 +174,8 @@ export class Combat {
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);
     this.perkDrink.update(dt,s);this.view.pivot.visible=!s.pack&&!s.drinking&&s.phase!=='reviving';
     if(s.reloadLeft>0&&s.reloadSerial!==this.lastReload){this.lastReload=s.reloadSerial;this.view.reload(false,s.reloadDuration,s.reloadStage);}
-    if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);}}
+    if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);this.bloodyKnife();}}
+    if(this.knifeBlood.active){this.knifeBlood.update(dt,this.view.knifeTip(this.camera,this.viewCamera),(p,v,k)=>this.blood?.fling(p,v,k));if(this.knifeBlood.active)this.view.tintKnife(this.knifeBlood.level);}
     const base=this.view.lookBase(this.camera);
     const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(base.yaw-this.lastLookYaw),Math.cos(base.yaw-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:base.pitch-this.lastLookPitch;this.lastLookYaw=base.yaw;this.lastLookPitch=base.pitch;
     this.view.update(dt,{moving,sprint,ads:this.ads,reloading:s.reloadLeft>0,empty:s.weapon.mag===0,time:s.time,look:{yaw:lookYaw,pitch:lookPitch},camera:this.camera,viewCamera:this.viewCamera,worldScene:this.scene});

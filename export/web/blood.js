@@ -109,6 +109,34 @@ export class BloodFx {
     }
   }
 
+  // A single drop or smear thrown off a bloody blade. strength is 0..1.
+  fling(position, velocity, strength = 1) {
+    if (!this.ready()) return;
+    const smear = Math.random() < 0.3 && this.textures.trail;
+    this.sprite(smear ? 'trail' : 'drops', position, smear ? 3 + Math.random() * 4 * strength : 0.9 + Math.random() * 1.5 * strength, 0.35 + Math.random() * 0.45, {
+      velocity: new THREE.Vector3(velocity.x, velocity.y, velocity.z),
+      gravity: GRAVITY,
+      grow: smear ? 1.5 : 0.7,
+      opacity: smear ? 0.55 : 0.9,
+      spin: (Math.random() - 0.5) * 3
+    });
+  }
+
+  // The red arc the blade leaves through the air right as it connects.
+  slash(position, direction) {
+    if (!this.ready()) return;
+    const along = new THREE.Vector3(direction.x, direction.y, direction.z).normalize();
+    for (let i = 0; i < 3; i++) {
+      this.sprite(this.textures.trail ? 'trail' : 'burst', position.clone().addScaledVector(along, i * 4), 12 + i * 4, 0.45 + i * 0.08, {
+        grow: 1.5,
+        velocity: along.clone().multiplyScalar(26 + i * 10),
+        gravity: 60,
+        opacity: 0.75,
+        spin: (Math.random() - 0.5) * 1.5
+      });
+    }
+  }
+
   release(item) {
     item.sprite.removeFromParent();
     item.material.dispose();

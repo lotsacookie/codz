@@ -17,6 +17,7 @@ import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } fro
 import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
+import { KnifeBlood } from '../knife-blood.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
@@ -92,7 +93,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let coop=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const impacts=new WallImpacts(scene);
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const impacts=new WallImpacts(scene);
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 const errors=[];
@@ -264,6 +265,7 @@ function melee(){
   if(!active||session.busy||session.weaponUnavailable||features.events.room||!view.ready)return false;
   const charge=!!meleeTarget(),type=session.bowie?'bowie':'knife',strike=view.melee(type,charge);
   if(!strike)return false;
+  knifeBlood.reset();view.tintKnife(0);
   session.cancelReload();session.meleeLeft=strike.duration;burstLeft=0;reloadShot=false;ads=false;primaryPressed=false;
   pendingMelee={at:session.time+strike.delay,damage:session.weapon.id==='knife_ballistic_zm'&&session.bowie?(session.weapon.upgraded?1500:1000):strike.damage,bowie:session.bowie};
   audio.knife('swing',session.bowie);return true;
@@ -278,8 +280,14 @@ function resolveMelee(){
   const strike=pendingMelee;pendingMelee=null;
   if(session.phase==='reviving'||session.phase==='gameover')return;
   const nearest=meleeTarget();
-  if(nearest){enemies.hurt(nearest,strike.damage,false,true);audio.knife('hit',strike.bowie);}
+  if(nearest){enemies.hurt(nearest,strike.damage,false,true);audio.knife('hit',strike.bowie);bloodyKnife();}
   else {const ray=new THREE.Ray(camera.position.clone(),camera.getWorldDirection(new THREE.Vector3())),wall=world.raycast(ray,0,94);if(wall){audio.knife('wall');impacts.dust(wall,ray,particles);}}
+}
+function bloodyKnife(){
+  knifeBlood.soak();view.tintKnife(1);
+  const tip=view.knifeTip(camera,viewCamera);if(!tip||!blood.ready())return;
+  const right=new THREE.Vector3(1,0,0).applyQuaternion(camera.quaternion);
+  blood.slash(tip,right.multiplyScalar(-1).add(new THREE.Vector3(0,-.25,0)));
 }
 function throwGrenade(){
   if(!active||session.grenades<=0||session.busy||features.events.room)return false;session.grenades--;
@@ -396,6 +404,7 @@ function update(dt){
       const base=view.lookBase(camera);
       const lookYaw=Math.atan2(Math.sin(base.yaw-lastLookYaw),Math.cos(base.yaw-lastLookYaw)),lookPitch=base.pitch-lastLookPitch;lastLookYaw=base.yaw;lastLookPitch=base.pitch;
       view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch},camera,viewCamera,worldScene:scene});
+      if(knifeBlood.active){knifeBlood.update(dt,view.knifeTip(camera,viewCamera),(p,v,k)=>blood.fling(p,v,k));if(knifeBlood.active)view.tintKnife(knifeBlood.level);}
       view.pivot.visible=!session.weaponUnavailable&&!features.events.room;
       perkDrink.update(dt,session);
       if(!sprint&&session.phase!=='reviving'&&(primaryPressed||(primary&&session.def.automatic)||burstLeft>0||reloadShot)){
