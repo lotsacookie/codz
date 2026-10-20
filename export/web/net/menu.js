@@ -66,7 +66,7 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
       button('HOST A GAME', hostForm, 'mp-big'),
       button('SERVER BROWSER', openBrowser, 'mp-big'),
       button('JOIN WITH CODE', joinForm, 'mp-big'),
-      el('p', { class: 'mp-note', text: `Up to ${MAX_PLAYERS} players. Games connect directly between browsers, with no account or server needed.` }),
+      el('p', { class: 'mp-note', text: `Up to ${MAX_PLAYERS} players. Games connect between browsers on any network, with no account needed.` }),
     );
   }
 
@@ -133,7 +133,7 @@ export function createMultiplayerMenu({ root, maps, onStart, onClose }) {
     const render = () => {
       const games = browser?.list() ?? [];
       empty.hidden = games.length > 0;
-      empty.textContent = 'No public games right now. Host one and share the code, or check again in a moment.';
+      empty.textContent = 'No public games right now. Games on any network show up here within a few seconds. Host one and share the code, or check again in a moment.';
       list.replaceChildren(...games.map(game => {
         const full = game.players >= game.max || game.started;
         const join = button(game.started ? 'IN PROGRESS' : full ? 'FULL' : 'JOIN', async () => {
