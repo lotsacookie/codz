@@ -93,10 +93,10 @@ export class ChalkHud {
       return;
     }
     if (!this.introDone) return;
-    if (session.phase === 'preparing' && session.round > 1 && this.shown === session.round - 1 && !this.overDone) {
+    if ((session.corePhase ?? session.phase) === 'preparing' && session.round > 1 && this.shown === session.round - 1 && !this.overDone) {
       this.overDone = true;
       this.runRoundOver(session.countdown);
-    } else if (session.phase === 'fighting' && this.shown !== session.round) {
+    } else if ((session.corePhase ?? session.phase) === 'fighting' && this.shown !== session.round) {
       this.overDone = false;
       this.runRoundStart(session.round);
     }

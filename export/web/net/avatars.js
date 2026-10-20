@@ -42,7 +42,7 @@ export function makeDiamond(color) {
 }
 
 export class RemoteAvatars {
-  constructor(scene) { this.scene = scene; this.items = new Map(); }
+  constructor(scene) { this.scene = scene; this.items = new Map(); this.hidden = null; }
 
   /** `samples` come from RemotePlayers.sample(); `roster` decides each player's colour. */
   sync(samples, roster, camera) {
@@ -56,6 +56,7 @@ export class RemoteAvatars {
         item = this.create(s.id, name, color);
       }
       item.group.position.set(s.x, s.y, s.z);
+      item.group.visible = s.id !== this.hidden;   // the player we are spectating: we are looking out of their eyes
       item.group.rotation.y = s.yaw;
       const downed = s.hp <= 0;
       if (item.downed !== downed) { item.downed = downed; item.body.material.color.set(downed ? DOWNED_COLOR : color); }

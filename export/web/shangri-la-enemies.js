@@ -65,7 +65,7 @@ export class ShangriEnemies extends Enemies {
 
   spawnStep(dt, player) {
     const s = this.session;
-    if (s.phase !== 'fighting' || s.spawned >= s.total || this.list.length >= 24) return;
+    if ((s.corePhase ?? s.phase) !== 'fighting' || s.spawned >= s.total || this.list.length >= 24) return;
     this.nextSpawn -= dt;
     if (this.nextSpawn > 0) return;
     const nav = this.world.navigation, kind = s.dogRound ? 'dog' : 'zombie';
@@ -138,12 +138,12 @@ export class ShangriEnemies extends Enemies {
     this.spent = 0;
     this.focus = player;
     if (s.spawned !== this.seenSpawned) { this.seenSpawned = s.spawned; this.starve = 0; }
-    if (s.phase === 'fighting' && s.spawned < s.total && this.list.length < 24) {
+    if ((s.corePhase ?? s.phase) === 'fighting' && s.spawned < s.total && this.list.length < 24) {
       this.starve += dt;
       if (this.starve > 5) { this.starve = 0; this.forceSpawn(); }
     } else this.starve = 0;
     this.spawnStep(dt, player);
-    if (s.dogRound && s.phase === 'fighting' && s.spawned >= s.total && !this.list.length) this.onDrop?.('full_ammo', this.lastDogDeath ?? player);
+    if (s.dogRound && (s.corePhase ?? s.phase) === 'fighting' && s.spawned >= s.total && !this.list.length) this.onDrop?.('full_ammo', this.lastDogDeath ?? player);
     super.update(dt, player);
     this.watchStalls(dt, player);
   }

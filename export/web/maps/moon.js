@@ -295,7 +295,7 @@ function update(dt) {
     renderAmmoIcons($('ammo-icons'),s.def,w.mag);
     $('grenade-count').textContent=s.grenades;
     $('reload-label').textContent=!deathMachine&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?(touchControls.mode?'Tap reload':touchControls.pad.active?'Press X to reload':'Reload'):'';
-    $('weapon-status').textContent=s.phase==='reviving'?'QUICK REVIVE…':s.pack?'WEAPON IN PACK-A-PUNCH':'';
+    $('weapon-status').textContent=s.spectating?'SPECTATING':s.phase==='reviving'?'QUICK REVIVE…':s.pack?'WEAPON IN PACK-A-PUNCH':'';
     if(deathMachine){$('mag').textContent=Math.ceil(s.effects.death_machine-s.time)+'s';$('reserve').textContent='';}
     $('hitmarker').style.opacity=combat.hitUntil>s.time?1:0;
     const seconds=performance.now()/1000;
@@ -348,7 +348,7 @@ async function load() {
     lineClear:(a,b)=>{const d=b.clone().sub(a);return !rayIntersect(new THREE.Ray(a,d.clone().normalize()),1,Math.max(1,d.length()-4));},
     zoneAt:p=>environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon').zone,
     lowGravity:p=>{const env=environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon');return (features?.environment(env)??env).lowGravity;}};
-  combat=new Combat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition()});combat.renderer=renderer;await combat.load();combat.enabled=mode==='survival';combat.attachCoop(createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>combat.session.points,health:()=>coopHealth(combat.session)}));
+  combat=new Combat(scene,camera,worldApi,{notice:showNotice,end:endRun,feet:()=>player.getFeetPosition(),teleport:p=>player.setPosition(p)});combat.renderer=renderer;await combat.load();combat.enabled=mode==='survival';combat.attachCoop(createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>combat.session.points,health:()=>coopHealth(combat.session)}));
   showStatus('Preparing station systems and quest…');
   features=new MoonFeatures({data,state,combat,scene,camera,player,objects,opened,parts,navigation,notice:showNotice,raycast:rayIntersect});await features.load();
   for(const t of data.entities){

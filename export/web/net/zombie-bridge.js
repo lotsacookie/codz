@@ -111,7 +111,8 @@ export function attachZombieNet(enemies, { net, session, world = enemies.world, 
       session.spawned = snap.spawned;
       session.killed = snap.killed;
       session.dogRound = snap.dogRound;
-      if (session.phase === 'preparing' || session.phase === 'fighting') {
+      const corePhase = session.corePhase ?? session.phase;
+      if (corePhase === 'preparing' || corePhase === 'fighting') {
         session.phase = snap.phase;
         if (snap.phase === 'preparing') session.countdown = snap.countdown;
       }

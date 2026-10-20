@@ -35,7 +35,7 @@ export function packSnapshot({ seq, session, zombies, boards = null }) {
   return {
     q: seq | 0,
     r: finite(session.round) | 0,
-    p: session.phase === 'preparing' ? 0 : 1,
+    p: (session.corePhase ?? session.phase) === 'preparing' ? 0 : 1,
     t: finite(session.total) | 0,
     s: finite(session.spawned) | 0,
     k: finite(session.killed) | 0,

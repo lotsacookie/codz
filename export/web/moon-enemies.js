@@ -60,14 +60,14 @@ export class MoonEnemies extends Enemies {
     const s=this.session;
     this.spawnDelay-=dt;
     const earth=s.area==='earth',cap=earth?(s.earthTime<25?10:20):24;
-    if(s.phase==='fighting'&&this.list.length<cap&&(earth||s.spawned<s.total)&&this.spawnDelay<=0){
+    if((s.corePhase??s.phase)==='fighting'&&this.list.length<cap&&(earth||s.spawned<s.total)&&this.spawnDelay<=0){
       const zone=this.world.zoneAt?.(player),nova=!earth&&s.power&&s.round>=5&&/tower|forest|generator_exit/.test(zone??'')&&s.spawned%5===4;
       const kind=earth&&s.earthTime>30&&this.list.filter(z=>z.kind==='dog').length<2&&s.random()<.25?'dog':nova?'nova':'zombie';
       const spawned=this.trySpawn(player,kind);
       this.spawnDelay=spawned?(earth?Math.max(.6,3-s.earthTime/40):Math.max(.4,2*Math.pow(.95,s.round-1))):.8;
     }
     this.astroDelay=(this.astroDelay??15)-dt;
-    if(!earth&&s.phase==='fighting'&&this.astroDelay<=0&&!this.list.some(z=>z.kind==='astronaut')&&s.round>=(this.nextAstroRound??1)){
+    if(!earth&&(s.corePhase??s.phase)==='fighting'&&this.astroDelay<=0&&!this.list.some(z=>z.kind==='astronaut')&&s.round>=(this.nextAstroRound??1)){
       if(this.trySpawn(player,'astronaut'))this.nextAstroRound=s.round+2;this.astroDelay=15;
     }
     for(const z of [...this.list]){
@@ -102,7 +102,7 @@ export class MoonEnemies extends Enemies {
     super.update(dt,player);
     // The common stuck-enemy retry decrements the wave count; astronauts are extra.
     for(const z of astronauts)if(!this.list.includes(z)&&z.state!=='dead')s.spawned++;
-    if(!earth&&s.phase==='fighting'&&s.spawned>=s.total&&!this.list.some(z=>z.kind!=='astronaut')){s.nextRound();this.spawnDelay=1;}
+    if(!earth&&(s.corePhase??s.phase)==='fighting'&&s.spawned>=s.total&&!this.list.some(z=>z.kind!=='astronaut')){s.nextRound();this.spawnDelay=1;}
   }
   hurt(z,damage,head=false,melee=false,cause='bullet'){
     if(z.kind==='astronaut'){

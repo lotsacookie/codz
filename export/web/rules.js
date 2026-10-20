@@ -52,7 +52,7 @@ export class Session {
     this.time=0;this.round=1;this.countdown=6;this.phase='preparing';this.health=100;
     this.points=this.data.rules.zombie_score_start_1p??500;this.kills=0;this.headshots=0;this.shots=0;this.hits=0;
     this.inventory=[makeWeapon(this.data.weapons.m1911_zm)];this.slot=0;this.adsShot=false;this.reloadLeft=0;this.reloadStage=null;this.reloadSerial=0;this.reloadDuration=0;this.fireLeft=0;
-    this.perks=new Set();this.flags=new Set(['always_on']);this.openDoors=new Set();this.power=false;this.revives=0;
+    this.perks=new Set();this.flags=new Set(['always_on']);this.openDoors=new Set();this.power=false;this.revives=0;this.spectating=false;this.deathRound=0;this.respawned=false;
     this.effects={};this.damageTime=-100;this.grenades=4;this.meleeLeft=0;this.spawned=0;this.killed=0;
     this.bowie=false;this.totalScore=this.points;this.drops=new PowerupDirector(this);this.drinking=null;this.drinkLeft=0;
     this.nextDogRound=5+Math.floor(this.random()*3);this.dogRound=false;this.dogRounds=0;this.total=roundPopulation(1,this.data.rules);
@@ -61,6 +61,12 @@ export class Session {
   }
   get weapon(){return this.inventory[this.slot];}
   get def(){const d=this.data.weapons[this.weapon.id];return this.weapon.upgraded?{...d,...d.upgrade,upgraded:true,name:d.name+' • Pack-a-Punch'}:d;}
+  // Co-op: a dead player spectates until the next round. `phase` then reads 'reviving' so every player-facing check
+  // (input, view model, damage, HUD) treats them as out of action, while `corePhase` keeps the real round state so
+  // the host's zombie spawning and round progress carry on underneath.
+  get phase(){return this.spectating?'reviving':this._phase;}
+  set phase(value){this._phase=value;}
+  get corePhase(){return this._phase;}
   get maxHealth(){return this.perks.has('specialty_armorvest')?250:100;}
   addPoints(n){const value=n*(this.effects.double_points>this.time?2:1)*(this.mods.has('double_points')?2:1);this.points+=value;this.totalScore+=value;}
   spend(n){if(this.points<n)return false;this.points-=n;return true;}
@@ -70,6 +76,7 @@ export class Session {
     if(this.health<=0){
       this.drinking=null;this.drinkLeft=0;
       if(this.perks.has('specialty_quickrevive')){if(!this.mods.has('keep_perks'))this.perks.clear();this.phase='reviving';this.reviveLeft=4;this.revives++;this.lastEvent='Quick Revive';}
+      else if(this.coopAlive?.()){if(!this.mods.has('keep_perks'))this.perks.clear();this.spectating=true;this.deathRound=this.round;this.lastEvent='Spectating';}
       else {this.phase='gameover';this.lastEvent='Game over';}
     } return true;
   }
@@ -78,7 +85,7 @@ export class Session {
     this.time+=dt;this.fireLeft=Math.max(0,this.fireLeft-dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     this.drops.observe(this);
     if(this.mods.has('insta_kill'))this.effects.insta_kill=this.time+999;
-    if(this.mods.has('endless')&&this.phase==='fighting'&&this.area!=='earth'){
+    if(this.mods.has('endless')&&this.corePhase==='fighting'&&this.area!=='earth'){
       if(this.total<=this.spawned)this.total=this.spawned+1;
       if(this.killed>=this.quota)this.nextRound();
     }
@@ -86,6 +93,11 @@ export class Session {
     let reloadDt=dt;
     while(this.reloadLeft>0&&reloadDt>=this.reloadLeft){reloadDt-=this.reloadLeft;this.finishReloadStage();}
     if(this.reloadLeft>0)this.reloadLeft-=reloadDt;
+    if(this.spectating&&this.round>this.deathRound){this.spectating=false;this.health=this.maxHealth;this.effects.invulnerable=this.time+5;this.respawned=true;this.lastEvent='Back in the fight';}
+    if(this.spectating){
+      if(this.corePhase==='preparing'){this.countdown-=dt;if(this.countdown<=0){this.phase='fighting';this.lastEvent=this.dogRound?'Fetch their souls':'Round '+this.round;}}
+      return;
+    }
     if(this.phase==='reviving'){this.reviveLeft-=dt;if(this.reviveLeft<=0){this.health=100;this.phase='fighting';this.effects.invulnerable=this.time+5;}return;}
     if(this.time-this.damageTime>4) this.health=Math.min(this.maxHealth,this.health+dt*this.maxHealth*.25);
     if(this.phase==='preparing'){this.countdown-=dt;if(this.countdown<=0){this.phase='fighting';this.lastEvent=this.dogRound?'Fetch their souls':'Round '+this.round;}}

@@ -109,3 +109,45 @@ test('a hidden tab keeps sending our pose and points from the background timer s
   assert.ok(sent.some(m => m.type === 'state' && m.data.score.points === 500), 'and keeps our points alive');
   coop.dispose();
 });
+
+test('a dead player spectates a living teammate through their eyes, can switch, and returns next to a teammate', () => {
+  const { lobby, handlers } = fakeLobby(), camera = new THREE.PerspectiveCamera(), moved = [];
+  const session = { spectating: false, phase: 'fighting' };
+  const doc = { hidden: false, getElementById: () => null, createElement: fakeEl, body: fakeEl(), addEventListener() {}, removeEventListener() {} };
+  let over = 0, t = 0;
+  const coop = createCoop({ scene: new THREE.Scene(), camera, feet: () => new THREE.Vector3(0, 0, 0), points: () => 500, config: { lobby, selfId: 'me', roster }, doc, now: () => t });
+  coop.attachEnemies({ update() {}, reset() {}, list: [], dead: [] }, { session, teleport: p => moved.push(p), onGameOver: () => over++ });
+  assert.equal(session.coopAlive(), false, 'nobody else has reported in yet');
+  handlers.get('pose')({ x: 400, y: 0, z: 0, yaw: 1, pitch: .2, hp: 1, a: 0 }, 'p2');
+  handlers.get('pose')({ x: 900, y: 0, z: 0, yaw: 2, pitch: 0, hp: 1, a: 0 }, 'p3');
+  assert.equal(session.coopAlive(), true);
+  session.spectating = true; t = 500;
+  coop.update(.016);
+  const first = camera.position.x;
+  assert.ok(first === 400 || first === 900, 'the camera sits at a living teammate');
+  assert.ok(camera.position.y > 0, 'at eye height');
+  assert.equal(camera.rotation.y, first === 400 ? 1 : 2, 'and looks where they look');
+  assert.equal(over, 0);
+  t = 600;
+  handlers.get('pose')({ x: 400, y: 0, z: 0, yaw: 1, pitch: .2, hp: 0, a: 2 }, 'p2');
+  handlers.get('pose')({ x: 900, y: 0, z: 0, yaw: 2, pitch: 0, hp: 1, a: 0 }, 'p3');
+  t = 900; coop.update(.016);
+  assert.equal(camera.position.x, 900, 'a teammate who is out is no longer followed');
+  handlers.get('pose')({ x: 900, y: 0, z: 0, yaw: 2, pitch: 0, hp: 0, a: 2 }, 'p3');
+  t = 1200; coop.update(.016);
+  assert.equal(session.phase, 'gameover', 'everybody out means the game is over');
+  assert.equal(session.spectating, false);
+  assert.equal(over, 1);
+  coop.dispose();
+
+  // returning for the next round teleports next to a teammate
+  const again = { spectating: true, phase: 'fighting' }, hub = fakeLobby();
+  const c2 = createCoop({ scene: new THREE.Scene(), camera, feet: () => new THREE.Vector3(), points: () => 500, config: { lobby: hub.lobby, selfId: 'me', roster }, doc, now: () => t });
+  c2.attachEnemies({ update() {}, reset() {}, list: [], dead: [] }, { session: again, teleport: p => moved.push(p) });
+  hub.handlers.get('pose')({ x: 123, y: 5, z: 7, yaw: 0, pitch: 0, hp: 1, a: 0 }, 'p2');
+  t += 500; c2.update(.016);
+  again.spectating = false; t += 500; c2.update(.016);
+  assert.equal(moved.length, 1);
+  assert.equal(moved[0].x, 123);
+  c2.dispose();
+});

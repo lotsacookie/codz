@@ -68,3 +68,23 @@ test('ADS hits that do not kill award 15 points like zombie_damage_ads', () => {
   s.scoreHit(true, false);
   assert.equal(s.points, 585);
 });
+
+test('co-op death spectates until the next round while the round machine keeps running underneath',()=>{
+ const s=new Session(data,()=>0);s.coopAlive=()=>true;
+ s.phase='fighting';s.total=6;s.spawned=0;s.damage(150);
+ assert.equal(s.spectating,true);assert.equal(s.phase,'reviving','player-facing code treats a spectator as out of action');
+ assert.equal(s.corePhase,'fighting','the host sim still sees the real round state');
+ assert(!s.damage(50),'a spectator cannot be hurt again');
+ s.nextRound();assert.equal(s.round,2);assert.equal(s.corePhase,'preparing');assert.equal(s.phase,'reviving');
+ s.update(.1);assert.equal(s.spectating,false,'back in as the next round starts');assert.equal(s.health,100);assert.equal(s.phase,'preparing');
+ assert(s.effects.invulnerable>s.time,'a short grace period after returning');
+});
+test('spectators keep the round countdown going so the host can carry on without them',()=>{
+ const s=new Session(data,()=>0);s.coopAlive=()=>true;s.phase='fighting';s.damage(150);
+ s.nextRound();s.deathRound=99;s.countdown=1;s.update(1.5);
+ assert.equal(s.corePhase,'fighting');assert.equal(s.phase,'reviving');
+});
+test('the last player standing still gets a real game over, and dying loses perks',()=>{
+ const s=new Session(data,()=>0);s.coopAlive=()=>false;s.damage(150);assert.equal(s.phase,'gameover');assert.equal(s.spectating,false);
+ const t=new Session(data,()=>0);t.coopAlive=()=>true;t.perks.add('specialty_armorvest');t.damage(500);assert.equal(t.perks.size,0);
+});

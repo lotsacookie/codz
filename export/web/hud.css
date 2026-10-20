@@ -93,3 +93,7 @@ body.touch-mode #location{font-size:13px}
 body.touch-mode #systems{top:62px;right:12px;gap:1px;font-size:8px}
 body.touch-mode #journal{top:58px;left:50%;transform:translateX(-50%);padding:12px;width:min(390px,calc(85 * var(--vw1)));font-size:12px}
 body.touch-mode #hazard{top:30%;font-size:11px}
+/* Spectating after death: who we are watching and how to switch. */
+#spectate-banner{position:fixed;left:50%;top:calc(var(--u) * 54);transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 6);pointer-events:none;font-family:var(--hud-font);text-align:center;text-shadow:0 1px 3px #000}
+.spectate-who{font-size:calc(var(--u) * 26);font-weight:900;letter-spacing:calc(var(--u) * 2)}
+.spectate-hint{font-size:calc(var(--u) * 12);letter-spacing:.06em;color:rgba(255,255,255,.75)}

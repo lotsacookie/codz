@@ -2,7 +2,7 @@
 // players as diamonds, keeps the live scoreboard in the HUD and tells zombies where the teammates are.
 import * as THREE from 'three';
 import { PoseSender, RemotePlayers } from './players.js';
-import { Scoreboard } from './coop.js';
+import { Scoreboard, colorFor } from './coop.js';
 import { RemoteAvatars } from './avatars.js';
 import { spawnScorePopup } from '../hud.js';
 import { ZombieNet } from './zombie-net.js';
@@ -79,9 +79,14 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
   lobby.onChange?.(refreshRoster);
   buildRows();
 
+  // Dead players spectate until the next round. They stay where they died (as a downed marker, `a: 2`) and look through
+  // a living teammate's eyes; once nobody is left standing the run really is over.
+  let sessionRef = null, teleportFn = null, gameOverFn = null, followId = null, wasSpectating = false;
+  let lastYaw = 0, eyeOffset = 60, banner = null, bannerName = null, candidates = [];
+  const isOut = () => !!(sessionRef && (sessionRef.spectating || sessionRef.phase === 'gameover'));
   function sendPose() {
-    const f = feet();
-    sender.update({ x: f.x, y: f.y, z: f.z, yaw: camera.rotation.y, pitch: camera.rotation.x, w: '', a: 0, hp: health() });
+    const f = feet(), out = isOut();
+    sender.update({ x: f.x, y: f.y, z: f.z, yaw: out ? lastYaw : camera.rotation.y, pitch: out ? 0 : camera.rotation.x, w: '', a: out ? 2 : 0, hp: health() });
   }
   function sendScore() {
     const total = points(), message = board.setLocal(total), t = now();
@@ -92,6 +97,8 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
 
   // ---- per frame -------------------------------------------------------------------------------------------------
   function update() {
+    const f = feet();
+    if (!sessionRef?.spectating) { lastYaw = camera.rotation.y; eyeOffset = Math.max(20, Math.min(120, camera.position.y - f.y || eyeOffset)); }
     sendPose();
 
     const samples = remote.sample();
@@ -104,6 +111,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       v.set(s.x, s.y, s.z); targetList.push(v);
     }
 
+    spectate(samples);
     const total = sendScore();
 
     if (total !== lastPoints) { lastPoints = total; paintSelfColor(); }
@@ -112,6 +120,71 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       if (ui && ui.pts.textContent !== String(entry.points)) ui.pts.textContent = String(entry.points);
     }
   }
+
+  function showBanner(target) {
+    if (!doc || !hudRoot) return;
+    if (!target) { banner?.remove(); banner = null; bannerName = null; return; }
+    if (!banner) {
+      banner = doc.createElement('div'); banner.id = 'spectate-banner';
+      const who = doc.createElement('strong'); who.className = 'spectate-who';
+      const hint = doc.createElement('span'); hint.className = 'spectate-hint';
+      hint.textContent = 'CLICK OR ARROW KEYS TO SWITCH PLAYER · YOU RETURN NEXT ROUND';
+      banner.append(who, hint); hudRoot.append(banner);
+    }
+    if (bannerName !== target.id) {
+      bannerName = target.id;
+      const who = banner.children?.[0];
+      if (who) { who.textContent = `SPECTATING ${String(target.name || 'Player').toUpperCase()}`; who.style.color = colorFor(board.roster, target.id); }
+    }
+  }
+  function cycle(step) {
+    if (!sessionRef?.spectating || candidates.length < 2) return;
+    const index = candidates.indexOf(followId);
+    followId = candidates[(index + step + candidates.length) % candidates.length];
+  }
+  function endSpectating() {
+    sessionRef.spectating = false; sessionRef.phase = 'gameover';
+    wasSpectating = false; showBanner(null); avatars.hidden = null;
+    try { gameOverFn?.(); } catch {}
+  }
+  function spectate(samples) {
+    const on = !!sessionRef?.spectating;
+    if (on && !wasSpectating) followId = null;
+    if (!on && wasSpectating && !isOut()) {
+      // Back for the new round: appear next to a teammate instead of the spot where we died.
+      const at = samples.find(s => s.id === followId) ?? samples.find(s => s.hp > 0);
+      if (at && teleportFn) { try { teleportFn(new THREE.Vector3(at.x, at.y + 2, at.z)); } catch {} }
+      followId = null;
+    }
+    wasSpectating = on;
+    avatars.hidden = on ? followId : null;
+    if (!on) { showBanner(null); return; }
+    const alive = samples.filter(s => s.hp > 0 && s.a !== 2);
+    candidates = alive.map(s => s.id);
+    if (!alive.length) {
+      if (samples.every(s => s.a === 2)) endSpectating();   // everybody else is out too (or has left)
+      return;
+    }
+    if (!candidates.includes(followId)) followId = candidates[0];
+    const target = alive.find(s => s.id === followId);
+    camera.position.set(target.x, target.y + eyeOffset, target.z);
+    camera.rotation.y = target.yaw; camera.rotation.x = target.pitch; camera.rotation.z = 0;
+    avatars.hidden = followId;
+    showBanner(target);
+  }
+  const onPointer = event => {
+    if (!sessionRef?.spectating) return;
+    const target = event.target, id = target?.id, tag = target?.tagName;
+    if (tag !== 'CANVAS' && id !== 'touch-controls') return;
+    cycle(event.button === 2 ? -1 : 1);
+  };
+  const onKey = event => {
+    if (!sessionRef?.spectating) return;
+    if (event.code === 'ArrowRight' || event.code === 'ArrowUp') cycle(1);
+    else if (event.code === 'ArrowLeft' || event.code === 'ArrowDown') cycle(-1);
+  };
+  doc?.addEventListener?.('pointerdown', onPointer, true);
+  doc?.addEventListener?.('keydown', onKey);
 
   let zombieHandle = null, simulation = null, backgroundTimer = null, lastBackground = now();
 
@@ -174,8 +247,10 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     return audioHandle;
   }
 
-  function attachEnemies(enemies, { session, damage = () => {}, onAward = null }) {
+  function attachEnemies(enemies, { session, damage = () => {}, onAward = null, teleport = null, onGameOver = null }) {
     if (zombieHandle) return zombieHandle;
+    sessionRef = session; teleportFn = teleport; gameOverFn = onGameOver;
+    session.coopAlive = () => remote.sample().some(s => s.a !== 2);
     const net = new ZombieNet({ channel, role, selfId, hostId: () => lobby.hostId ?? null, now });
     simulation = { enemies, session };
     zombieHandle = attachZombieNet(enemies, { net, session, damage, onAward, isMember: id => currentRoster().some(p => p.id === id) });
@@ -199,6 +274,10 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     dispose() {
       for (const stop of stops) { try { stop?.(); } catch {} }
       stopPopups();
+      doc?.removeEventListener?.('pointerdown', onPointer, true);
+      doc?.removeEventListener?.('keydown', onKey);
+      if (sessionRef) sessionRef.coopAlive = null;
+      showBanner(null); avatars.hidden = null;
       if (backgroundTimer !== null) { timers.clearInterval(backgroundTimer); backgroundTimer = null; }
       try { zombieHandle?.dispose(); } catch {}
       zombieHandle = null; simulation = null;

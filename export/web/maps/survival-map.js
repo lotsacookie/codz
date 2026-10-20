@@ -318,7 +318,7 @@ function hud() {
   setText('weapon-name', s.def.name);
   setText('grenade-count', s.grenades);
   setText('reload-label', s.reloadLeft <= 0 && w.mag === 0 && w.reserve > 0 ? (touchControls.mode ? 'Tap reload' : touchControls.pad.active ? 'Press X to reload' : 'Reload') : '');
-  setText('weapon-status', s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '');
+  setText('weapon-status', s.spectating ? 'SPECTATING' : s.phase === 'reviving' ? 'QUICK REVIVE…' : s.pack ? 'WEAPON IN PACK-A-PUNCH' : '');
   setOpacity('hitmarker', combat.hitUntil > s.time ? 1 : 0);
   setText('power', C.hideHud?.includes('power') ? '' : s.power ? 'POWER ON' : 'POWER OFF');
   const seconds = performance.now() / 1000;
@@ -541,7 +541,7 @@ async function load() {
     spawnBarriers: () => features.barriers,
     stepClear: (a, b) => navigation.stepClear(a, b),
   };
-  combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
+  combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), teleport: p => player.setPosition(p), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
   combat.renderer = renderer;
   await combat.load();
   combat.attachCoop(createCoop({ scene, camera, feet: () => player.getFeetPosition(), points: () => combat.session.points, health: () => coopHealth(combat.session) }));

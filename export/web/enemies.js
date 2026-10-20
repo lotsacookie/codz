@@ -69,7 +69,7 @@ export class Enemies {
   }
   update(dt,player){
     const s=this.session;
-    if(this.autoSpawn!==false&&s.phase==='fighting'&&s.spawned<s.total&&this.list.length<24){
+    if(this.autoSpawn!==false&&(s.corePhase??s.phase)==='fighting'&&s.spawned<s.total&&this.list.length<24){
       this.nextSpawn-=dt;
       if(this.nextSpawn<=0){
         const candidates=this.world.spawnBarriers(s).filter(b=>{const p=this.world.path(b.inside,player);return p.length>1&&p.at(-1).distanceTo(player)<150;});
@@ -152,7 +152,7 @@ export class Enemies {
       if(z.stuck>12){const moved=z.lastPosition.distanceTo(z.root.position);z.lastPosition.copy(z.root.position);z.stuck=0;if(moved<5&&dist>100){z.path=[];z.repath=0;z.stuckCount=(z.stuckCount??0)+1;if(z.stuckCount>=2&&this.relocate(z,player))z.stuckCount=0;else if(z.stuckCount>=4&&!this.seen(z,player)){this.remove(z);s.spawned--;}}else z.stuckCount=0;}
     }
     this.updateDead(dt);
-    if(this.autoRounds!==false&&s.phase==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
+    if(this.autoRounds!==false&&(s.corePhase??s.phase)==='fighting'&&s.spawned>=s.total&&this.list.length===0){if(s.dogRound)this.onKill?.(null,'full_ammo',this.lastDogDeath??player);s.nextRound();this.nextSpawn=0;this.lastDogDeath=null;}
   }
   updateDead(dt){for(const d of [...this.dead]){d.life-=dt;d.rig.update(dt);if(d.life<2)d.root.position.y-=dt*24;if(d.life<=0){this.discardDead(d);this.dead.splice(this.dead.indexOf(d),1);}}}
   discardDead(d){d.root.removeFromParent();d.rig.mixer.uncacheRoot(d.root);disposeSkeletons(d.root);}
