@@ -501,7 +501,7 @@ try{
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait)=>audio.voice(gait,()=>z.root.position)});
   world.actors=()=>enemies.list;
-  coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
+  coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;

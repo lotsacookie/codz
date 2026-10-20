@@ -22,9 +22,9 @@ export class MoonAudio extends GameAudio {
     super.warmWeapon(def,notifies);
     const key=this.ctx&&this.shotKey(def);if(key)this.buffer(key).catch(()=>{});
   }
-  weapon(kind,def){
-    if(kind==='shot'){const key=this.shotKey(def);if(key){this.play(key,.8);return;}}
-    super.weapon(kind,def);
+  weapon(kind,def,position=null,gain=1){
+    if(kind==='shot'){const key=this.shotKey(def);if(key){this.play(key,.8*gain,position);return;}}
+    super.weapon(kind,def,position,gain);
   }
   environment(env){
     if(!this.ctx)return;

@@ -7,6 +7,7 @@ import { RemoteAvatars } from './avatars.js';
 import { spawnScorePopup } from '../hud.js';
 import { ZombieNet } from './zombie-net.js';
 import { attachZombieNet } from './zombie-bridge.js';
+import { ShotLimiter, cleanShot, packShot, shotGain } from './gunfire.js';
 
 const SCORE_KEEPALIVE_MS = 2000;
 const BACKGROUND_MS = 250;
@@ -121,6 +122,28 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     }, BACKGROUND_MS);
   }
 
+  let audioHandle = null;
+
+  function attachAudio(audio, { weapons = {} } = {}) {
+    if (audioHandle) return audioHandle;
+    const original = audio.weapon;
+    const limiter = new ShotLimiter();
+    audio.weapon = function (kind, def, position, gain) {
+      original.call(audio, kind, def, position, gain);
+      if (kind !== 'shot' || position || !def?.id || !limiter.allow(now())) return;
+      channel.send('shot', packShot(def, camera.position));
+    };
+    const stop = channel.on('shot', (raw, from) => {
+      const shot = cleanShot(raw);
+      if (!shot || from === selfId || !currentRoster().some(p => p.id === from)) return;
+      const gain = shotGain(camera.position.distanceTo(new THREE.Vector3(shot.x, shot.y, shot.z)));
+      if (gain <= 0) return;
+      audio.weaponAt?.(weapons[shot.weapon] ?? { id: shot.weapon }, [shot.x, shot.y, shot.z], gain);
+    });
+    audioHandle = { dispose() { stop?.(); audio.weapon = original; audioHandle = null; } };
+    return audioHandle;
+  }
+
   function attachEnemies(enemies, { session, damage = () => {}, onAward = null }) {
     if (zombieHandle) return zombieHandle;
     const net = new ZombieNet({ channel, role, selfId, hostId: () => lobby.hostId ?? null, now });
@@ -134,6 +157,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     role,
     idle,
     attachEnemies,
+    attachAudio,
     update,
     /** Positions (THREE.Vector3, feet level) of living teammates, for zombie targeting. */
     targets: () => targetList,
@@ -145,6 +169,7 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
       if (backgroundTimer !== null) { timers.clearInterval(backgroundTimer); backgroundTimer = null; }
       try { zombieHandle?.dispose(); } catch {}
       zombieHandle = null; simulation = null;
+      try { audioHandle?.dispose(); } catch {}
       avatars.dispose();
       panel?.remove();
     },

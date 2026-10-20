@@ -34,7 +34,7 @@ export class GameAudio {
     const needed=new Set(notifies.map(name=>this.notifyKey(name,def)).filter(Boolean));
     for(const key of Object.keys(this.manifest))if(key.startsWith(prefix)||key.includes('/melee/knife/')||key.includes('/bowie/')||needed.has(key))this.buffer(key).catch(()=>{});
   }
-  weapon(kind,def){
+  weapon(kind,def,position=null,gain=1){
     const prefix=shotFolders[def.id.replace('_zm','')];
     let cue;
     if(kind==='shot'&&prefix)cue=this.select('resident/wpn/'+prefix+'/plr/shot/shot_');
@@ -42,7 +42,12 @@ export class GameAudio {
     if(kind==='shot'&&def.id==='ray_gun_zm')cue='resident/wpn/energy/raygun/plr/shot/ray_shot_f';
     if(kind==='shot'&&def.id==='thundergun_zm')cue='resident/wpn/energy/thundergun/plr/shot/wpn_thundergun_fire_plr';
     if(kind==='empty'&&prefix)cue=this.select('resident/wpn/'+prefix+'/plr/act/');
-    this.play(cue??kind,kind==='shot'?.75:1);
+    if(position&&!cue)return;
+    this.play(cue??kind,(kind==='shot'?.75:1)*gain,position);
+  }
+  weaponAt(def,position,gain=1){
+    if(!this.warmed?.has(def.id)){(this.warmed??=new Set()).add(def.id);this.warmWeapon(def);}
+    this.weapon('shot',def,position,gain);
   }
   knife(kind,bowie=false){
     const prefix=bowie?(kind==='swing'?'bowie/bowie_swing/':'bowie/bowie_stab/'):
