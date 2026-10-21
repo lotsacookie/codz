@@ -32,7 +32,7 @@ export class GameAudio {
     if(!this.ctx)return;
     const prefix='resident/wpn/'+shotFolders[def.id.replace('_zm','')]+'/plr/shot/';
     const needed=new Set(notifies.map(name=>this.notifyKey(name,def)).filter(Boolean));
-    for(const key of Object.keys(this.manifest))if(key.startsWith(prefix)||key.includes('/melee/knife/')||key.includes('/bowie/')||needed.has(key))this.buffer(key).catch(()=>{});
+    for(const key of Object.keys(this.manifest))if(key.startsWith(prefix)||(key.startsWith('resident/')&&(key.includes('/melee/knife/')||key.includes('/bowie/')))||needed.has(key))this.buffer(key).catch(()=>{});
   }
   weapon(kind,def,position=null,gain=1){
     const prefix=shotFolders[def.id.replace('_zm','')];
