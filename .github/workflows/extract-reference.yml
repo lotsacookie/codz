@@ -97,10 +97,17 @@ jobs:
         env:
           OUT_DIR: ${{ inputs.out_dir }}
           MAP: ${{ inputs.map }}
+          MAX_COMMIT_BYTES: 150000000
         run: |
           git add -- "$OUT_DIR"
           if git diff --cached --quiet; then echo "Nothing new to commit."; exit 0; fi
           git diff --cached --stat | tail -1
+          new_bytes=$(git diff --cached --name-only --diff-filter=A -z | xargs -0 -r du -cb | tail -1 | cut -f1)
+          echo "New files total ${new_bytes:-0} bytes (limit $MAX_COMMIT_BYTES)"
+          if [ "${new_bytes:-0}" -gt "$MAX_COMMIT_BYTES" ]; then
+            echo "Refusing to commit: new files exceed the size limit. Re-run with a narrower 'only' regex or fewer kinds."
+            exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "reference: extract new $MAP assets into $OUT_DIR"

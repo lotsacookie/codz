@@ -104,7 +104,7 @@ def shallow(obj):
     return {str(key): describe(item) for key, item in list(value.items())[:48]}
 
 
-def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name=""):
+def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name="", resolve_name=None):
     rows = []
     names = {kind: set() for kind in kinds}
     references = {kind: set() for kind in kinds}
@@ -114,6 +114,8 @@ def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name=""):
         kind = KIND_FOR_TYPE.get(type_name)
         if kind is None or kind not in kinds:
             continue
+        if not name and resolve_name is not None:
+            name = resolve_name(obj)
         if not name:
             field = name_field(obj)
             unnamed[(kind, field)] += 1
@@ -181,7 +183,7 @@ def capture_walk(zone_path):
 def run(zone_path, zone_name, out, kinds, only, overwrite):
     zone, status, error, lines = capture_walk(zone_path)
     assets = zone.assets if zone is not None else []
-    rows, index, summary = export_assets(assets, out, kinds, only, overwrite, zone_name)
+    rows, index, summary = export_assets(assets, out, kinds, only, overwrite, zone_name, zone._asset_name if zone is not None else None)
     if status != "ok":
         rows.append({"archive": zone_name, "kind": "zone", "status": status, "error": error})
     resyncs = sum(1 for line in lines if "resync" in line)

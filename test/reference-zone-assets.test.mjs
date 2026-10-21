@@ -116,3 +116,21 @@ print(json.dumps({'first': first, 'again': again, 'index': index, 'summary': sum
   assert.equal(existsSync(join(out, 'models/viewhands_usmc.json')), false);
   assert.equal(existsSync(join(out, 'models/,viewhands_usmc.json')), false);
 });
+
+test('an asset whose name only resolves after the walk is named at export time', { skip: !hasPython }, async () => {
+  const out = await mkdtemp(join(tmpdir(), 'zone-assets-out-'));
+  const result = runPython(`${loader}
+out = ${JSON.stringify(out)}
+assets = [
+    (1, 'XAnimParts', None, {'name': None, 'late': 'late_named_anim'}),
+    (2, 'XAnimParts', None, {'name': None}),
+]
+resolve = lambda obj: obj.get('late') if isinstance(obj, dict) else None
+rows, index, summary = module.export_assets(assets, out, ['animations'], None, False, 'zone/test.ff', resolve)
+print(json.dumps({'rows': rows, 'index': index, 'summary': summary}))
+`);
+  assert.deepEqual(result.rows.map(row => [row.entry, row.status]), [['late_named_anim', 'ok'], [null, 'unnamed']]);
+  assert.deepEqual(result.index.animations.names, ['late_named_anim']);
+  assert.deepEqual(result.summary.unnamed, [['animations', 'None', 1]]);
+  assert.equal(existsSync(join(out, 'animations/late_named_anim.json')), true);
+});
