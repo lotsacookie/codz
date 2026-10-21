@@ -20,6 +20,13 @@ const BETWEEN_ROUND_TIME = 10;
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms * 1000));
 
+const MARK_CENTER = [21, 35, 47, 62, 61.5];
+
+export function markCenterShift(count) {
+  const n = Math.min(5, Math.max(1, count));
+  return (64 - MARK_CENTER[n - 1]) / 128 * 64;
+}
+
 function tallyMark(count) {
   const n = Math.min(5, Math.max(1, count));
   return `<i class="chalk-mark" style="--mark:url(textures/chalkmarks_${n}.png)"></i>`;
@@ -33,7 +40,7 @@ export function chalkMarkup(round) {
 
 function setFade(el, seconds, props) {
   el.style.transition = seconds > 0
-    ? `opacity ${seconds}s linear, color ${seconds}s linear, left ${seconds}s linear, bottom ${seconds}s linear`
+    ? `opacity ${seconds}s linear, color ${seconds}s linear, left ${seconds}s linear, bottom ${seconds}s linear, transform ${seconds}s linear`
     : 'none';
   if (seconds <= 0) void el.offsetWidth;
   Object.assign(el.style, props);
@@ -60,8 +67,8 @@ export class ChalkHud {
 
   // Resting place after the intro: bottom-left, user_left x=-5 / y=-4 (hud 2 at x=64).
   dockGroups() {
-    setFade(this.groups[0], 0, { left: 'calc(var(--u) * -5)', bottom: 'calc(var(--u) * 4)' });
-    setFade(this.groups[1], 0, { left: 'calc(var(--u) * 64)', bottom: 'calc(var(--u) * 4)' });
+    setFade(this.groups[0], 0, { left: 'calc(var(--u) * -5)', bottom: 'calc(var(--u) * 4)', transform: 'translateX(0)' });
+    setFade(this.groups[1], 0, { left: 'calc(var(--u) * 64)', bottom: 'calc(var(--u) * 4)', transform: 'translateX(0)' });
   }
 
   render(round) {
@@ -90,6 +97,13 @@ export class ChalkHud {
     }
   }
 
+  settle() {
+    for (const g of this.groups) {
+      if (!g.innerHTML) continue;
+      setFade(g, 0, { color: CHALK_DARK, opacity: '1' });
+    }
+  }
+
   hide() {
     this.token++;
     for (const g of this.groups) setFade(g, 0.5, { opacity: '0' });
@@ -103,7 +117,7 @@ export class ChalkHud {
     this.render(round);
     setFade(g2, 0, { opacity: '0' });
     // Centre of the screen (the 64-wide mark box is centred under "Round"), 200 above the bottom; "Round" 265 above.
-    setFade(g1, 0, { left: 'calc(50% - var(--u) * 32)', bottom: 'calc(var(--u) * 200)', opacity: '0', color: CHALK_WHITE });
+    setFade(g1, 0, { left: 'calc(50% - var(--u) * 32)', bottom: 'calc(var(--u) * 200)', transform: `translateX(calc(var(--u) * ${markCenterShift(round)}))`, opacity: '0', color: CHALK_WHITE });
     setFade(this.label, 0, { opacity: '0', color: CHALK_WHITE });
     await sleep(0.05); if (token !== this.token) return;
     setFade(this.label, 1, { opacity: '1' });
@@ -114,9 +128,10 @@ export class ChalkHud {
     await sleep(2 + 3); if (token !== this.token) return;
     setFade(this.label, 1, { opacity: '0' });
     await sleep(1.25); if (token !== this.token) return;
-    setFade(g1, 1.75, { left: 'calc(var(--u) * -5)', bottom: 'calc(var(--u) * 4)' });
+    setFade(g1, 1.75, { left: 'calc(var(--u) * -5)', bottom: 'calc(var(--u) * 4)', transform: 'translateX(0)' });
     await sleep(2); if (token !== this.token) return;
     setFade(g2, 0, { opacity: this.shown > 5 && this.shown <= 10 ? '1' : '0', color: CHALK_DARK });
+    this.settle();
   }
 
   // chalk_one_up(), later rounds: fade out, swap marks, fade in white, settle to dark red.
@@ -131,6 +146,8 @@ export class ChalkHud {
     for (const g of this.groups) setFade(g, 2, { opacity: g === g2 && !(round > 5 && round <= 10) ? '0' : '1' });
     await sleep(2 + 2); if (token !== this.token) return;
     for (const g of this.groups) setFade(g, 1, { color: CHALK_DARK });
+    await sleep(1); if (token !== this.token) return;
+    this.settle();
   }
 
   // chalk_round_over(): turn white, flicker, then settle back to blood red and stay until the next round.
@@ -143,12 +160,14 @@ export class ChalkHud {
     await sleep(time * 0.25); if (token !== this.token) return;
     const steps = (time * 0.5) / 0.5;
     for (let i = 0; i < steps; i++) {
-      for (const g of visible) setFade(g, 0.5, { opacity: '0' });
+      for (const g of visible) setFade(g, 0.5, { opacity: '0.45' });
       await sleep(0.5); if (token !== this.token) return;
       for (const g of visible) setFade(g, 0.5, { opacity: '1' });
       await sleep(0.5); if (token !== this.token) return;
     }
     for (const g of visible) setFade(g, time * 0.25, { color: CHALK_DARK, opacity: '1' });
+    await sleep(time * 0.25); if (token !== this.token) return;
+    this.settle();
   }
 }
 

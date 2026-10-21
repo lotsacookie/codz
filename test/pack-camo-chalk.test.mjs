@@ -6,7 +6,7 @@ import { loadAtlas } from '../export/web/fx-atlas.js';
 import { createMuzzleFlash, MuzzleSmoke, flashTint } from '../export/web/muzzle-fx.js';
 import { weaponFxProfile } from '../export/web/fx-profile.js';
 import { applyPackCamo, isCamoTarget, patchPackCamo } from '../export/web/pack-camo.js';
-import { chalkMarkup } from '../export/web/hud.js';
+import { chalkMarkup, markCenterShift } from '../export/web/hud.js';
 
 const web = new URL('../export/web/', import.meta.url);
 
@@ -77,4 +77,13 @@ test('pack camo targets mapped opaque gun materials and patches the circuit boar
   assert.equal(applyPackCamo(new THREE.Group()), 0);
   assert.ok(existsSync(new URL('textures/camo_packapunch_spec.png', web)));
   assert.ok(existsSync(new URL('textures-mobile/camo_packapunch_spec.png', web)));
+});
+
+test('intro shift re-centres each reference chalk mark under the round label', () => {
+  assert.ok(Math.abs(markCenterShift(1) - 21.5) < 1e-9);
+  assert.ok(markCenterShift(1) > markCenterShift(2) && markCenterShift(2) > markCenterShift(3));
+  assert.ok(Math.abs(markCenterShift(4)) < 2);
+  assert.ok(Math.abs(markCenterShift(5)) < 2);
+  assert.equal(markCenterShift(9), markCenterShift(5));
+  assert.equal(markCenterShift(0), markCenterShift(1));
 });
