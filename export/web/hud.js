@@ -20,27 +20,15 @@ const BETWEEN_ROUND_TIME = 10;
 const $ = id => document.getElementById(id);
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms * 1000));
 
-// Hand-drawn chalk strokes standing in for hud_chalk_1..5 (those shaders are not
-// part of the extracted texture set). Slight per-stroke jitter keeps it uneven.
-const STROKE_X = [12, 25, 38, 51];
-const STROKE_TOP = [5, 7, 4, 6];
-const STROKE_BOTTOM = [58, 56, 60, 57];
-const STROKE_LEAN = [0.9, -1, 0.6, -0.8];
-
-function tallySvg(count) {
-  let paths = '';
-  const n = Math.min(count, 4), shift = count >= 5 ? 0 : (4 - n) * 6.5;
-  for (let i = 0; i < n; i++) {
-    paths += `<path d="M${STROKE_X[i] + shift + STROKE_LEAN[i]} ${STROKE_TOP[i]} L${STROKE_X[i] + shift - STROKE_LEAN[i]} ${STROKE_BOTTOM[i]}"/>`;
-  }
-  if (count >= 5) paths += '<path d="M5 49 L63 13"/>';
-  return `<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" filter="url(#chalk-rough)">${paths}</g></svg>`;
+function tallyMark(count) {
+  const n = Math.min(5, Math.max(1, count));
+  return `<i class="chalk-mark" style="--mark:url(textures/chalkmarks_${n}.png)"></i>`;
 }
 
 export function chalkMarkup(round) {
   if (round > 10) return [`<span class="chalk-num">${round}</span>`, ''];
-  if (round > 5) return [tallySvg(5), tallySvg(round - 5)];
-  return [tallySvg(Math.max(1, round)), ''];
+  if (round > 5) return [tallyMark(5), tallyMark(round - 5)];
+  return [tallyMark(round), ''];
 }
 
 function setFade(el, seconds, props) {

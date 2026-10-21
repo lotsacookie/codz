@@ -64,13 +64,12 @@ test('hit arcs cap how many attackers are shown', () => {
   assert.equal(hits.items.length, 3);
 });
 
-test('muzzle flash still fires and fades without a DOM or the real flash atlas', () => {
+test('muzzle flash shows nothing without the reference flash atlas', () => {
   const tag = new THREE.Object3D();
   const flash = createMuzzleFlash(tag);
   flash.fire({ size: 6 });
-  assert.equal(flash.group.visible, true);
-  flash.update(1);
   assert.equal(flash.group.visible, false);
+  assert.equal(flash.group.children.length, 0);
   flash.dispose();
 });
 

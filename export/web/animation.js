@@ -6,6 +6,7 @@ import { assets, rfetch } from './asset-loader.js';
 import { CameraEffects } from './camera-effects.js';
 import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
+import { applyPackCamo } from './pack-camo.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
 import { ViewmodelBob } from './viewmodel-bob.js';
@@ -210,6 +211,7 @@ export class ViewWeapon {
       if(b.pos)aimTracks.push({node,property:'position',sample:new THREE.VectorKeyframeTrack('',b.pos.frames.map(f=>f/aimData.fps),b.pos.values).createInterpolant()});
       if(b.rot)aimTracks.push({node,property:'quaternion',sample:new THREE.QuaternionKeyframeTrack('',b.rot.frames.map(f=>f/aimData.fps),b.rot.values).createInterpolant()});
     }
+    if(def.upgraded){applyPackCamo(gun);if(leftGun)applyPackCamo(leftGun);}
     applyScopeLens(gun);if(leftGun)applyScopeLens(leftGun);
     root.traverse(o=>{o.frustumCulled=false;});
     return {root,hands,gun,leftGun,flashes,knives:knives_,hiddenTags,rig,aimTracks,aimDuration,released:false};
