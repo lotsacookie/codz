@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process';
-import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { access, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 
@@ -30,6 +31,21 @@ export function selectClips(names, only) {
   return picked;
 }
 
+// Named WAVs that already sit under <sounds>/sound and <sounds>/english (no hashed clip needed).
+export async function treeNames(soundsDir) {
+  const names = {};
+  const walk = async dir => {
+    for (const entry of await readdir(join(soundsDir, dir), { withFileTypes: true }).catch(() => [])) {
+      const rel = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) await walk(rel);
+      else if (/\.wav$/i.test(entry.name)) names[rel] = rel;
+    }
+  };
+  await walk('sound');
+  await walk('english');
+  return names;
+}
+
 async function probe(file) {
   const { stdout } = await run('ffprobe', ['-v', 'error', '-select_streams', 'a:0', '-show_entries', 'stream=sample_rate,channels:format=duration', '-of', 'json', file]);
   const data = JSON.parse(stdout);
@@ -55,7 +71,7 @@ async function main() {
   const soundsDir = resolve(option('sounds', 'export/web/reference/sounds'));
   const audioDir = resolve(option('audio', 'export/web/audio'));
   const only = option('only', '');
-  const names = JSON.parse(await readFile(join(soundsDir, 'clip-names.json'), 'utf8'));
+  const names = argv.includes('--tree') ? await treeNames(soundsDir) : JSON.parse(await readFile(join(soundsDir, 'clip-names.json'), 'utf8'));
   const manifestFile = join(audioDir, 'manifest.json');
   const manifest = JSON.parse(await readFile(manifestFile, 'utf8'));
   const picked = selectClips(names, only);
@@ -70,7 +86,7 @@ async function main() {
       if (await exists(target)) stats.existing++;
       else { await convert(source, target); stats.converted++; }
       const info = await probe(target);
-      entries.set(key, { url: `audio/${key}.ogg`, source: `reference/sounds/${clip}`, sourceName: name, sourceSha256: clip.slice(6, 70), ...info });
+      entries.set(key, { url: `audio/${key}.ogg`, source: `reference/sounds/${clip}`, sourceName: name, sourceSha256: clip.startsWith('clips/') ? clip.slice(6, 70) : createHash('sha256').update(await readFile(source)).digest('hex'), ...info });
     } catch (error) {
       stats.failed++;
       console.error(`failed ${name}: ${error.message}`);

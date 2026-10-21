@@ -121,7 +121,7 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=_at.copy(z.root.position),eye=_eye.copy(player);at.y+=z.kind==='dog'?25:45;eye.y+=40;
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(z.kind==='dog')this.onEvent?.('bite',z);if(!onRemote)this.onDamage(amount,z.root.position);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(z.kind==='dog'){this.onEvent?.('bite',z);if(!onRemote&&this.session.health<=amount&&!(this.session.effects.invulnerable>this.session.time))this.onEvent?.('killplayer',z);}if(!onRemote)this.onDamage(amount,z.root.position);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
@@ -218,7 +218,7 @@ export class Enemies {
       if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();
       if(score){if(shooter){this.session.killed++;this.net?.award(shooter,{killed:true,head,melee});}else this.session.scoreHit(true,head,melee);}else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);this.onEvent?.('death',z,cause);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.net?.dead(z,cause);this.onKill?.(z);
       if(this.dead.length>12){const old=this.dead.shift();old.root.removeFromParent();old.rig.mixer.uncacheRoot(old.root);disposeSkeletons(old.root);}
-    }else if(score){if(shooter)this.net?.award(shooter,{killed:false});else this.session.scoreHit(false);}
+    }else{if(z.kind==='dog'&&damage>0)this.onEvent?.('pain',z);if(score){if(shooter)this.net?.award(shooter,{killed:false});else this.session.scoreHit(false);}}
   }
   rayHit(ray,far){
     let best=null;

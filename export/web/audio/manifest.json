@@ -21699,5 +21699,104 @@
     "duration": 0.231,
     "sampleRate": 44100,
     "channels": 1
+  },
+  "ref/english/voiceovers/zmb/ann/ann_dog_start_l": {
+    "url": "audio/ref/english/voiceovers/zmb/ann/ann_dog_start_l.ogg",
+    "source": "reference/sounds/english/sound/voiceovers/zmb/ann/ann_dog_start_l.wav",
+    "sourceName": "english/sound/voiceovers/zmb/ann/ann_dog_start_l.wav",
+    "sourceSha256": "8180a34419732e3da9d4a88a0d80e7c03721daefa8e6a810336dd87bb33b2e54",
+    "duration": 6.12,
+    "sampleRate": 48021,
+    "channels": 1
+  },
+  "ref/english/voiceovers/zmb/ann/ann_dog_start_r": {
+    "url": "audio/ref/english/voiceovers/zmb/ann/ann_dog_start_r.ogg",
+    "source": "reference/sounds/english/sound/voiceovers/zmb/ann/ann_dog_start_r.wav",
+    "sourceName": "english/sound/voiceovers/zmb/ann/ann_dog_start_r.wav",
+    "sourceSha256": "80897e29b1f4e613aa3908eb3756dd9bc87e58d496b9f477dcd5efe65d6e672a",
+    "duration": 6.239,
+    "sampleRate": 48006,
+    "channels": 1
+  },
+  "ref/english/voiceovers/zmb/ann/ann_dog_start_vox_b": {
+    "url": "audio/ref/english/voiceovers/zmb/ann/ann_dog_start_vox_b.ogg",
+    "source": "reference/sounds/english/sound/voiceovers/zmb/ann/ann_dog_start_vox_b.wav",
+    "sourceName": "english/sound/voiceovers/zmb/ann/ann_dog_start_vox_b.wav",
+    "sourceSha256": "20c86d0d893f161d3827dcad5571b03d4f66e131d97cd31dfb48e36126c0ccb6",
+    "duration": 11.59,
+    "sampleRate": 48021,
+    "channels": 2
+  },
+  "ref/aml/dog/anml_dog_attack_kill_player2": {
+    "url": "audio/ref/aml/dog/anml_dog_attack_kill_player2.ogg",
+    "source": "reference/sounds/sound/aml/dog/anml_dog_attack_kill_player2.wav",
+    "sourceName": "sound/aml/dog/anml_dog_attack_kill_player2.wav",
+    "sourceSha256": "d2e562f9b6012f974e6bdd51220263099d2fa8eda744e1a0a6c29ce859fb5fb1",
+    "duration": 3.75,
+    "sampleRate": 48060,
+    "channels": 1
+  },
+  "ref/aml/dog/dog_bite_00": {
+    "url": "audio/ref/aml/dog/dog_bite_00.ogg",
+    "source": "reference/sounds/sound/aml/dog/dog_bite_00.wav",
+    "sourceName": "sound/aml/dog/dog_bite_00.wav",
+    "sourceSha256": "6df3878c1fa673a4dc760099b9142239ab899b6eba1f91ba8df56a5268d35b0a",
+    "duration": 0.77,
+    "sampleRate": 47875,
+    "channels": 1
+  },
+  "ref/aml/dog/dog_neckbreak": {
+    "url": "audio/ref/aml/dog/dog_neckbreak.ogg",
+    "source": "reference/sounds/sound/aml/dog/dog_neckbreak.wav",
+    "sourceName": "sound/aml/dog/dog_neckbreak.wav",
+    "sourceSha256": "283915a4c04b5ccc8d8ab2b8b77f78dcad7970488ac1f7714c8440a548c17f22",
+    "duration": 0.698,
+    "sampleRate": 47645,
+    "channels": 1
+  },
+  "ref/aml/dog/pain/pain_00": {
+    "url": "audio/ref/aml/dog/pain/pain_00.ogg",
+    "source": "reference/sounds/sound/aml/dog/pain/pain_00.wav",
+    "sourceName": "sound/aml/dog/pain/pain_00.wav",
+    "sourceSha256": "06c71fcb483e530f113f69bf48121c503da43e4557e578c349bd7028b5c13c84",
+    "duration": 0.344,
+    "sampleRate": 47611,
+    "channels": 1
+  },
+  "ref/aml/dog/pain/pain_01": {
+    "url": "audio/ref/aml/dog/pain/pain_01.ogg",
+    "source": "reference/sounds/sound/aml/dog/pain/pain_01.wav",
+    "sourceName": "sound/aml/dog/pain/pain_01.wav",
+    "sourceSha256": "1592a769d4da5f088f567f856c96cd80472b24e86c3992e9a681149a1c66251a",
+    "duration": 0.195,
+    "sampleRate": 47327,
+    "channels": 1
+  },
+  "ref/aml/dog/pain/pain_02": {
+    "url": "audio/ref/aml/dog/pain/pain_02.ogg",
+    "source": "reference/sounds/sound/aml/dog/pain/pain_02.wav",
+    "sourceName": "sound/aml/dog/pain/pain_02.wav",
+    "sourceSha256": "0ecb0de110e4b3f42b722355eac10bc3f58920b70a9f34e2c6ae24257a8b646e",
+    "duration": 0.16,
+    "sampleRate": 48013,
+    "channels": 1
+  },
+  "ref/aml/dog/pain/pain_03": {
+    "url": "audio/ref/aml/dog/pain/pain_03.ogg",
+    "source": "reference/sounds/sound/aml/dog/pain/pain_03.wav",
+    "sourceName": "sound/aml/dog/pain/pain_03.wav",
+    "sourceSha256": "3083afe598ddeafbf5c4d507f401a34ed89063bfaa7b9c9093a5cb06c8686c57",
+    "duration": 0.804,
+    "sampleRate": 47736,
+    "channels": 1
+  },
+  "ref/aml/dog/pain/pain_04": {
+    "url": "audio/ref/aml/dog/pain/pain_04.ogg",
+    "source": "reference/sounds/sound/aml/dog/pain/pain_04.wav",
+    "sourceName": "sound/aml/dog/pain/pain_04.wav",
+    "sourceSha256": "dfbb783417965a9339e2b3c884ad9f178e9c30cadef81a4528873577ad811570",
+    "duration": 0.467,
+    "sampleRate": 48199,
+    "channels": 1
   }
 }

@@ -20,3 +20,19 @@ test('selectClips filters by pattern, sorts by name and skips duplicate keys', (
   assert.deepEqual(selectClips(names).map(item => item.key), ['ref/vox/zmb/a', 'ref/wpn/a', 'ref/wpn/b']);
   assert.deepEqual(selectClips(names, '^sound/wpn/').map(item => item.clip), ['clips/b.wav', 'clips/c.wav']);
 });
+
+test('treeNames lists named wavs under sound and english', async () => {
+  const { mkdtemp, mkdir, writeFile } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { treeNames } = await import('../.tools/build-clip-audio.mjs');
+  const dir = await mkdtemp(join(tmpdir(), 'tree-'));
+  await mkdir(join(dir, 'sound/aml/dog'), { recursive: true });
+  await mkdir(join(dir, 'english/sound/vox'), { recursive: true });
+  await writeFile(join(dir, 'sound/aml/dog/dog_bite_00.wav'), '');
+  await writeFile(join(dir, 'sound/aml/dog/readme.txt'), '');
+  await writeFile(join(dir, 'english/sound/vox/line.wav'), '');
+  const names = await treeNames(dir);
+  assert.deepEqual(Object.keys(names).sort(), ['english/sound/vox/line.wav', 'sound/aml/dog/dog_bite_00.wav']);
+  assert.deepEqual(selectClips(names).map(item => item.key).sort(), ['ref/aml/dog/dog_bite_00', 'ref/english/vox/line']);
+});

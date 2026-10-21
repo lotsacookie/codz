@@ -430,7 +430,7 @@ function update(dt){
       enemies.update(dt,player.getFeetPosition());
       features.update(dt);
       repairLeft=Math.max(0,repairLeft-dt);findPrompt();if((keys.has('KeyF')||keys.has('KeyE')||touch.use)&&prompt?.barrier)repair(prompt.barrier);
-      if(session.round!==lastRound||session.phase!==lastPhase){if(session.phase==='fighting'){audio.play(session.dogRound?'dog_round':'round');if(session.dogRound)audio.play('dog_announce');}else if(session.phase==='preparing'&&session.round>1){audio.play('round_end');}lastRound=session.round;lastPhase=session.phase;}
+      if(session.round!==lastRound||session.phase!==lastPhase){if(session.phase==='fighting'){if(session.dogRound)audio.dogRoundStart();else audio.play('round');}else if(session.phase==='preparing'&&session.round>1){audio.play('round_end');}lastRound=session.round;lastPhase=session.phase;}
       mysteryBox.update(dt);
       if(session.teleporter==='linking'&&session.time>linkUntil){session.teleporter='unlinked';toast('Teleporter link timed out');}
       if(teleportPending&&session.time>=teleportPending){teleportPending=0;const dest=data.entities.find(e=>e.targetname==='projroom_teleport_player0');player.setPosition(vector(dest.position));returnAt=session.time+30;session.teleporter='cooldown';flashUntil=session.time+.8;toast('Projection room · 30 seconds',4);}

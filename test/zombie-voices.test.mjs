@@ -193,3 +193,28 @@ test('hellhounds use the reference dog voices, steps and collar jingle', () => {
   const handle = audio.voice('sprint', () => position(900, 0, 0), 'dog');
   assert.match(handle.key, /hellhounds\/vox\/move\//);
 });
+
+test('hellhounds yelp when hurt, break their neck to melee and growl over a lethal bite', () => {
+  const { audio } = setup();
+  for (const key of Object.keys(manifest)) if (/^ref\/(aml\/dog|evt\/zombie_(tron|global)\/hellhounds)\//.test(key)) audio.manifest[key] = manifest[key];
+  const played = [];
+  audio.play = (key) => played.push(key);
+  audio.zombieEvent('pain', 'dog', [0, 0, 0]);
+  audio.zombieEvent('death', 'dog', [0, 0, 0], 1, 'melee');
+  audio.zombieEvent('killplayer', 'dog', [0, 0, 0]);
+  assert.match(played[0], /aml\/dog\/pain\//);
+  assert.ok(played.some(key => key.endsWith('dog_neckbreak')));
+  assert.ok(played.some(key => key.endsWith('anml_dog_attack_kill_player2')));
+});
+
+test('the dog round start plays the music, announcer and left/right stems', () => {
+  const { audio } = setup();
+  audio.camera = { matrixWorld: { elements: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 10, 20, 30, 1] } };
+  for (const key of ['dog_round', 'dog_announce', 'ref/english/voiceovers/zmb/ann/ann_dog_start_l', 'ref/english/voiceovers/zmb/ann/ann_dog_start_r']) audio.manifest[key] = manifest[key];
+  const played = [];
+  audio.play = (key, volume, at) => played.push({ key, at });
+  audio.dogRoundStart();
+  assert.deepEqual(played.map(p => p.key), ['dog_round', 'dog_announce', 'ref/english/voiceovers/zmb/ann/ann_dog_start_l', 'ref/english/voiceovers/zmb/ann/ann_dog_start_r']);
+  assert.deepEqual(played[2].at, [-290, 20, 30]);
+  assert.deepEqual(played[3].at, [310, 20, 30]);
+});

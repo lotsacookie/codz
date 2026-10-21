@@ -94,6 +94,16 @@ export class GameAudio {
     for(const layer of blastCues(kind,Object.keys(this.manifest)))this.play(this.pick(layer),gain*(layer[0].includes('/lfe/')?.6:.8));
     if(!this.manifest['ref/wpn/grenade/explosion/explode/explode_00'])this.play('explosion',gain);
   }
+  // Mono L/R stems play either side of the listener so they read as one stereo cue.
+  stereoPair(left,right,gain=1,spread=300){
+    const m=this.camera?.matrixWorld?.elements;if(!m)return;
+    const at=sign=>[m[12]+m[0]*spread*sign,m[13]+m[1]*spread*sign,m[14]+m[2]*spread*sign];
+    if(this.manifest[left])this.play(left,gain,at(-1));if(this.manifest[right])this.play(right,gain,at(1));
+  }
+  dogRoundStart(){
+    this.play('dog_round');this.play('dog_announce');
+    this.stereoPair('ref/english/voiceovers/zmb/ann/ann_dog_start_l','ref/english/voiceovers/zmb/ann/ann_dog_start_r',.5);
+  }
   grenadeThrow(){this.play('ref/wpn/grenade/foley/pin/pin',.6);this.later(180,()=>this.play('ref/wpn/grenade/foley/throw/gren_throw',.7));}
   grenadeBounce(){
     const now=this.ctx?.currentTime??0;if(now-(this.lastBounce??-1)<.12)return;this.lastBounce=now;
@@ -163,6 +173,8 @@ export class GameAudio {
   // One-shot zombie voice (attack, death, spawn) from the enemy's position.
   zombieEvent(type,kind,position,gain=1,cause=''){
     const cues=kind==='dog'?this.dogCues():this.zombieCues()[kind==='nova'?'nova':'zombie'];
+    if(kind==='dog'&&type==='pain'){const now=this.ctx?.currentTime??0;if(now-(this.lastDogPain??-1)<.3)return;this.lastDogPain=now;}
+    if(kind==='dog'&&type==='death'&&cause==='melee'){const neck=this.pick(cues.neck);if(neck)this.play(neck,.7*gain,position);}
     if(kind==='dog'&&type==='step'){const step=this.pick(cues.step),collar=this.pick(cues.collar);if(step)this.play(step,.6*gain,position);if(collar&&Math.random()<.3)this.play(collar,.3*gain,position);return;}
     const key=this.pick(type==='death'&&cause==='electric'&&cues.elec?.length?cues.elec:cues[type]);
     if(key)this.play(key,.8*gain,position);
