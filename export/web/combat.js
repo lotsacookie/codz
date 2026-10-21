@@ -137,6 +137,7 @@ export class Combat {
   grenade(){
     if(!this.session.grenades||!this.session.canAct)return;
     this.session.grenades--;
+    this.audio.grenadeThrow();
     const mesh=new THREE.Mesh(new THREE.SphereGeometry(3.5,8,6),new THREE.MeshStandardMaterial({color:0x43563b,roughness:.8}));mesh.position.copy(this.camera.position);this.scene.add(mesh);
     this.grenades.push({mesh,velocity:this.camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(480).add(new THREE.Vector3(0,140,0)),life:3});
   }
@@ -197,10 +198,10 @@ export class Combat {
     for(const g of [...this.grenades]){
       g.life-=dt;if(!g.rocket)g.velocity.y-=(this.world.lowGravity(g.mesh.position)?136:650)*dt;
       const travel=g.velocity.clone().multiplyScalar(dt),hit=this.world.raycast(new THREE.Ray(g.mesh.position.clone(),travel.clone().normalize()),0,travel.length()+4);
-      if(hit){const normal=hit.triangle.getNormal(new THREE.Vector3());if(normal.dot(g.velocity)>0)normal.negate();g.velocity.reflect(normal).multiplyScalar(.45);g.mesh.position.copy(hit.position).addScaledVector(normal,4);if(g.rocket)g.life=0;}else g.mesh.position.add(travel);
+      if(hit){const normal=hit.triangle.getNormal(new THREE.Vector3());if(normal.dot(g.velocity)>0)normal.negate();g.velocity.reflect(normal).multiplyScalar(.45);g.mesh.position.copy(hit.position).addScaledVector(normal,4);if(g.rocket)g.life=0;else if(!g.equipment)this.audio.grenadeBounce();}else g.mesh.position.add(travel);
       if(g.life<=0){
         if(g.equipment){this.features?.equipment(g.equipment,g.mesh.position.clone());this.removeEffect(this.grenades,g);continue;}
-        this.audio.play('explosion');this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
+        this.audio.blast(g.rocket?'rocket':'grenade');this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
         const radius=g.radius||300,damage=g.damage||1500;
         for(const z of [...this.enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<radius&&this.world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))this.enemies.hurt(z,Math.max(75,damage*(1-d/radius)),false,false,g.rocket?'explosion':'grenade');}
         const d=this.camera.position.distanceTo(g.mesh.position);if(d<160&&!s.perks.has('specialty_flakjacket'))this.damage(180*(1-d/160));this.removeEffect(this.grenades,g);

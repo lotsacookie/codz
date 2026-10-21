@@ -1,14 +1,11 @@
+import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER} from './weapon-sfx.js';
 // Native T5 cues decoded from IWD streams and resident LoadedSound records.
-const shotFolders={m1911:'pistol/m1911',m14:'assault/m14',rottweil72:'shotgun/rottweil72',ithaca:'shotgun/ithaca',
-  mp40:'smg/mp40',mp5k:'smg/mp5',mpl:'smg/mpl',pm63:'smg/pm63',ak74u:'smg/ak74',m16:'assault/m16',
-  galil:'assault/galil',commando:'assault/commando',hk21:'lmg/hk21',rpk:'lmg/rpk',python:'pistol/357',spas:'shotgun/spas',
-  cz75:'pistol/cz75',cz75dw:'pistol/cz75',g11_lps:'smg/g11',famas:'assault/famas',spectre:'smg/spectre',hs10:'shotgun/hs10',aug_acog:'assault/aug',fnfal:'assault/fnfal',dragunov:'sniper/dragunov',l96a1:'sniper/l96a1',china_lake:'gren_launcher/china_lake',crossbow_explosive:'crossbow',knife_ballistic:'melee/ballistic_knife'};
 const SPATIAL={near:140,rolloff:1.6,far:6000};
 const ZOMBIE_VOICES={walk:['w1','w2','w3'],sprint:['s1','s2']};
 const VOICE_RANGE=1600,VOICE_LIMIT=14;
 export class GameAudio {
-  constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();this.lastStart=new Map();}
-  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();for(const names of Object.values(ZOMBIE_VOICES))for(const name of names)this.manifest['zombies/'+name]??={url:'audio/zombies/'+name+'.ogg'};}
+  constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();this.lastStart=new Map();this.profiles=new Map();this.wpnKeys=null;}
+  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();this.profiles.clear();this.wpnKeys=null;for(const names of Object.values(ZOMBIE_VOICES))for(const name of names)this.manifest['zombies/'+name]??={url:'audio/zombies/'+name+'.ogg'};}
   get enabled(){return this._enabled;}
   set enabled(v){this._enabled=v;if(this.master)this.master.gain.value=v?.42:0;}
   start(){if(!this.ctx){const Context=globalThis.AudioContext??globalThis.webkitAudioContext;if(!Context){this.enabled=false;return;}this.ctx=new Context();this.master=this.ctx.createGain();this.master.gain.value=this.enabled?.42:0;this.master.connect(this.ctx.destination);
@@ -28,22 +25,47 @@ export class GameAudio {
     if(!this.variants.has(prefix))this.variants.set(prefix,Object.keys(this.manifest).filter(k=>k.startsWith(prefix)));
     const keys=this.variants.get(prefix);return keys[Math.floor(Math.random()*keys.length)];
   }
+  profile(def,folder=null){
+    this.wpnKeys??=Object.keys(this.manifest).filter(k=>/^(resident|ref)\/wpn\//.test(k));
+    const id=(folder??'')+'|'+def.id;
+    if(!this.profiles.has(id))this.profiles.set(id,weaponProfile(def,this.wpnKeys,folder));
+    return this.profiles.get(id);
+  }
+  launcherProfile(def){return def.attachmentActive&&def.projectileSpeed>0?this.profile(def,GRENADE_LAUNCHER_FOLDER):null;}
+  pick(pool){return pool?.length?pool[Math.floor(Math.random()*pool.length)]:undefined;}
+  later(ms,fn){setTimeout(()=>{if(this.ctx)fn();},ms);}
   warmWeapon(def,notifies=[]){
     if(!this.ctx)return;
-    const prefix='resident/wpn/'+shotFolders[def.id.replace('_zm','')]+'/plr/shot/';
-    const needed=new Set(notifies.map(name=>this.notifyKey(name,def)).filter(Boolean));
-    for(const key of Object.keys(this.manifest))if(key.startsWith(prefix)||(key.startsWith('resident/')&&(key.includes('/melee/knife/')||key.includes('/bowie/')))||needed.has(key))this.buffer(key).catch(()=>{});
+    const profile=this.profile(def),needed=new Set(notifies.map(name=>this.notifyKey(name,def)).filter(Boolean));
+    for(const pool of [profile.shot,profile.npcShot,profile.lfe,profile.sweet,profile.ring,profile.dry,profile.classDry,profile.classLfe,profile.shell,profile.pap])for(const key of pool)needed.add(key);
+    for(const key of Object.keys(this.manifest))if(key.startsWith('resident/')&&(key.includes('/melee/knife/')||key.includes('/bowie/')))needed.add(key);
+    for(const key of needed)this.buffer(key).catch(()=>{});
+  }
+  distanceTo(position){
+    const cam=this.camera?.position;if(!position||!cam)return 0;
+    const [x,y,z]=Array.isArray(position)?position:[position.x,position.y,position.z];return Math.hypot(x-cam.x,y-cam.y,z-cam.z);
   }
   weapon(kind,def,position=null,gain=1){
-    const prefix=shotFolders[def.id.replace('_zm','')];
-    let cue;
-    if(kind==='shot'&&prefix)cue=this.select('resident/wpn/'+prefix+'/plr/shot/shot_');
-    if(kind==='shot'&&def.attachmentActive&&def.projectileSpeed>0)cue=this.select('resident/wpn/gren_launcher/attachment/plr/shot/');
-    if(kind==='shot'&&def.id==='ray_gun_zm')cue='resident/wpn/energy/raygun/plr/shot/ray_shot_f';
-    if(kind==='shot'&&def.id==='thundergun_zm')cue='resident/wpn/energy/thundergun/plr/shot/wpn_thundergun_fire_plr';
-    if(kind==='empty'&&prefix)cue=this.select('resident/wpn/'+prefix+'/plr/act/');
-    if(position&&!cue)return;
-    this.play(cue??kind,(kind==='shot'?.75:1)*gain,position);
+    const profile=this.launcherProfile(def)??this.profile(def);
+    if(kind==='empty'){
+      const cue=this.pick(position?profile.npcDry:profile.dry)??this.pick(profile.dry)??this.pick(profile.classDry);
+      if(position&&!cue)return;
+      this.play(cue??kind,gain,position);return;
+    }
+    if(kind!=='shot'){this.play(kind,gain,position);return;}
+    const main=(position?this.pick(profile.npcShot):null)??this.pick(profile.shot)??this.pick(profile.npcShot)??this.pick(profile.dist);
+    if(position&&!main)return;
+    this.play(main??kind,.75*gain,position);
+    // Layers from the same alias group: low-frequency thump, sweetener, tail, stereo flux.
+    const layer=(pool,volume,delay=0)=>{const key=this.pick(pool);if(!key)return;if(delay)this.later(delay,()=>this.play(key,volume*gain,position));else this.play(key,volume*gain,position);};
+    layer(profile.lfe.length?profile.lfe:profile.classLfe,.5);
+    layer(profile.sweet,.4);
+    layer(profile.ring.length?profile.ring:profile.classRing,.3,40);
+    if(!position){
+      layer(profile.flux.length?profile.flux:profile.classFlux,.25);
+      layer(profile.shell,.3,320);
+      if(def.upgraded){layer(profile.pap,.45);layer(profile.flame,.4);}
+    }else if(this.distanceTo(position)>900)layer(profile.dist.length?profile.dist:profile.classDist,.6);
   }
   weaponAt(def,position,gain=1){
     if(!this.warmed?.has(def.id)){(this.warmed??=new Set()).add(def.id);this.warmWeapon(def);}
@@ -62,11 +84,22 @@ export class GameAudio {
     if(bottle)return 'resident/evt/zombie_global/perksacola/bottle/'+bottle;
     // Melee swing/impact cues are emitted by the strike timeline once.
     if(['bowie_swing','bowie_stab'].includes(name))return;
+    const own=foleyKey(this.profile(def),name);if(own)return own;
     const base=name.replace(/_plr$/, '');
     return Object.keys(this.manifest).find(k=>k.endsWith('/'+name)||k.endsWith('/'+base)||k.endsWith('/'+name+'_00')||k.endsWith('/'+base+'_00'));
   }
   notify(name,def){const key=this.notifyKey(name,def);if(key)this.play(key,.65);}
   event(path,volume=1,position=null){this.play('resident/evt/zombie_global/'+path,volume,position);}
+  blast(kind='grenade',gain=1){
+    for(const layer of blastCues(kind,Object.keys(this.manifest)))this.play(this.pick(layer),gain*(layer[0].includes('/lfe/')?.6:.8));
+    if(!this.manifest['ref/wpn/grenade/explosion/explode/explode_00'])this.play('explosion',gain);
+  }
+  grenadeThrow(){this.play('ref/wpn/grenade/foley/pin/pin',.6);this.later(180,()=>this.play('ref/wpn/grenade/foley/throw/gren_throw',.7));}
+  grenadeBounce(){
+    const now=this.ctx?.currentTime??0;if(now-(this.lastBounce??-1)<.12)return;this.lastBounce=now;
+    const key=this.select('ref/wpn/grenade/bounce/frag/earth/earth_');if(key)this.play(key,.5);
+  }
+  zoom(def){if(!hasScope(def))return;const key=this.select('ref/wpn/scope/zoom/zoom_');if(key)this.play(key,.5);}
   fireSale(on){
     if(this.saleOn===on)return;this.saleOn=on;const token=this.saleToken=(this.saleToken??0)+1;
     this.saleMusic?.stop();this.saleMusic=null;
@@ -81,10 +114,10 @@ export class GameAudio {
   }
   // Sniper scope breathing: breath in on aim, breath out on release, a gasp after a long hold.
   scopeBreath(def,aiming){
-    const sniper=shotFolders[def?.id?.replace('_zm','')]?.startsWith('sniper/');
+    const sniper=weaponFolder(def?.id)?.startsWith('sniper/');
     if(!sniper){this.scopeSince=null;return;}
     let cue='scope_breath_in';
-    if(aiming)this.scopeSince=performance.now();
+    if(aiming){this.scopeSince=performance.now();this.zoom(def);}
     else{cue=this.scopeSince!=null&&performance.now()-this.scopeSince>4000?'scope_breath_gasp':'scope_breath_out';this.scopeSince=null;}
     if(this.manifest[cue])this.play(cue,.6);
   }
