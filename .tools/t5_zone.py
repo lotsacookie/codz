@@ -628,6 +628,12 @@ class T5Zone:
                 return v
         # find first segment innermost-out
         val = None
+        if len(parts) > 1:
+            # `Type::member` where Type is an enclosing struct (FxElemDef::elemType)
+            for sname, vals in reversed(ctx):
+                if sname == parts[0] and parts[1].split("[")[0] in vals:
+                    parts = parts[1:]
+                    break
         m0 = re.match(r"(\w+)\[(\d+)\]$", parts[0])
         first, first_idx = (m0.group(1), int(m0.group(2))) if m0 else (parts[0], None)
         for sname, vals in reversed(ctx):
@@ -828,6 +834,28 @@ class T5Zone:
             if not isinstance(pv, int):
                 return
             kind, tgt = self.classify(pv)
+            if kind == "following" and m.ptr >= 2:
+                # char** (szXAnims, bounceSound, ...): an array of `count` string
+                # pointers follows, then the strings of every FOLLOWING entry. Reading a
+                # single C string here ate the first slots as text and shifted the weapon.
+                count = self.eval_expr(info["count"], ctx) if info["count"] else 1
+                top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
+                block = info["block"] if info["block"] is not None else top
+                raw = self.read(4 * count, block=block, align=4)
+                out = []
+                for (pv2,) in struct.iter_unpack("<I", raw):
+                    k2, t2 = self.classify(pv2)
+                    if k2 == "following":
+                        out.append(self.read_cstr())
+                    elif k2 == "offset":
+                        try:
+                            out.append(self.resolve(*t2))
+                        except (ZoneError, struct.error, ValueError, KeyError):
+                            out.append(PendingRef(*t2) if self.deferred else None)
+                    else:
+                        out.append(None)
+                vals[name] = out
+                return
             if kind == "null":
                 vals[name] = None
             elif kind == "following":
@@ -1208,7 +1236,7 @@ class T5Zone:
             # probe stream positions ahead for a struct that decodes sanely:
             # all pointer members classify as valid zone pointers, and any
             # first-member FOLLOWING string is printable
-            for probe in range(self.pos, min(self.pos + 200000, len(d) - sd.size), 4):
+            for probe in range(max(self.pos, 0), min(max(self.pos, 0) + 200000, len(d) - sd.size), 4):
                 if probe + sd.size > len(d):
                     break
                 ok = True

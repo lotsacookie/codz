@@ -63,3 +63,15 @@ print(json.dumps({'count': info['count']}))
 `);
   assert.equal(out.count, 'numCollTris');
 });
+
+test('char** string arrays read the pointer table, then the strings', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+d = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
+wv = d['WeaponVariantDef']
+print(json.dumps({'reorder': list(wv.reorder), 'xanims': wv.counts.get('szXAnims')}))
+`);
+  // szXAnims is stored before hideTags in this zone version: plain struct order
+  assert.deepEqual(out.reorder, []);
+  assert.equal(out.xanims, 'NUM_WEAP_ANIMS');
+});

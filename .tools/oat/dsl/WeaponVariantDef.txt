@@ -16,11 +16,8 @@ set count hideTags 32;
 set reusable hideTags;
 set string szAmmoName;
 set string szClipName;
-reorder:
-...
-szDisplayName
-szAltWeaponName
-szXAnims;
+// no reorder: this zone version stores szXAnims (and its strings) before hideTags,
+// which is plain struct order
 
 // WeaponDef
 use WeaponDef;
