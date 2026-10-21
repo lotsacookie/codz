@@ -164,6 +164,19 @@ def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name="", 
     return rows, index, summary
 
 
+FAILURE_LINE = re.compile(r"asset#\d+ \((\w+)\) failed \((.*)\); (?:resyncing|no resync target)")
+NUMBERS = re.compile(r"0x[0-9a-fA-F]+|-?\d+")
+
+
+def summarize_failures(lines, limit=8):
+    failures = Counter()
+    for line in lines:
+        match = FAILURE_LINE.search(line)
+        if match:
+            failures[(match.group(1), NUMBERS.sub("N", match.group(2))[:140])] += 1
+    return [[kind, message, count] for (kind, message), count in failures.most_common(limit)]
+
+
 def capture_walk(zone_path):
     buffer = io.StringIO()
     zone = None
@@ -195,6 +208,8 @@ def run(zone_path, zone_name, out, kinds, only, overwrite):
         "assets": len(assets),
         "types": dict(types.most_common(40)),
         "resyncs": resyncs,
+        "failures": summarize_failures(lines),
+        "named": dict(Counter(row["kind"] for row in rows if row.get("entry") and row["status"] in ("ok", "exists"))),
         "warnings": lines[:WARNING_LINES] + (["..."] + lines[-WARNING_LINES:] if len(lines) > 2 * WARNING_LINES else lines[WARNING_LINES:]),
         "rows": rows,
         "index": index,

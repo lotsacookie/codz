@@ -134,3 +134,20 @@ print(json.dumps({'rows': rows, 'index': index, 'summary': summary}))
   assert.deepEqual(result.summary.unnamed, [['animations', 'None', 1]]);
   assert.equal(existsSync(join(out, 'animations/late_named_anim.json')), true);
 });
+
+test('walker failure lines are grouped by asset type and error', { skip: !hasPython }, () => {
+  const result = runPython(`${loader}
+lines = [
+    '  asset#10 (XAnimParts) failed (unresolved OFFSET VIRTUAL+0x3f (trace=[1])); resyncing',
+    '  asset#11 (XAnimParts) failed (unresolved OFFSET VIRTUAL+0x40 (trace=[2])); resyncing',
+    '  asset#12 (XModel) failed (bad count 77); no resync target',
+    '  resync -> asset#13 (XAnimParts) @ 0x1234',
+    '  resync gave up after asset#12',
+]
+print(json.dumps(module.summarize_failures(lines)))
+`);
+  assert.deepEqual(result, [
+    ['XAnimParts', 'unresolved OFFSET VIRTUAL+N (trace=[N])', 2],
+    ['XModel', 'bad count N', 1]
+  ]);
+});

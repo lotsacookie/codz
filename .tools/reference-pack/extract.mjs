@@ -117,8 +117,10 @@ export async function extractZoneAssets(file, zoneName, { out, kinds, only, repo
     if (result.summary.unnamed.length) report.push({ archive: zoneName, kind: 'zone', status: 'unnamed-summary', unnamed: result.summary.unnamed, samples: result.summary.samples });
     console.log(`${zoneName}: ${result.status}, ${result.assets} assets walked, ${result.resyncs} resyncs`, result.types);
     if (result.error) console.log(`  walk error: ${result.error}`);
+    for (const [type, message, count] of result.failures) console.log(`  failed ${type} x${count}: ${message}`);
+    if (result.assets) console.log(`  named and written: ${JSON.stringify(result.named)}`);
     for (const [kind, field, count] of result.summary.unnamed.slice(0, 5)) console.log(`  unnamed ${kind} x${count}: ${field}`);
-    return { zone: zoneName, status: result.status, error: result.error, assets: result.assets, resyncs: result.resyncs, types: result.types, index: result.index };
+    return { zone: zoneName, status: result.status, error: result.error, failures: result.failures, named: result.named, assets: result.assets, resyncs: result.resyncs, types: result.types, index: result.index };
   } catch (error) {
     report.push({ archive: zoneName, kind: 'zone', status: `zone-assets failed: ${String(error.message).split('\n')[0]}` });
     return { zone: zoneName, status: 'failed', assets: 0, index: {} };
