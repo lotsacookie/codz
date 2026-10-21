@@ -185,7 +185,7 @@ test('hellhounds use the reference dog voices, steps and collar jingle', () => {
   audio.zombieEvent('spawn', 'dog', [0, 0, 0]);
   for (let i = 0; i < 30; i++) audio.zombieEvent('step', 'dog', [0, 0, 0]);
   assert.match(played[0], /hellhounds\/vox\/attack\/|aml\/dog\/bark\//);
-  assert.match(played[1], /hellhounds\/vox\/bite\//);
+  assert.match(played[1], /hellhounds\/vox\/bite\/|aml\/dog\/dog_bite/);
   assert.match(played[2], /hellhounds\/vox\/death\/|aml\/dog\/death\//);
   assert.match(played[3], /hellhounds\/spawn\//);
   assert.ok(played.slice(4).some(key => key.includes('/hellhounds/step/')));

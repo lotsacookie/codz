@@ -122,6 +122,14 @@ export class GameAudio {
     try{this.beatSource?.stop();}catch{}this.beatSource=null;
     if(on)this.native('heartbeat',.45,true).then(source=>{if(token!==this.beatToken){try{source.stop();}catch{}}else this.beatSource=source;}).catch(console.error);
   }
+  // Downed-state drone: loops while the player waits to be revived.
+  laststand(on){
+    const key='ref/evt/zombie_global/laststand/laststand_loop_l';
+    if(on&&(!this.ctx||!this.manifest[key]))return;
+    if(!!this.downOn===on)return;this.downOn=on;const token=this.downToken=(this.downToken??0)+1;
+    try{this.downSource?.stop();}catch{}this.downSource=null;
+    if(on)this.native(key,.4,true).then(source=>{if(token!==this.downToken){try{source.stop();}catch{}}else this.downSource=source;}).catch(console.error);
+  }
   // Sniper scope breathing: breath in on aim, breath out on release, a gasp after a long hold.
   scopeBreath(def,aiming){
     const sniper=weaponFolder(def?.id)?.startsWith('sniper/');

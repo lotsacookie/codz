@@ -8,6 +8,7 @@ import { Enemies } from '../enemies.js';
 import { KinoSession as Session } from '../kino-session.js';
 import { KinoFeatures } from '../kino-features.js';
 import { GameAudio } from '../audio.js';
+import { PlayerVox } from '../player-vox.js';
 import { Powerups } from '../powerups.js';
 import { PerkDrink } from '../perk-drink.js';
 import { MysteryBox } from '../mystery-box.js';
@@ -38,6 +39,7 @@ import { disposeObject } from '../dispose.js';
 export async function mount(ctx){
 const addEventListener=(type,handler,options)=>ctx.listen(window,type,handler,options);let disposed=false;
 const $=id=>document.getElementById(id), keys=new Set(),audio=new GameAudio();
+const playerVox=new PlayerVox(audio,{character:Math.floor(Math.random()*4)});audio.vox=playerVox;
 const chalk=new ChalkHud();let lastPoints=null,perkKey='';
 const perkIcons={specialty_quickrevive:'specialty_quickrevive_zombies',specialty_fastreload:'specialty_fastreload_zombies',specialty_rof:'specialty_doubletap_zombies',specialty_armorvest:'specialty_juggernaut_zombies'};
 const profile=configureKinoAssets();
@@ -202,7 +204,7 @@ function damage(n,from){
   return true;
 }
 function showGameOver(){
-  if(!deathCue){deathCue=true;audio.play('death_card',.8);}
+  if(!deathCue){deathCue=true;audio.play('death_card',.8);audio.play('ref/chr/death/chr_death',.6);audio.later(900,()=>audio.play('ref/mus/zombie/game_over/mus_gameover_abracadavre',.8));}
   primary=false;ads=false;ctx.gameOver({status:'GAME OVER · You survived '+session.round+(session.round===1?' Round':' Rounds'),results:session.kills+' kills · '+session.headshots+' headshots · '+Math.floor(session.time/60)+'m '+Math.floor(session.time%60)+'s'});
   try{const best=Math.max(session.round,+(localStorage.getItem('kino.best')||0));localStorage.setItem('kino.best',String(best));}catch{}
 }
@@ -234,7 +236,7 @@ function collect(type,position,info={}){
   if(!powerupNames[type])return;
   const authority=info.host!==false;
   session.powerup(type);toast(powerupNames[type],3);audio.event('powerup/grab/grab_00',.75);
-  audio.play(type);
+  audio.play(type);playerVox.powerup(type);
   if(type==='full_ammo')audio.event('powerup/max_ammo/max_ammo_00',.7);
   if(type==='nuke'){flashUntil=session.time+.8;audio.event('nuke/nuke_flash',.8);if(authority)enemies.nuke(z=>effect(z.root.position,0xc7dba4));}
   if(type==='carpenter'){if(authority)for(const b of world.barriers)world.setBoards(b,b.boards.length||6,true);audio.event('powerup/carpenter/end/end_00',.7);}
@@ -342,7 +344,7 @@ function interact(){
   if(t==='claymore_purchase'){const ok=features.interact(e);if(ok)revealWall(e);return ok;}
   if(e.script_noteworthy==='auto_turret_trigger'||t?.startsWith('trigger_movie_reel_')||t==='trigger_change_projector_reels')return features.interact(e);
   if(t==='meteor_egg_trigger'){meteors.add(e.id);audio.play('buy');toast('Meteor fragment '+meteors.size+' / 3');if(meteors.size===3){audio.playMusic('115');announce('115','MUSICAL EASTER EGG');}return true;}
-  const pay=n=>{if(!session.spend(n)){toast('Not enough points');return false;}audio.play('buy');return true;};
+  const pay=n=>{if(!session.spend(n)){toast('Not enough points');playerVox.say('nomoney');return false;}audio.play('buy');return true;};
   if(t==='bowie_upgrade'){if(session.bowie||!pay(3000))return false;session.bowie=true;toast('Bowie Knife');return true;}
   if(t==='zombie_door'){
     const d=world.doors.get(e.target);if(d.electric){toast('Turn on the power');return false;}if(session.openDoors.has(e.target)||!pay(d.cost))return false;
@@ -359,10 +361,10 @@ function interact(){
   if(t==='zombie_vending'){
     const id=e.script_noteworthy,p=perkInfo[id];if(!p||session.perks.has(id)||(!session.power&&id!=='specialty_quickrevive'))return false;
     if(id==='specialty_quickrevive'&&session.revives>=3){toast('Quick Revive is depleted');return false;}if(!pay(p.price))return false;
-    if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id,1,e.position);return true;
+    if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id,1,e.position);playerVox.perk(id);return true;
   }
   if(t==='use_elec_switch'&&!session.power){
-    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=lightLevels.powered;audio.play('round');return true;
+    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=lightLevels.powered;audio.play('round');audio.play('ref/evt/zombie_global/switch/turn_on/turn_on_00',.6);return true;
   }
   if(t==='treasure_chest_use'){
     if(mysteryBox.at(e)){if(session.pack?.weapon===session.weapon)return false;const weapon=mysteryBox.take(e);if(!weapon)return false;if(weapon==='zombie_cymbal_monkey'){session.giveMonkeys();toast('Monkey Bombs · X to throw');}else{session.giveWeapon(weapon);equipView();toast(data.weapons[weapon].name);}return true;}
@@ -389,7 +391,7 @@ function repair(b){if(b.count>=(b.boards.length||6)||repairLeft>0)return false;r
 function reset(){
   pendingMelee=null;lastReloadSerial=0;reloadShot=false;
   touchControls.reset();mousePrimary=mouseAim=false;toastUntil=0;announcementUntil=0;hitUntil=0;flashUntil=0;primary=false;primaryPressed=false;ads=false;keys.clear();
-  hitDirections.clear();deathCue=false;adsPrev=false;audio.heartbeat(false);session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
+  hitDirections.clear();deathCue=false;adsPrev=false;audio.heartbeat(false);audio.laststand(false);playerVox.reset();session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
   powerups.reset();perkDrink.stop();mysteryBox.reset();worldNet?.reset();
   features?.reset();
   blood.clear();limbDebris.clear();
@@ -469,6 +471,7 @@ function renderHitArcs(){
   hitArcEls.forEach((el,i)=>{const item=items[i];if(!item){if(el.style.opacity!=='0')el.style.opacity='0';return;}el.style.setProperty('--angle',hitDirections.screenAngle(item,yaw).toFixed(1)+'deg');el.style.opacity=hitDirections.opacity(item).toFixed(2);});
 }
 function hud(){
+  playerVox.update(session);
   const s=session,w=s.weapon;
   chalk.update(s,started);
   if(lastPoints===null||s.points===0&&lastPoints>0&&s.phase==='gameover')lastPoints=s.points;
@@ -482,7 +485,7 @@ function hud(){
   hide('claymore',!s.claymoresOwned);text('claymore-count',s.claymores);
   hide('monkey',!s.monkeysOwned);text('monkey-count',s.monkeys);
   text('reload-label',!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'');
-  opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);audio.heartbeat(active&&s.health>0&&s.health/s.maxHealth<.35&&s.phase!=='gameover'&&s.phase!=='reviving');opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
+  opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);audio.heartbeat(active&&s.health>0&&s.health/s.maxHealth<.35&&s.phase!=='gameover'&&s.phase!=='reviving');audio.laststand(active&&s.phase==='reviving');opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
   text('prompt',active&&promptText?bo1Prompt(promptText,touchControls.mode,touchControls.pad.active):'');
   if(toastUntil<s.time)text('toast','');if(announcementUntil<s.time)opacity('announcement',0);
   const nextPerkKey=[...s.perks].join();if(nextPerkKey!==perkKey){perkKey=nextPerkKey;$('perks').innerHTML=[...s.perks].filter(id=>perkIcons[id]).map(id=>`<img alt="${perkInfo[id].name}" src="textures/${perkIcons[id]}.png">`).join('');}
@@ -531,7 +534,7 @@ try{
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
-  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>audio.zombieEvent(type,z.kind,z.root.position,1,cause)});
+  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage,teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
