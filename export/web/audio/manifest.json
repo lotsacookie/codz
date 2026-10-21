@@ -5262,5 +5262,53 @@
     "channels": 1,
     "nativeFormat": 7,
     "decoderVersion": 2
+  },
+  "heartbeat": {
+    "url": "audio/heartbeat.ogg",
+    "source": "export/web/reference/sounds/sound/chr/heartbeat/heartbeat_loop_l.wav",
+    "sourceSha256": "cfba4d808a587af172f45bdc766b5fff759b514f8bd96dd9313466a6af840647",
+    "duration": 1.541336,
+    "sampleRate": 48166,
+    "channels": 1
+  },
+  "tinnitus": {
+    "url": "audio/tinnitus.ogg",
+    "source": "export/web/reference/sounds/sound/chr/tinitus/chr_tinitus_loop_l.wav",
+    "sourceSha256": "07df792d3404edba7761223491dea76ce6fea6cbd56c5da82d39c618830ec48a",
+    "duration": 1.6,
+    "sampleRate": 48000,
+    "channels": 2
+  },
+  "scope_breath_in": {
+    "url": "audio/scope_breath_in.ogg",
+    "source": "export/web/reference/sounds/sound/chr/breath/sniper/vox_sniper_breathin.wav",
+    "sourceSha256": "e7266a0e81213ad988d858e3958a72fc0afc4168e8ffd20fcf387c7a4625deca",
+    "duration": 1.423173,
+    "sampleRate": 47848,
+    "channels": 1
+  },
+  "scope_breath_out": {
+    "url": "audio/scope_breath_out.ogg",
+    "source": "export/web/reference/sounds/sound/chr/breath/sniper/vox_sniper_breathout.wav",
+    "sourceSha256": "5d9836d6259196db94955fb2fad8975d62fdcd800a17a86e16b3c3e09ed03c90",
+    "duration": 1.255137,
+    "sampleRate": 48135,
+    "channels": 1
+  },
+  "scope_breath_gasp": {
+    "url": "audio/scope_breath_gasp.ogg",
+    "source": "export/web/reference/sounds/sound/chr/breath/sniper/vox_sniper_breathgasp.wav",
+    "sourceSha256": "a87a98db27806893d1e711530bec3cc34586e4732fc76ad2849f9cf8bb721f8e",
+    "duration": 1.340008,
+    "sampleRate": 48143,
+    "channels": 1
+  },
+  "death_card": {
+    "url": "audio/death_card.ogg",
+    "source": "export/web/reference/sounds/sound/evt/zombie_global/death_card/death_card_00.wav",
+    "sourceSha256": "c6548ea1c5141126285ad3baa0cab9ea231fcc9e452d4455dd19e5d672dae8c7",
+    "duration": 6.402534,
+    "sampleRate": 47981,
+    "channels": 2
   }
 }

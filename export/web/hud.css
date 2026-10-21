@@ -2,7 +2,11 @@
 #hurt,#flash{position:fixed;inset:0;pointer-events:none;z-index:2}
 #hurt{background:radial-gradient(ellipse,transparent 25%,#ac151ad9);opacity:0;transition:opacity .12s}
 #flash{background:#d6efff;opacity:0}
-#hitmarker{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:37px;opacity:0;z-index:4;pointer-events:none;color:#eee;font-family:var(--hud-font)}
+/* Real T5 hit marker (damage_feedback.png, opaque in its top half); currentColor still tints headshots. */
+#hitmarker{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--u,1vh) * 34);height:calc(var(--u,1vh) * 34);background:currentColor;-webkit-mask:url(textures/damage_feedback.png) 0 0/100% 200% no-repeat;mask:url(textures/damage_feedback.png) 0 0/100% 200% no-repeat;opacity:0;z-index:4;pointer-events:none;color:#eee}
+/* Damage-direction arcs (hit_direction.png): hit-direction.js sets --angle and opacity per arc. */
+#hit-directions{position:fixed;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:3}
+#hit-directions i{position:absolute;left:calc(var(--u,1vh) * -48);top:calc(var(--u,1vh) * -24);width:calc(var(--u,1vh) * 96);height:calc(var(--u,1vh) * 48);background:url(textures/hit_direction.png) center/100% 100% no-repeat;opacity:0;transform:rotate(var(--angle,0deg)) translateY(calc(var(--u,1vh) * -150))}
 #prompt{position:fixed;left:50%;top:61%;transform:translateX(-50%);z-index:4;white-space:pre-line;text-align:center;font-size:calc(var(--u) * 16);line-height:1.7;color:#fff;text-shadow:0 1px 3px #000;font-family:var(--hud-font)}
 #toast{position:fixed;top:22%;left:50%;transform:translateX(-50%);z-index:4;font-size:13px;letter-spacing:1px;color:#dfc99a;text-shadow:0 2px 6px #000;font-family:var(--hud-font)}
 #announcement{position:fixed;left:50%;top:29%;transform:translateX(-50%);text-align:center;pointer-events:none;z-index:4;opacity:0;transition:opacity .6s;min-width:500px;font-family:var(--hud-font)}

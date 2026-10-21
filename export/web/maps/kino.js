@@ -21,6 +21,7 @@ import { KnifeBlood } from '../knife-blood.js';
 import { popHead, popLimb } from '../gore.js';
 import { LimbDebris } from '../limbs.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
+import { HitDirections, hitBearing } from '../hit-direction.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
 import { preloadShared } from '../shared-assets.js';
@@ -96,6 +97,7 @@ let coop=null,worldNet=null,data,world,session,player,enemies,view,powerups,perk
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
 const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
+const hitDirections=new HitDirections(),hitArcEls=[];let adsPrev=false,deathCue=false;
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 const errors=[];
@@ -190,14 +192,17 @@ addEventListener('keyup',e=>keys.delete(e.code));
 addEventListener('wheel',()=>{if(active){session.switchWeapon();equipView(true);}});
 addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const width=innerWidth,height=innerHeight,current=renderer.getSize(new THREE.Vector2());if(current.x===width&&current.y===height)return;camera.aspect=viewCamera.aspect=width/height;camera.updateProjectionMatrix();viewCamera.updateProjectionMatrix();if(csm)csm.updateFrustums();renderer.setSize(width,height);},profile.mobile?150:0);});
 
-function damage(n){
-  if(!session.damage(n))return;audio.play('hit');
+function damage(n,from){
+  if(!session.damage(n))return false;audio.play('hit');
+  if(from)hitDirections.add(hitBearing(camera.position,camera.rotation.y,from),THREE.MathUtils.radToDeg(camera.rotation.y));
   if(!session.drinking)perkDrink?.stop();
   if(session.phase==='gameover')showGameOver();
   else if(session.spectating)announce('Spectating until the next round','YOU DIED',4);
   else if(session.phase==='reviving')announce('A second chance','QUICK REVIVE',4);
+  return true;
 }
 function showGameOver(){
+  if(!deathCue){deathCue=true;audio.play('death_card',.8);}
   primary=false;ads=false;ctx.gameOver({status:'GAME OVER · You survived '+session.round+(session.round===1?' Round':' Rounds'),results:session.kills+' kills · '+session.headshots+' headshots · '+Math.floor(session.time/60)+'m '+Math.floor(session.time%60)+'s'});
   try{const best=Math.max(session.round,+(localStorage.getItem('kino.best')||0));localStorage.setItem('kino.best',String(best));}catch{}
 }
@@ -217,7 +222,7 @@ function kill(z,force,position){
     mesh.scale.set(1.65,.6,1.65);mesh.position.copy(z.root.position).add(new THREE.Vector3(0,28,0));scene.add(mesh);gasClouds.push({mesh,position:z.root.position.clone(),life:7});
     effect(mesh.position,0x9eb652,15);audio.play('explosion');
     for(const other of [...enemies.list])if(other.root.position.distanceTo(z.root.position)<96)enemies.hurt(other,other.maxHealth,false,false,'explosion');
-    if(player.getFeetPosition().distanceTo(z.root.position)<96)damage(45);
+    if(player.getFeetPosition().distanceTo(z.root.position)<96)damage(45,z.root.position);
   }
   if(force){dropPowerup(force,position??player.getFeetPosition());return;}
   if(z){const type=session.drops.tryDrop(session,{kind:z.kind,playable:z.state!=='barricade'&&!!world.zoneAt(z.root.position.clone().add(new THREE.Vector3(0,40,0))),destroyedWindows:world.barriers.filter(b=>b.count===0).length,boxMoves:mysteryBox.moves});if(type)dropPowerup(type,z.root.position);}
@@ -256,7 +261,7 @@ function shoot(){
       const p=target?.point??wall.position,radius=session.def.explosionRadius;
       effect(p,session.weapon.id==='ray_gun_zm'?0x93ed62:0xffb44e,18);audio.play('explosion',.3);
       for(const z of [...enemies.list]){const d=z.root.position.distanceTo(p);if(d<radius&&world.lineClear(p.clone().addScaledVector(direction,-3),z.root.position.clone().add(new THREE.Vector3(0,25,0))))enemies.hurt(z,THREE.MathUtils.lerp(session.def.explosionInnerDamage,session.def.explosionOuterDamage,d/radius),false,false,'explosion');}
-      const distance=player.getFeetPosition().distanceTo(p);if(distance<radius)damage(100*(1-distance/radius));
+      const distance=player.getFeetPosition().distanceTo(p);if(distance<radius&&damage(100*(1-distance/radius),p)&&distance<radius*.6)audio.play('tinnitus',.6);
     }
   }
   return true;
@@ -384,7 +389,7 @@ function repair(b){if(b.count>=(b.boards.length||6)||repairLeft>0)return false;r
 function reset(){
   pendingMelee=null;lastReloadSerial=0;reloadShot=false;
   touchControls.reset();mousePrimary=mouseAim=false;toastUntil=0;announcementUntil=0;hitUntil=0;flashUntil=0;primary=false;primaryPressed=false;ads=false;keys.clear();
-  session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
+  hitDirections.clear();deathCue=false;adsPrev=false;audio.heartbeat(false);session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
   powerups.reset();perkDrink.stop();mysteryBox.reset();worldNet?.reset();
   features?.reset();
   blood.clear();limbDebris.clear();
@@ -402,6 +407,8 @@ function update(dt){
   const touch=touchControls.input.read();
   if(tapReload.update(dt,touch.use))reload();
   primary=mousePrimary||touch.fire;primaryPressed ||= touch.firePressed;ads=mouseAim||touch.aim;
+  if(ads!==adsPrev){adsPrev=ads;if(active)audio.scopeBreath(session.def,ads);}
+  hitDirections.update(dt);renderHitArcs();
   if(active){
     session.update(dt);
     if(session.phase!=='gameover'){
@@ -456,6 +463,11 @@ const hudEls={},hudEl=id=>hudEls[id]??=$(id);
 function text(id,v){const e=hudEl(id),t=String(v);if(e.textContent!==t)e.textContent=t;}
 function opacity(id,v){const e=hudEl(id),t=String(v);if(e.style.opacity!==t)e.style.opacity=t;}
 function hide(id,v){const e=hudEl(id);if(e.hidden!==v)e.hidden=v;}
+function renderHitArcs(){
+  const host=hudEl('hit-directions'),yaw=THREE.MathUtils.radToDeg(camera.rotation.y),items=hitDirections.items;
+  while(hitArcEls.length<items.length){const el=document.createElement('i');host.appendChild(el);hitArcEls.push(el);}
+  hitArcEls.forEach((el,i)=>{const item=items[i];if(!item){if(el.style.opacity!=='0')el.style.opacity='0';return;}el.style.setProperty('--angle',hitDirections.screenAngle(item,yaw).toFixed(1)+'deg');el.style.opacity=hitDirections.opacity(item).toFixed(2);});
+}
 function hud(){
   const s=session,w=s.weapon;
   chalk.update(s,started);
@@ -470,7 +482,7 @@ function hud(){
   hide('claymore',!s.claymoresOwned);text('claymore-count',s.claymores);
   hide('monkey',!s.monkeysOwned);text('monkey-count',s.monkeys);
   text('reload-label',!unavailable&&s.reloadLeft<=0&&w.mag===0&&w.reserve>0?'Reload':'');
-  opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
+  opacity('hurt',s.health<s.maxHealth?(1-s.health/s.maxHealth)*.8:0);audio.heartbeat(active&&s.health>0&&s.health/s.maxHealth<.35&&s.phase!=='gameover'&&s.phase!=='reviving');opacity('hitmarker',hitUntil>s.time?1:0);opacity('flash',Math.max(0,flashUntil-s.time));
   text('prompt',active&&promptText?bo1Prompt(promptText,touchControls.mode,touchControls.pad.active):'');
   if(toastUntil<s.time)text('toast','');if(announcementUntil<s.time)opacity('announcement',0);
   const nextPerkKey=[...s.perks].join();if(nextPerkKey!==perkKey){perkKey=nextPerkKey;$('perks').innerHTML=[...s.perks].filter(id=>perkIcons[id]).map(id=>`<img alt="${perkInfo[id].name}" src="textures/${perkIcons[id]}.png">`).join('');}

@@ -1,8 +1,14 @@
 import * as THREE from 'three';
+import { loadAtlas, randomFrame } from './fx-atlas.js';
 
 const HOLE_SIZE = 4.2;
 const MAX_HOLES = 64;
 const SURFACE_LIFT = 0.12;
+// Real T5 decals/sprites; the canvas-drawn versions below are used until these load (or if they fail).
+const HOLE_DECALS = ['textures/~-gbullethole1.png', 'textures/~-gbullethole2.png'];
+const DUST_ATLAS = 'textures/fxt_smk_puff.png';
+const DUST_TINT = 0xb9b2a4;
+const DUST_ALPHA = 0.55;
 
 function canvasTexture(draw, size = 64) {
   const canvas = document.createElement('canvas');
@@ -78,6 +84,23 @@ export class WallImpacts {
     }));
     this.holes = [];
     this.next = 0;
+    this.disposed = false;
+    this.realHoles = [];
+    this.dustAtlas = loadAtlas(DUST_ATLAS, 2);
+    this.loadDecals();
+  }
+
+  loadDecals() {
+    if (typeof document === 'undefined') return;
+    const loader = new THREE.TextureLoader();
+    HOLE_DECALS.forEach((url, index) => loader.load(url, texture => {
+      if (this.disposed) { texture.dispose(); return; }
+      texture.colorSpace = THREE.SRGBColorSpace;
+      this.realHoles[index] = texture;
+      const material = this.holeMaterials[index % this.holeMaterials.length];
+      material.map = texture;
+      material.needsUpdate = true;
+    }, undefined, () => {}));
   }
 
   addHole(position, normal) {
@@ -100,7 +123,8 @@ export class WallImpacts {
 
   puffs(position, normal, particles) {
     for (let i = 0; i < 2; i++) {
-      const material = new THREE.SpriteMaterial({ map: this.dustTexture, transparent: true, depthWrite: false, opacity: 0.7, toneMapped: false });
+      const frame = randomFrame(this.dustAtlas);
+      const material = new THREE.SpriteMaterial({ map: frame ?? this.dustTexture, color: frame ? DUST_TINT : 0xffffff, transparent: true, depthWrite: false, opacity: 0.7, toneMapped: false });
       const sprite = new THREE.Sprite(material);
       const size = 3 + Math.random() * 2.5;
       sprite.scale.set(size, size, 1);
@@ -109,6 +133,7 @@ export class WallImpacts {
       particles.push({
         mesh: sprite,
         fade: 0.45,
+        alpha: frame ? DUST_ALPHA : 1,
         life: 0.3 + Math.random() * 0.2,
         velocity: new THREE.Vector3((Math.random() - 0.5) * 14, 5 + Math.random() * 10, (Math.random() - 0.5) * 14).addScaledVector(normal, 18 + Math.random() * 12),
       });
@@ -148,6 +173,9 @@ export class WallImpacts {
   }
 
   dispose() {
+    this.disposed = true;
+    for (const texture of this.realHoles) texture?.dispose();
+    this.realHoles.length = 0;
     for (const mesh of this.holes) mesh?.removeFromParent();
     this.holes.length = 0;
     this.holeGeometry.dispose();
@@ -158,5 +186,5 @@ export class WallImpacts {
 }
 
 export function fadeParticle(p) {
-  if (p.fade && p.mesh.material) p.mesh.material.opacity = Math.max(0, Math.min(1, p.life / p.fade));
+  if (p.fade && p.mesh.material) p.mesh.material.opacity = Math.max(0, Math.min(1, p.life / p.fade)) * (p.alpha ?? 1);
 }

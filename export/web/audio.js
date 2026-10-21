@@ -15,7 +15,7 @@ export class GameAudio {
     if(this.preload)this.runPreload(this.preloadKeys());
   }this.ctx.resume();if(!this.music)this.playMusic('ambience');}
   preloadKeys(){
-    const first=['round','round_end','dog_round','buy','explosion'].filter(key=>this.manifest[key]),later=['nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music'];
+    const first=['round','round_end','dog_round','buy','explosion'].filter(key=>this.manifest[key]),later=['nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music','heartbeat','tinnitus','scope_breath_in','scope_breath_out','scope_breath_gasp','death_card'];
     const rest=Object.keys(this.manifest).filter(key=>!first.includes(key)&&(key.startsWith('resident/evt/zombie_global/')||key.startsWith('zombies/')||later.includes(key)||key.startsWith('specialty_')));
     return [...first,...rest];
   }
@@ -72,8 +72,24 @@ export class GameAudio {
     this.saleMusic?.stop();this.saleMusic=null;
     if(on&&this.ctx)this.native('fire_sale_music',.35,true).then(source=>{if(token!==this.saleToken)source.stop();else this.saleMusic=source;}).catch(console.error);
   }
+  // Low-health heartbeat loop. Only latches once the context exists, so a call before start() is retried.
+  heartbeat(on){
+    if(on&&(!this.ctx||!this.manifest.heartbeat))return;
+    if(!!this.beatOn===on)return;this.beatOn=on;const token=this.beatToken=(this.beatToken??0)+1;
+    try{this.beatSource?.stop();}catch{}this.beatSource=null;
+    if(on)this.native('heartbeat',.45,true).then(source=>{if(token!==this.beatToken){try{source.stop();}catch{}}else this.beatSource=source;}).catch(console.error);
+  }
+  // Sniper scope breathing: breath in on aim, breath out on release, a gasp after a long hold.
+  scopeBreath(def,aiming){
+    const sniper=shotFolders[def?.id?.replace('_zm','')]?.startsWith('sniper/');
+    if(!sniper){this.scopeSince=null;return;}
+    let cue='scope_breath_in';
+    if(aiming)this.scopeSince=performance.now();
+    else{cue=this.scopeSince!=null&&performance.now()-this.scopeSince>4000?'scope_breath_gasp':'scope_breath_out';this.scopeSince=null;}
+    if(this.manifest[cue])this.play(cue,.6);
+  }
   pause(){this.ctx?.suspend();}
-  dispose(){this.voices.clear();this.tracked.clear();this.musicToken++;try{this.music?.stop();}catch{}this.music=null;try{this.saleMusic?.stop();}catch{}this.saleMusic=null;this.buffers.clear();this.bufferSizes.clear();this.bufferBytes=0;this.variants.clear();const ctx=this.ctx;this.ctx=null;this.master=null;ctx?.close?.().catch(()=>{});}
+  dispose(){this.voices.clear();this.tracked.clear();this.musicToken++;try{this.music?.stop();}catch{}this.music=null;try{this.saleMusic?.stop();}catch{}this.saleMusic=null;this.beatToken=(this.beatToken??0)+1;try{this.beatSource?.stop();}catch{}this.beatSource=null;this.beatOn=false;this.buffers.clear();this.bufferSizes.clear();this.bufferBytes=0;this.variants.clear();const ctx=this.ctx;this.ctx=null;this.master=null;ctx?.close?.().catch(()=>{});}
   async buffer(key,priority='high'){
     if(this.buffers.has(key)){const cached=this.buffers.get(key);this.buffers.delete(key);this.buffers.set(key,cached);return cached;}
     const pending=fetch(this.manifest[key].url,{priority}).then(r=>{if(!r.ok)throw new Error('Audio '+key+' HTTP '+r.status);return r.arrayBuffer();}).then(b=>this.ctx.decodeAudioData(b)).then(buffer=>{

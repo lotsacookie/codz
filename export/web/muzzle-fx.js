@@ -1,8 +1,13 @@
 import * as THREE from 'three';
+import { loadAtlas, randomFrame } from './fx-atlas.js';
 
 let starMap = null;
 let glowMap = null;
 let smokeMap = null;
+
+// Real T5 sheets (2 frames each); the procedural star/glow/smoke below stay as the fallback and as layers on top.
+const FLASH_ATLAS = 'textures/fxt_fire_gas_flash.png';
+const SMOKE_ATLAS = 'textures/fxt_smk_puff.png';
 
 // Slightly larger flash; depth-tested so the gun model occludes it instead of it showing through.
 const FLASH_SCALE = 1.25;
@@ -98,6 +103,8 @@ export function createMuzzleFlash(tag) {
   star.renderOrder = glow.renderOrder = 10;
   group.add(glow, star);
   tag.add(group);
+  const atlas = loadAtlas(FLASH_ATLAS, 2);
+  let burst = null;
   const state = { life: 0, total: 0.06 };
   return {
     group,
@@ -110,6 +117,19 @@ export function createMuzzleFlash(tag) {
       glow.scale.setScalar(size * 2.3);
       glow.material.rotation = Math.random() * Math.PI * 2;
       glow.material.opacity = 0.55;
+      const frame = randomFrame(atlas);
+      if (frame) {
+        if (!burst) {
+          burst = sprite(frame);
+          burst.renderOrder = 9;
+          group.add(burst);
+        }
+        burst.material.map = frame;
+        burst.scale.setScalar(size * 1.6);
+        burst.material.rotation = (Math.random() - 0.5) * 0.9;
+        burst.material.opacity = 0.9;
+        burst.visible = true;
+      }
       group.visible = true;
     },
     update(dt) {
@@ -119,6 +139,7 @@ export function createMuzzleFlash(tag) {
       const k = state.life / state.total;
       star.material.opacity = Math.min(1, k * 1.6);
       glow.material.opacity = k * 0.55;
+      if (burst) burst.material.opacity = Math.min(1, k * 1.4) * 0.9;
     },
     ndc(viewCamera) {
       viewCamera.updateMatrixWorld();
@@ -128,6 +149,7 @@ export function createMuzzleFlash(tag) {
       group.removeFromParent();
       star.material.dispose();
       glow.material.dispose();
+      burst?.material.dispose();
     }
   };
 }
@@ -137,6 +159,7 @@ export class MuzzleSmoke {
     this.scene = scene;
     this.limit = limit;
     this.puffs = [];
+    this.atlas = loadAtlas(SMOKE_ATLAS, 2);
   }
 
   emit(ndc, camera, profile, ads = false) {
@@ -152,7 +175,7 @@ export class MuzzleSmoke {
 
   spawn(origin, forward, right, up, profile) {
     if (this.puffs.length >= this.limit) this.remove(this.puffs[0]);
-    const material = new THREE.SpriteMaterial({ map: smokeTexture(), color: 0xb9b9b9, transparent: true, depthWrite: false, opacity: 0 });
+    const material = new THREE.SpriteMaterial({ map: randomFrame(this.atlas) ?? smokeTexture(), color: 0xb9b9b9, transparent: true, depthWrite: false, opacity: 0 });
     const sprite = new THREE.Sprite(material);
     const size = profile.size * (0.5 + Math.random() * 0.35);
     sprite.position.copy(origin)

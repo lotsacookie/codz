@@ -121,7 +121,7 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=_at.copy(z.root.position),eye=_eye.copy(player);at.y+=z.kind==='dog'?25:45;eye.y+=40;
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(!onRemote)this.onDamage(amount);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(!onRemote)this.onDamage(amount,z.root.position);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
