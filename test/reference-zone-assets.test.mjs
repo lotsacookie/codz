@@ -71,31 +71,37 @@ assets = [
     (1, 'XAnimParts', 'viewmodel_m1911_fire', {'name': 'viewmodel_m1911_fire', 'numframes': 12, 'data': module.RawArray('unsigned char', 3), 'ratio': float('inf')}),
     (2, 'XModel', 'viewmodel_usa_dempsey_arms', module.Ref(4, 8, {'name': 'viewmodel_usa_dempsey_arms', 'bones': [1, 2, 3]})),
     (3, 'Material', 'mtl_ignored', {'name': 'mtl_ignored'}),
-    (4, 'XAnimParts', None, {'name': None}),
+    (4, 'XAnimParts', None, {'name': module.PendingRef(4, 99)}),
     (5, 'XAnimParts', '../escape', {'name': '../escape'}),
     (6, 'XModel', 'weapon_ak47', {'name': 'weapon_ak47'}),
+    (7, 'XModel', ',viewhands_usmc', {'name': ',viewhands_usmc', 'numBones': 0}),
+    (8, 'XModel', None, None),
 ]
 assets[0][3]['data'].data = b'\\x01\\x02\\x03'
-first, index = module.export_assets(assets, out, ['animations', 'models'], None, False, 'zone/test.ff')
-again, _ = module.export_assets(assets, out, ['animations', 'models'], None, False, 'zone/test.ff')
-filtered, filtered_index = module.export_assets(assets, out, ['models'], re.compile('ak47', re.I), True, 'zone/test.ff')
-print(json.dumps({'first': first, 'again': again, 'index': index, 'filtered': filtered, 'filtered_index': filtered_index}))
+first, index, summary = module.export_assets(assets, out, ['animations', 'models'], None, False, 'zone/test.ff')
+again, _, _ = module.export_assets(assets, out, ['animations', 'models'], None, False, 'zone/test.ff')
+filtered, filtered_index, _ = module.export_assets(assets, out, ['models'], re.compile('ak47', re.I), True, 'zone/test.ff')
+print(json.dumps({'first': first, 'again': again, 'index': index, 'summary': summary, 'filtered': filtered, 'filtered_index': filtered_index}))
 `);
 
-  const status = rows => Object.fromEntries(rows.map(row => [row.entry ?? '(unnamed)', row.status]));
-  assert.deepEqual(status(result.first), {
+  const byEntry = rows => Object.fromEntries(rows.map(row => [row.entry ?? `(unnamed ${row.kind})`, row.status]));
+  assert.deepEqual(byEntry(result.first), {
     viewmodel_m1911_fire: 'ok',
     viewmodel_usa_dempsey_arms: 'ok',
-    '(unnamed)': 'unnamed',
+    '(unnamed animations)': 'unnamed',
     '../escape': 'rejected-path',
-    weapon_ak47: 'ok'
+    weapon_ak47: 'ok',
+    ',viewhands_usmc': 'reference',
+    '(unnamed models)': 'unnamed'
   });
-  assert.equal(status(result.again).viewmodel_m1911_fire, 'exists');
-  assert.equal(status(result.again).weapon_ak47, 'exists');
-  assert.deepEqual(result.index.animations, ['../escape', 'viewmodel_m1911_fire']);
-  assert.deepEqual(result.index.models, ['viewmodel_usa_dempsey_arms', 'weapon_ak47']);
-  assert.deepEqual(result.filtered.map(row => row.entry), ['weapon_ak47']);
-  assert.deepEqual(result.filtered_index.models, ['weapon_ak47']);
+  assert.equal(byEntry(result.again).viewmodel_m1911_fire, 'exists');
+  assert.equal(byEntry(result.again).weapon_ak47, 'exists');
+  assert.deepEqual(result.index.animations, { names: ['viewmodel_m1911_fire'], references: [] });
+  assert.deepEqual(result.index.models, { names: ['viewmodel_usa_dempsey_arms', 'weapon_ak47'], references: ['viewhands_usmc'] });
+  assert.deepEqual(result.summary.unnamed.sort(), [['animations', 'pending(4,99)', 1], ['models', 'null-asset', 1]]);
+  assert.equal(result.summary.samples.animations[0].nameField, 'pending(4,99)');
+  assert.deepEqual(result.filtered.map(row => row.entry), ['weapon_ak47', null]);
+  assert.deepEqual(result.filtered_index.models, { names: ['weapon_ak47'], references: [] });
 
   const anim = JSON.parse(await readFile(join(out, 'animations/viewmodel_m1911_fire.json'), 'utf8'));
   assert.equal(anim.type, 'XAnimParts');
@@ -107,4 +113,6 @@ print(json.dumps({'first': first, 'again': again, 'index': index, 'filtered': fi
   const model = JSON.parse(await readFile(join(out, 'models/viewmodel_usa_dempsey_arms.json'), 'utf8'));
   assert.deepEqual(model.asset, { name: 'viewmodel_usa_dempsey_arms', bones: [1, 2, 3] });
   assert.equal(existsSync(join(out, 'escape.json')), false);
+  assert.equal(existsSync(join(out, 'models/viewhands_usmc.json')), false);
+  assert.equal(existsSync(join(out, 'models/,viewhands_usmc.json')), false);
 });

@@ -5,7 +5,8 @@
 // scripts: GSC/CSC/other raw files stored in .ff zones (zlib payloads), written as plain text under scripts/.
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
 // animations/models: XAnimParts and XModel assets walked out of the .ff zones by zone-assets.py (python3), one JSON per asset under animations/ and models/,
-// with animations-index.json and models-index.json listing the names per zone. IWD entries that look like xanim/xmodel files are copied as-is.
+// with animations-index.json and models-index.json listing the names per zone. Names starting with a comma are empty reference stubs: they are listed
+// under references and not written, so they cannot take the place of the real asset. IWD entries that look like xanim/xmodel files are copied as-is.
 import { mkdir, mkdtemp, rm, writeFile, readFile, access } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -112,7 +113,10 @@ export async function extractZoneAssets(file, zoneName, { out, kinds, only, repo
     await execFileAsync(python, args, { maxBuffer: 1 << 26 });
     const result = JSON.parse(await readFile(reportFile, 'utf8'));
     report.push(...result.rows);
-    return { zone: zoneName, status: result.status, assets: result.assets, index: result.index };
+    if (result.resyncs) report.push({ archive: zoneName, kind: 'zone', status: 'resynced', count: result.resyncs, warnings: result.warnings });
+    if (result.summary.unnamed.length) report.push({ archive: zoneName, kind: 'zone', status: 'unnamed-summary', unnamed: result.summary.unnamed, samples: result.summary.samples });
+    console.log(`${zoneName}: ${result.status}, ${result.assets} assets walked, ${result.resyncs} resyncs`, result.types);
+    return { zone: zoneName, status: result.status, assets: result.assets, resyncs: result.resyncs, types: result.types, index: result.index };
   } catch (error) {
     report.push({ archive: zoneName, kind: 'zone', status: `zone-assets failed: ${String(error.message).split('\n')[0]}` });
     return { zone: zoneName, status: 'failed', assets: 0, index: {} };
@@ -157,7 +161,10 @@ async function main() {
       }
       if (zoneAssetKinds(kinds).length) {
         const result = await extractZoneAssets(item.file, item.path, { out, kinds, only, report, overwrite });
-        for (const kind of zoneAssetKinds(kinds)) if (result.index[kind]?.length) walked[kind].push({ zone: item.path, names: result.index[kind] });
+        for (const kind of zoneAssetKinds(kinds)) {
+          const found = result.index[kind];
+          if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references });
+        }
       }
     }
   }
