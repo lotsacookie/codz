@@ -1,7 +1,7 @@
 name: Extract reference assets
 
 # Manual only. Pulls one map's pack from UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies (sparse, that map's folder only),
-# verifies it against its manifest, then extracts textures (IWI -> PNG), sounds, scripts (GSC/CSC source from the zones), an FX name index, and animations and models (XAnimParts/XModel walked out of the zones as JSON) into one fixed folder.
+# verifies it against its manifest, then extracts textures (IWI -> PNG), sounds, scripts (GSC/CSC source from the zones), an FX name index, animations and models (XAnimParts/XModel walked out of the zones as JSON), and every weapon (WeaponVariantDef as JSON with the weapon animations, viewmodels and hand models it uses) into one fixed folder.
 # Re-running never replaces a file that already exists in that folder; only new files are added and committed.
 
 on:
@@ -13,8 +13,8 @@ on:
         default: kino
         options: [kino, ascension, cotd, moon, riese]
       kinds:
-        description: 'What to extract (comma separated: images,sounds,scripts,fx,animations,models)'
-        default: images,sounds,scripts,fx,animations,models
+        description: 'What to extract (comma separated: images,sounds,scripts,fx,animations,models,weapons). weapons also writes the animations, viewmodels and hand models the weapons use'
+        default: images,sounds,scripts,fx,animations,models,weapons
       only:
         description: 'Optional regex on entry names (e.g. fx_|muzzle|viewmodel). Empty = everything'
         default: ''
@@ -73,13 +73,13 @@ jobs:
           ONLY: ${{ inputs.only }}
           OUT_DIR: ${{ inputs.out_dir }}
         run: |
-          base=$(echo "$KINDS" | tr -d ' ' | tr ',' '\n' | grep -vxE 'animations|models' | paste -sd, - || true)
+          base=$(echo "$KINDS" | tr -d ' ' | tr ',' '\n' | grep -vxE 'animations|models|weapons' | paste -sd, - || true)
           if [ -z "$base" ]; then echo "No archive or zone kinds requested."; exit 0; fi
           args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract --kinds "$base")
           if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
           node .tools/reference-pack/extract.mjs "${args[@]}"
 
-      - name: Extract animations and models (zone walk)
+      - name: Extract weapons, animations and models (zone walk)
         timeout-minutes: 75
         continue-on-error: true
         env:
@@ -87,8 +87,8 @@ jobs:
           ONLY: ${{ inputs.only }}
           OUT_DIR: ${{ inputs.out_dir }}
         run: |
-          walk=$(echo "$KINDS" | tr -d ' ' | tr ',' '\n' | grep -xE 'animations|models' | paste -sd, - || true)
-          if [ -z "$walk" ]; then echo "No animations or models requested."; exit 0; fi
+          walk=$(echo "$KINDS" | tr -d ' ' | tr ',' '\n' | grep -xE 'animations|models|weapons' | paste -sd, - || true)
+          if [ -z "$walk" ]; then echo "No weapons, animations or models requested."; exit 0; fi
           args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract-zone-assets --kinds "$walk")
           if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
           node .tools/reference-pack/extract.mjs "${args[@]}"

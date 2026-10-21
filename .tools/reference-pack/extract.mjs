@@ -1,12 +1,14 @@
 // Extracts vfx/sfx source assets from fetched reference packs (see fetch.mjs, which writes resolved.json).
 // Existing output files are never replaced unless --overwrite is passed. --report-dir keeps reports out of the output tree.
-//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,animations,models,raw]
+//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,animations,models,weapons,raw]
 // images: IWI -> PNG (decodeIwi). sounds: IWD .wav/.flac and KSPK clips, copied as-is (decode with ffmpeg later).
 // scripts: GSC/CSC/other raw files stored in .ff zones (zlib payloads), written as plain text under scripts/.
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
 // animations/models: XAnimParts and XModel assets walked out of the .ff zones by zone-assets.py (python3), one JSON per asset under animations/ and models/,
 // with animations-index.json and models-index.json listing the names per zone. Names starting with a comma are empty reference stubs: they are listed
 // under references and not written, so they cannot take the place of the real asset. IWD entries that look like xanim/xmodel files are copied as-is.
+// weapons: every WeaponVariantDef walked out of the zones, written to weapons/ with a links block (the animations and models it uses, found here or external).
+// Asking for weapons also writes the XAnimParts and XModel assets those weapons use, plus viewmodel, hand and arm assets, even when animations/models are not requested.
 import { mkdir, mkdtemp, rm, writeFile, readFile, access } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -18,7 +20,7 @@ import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, scanRawFiles, de
 
 const execFileAsync = promisify(execFile);
 const ZONE_ASSETS_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'zone-assets.py');
-export const ZONE_ASSET_KINDS = ['animations', 'models'];
+export const ZONE_ASSET_KINDS = ['animations', 'models', 'weapons'];
 
 export function classifyEntry(name) {
   const lower = name.toLowerCase();
@@ -149,7 +151,7 @@ async function main() {
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
   const report = [], zones = [];
-  const walked = { animations: [], models: [] };
+  const walked = { animations: [], models: [], weapons: [] };
   for (const item of resolved.entries) {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
     if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
@@ -165,9 +167,9 @@ async function main() {
       }
       if (zoneAssetKinds(kinds).length) {
         const result = await extractZoneAssets(item.file, item.path, { out, kinds, only, report, overwrite });
-        for (const kind of zoneAssetKinds(kinds)) {
+        for (const kind of ZONE_ASSET_KINDS) {
           const found = result.index[kind];
-          if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references });
+          if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references, ...(found.links ? { links: found.links } : {}) });
         }
       }
     }
@@ -175,7 +177,7 @@ async function main() {
   await mkdir(reportDir, { recursive: true });
   await writeFile(join(reportDir, 'extract-report.json'), JSON.stringify(report, null, 1));
   if (zones.length) await writeFile(join(reportDir, 'fx-index.json'), JSON.stringify(zones, null, 1));
-  for (const kind of zoneAssetKinds(kinds)) if (walked[kind].length) await writeFile(join(reportDir, `${kind}-index.json`), JSON.stringify(walked[kind], null, 1));
+  for (const kind of ZONE_ASSET_KINDS) if (walked[kind].length) await writeFile(join(reportDir, `${kind}-index.json`), JSON.stringify(walked[kind], null, 1));
   const counts = {};
   for (const row of report) counts[`${row.kind}:${row.status}`] = (counts[`${row.kind}:${row.status}`] ?? 0) + 1;
   console.log(counts, `zones indexed: ${zones.length}`);

@@ -151,3 +151,61 @@ print(json.dumps(module.summarize_failures(lines)))
     ['XModel', 'bad count N', 1]
   ]);
 });
+
+test('weapons are written with links and pull in their animations, viewmodels and hand models', { skip: !hasPython }, async () => {
+  const out = await mkdtemp(join(tmpdir(), 'zone-assets-out-'));
+  const result = runPython(`${loader}
+out = ${JSON.stringify(out)}
+gun = {'name': 'm1911_gun'}
+hands = {'name': 'viewmodel_hands_usmc'}
+assets = [
+    (1, 'XModel', 'm1911_gun', gun),
+    (2, 'XModel', 'viewmodel_hands_usmc', hands),
+    (3, 'XModel', 'zombie_body', {'name': 'zombie_body'}),
+    (4, 'XAnimParts', 'viewmodel_m1911_fire', {'name': 'viewmodel_m1911_fire'}),
+    (5, 'XAnimParts', 'viewmodel_unrelated_name', {'name': 'viewmodel_unrelated_name'}),
+    (6, 'XAnimParts', 'zombie_walk', {'name': 'zombie_walk'}),
+    (7, 'XAnimParts', 'm1911_reload', {'name': 'm1911_reload'}),
+    (8, 'XModel', ',world_m1911', {'name': ',world_m1911'}),
+    (9, 'WeaponVariantDef', 'm1911_zm', {
+        'szInternalName': 'm1911_zm',
+        'szXAnims': [b'viewmodel_m1911_fire\\x00', b'm1911_reload\\x00', b'm1911_missing\\x00'],
+        'weapDef': module.Ref(4, 0, {'gunXModel': [module.Ref(1, 0, gun)], 'handXModel': module.Ref(2, 0, hands), 'worldModel': module.Ref(3, 0, {'name': ',world_m1911'})}),
+    }),
+    (10, 'WeaponVariantDef', ',remote_weapon', {'szInternalName': ',remote_weapon'}),
+]
+weapon = assets[8][3]
+weapon['weapDef'].obj['worldModel'] = module.Ref(3, 0, assets[7][3])
+rows, index, summary = module.export_assets(assets, out, ['weapons'], None, False, 'zone/test.ff')
+only_rows, only_index, _ = module.export_assets(assets, out, ['weapons'], re.compile('nomatch', re.I), True, 'zone/test.ff')
+print(json.dumps({'rows': rows, 'index': index, 'only_index': only_index}))
+`);
+
+  const status = Object.fromEntries(result.rows.map(row => [`${row.kind}:${row.entry}`, row.status]));
+  assert.equal(status['weapons:m1911_zm'], 'ok');
+  assert.equal(status['weapons:,remote_weapon'], 'reference');
+  assert.equal(status['animations:viewmodel_m1911_fire'], 'ok');
+  assert.equal(status['animations:m1911_reload'], 'ok');
+  assert.equal(status['animations:viewmodel_unrelated_name'], 'ok');
+  assert.equal(status['animations:zombie_walk'], undefined);
+  assert.equal(status['models:m1911_gun'], 'ok');
+  assert.equal(status['models:viewmodel_hands_usmc'], 'ok');
+  assert.equal(status['models:zombie_body'], undefined);
+  assert.deepEqual(result.index.weapons.names, ['m1911_zm']);
+  assert.deepEqual(result.index.weapons.references, ['remote_weapon']);
+  assert.deepEqual(result.index.weapons.links.m1911_zm, {
+    animations: ['m1911_reload', 'viewmodel_m1911_fire'],
+    missingAnimations: ['m1911_missing'],
+    externalAnimations: [],
+    models: ['m1911_gun', 'viewmodel_hands_usmc'],
+    externalModels: ['world_m1911']
+  });
+  assert.deepEqual(result.only_index.weapons.names, []);
+
+  const weapon = JSON.parse(await readFile(join(out, 'weapons/m1911_zm.json'), 'utf8'));
+  assert.equal(weapon.type, 'WeaponVariantDef');
+  assert.deepEqual(weapon.asset.weapDef.gunXModel, [{ assetRef: 'm1911_gun', assetType: 'XModel' }]);
+  assert.deepEqual(weapon.asset.weapDef.handXModel, { assetRef: 'viewmodel_hands_usmc', assetType: 'XModel' });
+  assert.equal(existsSync(join(out, 'animations/zombie_walk.json')), false);
+  assert.equal(existsSync(join(out, 'models/viewmodel_hands_usmc.json')), true);
+});
