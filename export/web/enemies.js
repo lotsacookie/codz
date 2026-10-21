@@ -34,7 +34,7 @@ export function rollGait(round, rules = {}, random = Math.random) {
 
 export class Enemies {
   routeBudgetMs=Infinity;routeSpent=0;
-  constructor(scene,world,data,session,{damage,kill,hit,sound,voice}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
+  constructor(scene,world,data,session,{damage,kill,hit,sound,voice,event}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice,onEvent:event});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
   async load(){
     const chars=this.data.characters;
     this.templates=await Promise.all(['c_ger_honorguard_body1','c_ger_honorguard_body2'].map(k=>loadModel(chars[k])));
@@ -70,7 +70,7 @@ export class Enemies {
     if(this.anims[death])rig.add('death',this.anims[death],true);
     rig.play('walk');rig.update(.01);
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
-    const z={id,kind,root,headModel,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),growl:3+id%7,voice:null,voiceGap:Math.random()*1.5};
+    const z={id,kind,root,headModel,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),voice:null,voiceGap:Math.random()*1.5};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
   }
@@ -96,9 +96,8 @@ export class Enemies {
     for(let zi=0;zi<_iter.length;zi++){const z=_iter[zi];
       // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
       const player=remotes?.length?nearestTarget(z.root.position,remotes,localDown?null:localPlayer):localPlayer,onRemote=player!==localPlayer;
-      z.rig.update(dt);z.growl-=dt;
-      if(z.growl<0){this.onSound?.('growl',z.root.position);z.growl=6+s.random()*7;}
-      if(z.kind==='zombie'&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
+      z.rig.update(dt);
+      if((z.kind==='zombie'||z.kind==='nova')&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
       // Zombies from a distant spawn point walk to the window before tearing its boards.
       if(z.state==='approach'){
         z.approachTime+=dt;
@@ -125,7 +124,7 @@ export class Enemies {
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){
-        z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);continue;
+        z.state='attack';z.attackLeft=1.15;z.attackDealt=false;z.rig.play('attack',false,1,BLEND);this.onEvent?.('attack',z);continue;
       }
       z.repath-=dt;
       if(z.repath<=0&&this.routeSpent>=this.routeBudgetMs){z.repath=.016;}// out of routing time this frame: keep walking the old path and try again next frame
@@ -174,7 +173,7 @@ export class Enemies {
     if(z.voice&&!z.voice.ended)return;
     if(z.voice){z.voice=null;z.voiceGap=.5+Math.random()*1.8;}
     z.voiceGap-=dt;if(z.voiceGap>0)return;
-    z.voice=this.onVoice?.(z,(z.baseSpeed??z.speed)>=80?'sprint':'walk')??null;
+    z.voice=this.onVoice?.(z,(z.baseSpeed??z.speed)>=80?'sprint':'walk',z.kind)??null;
     if(!z.voice)z.voiceGap=1.2;
   }
   silence(z){z.voice?.stop();z.voice=null;}
@@ -216,7 +215,7 @@ export class Enemies {
     if(shooter)this.onRemoteHit?.(z,head);else this.onHit?.(z,head);
     if(z.health<=0){
       if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();
-      if(score){if(shooter){this.session.killed++;this.net?.award(shooter,{killed:true,head,melee});}else this.session.scoreHit(true,head,melee);}else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.net?.dead(z,cause);this.onKill?.(z);
+      if(score){if(shooter){this.session.killed++;this.net?.award(shooter,{killed:true,head,melee});}else this.session.scoreHit(true,head,melee);}else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);this.onEvent?.('death',z,cause);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.net?.dead(z,cause);this.onKill?.(z);
       if(this.dead.length>12){const old=this.dead.shift();old.root.removeFromParent();old.rig.mixer.uncacheRoot(old.root);disposeSkeletons(old.root);}
     }else if(score){if(shooter)this.net?.award(shooter,{killed:false});else this.session.scoreHit(false);}
   }

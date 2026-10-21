@@ -1,11 +1,11 @@
+import {zombieCues,preloadZombieKeys} from './zombie-sfx.js';
 import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER} from './weapon-sfx.js';
 // Native T5 cues decoded from IWD streams and resident LoadedSound records.
 const SPATIAL={near:140,rolloff:1.6,far:6000};
-const ZOMBIE_VOICES={walk:['w1','w2','w3'],sprint:['s1','s2']};
 const VOICE_RANGE=1600,VOICE_LIMIT=14;
 export class GameAudio {
   constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();this.lastStart=new Map();this.profiles=new Map();this.wpnKeys=null;}
-  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();this.profiles.clear();this.wpnKeys=null;for(const names of Object.values(ZOMBIE_VOICES))for(const name of names)this.manifest['zombies/'+name]??={url:'audio/zombies/'+name+'.ogg'};}
+  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();this.profiles.clear();this.wpnKeys=null;this.zombieVoices=null;}
   get enabled(){return this._enabled;}
   set enabled(v){this._enabled=v;if(this.master)this.master.gain.value=v?.42:0;}
   start(){if(!this.ctx){const Context=globalThis.AudioContext??globalThis.webkitAudioContext;if(!Context){this.enabled=false;return;}this.ctx=new Context();this.master=this.ctx.createGain();this.master.gain.value=this.enabled?.42:0;this.master.connect(this.ctx.destination);
@@ -13,8 +13,8 @@ export class GameAudio {
   }this.ctx.resume();if(!this.music)this.playMusic('ambience');}
   preloadKeys(){
     const first=['round','round_end','dog_round','buy','explosion'].filter(key=>this.manifest[key]),later=['nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music','heartbeat','tinnitus','scope_breath_in','scope_breath_out','scope_breath_gasp','death_card'];
-    const rest=Object.keys(this.manifest).filter(key=>!first.includes(key)&&(key.startsWith('resident/evt/zombie_global/')||key.startsWith('zombies/')||later.includes(key)||key.startsWith('specialty_')));
-    return [...first,...rest];
+    const rest=Object.keys(this.manifest).filter(key=>!first.includes(key)&&(key.startsWith('resident/evt/zombie_global/')||later.includes(key)||key.startsWith('specialty_')));
+    return [...first,...rest,...preloadZombieKeys(this.zombieCues())];
   }
   runPreload(keys){
     const queue=[...keys],work=async()=>{while(queue.length&&this.ctx){const key=queue.shift();try{await this.buffer(key,'low');}catch(error){console.error(error);}}};
@@ -158,12 +158,26 @@ export class GameAudio {
     const [x,y,z]=Array.isArray(position)?position:[position.x,position.y,position.z];
     if(p.positionX){p.positionX.value=x;p.positionY.value=y;p.positionZ.value=z;}else p.setPosition(x,y,z);
   }
-  voice(gait,locate){
+  zombieCues(){return this.zombieVoices??=zombieCues(Object.keys(this.manifest).filter(k=>k.startsWith('ref/vox/zmb/')));}
+  // One-shot zombie voice (attack, death, spawn) from the enemy's position.
+  zombieEvent(type,kind,position,gain=1,cause=''){
+    const cues=this.zombieCues()[kind==='nova'?'nova':'zombie'];
+    const key=this.pick(type==='death'&&cause==='electric'&&cues.elec?.length?cues.elec:cues[type]);
+    if(key)this.play(key,.8*gain,position);
+  }
+  voice(gait,locate,kind='zombie'){
     if(!this.enabled||!this.ctx||this.ctx.state!=='running'||!this.camera)return null;
     const origin=locate(),m=this.camera.matrixWorld.elements;
     if(Math.hypot(origin.x-m[12],origin.y-m[13],origin.z-m[14])>VOICE_RANGE||this.voices.size>=VOICE_LIMIT)return null;
-    const names=ZOMBIE_VOICES[gait]??ZOMBIE_VOICES.walk,key='zombies/'+names[Math.floor(Math.random()*names.length)];
-    if(!this.manifest[key])return null;
+    const cues=this.zombieCues()[kind==='nova'?'nova':'zombie'];
+    let pool=cues[gait]??cues.walk;
+    if(cues.behind?.length&&Math.random()<.5){
+      // A zombie close behind the player gets the 'behind' callouts.
+      const dx=origin.x-m[12],dz=origin.z-m[14],len=Math.hypot(dx,dz)||1;
+      if(len<350&&(dx*-m[8]+dz*-m[10])/len<-.3)pool=cues.behind;
+    }
+    const key=this.pick(pool);
+    if(!key)return null;
     const handle={ended:false,stopped:false,source:null,key,stop(){this.stopped=true;try{this.source?.stop();}catch{}}};
     const finish=()=>{handle.ended=true;this.voices.delete(handle);};
     this.voices.add(handle);

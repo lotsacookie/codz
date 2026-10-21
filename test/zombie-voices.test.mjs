@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { GameAudio } from '../export/web/audio.js';
 import { Enemies } from '../export/web/enemies.js';
+import { readFileSync } from 'node:fs';
+
+const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
 
 globalThis.requestAnimationFrame ??= () => 0;
 
@@ -21,7 +24,7 @@ function setup(cameraAt = [0, 0, 0]) {
   audio.ctx = ctx;
   audio.master = node();
   audio.camera = { updateWorldMatrix() {}, matrixWorld: { elements } };
-  for (const name of ['w1', 'w2', 'w3', 's1', 's2']) audio.manifest['zombies/' + name] = { url: 'audio/zombies/' + name + '.ogg' };
+  for (const key of Object.keys(manifest)) if (key.startsWith('ref/vox/zmb/')) audio.manifest[key] = manifest[key];
   audio.buffer = async () => ({});
   return { audio, made };
 }
@@ -34,7 +37,7 @@ test('a walking zombie voice plays one of the walk cues from the zombie position
   const handle = audio.voice('walk', () => position(300, 0, 0));
   await flush();
   assert.ok(handle);
-  assert.match(handle.key, /^zombies\/w[123]$/);
+  assert.match(handle.key, /^ref\/vox\/zmb\/standard\/(amb|behind)\//);
   assert.equal(made.panners.length, 1);
   assert.equal(made.panners[0].positionX.value, 300);
   assert.equal(made.sources[0].started, true);
@@ -43,8 +46,9 @@ test('a walking zombie voice plays one of the walk cues from the zombie position
 test('a sprinting zombie voice plays one of the sprint cues', async () => {
   const { audio } = setup();
   const keys = new Set();
-  for (let i = 0; i < 40; i++) { audio.voices.clear(); keys.add(audio.voice('sprint', () => position(50, 0, 0)).key); }
-  assert.deepEqual([...keys].sort(), ['zombies/s1', 'zombies/s2']);
+  for (let i = 0; i < 80; i++) { audio.voices.clear(); keys.add(audio.voice('sprint', () => position(900, 0, 0)).key); }
+  assert.ok(keys.size > 3);
+  assert.ok([...keys].every(key => key.startsWith('ref/vox/zmb/standard/sprint/')));
 });
 
 test('the voice follows the zombie while it plays', async () => {
@@ -137,4 +141,35 @@ test('silencing a zombie stops its voice', () => {
   assert.equal(stopped, true);
   assert.equal(z.voice, null);
   enemies.silence({ voice: null });
+});
+
+test('quad crawlers use the quad ambient set', () => {
+  const { audio } = setup();
+  const handle = audio.voice('walk', () => position(900, 0, 0), 'nova');
+  assert.match(handle.key, /^ref\/vox\/zmb\/quads\/ambient\//);
+});
+
+test('a zombie close behind the player can use the behind callouts', () => {
+  const { audio } = setup();
+  audio.camera.matrixWorld.elements[10] = 1;
+  const seen = new Set();
+  for (let i = 0; i < 60; i++) { audio.voices.clear(); seen.add(audio.voice('walk', () => position(0, 0, 100)).key.split('/')[4]); }
+  assert.ok(seen.has('behind'));
+});
+
+test('attack and death events play the reference attack and death voices', () => {
+  const { audio } = setup();
+  const played = [];
+  audio.play = (key, volume, at) => played.push({ key, at });
+  audio.zombieEvent('attack', 'zombie', [1, 2, 3]);
+  audio.zombieEvent('death', 'zombie', [1, 2, 3]);
+  audio.zombieEvent('death', 'zombie', [1, 2, 3], 1, 'electric');
+  audio.zombieEvent('attack', 'nova', [1, 2, 3]);
+  audio.zombieEvent('spawn', 'nova', [1, 2, 3]);
+  assert.match(played[0].key, /standard\/attack\//);
+  assert.match(played[1].key, /standard\/death\//);
+  assert.match(played[2].key, /standard\/elec\//);
+  assert.match(played[3].key, /quads\/attack\//);
+  assert.match(played[4].key, /quads\/spawn\//);
+  assert.deepEqual(played[0].at, [1, 2, 3]);
 });
