@@ -370,9 +370,17 @@ def parse_dsl_folder(dsl_dir):
             continue
         cur = None
         in_reorder = False
+        pending = None
         for raw in open(os.path.join(dsl_dir, fn), errors="ignore"):
             line = raw.strip()
             if not line or line.startswith("//"):
+                continue
+            if pending is not None:
+                # continuation of a statement that spans lines
+                line = pending + " " + line
+                pending = None
+            if not in_reorder and line.startswith("set ") and not line.endswith(";"):
+                pending = line
                 continue
             if in_reorder:
                 if line.endswith(";"):
@@ -429,7 +437,8 @@ def parse_dsl_folder(dsl_dir):
             m = re.match(r"set\s+condition\s+(\S+)\s+(.+?)\s*;", line)
             if m:
                 expr = m.group(2)
-                if re.match(r"^[\w:\[\]]+\s*(==|!=|<=|>=|<|>)\s*\w+$", expr):
+                if all(re.match(r"^[\w:\[\]]+\s*(==|!=|<=|>=|<|>)\s*\w+$", t.strip())
+                       for t in re.split(r"\|\||&&", expr)):
                     cur.cond_expr[m.group(1)] = expr
                 else:
                     cur.cond_never.add(m.group(1))
@@ -619,12 +628,16 @@ class T5Zone:
                 return v
         # find first segment innermost-out
         val = None
+        m0 = re.match(r"(\w+)\[(\d+)\]$", parts[0])
+        first, first_idx = (m0.group(1), int(m0.group(2))) if m0 else (parts[0], None)
         for sname, vals in reversed(ctx):
-            if parts[0] in vals:
-                val = vals[parts[0]]
+            if first in vals:
+                val = vals[first]
                 break
         if val is None:
             raise ZoneError(f"lookup failed for {parts[0]} in {path}")
+        if first_idx is not None:
+            val = val[first_idx]
         for p in parts[1:]:
             m = re.match(r"(\w+)\[(\d+)\]", p)
             if m:
@@ -636,6 +649,10 @@ class T5Zone:
         return val
 
     def eval_cond(self, expr, ctx):
+        if "||" in expr:
+            return any(self.eval_cond(t.strip(), ctx) for t in expr.split("||"))
+        if "&&" in expr:
+            return all(self.eval_cond(t.strip(), ctx) for t in expr.split("&&"))
         m = re.match(r"^([\w:\[\]]+)\s*(==|!=|<=|>=|<|>)\s*(\w+)$", expr)
         if not m:
             raise ZoneError(f"bad condition {expr!r}")
@@ -1030,6 +1047,10 @@ class T5Zone:
 
     def _decode_member(self, m, chunk):
         if m.ptr:
+            if m.array and len(chunk) >= 8:
+                # T* x[N]: every slot is its own pointer (techniques[130], ...);
+                # reading only the first left the rest of the stream unconsumed
+                return list(struct.unpack_from(f"<{len(chunk) // 4}I", chunk, 0))
             (v,) = struct.unpack_from("<I", chunk, 0) if len(chunk) >= 4 else (0,)
             return v
         if m.type_name in self.structs:
