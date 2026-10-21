@@ -1,20 +1,36 @@
 // Extracts vfx/sfx source assets from fetched reference packs (see fetch.mjs, which writes resolved.json).
 // Existing output files are never replaced unless --overwrite is passed. --report-dir keeps reports out of the output tree.
-//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,raw]
+//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,animations,models,raw]
 // images: IWI -> PNG (decodeIwi). sounds: IWD .wav/.flac and KSPK clips, copied as-is (decode with ffmpeg later).
 // scripts: GSC/CSC/other raw files stored in .ff zones (zlib payloads), written as plain text under scripts/.
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
-import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
+// animations/models: XAnimParts and XModel assets walked out of the .ff zones by zone-assets.py (python3), one JSON per asset under animations/ and models/,
+// with animations-index.json and models-index.json listing the names per zone. IWD entries that look like xanim/xmodel files are copied as-is.
+import { mkdir, mkdtemp, rm, writeFile, readFile, access } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, scanRawFiles, decodeIwi, encodePng, safeRelative } from './lib.mjs';
+
+const execFileAsync = promisify(execFile);
+const ZONE_ASSETS_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'zone-assets.py');
+export const ZONE_ASSET_KINDS = ['animations', 'models'];
 
 export function classifyEntry(name) {
   const lower = name.toLowerCase();
   if (lower.endsWith('/')) return 'dir';
   if (/\.iwi$/.test(lower)) return 'images';
   if (/\.(wav|flac|ogg|mp3)$/.test(lower)) return 'sounds';
+  if (/(^|\/)xanim(_parts)?\//.test(lower) || /\.(xanim|xanim_parts)$/.test(lower)) return 'animations';
+  if (/(^|\/)xmodel(surfs|parts)?\//.test(lower) || /\.(xmodel|xmodelsurfs|xmodelpart|glb|gltf)$/.test(lower)) return 'models';
   return 'raw';
+}
+
+export function zoneAssetKinds(kinds) {
+  return ZONE_ASSET_KINDS.filter(kind => kinds.has(kind));
 }
 
 export function iwiToPng(buffer) {
@@ -85,6 +101,26 @@ export async function indexZone(file, zone) {
   return { zone: file, names: fxNames(scanNames(zone)) };
 }
 
+export async function extractZoneAssets(file, zoneName, { out, kinds, only, report, overwrite, python = process.env.ZONE_ASSETS_PYTHON || 'python3' }) {
+  const walkKinds = zoneAssetKinds(kinds);
+  const work = await mkdtemp(join(tmpdir(), 'zone-assets-'));
+  const reportFile = join(work, 'report.json');
+  const args = [ZONE_ASSETS_SCRIPT, '--zone', file, '--zone-name', zoneName, '--out', out, '--kinds', walkKinds.join(','), '--report', reportFile];
+  if (only) args.push('--only', only.source);
+  if (overwrite) args.push('--overwrite');
+  try {
+    await execFileAsync(python, args, { maxBuffer: 1 << 26 });
+    const result = JSON.parse(await readFile(reportFile, 'utf8'));
+    report.push(...result.rows);
+    return { zone: zoneName, status: result.status, assets: result.assets, index: result.index };
+  } catch (error) {
+    report.push({ archive: zoneName, kind: 'zone', status: `zone-assets failed: ${String(error.message).split('\n')[0]}` });
+    return { zone: zoneName, status: 'failed', assets: 0, index: {} };
+  } finally {
+    await rm(work, { recursive: true, force: true });
+  }
+}
+
 export async function extractScripts(file, zone, { out, report, overwrite }) {
   for (const script of scanRawFiles(zone)) {
     const sha256 = createHash('sha256').update(script.data).digest('hex');
@@ -105,20 +141,30 @@ async function main() {
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
   const report = [], zones = [];
+  const walked = { animations: [], models: [] };
   for (const item of resolved.entries) {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
     if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
-    else if (item.kind === 'zone' && (kinds.has('fx') || kinds.has('scripts'))) {
-      const zone = inflateZone(await readFile(item.file));
-      if (zone.error) { report.push({ archive: item.path, kind: 'zone', status: zone.error }); continue; }
-      if (kinds.has('fx')) zones.push(await indexZone(item.path, zone.data));
-      if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out, report, overwrite });
+    else if (item.kind === 'zone') {
+      if (kinds.has('fx') || kinds.has('scripts')) {
+        const zone = inflateZone(await readFile(item.file));
+        if (zone.error) report.push({ archive: item.path, kind: 'zone', status: zone.error });
+        else {
+          if (kinds.has('fx')) zones.push(await indexZone(item.path, zone.data));
+          if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out, report, overwrite });
+        }
+      }
+      if (zoneAssetKinds(kinds).length) {
+        const result = await extractZoneAssets(item.file, item.path, { out, kinds, only, report, overwrite });
+        for (const kind of zoneAssetKinds(kinds)) if (result.index[kind]?.length) walked[kind].push({ zone: item.path, names: result.index[kind] });
+      }
     }
   }
   await mkdir(reportDir, { recursive: true });
   await writeFile(join(reportDir, 'extract-report.json'), JSON.stringify(report, null, 1));
   if (zones.length) await writeFile(join(reportDir, 'fx-index.json'), JSON.stringify(zones, null, 1));
+  for (const kind of zoneAssetKinds(kinds)) if (walked[kind].length) await writeFile(join(reportDir, `${kind}-index.json`), JSON.stringify(walked[kind], null, 1));
   const counts = {};
   for (const row of report) counts[`${row.kind}:${row.status}`] = (counts[`${row.kind}:${row.status}`] ?? 0) + 1;
   console.log(counts, `zones indexed: ${zones.length}`);

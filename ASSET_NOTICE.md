@@ -24,6 +24,10 @@ extractions of the source game's own menu and loading art, copied from the
 `UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies` project. They are third-party
 material under the terms above.
 
+Animations and models walked out of the reference project's fastfile zones
+(`animations/` and `models/` under `export/web/reference/`) are likewise
+third-party material under the terms above.
+
 Original game archives, extraction dumps, and third-party extraction tools are
 not part of this repository. Rebuilding the exported assets requires your own
 copy of the game.
