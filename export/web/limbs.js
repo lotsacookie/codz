@@ -1,24 +1,47 @@
 import * as THREE from 'three';
 
-// Severed limbs flying through the air. A small pool of cheap tapered cylinders (one shared
-// geometry and material, no skinned clones): they tumble, bounce once or twice, lie there, then shrink away.
-
 const GRAVITY = 520;
 const LIFE = 7;
 const FADE = 1.2;
 
+const LIMB_TEXTURE = 'textures/~-glimbs_c.png';
+const SKIN_RECT = { u0: 0.74, u1: 0.98, v0: 0.4, v1: 0.7 };
+const STUMP_DISC = { u: 0.629, v: 0.893, r: 0.085 };
+const SKIN_POINT = { u: 0.86, v: 0.55, r: 0.05 };
+
 function limbGeometry() {
-  // Unit-length tapered cylinder; the torn end (y>0) is red, the other end is dull skin and cloth.
-  const geometry = new THREE.CylinderGeometry(2.1, 1.7, 1, 6, 1);
-  const position = geometry.attributes.position;
-  const colors = new Float32Array(position.count * 3);
-  const flesh = new THREE.Color(0x8a1010), skin = new THREE.Color(0x77735c);
-  for (let i = 0; i < position.count; i++) {
-    const c = position.getY(i) > 0 ? flesh : skin;
-    colors.set([c.r, c.g, c.b], i * 3);
-  }
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const geometry = new THREE.CylinderGeometry(2.1, 1.7, 1, 8, 1);
+  const uv = geometry.attributes.uv;
+  const index = geometry.index;
+  const mapped = new Uint8Array(uv.count);
+  geometry.groups.forEach(group => {
+    for (let i = group.start; i < group.start + group.count; i++) {
+      const vertex = index.getX(i);
+      if (mapped[vertex]) continue;
+      mapped[vertex] = 1;
+      const u = uv.getX(vertex), v = uv.getY(vertex);
+      if (group.materialIndex === 0) {
+        uv.setXY(vertex, SKIN_RECT.u0 + u * (SKIN_RECT.u1 - SKIN_RECT.u0), SKIN_RECT.v0 + v * (SKIN_RECT.v1 - SKIN_RECT.v0));
+      } else {
+        const disc = group.materialIndex === 1 ? STUMP_DISC : SKIN_POINT;
+        uv.setXY(vertex, disc.u + (u - 0.5) * 2 * disc.r, disc.v + (v - 0.5) * 2 * disc.r);
+      }
+    }
+  });
+  uv.needsUpdate = true;
   return geometry;
+}
+
+function limbMaterial() {
+  const material = new THREE.MeshLambertMaterial({ color: 0x6a2a24 });
+  if (typeof document === 'undefined') return material;
+  new THREE.TextureLoader().load(LIMB_TEXTURE, texture => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    material.map = texture;
+    material.color.setHex(0xb8aaa4);
+    material.needsUpdate = true;
+  }, undefined, () => {});
+  return material;
 }
 
 export class LimbDebris {
@@ -29,13 +52,12 @@ export class LimbDebris {
     this.group.name = 'limb-debris';
     scene.add(this.group);
     this.geometry = limbGeometry();
-    this.material = new THREE.MeshLambertMaterial({ vertexColors: true });
+    this.material = limbMaterial();
     this.items = [];
     this.pool = [];
     this.cursor = 0;
   }
 
-  // position/velocity: Vector3-likes. length: arm length in world units. floorY: height to land on.
   spawn(position, velocity, length = 20, floorY = 0) {
     let item;
     if (this.items.length >= this.max) {

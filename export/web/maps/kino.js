@@ -295,7 +295,7 @@ function bloodyKnife(){
   knifeBlood.soak();view.tintKnife(1);
   const tip=view.knifeTip(camera,viewCamera);if(!tip||!blood.ready())return;
   const right=new THREE.Vector3(1,0,0).applyQuaternion(camera.quaternion);
-  blood.slash(tip,right.multiplyScalar(-1).add(new THREE.Vector3(0,-.25,0)));
+  blood.slash(tip,right.multiplyScalar(-1).add(new THREE.Vector3(0,-.25,0)),camera);
 }
 function throwGrenade(){
   if(!active||session.grenades<=0||session.busy||features.events.room)return false;session.grenades--;
@@ -420,7 +420,7 @@ function update(dt){
       const base=view.lookBase(camera);
       const lookYaw=Math.atan2(Math.sin(base.yaw-lastLookYaw),Math.cos(base.yaw-lastLookYaw)),lookPitch=base.pitch-lastLookPitch;lastLookYaw=base.yaw;lastLookPitch=base.pitch;
       view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch},camera,viewCamera,worldScene:scene});
-      if(knifeBlood.active){knifeBlood.update(dt,view.knifeTip(camera,viewCamera),(p,v,k)=>blood.fling(p,v,k));if(knifeBlood.active)view.tintKnife(knifeBlood.level);}
+      if(knifeBlood.active){knifeBlood.update(dt,view.knifeTip(camera,viewCamera),(p,v,k)=>blood.fling(p,v,k,camera));if(knifeBlood.active)view.tintKnife(knifeBlood.level);}
       view.pivot.visible=!session.weaponUnavailable&&!features.events.room;
       perkDrink.update(dt,session);
       if(!sprint&&session.phase!=='reviving'&&(primaryPressed||(primary&&session.def.automatic)||burstLeft>0||reloadShot)){
