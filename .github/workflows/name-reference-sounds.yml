@@ -1,0 +1,84 @@
+name: Name reference sounds
+
+on:
+  workflow_dispatch:
+    inputs:
+      map:
+        description: Reference map whose sound pack to name
+        type: choice
+        default: kino
+        options: [kino, ascension, cotd, moon, riese]
+      apply:
+        description: Move the hashed clips into their real sound paths (otherwise only the name index is written)
+        type: boolean
+        default: false
+      out_dir:
+        description: Reference sounds folder in this repo
+        default: export/web/reference/sounds
+
+permissions:
+  contents: write
+
+concurrency:
+  group: extract-reference
+  cancel-in-progress: false
+
+env:
+  REFERENCE_REPO: UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies
+
+jobs:
+  name:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Validate inputs
+        env:
+          OUT_DIR: ${{ inputs.out_dir }}
+        run: |
+          case "$OUT_DIR" in
+            ''|/*|*..*|.git*|.github*|.tools*|node_modules*) echo "Unsafe out_dir: $OUT_DIR"; exit 1 ;;
+          esac
+
+      - name: Sparse-fetch the map's sound pack only
+        env:
+          MAP: ${{ inputs.map }}
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse "https://github.com/$REFERENCE_REPO.git" ref
+          git -C ref sparse-checkout set "$MAP/pack/web/sound"
+          ls -l "ref/$MAP/pack/web/sound"
+
+      - name: Unit tests
+        run: node --test test/reference-clip-names.test.mjs
+
+      - name: Download the real name index and map the clips
+        env:
+          MAP: ${{ inputs.map }}
+          APPLY: ${{ inputs.apply }}
+          OUT_DIR: ${{ inputs.out_dir }}
+        run: |
+          args=(--pack "ref/$MAP/pack/web/sound/sounds.pack" --map "$MAP" --repo "$REFERENCE_REPO" --out "$OUT_DIR")
+          if [ "$APPLY" = "true" ]; then args+=(--apply); fi
+          node .tools/reference-pack/name-clips.mjs "${args[@]}"
+
+      - name: Commit results
+        env:
+          OUT_DIR: ${{ inputs.out_dir }}
+          MAP: ${{ inputs.map }}
+        run: |
+          git add -A -- "$OUT_DIR"
+          if git diff --cached --quiet; then echo "Nothing to commit."; exit 0; fi
+          git diff --cached --stat | tail -1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "reference: name $MAP sound clips"
+          git pull --rebase origin main
+          git push origin HEAD:main
