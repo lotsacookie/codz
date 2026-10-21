@@ -50,3 +50,16 @@ print(json.dumps({'v': v}))
 `);
   assert.equal(out.v, 7);
 });
+
+test('Type::member directives from another struct file still apply', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+z = T5Zone.__new__(T5Zone)
+z.dsls = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
+hp = t5_zone.HeaderParser(open(os.path.join(t5_zone.OAT, 'T5_Assets.h'), errors='ignore').read())
+sd = hp.structs['XModelCollSurf_s']
+info = z._member_info(z.dsls.get('XModelCollSurf_s'), sd, 'collTris', [])
+print(json.dumps({'count': info['count']}))
+`);
+  assert.equal(out.count, 'numCollTris');
+});

@@ -772,6 +772,14 @@ class T5Zone:
             apply_from(dsl, candidates)
         for d, prefix in scopes:
             apply_from(d, candidates)
+        # directives written as `Type::member` in another struct's file (for example
+        # XModel.txt's `set count XModelCollSurf_s::collTris numCollTris;`) still apply
+        # when that Type is loaded from somewhere else; without this collTris fell back
+        # to a single element and every weapon model lost its collision triangles.
+        qualified = f"{sd.name}::{name}"
+        for d in self.dsls.values():
+            if d is not dsl and all(d is not sc for sc, _ in scopes):
+                apply_from(d, [qualified])
         return info
 
     def _treated_member_names(self, sd, dsl):
