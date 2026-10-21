@@ -72,7 +72,7 @@ export class Enemies {
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
     const z={id,kind,root,headModel,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),voice:null,voiceGap:Math.random()*1.5};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
-    z.maxHealth=z.health;this.list.push(z);this.session.spawned++;return z;
+    z.maxHealth=z.health;this.list.push(z);this.session.spawned++;if(kind==='dog'||kind==='nova')this.onEvent?.('spawn',z);return z;
   }
   update(dt,player){
     const s=this.session,remotes=this.remoteTargets?.();
@@ -97,7 +97,8 @@ export class Enemies {
       // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
       const player=remotes?.length?nearestTarget(z.root.position,remotes,localDown?null:localPlayer):localPlayer,onRemote=player!==localPlayer;
       z.rig.update(dt);
-      if((z.kind==='zombie'||z.kind==='nova')&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
+      if(z.kind==='dog'&&z.state==='chase'&&(z.stepLeft=(z.stepLeft??0)-dt)<=0){z.stepLeft=.26;this.onEvent?.('step',z);}
+      if((z.kind==='zombie'||z.kind==='nova'||z.kind==='dog')&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
       // Zombies from a distant spawn point walk to the window before tearing its boards.
       if(z.state==='approach'){
         z.approachTime+=dt;
@@ -120,7 +121,7 @@ export class Enemies {
       const dist=z.root.position.distanceTo(player),at=_at.copy(z.root.position),eye=_eye.copy(player);at.y+=z.kind==='dog'?25:45;eye.y+=40;
       if(z.state==='attack'){
         z.attackLeft-=dt;
-        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(!onRemote)this.onDamage(amount,z.root.position);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
+        if(!z.attackDealt&&z.attackLeft<.62){z.attackDealt=true;if(!lure&&dist<76&&this.world.lineClear(at,eye)){const amount=z.kind==='dog'?40:z.kind==='nova'?45:MELEE_DAMAGE;if(z.kind==='dog')this.onEvent?.('bite',z);if(!onRemote)this.onDamage(amount,z.root.position);else if(player.peerId)this.net?.hurtPeer(player.peerId,amount);}}
         if(z.attackLeft<=0){z.state='chase';z.rig.play('walk',true,1,BLEND);}continue;
       }
       if(!lure&&!approaching&&dist<MELEE_ATTACK_DIST&&Math.abs(z.root.position.y-player.y)<50&&s.phase!=='reviving'&&this.world.lineClear(at,eye)){

@@ -173,3 +173,23 @@ test('attack and death events play the reference attack and death voices', () =>
   assert.match(played[4].key, /quads\/spawn\//);
   assert.deepEqual(played[0].at, [1, 2, 3]);
 });
+
+test('hellhounds use the reference dog voices, steps and collar jingle', () => {
+  const { audio } = setup();
+  for (const key of Object.keys(manifest)) if (/^ref\/(aml\/dog|evt\/zombie_(tron|global)\/hellhounds)\//.test(key)) audio.manifest[key] = manifest[key];
+  const played = [];
+  audio.play = (key, volume, at) => played.push(key);
+  audio.zombieEvent('attack', 'dog', [0, 0, 0]);
+  audio.zombieEvent('bite', 'dog', [0, 0, 0]);
+  audio.zombieEvent('death', 'dog', [0, 0, 0]);
+  audio.zombieEvent('spawn', 'dog', [0, 0, 0]);
+  for (let i = 0; i < 30; i++) audio.zombieEvent('step', 'dog', [0, 0, 0]);
+  assert.match(played[0], /hellhounds\/vox\/attack\/|aml\/dog\/bark\//);
+  assert.match(played[1], /hellhounds\/vox\/bite\//);
+  assert.match(played[2], /hellhounds\/vox\/death\/|aml\/dog\/death\//);
+  assert.match(played[3], /hellhounds\/spawn\//);
+  assert.ok(played.slice(4).some(key => key.includes('/hellhounds/step/')));
+  assert.ok(played.slice(4).some(key => key.includes('run_collar')));
+  const handle = audio.voice('sprint', () => position(900, 0, 0), 'dog');
+  assert.match(handle.key, /hellhounds\/vox\/move\//);
+});
