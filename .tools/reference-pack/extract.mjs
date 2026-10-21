@@ -118,6 +118,9 @@ export async function extractZoneAssets(file, zoneName, { out, kinds, only, repo
     if (result.resyncs) report.push({ archive: zoneName, kind: 'zone', status: 'resynced', count: result.resyncs, warnings: result.warnings });
     if (result.summary.unnamed.length) report.push({ archive: zoneName, kind: 'zone', status: 'unnamed-summary', unnamed: result.summary.unnamed, samples: result.summary.samples });
     console.log(`${zoneName}: ${result.status}, ${result.assets} assets walked, ${result.resyncs} resyncs`, result.types);
+    const { streamPos = 0, streamSize = 0 } = result.coverage ?? {};
+    if (streamSize) console.log(`  walked ${(100 * streamPos / streamSize).toFixed(1)}% of the zone data (${streamPos} of ${streamSize} bytes)`);
+    if (streamSize && result.status !== 'ok') report.push({ archive: zoneName, kind: 'zone', status: 'walk-truncated', streamPos, streamSize, error: result.error });
     if (result.error) console.log(`  walk error: ${result.error}`);
     for (const [type, message, count] of result.failures) console.log(`  failed ${type} x${count}: ${message}`);
     if (result.assets) console.log(`  named and written: ${JSON.stringify(result.named)}`);

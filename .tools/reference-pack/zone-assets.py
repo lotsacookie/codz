@@ -318,6 +318,10 @@ def run(zone_path, zone_name, out, kinds, only, overwrite):
         "status": status,
         "error": error,
         "assets": len(assets),
+        "coverage": {
+            "streamPos": zone.pos if zone is not None else 0,
+            "streamSize": len(zone.data) if zone is not None else 0,
+        },
         "types": dict(types.most_common(40)),
         "resyncs": resyncs,
         "failures": summarize_failures(lines),
