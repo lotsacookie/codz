@@ -145,19 +145,9 @@ set string flameTableThirdPerson;
 set reusable flameTableFirstPersonPtr;
 set reusable flameTableThirdPersonPtr;
 
-reorder:
-...
-aiVsAiAccuracyGraphName
-aiVsAiAccuracyGraphKnots
-originalAiVsAiAccuracyGraphKnots
-aiVsPlayerAccuracyGraphName
-aiVsPlayerAccuracyGraphKnots
-originalAiVsPlayerAccuracyGraphKnots;
-
-reorder:
-...
-killIcon
-indicatorIcon;
+// no reorder: this zone version stores the accuracy graphs, killIcon and indicatorIcon in
+// plain struct order (verified against m1911_zm in common_zombie.ff: graph name and knots
+// follow hudIcon, then the 19 locationDamageMultipliers, then fireRumble, then szDisplayName)
 
 // FlameTable
 use FlameTable;

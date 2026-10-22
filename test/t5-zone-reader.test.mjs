@@ -75,3 +75,31 @@ print(json.dumps({'reorder': list(wv.reorder), 'xanims': wv.counts.get('szXAnims
   assert.deepEqual(out.reorder, []);
   assert.equal(out.xanims, 'NUM_WEAP_ANIMS');
 });
+
+test('WeaponDef keeps plain struct order (accuracy graphs, killIcon, indicatorIcon are not moved to the end)', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+d = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
+print(json.dumps({'reorder': list(d['WeaponDef'].reorder)}))
+`);
+  // m1911_zm in common_zombie.ff stores the accuracy graph right after hudIcon, before locationDamageMultipliers
+  assert.deepEqual(out.reorder, []);
+});
+
+test('decal effects read markArray only, not the shared union array', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+z = T5Zone.__new__(T5Zone)
+z.enums = t5_zone.HeaderParser(open(os.path.join(t5_zone.OAT, 'T5_Assets.h'), errors='ignore').read()).enums
+d = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
+cond = d['FxElemDefVisuals'].cond_expr['array']
+decal = z.enums['FX_ELEM_TYPE_DECAL']
+def ev(elem_type, count):
+    ctx = [('FxElemDef', {'elemType': elem_type, 'visualCount': count})]
+    return z.eval_cond(cond, ctx)
+print(json.dumps({'decal': ev(decal, 3), 'sprite': ev(0, 3), 'single': ev(0, 1)}))
+`);
+  assert.equal(out.decal, false);
+  assert.equal(out.sprite, true);
+  assert.equal(out.single, false);
+});
