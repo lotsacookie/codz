@@ -71,8 +71,8 @@ d = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
 wv = d['WeaponVariantDef']
 print(json.dumps({'reorder': list(wv.reorder), 'xanims': wv.counts.get('szXAnims')}))
 `);
-  // szXAnims is stored before hideTags in this zone version: plain struct order
-  assert.deepEqual(out.reorder, []);
+  // the alt weapon name string is stored before the szXAnims table; hideTags still follows it
+  assert.deepEqual(out.reorder, ['szInternalName', 'weapDef', 'szDisplayName', 'szAltWeaponName', 'szXAnims', '...']);
   assert.equal(out.xanims, 'NUM_WEAP_ANIMS');
 });
 

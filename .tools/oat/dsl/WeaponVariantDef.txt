@@ -16,8 +16,16 @@ set count hideTags 32;
 set reusable hideTags;
 set string szAmmoName;
 set string szClipName;
-// no reorder: this zone version stores szXAnims (and its strings) before hideTags,
-// which is plain struct order
+// szAltWeaponName's string is stored before the szXAnims pointer table (checked against
+// m16_gl_upgraded_zm in common_zombie.ff: display name, alt weapon name, then the anims).
+// hideTags still follows szXAnims, and the rest keeps struct order.
+reorder:
+szInternalName
+weapDef
+szDisplayName
+szAltWeaponName
+szXAnims
+...;
 
 // WeaponDef
 use WeaponDef;
