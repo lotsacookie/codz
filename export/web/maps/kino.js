@@ -24,6 +24,7 @@ import { KnifeBlood, tipToView, viewEmitter } from '../knife-blood.js';
 import { popHead, popLimb } from '../gore.js';
 import { LimbDebris } from '../limbs.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
+import { boardLanded } from '../board-chips.js';
 import { HitDirections, hitBearing, nearestAttacker } from '../hit-direction.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
@@ -100,7 +101,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let coop=null,worldNet=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const explosions=new ExplosionFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set(),boardShake={};const blood=new BloodFx(scene);const explosions=new ExplosionFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
 const hitDirections=new HitDirections(),hitArcEls=[];let adsPrev=false,deathCue=false;
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -389,7 +390,7 @@ function interact(){
   }
   return false;
 }
-function repair(b){if(b.count>=(b.boards.length||6)||repairLeft>0)return false;repairLeft=.75;world.setBoards(b,b.count+1,true);view.cameraFx?.build();if(b.rewardRound!==session.round){b.rewardRound=session.round;b.reward=0;}if(b.reward<50*session.round){session.addPoints(10);b.reward+=10;}audio.play('board');return true;}
+function repair(b){if(b.count>=(b.boards.length||6)||repairLeft>0)return false;repairLeft=.75;world.setBoards(b,b.count+1,true);if(b.rewardRound!==session.round){b.rewardRound=session.round;b.reward=0;}if(b.reward<50*session.round){session.addPoints(10);b.reward+=10;}audio.play('board');return true;}
 function reset(){
   pendingMelee=null;lastReloadSerial=0;reloadShot=false;
   touchControls.reset();mousePrimary=mouseAim=false;toastUntil=0;announcementUntil=0;hitUntil=0;flashUntil=0;primary=false;primaryPressed=false;ads=false;keys.clear();
@@ -532,7 +533,7 @@ Object.assign(kinoApi.debug,{
 });
 ctx.expose('kino',kinoApi);
 try{
-  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(kinoPack(profile.mobile))]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
+  progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(kinoPack(profile.mobile))]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);world.onBoardLand=(o,barrier)=>boardLanded(o,barrier,scene,particles,camera,boardShake,performance.now()/1000,()=>view.cameraFx?.build());await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});bindPlayerFootsteps(player,()=>audio);audio.surfaceResolver=createSurfaceResolver({root:world.staticRoot,fallback:'concrete'});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);

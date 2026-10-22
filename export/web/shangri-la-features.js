@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MysteryBox } from './mystery-box.js';
+import { boardLanded } from './board-chips.js';
 import { MOON_PERKS } from './moon-session.js';
 import { barrierGroups, boxLocations, powerSwitches } from './shangri-la-rules.js';
 
@@ -90,7 +91,7 @@ export class ShangriFeatures {
     const offset = out.clone().multiplyScalar(entering ? 46 + Math.random() * 18 : 58 + Math.random() * 26).addScaledVector(side, sign * (8 + Math.random() * 16));
     offset.y = entering ? -16 - Math.random() * 10 : -8;
     const tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random() - .5) * 1.1, (Math.random() - .5) * .7, (Math.random() - .5) * 1.6));
-    (this.boardFx ??= []).push({ o, entering, t: -delay, dur: entering ? .34 : .42, home, offset, away: home.q.clone().multiply(tilt), started: false });
+    (this.boardFx ??= []).push({ o, barrier, entering, t: -delay, dur: entering ? .34 : .42, home, offset, away: home.q.clone().multiply(tilt), started: false });
     if (entering) o.visible = false;
   }
 
@@ -115,6 +116,7 @@ export class ShangriFeatures {
         this.boardFx.splice(this.boardFx.indexOf(fx), 1);
         this.restoreBoard(o);
         o.visible = fx.entering;
+        if (fx.entering) boardLanded(o, fx.barrier, this.scene, this.combat.particles, this.camera, this.shakeState ??= {}, performance.now() / 1000, () => this.combat.view?.cameraFx?.build());
       }
     }
   }

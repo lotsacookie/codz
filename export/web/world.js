@@ -156,7 +156,7 @@ export class World {
     offset.y=entering?-16-Math.random()*10:-8;
     const tilt=new THREE.Quaternion().setFromEuler(new THREE.Euler((Math.random()-.5)*1.1,(Math.random()-.5)*.7,(Math.random()-.5)*1.6));
     const away=home.q.clone().multiply(tilt);
-    (this.boardFx??=[]).push({o,entering,t:-delay,dur:entering?.34:.42,home,offset,away,started:false});
+    (this.boardFx??=[]).push({o,barrier,entering,t:-delay,dur:entering?.34:.42,home,offset,away,started:false});
     if(entering)o.visible=false;
   }
   updateBoards(dt){
@@ -177,6 +177,7 @@ export class World {
       if(k>=1){
         this.boardFx.splice(this.boardFx.indexOf(fx),1);
         this.restoreBoard(o);o.visible=fx.entering;
+        if(fx.entering)this.onBoardLand?.(o,fx.barrier);
       }
     }
   }
