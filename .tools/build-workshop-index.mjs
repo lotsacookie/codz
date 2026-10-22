@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { APP_ID, crawl } from './lib/workshop-crawl.mjs';
+import { discover } from './lib/github-discover.mjs';
 
 const MIN_ITEMS = 1;
 const root = path.resolve(import.meta.dirname, '..');
@@ -8,13 +9,24 @@ const file = path.join(root, 'export', 'web', 'assets', 'maps', 'workshop', 'ind
 const debugDir = path.join(root, '.work', 'workshop-debug');
 
 const previous = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : { items: [] };
-const items = await crawl({
+const steamItems = await crawl({
   log: message => console.log(message),
   dump: ({ sort, page, html }) => {
     mkdirSync(debugDir, { recursive: true });
     writeFileSync(path.join(debugDir, `${String(sort).replace(/\W+/g, "-")}-page${page}.html`), html.slice(0, 500000));
   },
 });
+
+let githubItems = [];
+try {
+  githubItems = await discover({ token: process.env.GITHUB_TOKEN ?? '', log: message => console.log(message) });
+} catch (error) {
+  console.error(`GitHub search failed: ${error.message}`);
+}
+const seenSources = new Set(steamItems.map(item => item.source.toLowerCase()));
+const items = [...steamItems, ...githubItems.filter(item => !seenSources.has(item.source.toLowerCase()))]
+  .sort((a, b) => (b.updated ?? 0) - (a.updated ?? 0));
+console.log(`${steamItems.length} Steam items and ${githubItems.length} GitHub repos with a .map file.`);
 
 if (items.length < MIN_ITEMS) {
   console.error(`Only ${items.length} Workshop items were read; keeping the existing index.`);

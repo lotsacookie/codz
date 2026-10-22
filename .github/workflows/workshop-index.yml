@@ -26,6 +26,8 @@ jobs:
           node-version: 24
 
       - name: Build the Black Ops 3 Workshop index
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node .tools/build-workshop-index.mjs
 
       - name: Keep the Steam pages that could not be read

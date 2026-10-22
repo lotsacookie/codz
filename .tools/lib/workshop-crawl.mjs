@@ -249,7 +249,7 @@ export async function crawl({
       const fresh = parsed.items.filter(item => !found.has(item.id));
       for (const item of fresh) found.set(item.id, item);
       log(`${list.query ?? list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${found.size} unique`);
-      if (!fresh.length || (parsed.linkedPages && page >= parsed.linkedPages)) break;
+      if (!fresh.length || (parsed.total && page >= Math.ceil(parsed.total / PER_PAGE))) break;
       await sleep(delay);
     }
   }
