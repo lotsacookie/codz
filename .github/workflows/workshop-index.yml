@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: '17 6 * * *'
   workflow_dispatch:
+    inputs:
+      max_items:
+        description: 'Most Workshop items to list'
+        default: '2000'
 
 permissions:
   contents: write
@@ -28,6 +32,7 @@ jobs:
       - name: Build the Black Ops 3 Workshop index
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKSHOP_MAX_ITEMS: ${{ github.event.inputs.max_items || '2000' }}
         run: node .tools/build-workshop-index.mjs
 
       - name: Keep the Steam pages that could not be read

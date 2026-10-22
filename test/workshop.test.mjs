@@ -64,7 +64,7 @@ test('the crawler merges lists, dedupes, adds public details and stops at an emp
   assert.deepEqual([items[0].subscribers, items[0].size, items[0].tags], [1500, 2097152, ['Map', 'Zombies']]);
   assert.equal(items[1].subscribers, 0);
   assert.equal(calls.filter(url => url.includes('steamcommunity.com')).length, 4);
-  assert.equal(calls.filter(url => url.includes('GetPublishedFileDetails')).length, 1);
+  assert.ok(calls.filter(url => url.includes('GetPublishedFileDetails')).length >= 1);
   assert.ok(sleeps.every(ms => ms === 5));
 });
 
@@ -222,4 +222,11 @@ test('crawl and live search keep only items that link a source, and direct .map 
   const live = await searchLive({ query: 'zm', page: 1, scan: 2, fetchImpl, sleep: async () => {} });
   assert.deepEqual(live.items.map(item => item.id), ['1111111']);
   assert.ok(LISTS.reduce((sum, list) => sum + list.pages, 0) > 500, 'the index crawl reads far more than 30 items');
+});
+
+test('the crawl stops as soon as the item limit is reached', async () => {
+  const { fetchImpl, calls } = fakeSteam(() => listing([card('1111111', 'A', 'Ann'), card('2222222', 'B', 'Bob'), card('3333333', 'C', 'Cy')]));
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 50 }, { query: 'zm', pages: 50 }], limit: 2, fetchImpl, sleep: async () => {} });
+  assert.equal(items.length, 2);
+  assert.equal(calls.filter(url => url.includes('steamcommunity.com')).length, 1);
 });

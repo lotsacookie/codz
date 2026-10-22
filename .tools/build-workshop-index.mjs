@@ -1,15 +1,18 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { APP_ID, crawl } from './lib/workshop-crawl.mjs';
+import { APP_ID, DEFAULT_LIMIT, crawl } from './lib/workshop-crawl.mjs';
 import { discover } from './lib/github-discover.mjs';
 
 const MIN_ITEMS = 1;
+const LIMIT = Math.max(1, Math.floor(Number(process.env.WORKSHOP_MAX_ITEMS ?? process.argv[2])) || DEFAULT_LIMIT);
+console.log(`Item limit: ${LIMIT}`);
 const root = path.resolve(import.meta.dirname, '..');
 const file = path.join(root, 'export', 'web', 'assets', 'maps', 'workshop', 'index.json');
 const debugDir = path.join(root, '.work', 'workshop-debug');
 
 const previous = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : { items: [] };
 const steamItems = await crawl({
+  limit: LIMIT,
   log: message => console.log(message),
   dump: ({ sort, page, html }) => {
     mkdirSync(debugDir, { recursive: true });
@@ -19,13 +22,14 @@ const steamItems = await crawl({
 
 let githubItems = [];
 try {
-  githubItems = await discover({ token: process.env.GITHUB_TOKEN ?? '', log: message => console.log(message) });
+  githubItems = await discover({ maxRepos: LIMIT, token: process.env.GITHUB_TOKEN ?? '', log: message => console.log(message) });
 } catch (error) {
   console.error(`GitHub search failed: ${error.message}`);
 }
 const seenSources = new Set(steamItems.map(item => item.source.toLowerCase()));
 const items = [...steamItems, ...githubItems.filter(item => !seenSources.has(item.source.toLowerCase()))]
-  .sort((a, b) => (b.updated ?? 0) - (a.updated ?? 0));
+  .sort((a, b) => (b.updated ?? 0) - (a.updated ?? 0))
+  .slice(0, LIMIT);
 console.log(`${steamItems.length} Steam items and ${githubItems.length} GitHub repos with a .map file.`);
 
 if (items.length < MIN_ITEMS) {

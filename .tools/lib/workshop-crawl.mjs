@@ -9,6 +9,7 @@ export const LISTS = [
     .map(query => ({ query, pages: 60 })),
 ];
 export const LIVE_SCAN_PAGES = 6;
+export const DEFAULT_LIMIT = 2000;
 
 const BROWSE = 'https://steamcommunity.com/workshop/browse/';
 const DETAILS = 'https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/';
@@ -226,13 +227,15 @@ export async function crawl({
   fetchImpl = globalThis.fetch.bind(globalThis),
   sleep = defaultSleep,
   delay = 2000,
+  limit = DEFAULT_LIMIT,
   log = () => {},
   dump = () => {},
 } = {}) {
-  const found = new Map();
+  const found = new Set();
+  const kept = new Map();
   const tools = { fetchImpl, sleep };
   for (const list of lists) {
-    for (let page = 1; page <= list.pages; page++) {
+    for (let page = 1; page <= list.pages && kept.size < limit; page++) {
       let result;
       try {
         result = await getPage(browseUrl({ sort: list.sort, query: list.query, page }), tools);
@@ -247,12 +250,17 @@ export async function crawl({
         break;
       }
       const fresh = parsed.items.filter(item => !found.has(item.id));
-      for (const item of fresh) found.set(item.id, item);
-      log(`${list.query ?? list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${found.size} unique`);
+      fresh.forEach(item => found.add(item.id));
+      const details = await fetchDetails(fresh.map(item => item.id), tools);
+      for (const entry of fresh) {
+        const item = merge(entry, details);
+        if (item?.name && hasSource(item) && kept.size < limit) kept.set(item.id, item);
+      }
+      log(`${list.query ?? list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${kept.size}/${limit} with a source`);
       if (!fresh.length || (parsed.total && page >= Math.ceil(parsed.total / PER_PAGE))) break;
       await sleep(delay);
     }
+    if (kept.size >= limit) break;
   }
-  const details = await fetchDetails([...found.keys()], tools);
-  return [...found.values()].map(entry => merge(entry, details)).filter(item => item?.name && hasSource(item));
+  return [...kept.values()];
 }
