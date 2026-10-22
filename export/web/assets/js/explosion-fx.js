@@ -150,6 +150,7 @@ export class ExplosionFx {
   }
 
   blast(position, { radius = BASE_RADIUS, kind = 'grenade' } = {}) {
+    this.onBlast?.(position, radius, kind);
     if (!this.ready()) return false;
     const profile = KINDS[kind] ?? KINDS.grenade;
     const s = Math.min(2.2, Math.max(0.4, radius / BASE_RADIUS)) * profile.scale;

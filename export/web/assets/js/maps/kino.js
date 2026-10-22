@@ -102,7 +102,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let coop=null,worldNet=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-let dogFx=null;const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set(),boardShake={};const blood=new BloodFx(scene);const explosions=new ExplosionFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
+let dogFx=null;const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set(),boardShake={};const blood=new BloodFx(scene);const explosions=new ExplosionFx(scene);explosions.onBlast=(p,r)=>quake(p,.5,r>600?r:1000);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
 const hitDirections=new HitDirections(),hitArcEls=[];let adsPrev=false,deathCue=false;
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -233,8 +233,12 @@ function kill(z,force,position){
   if(force){dropPowerup(force,position??player.getFeetPosition());return;}
   if(z){const type=session.drops.tryDrop(session,{kind:z.kind,playable:z.state!=='barricade'&&!!world.zoneAt(z.root.position.clone().add(new THREE.Vector3(0,40,0))),destroyedWindows:world.barriers.filter(b=>b.count===0).length,boxMoves:mysteryBox.moves});if(type)dropPowerup(type,z.root.position);}
 }
+function quake(position,magnitude=.5,radius=1000){
+  if(!position||!camera)return;const d=position.distanceTo(camera.position);if(d>=radius)return;view?.cameraFx?.build(Math.min(1.4,magnitude*2*(1-d/radius)+.15));
+}
 function dropPowerup(type,position){
-  return powerups.spawn(type,position);
+  const at=position.clone(),s=session;dogFx?.begin(at);
+  setTimeout(()=>{if(session!==s)return;quake(at,.5,1000);powerups.spawn(type,at);},1500);return null;
 }
 function collect(type,position,info={}){
   if(!powerupNames[type])return;
@@ -538,7 +542,7 @@ try{
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});bindPlayerFootsteps(player,()=>audio);audio.surfaceResolver=createSurfaceResolver({root:world.staticRoot,fallback:'concrete'});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
-  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));if(dogFx)dogFx.clear();dogFx=new DogSpawnFx(scene,{shake:()=>view?.cameraFx?.build()});enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='spawn'&&z.kind==='dog'&&z.spawnFx>0)dogFx.begin(z.root.position);audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});enemies.spawnEffects=true;
+  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));if(dogFx)dogFx.clear();dogFx=new DogSpawnFx(scene,{shake:()=>view?.cameraFx?.build()});enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='bite')view?.cameraFx?.build(.9);if(type==='spawn'&&z.kind==='dog'&&z.spawnFx>0)dogFx.begin(z.root.position);audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});enemies.spawnEffects=true;
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage:n=>damage(n,nearestAttacker(camera.position,enemies.list)),teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
