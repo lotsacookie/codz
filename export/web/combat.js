@@ -15,7 +15,7 @@ import { KnifeBlood, tipToView, viewEmitter } from './knife-blood.js';
 import { popHead, popLimb } from './gore.js';
 import { LimbDebris } from './limbs.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
-import { HitDirections, hitBearing } from './hit-direction.js';
+import { HitDirections, hitBearing, nearestAttacker } from './hit-direction.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
@@ -172,7 +172,7 @@ export class Combat {
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
   /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
-  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});coop.attachPowerups(this.pickups,{area:()=>this.session.area});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
+  attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n,nearestAttacker(this.camera.position,this.enemies.list)),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});coop.attachPowerups(this.pickups,{area:()=>this.session.area});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
   renderHitArcs(){
     const host=document.getElementById('hit-directions');if(!host)return;
     const yaw=THREE.MathUtils.radToDeg(this.camera.rotation.y),items=this.hitDirections.items,els=this.hitArcEls;
@@ -215,7 +215,7 @@ export class Combat {
         this.audio.blast(g.rocket?'rocket':'grenade');if(!this.explosions.blast(g.mesh.position,{radius:g.radius||300,kind:g.rocket?'explosion':'grenade'}))this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
         const radius=g.radius||300,damage=g.damage||1500;
         for(const z of [...this.enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<radius&&this.world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))this.enemies.hurt(z,Math.max(75,damage*(1-d/radius)),false,false,g.rocket?'explosion':'grenade');}
-        const d=this.camera.position.distanceTo(g.mesh.position);if(d<160&&!s.perks.has('specialty_flakjacket'))this.damage(180*(1-d/160));this.removeEffect(this.grenades,g);
+        const d=this.camera.position.distanceTo(g.mesh.position);if(d<160&&!s.perks.has('specialty_flakjacket'))this.damage(180*(1-d/160),g.mesh.position);this.removeEffect(this.grenades,g);
       }
     }
     for(const p of [...this.particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);fadeParticle(p);if(p.life<=0)this.removeEffect(this.particles,p);}

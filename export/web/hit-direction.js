@@ -16,6 +16,18 @@ export function hitBearing(player, yaw, source) {
   return (degrees % 360 + 360) % 360;
 }
 
+export function nearestAttacker(player, enemies, range = 170) {
+  let best = null;
+  let bestDistance = range;
+  for (const z of enemies ?? []) {
+    const at = z?.root?.position;
+    if (!at || z.state === 'dead') continue;
+    const distance = Math.hypot(at.x - player.x, at.z - player.z);
+    if (distance < bestDistance) { bestDistance = distance; best = at; }
+  }
+  return best;
+}
+
 function angleGap(a, b) {
   const gap = Math.abs(a - b) % 360;
   return gap > 180 ? 360 - gap : gap;

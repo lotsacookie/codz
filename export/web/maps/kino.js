@@ -24,7 +24,7 @@ import { KnifeBlood, tipToView, viewEmitter } from '../knife-blood.js';
 import { popHead, popLimb } from '../gore.js';
 import { LimbDebris } from '../limbs.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
-import { HitDirections, hitBearing } from '../hit-direction.js';
+import { HitDirections, hitBearing, nearestAttacker } from '../hit-direction.js';
 import { configureKinoAssets, assetDiagnostics } from '../runtime-assets.js';
 import { assets, rfetch } from '../asset-loader.js';
 import { preloadShared } from '../shared-assets.js';
@@ -538,7 +538,7 @@ try{
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});
   world.actors=()=>enemies.list;
-  coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage,teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
+  coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage:n=>damage(n,nearestAttacker(camera.position,enemies.list)),teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
   features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast,explosion:(position,radius,kind)=>explosions.blast(position,{radius,kind})});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
