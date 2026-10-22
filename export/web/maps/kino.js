@@ -2,6 +2,7 @@ import { createCoop } from '../net/coop-client.js';
 import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { PlayerController } from '../player-controller.js';
+import { bindPlayerFootsteps, createSurfaceResolver } from '../footsteps.js';
 import { World, vector, zoneNames } from '../world.js';
 import { ViewWeapon } from '../animation.js';
 import { Enemies } from '../enemies.js';
@@ -533,7 +534,7 @@ ctx.expose('kino',kinoApi);
 try{
   progress('Loading game data',5);{const m=document.querySelector('meta[name="kino-asset-manifest"]');if(m)await assets.loadManifest(m.content||'asset-manifest.json');}const packLoad=/[?&]pack=0\b/.test(location.search)?Promise.resolve(false):(byteProgress=true,Promise.all([preloadShared(),assets.loadPack(kinoPack(profile.mobile))]));data=await rfetch('game-data.json').then(r=>r.json());session=new Session(data);world=new World(scene,data);await packLoad;byteProgress=true;await world.load(progress);byteProgress=false;try{const fxData=await rfetch('theater-fx.json').then(r=>r.json());theaterFx=new TheaterLighting({scene,world,sunColor:THEATER_WORLD.sunColor,fxData});theaterFx.setGodRays(graphics.preset.godRays);}catch(error){console.warn('[kino] theater light fx unavailable',error);}
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
-  player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});
+  player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});bindPlayerFootsteps(player,()=>audio);audio.surfaceResolver=createSurfaceResolver({root:world.staticRoot,fallback:'concrete'});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
   progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});
   world.actors=()=>enemies.list;

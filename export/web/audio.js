@@ -1,11 +1,12 @@
 import {zombieCues,dogCues,preloadZombieKeys,preloadDogKeys} from './zombie-sfx.js';
+import {stepPools,pickStep,pickLanding,pickCrawl,preloadStepKeys,PLAYER_STEP_GAIN,ZOMBIE_STEP_GAIN,ZOMBIE_STEP_RANGE} from './footsteps.js';
 import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER,usesPapShot} from './weapon-sfx.js';
 // Native T5 cues decoded from IWD streams and resident LoadedSound records.
 const SPATIAL={near:140,rolloff:1.6,far:6000};
 const VOICE_RANGE=1600,VOICE_LIMIT=14;
 export class GameAudio {
-  constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();this.lastStart=new Map();this.profiles=new Map();this.wpnKeys=null;}
-  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();this.profiles.clear();this.wpnKeys=null;this.zombieVoices=null;this.dogVoices=null;}
+  constructor(){this.camera=null;this.spatial=new Set();this.tracked=new Map();this.voices=new Set();this.watching=false;this._enabled=true;this.ctx=null;this.manifest={};this.buffers=new Map();this.bufferSizes=new Map();this.bufferBytes=0;this.maxBufferBytes=Infinity;this.preload=true;this.played=[];this.music=null;this.musicToken=0;this.variants=new Map();this.lastStart=new Map();this.profiles=new Map();this.wpnKeys=null;this.stepSets=null;this.surfaceResolver=null;this.defaultSurface='concrete';this.lastStepKey=new Map();}
+  async load(){const r=await fetch('audio/manifest.json');if(!r.ok)throw new Error('Audio manifest HTTP '+r.status);this.manifest=await r.json();this.profiles.clear();this.wpnKeys=null;this.zombieVoices=null;this.dogVoices=null;this.stepSets=null;}
   get enabled(){return this._enabled;}
   set enabled(v){this._enabled=v;if(this.master)this.master.gain.value=v?.42:0;}
   start(){if(!this.ctx){const Context=globalThis.AudioContext??globalThis.webkitAudioContext;if(!Context){this.enabled=false;return;}this.ctx=new Context();this.master=this.ctx.createGain();this.master.gain.value=this.enabled?.42:0;this.master.connect(this.ctx.destination);
@@ -14,13 +15,13 @@ export class GameAudio {
   preloadKeys(){
     const first=['round','round_end','dog_round','buy','explosion'].filter(key=>this.manifest[key]),later=['nuke','full_ammo','insta_kill','double_points','carpenter','fire_sale','fire_sale_music','heartbeat','tinnitus','scope_breath_in','scope_breath_out','scope_breath_gasp','death_card'];
     const rest=Object.keys(this.manifest).filter(key=>!first.includes(key)&&(key.startsWith('resident/evt/zombie_global/')||later.includes(key)||key.startsWith('specialty_')));
-    return [...first,...rest,...preloadZombieKeys(this.zombieCues()),...preloadDogKeys(this.dogCues())];
+    return [...first,...rest,...preloadZombieKeys(this.zombieCues()),...preloadDogKeys(this.dogCues()),...preloadStepKeys(this.stepPools())];
   }
   runPreload(keys){
     const queue=[...keys],work=async()=>{while(queue.length&&this.ctx){const key=queue.shift();try{await this.buffer(key,'low');}catch(error){console.error(error);}}};
     for(let i=0;i<3;i++)work();
   }
-  staleLimit(kind){return /(\/shot\/|\/act\/|\/plr\/|swing|stab|whoosh|\/hit)/.test(kind)?250:4000;}
+  staleLimit(kind){return /(\/shot\/|\/act\/|\/plr\/|swing|stab|whoosh|\/hit|\/footsteps\/)/.test(kind)?250:4000;}
   select(prefix){
     if(!this.variants.has(prefix))this.variants.set(prefix,Object.keys(this.manifest).filter(k=>k.startsWith(prefix)));
     const keys=this.variants.get(prefix);return keys[Math.floor(Math.random()*keys.length)];
@@ -187,9 +188,31 @@ export class GameAudio {
     const cues=kind==='dog'?this.dogCues():this.zombieCues()[kind==='nova'?'nova':'zombie'];
     if(kind==='dog'&&type==='pain'){const now=this.ctx?.currentTime??0;if(now-(this.lastDogPain??-1)<.3)return;this.lastDogPain=now;}
     if(kind==='dog'&&type==='death'&&cause==='melee'){const neck=this.pick(cues.neck);if(neck)this.play(neck,.7*gain,position);}
+    if(kind!=='dog'&&type==='step'){this.zombieStep(kind,position,cause||'walk',gain);return;}
     if(kind==='dog'&&type==='step'){const step=this.pick(cues.step),collar=this.pick(cues.collar);if(step)this.play(step,.6*gain,position);if(collar&&Math.random()<.3)this.play(collar,.3*gain,position);return;}
     const key=this.pick(type==='death'&&cause==='electric'&&cues.elec?.length?cues.elec:cues[type]);
     if(key)this.play(key,.8*gain,position);
+  }
+  stepPools(){return this.stepSets??=stepPools(Object.keys(this.manifest));}
+  surfaceAt(position,cheap=false){try{return this.surfaceResolver?this.surfaceResolver(position,{cheap})||this.defaultSurface:this.defaultSurface;}catch{return this.defaultSurface;}}
+  playerStep(movement,position,crouched=false){
+    if(!this.enabled||!this.ctx||this.ctx.state!=='running')return;
+    const surface=this.surfaceAt(position),key=pickStep(this.stepPools(),movement,surface,this.lastStepKey.get('player'));
+    if(!key||!this.manifest[key])return;this.lastStepKey.set('player',key);
+    this.play(key,PLAYER_STEP_GAIN[movement]*(crouched?.7:1));
+  }
+  playerLand(position,hard=false){
+    if(!this.enabled||!this.ctx||this.ctx.state!=='running')return;
+    const key=pickLanding(this.stepPools(),this.surfaceAt(position),hard);
+    if(key&&this.manifest[key])this.play(key,hard?.8:.6);
+  }
+  zombieStep(kind,position,movement='walk',gain=1){
+    if(!this.enabled||!this.ctx||this.ctx.state!=='running'||!this.camera)return;
+    if(this.distanceTo(position)>ZOMBIE_STEP_RANGE)return;
+    const pools=this.stepPools(),id=kind==='nova'?'nova':'zombie';
+    const key=kind==='nova'?pickCrawl(pools,this.lastStepKey.get(id)):pickStep(pools,movement==='sprint'?'run':'walk',this.surfaceAt(position,true),this.lastStepKey.get(id));
+    if(!key||!this.manifest[key])return;this.lastStepKey.set(id,key);
+    this.play(key,ZOMBIE_STEP_GAIN*gain*(movement==='sprint'?1.15:1),position);
   }
   voice(gait,locate,kind='zombie'){
     if(!this.enabled||!this.ctx||this.ctx.state!=='running'||!this.camera)return null;

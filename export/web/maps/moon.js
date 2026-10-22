@@ -5,6 +5,7 @@ import { loadMapGltf } from '../map-assets.js';
 import { ensureTextures, prewarm } from '../load-flow.js';
 import { preloadShared } from '../shared-assets.js';
 import { PlayerController } from '../player-controller.js';
+import { bindPlayerFootsteps } from '../footsteps.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { MoonState, contains, environmentAt } from '../moon-rules.js';
@@ -348,6 +349,7 @@ async function load() {
   showStatus('Loading Moon navigation…'); await nextTask();
   navigation=new MoonNavigation(data);await navigation.load();navigation.setDoors(parts);
   player = new PlayerController(camera, {capsuleIntersect, rayIntersect}, {radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4});
+  bindPlayerFootsteps(player, () => combat?.audio);
   showStatus('Loading Moon zombies and weapons…');
   await sharedAssets;
   const worldApi={navigation,path:(a,b)=>navigation.path(a,b),closest:(p,e)=>navigation.closest(p,e),raycast:rayIntersect,

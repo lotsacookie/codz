@@ -6,6 +6,7 @@ import { loadManifest, loadPacks, ensureTextures, prewarm } from '../load-flow.j
 import { preloadShared } from '../shared-assets.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
+import { bindPlayerFootsteps } from '../footsteps.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
 import { disposeObject } from '../dispose.js';
 import { chunkWorldMeshes } from '../world-chunks.js';
@@ -542,6 +543,7 @@ async function load() {
   syncNavigation();
 
   player = new PlayerController(camera, { capsuleIntersect, rayIntersect }, { ...C.player });
+  bindPlayerFootsteps(player, () => combat?.audio);
   showStatus('Loading zombies and weapons…');
   await sharedAssets;
   const worldApi = {

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { Octree } from 'three/addons/math/Octree.js';
 import { CameraSmoother } from './camera-smoothing.js';
+import { STRIDE as STEP_STRIDE } from './footsteps.js';
 
 // A small, physics-only first-person controller.  The Octree is deliberately
 // separate from the render scene: pass it the collision-only Object3D (or the
@@ -232,6 +233,8 @@ export class PlayerController {
     this.crouched = false;
     this.onLadder = false;
     this.enabled = true;
+    this.onFootstep = null;
+    this._stride = 30;
     this._accumulator = 0;
     this._jumpBufferTimer = 0;
     this._coyoteTimer = 0;
@@ -516,6 +519,8 @@ export class PlayerController {
     _movement.copy(this.velocity).multiplyScalar(moveDt);
     const climbSpeedY = this.velocity.y;
     const previousFeetY = this.collider.start.y - this.radius;
+    const impactSpeed = this.velocity.y;
+    const strideX = this.collider.start.x, strideZ = this.collider.start.z;
     let groundedDuringMove = false;
     for (let i = 0; i < moveSteps; i += 1) {
       const beforeStart=this.collider.start.clone(),beforeEnd=this.collider.end.clone();
@@ -547,8 +552,37 @@ export class PlayerController {
       if (groundedDuringMove && this.velocity.y < 0) this.velocity.y = 0;
     }
 
+    this._emitFootsteps(dt, wasOnFloor, impactSpeed, strideX, strideZ);
+
     if (this.fallResetY !== null && this.collider.start.y - this.radius < this.fallResetY) {
       this.reset(this.spawn, { eye: this.spawnIsEye, resolve: true });
+    }
+  }
+
+  _emitFootsteps(dt, wasOnFloor, impactSpeed, startX, startZ) {
+    const emit = this.onFootstep;
+    if (typeof emit !== 'function' || this.onLadder) return;
+    const moved = Math.hypot(this.collider.start.x - startX, this.collider.start.z - startZ);
+    const movement = this.crouched ? 'walk' : (this.input.sprint ? 'sprint' : 'run');
+    if (!wasOnFloor && this.onFloor && impactSpeed < -170) {
+      emit('land', impactSpeed < -620 ? 'hard' : 'soft', this);
+      this._stride = 0;
+      return;
+    }
+    if (wasOnFloor && !this.onFloor && this.velocity.y > 40) {
+      emit('step', 'run', this);
+      return;
+    }
+    if (!this.onFloor) return;
+    if (moved / Math.max(dt, 1e-4) < 28) {
+      this._stride = Math.max(this._stride, 30);
+      return;
+    }
+    this._stride += moved;
+    const stride = STEP_STRIDE[movement];
+    if (this._stride >= stride) {
+      this._stride -= stride;
+      emit('step', movement, this);
     }
   }
 

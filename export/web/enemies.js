@@ -98,6 +98,7 @@ export class Enemies {
       const player=remotes?.length?nearestTarget(z.root.position,remotes,localDown?null:localPlayer):localPlayer,onRemote=player!==localPlayer;
       z.rig.update(dt);
       if(z.kind==='dog'&&z.state==='chase'&&(z.stepLeft=(z.stepLeft??0)-dt)<=0){z.stepLeft=.26;this.onEvent?.('step',z);}
+      if((z.kind==='zombie'||z.kind==='nova')&&(z.state==='chase'||z.state==='approach')&&z.speed>8&&(z.stepLeft=(z.stepLeft??0)-dt)<=0){z.stepLeft=(z.kind==='nova'?40:54)/Math.max(z.speed,20);this.onEvent?.('step',z,z.speed>=125?'sprint':z.speed>=80?'run':'walk');}
       if((z.kind==='zombie'||z.kind==='nova'||z.kind==='dog')&&(z.state==='chase'||z.state==='approach'))this.speak(z,dt);
       // Zombies from a distant spawn point walk to the window before tearing its boards.
       if(z.state==='approach'){
