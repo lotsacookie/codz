@@ -15,6 +15,7 @@ import { KnifeBlood, tipToView, viewEmitter } from './knife-blood.js';
 import { popHead, popLimb } from './gore.js';
 import { LimbDebris } from './limbs.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
+import { HitDirections, hitBearing } from './hit-direction.js';
 
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
@@ -24,6 +25,7 @@ export class Combat {
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
     this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.explosions=new ExplosionFx(scene);this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
+    this.hitDirections=new HitDirections();this.hitArcEls=[];if(typeof document!=='undefined')document.getElementById('hit-directions')?.replaceChildren();
     this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
     this.audio.music={stop(){}};
@@ -36,7 +38,7 @@ export class Combat {
     const response=await fetch('moon/combat-data.json');if(!response.ok)throw new Error('Missing Moon combat assets; rebuild Moon.');
     this.data=await response.json();this.session=new this.sessionClass(this.data);
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
-    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:n=>this.damage(n),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>this.audio.zombieEvent(type,z.kind,z.root.position,1,cause)});
+    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:(n,from)=>this.damage(n,from),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>this.audio.zombieEvent(type,z.kind,z.root.position,1,cause)});
     guardEnemies(this.enemies,{onFault:(where,error)=>this.faultNotice?.(where,error)});
     this.pickups=new Powerups(this.scene,this.data,this.audio,(type,position,info)=>this.collect(type,info));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};
@@ -67,13 +69,14 @@ export class Combat {
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
     this.blood?.clear();this.explosions.clear();this.limbDebris.clear();
-    this.impacts.clear();
+    this.impacts.clear();this.hitDirections.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.view.clearCache();this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
-  damage(n){
+  damage(n,from){
     if(this.session.area==='earth'&&this.session.effects.pack_shield>this.session.time&&this.camera.position.distanceTo(new THREE.Vector3(...this.features.one('zombie_vending_upgrade').position))<220)return;
     if(!this.enabled||!this.session.damage(n))return;
     this.audio.play('hit');
+    if(from)this.hitDirections.add(hitBearing(this.camera.position,this.camera.rotation.y,from),THREE.MathUtils.radToDeg(this.camera.rotation.y));
     if(this.session.phase==='gameover'){this.pendingMelee=null;this.clearInput();this.end();}
   }
   key(code){
@@ -170,6 +173,12 @@ export class Combat {
   }
   /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
   attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});coop.attachPowerups(this.pickups,{area:()=>this.session.area});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
+  renderHitArcs(){
+    const host=document.getElementById('hit-directions');if(!host)return;
+    const yaw=THREE.MathUtils.radToDeg(this.camera.rotation.y),items=this.hitDirections.items,els=this.hitArcEls;
+    while(els.length<items.length){const el=document.createElement('i');host.appendChild(el);els.push(el);}
+    els.forEach((el,i)=>{const item=items[i];if(!item){if(el.style.opacity!=='0')el.style.opacity='0';return;}el.style.setProperty('--angle',this.hitDirections.screenAngle(item,yaw).toFixed(1)+'deg');el.style.opacity=this.hitDirections.opacity(item).toFixed(2);});
+  }
   idle(dt){if(!this.enabled||!this.coop)return;this.coop.update(dt);this.coop.idle(dt);}
   remoteHit(z,head){const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
   puppetKill(z){
@@ -178,6 +187,7 @@ export class Combat {
   }
   update(dt,{moving,sprint}){
     this.blood?.update(dt);this.explosions.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
+    this.hitDirections.update(dt);this.renderHitArcs();
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);
