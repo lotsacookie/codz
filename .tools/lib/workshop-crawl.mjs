@@ -1,11 +1,14 @@
 export const APP_ID = 311210;
 export const PER_PAGE = 30;
+// Workshop items cannot be downloaded, so only ones that link their source are kept. Those are rare, which is why
+// the crawl reads many pages of several lists and searches for the words authors put next to their source links.
 export const LISTS = [
-  { sort: 'trend', pages: 30 },
-  { sort: 'mostrecent', pages: 20 },
-  { query: 'cheese tower', pages: 3 },
-  { query: 'zombies', pages: 10 },
+  { sort: 'trend', pages: 200 },
+  { sort: 'mostrecent', pages: 200 },
+  ...['github', 'source', 'source code', 'radiant', '.map', 'zombies', 'zm', 'map', 'custom map', 'cheese tower', 'open source', 'download', 'gdk', 'mod tools', 'bsp']
+    .map(query => ({ query, pages: 60 })),
 ];
+export const LIVE_SCAN_PAGES = 6;
 
 const BROWSE = 'https://steamcommunity.com/workshop/browse/';
 const DETAILS = 'https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/';
@@ -164,10 +167,13 @@ export async function fetchDetails(ids, { fetchImpl, sleep }) {
 // (a GitHub repo or a .map link) often say so in the description; that link is what can be loaded in the browser.
 export function sourceLink(description) {
   const text = decode(String(description ?? '')).replace(/\[url=([^\]]+)\]/gi, ' $1 ').replace(/\[\/?[a-z*]+[^\]]*\]/gi, ' ');
-  const links = [...text.matchAll(/https?:\/\/(?:www\.)?(?:github\.com|raw\.githubusercontent\.com)\/[^\s<>"'\])\[]+/gi)]
+  const direct = [...text.matchAll(/https?:\/\/[^\s<>"'\])\[]+?\.map(?:\?[^\s<>"'\])\[]*)?(?=[\s<>"'\])\[]|$)/gi)]
+    .map(match => match[0]).find(link => !/\/_prefabs\//i.test(link) && !/steamcommunity\.com/i.test(link));
+  const links = [...text.matchAll(/https?:\/\/(?:www\.)?(?:github\.com|raw\.githubusercontent\.com|gist\.github\.com)\/[^\s<>"'\])\[]+/gi)]
     .map(match => match[0].replace(/[.,;:!?]+$/, '').replace(/\/$/, ''));
   const map = links.find(link => /\.map(?:$|\?)/i.test(link) && !/\/_prefabs\//i.test(link));
   if (map) return map;
+  if (direct) return direct;
   const repo = links.map(link => /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/#?]+?)(?:\.git)?(?:\/tree\/([^/#?]+))?(?:[/#?].*)?$/i.exec(link))
     .find(match => match && !/^(?:sponsors|orgs|topics|settings|features|about|marketplace)$/i.test(match[1]));
   return repo ? `https://github.com/${repo[1]}/${repo[2]}${repo[3] ? `/tree/${repo[3]}` : ''}` : '';
@@ -191,15 +197,28 @@ export function merge(entry, details) {
   };
 }
 
-// One live search page, for the optional /api/workshop endpoint.
-export async function searchLive({ query = '', page = 1, fetchImpl = globalThis.fetch.bind(globalThis), sleep = defaultSleep } = {}) {
+export const hasSource = item => Boolean(item?.source);
+
+// Live search for the optional /api/workshop endpoint. Steam returns 30 items a page and most have no source link, so
+// several Steam pages are read per request and only items with a source link come back. `pages` is how many result
+// pages exist for the menu to walk through (each one covers LIVE_SCAN_PAGES Steam pages).
+export async function searchLive({ query = '', page = 1, fetchImpl = globalThis.fetch.bind(globalThis), sleep = defaultSleep, scan = LIVE_SCAN_PAGES } = {}) {
   const tools = { fetchImpl, sleep, retries: 1 };
-  const result = await getPage(browseUrl({ query, page }), tools);
-  const parsed = parseBrowse(result.html);
-  const details = await fetchDetails(parsed.items.map(item => item.id), tools);
-  const items = parsed.items.map(entry => merge(entry, details)).filter(item => item?.name);
-  const pages = Math.max(parsed.linkedPages, parsed.total ? Math.ceil(parsed.total / PER_PAGE) : 0, page);
-  return { items, pages };
+  const first = (page - 1) * scan + 1;
+  const items = [];
+  const seen = new Set();
+  let steamPages = 0;
+  for (let at = first; at < first + scan; at++) {
+    const result = await getPage(browseUrl({ query, page: at }), tools);
+    const parsed = parseBrowse(result.html);
+    steamPages = Math.max(steamPages, parsed.linkedPages, parsed.total ? Math.ceil(parsed.total / PER_PAGE) : 0, at);
+    const fresh = parsed.items.filter(entry => !seen.has(entry.id));
+    fresh.forEach(entry => seen.add(entry.id));
+    const details = await fetchDetails(fresh.map(entry => entry.id), tools);
+    items.push(...fresh.map(entry => merge(entry, details)).filter(item => item?.name && hasSource(item)));
+    if (!parsed.items.length || at >= steamPages) { steamPages = at; break; }
+  }
+  return { items, pages: Math.max(page, Math.ceil(steamPages / scan)) };
 }
 
 export async function crawl({
@@ -235,5 +254,5 @@ export async function crawl({
     }
   }
   const details = await fetchDetails([...found.keys()], tools);
-  return [...found.values()].map(entry => merge(entry, details)).filter(item => item?.name);
+  return [...found.values()].map(entry => merge(entry, details)).filter(item => item?.name && hasSource(item));
 }

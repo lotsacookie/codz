@@ -204,7 +204,7 @@ export const polyhaven = {
 const WORKSHOP_INDEX = new URL('../../maps/workshop/index.json', import.meta.url).href;
 const WORKSHOP_API = new URL('../../../api/workshop', import.meta.url).href;
 const STEAM_PAGE = id => `https://steamcommunity.com/sharedfiles/filedetails/?id=${encodeURIComponent(id)}`;
-const STEAM_SEARCH = query => `https://steamcommunity.com/workshop/browse/?${new URLSearchParams({ appid: '311210', searchtext: query, browsesort: 'textsearch', section: 'readytouseitems' })}`;
+const WORKSHOP_PAGE = 60;
 let workshopIndex = null;
 let liveWorks = null;
 
@@ -217,7 +217,7 @@ const workshopItem = entry => ({
   license: '',
   description: entry.description ?? '',
   detail: [
-    entry.source ? 'source repo: loads here' : '',
+    'source on GitHub',
     (entry.tags ?? []).slice(0, 2).join(', '),
     entry.subscribers ? `${compact(entry.subscribers)} subscribers` : '',
     entry.size ? sizeLabel(entry.size) : '',
@@ -248,16 +248,16 @@ async function liveSearch(query, page, fetchImpl, signal) {
 
 export const workshop = {
   id: 'workshop',
-  label: 'Black Ops 3 Workshop (Steam search, no key needed)',
+  label: 'Black Ops 3 Workshop (maps with source code)',
   needsToken: false,
-  hint: 'Maps with a linked source repo load right here. For the rest, Steam opens so you can subscribe in Black Ops 3.',
+  hint: 'Only Workshop maps that link their source on GitHub are listed, since Workshop downloads cannot be loaded here.',
   async search({ query = '', cursor = null, fetchImpl = defaultFetch, signal } = {}) {
     const text = query.trim();
-    const steam = text && !cursor ? [{ id: 'steam-search', name: `Search Steam for \u201c${text}\u201d`, author: 'steamcommunity.com', license: '', detail: 'Opens the Black Ops 3 Workshop search', thumb: '', art: '', external: STEAM_SEARCH(text), source: 'workshop' }] : [];
+    const steam = [];
     const livePage = String(cursor ?? '').startsWith('live:') ? Number(String(cursor).slice(5)) || 1 : 1;
     const live = !cursor || String(cursor).startsWith('live:') ? await liveSearch(text, livePage, fetchImpl, signal) : null;
     if (live) {
-      return { items: [...live.items.map(workshopItem), ...steam], next: livePage < (live.pages ?? 1) ? `live:${livePage + 1}` : null };
+      return { items: live.items.filter(entry => entry.source).map(workshopItem), next: livePage < (live.pages ?? 1) ? `live:${livePage + 1}` : null };
     }
     workshopIndex ??= fetchImpl(WORKSHOP_INDEX, { signal })
       .then(response => {
@@ -275,11 +275,12 @@ export const workshop = {
     }
     const words = text.toLowerCase().split(/\s+/).filter(Boolean);
     const matches = all.filter(entry => {
+      if (!entry.source) return false;
       const haystack = [entry.name, entry.author, ...(entry.tags ?? [])].join(' ').toLowerCase();
       return words.every(word => haystack.includes(word));
-    }).sort((a, b) => Number(Boolean(b.source)) - Number(Boolean(a.source)));
-    const { slice, next } = page(matches, cursor);
-    return { items: [...slice.map(workshopItem), ...steam], next };
+    }).sort((a, b) => (b.updated ?? 0) - (a.updated ?? 0));
+    const offset = Number(cursor) || 0;
+    return { items: matches.slice(offset, offset + WORKSHOP_PAGE).map(workshopItem), next: offset + WORKSHOP_PAGE < matches.length ? String(offset + WORKSHOP_PAGE) : null };
   },
   play(item) {
     if (item.external) return { external: item.external };

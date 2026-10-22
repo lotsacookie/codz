@@ -10,7 +10,11 @@ const listing = items => `<html><body><div class="workshopBrowsePagingInfo">1-30
 
 const HTML = listing([card('1111111', 'Zombies &amp; Co', 'Ann'), card('2222222', 'Bunker Run', 'Bob', 3)]);
 
-const DETAILS = [{ publishedfileid: '1111111', result: 1, title: 'Fallback', subscriptions: 1500, file_size: '2097152', time_updated: 1700000000, tags: [{ tag: 'Map' }, { tag: 'Zombies' }] }];
+const SRC = id => `Source: https://github.com/Ann/zm_${id}`;
+const DETAILS = [
+  { publishedfileid: '1111111', result: 1, title: 'Fallback', subscriptions: 1500, file_size: '2097152', time_updated: 1700000000, tags: [{ tag: 'Map' }, { tag: 'Zombies' }], description: SRC('a') },
+  ...['2222222', '3333333', '4444444'].map(id => ({ publishedfileid: id, result: 1, description: SRC(id) })),
+];
 
 function fakeSteam(pages) {
   const calls = [];
@@ -121,7 +125,7 @@ test('the page report shows status, markers and the markup around the first item
 const INDEX = {
   appId: 311210,
   generated: '2026-10-18T06:17:00.000Z',
-  items: Array.from({ length: 15 }, (_, i) => ({ id: String(1000000 + i), name: i === 0 ? 'Kino Remix' : `Map ${i}`, author: i === 0 ? 'Ann' : 'Bob', thumb: `img${i}`, subscribers: i === 0 ? 1500 : 0, size: i === 0 ? 2097152 : 0, tags: i === 0 ? ['Map', 'Zombies', 'Extra'] : ['Mod'] })),
+  items: [{ id: '999', name: 'No Source Map', author: 'Zed', tags: ['Map'] }, ...Array.from({ length: 130 }, (_, i) => ({ source: `https://github.com/Bob/zm_${i}`, updated: 1000 - i, id: String(1000000 + i), name: i === 0 ? 'Kino Remix' : `Map ${i}`, author: i === 0 ? 'Ann' : 'Bob', thumb: `img${i}`, subscribers: i === 0 ? 1500 : 0, size: i === 0 ? 2097152 : 0, tags: i === 0 ? ['Map', 'Zombies', 'Extra'] : ['Mod'] }))],
 };
 
 test('source links are read from Workshop descriptions', () => {
@@ -144,7 +148,7 @@ test('the index crawl searches for cheese tower and a live search reads one page
   assert.equal(new URL(seen[0]).searchParams.get('searchtext'), 'cheese tower');
   const live = await searchLive({ query: 'cheese tower', page: 1, fetchImpl, sleep: async () => {} });
   assert.deepEqual(live.items.map(item => item.id), ['1111111', '2222222']);
-  assert.equal(live.pages, 120);
+  assert.equal(live.pages, 20);
 });
 
 test('the live endpoint normalises input, caches, and backs off after a failure', async () => {
@@ -165,7 +169,7 @@ test('the live endpoint normalises input, caches, and backs off after a failure'
   assert.equal(blocked.status, 503);
 });
 
-test('the Workshop provider uses live Steam search when available, adds a Steam search card, and loads source repos', async () => {
+test('the Workshop provider uses live Steam search, lists only maps with a source repo and loads them', async () => {
   const seen = [];
   const fetchImpl = async url => {
     seen.push(String(url));
@@ -176,14 +180,10 @@ test('the Workshop provider uses live Steam search when available, adds a Steam 
   };
   const result = await workshop.search({ query: 'cheese tower', fetchImpl });
   assert.match(seen[0], /\/api\/workshop\?q=cheese\+tower&page=1$/);
-  assert.deepEqual(result.items.map(item => item.name), ['Cheese Tower', 'Cheese Tower Remix', 'Search Steam for \u201ccheese tower\u201d']);
+  assert.deepEqual(result.items.map(item => item.name), ['Cheese Tower']);
   assert.equal(result.next, 'live:2');
-  assert.match(result.items[0].detail, /source repo: loads here/);
+  assert.match(result.items[0].detail, /source on GitHub/);
   assert.deepEqual(workshop.play(result.items[0]), { source: 'iwmap', url: 'https://github.com/Ann/zm_cheese' });
-  assert.deepEqual(workshop.play(result.items[1]), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=78' });
-  const external = workshop.play(result.items[2]).external;
-  assert.equal(new URL(external).searchParams.get('searchtext'), 'cheese tower');
-  assert.equal(new URL(external).searchParams.get('appid'), '311210');
   const second = await workshop.search({ query: 'cheese tower', cursor: 'live:2', fetchImpl });
   assert.match(seen[1], /page=2$/);
   assert.equal(second.items.some(item => item.id === 'steam-search'), false);
@@ -200,15 +200,26 @@ test('the Workshop provider reports a missing or empty list, then searches and p
   };
   const first = await workshop.search({ fetchImpl });
   assert.match(seen[0], /\/maps\/workshop\/index\.json$/);
-  assert.equal(first.items.length, 12);
-  assert.equal(first.next, '12');
+  assert.equal(first.items.length, 60);
+  assert.equal(first.next, '60');
+  assert.ok(first.items.every(item => item.repo), 'items without a source repo are never listed');
   assert.deepEqual([first.items[0].name, first.items[0].author, first.items[0].thumb, first.items[0].source], ['Kino Remix', 'Ann', 'img0', 'workshop']);
-  assert.equal(first.items[0].detail, 'Map, Zombies · 1.5k subscribers · 2.0 MB');
-  const second = await workshop.search({ cursor: '12', fetchImpl });
-  assert.deepEqual([second.items.length, second.next], [3, null]);
+  assert.equal(first.items[0].detail, 'source on GitHub \u00b7 Map, Zombies \u00b7 1.5k subscribers \u00b7 2.0 MB');
+  const third = await workshop.search({ cursor: '120', fetchImpl });
+  assert.deepEqual([third.items.length, third.next], [10, null]);
   assert.equal(seen.length, 1);
   const found = await workshop.search({ query: ' zombies  KINO ', fetchImpl });
-  assert.deepEqual(found.items.filter(item => item.id !== 'steam-search').map(item => item.name), ['Kino Remix']);
-  assert.deepEqual((await workshop.search({ query: 'nothing here', fetchImpl })).items.map(item => item.id), ['steam-search']);
+  assert.deepEqual(found.items.map(item => item.name), ['Kino Remix']);
+  assert.deepEqual((await workshop.search({ query: 'no source map', fetchImpl })).items, []);
   assert.deepEqual(workshop.play({ id: '1000000' }), { external: 'https://steamcommunity.com/sharedfiles/filedetails/?id=1000000' });
+});
+
+test('crawl and live search keep only items that link a source, and direct .map links count', async () => {
+  assert.equal(sourceLink('get it at https://cdn.example.com/maps/zm_tower.map now'), 'https://cdn.example.com/maps/zm_tower.map');
+  const { fetchImpl } = fakeSteam(() => listing([card('1111111', 'Has Source', 'Ann'), card('5555555', 'No Source', 'Bob')]));
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 1 }], fetchImpl, sleep: async () => {} });
+  assert.deepEqual(items.map(item => item.id), ['1111111']);
+  const live = await searchLive({ query: 'zm', page: 1, scan: 2, fetchImpl, sleep: async () => {} });
+  assert.deepEqual(live.items.map(item => item.id), ['1111111']);
+  assert.ok(LISTS.reduce((sum, list) => sum + list.pages, 0) > 500, 'the index crawl reads far more than 30 items');
 });

@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { APP_ID, crawl } from './lib/workshop-crawl.mjs';
 
-const MIN_ITEMS = 30;
+const MIN_ITEMS = 1;
 const root = path.resolve(import.meta.dirname, '..');
 const file = path.join(root, 'export', 'web', 'assets', 'maps', 'workshop', 'index.json');
 const debugDir = path.join(root, '.work', 'workshop-debug');
