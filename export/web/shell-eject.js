@@ -5,7 +5,10 @@ export { SHELLS, ENABLED, shellKindFor } from './shell-kinds.js';
 // Shell casings use the reference fx_*_shell XModels (baked by .tools/bake-shells.mjs into shell-models.json).
 // and their reference colour textures. Only the kinds listed in ENABLED eject a casing.
 const MODELS_URL = new URL('./shell-models.json', import.meta.url);
-const textureUrl = file => new URL(`./reference/images/${encodeURIComponent(file)}`, import.meta.url).href;
+// Prefer the shipped textures/ copy (the only one deployed); fall back to the raw reference dump for local dev.
+const textureUrls = file => ['textures', 'reference/images'].map(dir => new URL(`./${dir}/${encodeURIComponent(file)}`, import.meta.url).href);
+// The tint is only a dim stand-in so a casing never flashes as a solid saturated colour while its map is missing.
+const FALLBACK_DIM = 0.3;
 
 let modelsPromise = null;
 const loadModels = () => (modelsPromise ??= fetch(MODELS_URL).then(r => r.json()).catch(() => null));
@@ -27,11 +30,16 @@ export class ShellEjector {
   asset(kind) {
     if (this.assets.has(kind)) return this.assets.get(kind);
     const spec = SHELLS[kind];
-    const entry = { geometry: null, material: new THREE.MeshBasicMaterial({ color: spec.tint, side: THREE.DoubleSide }) };
-    new THREE.TextureLoader().load(textureUrl(spec.texture), map => {
-      map.colorSpace = THREE.SRGBColorSpace; map.wrapS = map.wrapT = THREE.RepeatWrapping;
-      entry.material.map = map; entry.material.color.set(0xffffff); entry.material.needsUpdate = true;
-    }, undefined, () => {});
+    const entry = { geometry: null, ready: false, material: new THREE.MeshBasicMaterial({ color: new THREE.Color(spec.tint).multiplyScalar(FALLBACK_DIM), side: THREE.DoubleSide }) };
+    const loader = new THREE.TextureLoader();
+    const urls = textureUrls(spec.texture);
+    const attempt = index => loader.load(urls[index], map => {
+      // Reference model UVs are top-down (D3D), so the image must not be flipped on upload.
+      map.flipY = false; map.colorSpace = THREE.SRGBColorSpace; map.wrapS = map.wrapT = THREE.RepeatWrapping;
+      map.anisotropy = 4; map.needsUpdate = true;
+      entry.material.map = map; entry.material.color.set(0xffffff); entry.material.needsUpdate = true; entry.ready = true;
+    }, undefined, () => { if (index + 1 < urls.length) attempt(index + 1); });
+    attempt(0);
     loadModels().then(all => { if (all?.[spec.model]) entry.geometry = buildGeometry(all[spec.model]); });
     this.assets.set(kind, entry);
     return entry;
@@ -39,8 +47,8 @@ export class ShellEjector {
 
   emit(ndc, camera, kind, hand = 'right') {
     const spec = SHELLS[kind]; if (!spec) return;
-    const { geometry, material } = this.asset(kind);
-    if (!geometry) return;
+    const { geometry, material, ready } = this.asset(kind);
+    if (!geometry || !ready) return;
     camera.updateMatrixWorld();
     const forward = camera.getWorldDirection(new THREE.Vector3());
     const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0).normalize();

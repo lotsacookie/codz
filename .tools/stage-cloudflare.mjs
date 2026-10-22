@@ -44,7 +44,7 @@ function includeModule(relative) {
 }
 includeModule('shell.js');
 includeModule('maps/kino.js');
-for (const file of ['shell.css', 'touch-controls.css', 'hud.css', 'game-data.json', 'navigation.bin',
+for (const file of ['shell.css', 'touch-controls.css', 'hud.css', 'game-data.json', 'navigation.bin', 'shell-models.json',
   'art/loadscreen_zombie_theater.webp']) copy(file);
 const kinoOnlyPage = readFileSync(path.join(source, 'index.html'), 'utf8')
   .replace(/\s*<li><button type="button" data-map="(?!kino")[^"]*"[\s\S]*?<\/li>/g, '');

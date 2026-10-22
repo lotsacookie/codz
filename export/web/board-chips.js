@@ -3,6 +3,28 @@ import * as THREE from 'three';
 const WOOD = [[0.52, 0.36, 0.2], [0.42, 0.28, 0.15], [0.62, 0.46, 0.28], [0.34, 0.23, 0.12]];
 const SHAKE_RANGE = 320;
 const SHAKE_GAP = 0.12;
+const CHIP_TEXTURE = 'textures/~-gfx_wood_splinter_col.png';
+const CHIP_WINDOW = 0.28;
+
+// One shared reference splinter texture for every chip. Started at import so it is ready before the first board lands.
+let chipTexture = null;
+function woodTexture() {
+  if (chipTexture || typeof document === 'undefined') return chipTexture;
+  chipTexture = new THREE.TextureLoader().load(new URL(`./${encodeURI(CHIP_TEXTURE)}`, import.meta.url).href);
+  chipTexture.colorSpace = THREE.SRGBColorSpace;
+  chipTexture.anisotropy = 2;
+  return chipTexture;
+}
+woodTexture();
+
+// Point a chip's UVs at a random small patch of the splinter sheet (bark half or clean-grain half) so chips differ.
+function texturePatch(geometry, random) {
+  const uv = geometry.getAttribute('uv');
+  const u0 = random() * (1 - CHIP_WINDOW), v0 = random() * (1 - CHIP_WINDOW);
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * CHIP_WINDOW, v0 + uv.getY(i) * CHIP_WINDOW);
+  uv.needsUpdate = true;
+  return geometry;
+}
 
 export function boardOutward(barrier, out = new THREE.Vector3()) {
   out.set(0, 0, 0);
@@ -35,10 +57,13 @@ export function planBoardChips(origin, out, random = Math.random, count = 9) {
 
 export function spawnBoardChips(scene, particles, origin, out, random = Math.random) {
   const chips = planBoardChips(origin, out, random);
+  const map = woodTexture();
   for (const chip of chips) {
+    // The splinter texture carries the wood colour; the per-chip shade only lightens or darkens it.
+    const tint = chip.color.map(c => Math.min(1, c * 2));
     const mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(...chip.size),
-      new THREE.MeshBasicMaterial({ color: new THREE.Color(...chip.color), transparent: true, toneMapped: false }),
+      texturePatch(new THREE.BoxGeometry(...chip.size), random),
+      new THREE.MeshBasicMaterial({ map, color: new THREE.Color(...tint), transparent: true, toneMapped: false }),
     );
     mesh.position.copy(chip.position);
     mesh.rotation.set(...chip.spin);

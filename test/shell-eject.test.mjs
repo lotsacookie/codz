@@ -20,3 +20,13 @@ test('baked reference shell meshes are valid', () => {
     assert.ok(m.idx.every(i => i < m.pos.length / 3));
   }
 });
+
+test('shell and wood chip textures ship in the deployed textures directories', async () => {
+  const { existsSync } = await import('node:fs');
+  const files = [...Object.values(SHELLS).map(s => s.texture), '~-gfx_wood_splinter_col.png'];
+  for (const dir of ['textures', 'textures-mobile']) {
+    for (const file of files) assert.ok(existsSync(new URL(`../export/web/${dir}/${file}`, import.meta.url)), `${dir}/${file}`);
+  }
+  const stage = readFileSync(new URL('../.tools/stage-cloudflare.mjs', import.meta.url), 'utf8');
+  assert.ok(stage.includes("'shell-models.json'"), 'staging copies shell-models.json');
+});
