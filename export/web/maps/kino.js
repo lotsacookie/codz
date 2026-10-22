@@ -19,7 +19,7 @@ import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
 import { ExplosionFx } from '../explosion-fx.js';
-import { KnifeBlood } from '../knife-blood.js';
+import { KnifeBlood, tipToView, viewEmitter } from '../knife-blood.js';
 import { popHead, popLimb } from '../gore.js';
 import { LimbDebris } from '../limbs.js';
 import { WallImpacts, fadeParticle } from '../impact-fx.js';
@@ -423,7 +423,7 @@ function update(dt){
       const base=view.lookBase(camera);
       const lookYaw=Math.atan2(Math.sin(base.yaw-lastLookYaw),Math.cos(base.yaw-lastLookYaw)),lookPitch=base.pitch-lastLookPitch;lastLookYaw=base.yaw;lastLookPitch=base.pitch;
       view.update(dt,{moving,sprint,ads:ads&&!session.def.dualWield,reloading:session.reloadLeft>0,empty:session.weapon.mag===0,time:session.time,look:{yaw:lookYaw,pitch:lookPitch},camera,viewCamera,worldScene:scene});
-      if(knifeBlood.active){knifeBlood.update(dt,view.knifeTip(camera,viewCamera),(p,v,k)=>blood.fling(p,v,k,camera));if(knifeBlood.active)view.tintKnife(knifeBlood.level);}
+      if(knifeBlood.active){knifeBlood.update(dt,tipToView(camera,view.knifeTip(camera,viewCamera)),viewEmitter(camera,(p,v,k,s,h)=>blood.fling(p,v,k,camera,s,h)));if(knifeBlood.active)view.tintKnife(knifeBlood.level);}
       view.pivot.visible=!session.weaponUnavailable&&!features.events.room;
       perkDrink.update(dt,session);
       if(!sprint&&session.phase!=='reviving'&&(primaryPressed||(primary&&session.def.automatic)||burstLeft>0||reloadShot)){

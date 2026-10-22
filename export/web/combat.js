@@ -11,7 +11,7 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
 import { ExplosionFx } from './explosion-fx.js';
-import { KnifeBlood } from './knife-blood.js';
+import { KnifeBlood, tipToView, viewEmitter } from './knife-blood.js';
 import { popHead, popLimb } from './gore.js';
 import { LimbDebris } from './limbs.js';
 import { WallImpacts, fadeParticle } from './impact-fx.js';
@@ -184,7 +184,7 @@ export class Combat {
     this.perkDrink.update(dt,s);this.view.pivot.visible=!s.pack&&!s.drinking&&s.phase!=='reviving';
     if(s.reloadLeft>0&&s.reloadSerial!==this.lastReload){this.lastReload=s.reloadSerial;this.view.reload(false,s.reloadDuration,s.reloadStage);}
     if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);this.bloodyKnife();}}
-    if(this.knifeBlood.active){this.knifeBlood.update(dt,this.view.knifeTip(this.camera,this.viewCamera),(p,v,k)=>this.blood?.fling(p,v,k,this.camera));if(this.knifeBlood.active)this.view.tintKnife(this.knifeBlood.level);}
+    if(this.knifeBlood.active){this.knifeBlood.update(dt,tipToView(this.camera,this.view.knifeTip(this.camera,this.viewCamera)),viewEmitter(this.camera,(p,v,k,s,h)=>this.blood?.fling(p,v,k,this.camera,s,h)));if(this.knifeBlood.active)this.view.tintKnife(this.knifeBlood.level);}
     const base=this.view.lookBase(this.camera);
     const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(base.yaw-this.lastLookYaw),Math.cos(base.yaw-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:base.pitch-this.lastLookPitch;this.lastLookYaw=base.yaw;this.lastLookPitch=base.pitch;
     this.view.update(dt,{moving,sprint,ads:this.ads,reloading:s.reloadLeft>0,empty:s.weapon.mag===0,time:s.time,look:{yaw:lookYaw,pitch:lookPitch},camera:this.camera,viewCamera:this.viewCamera,worldScene:this.scene});

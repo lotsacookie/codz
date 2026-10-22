@@ -14,6 +14,7 @@ const ATLAS = { splat: [4, 4], drops: [2, 2], gush: [2, 1] };
 const TINT = { splat: 0x7a1313, cloud: 0xd01c1c };
 
 const MAX_SPRITES = 400;
+const TRAIL_MIN_SPEED = 60;
 const GRAVITY = 360;
 const UP = Object.freeze(new THREE.Vector3(0, 1, 0));
 
@@ -153,15 +154,20 @@ export class BloodFx {
     if (kill && this.textures.trail) this.emit('trail', x, y - 3, z, 20, 0.7, ax * 8, ay * 8, az * 8, 40, 1.4, 0.75, 0, (Math.random() - 0.5) * 0.6);
   }
 
-  fling(position, velocity, strength = 1, camera = null) {
+  fling(position, velocity, strength = 1, camera = null, speed = Infinity, heading = null) {
     if (!this.ready()) return;
     const k = 0.55 + 0.45 * strength;
-    const angle = this.screenAngle(camera, velocity.x, velocity.y, velocity.z);
-    if (this.textures.trail) {
-      this.emit('trail', position.x, position.y, position.z, (8 + Math.random() * 5) * k, 0.4 + Math.random() * 0.35,
-        velocity.x * 0.3, velocity.y * 0.3, velocity.z * 0.3, 140, 1.15, 0.85, 0, angle ?? (Math.random() - 0.5) * 0.8);
+    const along = heading ?? velocity;
+    const angle = this.screenAngle(camera, along.x, along.y, along.z);
+    const streaking = this.textures.trail && (angle !== null || !camera) && speed >= TRAIL_MIN_SPEED;
+    if (streaking) {
+      const size = (10 + Math.random() * 3) * k;
+      const reach = size * 0.45;
+      const hx = heading ? heading.x : 0, hy = heading ? heading.y : 0, hz = heading ? heading.z : 0;
+      this.emit('trail', position.x + hx * reach, position.y + hy * reach, position.z + hz * reach, size, 0.35 + Math.random() * 0.2,
+        hx * 14, hy * 14, hz * 14, 60, 1.1, 0.85, 0, angle ?? 0);
     }
-    if (!this.textures.trail || Math.random() < 0.45) {
+    if (!streaking || Math.random() < 0.45) {
       this.emit('drops', position.x, position.y, position.z, (2.2 + Math.random() * 2) * k, 0.35 + Math.random() * 0.4,
         velocity.x, velocity.y, velocity.z, GRAVITY, 0.8, 0.9, (Math.random() - 0.5) * 3);
     }
