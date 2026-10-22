@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { DOG_SPAWN_DELAY } from './dog-spawn-fx.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { boneOf, findArmHit } from './gore.js';
 import { Rig, loadModel, loadAnimation } from './animation.js';
@@ -72,7 +73,7 @@ export class Enemies {
     root.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
     const z={id,kind,root,headModel,rig,speed,health:kind==='dog'?([400,900,1300,1600][Math.min(3,Math.max(0,this.session.dogRounds-1))]):zombieHealth(round,this.data.rules),state:barrier?(spawnAt?'approach':'barricade'):'chase',approachTime:0,barrier,path:[],pathIndex:0,repath:0,attackLeft:0,attackDealt:false,tearLeft:1.1,stuck:0,lastPosition:root.position.clone(),voice:null,voiceGap:Math.random()*1.5};
     if(kind==='nova')z.health=Math.trunc(z.health*.75);
-    z.maxHealth=z.health;this.list.push(z);this.session.spawned++;if(kind==='dog'||kind==='nova')this.onEvent?.('spawn',z);return z;
+    z.maxHealth=z.health;this.list.push(z);this.session.spawned++;if(kind==='dog'&&this.spawnEffects){z.spawnFx=DOG_SPAWN_DELAY;z.root.visible=false;z.root.scale.multiplyScalar(.001);z.fxScale=1000;}if(kind==='dog'||kind==='nova')this.onEvent?.('spawn',z);return z;
   }
   update(dt,player){
     const s=this.session,remotes=this.remoteTargets?.();
@@ -96,6 +97,7 @@ export class Enemies {
     for(let zi=0;zi<_iter.length;zi++){const z=_iter[zi];
       // Chase whichever player is closest (the local one unless a co-op teammate is nearer); only the local player takes damage here.
       const player=remotes?.length?nearestTarget(z.root.position,remotes,localDown?null:localPlayer):localPlayer,onRemote=player!==localPlayer;
+      if(z.spawnFx>0){z.spawnFx-=dt;z.root.visible=false;if(z.spawnFx<=0){z.spawnFx=0;z.root.visible=true;z.root.scale.multiplyScalar(z.fxScale);z.fxScale=1;z.lastPosition.copy(z.root.position);}continue;}
       z.rig.update(dt);
       if(z.kind==='dog'&&z.state==='chase'&&(z.stepLeft=(z.stepLeft??0)-dt)<=0){z.stepLeft=.26;this.onEvent?.('step',z);}
       if((z.kind==='zombie'||z.kind==='nova')&&(z.state==='chase'||z.state==='approach')&&z.speed>8&&(z.stepLeft=(z.stepLeft??0)-dt)<=0){z.stepLeft=(z.kind==='nova'?40:54)/Math.max(z.speed,20);this.onEvent?.('step',z,z.speed>=125?'sprint':z.speed>=80?'run':'walk');}
@@ -224,6 +226,7 @@ export class Enemies {
   rayHit(ray,far){
     let best=null;
     for(const z of this.list){
+      if(z.spawnFx>0)continue;
       const base=z.root.position,headPos=this.headPosition(z);
       const headPoint=ray.intersectSphere(new THREE.Sphere(headPos,z.kind==='dog'?12:10),new THREE.Vector3());
       const bodyPoint=ray.intersectBox(new THREE.Box3(base.clone().add(new THREE.Vector3(-18,4,-18)),base.clone().add(new THREE.Vector3(18,z.kind==='zombie'?58:36,18))),new THREE.Vector3());
