@@ -18,6 +18,7 @@ import { TheaterLighting, pickLightLevels, SHADOW_BACKOFF, SHADOW_CASCADES } fro
 import { AutoGraphics, gpuName } from '../graphics.js';
 import { CSM } from 'three/addons/csm/CSM.js';
 import { BloodFx } from '../blood.js';
+import { ExplosionFx } from '../explosion-fx.js';
 import { KnifeBlood } from '../knife-blood.js';
 import { popHead, popLimb } from '../gore.js';
 import { LimbDebris } from '../limbs.js';
@@ -98,7 +99,7 @@ const stopGraphics=graphics.onChange(applyGraphics);applyGraphics();
 let coop=null,worldNet=null,data,world,session,player,enemies,view,powerups,perkDrink,mysteryBox,features,ready=false,active=false,started=false,primary=false,primaryPressed=false,ads=false;
 let prompt=null,promptText='',toastUntil=0,announcementUntil=0,hitUntil=0,flashUntil=0,spawn;
 let lastPhase='',lastRound=0,frameTime=0,frameCount=0,fps=0,debugVisible=false,teleportPending=0,linkUntil=0,returnAt=0,cooldownUntil=0,repairLeft=0,burstLeft=0;
-const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
+const particles=[],grenades=[],traps=[],gasClouds=[],meteors=new Set();const blood=new BloodFx(scene);const explosions=new ExplosionFx(scene);const knifeBlood=new KnifeBlood();const limbDebris=new LimbDebris(scene);const impacts=new WallImpacts(scene);
 const hitDirections=new HitDirections(),hitArcEls=[];let adsPrev=false,deathCue=false;
 const perkInfo={specialty_quickrevive:{name:'Quick Revive',price:500,color:'#509ebc',icon:'QR'},specialty_fastreload:{name:'Speed Cola',price:3000,color:'#478450',icon:'SC'},specialty_rof:{name:'Double Tap',price:2000,color:'#b37528',icon:'DT'},specialty_armorvest:{name:'Juggernog',price:2500,color:'#a53835',icon:'J'}};
 const powerupNames={nuke:'Nuke',insta_kill:'Insta-Kill',double_points:'Double Points',full_ammo:'Max Ammo',carpenter:'Carpenter',fire_sale:'Fire Sale'};
@@ -133,7 +134,7 @@ ctx.onDispose(()=>{
   try{audio.dispose();}catch{}
   try{coop?.dispose();}catch{}
   try{enemies?.reset();}catch{}
-  try{blood.clear();limbDebris.clear();}catch{}
+  try{blood.clear();explosions.clear();limbDebris.clear();}catch{}
   try{chalk.reset();}catch{}
   try{grade?.dispose?.();}catch{}
   try{if(!noFxQuery)document.body.classList.remove('no-fx');}catch{}
@@ -261,7 +262,7 @@ function shoot(){
     else if(wall)impacts.strike(wall,ray,particles);
     if(session.def.explosionRadius&&(target||wall)){
       const p=target?.point??wall.position,radius=session.def.explosionRadius;
-      effect(p,session.weapon.id==='ray_gun_zm'?0x93ed62:0xffb44e,18);audio.play('explosion',.3);
+      if(session.weapon.id==='ray_gun_zm'||!explosions.blast(p,{radius,kind:'explosion'}))effect(p,session.weapon.id==='ray_gun_zm'?0x93ed62:0xffb44e,18);audio.play('explosion',.3);
       for(const z of [...enemies.list]){const d=z.root.position.distanceTo(p);if(d<radius&&world.lineClear(p.clone().addScaledVector(direction,-3),z.root.position.clone().add(new THREE.Vector3(0,25,0))))enemies.hurt(z,THREE.MathUtils.lerp(session.def.explosionInnerDamage,session.def.explosionOuterDamage,d/radius),false,false,'explosion');}
       const distance=player.getFeetPosition().distanceTo(p);if(distance<radius&&damage(100*(1-distance/radius),p)&&distance<radius*.6)audio.play('tinnitus',.6);
     }
@@ -394,7 +395,7 @@ function reset(){
   hitDirections.clear();deathCue=false;adsPrev=false;audio.heartbeat(false);audio.laststand(false);playerVox.reset();session.reset();enemies.reset();world.reset(session);player.setSpawn(vector(spawn.position));player.respawn();camera.rotation.set(0,spawn.yaw-Math.PI/2,0);
   powerups.reset();perkDrink.stop();mysteryBox.reset();worldNet?.reset();
   features?.reset();
-  blood.clear();limbDebris.clear();
+  blood.clear();explosions.clear();limbDebris.clear();
   impacts.clear();
   for(const group of [particles,grenades,traps,gasClouds]){for(const item of group){item.mesh.removeFromParent();item.mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}group.length=0;}
   meteors.clear();renderer.domElement.style.filter='';if(audio.ctx)audio.playMusic('ambience');
@@ -451,7 +452,7 @@ function update(dt){
       for(const g of [...grenades]){
         g.life-=dt;g.velocity.y-=650*dt;const travel=g.velocity.clone().multiplyScalar(dt),ray=new THREE.Ray(g.mesh.position.clone(),travel.clone().normalize()),hit=world.raycast(ray,0,travel.length()+4);
         if(hit){g.velocity.y=Math.abs(g.velocity.y)*.4;g.velocity.x*=-.4;g.velocity.z*=-.4;}else g.mesh.position.add(travel);
-        if(g.life<=0){effect(g.mesh.position,0xffb347,30);audio.play('explosion');for(const z of [...enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<300&&world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))enemies.hurt(z,Math.max(75,1500*(1-d/300)),false,false,'explosion');}const d=camera.position.distanceTo(g.mesh.position);if(d<160)damage(180*(1-d/160));g.mesh.removeFromParent();g.mesh.geometry.dispose();g.mesh.material.dispose();grenades.splice(grenades.indexOf(g),1);}
+        if(g.life<=0){if(!explosions.blast(g.mesh.position,{radius:300,kind:'grenade'}))effect(g.mesh.position,0xffb347,30);audio.play('explosion');for(const z of [...enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<300&&world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))enemies.hurt(z,Math.max(75,1500*(1-d/300)),false,false,'explosion');}const d=camera.position.distanceTo(g.mesh.position);if(d<160)damage(180*(1-d/160));g.mesh.removeFromParent();g.mesh.geometry.dispose();g.mesh.material.dispose();grenades.splice(grenades.indexOf(g),1);}
       }
       for(const p of [...particles]){p.life-=dt;p.velocity.y-=200*dt;p.mesh.position.addScaledVector(p.velocity,dt);fadeParticle(p);if(p.life<=0){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();particles.splice(particles.indexOf(p),1);}}
     }
@@ -538,7 +539,7 @@ try{
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage,teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
-  features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
+  features=new KinoFeatures({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast,explosion:(position,radius,kind)=>explosions.blast(position,{radius,kind})});
   await Promise.all([enemies.load(),equipView(),audio.load(),powerups.load(),perkDrink.load(),mysteryBox.load(),features.load()]);player.update(.05,{});ready=true;
   progress('Checking textures',88);await ensureTextures();
   progress('Preparing graphics',90);await prewarm();
@@ -554,7 +555,7 @@ function renderFrame(now){
   lastRendered=now;const dt=Math.min((now-previous)/1000,.06);previous=now;frameTime+=dt;
   if(ready&&started&&active){const scale=adapt.sample(dt*1000);if(scale!==null)renderer.setPixelRatio(ratio()*scale);if(graphics.setting==='auto'&&autoGraphics.sample(dt*1000,adapt.scale<adapt.max-.15))graphics.stepDown();}frameCount++;renderedFrames++;
   if(frameTime>.75){fps=Math.round(frameCount/frameTime);frameTime=0;frameCount=0;perf?.(fps,adapt.scale,renderer.info.render.calls,renderer.info.render.triangles);}
-  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);limbDebris.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],100,40,1600,camera.position);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
+  update(dt);if(theaterFx)theaterFx.update(dt,camera);blood.update(dt);explosions.update(dt);limbDebris.update(dt);if(world)world.updateBoards(dt);if(csm){camera.updateMatrixWorld();csm.update();}if(culler&&cullReady){culler.update(camera);if(enemies)culler.cullDynamic([...enemies.list.map(z=>z.root),...enemies.dead.map(d=>d.root)],100,40,1600,camera.position);}renderer.info.reset();if(grade)grade.render(scene,camera,viewScene,viewCamera,ready&&started);else{renderer.clear();renderer.render(scene,camera);if(ready&&started){renderer.clearDepth();renderer.render(viewScene,viewCamera);}}
 }
 resumeRendering();
 return {setActive,prepare,restart:async()=>{reset();}};

@@ -10,6 +10,7 @@ import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel-
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
+import { ExplosionFx } from './explosion-fx.js';
 import { KnifeBlood } from './knife-blood.js';
 import { popHead, popLimb } from './gore.js';
 import { LimbDebris } from './limbs.js';
@@ -21,7 +22,7 @@ export class Combat {
   constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,teleport,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
-    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.explosions=new ExplosionFx(scene);this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
     this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
@@ -65,7 +66,7 @@ export class Combat {
     this.perkDrink?.stop();
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
-    this.blood?.clear();this.limbDebris.clear();
+    this.blood?.clear();this.explosions.clear();this.limbDebris.clear();
     this.impacts.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.view.clearCache();this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
@@ -176,7 +177,7 @@ export class Combat {
     if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});
   }
   update(dt,{moving,sprint}){
-    this.blood?.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
+    this.blood?.update(dt);this.explosions.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);
@@ -201,7 +202,7 @@ export class Combat {
       if(hit){const normal=hit.triangle.getNormal(new THREE.Vector3());if(normal.dot(g.velocity)>0)normal.negate();g.velocity.reflect(normal).multiplyScalar(.45);g.mesh.position.copy(hit.position).addScaledVector(normal,4);if(g.rocket)g.life=0;else if(!g.equipment)this.audio.grenadeBounce();}else g.mesh.position.add(travel);
       if(g.life<=0){
         if(g.equipment){this.features?.equipment(g.equipment,g.mesh.position.clone());this.removeEffect(this.grenades,g);continue;}
-        this.audio.blast(g.rocket?'rocket':'grenade');this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
+        this.audio.blast(g.rocket?'rocket':'grenade');if(!this.explosions.blast(g.mesh.position,{radius:g.radius||300,kind:g.rocket?'explosion':'grenade'}))this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
         const radius=g.radius||300,damage=g.damage||1500;
         for(const z of [...this.enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<radius&&this.world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))this.enemies.hurt(z,Math.max(75,damage*(1-d/radius)),false,false,g.rocket?'explosion':'grenade');}
         const d=this.camera.position.distanceTo(g.mesh.position);if(d<160&&!s.perks.has('specialty_flakjacket'))this.damage(180*(1-d/160));this.removeEffect(this.grenades,g);

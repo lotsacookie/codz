@@ -6,8 +6,8 @@ import { disposeSkeletons } from './runtime-assets.js';
 
 const up=new THREE.Vector3(0,1,0),v=a=>new THREE.Vector3(...a);
 export class KinoFeatures {
-  constructor({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast}){
-    Object.assign(this,{scene,world,data,session,enemies,player,camera,audio,effect,damage,toast});
+  constructor({scene,world,data,session,enemies,player,camera,audio,effect,damage,toast,explosion}){
+    Object.assign(this,{scene,world,data,session,enemies,player,camera,audio,effect,damage,toast,explosion});
     this.models=new Map();this.projectiles=[];this.mines=[];this.turrets=[];this.events=new KinoEvents(data,()=>session.random());
   }
   async load(){
@@ -58,7 +58,7 @@ export class KinoFeatures {
   }
   blast(position,def,{playerDamage=true,score=true}={}){
     const radius=def.explosionRadius??200;
-    this.effect(position,def.id==='ray_gun_zm'?0x8df565:0xffb347,25);this.audio.blast(def.id==='ray_gun_zm'?'raygun':def.projectileType==='rocket'?'rocket':'grenade',.6);
+    if(def.id==='ray_gun_zm'||!this.explosion?.(position,radius,def.projectileType==='rocket'?'explosion':'grenade'))this.effect(position,def.id==='ray_gun_zm'?0x8df565:0xffb347,25);this.audio.blast(def.id==='ray_gun_zm'?'raygun':def.projectileType==='rocket'?'rocket':'grenade',.6);
     for(const z of [...this.enemies.list]){const point=z.root.position.clone().addScaledVector(up,25),d=point.distanceTo(position);if(d<radius&&this.world.lineClear(position,point))this.enemies.hurt(z,THREE.MathUtils.lerp(def.explosionInnerDamage,def.explosionOuterDamage,d/radius),false,false,'explosion',score);}
     const feet=this.player.getFeetPosition().addScaledVector(up,30),distance=feet.distanceTo(position);
     if(playerDamage&&distance<radius&&this.world.lineClear(position,feet))this.damage(Math.min(180,def.explosionInnerDamage)*(1-distance/radius));
