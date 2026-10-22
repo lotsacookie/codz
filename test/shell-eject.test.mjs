@@ -12,7 +12,7 @@ test('pistols and shotguns eject shells', () => {
 });
 
 test('baked reference shell meshes are valid', () => {
-  const models = JSON.parse(readFileSync(new URL('../export/web/shell-models.json', import.meta.url), 'utf8'));
+  const models = JSON.parse(readFileSync(new URL('../export/web/assets/data/shell-models.json', import.meta.url), 'utf8'));
   for (const spec of Object.values(SHELLS)) {
     const m = models[spec.model];
     assert.equal(m.pos.length % 3, 0);
@@ -28,5 +28,5 @@ test('shell and wood chip textures ship in the deployed textures directories', a
     for (const file of files) assert.ok(existsSync(new URL(`../export/web/${dir}/${file}`, import.meta.url)), `${dir}/${file}`);
   }
   const stage = readFileSync(new URL('../.tools/stage-cloudflare.mjs', import.meta.url), 'utf8');
-  assert.ok(stage.includes("'shell-models.json'"), 'staging copies shell-models.json');
+  assert.ok(stage.includes("'assets/data/shell-models.json'"), 'staging copies shell-models.json');
 });

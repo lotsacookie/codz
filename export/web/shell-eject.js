@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { SHELLS } from './shell-kinds.js';
 export { SHELLS, ENABLED, shellKindFor } from './shell-kinds.js';
 
-// Shell casings use the reference fx_*_shell XModels (baked by .tools/bake-shells.mjs into shell-models.json).
+// Shell casings use the reference fx_*_shell XModels (baked by .tools/bake-shells.mjs into assets/data/shell-models.json).
 // and their reference colour textures. Only the kinds listed in ENABLED eject a casing.
-const MODELS_URL = new URL('./shell-models.json', import.meta.url);
+const MODELS_URL = new URL('./assets/data/shell-models.json', import.meta.url);
 // Prefer the shipped textures/ copy (the only one deployed); fall back to the raw reference dump for local dev.
 const textureUrls = file => ['textures', 'reference/images'].map(dir => new URL(`./${dir}/${encodeURIComponent(file)}`, import.meta.url).href);
 // The tint is only a dim stand-in so a casing never flashes as a solid saturated colour while its map is missing.

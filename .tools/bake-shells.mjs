@@ -16,6 +16,6 @@ export function bake(name) {
 }
 if (process.argv[1].endsWith('bake-shells.mjs')) {
   const out = { pistol: bake('fx_pistol_shell'), shotgun: bake('fx_shotgun_shell') };
-  writeFileSync('export/web/shell-models.json', JSON.stringify(out));
+  writeFileSync('export/web/assets/data/shell-models.json', JSON.stringify(out));
   for (const [k, m] of Object.entries(out)) console.log(k, m.pos.length / 3, 'verts', m.idx.length / 3, 'tris', 'uv', Math.min(...m.uv), Math.max(...m.uv));
 }
