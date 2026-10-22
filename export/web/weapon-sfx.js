@@ -89,7 +89,7 @@ export function hasScope(def) {
 export function weaponProfile(def, keys, folderOverride = null) {
   const folder = folderOverride ?? weaponFolder(def?.id, keys);
   const empty = Object.fromEntries(ROLES.map(role => [role, []]));
-  if (!folder) return { folder: null, ...empty, shell: [], classLfe: [], classFlux: [], classRing: [], classDry: [], classDist: [], pap: [] };
+  if (!folder) return { folder: null, ...empty, shell: [], classLfe: [], classFlux: [], classRing: [], classDry: [], classDist: [], pap: [], papStereo: [], papFlux: [] };
   const cls = folder.split('/')[0];
   const own = poolFor(keys, folder);
   const profile = { folder, ...own };
@@ -104,7 +104,10 @@ export function weaponProfile(def, keys, folderOverride = null) {
     profile.shot = profile.silenced.filter(key => !/(lfe|sweet)/.test(key));
     if (!profile.shot.length) profile.shot = classFallback(keys, cls, folder);
   }
+  // Pack-a-Punch laser fire (replaces the stock shot for upgraded guns): mono blast, stereo tail, left/right flux.
   profile.pap = keys.filter(key => /^(resident|ref)\/wpn\/pap\/pap_shot_m$/.test(key));
+  profile.papStereo = keys.filter(key => /^(resident|ref)\/wpn\/pap\/pap_shot_st$/.test(key));
+  profile.papFlux = keys.filter(key => /^(resident|ref)\/wpn\/pap\/pap_flux_(left|right)$/.test(key));
   return profile;
 }
 
@@ -137,4 +140,9 @@ export function blastCues(kind, keys) {
   else layers.push(starts('ref/wpn/grenade/explosion/explode/'));
   if (kind !== 'raygun') layers.push(starts('ref/wpn/grenade/explosion/debris/dirt/'));
   return layers.filter(layer => layer.length);
+}
+
+/** Upgraded guns fire the Pack-a-Punch laser cues instead of their own shot (energy weapons keep theirs). */
+export function usesPapShot(def, profile) {
+  return !!def?.upgraded && !profile?.folder?.startsWith('energy/') && !!profile?.pap?.length;
 }

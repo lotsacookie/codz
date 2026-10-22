@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { GameAudio } from '../export/web/audio.js';
-import { weaponFolder, cueRole, weaponProfile, foleyKey, blastCues, hasScope } from '../export/web/weapon-sfx.js';
+import { weaponFolder, cueRole, weaponProfile, foleyKey, blastCues, hasScope, usesPapShot } from '../export/web/weapon-sfx.js';
 
 const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
 const keys = Object.keys(manifest).filter(key => /^(resident|ref)\/wpn\//.test(key));
@@ -89,8 +89,18 @@ test('other players use npc shots and add a distant layer when far', () => {
   assert.ok(played.every(p => p.position));
 });
 
-test('upgraded weapons add the pack-a-punch shot layer', () => {
+test('upgraded weapons fire the pack-a-punch laser instead of the stock shot', () => {
   const { audio, played } = recorder();
-  audio.weapon('shot', { ...data.weapons.m16_zm, upgraded: true });
+  const def = { ...data.weapons.m16_zm, upgraded: true };
+  const own = audio.profile(def);
+  audio.weapon('shot', def);
   assert.ok(played.some(p => p.kind.endsWith('pap/pap_shot_m')));
+  assert.ok(played.some(p => p.kind.endsWith('pap/pap_shot_st')));
+  assert.ok(!played.some(p => own.shot.includes(p.kind) || own.lfe.includes(p.kind) || own.sweet.includes(p.kind)));
+});
+
+test('stock guns and energy weapons keep their own shot sound', () => {
+  assert.equal(usesPapShot(data.weapons.m16_zm, { pap: ['x'] }), false);
+  assert.equal(usesPapShot({ upgraded: true }, { folder: 'energy/raygun', pap: ['x'] }), false);
+  assert.equal(usesPapShot({ upgraded: true }, { folder: 'assault/m16', pap: ['x'] }), true);
 });

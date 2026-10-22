@@ -1,5 +1,5 @@
 import {zombieCues,dogCues,preloadZombieKeys,preloadDogKeys} from './zombie-sfx.js';
-import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER} from './weapon-sfx.js';
+import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER,usesPapShot} from './weapon-sfx.js';
 // Native T5 cues decoded from IWD streams and resident LoadedSound records.
 const SPATIAL={near:140,rolloff:1.6,far:6000};
 const VOICE_RANGE=1600,VOICE_LIMIT=14;
@@ -37,7 +37,7 @@ export class GameAudio {
   warmWeapon(def,notifies=[]){
     if(!this.ctx)return;
     const profile=this.profile(def),needed=new Set(notifies.map(name=>this.notifyKey(name,def)).filter(Boolean));
-    for(const pool of [profile.shot,profile.npcShot,profile.lfe,profile.sweet,profile.ring,profile.dry,profile.classDry,profile.classLfe,profile.shell,profile.pap])for(const key of pool)needed.add(key);
+    for(const pool of [profile.shot,profile.npcShot,profile.lfe,profile.sweet,profile.ring,profile.dry,profile.classDry,profile.classLfe,profile.shell,profile.pap,profile.papStereo,profile.papFlux])for(const key of pool)needed.add(key);
     for(const key of Object.keys(this.manifest))if(key.startsWith('resident/')&&(key.includes('/melee/knife/')||key.includes('/bowie/')))needed.add(key);
     for(const key of needed)this.buffer(key).catch(()=>{});
   }
@@ -53,6 +53,11 @@ export class GameAudio {
       this.play(cue??kind,gain,position);return;
     }
     if(kind!=='shot'){this.play(kind,gain,position);return;}
+    if(!position&&usesPapShot(def,profile)){
+      const papLayer=(pool,volume,delay=0)=>{const key=this.pick(pool);if(!key)return;if(delay)this.later(delay,()=>this.play(key,volume*gain));else this.play(key,volume*gain);};
+      papLayer(profile.pap,.9);papLayer(profile.papStereo,.6);papLayer(profile.papFlux,.35);papLayer(profile.shell,.3,320);
+      return;
+    }
     const main=(position?this.pick(profile.npcShot):null)??this.pick(profile.shot)??this.pick(profile.npcShot)??this.pick(profile.dist);
     if(position&&!main)return;
     this.play(main??kind,.75*gain,position);
@@ -64,7 +69,6 @@ export class GameAudio {
     if(!position){
       layer(profile.flux.length?profile.flux:profile.classFlux,.25);
       layer(profile.shell,.3,320);
-      if(def.upgraded){layer(profile.pap,.45);layer(profile.flame,.4);}
     }else if(this.distanceTo(position)>900)layer(profile.dist.length?profile.dist:profile.classDist,.6);
   }
   weaponAt(def,position,gain=1){
