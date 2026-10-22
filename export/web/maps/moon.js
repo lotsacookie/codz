@@ -348,7 +348,7 @@ async function load() {
   const optimization = optimizeStaticScene(gltf.scene, {cellSize: 1024});
   showStatus('Loading Moon navigation…'); await nextTask();
   navigation=new MoonNavigation(data);await navigation.load();navigation.setDoors(parts);
-  player = new PlayerController(camera, {capsuleIntersect, rayIntersect}, {radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4});
+  player = new PlayerController(camera, {capsuleIntersect, rayIntersect}, {radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 24, groundProbeDistance: 4});
   bindPlayerFootsteps(player, () => combat?.audio);
   showStatus('Loading Moon zombies and weapons…');
   await sharedAssets;

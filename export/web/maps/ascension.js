@@ -170,7 +170,7 @@ async function load() {
   scene.add(world);
   player = new PlayerController(camera, collision, {
     radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285,
-    crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4,
+    crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 24, groundProbeDistance: 4,
   });
   reset();
   ready = true;

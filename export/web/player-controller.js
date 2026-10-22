@@ -17,6 +17,8 @@ const _wish = new THREE.Vector3();
 const _movement = new THREE.Vector3();
 const _translation = new THREE.Vector3();
 const _normal = new THREE.Vector3();
+const _stepDown = new THREE.Vector3(0, -0.5, 0);
+const _stepSettle = new THREE.Vector3();
 const _groundOrigin = new THREE.Vector3();
 const _groundRay = new THREE.Ray(new THREE.Vector3(), new THREE.Vector3(0, -1, 0));
 const _candidateStart = new THREE.Vector3();
@@ -166,6 +168,8 @@ export class PlayerController {
     this.crouchSpeed = Math.max(0, numberOr(options.crouchSpeed, 190));
     // Visual-only camera easing (crouch, stairs, landing). Off unless the game asks for it.
     this._smoother = options.smoothCamera ? new CameraSmoother() : null;
+    this._eyeSmooth = null;
+    this.crouchEyeRate = Math.max(1, numberOr(options.crouchEyeRate, 8));
     this._lastDt = 0;
     this.groundAcceleration = Math.max(0, numberOr(options.groundAcceleration, 2600));
     this.airAcceleration = Math.max(0, numberOr(options.airAcceleration, 900));
@@ -182,7 +186,7 @@ export class PlayerController {
     this.maxSlopeAngle = clamp(numberOr(options.maxSlopeAngle, 50), 0, 89.9);
     this.floorNormalY = Math.cos(THREE.MathUtils.degToRad(this.maxSlopeAngle));
     this.skin = Math.max(0.0001, numberOr(options.skin, 0.05));
-    this.stepHeight = Math.max(0, numberOr(options.stepHeight, 18));
+    this.stepHeight = Math.max(0, numberOr(options.stepHeight, 24));
 
     // A fixed step keeps collision results stable across frame rates.  The
     // default 120 Hz step is inexpensive for this map and handles thin walls.
@@ -324,6 +328,7 @@ export class PlayerController {
     this._releaseLadder();
     this._ladderExitTimer = 0;
     this._smoother?.reset();
+    this._eyeSmooth = null;
 
     if (resolve && this.worldReady) this._resolveOverlaps();
     this._syncCamera();
@@ -590,21 +595,38 @@ export class PlayerController {
   // onto the stair edge. Vertical walls and low ceilings reject the candidate.
   _tryStep(start,end,movement) {
     if(!this.stepHeight)return false;
+    const length=Math.hypot(movement.x,movement.z);
+    if(length<1e-6)return false;
+    const scale=Math.max(length,this.radius*.35)/length;
+    const probe=new THREE.Vector3(movement.x*scale,0,movement.z*scale);
     const trial=new Capsule(start.clone(),end.clone(),this.radius);
     for(let rise=2;rise<=this.stepHeight;rise+=2){
-      trial.start.copy(start).add(new THREE.Vector3(0,rise,0));trial.end.copy(end).add(new THREE.Vector3(0,rise,0));
+      trial.start.copy(start);trial.end.copy(end);
+      trial.start.y+=rise;trial.end.y+=rise;
       const overhead=this.worldOctree.capsuleIntersect(trial);
       if(overhead&&overhead.normal.y<-.1&&overhead.depth>this.skin)return false;
-    }
-    trial.translate(new THREE.Vector3(movement.x,0,movement.z));
-    const blocked=this.worldOctree.capsuleIntersect(trial);if(blocked&&blocked.depth>this.skin)return false;
-    for(let drop=0;drop<this.stepHeight;drop+=.5){
-      trial.translate(new THREE.Vector3(0,-.5,0));const contact=this.worldOctree.capsuleIntersect(trial);
-      if(contact&&contact.depth>this.skin){
-        if(contact.normal.y<.1)return false;
-        trial.translate(new THREE.Vector3(0,.5+this.skin,0));
-        this.collider.start.copy(trial.start);this.collider.end.copy(trial.end);this.onFloor=this.grounded=true;this.velocity.y=0;return true;
+      trial.translate(probe);
+      const blocked=this.worldOctree.capsuleIntersect(trial);
+      if(blocked&&blocked.depth>this.skin)continue;
+      let landed=false;
+      for(let drop=0;drop<=rise+1;drop+=.5){
+        trial.translate(_stepDown);
+        const contact=this.worldOctree.capsuleIntersect(trial);
+        if(contact&&contact.depth>this.skin){
+          landed=contact.normal.y>=.1;
+          if(landed)trial.translate(_stepSettle.set(0,.5+this.skin,0));
+          break;
+        }
       }
+      if(!landed)continue;
+      const lift=trial.start.y-start.y;
+      trial.start.set(start.x+movement.x,start.y+lift,start.z+movement.z);
+      trial.end.set(end.x+movement.x,end.y+lift,end.z+movement.z);
+      const final=this.worldOctree.capsuleIntersect(trial);
+      if(final&&final.depth>this.skin)continue;
+      this.collider.start.copy(trial.start);this.collider.end.copy(trial.end);
+      this.onFloor=this.grounded=true;this.velocity.y=0;
+      return true;
     }
     return false;
   }
@@ -891,8 +913,15 @@ export class PlayerController {
 
   _syncCamera() {
     const feetY = this.collider.start.y - this.radius;
-    if (!this._smoother) { this.camera.position.set(this.collider.start.x, feetY + this._eyeHeight, this.collider.start.z); return; }
-    const view = this._smoother.update(this._lastDt, { feetY, eyeHeight: this._eyeHeight, onFloor: this.onFloor, velocityY: this.velocity.y });
+    const targetEye = this._eyeHeight;
+    if (this._eyeSmooth === null || !Number.isFinite(this._eyeSmooth)) this._eyeSmooth = targetEye;
+    else {
+      const dt = clamp(numberOr(this._lastDt, 0), 0, 0.05);
+      this._eyeSmooth += (targetEye - this._eyeSmooth) * (1 - Math.exp(-this.crouchEyeRate * dt));
+    }
+    const eyeHeight = this._eyeSmooth;
+    if (!this._smoother) { this.camera.position.set(this.collider.start.x, feetY + eyeHeight, this.collider.start.z); return; }
+    const view = this._smoother.update(this._lastDt, { feetY, eyeHeight, onFloor: this.onFloor, velocityY: this.velocity.y });
     this.camera.position.set(this.collider.start.x, feetY + view.eye + view.offset, this.collider.start.z);
   }
 }

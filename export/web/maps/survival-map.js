@@ -46,7 +46,7 @@ export function withDefaults(cfg) {
     base, mapData: cfg.mapData ?? `${base}/map-data.json`, gltf: cfg.gltf ?? `${base}/${cfg.id}.gltf`,
     collisionMeta: cfg.collisionMeta ?? `${base}/collision.json`, pack: cfg.pack ?? `asset-pack/${cfg.id}.pack`,
     lighting: L,
-    player: { radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 18, groundProbeDistance: 4, ...cfg.player },
+    player: { radius: 15, height: 70, eyeHeight: 60, moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 90, gravity: 800, jumpHeight: 39, stepHeight: 24, groundProbeDistance: 4, ...cfg.player },
     classes: { session: ShangriSession, enemies: ShangriEnemies, features: ShangriFeatures, navigation: SurvivalNavigation, ...cfg.classes },
     startHint: cfg.startHint ?? '500 points. M1911. Buy a door, throw both power switches and survive.',
   };

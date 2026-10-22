@@ -147,7 +147,7 @@ async function load() {
   scene.add(gltf.scene);
   player = new PlayerController(camera, collision, {radius: 14, height: 70, eyeHeight: 60,
     moveSpeed: 190, sprintSpeed: 285, crouchSpeed: 95, gravity: 800, jumpHeight: 39,
-    stepHeight: 18, maxSubSteps: 12, groundProbeDistance: 4, groundSnapSpeed: 10});
+    stepHeight: 24, maxSubSteps: 12, groundProbeDistance: 4, groundSnapSpeed: 10});
   relocate();
   // Settle at the original spawn before requesting mouse input.
   player.setEnabled(true); for (let i = 0; i < 120; i++) player.update(1/120, {}); player.setEnabled(false);
