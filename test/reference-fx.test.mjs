@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { atlasFrame, pickFrame, loadAtlas, randomFrame } from '../export/web/fx-atlas.js';
 import { hitBearing, HitDirections, HIT_LIFE } from '../export/web/hit-direction.js';
 import { createMuzzleFlash } from '../export/web/muzzle-fx.js';
+import { SURFACES, classifySurface, surfaceTextureUrl } from '../export/web/impact-fx.js';
 import { GameAudio } from '../export/web/audio.js';
 
 const web = new URL('../export/web/', import.meta.url);
@@ -87,6 +88,31 @@ test('new reference cues are in the manifest with files on disk', () => {
     assert.ok(existsSync(new URL(`textures/${texture}.png`, web)), `textures/${texture}.png missing`);
     assert.ok(existsSync(new URL(`textures-mobile/${texture}.png`, web)), `textures-mobile/${texture}.png missing`);
   }
+});
+
+test('every bullet hole decal exists in full and mobile texture folders', () => {
+  for (const [surface, config] of Object.entries(SURFACES)) {
+    assert.ok(config.files.length > 0 && config.size > 0, `${surface} config`);
+    for (const file of config.files) {
+      const encoded = surfaceTextureUrl(file);
+      assert.ok(existsSync(new URL(encoded, web)), `${encoded} missing`);
+      assert.ok(existsSync(new URL(encoded.replace('textures/', 'textures-mobile/'), web)), `mobile ${encoded} missing`);
+    }
+  }
+  assert.equal(surfaceTextureUrl('~-gimpact_wood02_col#0.png'), 'textures/~-gimpact_wood02_col%230.png');
+});
+
+test('bullet holes pick a surface from what was hit', () => {
+  const floor = new THREE.Vector3(0, 1, 0);
+  const wall = new THREE.Vector3(1, 0, 0);
+  const at = (x, y, z) => ({ position: new THREE.Vector3(x, y, z) });
+  assert.equal(classifySurface({ ...at(0, 0, 0), dynamic: true }, wall), 'wood');
+  assert.equal(classifySurface({ ...at(0, 0, 0), surface: 'metal' }, wall), 'metal');
+  assert.equal(classifySurface({ ...at(0, 0, 0), surface: 'nonsense' }, wall), 'plaster');
+  assert.ok(['concrete', 'asphalt'].includes(classifySurface(at(10, 0, 10), floor)));
+  assert.ok(['concrete', 'plaster'].includes(classifySurface(at(10, 50, 10), wall)));
+  assert.equal(classifySurface(at(10, 50, 10), wall), classifySurface(at(11, 51, 11), wall), 'nearby shots on one wall share a surface');
+  assert.equal(classifySurface(null, null), 'generic');
 });
 
 function audioWithFakeSources() {

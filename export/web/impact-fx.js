@@ -1,14 +1,40 @@
 import * as THREE from 'three';
 import { loadAtlas, randomFrame } from './fx-atlas.js';
 
-const HOLE_SIZE = 4.2;
 const MAX_HOLES = 64;
 const SURFACE_LIFT = 0.12;
-// Real T5 decals/sprites; the canvas-drawn versions below are used until these load (or if they fail).
-const HOLE_DECALS = ['textures/~-gbullethole1.png', 'textures/~-gbullethole2.png'];
 const DUST_ATLAS = 'textures/fxt_smk_puff.png';
-const DUST_TINT = 0xb9b2a4;
 const DUST_ALPHA = 0.55;
+const WALL_CELL = 96;
+
+export const SURFACES = {
+  generic: { size: 4.2, files: ['~-gbullethole1.png', '~-gbullethole2.png'], dust: 0xb9b2a4, chip: [0.5, 0.48, 0.44], puffs: 2, chips: 3 },
+  concrete: { size: 5.4, files: ['~-gimpact_concrete01_col#0.png', '~-gimpact_concrete02_col#0.png'], dust: 0xaaa69e, chip: [0.5, 0.49, 0.47], puffs: 2, chips: 4 },
+  plaster: { size: 5.4, files: ['~-gimpact_plaster01_col#0.png', '~-gimpact_plaster02_col#0.png'], dust: 0xd2cabb, chip: [0.68, 0.64, 0.57], puffs: 3, chips: 4 },
+  wood: { size: 5, files: ['~-gimpact_wood01_col.png', '~-gimpact_wood02_col#0.png', '~-gimpact_wood03_col#0.png'], dust: 0x9a7b55, chip: [0.45, 0.31, 0.18], puffs: 1, chips: 5 },
+  metal: { size: 3.6, files: ['~-gimpact_metal02_col.png', '~-gimpact_metal03_col.png'], dust: 0xc8c8c4, chip: [0.78, 0.74, 0.62], puffs: 1, chips: 3 },
+  asphalt: { size: 5, files: ['~-gimpact_asphalt01_col#0.png', '~-gimpact_asphalt02_col#0.png'], dust: 0x8f8c86, chip: [0.36, 0.35, 0.34], puffs: 2, chips: 4 },
+  glass: { size: 7, files: ['~-gimpact_glass01_col.png', '~-gimpact_glass02_col.png'], dust: 0xdfe6e8, chip: [0.82, 0.88, 0.9], puffs: 0, chips: 5 },
+};
+
+export function surfaceTextureUrl(file) {
+  return `textures/${file.replace(/#/g, '%23')}`;
+}
+
+export function classifySurface(hit, normal) {
+  if (hit?.surface && SURFACES[hit.surface]) return hit.surface;
+  if (hit?.dynamic) return 'wood';
+  if (!normal) return 'generic';
+  if (Math.abs(normal.y) > 0.7) {
+    const p = hit?.position;
+    if (!p) return 'concrete';
+    return ((Math.floor(p.x / WALL_CELL) + Math.floor(p.z / WALL_CELL)) & 1) ? 'asphalt' : 'concrete';
+  }
+  const p = hit?.position;
+  if (!p) return 'plaster';
+  const cell = Math.floor((p.x + p.z) / WALL_CELL) + Math.floor(p.y / (WALL_CELL * 1.5));
+  return (cell & 1) ? 'concrete' : 'plaster';
+}
 
 function canvasTexture(draw, size = 64) {
   const canvas = document.createElement('canvas');
@@ -73,46 +99,65 @@ export function hitNormal(hit, ray, out = new THREE.Vector3()) {
 export class WallImpacts {
   constructor(scene) {
     this.scene = scene;
-    this.holeTextures = [
+    this.fallbackTextures = [
       canvasTexture((ctx, size) => drawHole(ctx, size, [[0.2, 22], [1.4, 18], [2.6, 24], [3.9, 16], [5.1, 20]])),
       canvasTexture((ctx, size) => drawHole(ctx, size, [[0.7, 17], [2.1, 23], [3.3, 19], [4.6, 25]])),
     ];
     this.dustTexture = canvasTexture(drawDust);
-    this.holeGeometry = new THREE.PlaneGeometry(HOLE_SIZE, HOLE_SIZE);
-    this.holeMaterials = this.holeTextures.map(map => new THREE.MeshBasicMaterial({
-      map, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, toneMapped: false,
-    }));
+    this.holeGeometry = new THREE.PlaneGeometry(1, 1);
+    this.materials = new Map();
+    this.realTextures = new Map();
     this.holes = [];
     this.next = 0;
     this.disposed = false;
-    this.realHoles = [];
     this.dustAtlas = loadAtlas(DUST_ATLAS, 2);
-    this.loadDecals();
+    this.loader = typeof document === 'undefined' ? null : new THREE.TextureLoader();
   }
 
-  loadDecals() {
-    if (typeof document === 'undefined') return;
-    const loader = new THREE.TextureLoader();
-    HOLE_DECALS.forEach((url, index) => loader.load(url, texture => {
+  materialFor(surface, variant) {
+    const config = SURFACES[surface] ?? SURFACES.generic;
+    const file = config.files[variant % config.files.length];
+    let material = this.materials.get(file);
+    if (material) return material;
+    material = new THREE.MeshBasicMaterial({
+      map: this.fallbackTextures[variant % this.fallbackTextures.length],
+      transparent: true,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -4,
+      polygonOffsetUnits: -4,
+      toneMapped: false,
+    });
+    this.materials.set(file, material);
+    this.loadDecal(file, material);
+    return material;
+  }
+
+  loadDecal(file, material) {
+    if (!this.loader) return;
+    this.loader.load(surfaceTextureUrl(file), texture => {
       if (this.disposed) { texture.dispose(); return; }
       texture.colorSpace = THREE.SRGBColorSpace;
-      this.realHoles[index] = texture;
-      const material = this.holeMaterials[index % this.holeMaterials.length];
+      this.realTextures.set(file, texture);
       material.map = texture;
       material.needsUpdate = true;
-    }, undefined, () => {}));
+    }, undefined, () => {});
   }
 
-  addHole(position, normal) {
+  addHole(position, normal, surface = 'generic') {
+    const config = SURFACES[surface] ?? SURFACES.generic;
     let mesh = this.holes[this.next];
     if (!mesh) {
-      mesh = new THREE.Mesh(this.holeGeometry, this.holeMaterials[this.next % this.holeMaterials.length]);
+      mesh = new THREE.Mesh(this.holeGeometry, null);
       mesh.matrixAutoUpdate = true;
       mesh.renderOrder = 2;
       this.scene.add(mesh);
       this.holes[this.next] = mesh;
     }
     this.next = (this.next + 1) % MAX_HOLES;
+    mesh.material = this.materialFor(surface, Math.floor(Math.random() * config.files.length));
+    const size = config.size * (0.9 + Math.random() * 0.25);
+    mesh.scale.set(size, size, 1);
     mesh.position.copy(position).addScaledVector(normal, SURFACE_LIFT);
     lookTarget.copy(mesh.position).add(normal);
     mesh.lookAt(lookTarget);
@@ -121,10 +166,11 @@ export class WallImpacts {
     return mesh;
   }
 
-  puffs(position, normal, particles) {
-    for (let i = 0; i < 2; i++) {
+  puffs(position, normal, particles, surface = 'generic') {
+    const config = SURFACES[surface] ?? SURFACES.generic;
+    for (let i = 0; i < config.puffs; i++) {
       const frame = randomFrame(this.dustAtlas);
-      const material = new THREE.SpriteMaterial({ map: frame ?? this.dustTexture, color: frame ? DUST_TINT : 0xffffff, transparent: true, depthWrite: false, opacity: 0.7, toneMapped: false });
+      const material = new THREE.SpriteMaterial({ map: frame ?? this.dustTexture, color: frame ? config.dust : 0xffffff, transparent: true, depthWrite: false, opacity: 0.7, toneMapped: false });
       const sprite = new THREE.Sprite(material);
       const size = 3 + Math.random() * 2.5;
       sprite.scale.set(size, size, 1);
@@ -138,11 +184,12 @@ export class WallImpacts {
         velocity: new THREE.Vector3((Math.random() - 0.5) * 14, 5 + Math.random() * 10, (Math.random() - 0.5) * 14).addScaledVector(normal, 18 + Math.random() * 12),
       });
     }
-    for (let i = 0; i < 3; i++) {
-      const shade = 0.42 + Math.random() * 0.2;
+    const [r, g, b] = config.chip;
+    for (let i = 0; i < config.chips; i++) {
+      const shade = 0.82 + Math.random() * 0.36;
       const chip = new THREE.Mesh(
         new THREE.BoxGeometry(0.5, 0.5, 0.5),
-        new THREE.MeshBasicMaterial({ color: new THREE.Color(shade, shade * 0.97, shade * 0.9), transparent: true, toneMapped: false }),
+        new THREE.MeshBasicMaterial({ color: new THREE.Color(Math.min(1, r * shade), Math.min(1, g * shade), Math.min(1, b * shade)), transparent: true, toneMapped: false }),
       );
       chip.position.copy(position).addScaledVector(normal, 0.5);
       this.scene.add(chip);
@@ -158,13 +205,15 @@ export class WallImpacts {
   strike(hit, ray, particles) {
     if (!hit?.position) return;
     const normal = hitNormal(hit, ray, normalFromHit).clone();
-    this.addHole(hit.position, normal);
-    this.puffs(hit.position, normal, particles);
+    const surface = classifySurface(hit, normal);
+    this.addHole(hit.position, normal, surface);
+    this.puffs(hit.position, normal, particles, surface);
   }
 
   dust(hit, ray, particles) {
     if (!hit?.position) return;
-    this.puffs(hit.position, hitNormal(hit, ray, normalFromHit).clone(), particles);
+    const normal = hitNormal(hit, ray, normalFromHit).clone();
+    this.puffs(hit.position, normal, particles, classifySurface(hit, normal));
   }
 
   clear() {
@@ -174,13 +223,14 @@ export class WallImpacts {
 
   dispose() {
     this.disposed = true;
-    for (const texture of this.realHoles) texture?.dispose();
-    this.realHoles.length = 0;
+    for (const texture of this.realTextures.values()) texture.dispose();
+    this.realTextures.clear();
     for (const mesh of this.holes) mesh?.removeFromParent();
     this.holes.length = 0;
     this.holeGeometry.dispose();
-    for (const material of this.holeMaterials) material.dispose();
-    for (const texture of this.holeTextures) texture.dispose();
+    for (const material of this.materials.values()) material.dispose();
+    this.materials.clear();
+    for (const texture of this.fallbackTextures) texture.dispose();
     this.dustTexture.dispose();
   }
 }
