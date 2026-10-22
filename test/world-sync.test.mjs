@@ -67,7 +67,7 @@ test('co-op world handle broadcasts our unlocks and applies only roster teammate
 
   handle.door('auto2');
   handle.wall('12');
-  assert.deepEqual(sent.filter(m => m.type === 'unlock').map(m => m.data), [{ k: 'd', n: 'auto2' }, { k: 'w', n: '12' }]);
+  assert.deepEqual(sent.filter(m => m.type === 'unlock' && m.data.k !== 'r').map(m => m.data), [{ k: 'd', n: 'auto2' }, { k: 'w', n: '12' }]);
 
   handlers.get('unlock')({ k: 'd', n: 'lobby_door' }, 'p2');
   handlers.get('unlock')({ k: 'w', n: '99' }, 'p2');
@@ -83,4 +83,34 @@ test('co-op world handle broadcasts our unlocks and applies only roster teammate
   coop.dispose();
   assert.equal(handlers.has('unlock'), false);
   assert.equal(coop.world(), null);
+});
+
+test('the host replays everything bought so far to a teammate who asks, and only the host answers', () => {
+  const sent = [];
+  const host = new WorldSync({ send: (m, target) => sent.push([m, target]) });
+  host.door('auto2');
+  host.wall(55);
+  host.wall(56);
+  sent.length = 0;
+  assert.equal(host.receive({ k: 'r' }, 'p2'), false);
+  assert.deepEqual(sent, [[{ k: 'd', n: 'auto2' }, 'p2'], [{ k: 'w', n: '55' }, 'p2'], [{ k: 'w', n: '56' }, 'p2']]);
+
+  const walls = [];
+  const guest = new WorldSync({ applyWall: k => walls.push(k) });
+  for (const [m] of sent) guest.receive(m, 'host');
+  assert.deepEqual(walls, ['55', '56'], 'the guest ends up with the same wall buys as the host');
+  assert.deepEqual(cleanUnlock({ k: 'r' }), { kind: 'request' });
+});
+
+test('a guest asks the host for the current wall buys when it attaches the world', () => {
+  const { lobby, handlers, sent } = fakeLobby();
+  const coop = createCoop({ scene: new THREE.Scene(), camera: new THREE.PerspectiveCamera(), feet: () => new THREE.Vector3(), points: () => 500, config: { lobby, selfId: 'p2', role: 'client', roster }, doc: null });
+  const walls = [];
+  coop.attachWorld({ applyWall: k => walls.push(k) });
+  assert.deepEqual(sent.filter(m => m.type === 'unlock').map(m => m.data), [{ k: 'r' }]);
+  handlers.get('unlock')({ k: 'r' }, 'me');
+  assert.deepEqual(sent.filter(m => m.type === 'unlock').length, 1, 'guests never answer requests');
+  handlers.get('unlock')({ k: 'w', n: '7' }, 'me');
+  assert.deepEqual(walls, ['7']);
+  coop.dispose();
 });

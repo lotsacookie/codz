@@ -253,19 +253,29 @@ export function createCoop({ scene, camera, feet, points, health = () => 1, conf
     if (worldHandle) return worldHandle;
     const nameOf = id => currentRoster().find(p => p.id === id)?.name ?? 'A teammate';
     const sync = new WorldSync({
-      send: data => channel.send('unlock', data),
+      send: (data, target) => channel.send('unlock', data, target),
       applyDoor: (key, from) => applyDoor?.(key, nameOf(from)),
       applyWall: (key, from) => applyWall?.(key, nameOf(from)),
     });
     const stop = channel.on('unlock', (raw, from) => {
       if (from === selfId || !currentRoster().some(p => p.id === from)) return;
+      if (raw?.k === 'r' && role !== 'host') return;
       sync.receive(raw, from);
     });
+    // Wall buys and doors persist for the whole match: the host remembers them and hands them to anyone who joins
+    // or finishes loading later, so every player sees the same wall buys.
+    let rosterIds = new Set(currentRoster().map(p => p.id));
+    const stopRoster = lobby.onChange?.(() => {
+      const ids = new Set(currentRoster().map(p => p.id));
+      if (role === 'host') for (const id of ids) if (!rosterIds.has(id) && id !== selfId) sync.replay(id);
+      rosterIds = ids;
+    });
+    if (role !== 'host') sync.request();
     worldHandle = {
       door: key => sync.door(key),
       wall: key => sync.wall(key),
       reset: () => sync.reset(),
-      dispose() { try { stop?.(); } catch {} worldHandle = null; },
+      dispose() { try { stop?.(); } catch {} try { if (typeof stopRoster === 'function') stopRoster(); } catch {} worldHandle = null; },
     };
     return worldHandle;
   }
