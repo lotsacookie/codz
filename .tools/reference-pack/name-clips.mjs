@@ -73,7 +73,7 @@ async function main() {
   const packFile = resolve(option('pack', ''));
   const repo = option('repo', 'UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies');
   const map = option('map', 'kino');
-  const soundsDir = resolve(option('out', 'export/web/reference/sounds'));
+  const soundsDir = resolve(option('out', 'export/web/assets/reference/sounds'));
   const apply = argv.includes('--apply');
   const { data, pointer } = await readIndex(packFile, repo);
   await mkdir(join(soundsDir, 'index'), { recursive: true });

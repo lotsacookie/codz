@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { parseVector } from './bsp-parse.js';
 import { parseMdl, skinToRgba, decodePcx, decodeTga } from './mdl.js';
 
-export const DEFAULT_PROPS_BASE = new URL('../maps/bsp/', import.meta.url).href;
+export const DEFAULT_PROPS_BASE = new URL('../../maps/bsp/', import.meta.url).href;
 
 const PROP_CLASSES = new Set(['misc_model', 'place_model', 'explosive_barrel']);
 const QUAKE_TO_THREE = new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1);

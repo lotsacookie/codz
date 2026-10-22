@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { TouchInput } from '../export/web/touch-controls.js';
+import { TouchInput } from '../export/web/assets/js/touch-controls.js';
 
 test('stick has a dead zone, proportional walking, and a circular speed limit', () => {
   const input = new TouchInput();

@@ -4,9 +4,9 @@ import path from 'node:path';
 import * as THREE from 'three';
 import { MeshBVH, SAH } from 'three-mesh-bvh';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
-import { doorGroups, movingEntityIds } from '../export/web/shangri-la-rules.js';
+import { doorGroups, movingEntityIds } from '../export/web/assets/js/shangri-la-rules.js';
 
-const out = path.resolve(import.meta.dirname, '../export/web/shangri-la');
+const out = path.resolve(import.meta.dirname, '../export/web/assets/shangri-la');
 const doc = JSON.parse(fs.readFileSync(path.join(out, 'shangri-la.gltf')));
 const buffer = fs.readFileSync(path.join(out, 'shangri-la.bin'));
 const data = JSON.parse(fs.readFileSync(path.join(out, 'map-data.json')));

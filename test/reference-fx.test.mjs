@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import * as THREE from 'three';
-import { atlasFrame, pickFrame, loadAtlas, randomFrame } from '../export/web/fx-atlas.js';
-import { hitBearing, HitDirections, HIT_LIFE } from '../export/web/hit-direction.js';
-import { createMuzzleFlash } from '../export/web/muzzle-fx.js';
-import { SURFACES, classifySurface, surfaceTextureUrl } from '../export/web/impact-fx.js';
-import { GameAudio } from '../export/web/audio.js';
+import { atlasFrame, pickFrame, loadAtlas, randomFrame } from '../export/web/assets/js/fx-atlas.js';
+import { hitBearing, HitDirections, HIT_LIFE } from '../export/web/assets/js/hit-direction.js';
+import { createMuzzleFlash } from '../export/web/assets/js/muzzle-fx.js';
+import { SURFACES, classifySurface, surfaceTextureUrl } from '../export/web/assets/js/impact-fx.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
 
-const web = new URL('../export/web/', import.meta.url);
+const web = new URL('../export/web/assets/', import.meta.url);
 const near = (actual, expected, message) => assert.ok(Math.abs(actual - expected) < 1e-6, `${message}: ${actual} vs ${expected}`);
 
 test('atlas frames split a sheet into equal horizontal slices', () => {

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { hitBearing, nearestAttacker, HitDirections } from '../export/web/hit-direction.js';
+import { hitBearing, nearestAttacker, HitDirections } from '../export/web/assets/js/hit-direction.js';
 
 const zombie = (x, z, state = 'chase') => ({ state, root: { position: { x, y: 0, z } } });
 

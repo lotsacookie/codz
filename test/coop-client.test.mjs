@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { RemoteAvatars } from '../export/web/net/avatars.js';
-import { createCoop } from '../export/web/net/coop-client.js';
-import { PLAYER_COLORS, coopHealth } from '../export/web/net/coop.js';
-import { Powerups } from '../export/web/powerups.js';
+import { RemoteAvatars } from '../export/web/assets/js/net/avatars.js';
+import { createCoop } from '../export/web/assets/js/net/coop-client.js';
+import { PLAYER_COLORS, coopHealth } from '../export/web/assets/js/net/coop.js';
+import { Powerups } from '../export/web/assets/js/powerups.js';
 
 const roster = [{ id: 'me', name: 'Me' }, { id: 'p2', name: 'Bo' }, { id: 'p3', name: 'Cy' }];
 const sample = (id, x, hp = 1) => ({ id, name: id, x, y: 0, z: 0, yaw: 0, pitch: 0, hp });

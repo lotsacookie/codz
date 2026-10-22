@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { PuppetTracker, cleanSnapshot, followFactor, followPosition, packSnapshot } from '../export/web/net/zombie-sync.js';
+import { PuppetTracker, cleanSnapshot, followFactor, followPosition, packSnapshot } from '../export/web/assets/js/net/zombie-sync.js';
 
 const session = { round: 1, phase: 'fighting', total: 5, spawned: 1, killed: 0, countdown: 0, dogRound: false, area: '' };
 const zombie = (id, x) => ({ id, kind: 'zombie', state: 'chase', health: 100, maxHealth: 100, root: { position: { x, y: 0, z: 0 }, rotation: { y: 0 } } });

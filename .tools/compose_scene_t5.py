@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--config', help='Optional map-specific paths and composition options (JSON).')
 args = parser.parse_args()
 config = json.load(open(args.config)) if args.config else {}
-OUT = os.path.join(ROOT, config.get('output', 'export/web'))
+OUT = os.path.join(ROOT, config.get('output', 'export/web/assets'))
 MAP = config.get('map', 'zombie_theater')
 NAME = config.get('name', 'kino')
 BASE = os.path.join(ROOT, config.get('world', f'export/maps/{MAP}.d3dbsp.gfxworld'))

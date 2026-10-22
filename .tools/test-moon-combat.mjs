@@ -25,7 +25,7 @@ try{
   await page.screenshot({path:path.join(out,'area51.png')});
   // Place a native actor on reachable ground directly in front of the player.
   await page.evaluate(async()=>{
-    const T=await import('/vendor/three.module.js'),c=moon.combat;
+    const T=await import('/assets/js/vendor/three.module.js'),c=moon.combat;
     c.enemies.reset();c.enemies.spawnDelay=999;
     const at=moon.player.getFeetPosition().clone(),target=at.clone().add(new T.Vector3(0,0,140));
     const z=c.enemies.spawn(moon.navigation.closest(target));z.speed=0;z.baseSpeed=0;

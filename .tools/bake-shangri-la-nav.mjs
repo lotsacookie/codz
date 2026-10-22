@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { init, generateSoloNavMesh } from './lib/solo-navmesh.mjs';
 import { exportNavMesh, NavMeshQuery } from '@recast-navigation/core';
-import { spawnPoints } from '../export/web/shangri-la-rules.js';
+import { spawnPoints } from '../export/web/assets/js/shangri-la-rules.js';
 
-const out = path.resolve(import.meta.dirname, '../export/web/shangri-la');
+const out = path.resolve(import.meta.dirname, '../export/web/assets/shangri-la');
 const data = JSON.parse(fs.readFileSync(path.join(out, 'map-data.json')));
 const meta = JSON.parse(fs.readFileSync(path.join(out, 'collision.json')));
 const binary = fs.readFileSync(path.join(out, 'collision.bin'));

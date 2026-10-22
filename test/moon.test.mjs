@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as THREE from 'three';
-import { MoonState, environmentAt } from '../export/web/moon-rules.js';
-import { deserializeCollisionWorld } from '../export/web/collision-world.js';
+import { MoonState, environmentAt } from '../export/web/assets/js/moon-rules.js';
+import { deserializeCollisionWorld } from '../export/web/assets/js/collision-world.js';
 
-const out = new URL('../export/web/moon/', import.meta.url);
+const out = new URL('../export/web/assets/moon/', import.meta.url);
 const data = JSON.parse(fs.readFileSync(new URL('map-data.json', out)));
 const location = key => data.entities[data.landmarks[key].entity].position;
 

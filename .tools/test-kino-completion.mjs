@@ -2,7 +2,7 @@ import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const out='artifacts/kino-completion';fs.mkdirSync(out,{recursive:true});
-const data=JSON.parse(fs.readFileSync('export/web/game-data.json'));
+const data=JSON.parse(fs.readFileSync('export/web/assets/game-data.json'));
 const browser=await chromium.launch({executablePath:['C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find(fs.existsSync),headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:900}}),checks=[],errors=[];
 page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { PlayerTrail } from '../export/web/player-trail.js';
+import { PlayerTrail } from '../export/web/assets/js/player-trail.js';
 
 const v = (x, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 

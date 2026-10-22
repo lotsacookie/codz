@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { gzipSync } from 'node:zlib';
-import { AssetLoader, LfsPointerError, fetchBytes, parseLfsPointer, defaultBases } from '../export/web/asset-loader.js';
+import { AssetLoader, LfsPointerError, fetchBytes, parseLfsPointer, defaultBases } from '../export/web/assets/js/asset-loader.js';
 
 const BASE = 'https://game.example/play/';
 const FALLBACK = 'https://lfs.example/media/';
@@ -142,7 +142,7 @@ test('works from any sub-path and passes range/HEAD requests through', async () 
 
 test('alternate host order: query string, global, then GitHub media', () => {
   const bases = defaultBases({ search: '?assets=https://a.example/x', hostname: 'me.github.io', pathname: '/proj/' }, { KINO_ASSET_BASES: ['https://b.example/'] });
-  assert.deepEqual(bases, ['https://a.example/x/', 'https://b.example/', 'https://media.githubusercontent.com/media/me/proj/main/export/web/']);
+  assert.deepEqual(bases, ['https://a.example/x/', 'https://b.example/', 'https://media.githubusercontent.com/media/me/proj/main/export/web/assets/']);
 });
 
 test('writes straight into a caller-provided buffer and rejects oversize data', async () => {

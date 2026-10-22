@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AdaptiveResolution, applyAnisotropy, createPerfOverlay } from '../export/web/quality.js';
-import { shortestAngle, turnToward } from '../export/web/steering.js';
+import { AdaptiveResolution, applyAnisotropy, createPerfOverlay } from '../export/web/assets/js/quality.js';
+import { shortestAngle, turnToward } from '../export/web/assets/js/steering.js';
 
 const feed = (a, ms, frames) => { let last = null; for (let i = 0; i < frames; i++) { const r = a.sample(ms); if (r !== null) last = r; } return last; };
 
@@ -66,7 +66,7 @@ test('turnToward wraps across the +-pi seam instead of spinning the long way', (
 });
 
 test('explore maps share one pixel ratio cap and a gentle adaptive floor', async () => {
-  const { EXPLORE_MAX_PIXEL_RATIO, EXPLORE_MIN_SCALE } = await import('../export/web/explore-graphics.js');
+  const { EXPLORE_MAX_PIXEL_RATIO, EXPLORE_MIN_SCALE } = await import('../export/web/assets/js/explore-graphics.js');
   assert.ok(EXPLORE_MAX_PIXEL_RATIO < 1.5 && EXPLORE_MAX_PIXEL_RATIO >= 1);
   assert.ok(EXPLORE_MIN_SCALE >= .7 && EXPLORE_MIN_SCALE < 1);
 });

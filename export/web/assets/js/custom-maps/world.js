@@ -141,7 +141,7 @@ function placeChest(site, models, add, scene, solids) {
 let kinoBoards = null;
 async function loadKinoBoards() {
   if (kinoBoards) return kinoBoards;
-  const template = await (await fetch(new URL('./window-boards.json', import.meta.url))).json();
+  const template = await (await fetch(new URL('../../custom-maps/window-boards.json', import.meta.url))).json();
   const { assetManager } = await import('../runtime-assets.js');
   const texture = await new Promise(resolve => new THREE.TextureLoader(assetManager).load(template.texture, resolve, undefined, () => resolve(null)));
   if (texture) {

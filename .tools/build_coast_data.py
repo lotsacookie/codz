@@ -9,7 +9,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'export/web/coast'
+OUT = ROOT / 'export/web/assets/coast'
 OUT.mkdir(parents=True, exist_ok=True)
 SOURCE = ROOT / 'export_coast/world/maps/zombie_coast.d3dbsp'
 

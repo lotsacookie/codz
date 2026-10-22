@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { limbBurstPower, findArmHit, amputate, popLimb, boneOf } from '../export/web/gore.js';
-import { LimbDebris } from '../export/web/limbs.js';
-import { BloodFx } from '../export/web/blood.js';
+import { limbBurstPower, findArmHit, amputate, popLimb, boneOf } from '../export/web/assets/js/gore.js';
+import { LimbDebris } from '../export/web/assets/js/limbs.js';
+import { BloodFx } from '../export/web/assets/js/blood.js';
 
 const gun = (damage, extra = {}) => ({ damage, headMultiplier: 4, pellets: 1, explosionRadius: 0, projectileSpeed: 0, ...extra });
 

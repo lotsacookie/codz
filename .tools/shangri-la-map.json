@@ -1,7 +1,7 @@
 {
   "map": "zombie_temple",
   "name": "shangri-la",
-  "output": "export/web/shangri-la",
+  "output": "export/web/assets/shangri-la",
   "world": "export_shangri_la/world/maps/zombie_temple.d3dbsp.gfxworld",
   "entities": "export_shangri_la/world/maps/zombie_temple.d3dbsp.ents",
   "objDirs": [

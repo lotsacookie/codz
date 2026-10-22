@@ -566,7 +566,7 @@ def export_collision(root: str, out_dir: Optional[str] = None) -> Dict:
     """Write collision glTF, nav hints, and documentation; return summary stats."""
 
     if out_dir is None:
-        out_dir = _path(root, "export", "web")
+        out_dir = _path(root, "export", "web", "assets")
     os.makedirs(out_dir, exist_ok=True)
 
     gltf = _CollisionGltf()

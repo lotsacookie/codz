@@ -20,7 +20,7 @@ on:
         default: ''
       out_dir:
         description: Output folder in this repo
-        default: export/web/reference
+        default: export/web/assets/reference
 
 permissions:
   contents: write

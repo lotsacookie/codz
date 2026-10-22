@@ -1,7 +1,7 @@
 {
   "map": "zombie_cosmodrome",
   "name": "ascension",
-  "output": "export/web/ascension",
+  "output": "export/web/assets/ascension",
   "world": "export_ascension/world/maps/zombie_cosmodrome.d3dbsp.gfxworld",
   "entities": "export_ascension/world/maps/zombie_cosmodrome.d3dbsp.ents",
   "objDirs": [

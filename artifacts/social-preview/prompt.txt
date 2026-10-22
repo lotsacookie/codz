@@ -1,5 +1,5 @@
 Mode: built-in imagegen
-Output: export/web/social/kino-preview-v1.png
+Output: export/web/assets/social/kino-preview-v1.png
 
 Use case: ads-marketing
 Asset type: social link preview for the playable Kino der Toten browser game, for X and Discord.

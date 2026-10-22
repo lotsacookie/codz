@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   BUTTON, GamepadInput, LOOK_SPEED, MenuNav, mergeInput, pickPad, stick,
-} from '../export/web/gamepad.js';
+} from '../export/web/assets/js/gamepad.js';
 
 // A fake standard-mapping pad whose state the tests edit between frames.
 function fakePad(index = 0) {

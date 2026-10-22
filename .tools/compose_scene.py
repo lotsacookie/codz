@@ -5,7 +5,7 @@ from urllib.parse import quote
 from export_collision import export_collision
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = f"{ROOT}/export/web"
+OUT = f"{ROOT}/export/web/assets"
 
 # ---------- binary buffer helpers ----------
 class Buf:

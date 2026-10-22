@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CameraEffects } from '../export/web/camera-effects.js';
-import { weaponFxProfile } from '../export/web/fx-profile.js';
+import { CameraEffects } from '../export/web/assets/js/camera-effects.js';
+import { weaponFxProfile } from '../export/web/assets/js/fx-profile.js';
 
 function run(fx, seconds, step = 1 / 60) {
   const rolls = [];

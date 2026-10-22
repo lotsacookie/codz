@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { doorGroups, barrierGroups, movingEntityIds, boxLocations, spawnPoints, powerSwitches } from '../export/web/shangri-la-rules.js';
-import { ShangriSession } from '../export/web/shangri-la-session.js';
+import { doorGroups, barrierGroups, movingEntityIds, boxLocations, spawnPoints, powerSwitches } from '../export/web/assets/js/shangri-la-rules.js';
+import { ShangriSession } from '../export/web/assets/js/shangri-la-session.js';
 
-const data = JSON.parse(fs.readFileSync(new URL('../export/web/shangri-la/map-data.json', import.meta.url)));
+const data = JSON.parse(fs.readFileSync(new URL('../export/web/assets/shangri-la/map-data.json', import.meta.url)));
 const weapons = { m1911_zm: { id: 'm1911_zm', clipSize: 8, startAmmo: 32, maxAmmo: 80, fireTime: .1, price: 0 } };
 
 test('Shangri-La entities group into doors, windows, boxes and power', () => {

@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { deflateRawSync } from 'node:zlib';
 import * as THREE from 'three';
-import { unzip } from '../export/web/custom-maps/zip.js';
-import { appendBoxes, fitModel } from '../export/web/custom-maps/geometry.js';
-import { createProbe, planLevel } from '../export/web/custom-maps/analyze.js';
-import { createGridNavigation } from '../export/web/custom-maps/runtime.js';
-import { khronos, sketchfab, isModelUrl } from '../export/web/custom-maps/providers.js';
+import { unzip } from '../export/web/assets/js/custom-maps/zip.js';
+import { appendBoxes, fitModel } from '../export/web/assets/js/custom-maps/geometry.js';
+import { createProbe, planLevel } from '../export/web/assets/js/custom-maps/analyze.js';
+import { createGridNavigation } from '../export/web/assets/js/custom-maps/runtime.js';
+import { khronos, sketchfab, isModelUrl } from '../export/web/assets/js/custom-maps/providers.js';
 
 const box = (min, max) => ({ min: new THREE.Vector3(...min), max: new THREE.Vector3(...max) });
 
@@ -103,11 +103,11 @@ test('providers turn Sketchfab and Khronos responses into pages of named maps', 
 
 test('BSP maps load as textured geometry and the index lists them', async () => {
   const { readFileSync } = await import('node:fs');
-  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
-  const index = JSON.parse(readFileSync(new URL('../export/web/maps/bsp/maps.json', import.meta.url), 'utf8'));
+  const { loadBspBuffer } = await import('../export/web/assets/js/custom-maps/bsp.js');
+  const index = JSON.parse(readFileSync(new URL('../export/web/assets/maps/bsp/maps.json', import.meta.url), 'utf8'));
   assert(index.maps.length > 0);
-  for (const map of index.maps) assert(readFileSync(new URL(`../export/web/maps/bsp/${map.file}`, import.meta.url)).length === map.size);
-  const scene = loadBspBuffer(readFileSync(new URL('../export/web/maps/bsp/boxxer.bsp', import.meta.url)));
+  for (const map of index.maps) assert(readFileSync(new URL(`../export/web/assets/maps/bsp/${map.file}`, import.meta.url)).length === map.size);
+  const scene = loadBspBuffer(readFileSync(new URL('../export/web/assets/maps/bsp/boxxer.bsp', import.meta.url)));
   assert(scene.triangles > 100 && scene.root.children.length > 0);
   assert(!scene.root.children.some(mesh => /trigger|sky/i.test(mesh.name)));
   const box = new THREE.Box3().setFromObject(scene.root);
@@ -116,9 +116,9 @@ test('BSP maps load as textured geometry and the index lists them', async () => 
 
 test('BSP maps are laid out from their NZ:P entities', async () => {
   const { readFileSync } = await import('node:fs');
-  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
-  const { createCustomWorld } = await import('../export/web/custom-maps/world.js');
-  const root = loadBspBuffer(readFileSync(new URL('../export/web/maps/bsp/4all.bsp', import.meta.url))).root;
+  const { loadBspBuffer } = await import('../export/web/assets/js/custom-maps/bsp.js');
+  const { createCustomWorld } = await import('../export/web/assets/js/custom-maps/world.js');
+  const root = loadBspBuffer(readFileSync(new URL('../export/web/assets/maps/bsp/4all.bsp', import.meta.url))).root;
   const world = await createCustomWorld(root, { scale: 1, loadModel: null });
   assert.equal(world.layout.windows.length, 17);
   assert.equal(world.layout.doors.length, 12);
@@ -130,10 +130,10 @@ test('BSP maps are laid out from their NZ:P entities', async () => {
 
 test('BSP props: every shipped MDL parses and map entities place them', async () => {
   const { readFileSync } = await import('node:fs');
-  const { parseMdl } = await import('../export/web/custom-maps/mdl.js');
-  const { loadBspBuffer } = await import('../export/web/custom-maps/bsp.js');
-  const { loadBspProps, propPlacement } = await import('../export/web/custom-maps/bsp-props.js');
-  const root = new URL('../export/web/maps/bsp/', import.meta.url);
+  const { parseMdl } = await import('../export/web/assets/js/custom-maps/mdl.js');
+  const { loadBspBuffer } = await import('../export/web/assets/js/custom-maps/bsp.js');
+  const { loadBspProps, propPlacement } = await import('../export/web/assets/js/custom-maps/bsp-props.js');
+  const root = new URL('../export/web/assets/maps/bsp/', import.meta.url);
   const index = JSON.parse(readFileSync(new URL('maps.json', root), 'utf8'));
   const entries = Object.values(index.models);
   assert(entries.length > 50);

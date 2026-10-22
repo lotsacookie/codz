@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { KnifeBlood, tipToView, viewEmitter } from '../export/web/knife-blood.js';
-import { BloodFx } from '../export/web/blood.js';
+import { KnifeBlood, tipToView, viewEmitter } from '../export/web/assets/js/knife-blood.js';
+import { BloodFx } from '../export/web/assets/js/blood.js';
 
 function texture(width = 256, height = 256) {
   const t = new THREE.Texture();

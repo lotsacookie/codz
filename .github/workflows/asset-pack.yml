@@ -5,19 +5,19 @@ on:
   push:
     branches: [main]
     paths:
-      - export/web/textures/**
-      - export/web/textures-mobile/**
-      - export/web/models/**
-      - export/web/animations/**
-      - export/web/kino.gltf
-      - export/web/game-data.json
-      - export/web/moon/textures/**
-      - export/web/moon/models/**
-      - export/web/moon/combat-data.json
-      - export/web/shangri-la/textures/**
-      - export/web/ascension/textures/**
-      - export/web/coast/textures/**
-      - export/web/asset-pack.js
+      - export/web/assets/textures/**
+      - export/web/assets/textures-mobile/**
+      - export/web/assets/models/**
+      - export/web/assets/animations/**
+      - export/web/assets/kino.gltf
+      - export/web/assets/game-data.json
+      - export/web/assets/moon/textures/**
+      - export/web/assets/moon/models/**
+      - export/web/assets/moon/combat-data.json
+      - export/web/assets/shangri-la/textures/**
+      - export/web/assets/ascension/textures/**
+      - export/web/assets/coast/textures/**
+      - export/web/assets/js/asset-pack.js
       - .tools/build-asset-pack.mjs
 
 permissions:
@@ -28,7 +28,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  LFS_FILES: export/web/textures/*,export/web/textures-mobile/*,export/web/models/*,export/web/moon/models/*,export/web/moon/textures/*,export/web/shangri-la/textures/*,export/web/ascension/textures/*,export/web/coast/textures/*
+  LFS_FILES: export/web/assets/textures/*,export/web/assets/textures-mobile/*,export/web/assets/models/*,export/web/assets/moon/models/*,export/web/assets/moon/textures/*,export/web/assets/shangri-la/textures/*,export/web/assets/ascension/textures/*,export/web/assets/coast/textures/*
 
 jobs:
   build:
@@ -68,7 +68,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git lfs install --local
-          git add export/web/asset-pack/*.pack
+          git add export/web/assets/asset-pack/*.pack
           if git diff --cached --quiet; then
             echo "Asset packs are already up to date."
             exit 0

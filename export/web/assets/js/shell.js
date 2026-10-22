@@ -135,7 +135,7 @@ function loadStyle(href) {
 }
 
 function prepareLoadscreen(entry) {
-  const href = entry.loadscreen ? new URL(entry.loadscreen, location.href).href : '';
+  const href = entry.loadscreen ? new URL(entry.loadscreen, document.baseURI).href : '';
   loading.style.setProperty('--art', href ? `url("${href}")` : 'none');
   if (!href) return Promise.resolve();
   const image = new Image();

@@ -15,7 +15,7 @@ concurrency:
 
 env:
   # The unit tests read this LFS object; the rest of the ~1 GB LFS set is not needed.
-  LFS_TEST_FILES: export/web/moon/collision.bin
+  LFS_TEST_FILES: export/web/assets/moon/collision.bin
 
 jobs:
   unit-tests:

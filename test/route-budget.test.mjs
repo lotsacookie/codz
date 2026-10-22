@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { Enemies } from '../export/web/enemies.js';
-import { Grid } from '../export/web/custom-maps/analyze.js';
-import { createGridNavigation } from '../export/web/custom-maps/runtime.js';
+import { Enemies } from '../export/web/assets/js/enemies.js';
+import { Grid } from '../export/web/assets/js/custom-maps/analyze.js';
+import { createGridNavigation } from '../export/web/assets/js/custom-maps/runtime.js';
 
 function fakeZombie(id) {
   const root = new THREE.Group();

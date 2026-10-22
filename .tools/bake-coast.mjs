@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { MeshBVH, SAH } from 'three-mesh-bvh';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
-const out = path.resolve(import.meta.dirname, '../export/web/coast');
+const out = path.resolve(import.meta.dirname, '../export/web/assets/coast');
 const doc = JSON.parse(fs.readFileSync(path.join(out, 'coast.gltf')));
 const binary = fs.readFileSync(path.join(out, 'coast.bin'));
 const data = JSON.parse(fs.readFileSync(path.join(out, 'map-data.json')));

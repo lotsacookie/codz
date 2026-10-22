@@ -10,7 +10,7 @@ page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());})
 const check=(name,passed,details=null)=>{checks.push({name,passed:!!passed,details});if(!passed)throw new Error(name+': '+JSON.stringify(details));console.log('PASS',name);};
 async function approach(kind,id=null){
   const result=await page.evaluate(async({kind,id})=>{
-    const T=await import('/vendor/three.module.js'),m=moon,f=m.features,t=f.targets.find(t=>t.kind===kind&&(id===null||t.e.id===id));if(!t)return {error:'missing '+kind+' '+id};
+    const T=await import('/assets/js/vendor/three.module.js'),m=moon,f=m.features,t=f.targets.find(t=>t.kind===kind&&(id===null||t.e.id===id));if(!t)return {error:'missing '+kind+' '+id};
     const center=new T.Vector3(...t.e.position),region=center.x>10000?'earth':'moon';
     if(m.combat.session.area!==region){m.debug.relocate(region==='earth'?'area51':'receiving');m.combat.enemies.reset();}
     m.combat.enemies.spawnDelay=1e9;m.combat.enemies.nextAstroRound=Infinity;
@@ -70,7 +70,7 @@ try{
   await page.evaluate(()=>{moon.combat.session.giveEquipment('zombie_black_hole_bomb');});await page.keyboard.press('KeyX');await page.waitForTimeout(100);
   check('X throws native equipment and consumes a charge',await page.evaluate(()=>moon.combat.session.equipmentAmmo===2&&moon.combat.grenades.some(g=>g.equipment)));
   await page.evaluate(()=>{const g=moon.combat.grenades.find(g=>g.equipment);g.life=.01;});await page.waitForTimeout(200);check('Gersh Device creates a black hole',await page.evaluate(()=>moon.features.portals.length===1));
-  const actors=await page.evaluate(async()=>{const T=await import('/vendor/three.module.js'),c=moon.combat;moon.debug.relocate('receiving');moon.state.equipSuit();c.enemies.reset();c.enemies.spawnDelay=1e9;c.enemies.nextAstroRound=Infinity;const p=moon.player.getFeetPosition();return ['astronaut','nova','dog'].map((kind,i)=>{const at=moon.navigation.closest(p.clone().add(new T.Vector3(100+i*70,0,0)),{x:180,y:160,z:180})??moon.navigation.closest(p);const z=c.enemies.spawn(at,null,kind);return {kind:z.kind,meshes:z.root.children.length,actions:Object.keys(z.rig.actions)};});});
+  const actors=await page.evaluate(async()=>{const T=await import('/assets/js/vendor/three.module.js'),c=moon.combat;moon.debug.relocate('receiving');moon.state.equipSuit();c.enemies.reset();c.enemies.spawnDelay=1e9;c.enemies.nextAstroRound=Infinity;const p=moon.player.getFeetPosition();return ['astronaut','nova','dog'].map((kind,i)=>{const at=moon.navigation.closest(p.clone().add(new T.Vector3(100+i*70,0,0)),{x:180,y:160,z:180})??moon.navigation.closest(p);const z=c.enemies.spawn(at,null,kind);return {kind:z.kind,meshes:z.root.children.length,actions:Object.keys(z.rig.actions)};});});
   check('Special enemies have native models and animation',actors.every(a=>a.meshes>0&&a.actions.includes('walk')),actors);await page.screenshot({path:path.join(out,'special-enemies.png')});
   const special=await page.evaluate(()=>{const c=moon.combat,s=c.session,astro=c.enemies.list.find(z=>z.kind==='astronaut'),nova=c.enemies.list.find(z=>z.kind==='nova');
     c.enemies.hurt(astro,1e9,false,false,'wave');const immune=c.enemies.list.includes(astro);c.enemies.hurt(nova,nova.health);const gas=moon.features.fx.some(f=>f.gas);const points=s.points;c.collect('nuke');return {immune,gas,nukePoints:s.points-points,remaining:c.enemies.list.map(z=>z.kind)};});

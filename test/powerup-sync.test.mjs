@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { Powerups } from '../export/web/powerups.js';
-import { MESSAGE_TYPES, packMessage, unpackMessage } from '../export/web/net/protocol.js';
-import { cleanDrop, cleanGrab, cleanTake, packDrop, packGrab, packTake } from '../export/web/net/powerup-sync.js';
+import { Powerups } from '../export/web/assets/js/powerups.js';
+import { MESSAGE_TYPES, packMessage, unpackMessage } from '../export/web/assets/js/net/protocol.js';
+import { cleanDrop, cleanGrab, cleanTake, packDrop, packGrab, packTake } from '../export/web/assets/js/net/powerup-sync.js';
 
 const TYPES = ['nuke', 'insta_kill', 'double_points', 'full_ammo', 'carpenter', 'fire_sale'];
 

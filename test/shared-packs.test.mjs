@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { encodePack, parsePack } from '../export/web/asset-pack.js';
-import { AssetLoader } from '../export/web/asset-loader.js';
+import { encodePack, parsePack } from '../export/web/assets/js/asset-pack.js';
+import { AssetLoader } from '../export/web/assets/js/asset-loader.js';
 import { collectAssets, collectShared, sharedPackName, verifyPacks, writePacks } from '../.tools/build-asset-pack.mjs';
 
 const bytesOf = (n, seed = 1) => Uint8Array.from({ length: n }, (_, i) => (i * 31 + seed) & 255);

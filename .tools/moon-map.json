@@ -1,7 +1,7 @@
 {
   "map": "zombie_moon",
   "name": "moon",
-  "output": "export/web/moon",
+  "output": "export/web/assets/moon",
   "world": "export_moon/world/maps/zombie_moon.d3dbsp.gfxworld",
   "entities": "export_moon/world/maps/zombie_moon.d3dbsp.ents",
   "objDirs": ["export_moon/zombie_moon/model_export", "export_moon/en_zombie_moon/model_export", "export/model_export", "export_localized_obj/model_export"],

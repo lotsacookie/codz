@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BOB, ViewmodelBob } from '../export/web/viewmodel-bob.js';
+import { BOB, ViewmodelBob } from '../export/web/assets/js/viewmodel-bob.js';
 
 const run = (bob, seconds, input, dt = 1 / 60) => {
   const samples = [];

@@ -4,7 +4,7 @@ from urllib.parse import quote
 from PIL import Image
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-OUT = ROOT / 'export/web'
+OUT = ROOT / 'export/web/assets'
 ZONES = [ROOT / 'export_game' / z for z in ['common', 'common_zombie', 'zombie_theater', 'en_common_zombie', 'en_zombie_theater', 'common_zombie_patch', 'zombie_theater_patch']]
 for sub in ['models', 'animations', 'textures/game', 'audio']:
     (OUT / sub).mkdir(parents=True, exist_ok=True)

@@ -61,7 +61,7 @@ Verified for this build: 43 unit tests; 17 Moon exploration checks; 26 Moon comb
 
 Rebuilding needs Python 3.11/Pillow, FFmpeg, Node and retained local OAT dumps. Shared Kino exports must exist first. To refresh raw extraction, run `.tools/rebuild-moon.ps1 -Extract`; this additionally uses `.tools/Unlinker.exe` and the patched WSL exporter `~/oat/build/bin/Release_x64/Unlinker` (override with `-PatchedUnlinker`). Its patch is retained under `.tools/oat_patch`.
 
-Inputs are the installed Moon fastfiles, common-zombie exports and IWD audio archives. Archive hashes are recorded in `export/web/moon/provenance.json`; audio source hashes are in its manifest. Original archives remain unchanged. The browser game and assets are under `export/web`, with map-specific assets under `export/web/moon`. Build tools recover map data, compose geometry, bake collision/navigation, convert rigs and extract audio/presentation textures.
+Inputs are the installed Moon fastfiles, common-zombie exports and IWD audio archives. Archive hashes are recorded in `export/web/assets/moon/provenance.json`; audio source hashes are in its manifest. Original archives remain unchanged. The browser game and assets are under `export/web`, with map-specific assets under `export/web/assets/moon`. Build tools recover map data, compose geometry, bake collision/navigation, convert rigs and extract audio/presentation textures.
 
 ## Fidelity limits
 

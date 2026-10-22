@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { PlayerController } from '../export/web/player-controller.js';
-import { deserializeCollisionWorld } from '../export/web/collision-world.js';
+import { PlayerController } from '../export/web/assets/js/player-controller.js';
+import { deserializeCollisionWorld } from '../export/web/assets/js/collision-world.js';
 import { init, importNavMesh, NavMeshQuery } from '@recast-navigation/core';
-const data=JSON.parse(fs.readFileSync('export/web/game-data.json')),meta=JSON.parse(fs.readFileSync('export/web/collision.json')),bytes=fs.readFileSync('export/web/collision.bin');
+const data=JSON.parse(fs.readFileSync('export/web/assets/game-data.json')),meta=JSON.parse(fs.readFileSync('export/web/assets/collision.json')),bytes=fs.readFileSync('export/web/assets/collision.bin');
 const physics=deserializeCollisionWorld(meta,bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength));
-await init();const {navMesh}=importNavMesh(new Uint8Array(fs.readFileSync('export/web/navigation.bin'))),query=new NavMeshQuery(navMesh,{maxNodes:8192});query.defaultQueryHalfExtents={x:100,y:100,z:100};
+await init();const {navMesh}=importNavMesh(new Uint8Array(fs.readFileSync('export/web/assets/navigation.bin'))),query=new NavMeshQuery(navMesh,{maxNodes:8192});query.defaultQueryHalfExtents={x:100,y:100,z:100};
 const camera=new THREE.PerspectiveCamera();camera.rotation.order='YXZ';
 const player=new PlayerController(camera,physics,{radius:14,height:70,eyeHeight:60,moveSpeed:190,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10});
 const results=[];

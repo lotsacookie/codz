@@ -81,7 +81,7 @@ export function defaultBases(location = globalThis.location, scope = globalThis)
   for (const v of scope.KINO_ASSET_BASES ?? []) add(v);
   const m = /^([^.]+)\.github\.io$/.exec(location.hostname ?? '');
   const repo = (location.pathname ?? '').split('/').filter(Boolean)[0];
-  if (m && repo) add(`https://media.githubusercontent.com/media/${m[1]}/${repo}/main/export/web/`);
+  if (m && repo) add(`https://media.githubusercontent.com/media/${m[1]}/${repo}/main/export/web/assets/`);
   return out;
 }
 

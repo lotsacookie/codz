@@ -6,7 +6,7 @@ import { init, exportNavMesh, NavMeshQuery } from '@recast-navigation/core';
 import { generateSoloNavMesh } from '@recast-navigation/generators';
 
 const root = path.resolve(import.meta.dirname, '..');
-const out = path.join(root, 'export/web');
+const out = path.join(root, 'export/web/assets');
 const doc = JSON.parse(fs.readFileSync(path.join(out,'kino.gltf')));
 const buffer = fs.readFileSync(path.join(out,'kino.bin'));
 const data = JSON.parse(fs.readFileSync(path.join(out,'game-data.json')));
@@ -84,17 +84,17 @@ const report={config,bytes:fs.statSync(path.join(out,'navigation.bin')).size,pat
 fs.writeFileSync(path.join(out,'navigation.json'),JSON.stringify(report,null,2));
 console.log('Navigation',report);
 // Pin the browser vendor modules to the same versions used for baking.
-fs.mkdirSync(path.join(out,'vendor'),{recursive:true});
+fs.mkdirSync(path.join(out,'js','vendor'),{recursive:true});
 for(const [src,dst] of [
  ['three/build/three.module.js','three.module.js'],['three/build/three.core.js','three.core.js'],
  ['three-mesh-bvh/build/index.module.js','bvh.js'],
  ['@recast-navigation/core/dist/index.mjs','recast-core.mjs'],
  ['@recast-navigation/wasm/dist/recast-navigation.wasm-compat.js','recast-wasm.js'],
-]) fs.copyFileSync(path.join(root,'node_modules',src),path.join(out,'vendor',dst));
+]) fs.copyFileSync(path.join(root,'node_modules',src),path.join(out,'js','vendor',dst));
 for(const file of ['math/Capsule.js','math/Octree.js','loaders/GLTFLoader.js','utils/SkeletonUtils.js','utils/BufferGeometryUtils.js','controls/PointerLockControls.js','csm/CSM.js','csm/CSMFrustum.js','csm/CSMShader.js']) {
- const dest=path.join(out,'vendor/jsm',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(path.join(root,'node_modules/three/examples/jsm',file),dest);
+ const dest=path.join(out,'js/vendor/jsm',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(path.join(root,'node_modules/three/examples/jsm',file),dest);
 }
-fs.mkdirSync(path.join(out,'vendor/licenses'),{recursive:true});
+fs.mkdirSync(path.join(out,'js/vendor/licenses'),{recursive:true});
 for(const pkg of ['three','three-mesh-bvh','@recast-navigation/core','@recast-navigation/wasm','@recast-navigation/generators']){
  fs.copyFileSync(path.join(root,'node_modules',pkg,'LICENSE'),path.join(out,'vendor/licenses',pkg.replaceAll('/','-')+'.txt'));
 }

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const vendor = path.resolve(import.meta.dirname, '../../export/web/vendor');
+const vendor = path.resolve(import.meta.dirname, '../../export/web/assets/js/vendor');
 const exact = {
   'three': 'three.module.js',
   'three-mesh-bvh': 'bvh.js',

@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {Session,powerupVisible,POWERUP_LIFETIME} from '../export/web/rules.js';
-const data=JSON.parse(fs.readFileSync(new URL('../export/web/game-data.json',import.meta.url)));
+import {Session,powerupVisible,POWERUP_LIFETIME} from '../export/web/assets/js/rules.js';
+const data=JSON.parse(fs.readFileSync(new URL('../export/web/assets/game-data.json',import.meta.url)));
 test('Max Ammo replenishes both reserves and grenades without loading magazines',()=>{
  const s=new Session(data);s.giveWeapon('ray_gun_zm');s.weapon.upgraded=true;for(const w of s.inventory){w.mag=1;w.reserve=0;}s.grenades=0;s.powerup('full_ammo');
  assert.deepEqual(s.inventory.map(w=>w.mag),[1,1]);assert.equal(s.inventory[0].reserve,80);assert.equal(s.inventory[1].reserve,200);assert.equal(s.grenades,4);

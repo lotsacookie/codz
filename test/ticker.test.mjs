@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createTickTimers } from '../export/web/net/ticker.js';
+import { createTickTimers } from '../export/web/assets/js/net/ticker.js';
 
 test('uses plain timers when Workers are unavailable', () => {
   const log = [];

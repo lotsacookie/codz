@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { GameAudio } from '../export/web/audio.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
 
 globalThis.requestAnimationFrame ??= () => 0;
 

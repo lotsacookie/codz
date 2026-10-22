@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { headBurstPower, decapitate, popHead } from '../export/web/gore.js';
-import { BloodFx } from '../export/web/blood.js';
+import { headBurstPower, decapitate, popHead } from '../export/web/assets/js/gore.js';
+import { BloodFx } from '../export/web/assets/js/blood.js';
 
 const gun = (damage, headMultiplier, extra = {}) => ({ damage, headMultiplier, pellets: 1, explosionRadius: 0, projectileSpeed: 0, ...extra });
 

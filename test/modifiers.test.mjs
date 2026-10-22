@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { MODIFIERS, setModifier, clearModifiers, activeModifiers } from '../export/web/modifiers.js';
-import { Session, zombieHealth } from '../export/web/rules.js';
-import { MoonSession } from '../export/web/moon-session.js';
+import { MODIFIERS, setModifier, clearModifiers, activeModifiers } from '../export/web/assets/js/modifiers.js';
+import { Session, zombieHealth } from '../export/web/assets/js/rules.js';
+import { MoonSession } from '../export/web/assets/js/moon-session.js';
 
-const web = path.resolve(import.meta.dirname, '..', 'export', 'web');
+const web = path.resolve(import.meta.dirname, '..', 'export', 'web', 'assets');
 const data = JSON.parse(readFileSync(path.join(web, 'game-data.json'), 'utf8'));
 const moonData = JSON.parse(readFileSync(path.join(web, 'moon', 'combat-data.json'), 'utf8'));
 

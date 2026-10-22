@@ -34,7 +34,7 @@ Sources: the four `weapons/zombie_perk_bottle_*` definitions, their exported XAn
 
 ## Rebuild and checks
 
-`npm run build:assets` exports the six pickup meshes, three HUD icons, four bottle viewmodels, three bottle clips, 32 weapon worldmodels and teddy. `npm run build:audio` produces 445 cues, including 25 added interaction/announcement/music cues. Their sources and hashes are recorded in `export/web/audio/manifest.json`.
+`npm run build:assets` exports the six pickup meshes, three HUD icons, four bottle viewmodels, three bottle clips, 32 weapon worldmodels and teddy. `npm run build:audio` produces 445 cues, including 25 added interaction/announcement/music cues. Their sources and hashes are recorded in `export/web/assets/audio/manifest.json`.
 
 `npm test` covers drop rules, ammo, timers and drinking state. `npm run test:zombies` exercises rendering and live interactions with controlled browser setups; its report and screenshots are in `artifacts/zombies`. `npm run test:gameplay` covers the broader game loop. These checks are accelerated scenarios, not a complete uninterrupted survival playthrough.
 

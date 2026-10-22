@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { Octree } from 'three/addons/math/Octree.js';
-import { PlayerController } from '../export/web/player-controller.js';
+import { PlayerController } from '../export/web/assets/js/player-controller.js';
 
 function stairWorld({ steps, rise, tread = 22, width = 160, ceiling = false }) {
   const group = new THREE.Group();

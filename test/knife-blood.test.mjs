@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { KnifeBlood } from '../export/web/knife-blood.js';
+import { KnifeBlood } from '../export/web/assets/js/knife-blood.js';
 
 const seeded = () => { let s = 7; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
 const swing = (kb, frames, emit, speed = 400, dt = 1 / 60) => {

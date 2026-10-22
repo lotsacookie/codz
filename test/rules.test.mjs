@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {Session,zombieHealth,roundPopulation} from '../export/web/rules.js';
-const data=JSON.parse(fs.readFileSync(new URL('../export/web/game-data.json',import.meta.url)));
+import {Session,zombieHealth,roundPopulation} from '../export/web/assets/js/rules.js';
+const data=JSON.parse(fs.readFileSync(new URL('../export/web/assets/game-data.json',import.meta.url)));
 test('weapon reserve extraction respects absolute versus clip-relative counts',()=>{
  assert.equal(data.weapons.m1911_zm.startAmmo,32);assert.equal(data.weapons.mp40_zm.maxAmmo,192);
  assert.equal(data.weapons.ray_gun_zm.maxAmmo,160);assert.equal(data.weapons.ray_gun_zm.upgrade.maxAmmo,200);

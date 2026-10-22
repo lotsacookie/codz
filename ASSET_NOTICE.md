@@ -19,13 +19,13 @@ assets, preserve the copyright and permission notice as required by the
 license.
 
 The map-select menu and map loading screens use artwork under
-`export/web/art/` (`loadscreen_*`). These are captures and
+`export/web/assets/art/` (`loadscreen_*`). These are captures and
 extractions of the source game's own menu and loading art, copied from the
 `UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies` project. They are third-party
 material under the terms above.
 
 Animations and models walked out of the reference project's fastfile zones
-(`animations/` and `models/` under `export/web/reference/`) are likewise
+(`animations/` and `models/` under `export/web/assets/reference/`) are likewise
 third-party material under the terms above.
 
 Original game archives, extraction dumps, and third-party extraction tools are

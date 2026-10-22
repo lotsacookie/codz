@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { encodePack, parsePack } from '../export/web/asset-pack.js';
+import { encodePack, parsePack } from '../export/web/assets/js/asset-pack.js';
 
-const defaultRoot = path.resolve(import.meta.dirname, '..', 'export', 'web');
+const defaultRoot = path.resolve(import.meta.dirname, '..', 'export', 'web', 'assets');
 const POINTER = 'version https://git-lfs.github.com/spec/v1';
 const PROFILES = ['desktop', 'mobile'];
 const mb = n => (n / 1048576).toFixed(1);

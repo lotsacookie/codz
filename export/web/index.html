@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8">
+<base href="assets/">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Zombies — Select a map</title>
 <meta name="description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
@@ -21,9 +22,9 @@
 <meta name="twitter:image" content="https://kino-der-toten.pages.dev/social/kino-preview-v1.png">
 <meta name="twitter:image:alt" content="Kino der Toten: Solo Survival. Zombies emerge from the shadows of a ruined theater with red curtains and twin staircases.">
 <link rel="icon" href="data:,">
-<script src="orientation.js"></script>
+<script src="js/orientation.js"></script>
 <link rel="stylesheet" href="shell.css">
-<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/jsm/","three-mesh-bvh":"./vendor/bvh.js","@recast-navigation/core":"./vendor/recast-core.mjs","@recast-navigation/wasm":"./vendor/recast-wasm.js"}}</script>
+<script type="importmap">{"imports":{"three":"./js/vendor/three.module.js","three/addons/":"./js/vendor/jsm/","three-mesh-bvh":"./js/vendor/bvh.js","@recast-navigation/core":"./js/vendor/recast-core.mjs","@recast-navigation/wasm":"./js/vendor/recast-wasm.js"}}</script>
 </head><body data-state="launcher" data-map="">
 <main id="launcher">
   <section class="launcher-panel" aria-labelledby="launcher-title">
@@ -127,5 +128,5 @@
     <div id="load-actions"></div>
   </div>
 </div>
-<script type="module" src="shell.js"></script>
+<script type="module" src="js/shell.js"></script>
 </body></html>

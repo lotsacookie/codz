@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {Vector3} from 'three';
-import {MoonEnemies} from '../export/web/moon-enemies.js';
-import {MoonSession} from '../export/web/moon-session.js';
-const data=JSON.parse(fs.readFileSync(new URL('../export/web/moon/combat-data.json',import.meta.url)));
+import {MoonEnemies} from '../export/web/assets/js/moon-enemies.js';
+import {MoonSession} from '../export/web/assets/js/moon-session.js';
+const data=JSON.parse(fs.readFileSync(new URL('../export/web/assets/moon/combat-data.json',import.meta.url)));
 const actor=kind=>({kind,health:150,state:'chase',root:{position:new Vector3()},rig:{play(){}}});
 test('Moon Nuke preserves astronauts and gives no per-enemy score or hit credit',()=>{
   const s=new MoonSession(data),kills=[],e=new MoonEnemies(null,{},data,s,{kill:z=>kills.push(z.kind)});

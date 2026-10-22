@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const half = h => { const s = h & 0x8000 ? -1 : 1, e = (h >> 10) & 31, f = h & 1023;
   return e === 0 ? s * f * 2 ** -24 : e === 31 ? 0 : s * (1 + f / 1024) * 2 ** (e - 15); };
 export function bake(name) {
-  const asset = JSON.parse(readFileSync(`export/web/reference/models/${name}.json`, 'utf8')).asset;
+  const asset = JSON.parse(readFileSync(`export/web/assets/reference/models/${name}.json`, 'utf8')).asset;
   const pos = [], uv = [], idx = [];
   for (const s of asset.surfs) {
     const base = pos.length / 3;

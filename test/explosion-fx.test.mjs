@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import * as THREE from 'three';
-import { ExplosionFx } from '../export/web/explosion-fx.js';
+import { ExplosionFx } from '../export/web/assets/js/explosion-fx.js';
 
-const web = new URL('../export/web/', import.meta.url);
+const web = new URL('../export/web/assets/', import.meta.url);
 
 function texture(width = 256, height = 256) {
   const t = new THREE.Texture();

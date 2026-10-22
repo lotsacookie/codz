@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { TapReload } from '../export/web/tap-reload.js';
+import { TapReload } from '../export/web/assets/js/tap-reload.js';
 
 test('a quick tap reloads when the button is released', () => {
   const tap = new TapReload();

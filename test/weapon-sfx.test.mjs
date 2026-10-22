@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { GameAudio } from '../export/web/audio.js';
-import { weaponFolder, cueRole, weaponProfile, foleyKey, blastCues, hasScope, usesPapShot } from '../export/web/weapon-sfx.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
+import { weaponFolder, cueRole, weaponProfile, foleyKey, blastCues, hasScope, usesPapShot } from '../export/web/assets/js/weapon-sfx.js';
 
-const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
+const manifest = JSON.parse(readFileSync(new URL('../export/web/assets/audio/manifest.json', import.meta.url), 'utf8'));
 const keys = Object.keys(manifest).filter(key => /^(resident|ref)\/wpn\//.test(key));
-const data = JSON.parse(readFileSync(new URL('../export/web/game-data.json', import.meta.url), 'utf8'));
+const data = JSON.parse(readFileSync(new URL('../export/web/assets/game-data.json', import.meta.url), 'utf8'));
 
 test('cueRole sorts weapon cues into layers', () => {
   assert.equal(cueRole('plr/shot/shot_00'), 'shot');

@@ -1,7 +1,7 @@
 {
   "map": "zombie_coast",
   "name": "coast",
-  "output": "export/web/coast",
+  "output": "export/web/assets/coast",
   "world": "export_coast/world/maps/zombie_coast.d3dbsp.gfxworld",
   "entities": "export_coast/world/maps/zombie_coast.d3dbsp.ents",
   "objDirs": [

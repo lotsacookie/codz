@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $moonRoot = Split-Path -Parent $PSScriptRoot
-foreach ($moonFile in @('index.html','shell.js','shell.css','orientation.js','maps/moon.js','hud.css','map-assets.js','moon/moon.gltf','moon/moon.bin','moon/collision.bin','moon/map-data.json','moon/combat-data.json','moon/navigation-earth.bin','moon/navigation-moon.bin','moon/navigation.json')) {
+foreach ($moonFile in @('index.html','assets/js/shell.js','assets/shell.css','assets/js/orientation.js','assets/js/maps/moon.js','assets/hud.css','assets/js/map-assets.js','assets/moon/moon.gltf','assets/moon/moon.bin','assets/moon/collision.bin','assets/moon/map-data.json','assets/moon/combat-data.json','assets/moon/navigation-earth.bin','assets/moon/navigation-moon.bin','assets/moon/navigation.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $moonRoot "export/web/$moonFile"))) {
         throw "Missing Moon asset: $moonFile. Run .tools/rebuild-moon.ps1."
     }
@@ -23,7 +23,7 @@ if ($null -eq $moonPort) {
     $moonLogs = Join-Path $moonRoot 'artifacts'
     New-Item -ItemType Directory -Path $moonLogs -Force | Out-Null
     $moonNode = (Get-Command node -ErrorAction Stop).Source
-    $moonProcess = Start-Process -FilePath $moonNode -ArgumentList @('"'+(Join-Path $PSScriptRoot 'serve.mjs')+'"', "$moonPort") -WorkingDirectory $moonRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $moonLogs 'moon-server.log') -RedirectStandardError (Join-Path $moonLogs 'moon-server-error.log') -PassThru
+    $moonProcess = Start-Process -FilePath $moonNode -ArgumentList @('assets/"','assets/serve.mjs')+'"', "$moonPort") -WorkingDirectory $moonRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $moonLogs 'moon-server.log') -RedirectStandardError (Join-Path $moonLogs 'moon-server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $moonLogs 'moon-server.pid') -Value $moonProcess.Id
     for ($moonAttempt = 0; $moonAttempt -lt 40; $moonAttempt++) {
         try {

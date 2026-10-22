@@ -64,4 +64,4 @@ GitHub repo or `.map` file, the card says `source repo: loads here` and opens it
 
 World at War stand-ins (`custom-maps/textures/waw`, from `arrowsv/T5-WaW-Textures`) cover tile and metal materials that have a real colour map but no image in the zip. Flat colours (`black1`, `white1`), clip and tool materials stay plain.
 
-Code: `export/web/custom-maps/iwmap-*.js` and `iwmap.js`; tests: `test/iwmap.test.mjs`.
+Code: `export/web/assets/js/custom-maps/iwmap-*.js` and `iwmap.js`; tests: `test/iwmap.test.mjs`.

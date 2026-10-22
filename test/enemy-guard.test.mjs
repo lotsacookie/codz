@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { guardEnemies, brokenZombie } from '../export/web/enemy-guard.js';
+import { guardEnemies, brokenZombie } from '../export/web/assets/js/enemy-guard.js';
 
 const zombie = (x = 0, state = 'chase') => ({ root: new THREE.Group(), rig: {}, state, position: x });
 function fake() {

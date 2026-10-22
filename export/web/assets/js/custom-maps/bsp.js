@@ -131,6 +131,6 @@ export async function loadBspFromUrl(url, onProgress, options = {}) {
     }
     buffer = bytes.buffer;
   } else buffer = await response.arrayBuffer();
-  const baseUrl = options.baseUrl ?? new URL('./', new URL(url, globalThis.location?.href ?? import.meta.url)).href;
+  const baseUrl = options.baseUrl ?? new URL('./', new URL(url, globalThis.document?.baseURI ?? globalThis.location?.href ?? import.meta.url)).href;
   return (await loadBspWithProps(buffer, { ...options, baseUrl })).root;
 }

@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { GameAudio } from '../export/web/audio.js';
-import { stepPools, pickStep, pickLanding, pickCrawl, classifyMaterial, preloadStepKeys, bindPlayerFootsteps, ZOMBIE_STEP_GAIN, PLAYER_STEP_GAIN } from '../export/web/footsteps.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
+import { stepPools, pickStep, pickLanding, pickCrawl, classifyMaterial, preloadStepKeys, bindPlayerFootsteps, ZOMBIE_STEP_GAIN, PLAYER_STEP_GAIN } from '../export/web/assets/js/footsteps.js';
 
-const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
+const manifest = JSON.parse(readFileSync(new URL('../export/web/assets/audio/manifest.json', import.meta.url), 'utf8'));
 const keys = Object.keys(manifest);
 const pools = stepPools(keys);
 

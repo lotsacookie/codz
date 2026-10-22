@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { WorldSync, cleanUnlock, packUnlock } from '../export/web/net/world-sync.js';
-import { packMessage, unpackMessage } from '../export/web/net/protocol.js';
-import { createCoop } from '../export/web/net/coop-client.js';
+import { WorldSync, cleanUnlock, packUnlock } from '../export/web/assets/js/net/world-sync.js';
+import { packMessage, unpackMessage } from '../export/web/assets/js/net/protocol.js';
+import { createCoop } from '../export/web/assets/js/net/coop-client.js';
 
 const roster = [{ id: 'me', name: 'Me' }, { id: 'p2', name: 'Bo' }];
 

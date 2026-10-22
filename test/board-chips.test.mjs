@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { boardOutward, planBoardChips, spawnBoardChips, boardLandingShake, boardLanded } from '../export/web/board-chips.js';
+import { boardOutward, planBoardChips, spawnBoardChips, boardLandingShake, boardLanded } from '../export/web/assets/js/board-chips.js';
 import { readFileSync } from 'node:fs';
 
 const seeded = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -67,7 +67,7 @@ test('boardLanded throws chips and shakes the camera', () => {
 });
 
 test('board landing is wired into every map that animates window boards', () => {
-  const read = file => readFileSync(new URL(`../export/web/${file}`, import.meta.url), 'utf8');
+  const read = file => readFileSync(new URL(`../export/web/assets/js/${file}`, import.meta.url), 'utf8');
   assert.match(read('world.js'), /if\(fx\.entering\)this\.onBoardLand\?\.\(o,fx\.barrier\)/);
   assert.match(read('world.js'), /push\(\{o,barrier,entering/);
   assert.match(read('maps/kino.js'), /world\.onBoardLand=\(o,barrier\)=>boardLanded\(/);

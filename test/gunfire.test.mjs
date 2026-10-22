@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { GUN_NEAR, GUN_RANGE, ShotLimiter, cleanShot, packShot, shotGain } from '../export/web/net/gunfire.js';
-import { createCoop } from '../export/web/net/coop-client.js';
-import { GameAudio } from '../export/web/audio.js';
-import { MoonAudio } from '../export/web/moon-audio.js';
+import { GUN_NEAR, GUN_RANGE, ShotLimiter, cleanShot, packShot, shotGain } from '../export/web/assets/js/net/gunfire.js';
+import { createCoop } from '../export/web/assets/js/net/coop-client.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
+import { MoonAudio } from '../export/web/assets/js/moon-audio.js';
 
 globalThis.requestAnimationFrame ??= () => 0;
 

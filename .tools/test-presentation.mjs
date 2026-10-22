@@ -10,13 +10,13 @@ const check=(name,value)=>{assert(value,name);checks.push({name,passed:true});};
 const step=async(seconds,options={})=>page.evaluate(({seconds,options})=>{for(let t=0;t<seconds;t+=1/120)lab.view.update(Math.min(1/120,seconds-t),options);lab.draw();return lab.view.snapshot();},{seconds,options});
 const snap=async name=>page.screenshot({path:`${out}/${name}.png`});
 try{
- await page.route('**/presentation-test.html',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><style>body{margin:0;background:#20252a}canvas{display:block}</style><script type="importmap">{"imports":{"three":"/vendor/three.module.js","three/addons/":"/vendor/jsm/"}}</script><script type="module">
- import * as THREE from 'three';import {ViewWeapon} from '/animation.js';import {GameAudio} from '/audio.js';
+ await page.route('**/presentation-test.html',route=>route.fulfill({contentType:'text/html',body:`<!doctype html><style>body{margin:0;background:#20252a}canvas{display:block}</style><script type="importmap">{"imports":{"three":"/assets/js/vendor/three.module.js","three/addons/":"/assets/js/vendor/jsm/"}}</script><script type="module">
+ import * as THREE from 'three';import {ViewWeapon} from '/assets/js/animation.js';import {GameAudio} from '/assets/js/audio.js';
  const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);document.body.append(renderer.domElement);
  const scene=new THREE.Scene();scene.background=new THREE.Color(0x30383e);scene.add(new THREE.HemisphereLight(0xffffff,0x8899aa,3));
  const light=new THREE.DirectionalLight(0xffefce,2);light.position.set(0,4,2);scene.add(light);
  const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.01,200);
- const data=await fetch('/game-data.json').then(r=>r.json()),audio=new GameAudio();await audio.load();
+ const data=await fetch('/assets/game-data.json').then(r=>r.json()),audio=new GameAudio();await audio.load();
  const notes=[],view=new ViewWeapon(scene,data,(name,def)=>{notes.push(name);audio.notify(name,def);});
  await view.equip(data.weapons.m1911_zm);
  window.lab={view,data,notes,audio,camera,renderer,draw:()=>renderer.render(scene,camera)};lab.draw();

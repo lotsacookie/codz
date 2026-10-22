@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SHELLS, ENABLED, shellKindFor } from '../export/web/shell-kinds.js';
+import { SHELLS, ENABLED, shellKindFor } from '../export/web/assets/js/shell-kinds.js';
 
 test('pistols and shotguns eject shells', () => {
   assert.deepEqual([...ENABLED], ['pistol', 'shotgun']);
@@ -25,7 +25,7 @@ test('shell and wood chip textures ship in the deployed textures directories', a
   const { existsSync } = await import('node:fs');
   const files = [...Object.values(SHELLS).map(s => s.texture), '~-gfx_wood_splinter_col.png'];
   for (const dir of ['textures', 'textures-mobile']) {
-    for (const file of files) assert.ok(existsSync(new URL(`../export/web/${dir}/${file}`, import.meta.url)), `${dir}/${file}`);
+    for (const file of files) assert.ok(existsSync(new URL(`../export/web/assets/${dir}/${file}`, import.meta.url)), `${dir}/${file}`);
   }
   const stage = readFileSync(new URL('../.tools/stage-cloudflare.mjs', import.meta.url), 'utf8');
   assert.ok(stage.includes("'assets/data/shell-models.json'"), 'staging copies shell-models.json');

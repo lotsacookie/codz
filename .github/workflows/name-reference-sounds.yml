@@ -14,7 +14,7 @@ on:
         default: false
       out_dir:
         description: Reference sounds folder in this repo
-        default: export/web/reference/sounds
+        default: export/web/assets/reference/sounds
 
 permissions:
   contents: write

@@ -8,7 +8,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'export/web/moon'
+OUT = ROOT / 'export/web/assets/moon'
 material_path = ROOT / 'export_moon/zombie_moon/materials/wc/a51_water.json'
 material = json.loads(material_path.read_text())
 constants = {entry['name']: entry['literal'] for entry in material['constants']}

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ViewmodelCache, prefetchOtherSlots } from '../export/web/viewmodel-cache.js';
+import { ViewmodelCache, prefetchOtherSlots } from '../export/web/assets/js/viewmodel-cache.js';
 
 test('the least recently used entry is evicted first', () => {
   const evicted = [];

@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { MeshBVH, SAH } from 'three-mesh-bvh';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
-const out = path.resolve(import.meta.dirname, '../export/web/moon');
+const out = path.resolve(import.meta.dirname, '../export/web/assets/moon');
 const doc = JSON.parse(fs.readFileSync(path.join(out, 'moon.gltf')));
 const buffer = fs.readFileSync(path.join(out, 'moon.bin'));
 const data = JSON.parse(fs.readFileSync(path.join(out, 'map-data.json')));

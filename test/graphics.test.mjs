@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { GraphicsSettings, AutoGraphics, GRAPHICS_PRESETS, nextSetting, lowerLevel, detectLowEnd, isWeakGpu } from '../export/web/graphics.js';
+import { GraphicsSettings, AutoGraphics, GRAPHICS_PRESETS, nextSetting, lowerLevel, detectLowEnd, isWeakGpu } from '../export/web/assets/js/graphics.js';
 
 const memory = () => { const m = new Map(); return { getItem: k => m.get(k) ?? null, setItem: (k, v) => m.set(k, String(v)) }; };
 

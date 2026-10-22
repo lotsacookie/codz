@@ -1,13 +1,13 @@
-"""Encode selected reference-pack sounds into export/web/audio and merge them into manifest.json.
+"""Encode selected reference-pack sounds into export/web/assets/audio and merge them into manifest.json.
 
-Source files come from export/web/reference/sounds (see .github/workflows/extract-reference.yml).
+Source files come from export/web/assets/reference/sounds (see .github/workflows/extract-reference.yml).
 Run after extract_audio.py (which rewrites manifest.json from scratch); this script only adds keys.
 Usage: python .tools/extract_reference_audio.py
 """
 import hashlib, json, pathlib, subprocess, sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-WEB = ROOT / 'export/web'
+WEB = ROOT / 'export/web/assets'
 SOURCE = WEB / 'reference/sounds'
 OUT = WEB / 'audio'
 
@@ -35,7 +35,7 @@ def main():
         probe = json.loads(subprocess.check_output(['ffprobe', '-v', 'error', '-show_streams', '-of', 'json', str(target)]))['streams'][0]
         manifest[key] = {
             'url': 'audio/' + target.name,
-            'source': 'export/web/reference/sounds/' + relative,
+            'source': 'export/web/assets/reference/sounds/' + relative,
             'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(),
             'duration': float(probe['duration']),
             'sampleRate': int(probe['sample_rate']),

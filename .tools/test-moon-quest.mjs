@@ -30,7 +30,7 @@ try{
   check('Moon loads',await page.evaluate(()=>!!window.moon?.ready),await page.locator('#error').textContent());
   await page.locator('#start').click();await page.waitForFunction(()=>moon.debug.snapshot().active);
   await page.evaluate(async()=>{
-    const T=await import('/vendor/three.module.js'),m=moon,f=m.features,s=m.combat.session;
+    const T=await import('/assets/js/vendor/three.module.js'),m=moon,f=m.features,s=m.combat.session;
     s.random=()=>.37;s.points=100000;s.effects.invulnerable=Infinity;m.state.equipSuit();
     for(const d of m.data.doors){s.openDoors.add(d.name);if(d.flag)s.flags.add(d.flag);m.opened.add(d.name);}
     m.debug.relocate('receiving');m.combat.enemies.reset();m.combat.enemies.spawnDelay=1e9;m.combat.enemies.nextAstroRound=Infinity;

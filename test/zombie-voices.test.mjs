@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { GameAudio } from '../export/web/audio.js';
-import { Enemies } from '../export/web/enemies.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
+import { Enemies } from '../export/web/assets/js/enemies.js';
 import { readFileSync } from 'node:fs';
 
-const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
+const manifest = JSON.parse(readFileSync(new URL('../export/web/assets/audio/manifest.json', import.meta.url), 'utf8'));
 
 globalThis.requestAnimationFrame ??= () => 0;
 

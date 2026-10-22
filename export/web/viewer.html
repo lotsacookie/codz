@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<base href="assets/">
 <title>Kino der Toten — world shell</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -61,8 +62,8 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "./vendor/three.module.js",
-    "three/addons/": "./vendor/jsm/"
+    "three": "./js/vendor/three.module.js",
+    "three/addons/": "./js/vendor/jsm/"
   }
 }
 </script>
@@ -70,7 +71,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { censorFlags } from './flag-censorship.js';
+import { censorFlags } from './js/flag-censorship.js';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 
 const $ = id => document.getElementById(id);

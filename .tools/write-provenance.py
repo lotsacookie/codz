@@ -1,7 +1,7 @@
 """Record local source identities and the current browser asset inventory."""
 import hashlib, json, pathlib
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-OUT=ROOT/'export/web'
+OUT=ROOT/'export/web/assets'
 sources=[]
 for name in ['Common/common','Common/common_zombie','Common/zombie_theater','English/en_common_zombie','English/en_zombie_theater','Common/common_zombie_patch','Common/zombie_theater_patch']:
     p=ROOT/'zone'/(name+'.ff')

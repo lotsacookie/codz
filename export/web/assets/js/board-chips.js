@@ -10,7 +10,7 @@ const CHIP_WINDOW = 0.28;
 let chipTexture = null;
 function woodTexture() {
   if (chipTexture || typeof document === 'undefined') return chipTexture;
-  chipTexture = new THREE.TextureLoader().load(new URL(`./${encodeURI(CHIP_TEXTURE)}`, import.meta.url).href);
+  chipTexture = new THREE.TextureLoader().load(new URL(`../${encodeURI(CHIP_TEXTURE)}`, import.meta.url).href);
   chipTexture.colorSpace = THREE.SRGBColorSpace;
   chipTexture.anisotropy = 2;
   return chipTexture;

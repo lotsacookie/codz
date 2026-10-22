@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $kinoRoot = Split-Path -Parent $PSScriptRoot
-foreach ($kinoFile in @('index.html','kino.gltf','kino.bin','collision.bin','game-data.json','navigation.bin','kino-features.js','shell.js','shell.css','orientation.js','maps/kino.js','hud.css')) {
+foreach ($kinoFile in @('index.html','assets/kino.gltf','assets/kino.bin','assets/collision.bin','assets/game-data.json','assets/navigation.bin','assets/js/kino-features.js','assets/js/shell.js','assets/shell.css','assets/js/orientation.js','assets/js/maps/kino.js','assets/hud.css')) {
     if (-not (Test-Path -LiteralPath (Join-Path $kinoRoot "export/web/$kinoFile"))) {
         throw "Missing Kino asset: $kinoFile. Run .tools/rebuild-kino.ps1."
     }
@@ -23,7 +23,7 @@ if ($null -eq $kinoPort) {
     $kinoLogs = Join-Path $kinoRoot 'artifacts'
     New-Item -ItemType Directory -Path $kinoLogs -Force | Out-Null
     $kinoNode = (Get-Command node -ErrorAction Stop).Source
-    $kinoProcess = Start-Process -FilePath $kinoNode -ArgumentList @('"'+(Join-Path $PSScriptRoot 'serve.mjs')+'"', "$kinoPort") -WorkingDirectory $kinoRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $kinoLogs 'server.log') -RedirectStandardError (Join-Path $kinoLogs 'server-error.log') -PassThru
+    $kinoProcess = Start-Process -FilePath $kinoNode -ArgumentList @('assets/"','assets/serve.mjs')+'"', "$kinoPort") -WorkingDirectory $kinoRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $kinoLogs 'server.log') -RedirectStandardError (Join-Path $kinoLogs 'server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $kinoLogs 'server.pid') -Value $kinoProcess.Id
     for ($kinoAttempt = 0; $kinoAttempt -lt 40; $kinoAttempt++) {
         try {

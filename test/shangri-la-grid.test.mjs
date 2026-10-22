@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { Grid } from '../export/web/custom-maps/analyze.js';
-import { createShangriNavigation, doorFootprint } from '../export/web/shangri-la-grid.js';
+import { Grid } from '../export/web/assets/js/custom-maps/analyze.js';
+import { createShangriNavigation, doorFootprint } from '../export/web/assets/js/shangri-la-grid.js';
 
 function strip(cols) {
   const nodes = [];

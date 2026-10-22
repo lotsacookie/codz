@@ -15,4 +15,4 @@ Run `npm run build:coast` to rebuild from the retained dumps. To extract fresh m
 
 Run `npm run test:coast` for browser verification. It starts or reuses the local server and checks direct loading, the native beach spawn, keyboard movement, jumping, crouching, cursor release/resume, flight/reset, floor collision at six additional map locations, resizing and asset errors. Reports and screenshots are in `artifacts/call-of-the-dead`. Landmark checks use controlled camera placement; they do not establish that every possible walking route matches T5.
 
-Runtime files are `export/web/index.html` (the shared map list), `call-of-the-dead.js` and `export/web/coast`. `coast/provenance.json` records source hashes; `coast/composition.json` records asset coverage. Add `?debug` to expose `window.coast` for inspection.
+Runtime files are `export/web/index.html` (the shared map list), `call-of-the-dead.js` and `export/web/assets/coast`. `coast/provenance.json` records source hashes; `coast/composition.json` records asset coverage. Add `?debug` to expose `window.coast` for inspection.

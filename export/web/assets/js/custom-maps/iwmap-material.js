@@ -8,7 +8,7 @@ import { SOLID_CLIP } from './iwmap-brush.js';
 // material's colour with a light pattern is used.
 
 // Generic World at War stand-ins (textures/waw/README.md), used when the zip holds no image for a material.
-const PACK = new URL('./textures/waw/', import.meta.url);
+const PACK = new URL('../../custom-maps/textures/waw/', import.meta.url);
 const PACK_BY_COLORMAP = { dark_grey_floortile_c_new: 'tile.webp' };
 const PACK_BY_KIND = { tile: 'tile.webp', metal: 'metal.webp' };
 // Flat colour maps (black1, white1, darkblue1, $white_diffuse) and tool materials stay a plain tint.

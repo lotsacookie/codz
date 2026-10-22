@@ -1,7 +1,7 @@
 # Agent development guide
 
 This project is a browser-based Three.js reconstruction of Black Ops (T5)
-Zombies maps. Runtime code is in `export/web`; build, test, and diagnostic
+Zombies maps. Runtime code is in `export/web` (entry pages) and `export/web/assets` (`js/`, data, textures, audio, models); build, test, and diagnostic
 tools are in `.tools`. Agents must verify gameplay and rendering changes in a
 real browser; source inspection alone is not sufficient for changes that can
 affect runtime behavior or visuals.

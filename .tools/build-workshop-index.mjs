@@ -4,7 +4,7 @@ import { APP_ID, crawl } from './lib/workshop-crawl.mjs';
 
 const MIN_ITEMS = 30;
 const root = path.resolve(import.meta.dirname, '..');
-const file = path.join(root, 'export', 'web', 'maps', 'workshop', 'index.json');
+const file = path.join(root, 'export', 'web', 'assets', 'maps', 'workshop', 'index.json');
 const debugDir = path.join(root, '.work', 'workshop-debug');
 
 const previous = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : { items: [] };

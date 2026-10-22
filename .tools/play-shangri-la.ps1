@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $shangriRoot = Split-Path -Parent $PSScriptRoot
-foreach ($shangriFile in @('index.html','map-assets.js','shell.js','shell.css','orientation.js','maps/shangri-la.js','hud.css','shangri-la/shangri-la.gltf','shangri-la/shangri-la.bin','shangri-la/collision.json','shangri-la/collision.bin','shangri-la/map-data.json')) {
+foreach ($shangriFile in @('index.html','assets/js/map-assets.js','assets/js/shell.js','assets/shell.css','assets/js/orientation.js','assets/js/maps/shangri-la.js','assets/hud.css','assets/shangri-la/shangri-la.gltf','assets/shangri-la/shangri-la.bin','assets/shangri-la/collision.json','assets/shangri-la/collision.bin','assets/shangri-la/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $shangriRoot "export/web/$shangriFile"))) {
         throw "Missing Shangri-La asset: $shangriFile. Run npm run build:shangri-la."
     }
@@ -24,7 +24,7 @@ if ($null -eq $shangriPort) {
     $shangriPort = $shangriPorts | Where-Object { $shangriListening -notcontains $_ } | Select-Object -First 1
     if ($null -eq $shangriPort) { throw 'No free local port in 5173-5183.' }
     $shangriNode = (Get-Command node -ErrorAction Stop).Source
-    $shangriProcess = Start-Process -FilePath $shangriNode -ArgumentList @('"'+(Join-Path $PSScriptRoot 'serve.mjs')+'"', "$shangriPort") -WorkingDirectory $shangriRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $shangriLogs 'shangri-la-server.log') -RedirectStandardError (Join-Path $shangriLogs 'shangri-la-server-error.log') -PassThru
+    $shangriProcess = Start-Process -FilePath $shangriNode -ArgumentList @('assets/"','assets/serve.mjs')+'"', "$shangriPort") -WorkingDirectory $shangriRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $shangriLogs 'shangri-la-server.log') -RedirectStandardError (Join-Path $shangriLogs 'shangri-la-server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $shangriLogs 'shangri-la-server.pid') -Value $shangriProcess.Id
     $shangriStarted = $false
     for ($shangriAttempt = 0; $shangriAttempt -lt 40; $shangriAttempt++) {

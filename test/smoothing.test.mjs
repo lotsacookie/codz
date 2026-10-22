@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CameraSmoother } from '../export/web/camera-smoothing.js';
-import { damp, steerDirection, smoothingEnabled } from '../export/web/steering.js';
+import { CameraSmoother } from '../export/web/assets/js/camera-smoothing.js';
+import { damp, steerDirection, smoothingEnabled } from '../export/web/assets/js/steering.js';
 
 const run = (s, frames, dt, state) => { let out; for (let i = 0; i < frames; i++) out = s.update(dt, typeof state === 'function' ? state(i) : state); return out; };
 const stand = { feetY: 0, eyeHeight: 60, onFloor: true, velocityY: 0 };

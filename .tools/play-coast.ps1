@@ -2,7 +2,7 @@ param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $coastRoot = Split-Path -Parent $PSScriptRoot
 $coastWeb = Join-Path $coastRoot 'export\web'
-foreach ($coastFile in @('index.html','map-assets.js','shell.js','shell.css','orientation.js','maps/call-of-the-dead.js','hud.css','coast/coast.gltf','coast/coast.bin','coast/collision.json','coast/collision.bin','coast/map-data.json','coast/sky/0.png')) {
+foreach ($coastFile in @('index.html','assets/js/map-assets.js','assets/js/shell.js','assets/shell.css','assets/js/orientation.js','assets/js/maps/call-of-the-dead.js','assets/hud.css','assets/coast/coast.gltf','assets/coast/coast.bin','assets/coast/collision.json','assets/coast/collision.bin','assets/coast/map-data.json','assets/coast/sky/0.png')) {
     if (-not (Test-Path -LiteralPath (Join-Path $coastWeb $coastFile))) { throw "Missing Call of the Dead asset: $coastFile. Run .tools/rebuild-coast.ps1." }
 }
 $coastPorts = 5173..5183
@@ -22,7 +22,7 @@ if ($null -eq $coastPort) {
     $coastPort = $coastPorts | Where-Object { $coastListening -notcontains $_ } | Select-Object -First 1
     if ($null -eq $coastPort) { throw 'No free local port in 5173-5183.' }
     $coastNode = (Get-Command node -ErrorAction Stop).Source
-    $coastProcess = Start-Process -FilePath $coastNode -ArgumentList @('"'+(Join-Path $PSScriptRoot 'serve.mjs')+'"', "$coastPort") -WorkingDirectory $coastRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $coastLogs 'server.log') -RedirectStandardError (Join-Path $coastLogs 'server-error.log') -PassThru
+    $coastProcess = Start-Process -FilePath $coastNode -ArgumentList @('assets/"','assets/serve.mjs')+'"', "$coastPort") -WorkingDirectory $coastRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $coastLogs 'server.log') -RedirectStandardError (Join-Path $coastLogs 'server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $coastLogs 'server.pid') -Value $coastProcess.Id
     $coastReady = $false
     for ($coastAttempt = 0; $coastAttempt -lt 40; $coastAttempt++) {

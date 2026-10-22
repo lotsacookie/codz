@@ -12,7 +12,7 @@ Double-click **Play Ascension.cmd** to open directly into `/?map=ascension`. Cli
 | H / F3 | Toggle control hints / diagnostics |
 | Esc | Release the mouse and pause movement |
 
-Map-only assets include all **5,902 static placements**, **174 scripted models**, **2,973 source entities**, **429 map textures** and the six native sky faces. Every referenced model was found. Both original asset extraction steps completed with zero warnings and errors. Source archive hashes and the material audit are recorded in `export/web/ascension/provenance.json`.
+Map-only assets include all **5,902 static placements**, **174 scripted models**, **2,973 source entities**, **429 map textures** and the six native sky faces. Every referenced model was found. Both original asset extraction steps completed with zero warnings and errors. Source archive hashes and the material audit are recorded in `export/web/assets/ascension/provenance.json`.
 
 The lander's 19 linked entities use the arrival position from `zombie_cosmodrome_lander.gsc::new_lander_intro`, with lowered gates from `open_lander_gate`. Rendering and baked collision share those transforms. Floating quest letters and later radio props start hidden according to the original scripts. The viewer displays the colored source assets without the gameplay intro's monochrome filter.
 
@@ -28,6 +28,6 @@ npm run test:ascension
 
 Rebuilding uses Python 3.11/Pillow, Node.js and retained local dumps/shared Kino exports. To refresh the raw map extraction, run `.tools/rebuild-ascension.ps1 -Extract`. This invokes the same Windows OpenAssetTools exporter and patched WSL world exporter used by Kino and Shangri-La. Override the latter's path with `-PatchedUnlinker` if necessary. Original archives are unchanged.
 
-Browser files are `export/web/index.html` (the shared map list), `export/web/ascension.js` and `export/web/ascension/`. Reports and screenshots are in `artifacts/ascension/`. The browser suite verifies direct rendering, floor collision, the parked lander, movement, jump/landing, mouse look, fly mode, pausing, reset, resize and asset errors. Additional location screenshots use controlled camera positions, not physical route traversal. All 58 shared unit tests also passed.
+Browser files are `export/web/index.html` (the shared map list), `export/web/assets/js/ascension.js` and `export/web/assets/ascension/`. Reports and screenshots are in `artifacts/ascension/`. The browser suite verifies direct rendering, floor collision, the parked lander, movement, jump/landing, mouse look, fly mode, pausing, reset, resize and asset errors. Additional location screenshots use controlled camera positions, not physical route traversal. All 58 shared unit tests also passed.
 
 The launcher reuses a server only after matching this workspace's health endpoint, or starts one on a free port from 5173–5183. The current URL is saved in `artifacts/ascension-url.txt`. **Stop Ascension.cmd** stops a server recorded as started by this launcher; a reused Kino/Moon server keeps running.

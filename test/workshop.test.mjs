@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { browseUrl, parseBrowse, crawl, merge, describePage, sourceLink, searchLive, LISTS } from '../.tools/lib/workshop-crawl.mjs';
 import { workshopResponse, normalizeParams } from '../functions/api/workshop.js';
-import { workshop, PROVIDERS } from '../export/web/custom-maps/providers.js';
+import { workshop, PROVIDERS } from '../export/web/assets/js/custom-maps/providers.js';
 
 const card = (id, title, author, rating = 5) => `<div class="workshopItem"><a data-panel="{&quot;focusable&quot;:false}" href="https://steamcommunity.com/sharedfiles/filedetails/?id=${id}&amp;searchtext=zombies" class="ugc" data-publishedfileid="${id}"><div class="workshopItemPreviewHolder  "><img class="workshopItemPreviewImage " src="https://images.steamusercontent.com/ugc/${id}/?imw=268&amp;imh=268&amp;ima=fit"></div><div class="workshopItemTitle ellipsis">${title}</div></a><div class="workshopItemAuthorName ellipsis">by&nbsp;<a class="workshop_author_link" href="https://steamcommunity.com/id/x/myworkshopfiles/">${author}</a></div><img class="fileRating" src="https://community.fastly.steamstatic.com/public/images/sharedfiles/${rating}-star_large.png"></div>`;
 

@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { MoonSession } from '../export/web/moon-session.js';
-import { MoonNavigation } from '../export/web/moon-navigation.js';
+import { MoonSession } from '../export/web/assets/js/moon-session.js';
+import { MoonNavigation } from '../export/web/assets/js/moon-navigation.js';
 
-const data=JSON.parse(fs.readFileSync(new URL('../export/web/moon/combat-data.json',import.meta.url)));
-const map=JSON.parse(fs.readFileSync(new URL('../export/web/moon/map-data.json',import.meta.url)));
+const data=JSON.parse(fs.readFileSync(new URL('../export/web/assets/moon/combat-data.json',import.meta.url)));
+const map=JSON.parse(fs.readFileSync(new URL('../export/web/assets/moon/map-data.json',import.meta.url)));
 const session=()=>new MoonSession(data,()=>.5);
 
 test('Moon starts in endless Area 51, with source starting points and ammunition',()=>{
@@ -51,7 +51,7 @@ test('Every Moon combat model and animation URL resolves locally',()=>{
   const definitions=[...Object.values(data.weapons),...Object.values(data.equipment),...Object.values(data.perkDrinks)];
   const urls=[...Object.values(data.actors.models),...Object.values(data.animations),...Object.values(data.props),...definitions.flatMap(d=>[d.model,d.worldModel,...Object.values(d.animations),...Object.values(d.upgrade?.animations??{})]).filter(Boolean)];
   for(const id of ['m1911_zm','microwavegun_zm','microwavegundw_zm','minigun_zm'])assert.ok(data.weapons[id],id);
-  for(const url of urls)assert.ok(fs.existsSync(new URL('../export/web/'+url,import.meta.url)),url);
+  for(const url of urls)assert.ok(fs.existsSync(new URL('../export/web/assets/'+url,import.meta.url)),url);
   for(const name of data.actors.technicians)assert.match(name,/c_zom_moon_tech/);
   assert.match(data.actors.military,/militarypolice/);
 });

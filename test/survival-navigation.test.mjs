@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { SurvivalNavigation } from '../export/web/shangri-la-navigation.js';
+import { SurvivalNavigation } from '../export/web/assets/js/shangri-la-navigation.js';
 
 // Open floor with a wall at x=200 and a doorway (z 0..110); no baked navmesh at all.
 const boxes = [

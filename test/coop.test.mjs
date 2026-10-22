@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { PLAYER_COLORS, colorFor, nearestTarget, Scoreboard, cleanScore } from '../export/web/net/coop.js';
+import { PLAYER_COLORS, colorFor, nearestTarget, Scoreboard, cleanScore } from '../export/web/assets/js/net/coop.js';
 
 const roster = [{ id: 'a', name: 'Ann' }, { id: 'b', name: 'Bo' }, { id: 'c', name: 'Cy' }];
 

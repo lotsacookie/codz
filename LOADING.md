@@ -27,24 +27,24 @@
   loading screen (a time-capped "Preparing graphics" step) instead of during the first seconds of play.
 
 ## Hosting
-Serve `export/web` with the real files, not LFS pointers (`git lfs pull` before deploying). If you cannot, point the
+Serve `export/web` (page + `assets/`) with the real files, not LFS pointers (`git lfs pull` before deploying). If you cannot, point the
 game at a host that has them:
 * `?assets=https://host/path/` (comma-separate several), or
 * `window.KINO_ASSET_BASES=['https://host/path/']` before the module loads.
-On `<user>.github.io/<repo>/` the loader also tries `media.githubusercontent.com/media/<user>/<repo>/main/export/web/`
+On `<user>.github.io/<repo>/` the loader also tries `media.githubusercontent.com/media/<user>/<repo>/main/export/web/assets/`
 (best effort; requires that host to allow cross-origin reads).
 
 ## Asset pack: one download for textures, models and animations
 Kino requests ~590 textures, 137 models and 676 animation files. `npm run build:pack` bundles them into one file per
 device profile, so the game makes one request instead of ~1400:
 
-* `export/web/asset-pack/kino-desktop.pack` (~166 MB) and `kino-mobile.pack` (~85 MB, uses the `textures-mobile` images).
+* `export/web/assets/asset-pack/kino-desktop.pack` (~166 MB) and `kino-mobile.pack` (~85 MB, uses the `textures-mobile` images).
 * The loader fetches the pack with the normal resilient downloader (byte progress, retries, stall detection, Cache
   Storage, LFS-pointer detection), then serves every texture, model and animation from memory. Anything not in the pack,
   or any pack that is missing, truncated or an LFS pointer, falls back to the individual files, so a bad pack cannot
   break the game.
 * The builder refuses to pack Git LFS pointers or missing files. Run `git lfs pull` first.
-* The packs are committed to `export/web/asset-pack/` through Git LFS (`*.pack` in `.gitattributes`), so they are
+* The packs are committed to `export/web/assets/asset-pack/` through Git LFS (`*.pack` in `.gitattributes`), so they are
   served from the same place as `index.html` and the other LFS files (the game requests
   `asset-pack/kino-<profile>.pack`). Deploy with the LFS files pulled, as for `kino.bin`.
 * The builder is deterministic: unchanged inputs give byte-identical packs, so a rebuild with nothing new commits

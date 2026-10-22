@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cleanCustomMap, inferMapSource, makeListing, CUSTOM_MAP_ID } from '../export/web/net/protocol.js';
-import { listBuiltinBsp, builtinBspUrl, builtinBspMap } from '../export/web/custom-maps/providers.js';
-import { HostLobby, ClientLobby } from '../export/web/net/lobby.js';
+import { cleanCustomMap, inferMapSource, makeListing, CUSTOM_MAP_ID } from '../export/web/assets/js/net/protocol.js';
+import { listBuiltinBsp, builtinBspUrl, builtinBspMap } from '../export/web/assets/js/custom-maps/providers.js';
+import { HostLobby, ClientLobby } from '../export/web/assets/js/net/lobby.js';
 
 // Same in-memory Trystero stand-in as net.test.mjs, trimmed to what a host and one client need.
 function fakeNetwork() {

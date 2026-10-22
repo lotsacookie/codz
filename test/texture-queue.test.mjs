@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { createTextureQueue, createTextureRegistry, looksComplete, placeholderColor, canUseImageBitmap } from '../export/web/texture-queue.js';
+import { createTextureQueue, createTextureRegistry, looksComplete, placeholderColor, canUseImageBitmap } from '../export/web/assets/js/texture-queue.js';
 
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
-const texturesDir = new URL('../export/web/textures/', import.meta.url).pathname;
+const texturesDir = new URL('../export/web/assets/textures/', import.meta.url).pathname;
 const isPointer = bytes => Buffer.from(bytes.subarray(0, 23)).toString() === 'version https://git-lfs';
 
 test('registry reports pending, ready and failed textures and says when all are ready', () => {

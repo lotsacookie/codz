@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { Enemies } from '../export/web/enemies.js';
+import { Enemies } from '../export/web/assets/js/enemies.js';
 
 function fakeZombie(id) {
   const root = new THREE.Group();

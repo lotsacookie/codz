@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { init, exportNavMesh, NavMeshQuery } from '@recast-navigation/core';
 import { generateSoloNavMesh } from '@recast-navigation/generators';
 
-const out = path.resolve(import.meta.dirname,'../export/web/moon');
+const out = path.resolve(import.meta.dirname,'../export/web/assets/moon');
 const data = JSON.parse(fs.readFileSync(path.join(out,'map-data.json')));
 const meta = JSON.parse(fs.readFileSync(path.join(out,'collision.json')));
 const binary = fs.readFileSync(path.join(out,'collision.bin'));

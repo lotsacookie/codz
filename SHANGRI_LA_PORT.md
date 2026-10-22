@@ -23,7 +23,7 @@ Shangri-La is a solo survival map built on the shared Zombies combat stack, with
 
 - `.tools/bake-shangri-la.mjs` bakes static collision; door, debris and window-board parts are excluded and collide at runtime.
 - `.tools/bake-shangri-la-nav.mjs` bakes `navigation.bin` and `navigation.json` (spawn candidates) from that collision using the vendored Recast build (`node --import ./.tools/lib/vendor-resolve.mjs ...`).
-- `export/web/shangri-la-rules.js` groups doors, barricades, boxes, spawners and power switches from the map entities.
+- `export/web/assets/js/shangri-la-rules.js` groups doors, barricades, boxes, spawners and power switches from the map entities.
 
 ## Known limits
 

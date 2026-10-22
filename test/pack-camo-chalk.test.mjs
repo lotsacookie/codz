@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import * as THREE from 'three';
-import { loadAtlas } from '../export/web/fx-atlas.js';
-import { createMuzzleFlash, MuzzleSmoke, flashTint } from '../export/web/muzzle-fx.js';
-import { weaponFxProfile } from '../export/web/fx-profile.js';
-import { applyPackCamo, isCamoTarget, patchPackCamo } from '../export/web/pack-camo.js';
-import { chalkMarkup, markCenterShift } from '../export/web/hud.js';
+import { loadAtlas } from '../export/web/assets/js/fx-atlas.js';
+import { createMuzzleFlash, MuzzleSmoke, flashTint } from '../export/web/assets/js/muzzle-fx.js';
+import { weaponFxProfile } from '../export/web/assets/js/fx-profile.js';
+import { applyPackCamo, isCamoTarget, patchPackCamo } from '../export/web/assets/js/pack-camo.js';
+import { chalkMarkup, markCenterShift } from '../export/web/assets/js/hud.js';
 
-const web = new URL('../export/web/', import.meta.url);
+const web = new URL('../export/web/assets/', import.meta.url);
 
 test('chalk tally marks use the reference chalkmarks images that exist on disk', () => {
   for (let n = 1; n <= 5; n++) {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { GameAudio } from '../export/web/audio.js';
+import { GameAudio } from '../export/web/assets/js/audio.js';
 
 test('mobile audio shares pending requests and evicts old decoded cues within its byte budget', async t => {
   const requests = [];

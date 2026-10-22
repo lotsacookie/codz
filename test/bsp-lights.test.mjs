@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { addMapLights, packLights, selectViewLights, lightReach, POOL_DESKTOP } from '../export/web/custom-maps/lights.js';
-import { windingSide } from '../export/web/custom-maps/bsp.js';
+import { addMapLights, packLights, selectViewLights, lightReach, POOL_DESKTOP } from '../export/web/assets/js/custom-maps/lights.js';
+import { windingSide } from '../export/web/assets/js/custom-maps/bsp.js';
 
 function camera(x = 0, y = 0, z = 0, yaw = 0) {
   const cam = new THREE.PerspectiveCamera(78, 16 / 9, 1, 5000);

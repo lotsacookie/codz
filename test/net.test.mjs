@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Directory, makeCode, makeListing, normalizeCode, validListing, packMessage, unpackMessage, NET_VERSION, MAX_PLAYERS } from '../export/web/net/protocol.js';
-import { HostLobby, ClientLobby, ServerBrowser } from '../export/web/net/lobby.js';
+import { Directory, makeCode, makeListing, normalizeCode, validListing, packMessage, unpackMessage, NET_VERSION, MAX_PLAYERS } from '../export/web/assets/js/net/protocol.js';
+import { HostLobby, ClientLobby, ServerBrowser } from '../export/web/assets/js/net/lobby.js';
 
 // In-memory stand-in for Trystero: rooms are keyed by appId+password+roomId and peers see each other asynchronously.
 function fakeNetwork() {
@@ -133,12 +133,12 @@ test('the host dropping out of the directory removes its listing', async () => {
 test('the launcher offers Multiplayer, wires its menu, and only co-op maps can be hosted', async () => {
   const { readFileSync } = await import('node:fs');
   const html = readFileSync(new URL('../export/web/index.html', import.meta.url), 'utf8');
-  const shell = readFileSync(new URL('../export/web/shell.js', import.meta.url), 'utf8');
+  const shell = readFileSync(new URL('../export/web/assets/js/shell.js', import.meta.url), 'utf8');
   assert.ok(html.includes('data-menu="multiplayer"') && html.includes('id="multiplayer"'));
   assert.ok(shell.includes("createMultiplayerMenu") && shell.includes('no rounds'), 'exploration maps without rounds are excluded');
 });
 
-import { PoseSender, RemotePlayers, cleanPose } from '../export/web/net/players.js';
+import { PoseSender, RemotePlayers, cleanPose } from '../export/web/assets/js/net/players.js';
 
 test('poses are clamped and nonsense is dropped', () => {
   assert.equal(cleanPose({ x: 1e9, y: 0, z: 0 }), null);

@@ -84,7 +84,7 @@ export const khronos = {
 };
 
 
-const BSP_INDEX = new URL('../maps/bsp/maps.json', import.meta.url).href;
+const BSP_INDEX = new URL('../../maps/bsp/maps.json', import.meta.url).href;
 const POLY = 'https://api.polyhaven.com';
 let bspIndex = null, polyIndex = null;
 
@@ -121,9 +121,9 @@ export const bsp = {
         license: '',
         description: map.description ?? '',
         detail: [`${map.perks ?? 0} perks`, sizeLabel(map.size)].filter(Boolean).join(' · '),
-        thumb: map.art ? new URL(`../${map.art}`, import.meta.url).href : '',
-        art: map.art ? new URL(`../${map.art}`, import.meta.url).href : '',
-        url: new URL(`../maps/bsp/${map.file}`, import.meta.url).href,
+        thumb: map.art ? new URL(`../../${map.art}`, import.meta.url).href : '',
+        art: map.art ? new URL(`../../${map.art}`, import.meta.url).href : '',
+        url: new URL(`../../maps/bsp/${map.file}`, import.meta.url).href,
         source: 'bsp',
       })),
       next,
@@ -201,8 +201,8 @@ export const polyhaven = {
   },
 };
 
-const WORKSHOP_INDEX = new URL('../maps/workshop/index.json', import.meta.url).href;
-const WORKSHOP_API = new URL('../api/workshop', import.meta.url).href;
+const WORKSHOP_INDEX = new URL('../../maps/workshop/index.json', import.meta.url).href;
+const WORKSHOP_API = new URL('../../../api/workshop', import.meta.url).href;
 const STEAM_PAGE = id => `https://steamcommunity.com/sharedfiles/filedetails/?id=${encodeURIComponent(id)}`;
 const STEAM_SEARCH = query => `https://steamcommunity.com/workshop/browse/?${new URLSearchParams({ appid: '311210', searchtext: query, browsesort: 'textsearch', section: 'readytouseitems' })}`;
 let workshopIndex = null;

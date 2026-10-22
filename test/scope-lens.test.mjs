@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, updateScopeLens, lensUniforms } from '../export/web/scope-lens.js';
+import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, updateScopeLens, lensUniforms } from '../export/web/assets/js/scope-lens.js';
 
 test('lens materials are recognised by name', () => {
   assert.ok(isLensMaterial({ name: 'mc/mtl_weapon_scope_acog_lens' }));

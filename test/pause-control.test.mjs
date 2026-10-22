@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createPauseControl } from '../export/web/pause-control.js';
+import { createPauseControl } from '../export/web/assets/js/pause-control.js';
 
 function rig({ ready = true, over = false } = {}) {
   const log = [], keys = new Set(['KeyW']);

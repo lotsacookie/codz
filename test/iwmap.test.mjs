@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseIwmap } from '../export/web/custom-maps/iwmap-parse.js';
-import { brushPolygons } from '../export/web/custom-maps/iwmap-brush.js';
-import { flattenIwmap, createResolver } from '../export/web/custom-maps/iwmap-flatten.js';
-import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/custom-maps/iwmap-layout.js';
-import { parseGdtMaterials, describeMaterial, packTextureFor, imageIndex, boxUv, createMaterialLibrary } from '../export/web/custom-maps/iwmap-material.js';
-import { patchPolygons } from '../export/web/custom-maps/iwmap-brush.js';
-import { parseGithubMapUrl, isGithubRepoUrl, fetchPrefabs } from '../export/web/custom-maps/iwmap-remote.js';
+import { parseIwmap } from '../export/web/assets/js/custom-maps/iwmap-parse.js';
+import { brushPolygons } from '../export/web/assets/js/custom-maps/iwmap-brush.js';
+import { flattenIwmap, createResolver } from '../export/web/assets/js/custom-maps/iwmap-flatten.js';
+import { extractIwmapLayout, playArea, restrictLayout } from '../export/web/assets/js/custom-maps/iwmap-layout.js';
+import { parseGdtMaterials, describeMaterial, packTextureFor, imageIndex, boxUv, createMaterialLibrary } from '../export/web/assets/js/custom-maps/iwmap-material.js';
+import { patchPolygons } from '../export/web/assets/js/custom-maps/iwmap-brush.js';
+import { parseGithubMapUrl, isGithubRepoUrl, fetchPrefabs } from '../export/web/assets/js/custom-maps/iwmap-remote.js';
 
 const face = (a, b, c, material = 'wall') => ` ( ${a.join(' ')} ) ( ${b.join(' ')} ) ( ${c.join(' ')} ) ${material} 16 16 0 0 0 0 lightmap_gray 16384 16384 0 0 0 0`;
 

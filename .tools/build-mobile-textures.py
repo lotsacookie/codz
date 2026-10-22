@@ -5,7 +5,7 @@ from urllib.parse import unquote
 from PIL import Image
 
 root = Path(__file__).resolve().parents[1]
-web = root / 'export' / 'web'
+web = root / 'export' / 'web' / 'assets'
 source = web / 'textures'
 destination = web / 'textures-mobile'
 count = 0

@@ -1,7 +1,7 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $ascensionRoot = Split-Path -Parent $PSScriptRoot
-foreach ($ascensionFile in @('index.html','map-assets.js','shell.js','shell.css','orientation.js','maps/ascension.js','hud.css','ascension/ascension.gltf','ascension/ascension.bin','ascension/collision.json','ascension/collision.bin','ascension/map-data.json')) {
+foreach ($ascensionFile in @('index.html','assets/js/map-assets.js','assets/js/shell.js','assets/shell.css','assets/js/orientation.js','assets/js/maps/ascension.js','assets/hud.css','assets/ascension/ascension.gltf','assets/ascension/ascension.bin','assets/ascension/collision.json','assets/ascension/collision.bin','assets/ascension/map-data.json')) {
     if (-not (Test-Path -LiteralPath (Join-Path $ascensionRoot "export/web/$ascensionFile"))) {
         throw "Missing Ascension asset: $ascensionFile. Run npm run build:ascension."
     }
@@ -24,7 +24,7 @@ if ($null -eq $ascensionPort) {
     $ascensionPort = $ascensionPorts | Where-Object { $ascensionListening -notcontains $_ } | Select-Object -First 1
     if ($null -eq $ascensionPort) { throw 'No free local port in 5173-5183.' }
     $ascensionNode = (Get-Command node -ErrorAction Stop).Source
-    $ascensionProcess = Start-Process -FilePath $ascensionNode -ArgumentList @('"'+(Join-Path $PSScriptRoot 'serve.mjs')+'"', "$ascensionPort") -WorkingDirectory $ascensionRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $ascensionLogs 'ascension-server.log') -RedirectStandardError (Join-Path $ascensionLogs 'ascension-server-error.log') -PassThru
+    $ascensionProcess = Start-Process -FilePath $ascensionNode -ArgumentList @('assets/"','assets/serve.mjs')+'"', "$ascensionPort") -WorkingDirectory $ascensionRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $ascensionLogs 'ascension-server.log') -RedirectStandardError (Join-Path $ascensionLogs 'ascension-server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $ascensionLogs 'ascension-server.pid') -Value $ascensionProcess.Id
     $ascensionStarted = $false
     for ($ascensionAttempt = 0; $ascensionAttempt -lt 40; $ascensionAttempt++) {

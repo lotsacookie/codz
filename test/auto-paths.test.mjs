@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { AutoPaths } from '../export/web/auto-paths.js';
+import { AutoPaths } from '../export/web/assets/js/auto-paths.js';
 
 // A flat floor split by a wall at x=200 with one doorway (z 0..110). Everything is an axis-aligned box.
 function level({ door = true } = {}) {

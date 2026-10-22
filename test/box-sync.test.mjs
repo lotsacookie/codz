@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { MysteryBox } from '../export/web/mystery-box.js';
-import { cleanBoxMessage, packBoxStart } from '../export/web/net/box-sync.js';
-import { createCoop } from '../export/web/net/coop-client.js';
+import { MysteryBox } from '../export/web/assets/js/mystery-box.js';
+import { cleanBoxMessage, packBoxStart } from '../export/web/assets/js/net/box-sync.js';
+import { createCoop } from '../export/web/assets/js/net/coop-client.js';
 
 function makeBox({ selfId = null, names = {}, random = () => .5 } = {}) {
   const sent = [], toasts = [], session = { time: 0, points: 1000, effects: {}, inventory: [], monkeysOwned: false, random };

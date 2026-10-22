@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getHands, setHands, cycleHands, handsLabel, handsModelFor } from '../export/web/viewmodel-hands.js';
+import { getHands, setHands, cycleHands, handsLabel, handsModelFor } from '../export/web/assets/js/viewmodel-hands.js';
 
 const characters = {
   viewmodel_usa_pow_arms: 'models/viewmodel_usa_pow_arms.glb',

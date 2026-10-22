@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import * as THREE from 'three';
-import { BloodFx } from '../export/web/blood.js';
-import { LimbDebris } from '../export/web/limbs.js';
+import { BloodFx } from '../export/web/assets/js/blood.js';
+import { LimbDebris } from '../export/web/assets/js/limbs.js';
 
-const web = new URL('../export/web/', import.meta.url);
+const web = new URL('../export/web/assets/', import.meta.url);
 
 function texture(width = 256, height = 256) {
   const t = new THREE.Texture();

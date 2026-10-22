@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'export/web/moon'
+OUT = ROOT / 'export/web/assets/moon'
 OUT.mkdir(parents=True, exist_ok=True)
 WORLD = ROOT / 'export_moon/world/maps/zombie_moon.d3dbsp.gfxworld.json'
 ENTS = ROOT / 'export_moon/world/maps/zombie_moon.d3dbsp.ents'

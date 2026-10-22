@@ -9,7 +9,7 @@ from urllib.parse import quote
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'export/web/moon'
+OUT = ROOT / 'export/web/assets/moon'
 ZONES = [ROOT/'export_game/common', ROOT/'export_game/common_zombie', ROOT/'export_game/en_common_zombie', ROOT/'export_moon/zombie_moon', ROOT/'export_moon/zombie_moon_patch']
 ZONES += [ROOT/'export_moon/rigs/zombie_moon', ROOT/'export_moon/rigs/zombie_moon_patch']
 for sub in ['models', 'textures/actors', 'animations']:
@@ -54,7 +54,7 @@ def model(name):
     (OUT/'models'/f'{name}.glb').write_bytes(struct.pack('<III',0x46546c67,2,20+len(raw)+len(tail))+struct.pack('<II',len(raw),0x4e4f534a)+raw+tail)
     return 'moon/models/'+name+'.glb'
 
-kino = json.loads((ROOT/'export/web/game-data.json').read_text())
+kino = json.loads((ROOT/'export/web/assets/game-data.json').read_text())
 map_data = json.loads((OUT/'map-data.json').read_text())
 weapon_ids = {'m1911_zm'} | {e.get('zombie_weapon_upgrade') for e in map_data['entities']}
 weapons = {k:v for k,v in kino['weapons'].items() if k != 'thundergun_zm'}
@@ -136,6 +136,6 @@ combat = {'map':'zombie_moon','weapons':weapons,'rules':kino['rules'],'melee':ki
     'characters':kino['characters'],'animations':animations,'powerups':kino['powerups'],
     'perkDrinks':drinks,'boxTeddy':kino['boxTeddy'],'equipment':equipment,'props':props,'boxPool':box_pool,
     'actors':{'models':actor_models,'technicians':bodies,'heads':heads,'military':'c_zom_moon_militarypolice_body_bloat'},
-    'sources':{'actors':'export_moon/zombie_moon/character','commonWeapons':'export/web/game-data.json','animations':'export_moon/rigs/zombie_moon/xanim'}}
+    'sources':{'actors':'export_moon/zombie_moon/character','commonWeapons':'export/web/assets/game-data.json','animations':'export_moon/rigs/zombie_moon/xanim'}}
 (OUT/'combat-data.json').write_text(json.dumps(combat,separators=(',',':')))
 print(f'Moon combat: {len(weapons)} weapons, {len(actor_models)} native actor parts, {len(animations)} animations')

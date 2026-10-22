@@ -1,10 +1,10 @@
-// Regenerates export/web/maps/bsp/maps.json from the .bsp files (and their .txt/.mb2/.nsz/.way sidecars).
+// Regenerates export/web/assets/maps/bsp/maps.json from the .bsp files (and their .txt/.mb2/.nsz/.way sidecars).
 // Run after adding or removing maps:  npm run build:bsp-index
 import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
-import { parseBsp, summarizeEntities } from '../export/web/custom-maps/bsp-parse.js';
+import { parseBsp, summarizeEntities } from '../export/web/assets/js/custom-maps/bsp-parse.js';
 
-const dir = path.resolve(import.meta.dirname, '..', 'export', 'web', 'maps', 'bsp');
+const dir = path.resolve(import.meta.dirname, '..', 'export', 'web', 'assets', 'maps', 'bsp');
 const unwrap = lines => lines.map(l => l.trim()).filter(Boolean).reduce((out, line) => (out.endsWith('-') ? out.slice(0, -1) + line : (out ? `${out} ${line}` : line)), '');
 const pretty = id => id.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 

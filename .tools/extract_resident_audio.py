@@ -8,7 +8,7 @@ fmt/dpds/data for FFmpeg. Keep offsets and hashes so every cue is auditable.
 import hashlib, json, pathlib, re, struct, subprocess, zlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-OUT = ROOT/'export/web/audio'
+OUT = ROOT/'export/web/assets/audio'
 TEMP = ROOT/'artifacts/resident-audio'
 EVENT_PREFIXES = tuple('sound/evt/zombie_global/'+p+'/' for p in ['powerup','nuke','perksacola/bottle','box'])
 

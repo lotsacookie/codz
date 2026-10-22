@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { buildBspScene } from '../export/web/custom-maps/bsp.js';
+import { buildBspScene } from '../export/web/assets/js/custom-maps/bsp.js';
 
 // A tiny hand-made parsed BSP: one quad per texture. Quake stores a front face clockwise, so the real
 // builder reverses it; the plane data says which way each quad faces.

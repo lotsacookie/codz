@@ -6,6 +6,8 @@ import { compactCollision } from './compact-collision.mjs';
 const root = path.resolve(import.meta.dirname, '..');
 const source = path.join(root, 'export', 'web');
 const destination = path.join(root, '.work', 'cloudflare-pages');
+const assetSource = path.join(source, 'assets');
+const assetDestination = path.join(destination, 'assets');
 const limit = 24 * 1024 * 1024;
 const included = new Set();
 mkdirSync(destination, { recursive: true });
@@ -42,21 +44,21 @@ function includeModule(relative) {
     includeModule(path.posix.normalize(path.posix.join(path.posix.dirname(relative), match[1])));
   }
 }
-includeModule('shell.js');
-includeModule('maps/kino.js');
-for (const file of ['shell.css', 'touch-controls.css', 'hud.css', 'game-data.json', 'navigation.bin', 'assets/data/shell-models.json',
-  'art/loadscreen_zombie_theater.webp']) copy(file);
+includeModule('assets/js/shell.js');
+includeModule('assets/js/maps/kino.js');
+for (const file of ['assets/shell.css', 'assets/touch-controls.css', 'assets/hud.css', 'assets/game-data.json', 'assets/navigation.bin', 'assets/data/shell-models.json',
+  'assets/art/loadscreen_zombie_theater.webp']) copy(file);
 const kinoOnlyPage = readFileSync(path.join(source, 'index.html'), 'utf8')
   .replace(/\s*<li><button type="button" data-map="(?!kino")[^"]*"[\s\S]*?<\/li>/g, '');
 assert(kinoOnlyPage.includes('data-map="kino"') && !/data-map="(?!kino")/.test(kinoOnlyPage), 'Staged map list must contain only Kino');
 write('index.html', kinoOnlyPage);
-for (const directory of ['animations', 'audio', 'models', 'textures', 'textures-mobile', 'vendor', 'social']) copy(directory);
+for (const directory of ['assets/animations', 'assets/audio', 'assets/models', 'assets/textures', 'assets/textures-mobile', 'assets/js/vendor', 'assets/social']) copy(directory);
 
 // glTF supports multiple buffers natively. Repack complete buffer views with
 // four-byte alignment, and verify every view against the original geometry.
-const original = JSON.parse(readFileSync(path.join(source, 'kino.gltf'), 'utf8'));
+const original = JSON.parse(readFileSync(path.join(assetSource, 'kino.gltf'), 'utf8'));
 const gltf = structuredClone(original);
-const inputs = original.buffers.map(buffer => readFileSync(path.join(source, buffer.uri)));
+const inputs = original.buffers.map(buffer => readFileSync(path.join(assetSource, buffer.uri)));
 const chunks = [];
 let pieces = [], size = 0;
 function flush() {
@@ -82,7 +84,7 @@ for (let i = 0; i < gltf.bufferViews.length; i++) {
 flush();
 gltf.buffers = chunks.map((bytes, i) => {
   const uri = `kino-part-${i}.bin`;
-  write(uri, bytes);
+  write(`assets/${uri}`, bytes);
   return { uri, byteLength: bytes.length };
 });
 for (let i = 0; i < gltf.bufferViews.length; i++) {
@@ -90,29 +92,29 @@ for (let i = 0; i < gltf.bufferViews.length; i++) {
   assert(chunks[view.buffer].subarray(view.byteOffset, view.byteOffset + view.byteLength)
     .equals(inputs[input.buffer].subarray(input.byteOffset ?? 0, (input.byteOffset ?? 0) + input.byteLength)), `Changed glTF view ${i}`);
 }
-write('kino.gltf', JSON.stringify(gltf));
+write('assets/kino.gltf', JSON.stringify(gltf));
 
 // Reassemble these parts in the collision loader, preserving the baked BVH.
-const originalCollision = JSON.parse(readFileSync(path.join(source, 'collision.json'), 'utf8'));
-const originalBinary = readFileSync(path.join(source, originalCollision.binary));
+const originalCollision = JSON.parse(readFileSync(path.join(assetSource, 'collision.json'), 'utf8'));
+const originalBinary = readFileSync(path.join(assetSource, originalCollision.binary));
 assert.equal(originalBinary.length, originalCollision.byteLength);
 const { metadata: collision, binary, report: collisionCompaction } = compactCollision(originalCollision, originalBinary);
 collision.binaryParts = [];
 for (let offset = 0; offset < binary.length; offset += limit) {
   const bytes = binary.subarray(offset, offset + limit);
   const uri = `collision-part-${collision.binaryParts.length}.bin`;
-  write(uri, bytes);
+  write(`assets/${uri}`, bytes);
   collision.binaryParts.push({ uri, byteLength: bytes.length });
 }
 delete collision.binary;
-assert(Buffer.concat(collision.binaryParts.map(part => readFileSync(path.join(destination, part.uri)))).equals(binary));
-write('collision.json', JSON.stringify(collision));
+assert(Buffer.concat(collision.binaryParts.map(part => readFileSync(path.join(assetDestination, part.uri)))).equals(binary));
+write('assets/collision.json', JSON.stringify(collision));
 // Remove only obsolete generated collision parts inside this exact output
 // directory; a smaller lossless collision buffer may need fewer parts.
-for (const name of readdirSync(destination)) {
-  if (!/^collision-part-\d+\.bin$/.test(name) || included.has(name)) continue;
-  const file = path.resolve(destination, name);
-  assert.equal(path.dirname(file), destination);
+for (const name of readdirSync(assetDestination)) {
+  if (!/^collision-part-\d+\.bin$/.test(name) || included.has(`assets/${name}`)) continue;
+  const file = path.resolve(assetDestination, name);
+  assert.equal(path.dirname(file), assetDestination);
   assert(lstatSync(file).isFile() && !lstatSync(file).isSymbolicLink());
   unlinkSync(file);
 }

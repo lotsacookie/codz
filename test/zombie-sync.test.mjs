@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {
   PuppetTracker, packSnapshot, cleanSnapshot, packZombie, cleanHit, packHit, cleanDead, cleanAward, cleanHurt, cleanBoardRequest,
   MAX_ZOMBIES, MAX_PEER_DAMAGE, MAX_HIT_DAMAGE, STATES,
-} from '../export/web/net/zombie-sync.js';
-import { ZombieNet } from '../export/web/net/zombie-net.js';
-import { packMessage, unpackMessage, MESSAGE_TYPES } from '../export/web/net/protocol.js';
+} from '../export/web/assets/js/net/zombie-sync.js';
+import { ZombieNet } from '../export/web/assets/js/net/zombie-net.js';
+import { packMessage, unpackMessage, MESSAGE_TYPES } from '../export/web/assets/js/net/protocol.js';
 
 const zombie = (id, x, extra = {}) => ({ id, kind: 'zombie', state: 'chase', health: 75, maxHealth: 150, root: { position: { x, y: 1.26, z: -3 }, rotation: { y: .5 } }, ...extra });
 const session = { round: 4, phase: 'fighting', total: 20, spawned: 7, killed: 3, countdown: 0, dogRound: false, area: '' };

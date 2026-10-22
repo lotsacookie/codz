@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { MoonSession, MOON_PERKS } from '../export/web/moon-session.js';
-import { MoonProgression } from '../export/web/moon-progression.js';
-const data=JSON.parse(fs.readFileSync(new URL('../export/web/moon/combat-data.json',import.meta.url)));
-const map=JSON.parse(fs.readFileSync(new URL('../export/web/moon/map-data.json',import.meta.url)));
+import { MoonSession, MOON_PERKS } from '../export/web/assets/js/moon-session.js';
+import { MoonProgression } from '../export/web/assets/js/moon-progression.js';
+const data=JSON.parse(fs.readFileSync(new URL('../export/web/assets/moon/combat-data.json',import.meta.url)));
+const map=JSON.parse(fs.readFileSync(new URL('../export/web/assets/moon/map-data.json',import.meta.url)));
 const setup=()=>{const s=new MoonSession(data,()=>.37);return {s,q:new MoonProgression(map,s)};};
 const simon=q=>{let safety=1000;while(['simon','final_simon'].includes(q.stage)&&safety--){q.update(Math.max(0,q.sequenceShowUntil-q.elapsed)+.01);for(const color of q.sequence.slice(0,q.sequenceLength))q.pressSimon(color);}assert.ok(safety>0);};
 

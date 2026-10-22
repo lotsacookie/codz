@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createOfferPrefetch, prefetchWeapon } from '../export/web/viewmodel-cache.js';
+import { createOfferPrefetch, prefetchWeapon } from '../export/web/assets/js/viewmodel-cache.js';
 
 const weapons = { ak74u_zm: { id: 'ak74u_zm', name: 'AK74u' }, ray_gun_zm: { id: 'ray_gun_zm', name: 'Ray Gun' } };
 

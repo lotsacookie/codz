@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { KinoSession } from '../export/web/kino-session.js';
-import { KinoEvents } from '../export/web/kino-events.js';
-const data=JSON.parse(fs.readFileSync('export/web/game-data.json'));
+import { KinoSession } from '../export/web/assets/js/kino-session.js';
+import { KinoEvents } from '../export/web/assets/js/kino-events.js';
+const data=JSON.parse(fs.readFileSync('export/web/assets/game-data.json'));
 const fresh=()=>new KinoSession(data,()=>.5);
 
 test('All 32 Kino weapons, upgrades, attachments and equipment have local models and clips',()=>{
@@ -11,7 +11,7 @@ test('All 32 Kino weapons, upgrades, attachments and equipment have local models
   for(const d of [...Object.values(data.weapons),...Object.values(data.equipment)]){
     for(const def of [d,d.upgrade,d.upgrade?.attachment].filter(Boolean)){
       assert(def.model&&def.worldModel,def.id);
-      for(const url of [def.model,def.worldModel,def.leftModel,def.projectileModel,...Object.values(def.animations),...Object.values(def.leftAnimations??{})].filter(Boolean))assert(fs.existsSync('export/web/'+url),url);
+      for(const url of [def.model,def.worldModel,def.leftModel,def.projectileModel,...Object.values(def.animations),...Object.values(def.leftAnimations??{})].filter(Boolean))assert(fs.existsSync('export/web/assets/'+url),url);
     }
   }
   for(const id of data.boxPool)assert(data.weapons[id]||data.equipment[id],id);

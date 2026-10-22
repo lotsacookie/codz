@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { PlayerVox, voiceLines, weaponCategory, CATEGORIES } from '../export/web/player-vox.js';
+import { PlayerVox, voiceLines, weaponCategory, CATEGORIES } from '../export/web/assets/js/player-vox.js';
 
-const manifest = JSON.parse(readFileSync(new URL('../export/web/audio/manifest.json', import.meta.url), 'utf8'));
+const manifest = JSON.parse(readFileSync(new URL('../export/web/assets/audio/manifest.json', import.meta.url), 'utf8'));
 const keys = Object.keys(manifest);
 
 function setup(character = 0, roll = 0) {

@@ -68,8 +68,8 @@ async function pool(items, size, task) {
 async function main() {
   const argv = process.argv.slice(2);
   const option = (name, fallback) => { const at = argv.indexOf(`--${name}`); return at < 0 ? fallback : argv[at + 1]; };
-  const soundsDir = resolve(option('sounds', 'export/web/reference/sounds'));
-  const audioDir = resolve(option('audio', 'export/web/audio'));
+  const soundsDir = resolve(option('sounds', 'export/web/assets/reference/sounds'));
+  const audioDir = resolve(option('audio', 'export/web/assets/audio'));
   const only = option('only', '');
   const names = argv.includes('--tree') ? await treeNames(soundsDir) : JSON.parse(await readFile(join(soundsDir, 'clip-names.json'), 'utf8'));
   const manifestFile = join(audioDir, 'manifest.json');

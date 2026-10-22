@@ -1,7 +1,7 @@
 """Decode locally owned T5 IWD sound files with FFmpeg's Black Ops Audio demuxer."""
 import hashlib, json, pathlib, subprocess, sys, zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-OUT=ROOT/'export/web/audio';OUT.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/'export/web/assets/audio';OUT.mkdir(parents=True,exist_ok=True)
 TEMP=ROOT/'artifacts/native-audio';TEMP.mkdir(parents=True,exist_ok=True)
 requests={
  'fire_sale':'english/sound/vox/scripted/zmb/announcer/firesale_short.wav',

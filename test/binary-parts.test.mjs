@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
-import { loadBinaryParts } from '../export/web/binary-parts.js';
+import { loadBinaryParts } from '../export/web/assets/js/binary-parts.js';
 
 test('collision downloads preserve order across network chunks and reject incomplete or oversized data', async () => {
   const server = createServer((req, res) => {
@@ -27,10 +27,10 @@ test('collision downloads preserve order across network chunks and reject incomp
 });
 
 test('collision layouts are validated against the declared byte length before any download is used', async () => {
-  const { validateCollisionLayout } = await import('../export/web/collision-world.js');
+  const { validateCollisionLayout } = await import('../export/web/assets/js/collision-world.js');
   const fs = await import('node:fs');
   for (const map of ['shangri-la', 'moon']) {
-    const meta = JSON.parse(fs.readFileSync(new URL(`../export/web/${map}/collision.json`, import.meta.url)));
+    const meta = JSON.parse(fs.readFileSync(new URL(`../export/web/assets/${map}/collision.json`, import.meta.url)));
     assert.doesNotThrow(() => validateCollisionLayout(meta, [{ uri: meta.binary, byteLength: meta.byteLength }]), map);
     assert.throws(() => validateCollisionLayout({ ...meta, byteLength: meta.byteLength + 4 }, [{ uri: meta.binary }]), /size mismatch/);
     assert.throws(() => validateCollisionLayout(meta, [{ uri: 'a', byteLength: 10 }, { uri: 'b', byteLength: 10 }]), /size mismatch/);

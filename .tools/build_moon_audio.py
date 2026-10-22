@@ -9,7 +9,7 @@ import zlib
 from extract_resident_audio import records, container
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'export/web/moon/audio';OUT.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/'export/web/assets/moon/audio';OUT.mkdir(parents=True,exist_ok=True)
 TEMP=ROOT/'artifacts/moon/audio-sources';TEMP.mkdir(parents=True,exist_ok=True)
 manifest_path=OUT/'manifest.json'
 manifest=json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
