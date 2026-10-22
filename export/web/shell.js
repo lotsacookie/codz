@@ -10,6 +10,7 @@ import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersCha
 import { createCustomMenu } from './custom-maps/menu.js';
 import { createMultiplayerMenu } from './net/menu.js';
 import { builtinBspMap } from './custom-maps/providers.js';
+import { cycleHands, handsLabel } from './viewmodel-hands.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
@@ -23,7 +24,7 @@ const pauseEls = {
   eyebrow: $('pause-eyebrow'), title: $('pause-title'), main: $('pause-main'), resume: $('start'), restart: $('pause-restart'),
   extra: $('pause-extra'), options: $('pause-options'), quit: $('pause-quit'), status: $('pause-status'), results: $('pause-results'),
   optionsView: $('pause-options-view'), slider: $('look-sensitivity'), sliderValue: $('look-sensitivity-value'),
-  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'), aim: $('pause-aim-toggle'),
+  fullscreen: $('pause-fullscreen'), back: $('pause-options-back'), graphics: $('pause-graphics'), aim: $('pause-aim-toggle'), hands: $('pause-hands'),
 };
 // A cached older index.html (common on mobile) has no GRAPHICS button; create it so the rest of
 // the shell never fails to start because of it.
@@ -180,9 +181,16 @@ function syncAimToggle() {
   pauseEls.aim.textContent = `AIM TOGGLE: ${aimToggle ? 'ON' : 'OFF'}`;
 }
 
+function syncHands() {
+  if (!pauseEls.hands) return;
+  pauseEls.hands.hidden = !session?.aimToggleEnabled;
+  pauseEls.hands.textContent = `HANDS: ${handsLabel()}`;
+}
+
 function syncOptions() {
   syncGraphics();
   syncAimToggle();
+  syncHands();
   const touch = !!session?.ctx.touch?.mode;
   const coarse = touch || !!session?.pad;  // touch and controller share a 0.4–2 scale
   const slider = pauseEls.slider;
@@ -213,6 +221,7 @@ pauseEls.aim.addEventListener('click', () => {
   try { localStorage.setItem(AIM_TOGGLE_KEY, aimToggle ? '1' : '0'); } catch {}
   syncAimToggle();
 });
+pauseEls.hands?.addEventListener('click', () => { cycleHands(); syncHands(); });
 pauseEls.options.addEventListener('click', () => showOptions(true));
 pauseEls.back.addEventListener('click', () => showOptions(false));
 pauseEls.fullscreen.addEventListener('click', async () => {

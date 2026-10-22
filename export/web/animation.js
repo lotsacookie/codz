@@ -10,6 +10,7 @@ import { applyPackCamo } from './pack-camo.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
 import { ViewmodelBob } from './viewmodel-bob.js';
+import { handsModelFor } from './viewmodel-hands.js';
 
 const BLOOD_COLOR = new THREE.Color(0x5a0707);
 
@@ -104,7 +105,8 @@ export class ViewWeapon {
   }
   // Built viewmodels are cached per weapon (and hands model) so switching back and forth is instant, and the
   // other equipped guns are built in the background (prepare) before they are ever switched to.
-  modelKey(def){return def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'')+'|'+(def.handsModel??'');}
+  handsFor(def){return def.handsModel??handsModelFor(this.data.characters)??'';}
+  modelKey(def){return def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'')+'|'+this.handsFor(def);}
   keyOfEntry(entry){return entry.key;}
   cacheable(def){return !def.id.startsWith('zombie_perk_bottle_');}
   prepare(def){
@@ -150,7 +152,8 @@ export class ViewWeapon {
   }
   async equip(def,{lower=false}={}){
     const key=def.id+(def.upgraded?':upgraded':'')+(def.attachmentActive?':attachment':'');
-    if(this.currentId===key&&this.ready)return;this.currentId=key;const token=++this.token;
+    const handsKey=this.handsFor(def);
+    if(this.currentId===key&&this.ready&&this.handsKey===handsKey)return;this.currentId=key;this.handsKey=handsKey;this.lastDef=def;const token=++this.token;
     const lowered=lower?this.lower():null;
     this.ready=false;if(!lowered)this.pivot.visible=false;
     let [entry]=await Promise.all([this.prepare(def),lowered]);
@@ -162,7 +165,7 @@ export class ViewWeapon {
   }
   async build(def){
     const [hands,gun,leftGun,...knives]=await Promise.all([
-      loadModel(def.handsModel??this.data.characters.viewmodel_usa_pow_arms??this.data.characters.viewhands_usmc),loadModel(def.model),
+      loadModel(def.handsModel??handsModelFor(this.data.characters)??this.data.characters.viewmodel_usa_pow_arms??this.data.characters.viewhands_usmc),loadModel(def.model),
       def.leftModel?loadModel(def.leftModel):Promise.resolve(null),
       ...Object.values(this.data.melee).map(d=>loadModel(d.model))]);
     const entries=await Promise.all(Object.entries(def.animations).map(async([key,url])=>[key,await loadAnimation(url)]));
@@ -309,6 +312,7 @@ export class ViewWeapon {
     this.updateFx(dt,camera);
     if(this.lowering){this.tickLowering(dt);return;}
     if(!this.ready)return;
+    if(this.lastDef&&this.cacheable(this.lastDef)&&this.handsKey!==this.handsFor(this.lastDef)){this.equip(this.lastDef).catch(console.error);return;}
     this.rig.update(dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     const action=this.rig.actions[this.rig.current],finished=!action?.isRunning();
     const sprintKey=phase=>{const key='sprint'+phase+(empty?'Empty':'')+'Anim';return this.rig.actions[key]?key:'sprint'+phase+'Anim';};
