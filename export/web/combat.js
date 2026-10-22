@@ -6,7 +6,7 @@ import { MoonSession } from './moon-session.js';
 import { MoonEnemies } from './moon-enemies.js';
 import { PerkDrink } from './perk-drink.js';
 import { loadModel } from './animation.js';
-import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel-cache.js';
+import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel.js';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';

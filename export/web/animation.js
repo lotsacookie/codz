@@ -8,10 +8,10 @@ import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
 import { ShellEjector, shellKindFor } from './shell-eject.js';
 import { applyPackCamo } from './pack-camo.js';
-import { ViewmodelCache } from './viewmodel-cache.js';
+import { ViewmodelCache } from './viewmodel.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
-import { ViewmodelBob } from './viewmodel-bob.js';
-import { handsModelFor } from './viewmodel-hands.js';
+import { ViewmodelBob } from './viewmodel.js';
+import { handsModelFor } from './viewmodel.js';
 
 const BLOOD_COLOR = new THREE.Color(0x5a0707);
 

@@ -33,7 +33,7 @@ import { ensureTextures as sharedEnsureTextures, prewarm as sharedPrewarm, kinoP
 import { smoothingEnabled } from '../steering.js';
 import { AdaptiveResolution, createPerfOverlay } from '../quality.js';
 import { GradePass } from '../grade.js';
-import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from '../viewmodel-cache.js';
+import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from '../viewmodel.js';
 import { TapReload } from '../tap-reload.js';
 import { OcclusionCuller } from '../occlusion.js';
 import { THEATER_FOG, THEATER_WORLD, fogDensityFromHalfDistance, sunTravelDirection, verticalFovFromCgFov } from '../vision.js';

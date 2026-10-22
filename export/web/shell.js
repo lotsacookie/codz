@@ -10,7 +10,7 @@ import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersCha
 import { createCustomMenu } from './custom-maps/menu.js';
 import { createMultiplayerMenu } from './net/menu.js';
 import { builtinBspMap } from './custom-maps/providers.js';
-import { cycleHands, handsLabel } from './viewmodel-hands.js';
+import { cycleHands, handsLabel } from './viewmodel.js';
 
 const $ = id => document.getElementById(id);
 const body = document.body;
