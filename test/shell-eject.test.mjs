@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { SHELLS, ENABLED, shellKindFor } from '../export/web/shell-kinds.js';
 
-test('only pistols eject shells for now', () => {
-  assert.deepEqual([...ENABLED], ['pistol']);
+test('pistols and shotguns eject shells', () => {
+  assert.deepEqual([...ENABLED], ['pistol', 'shotgun']);
   assert.equal(shellKindFor({ kind: 'pistol' }), 'pistol');
-  assert.equal(shellKindFor({ kind: 'shotgun' }), null);
+  assert.equal(shellKindFor({ kind: 'shotgun' }), 'shotgun');
   assert.equal(shellKindFor({ kind: 'smg' }), null);
   assert.equal(shellKindFor(null), null);
 });
