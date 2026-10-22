@@ -1,3 +1,5 @@
+import { CharacterFire } from './character-fire.js';
+import { FlopFx } from './perk-fx.js';
 import * as THREE from 'three';
 import { ViewWeapon } from './animation.js';
 import { MoonAudio } from './moon-audio.js';
@@ -23,7 +25,7 @@ export class Combat {
   constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,teleport,sessionClass,enemiesClass});
     // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
-    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.explosions=new ExplosionFx(scene);this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
+    this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.explosions=new ExplosionFx(scene);this.fire=new CharacterFire(scene);this.flopFx=new FlopFx(scene);this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
     this.impacts=new WallImpacts(scene);
     this.hitDirections=new HitDirections();this.hitArcEls=[];if(typeof document!=='undefined')document.getElementById('hit-directions')?.replaceChildren();
     this.audio=new MoonAudio();this.audio.camera=camera;
@@ -38,7 +40,7 @@ export class Combat {
     const response=await fetch('moon/combat-data.json');if(!response.ok)throw new Error('Missing Moon combat assets; rebuild Moon.');
     this.data=await response.json();this.session=new this.sessionClass(this.data);
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
-    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:(n,from)=>this.damage(n,from),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>this.audio.zombieEvent(type,z.kind,z.root.position,1,cause)});
+    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:(n,from)=>this.damage(n,from),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='burn')this.fire.ignite(z,{death:cause==='death'});this.audio.zombieEvent(type,z.kind,z.root.position,1,cause);}});
     guardEnemies(this.enemies,{onFault:(where,error)=>this.faultNotice?.(where,error)});
     this.pickups=new Powerups(this.scene,this.data,this.audio,(type,position,info)=>this.collect(type,info));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};
@@ -172,6 +174,17 @@ export class Combat {
     this.equip().catch(console.error);this.audio.play('buy');this.notice(this.data.weapons[id].name);return true;
   }
   /** Attach a co-op client (see net/coop-client.js): it is updated every frame and tells zombies where teammates are. */
+  flopTick(){
+    const y=this.feet().y,prev=this.flopPrev??y;this.flopPrev=y;
+    if(y<prev-.05){this.flopFalling=true;if(this.flopPeak===undefined)this.flopPeak=prev;}
+    else if(y>prev+.05&&!this.flopFalling)this.flopPeak=y;
+    else if(this.flopFalling){const drop=(this.flopPeak??y)-y;this.flopFalling=false;this.flopPeak=undefined;if(drop>=110&&this.session.perks.has('specialty_flakjacket'))this.flop(this.feet().clone());}
+  }
+  flop(position){
+    const radius=300,origin=position.clone().add(new THREE.Vector3(0,30,0));
+    this.flopFx.blast(position,radius);this.audio.blast?.('grenade');this.view?.cameraFx?.build?.(1.2);
+    for(const z of [...this.enemies.list]){const d=z.root.position.distanceTo(position);if(d<radius&&this.world.lineClear(origin,z.root.position.clone().add(new THREE.Vector3(0,30,0))))this.enemies.hurt(z,5000-4000*(d/radius),false,false,'explosion');}
+  }
   attachCoop(coop){this.coop=coop;this.enemies.remoteTargets=coop?()=>coop.targets():null;if(!coop)return;coop.attachEnemies(this.enemies,{session:this.session,damage:n=>this.damage(n,nearestAttacker(this.camera.position,this.enemies.list)),teleport:p=>this.teleport?.(p),onGameOver:()=>{this.pendingMelee=null;this.clearInput();this.end();}});coop.attachAudio(this.audio,{weapons:this.data.weapons});coop.attachPowerups(this.pickups,{area:()=>this.session.area});this.enemies.onRemoteHit=(z,head)=>this.remoteHit(z,head);this.enemies.onPuppetKill=z=>this.puppetKill(z);}
   renderHitArcs(){
     const host=document.getElementById('hit-directions');if(!host)return;
@@ -202,7 +215,7 @@ export class Combat {
     this.pressed=false;
     if(!sprint&&s.def.dualWield&&(this.secondaryPressed||this.secondary&&s.def.automatic))this.shot('left');
     this.secondaryPressed=false;
-    this.enemies.update(dt,this.feet());
+    this.enemies.update(dt,this.feet());this.fire.update(dt);this.flopFx.update(dt);this.flopTick();
     if(s.area==='moon'&&(s.corePhase??s.phase)==='fighting'&&s.round!==this.lastRound){this.lastRound=s.round;this.notice('Round '+s.round,4);this.audio.play('round');}
     {const core=s.corePhase??s.phase;if(core!==this.lastPhase){if(core==='preparing'&&s.round>1&&this.lastPhase==='fighting')this.audio.play('round_end');this.lastPhase=core;}}
     this.pickups.update(dt,this.feet(),!['gameover','reviving'].includes(s.phase)&&!this.features?.hack,(a,b)=>this.world.lineClear(a,b));

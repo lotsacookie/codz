@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { DOG_SPAWN_DELAY } from './dog-spawn-fx.js';
+const FIRE_CAUSE=/^(fire|flame|burn|dragon|incendiary|molotov)/i,FIRE_WEAPON=/dragon|flame|molotov|incendi/i;
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { boneOf, findArmHit } from './gore.js';
 import { Rig, loadModel, loadAnimation } from './animation.js';
@@ -216,7 +217,7 @@ export class Enemies {
     if(!this.list.includes(z))return;
     const shooter=this.currentShooter;
     z.health-=this.session.effects.insta_kill>this.session.time?Math.max(damage,z.health):damage;
-    if(shooter)this.onRemoteHit?.(z,head);else this.onHit?.(z,head);
+    if(shooter)this.onRemoteHit?.(z,head);else this.onHit?.(z,head);if(FIRE_CAUSE.test(cause)||(cause==='bullet'&&FIRE_WEAPON.test(this.session.weapon?.id??'')))this.onEvent?.('burn',z,z.health<=0?'death':'pain');
     if(z.health<=0){
       if(z.kind==='dog')this.lastDogDeath=z.root.position.clone();
       if(score){if(shooter){this.session.killed++;this.net?.award(shooter,{killed:true,head,melee});}else this.session.scoreHit(true,head,melee);}else{this.session.kills++;this.session.killed++;}this.list.splice(this.list.indexOf(z),1);this.silence(z);z.killedByHead=!!head;this.onEvent?.('death',z,cause);z.state='dead';z.life=4;z.rig.play('death',false);this.dead.push(z);z.gasDeath=z.kind==='nova'&&!melee&&cause==='bullet';this.net?.dead(z,cause);this.onKill?.(z);

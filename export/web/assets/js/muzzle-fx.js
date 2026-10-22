@@ -27,6 +27,22 @@ function flashMaterial(map) {
   return material;
 }
 
+let steamTex = null;
+function steamTexture() {
+  if (steamTex) return steamTex;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 64;
+  const g = canvas.getContext('2d');
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grad.addColorStop(0, 'rgba(235,245,255,0.9)');
+  grad.addColorStop(0.5, 'rgba(180,215,255,0.4)');
+  grad.addColorStop(1, 'rgba(160,200,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 64, 64);
+  steamTex = new THREE.CanvasTexture(canvas);
+  return steamTex;
+}
+
 export function createMuzzleFlash(tag) {
   const group = new THREE.Group();
   group.visible = false;
@@ -34,6 +50,20 @@ export function createMuzzleFlash(tag) {
   const atlas = loadAtlas(FLASH_ATLAS, 2);
   let burst = null;
   const state = { life: 0, total: 0.06 };
+  const steamGroup = new THREE.Group();
+  tag.add(steamGroup);
+  const steams = [];
+  function updateSteam(dt) {
+    for (let i = steams.length - 1; i >= 0; i--) {
+      const s = steams[i];
+      s.age += dt;
+      const t = s.age / s.life;
+      if (t >= 1) { steamGroup.remove(s.sprite); s.sprite.material.dispose(); steams.splice(i, 1); continue; }
+      s.sprite.position.addScaledVector(s.v, dt);
+      s.sprite.scale.setScalar(s.size * (1 + t * 1.8));
+      s.sprite.material.opacity = s.alpha * (1 - t);
+    }
+  }
   return {
     group,
     get burst() { return burst; },
@@ -54,7 +84,19 @@ export function createMuzzleFlash(tag) {
       burst.material.opacity = 0.95;
       group.visible = true;
     },
+    steam(upgraded = false) {
+      const color = upgraded ? 0xd9b8ff : 0xcfe6ff;
+      for (let i = 0; i < 6; i++) {
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: steamTexture(), color, transparent: true, opacity: 0.6, depthWrite: false }));
+        sprite.renderOrder = 10;
+        sprite.position.set((Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3);
+        steamGroup.add(sprite);
+        const k = FLASH_SCALE * (0.8 + Math.random() * 0.6);
+        steams.push({ sprite, age: 0, life: 0.9 + Math.random() * 0.7, size: k * 7, alpha: 0.5 + Math.random() * 0.25, v: new THREE.Vector3((Math.random() - 0.5) * k * 6, (Math.random() - 0.3) * k * 8, (Math.random() - 0.5) * k * 6) });
+      }
+    },
     update(dt) {
+      updateSteam(dt);
       if (state.life <= 0) return;
       state.life -= dt;
       if (state.life <= 0) { group.visible = false; return; }
@@ -67,6 +109,9 @@ export function createMuzzleFlash(tag) {
     },
     dispose() {
       group.removeFromParent();
+      steamGroup.removeFromParent();
+      for (const s of steams) s.sprite.material.dispose();
+      steams.length = 0;
       burst?.material.dispose();
     }
   };

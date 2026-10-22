@@ -253,7 +253,7 @@ export class ViewWeapon {
     let key=ads?(empty?'adsLastShotAnim':'adsFireAnim'):(empty?'lastShotAnim':'fireAnim');
     if(hand==='left'&&this.rig.actions.leftFireAnim)key='leftFireAnim';
     if(!this.rig.actions[key])key='fireAnim';this.recoil=1;this.mode='fire';this.rig.play(key,false,1,0);
-    const profile=weaponFxProfile(this.def);
+    const profile=weaponFxProfile(this.def);if(!profile&&/thundergun/i.test(this.def.id??'')){this.cameraFx.fire();this.flashes[0]?.steam?.(!!this.def.upgraded);}
     if(profile){
       const index=hand==='left'&&this.flashes[1]?1:0;
       this.cameraFx.fire();this.flashes[index]?.fire(profile,ads);this.pendingFx={profile,ads,index};
