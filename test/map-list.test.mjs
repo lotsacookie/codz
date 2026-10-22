@@ -32,7 +32,7 @@ test('there is exactly one viewport, HUD and pause menu, and no per-map template
 });
 
 test('the page loads only the shell, and no map code or assets', () => {
-  assert.deepEqual([...html.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]), ['js/shell.js']);
+  assert.deepEqual([...html.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]), ['js/orientation.js', 'js/shell.js']);
   assert.deepEqual([...html.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/g)].map(match => match[1]), ['shell.css']);
 });
 

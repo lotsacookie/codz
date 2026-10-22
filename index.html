@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<base href="export/web/assets/">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zombies — Select a map</title>
+<meta name="description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
+<link rel="canonical" href="https://kino-der-toten.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kino der Toten">
+<meta property="og:title" content="Kino der Toten — Zombies">
+<meta property="og:description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
+<meta property="og:url" content="https://kino-der-toten.pages.dev/">
+<meta property="og:image" content="https://kino-der-toten.pages.dev/social/kino-preview-v1.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1737">
+<meta property="og:image:height" content="906">
+<meta property="og:image:alt" content="Kino der Toten: Solo Survival. Zombies emerge from the shadows of a ruined theater with red curtains and twin staircases.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kino der Toten — Zombies">
+<meta name="twitter:description" content="The lights are out. The show goes on. Play Kino der Toten solo zombie survival in your browser.">
+<meta name="twitter:image" content="https://kino-der-toten.pages.dev/social/kino-preview-v1.png">
+<meta name="twitter:image:alt" content="Kino der Toten: Solo Survival. Zombies emerge from the shadows of a ruined theater with red curtains and twin staircases.">
+<link rel="icon" href="data:,">
+<script src="js/orientation.js"></script>
+<link rel="stylesheet" href="shell.css">
+<script type="importmap">{"imports":{"three":"./js/vendor/three.module.js","three/addons/":"./js/vendor/jsm/","three-mesh-bvh":"./js/vendor/bvh.js","@recast-navigation/core":"./js/vendor/recast-core.mjs","@recast-navigation/wasm":"./js/vendor/recast-wasm.js"}}</script>
+</head><body data-state="launcher" data-map="">
+<main id="launcher">
+  <section class="launcher-panel" aria-labelledby="launcher-title">
+    <div class="launcher-menu">
+      <p class="launcher-eyebrow">ZOMBIES / SOLO SURVIVAL</p>
+      <h1 id="launcher-title">SELECT A MAP</h1>
+      <ul id="map-list">
+      <li><button type="button" data-map="kino" data-label="Kino der Toten" data-module="./maps/kino.js" data-styles="touch-controls.css hud.css" data-title="Kino der Toten — Zombies" data-loadscreen="art/loadscreen_zombie_theater.webp" data-info="Black Ops · Solo · Round survival · Modifiers supported"><strong>Kino der Toten</strong><span>Solo survival in the ruined theater.</span></button></li>
+      <li><button type="button" data-map="moon" data-label="Moon" data-module="./maps/moon.js" data-styles="touch-controls.css hud.css" data-title="Moon — Zombies" data-loadscreen="art/loadscreen_zombie_moon.webp" data-info="Black Ops · Solo · Round survival + main quest · Modifiers supported"><strong>Moon</strong><span>Solo survival and the Griffin Station quest.</span></button></li>
+      <li><button type="button" data-map="shangri-la" data-label="Shangri-La" data-module="./maps/shangri-la.js" data-styles="touch-controls.css hud.css" data-title="Shangri-La — Zombies" data-loadscreen="art/loadscreen_zombie_temple.webp" data-info="Black Ops · Solo · Round survival · Modifiers supported"><strong>Shangri-La</strong><span>Solo survival in the temple and jungle.</span></button></li>
+      <li><button type="button" data-map="ascension" data-label="Ascension" data-module="./maps/ascension.js" data-styles="hud.css" data-title="Ascension — Zombies" data-loadscreen="art/loadscreen_zombie_cosmodrome.webp" data-info="Black Ops · Free exploration · No rounds"><strong>Ascension</strong><span>Walk or fly through the Cosmodrome.</span></button></li>
+      <li><button type="button" data-map="call-of-the-dead" data-label="Call of the Dead" data-module="./maps/call-of-the-dead.js" data-styles="hud.css" data-title="Call of the Dead — Zombies" data-loadscreen="art/loadscreen_zombie_coast.webp" data-info="Black Ops · Free exploration · No rounds"><strong>Call of the Dead</strong><span>Walk or fly through the shipwreck and lighthouse island.</span></button></li>
+      <li><button type="button" data-map="one-window-challenge" data-label="One Window Challenge" data-module="./maps/one-window-challenge.js" data-styles="touch-controls.css hud.css" data-title="One Window Challenge — Zombies" data-loadscreen="art/loadscreen_zombie_temple.webp" data-info="Challenge · Solo · Modifiers supported"><strong>One Window Challenge</strong><span>One window, every perk, one box.</span></button></li>
+      <li><button type="button" data-menu="multiplayer" data-label="Multiplayer" data-art="art/loadscreen_zombie_theater.webp" data-info="Co-op · Up to 4 players · Server browser or join by code · No account needed"><strong>Multiplayer</strong><span>Host a game, browse public servers or join a friend with a code.</span></button></li>
+      <li><button type="button" data-menu="custom-maps" data-art="art/loadscreen_zombie_temple.webp" data-info="NZ:P maps built in · Black Ops 3 Workshop · glTF and BSP files"><strong>Custom Maps</strong><span>NZ:P maps, Black Ops 3 Workshop maps and your own files.</span></button></li>
+      </ul>
+      <button type="button" id="modifiers-open" aria-haspopup="dialog" aria-controls="modifiers">Modifiers<b id="modifiers-count"></b></button>
+      <p id="launcher-note" role="status">Pick a map to begin.</p>
+      <p id="launcher-error" role="alert" hidden></p>
+      <noscript>This game requires JavaScript and WebGL.</noscript>
+    </div>
+    <aside id="map-detail" aria-live="polite">
+      <div class="detail-art"><img alt="" decoding="async"></div>
+      <h2 class="detail-title"></h2>
+      <p class="detail-desc"></p>
+      <p class="detail-info"></p>
+    </aside>
+  </section>
+  <div id="modifiers" role="dialog" aria-modal="true" aria-labelledby="modifiers-title" hidden>
+    <div class="modifiers-card">
+      <h2 id="modifiers-title">Modifiers</h2>
+      <p class="modifiers-note">Apply to the next map you start: Kino der Toten, Moon, Shangri-La and One Window Challenge. Ascension and Call of the Dead have no rounds.</p>
+      <div id="modifier-list"></div>
+      <div class="modifiers-actions"><button type="button" id="modifiers-clear">Clear all</button><button type="button" id="modifiers-close">Done</button></div>
+    </div>
+  </div>
+  <section id="custom-maps" hidden aria-label="Custom maps"></section>
+  <section id="multiplayer" hidden aria-label="Multiplayer"></section>
+  <div id="preload" role="status" aria-live="polite"><span id="preload-label">Preparing weapons and enemies…</span><i><b id="preload-bar"></b></i></div>
+</main>
+
+<div id="stage" hidden>
+  <div id="viewport"></div>
+  <div id="fx" aria-hidden="true"></div>
+  <div id="vignette"></div>
+  <div id="visor" hidden></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="chalk-rough"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></svg>
+
+  <div id="hud" hidden>
+    <div id="hurt"></div><div id="hit-directions"></div><div id="flash"></div>
+    <div id="crosshair" hidden><i></i><i></i><i></i><i></i></div><div id="hitmarker" aria-hidden="true"></div>
+    <div id="announcement"><span id="announcement-small"></span><strong id="announcement-title"></strong></div>
+    <div id="prompt"></div><div id="toast"></div>
+    <div id="chalk"><span id="chalk-label">Round</span><div class="chalk-group" id="chalk1"></div><div class="chalk-group" id="chalk2"></div></div>
+    <div id="location-panel"><span id="mode-label"></span><strong id="location"></strong></div>
+    <div id="systems"><span id="gravity"></span><span id="power"></span><span id="suit"></span></div>
+    <div id="oxygen" hidden><span>NO OXYGEN — EQUIP P.E.S.</span><progress id="air" max="15" value="15"></progress></div>
+    <div id="hazard" role="status"></div>
+    <progress id="hack-progress" max="1" value="0" hidden></progress>
+    <aside id="journal" hidden><strong>GRIFFIN STATION / OBJECTIVE</strong><p id="objective"></p><p id="journal-hint">Restore power, gather equipment from the Mystery Box, and follow the station’s clues. Tab closes this panel.</p></aside>
+    <div id="combat-hud" hidden>
+      <div id="round-info"><strong id="round"></strong><span id="remaining"></span></div>
+      <div id="weapon-panel"><div id="ammo-block"><div id="player-panel"><div id="perks"></div><div class="points"><strong id="points">500</strong></div><span id="health"></span><div id="score-popups"></div></div><span id="weapon-name"></span><div id="ammo"><strong id="mag">8</strong><span>/</span><span id="reserve">32</span></div><div id="ammo-icons"></div><div id="reload-label"></div><span id="weapon-status"></span></div><div id="equipment"><span id="lethal"><img id="lethal-icon" alt="" src="textures/hud_us_grenade.png" onerror="this.hidden=true"><b id="grenade-count">4</b></span><span id="claymore" hidden><img alt="" src="textures/hud_claymore.png"><b id="claymore-count">0</b></span><span id="monkey" hidden><img alt="" src="textures/hud_cymbal_monkey.png"><b id="monkey-count">0</b></span></div></div>
+      <div id="effects"><img class="powerup-slot" id="pu-double_points" alt="" src="textures/specialty_2x_zombies.png" hidden><img class="powerup-slot" id="pu-insta_kill" alt="" src="textures/specialty_instakill_zombies.png" hidden><img class="powerup-slot" id="pu-fire_sale" alt="" src="textures/specialty_firesale_zombies.png" hidden><span id="effects-text"></span><span id="return-timer"></span></div>
+    </div>
+    <p id="help" hidden></p><p id="status" role="status" hidden></p><pre id="debug" hidden></pre>
+  </div>
+
+  <section id="pause" hidden>
+    <div class="menu-grain"></div>
+    <div class="menu-content">
+      <p id="pause-eyebrow"></p>
+      <h1 id="pause-title">PAUSED</h1>
+      <div id="pause-main">
+        <div class="menu-list">
+          <button id="start" type="button">RESUME GAME</button>
+          <button id="pause-restart" type="button" class="secondary" hidden>RESTART</button>
+          <div id="pause-extra" class="menu-list"></div>
+          <button id="pause-options" type="button">OPTIONS</button>
+          <button id="pause-quit" type="button">QUIT</button>
+        </div>
+        <p id="pause-status"></p>
+        <div id="pause-results" hidden></div>
+      </div>
+      <div id="pause-options-view" hidden>
+        <div class="menu-list">
+          <div class="menu-row"><label for="look-sensitivity">LOOK SENSITIVITY</label><input id="look-sensitivity" type="range" min="0.25" max="3" step="0.05" value="1"><output id="look-sensitivity-value" for="look-sensitivity">1.00×</output></div>
+          <button id="pause-graphics" type="button" hidden>GRAPHICS: AUTO</button>
+          <button id="pause-aim-toggle" type="button" hidden>AIM TOGGLE: OFF</button>
+          <button id="pause-hands" type="button" hidden>HANDS: ARMS</button>
+          <button id="pause-fullscreen" type="button" hidden>FULL SCREEN</button>
+          <button id="pause-options-back" type="button">BACK</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="loading" hidden role="status">
+    <div class="load-track"><i id="load-progress"></i></div>
+    <span id="load-label"></span>
+    <div id="load-actions"></div>
+  </div>
+</div>
+<script type="module" src="js/shell.js"></script>
+</body></html>
