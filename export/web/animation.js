@@ -6,6 +6,7 @@ import { assets, rfetch } from './asset-loader.js';
 import { CameraEffects } from './camera-effects.js';
 import { MuzzleSmoke, createMuzzleFlash } from './muzzle-fx.js';
 import { weaponFxProfile } from './fx-profile.js';
+import { ShellEjector, shellKindFor } from './shell-eject.js';
 import { applyPackCamo } from './pack-camo.js';
 import { ViewmodelCache } from './viewmodel-cache.js';
 import { applyScopeLens, updateScopeLens } from './scope-lens.js';
@@ -284,6 +285,7 @@ export class ViewWeapon {
     if(camera)this.cameraFx.apply(camera,dt);
     for(const flash of this.flashes)flash?.update(dt);
     this.smoke?.update(dt);
+    this.shells?.update(dt);
   }
   // World-space blade position (the viewmodel is drawn by its own camera, so it is projected out).
   knifeTip(camera,viewCamera,distance=26){
@@ -307,6 +309,8 @@ export class ViewWeapon {
     const ndc=flash?flash.ndc(viewCamera):new THREE.Vector3(.2,-.14,0);
     if(!this.smoke||this.smoke.scene!==worldScene){this.smoke?.dispose();this.smoke=new MuzzleSmoke(worldScene);}
     this.smoke.emit(ndc,camera,fx.profile,fx.ads);
+    const shellKind=shellKindFor(fx.profile);
+    if(shellKind){if(!this.shells||this.shells.scene!==worldScene){this.shells?.dispose();this.shells=new ShellEjector(worldScene);}this.shells.emit(ndc,camera,shellKind,fx.index===1?'left':'right');}
   }
   update(dt,{moving=false,sprint=false,ads=false,reloading=false,empty=false,time=0,look=null,camera=null,viewCamera=null,worldScene=null}={}){
     this.updateFx(dt,camera);
