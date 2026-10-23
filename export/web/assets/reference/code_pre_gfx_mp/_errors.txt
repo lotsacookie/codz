@@ -1,0 +1,6 @@
+# error report: zone/Common/code_pre_gfx_mp.ff
+status: ok
+stream: walked 0x24a5c of 0x24a5c bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
