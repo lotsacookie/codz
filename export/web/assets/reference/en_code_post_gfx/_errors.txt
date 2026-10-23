@@ -1,0 +1,6 @@
+# error report: zone/english/en_code_post_gfx.ff
+status: ok
+stream: walked 0x69df7 of 0x69df7 bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
