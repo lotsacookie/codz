@@ -1,0 +1,463 @@
+{
+ "zone": "zone/Common/code_pre_gfx_mp.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 150108,
+  "streamSize": 150108,
+  "percent": 100.0
+ },
+ "types": {
+  "RawFile": 68,
+  "StringTable": 3
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "assets": [
+  {
+   "index": 0,
+   "type": "StringTable",
+   "name": "mp/devconsole_restrict_access_mp.csv",
+   "file": "assets/StringTable/mp/devconsole_restrict_access_mp.csv.json"
+  },
+  {
+   "index": 1,
+   "type": "StringTable",
+   "name": "mp/devconsole_restrict_access_dedicated_mp.csv",
+   "file": "assets/StringTable/mp/devconsole_restrict_access_dedicated_mp.csv.json"
+  },
+  {
+   "index": 2,
+   "type": "StringTable",
+   "name": "mp/devconsole_restrict_access_dedicated_ranked_mp.csv",
+   "file": "assets/StringTable/mp/devconsole_restrict_access_dedicated_ranked_mp.csv.json"
+  },
+  {
+   "index": 3,
+   "type": "RawFile",
+   "name": "configure_mp.cfg",
+   "file": "rawfiles/configure_mp.cfg"
+  },
+  {
+   "index": 4,
+   "type": "RawFile",
+   "name": "safemode.cfg",
+   "file": "rawfiles/safemode.cfg"
+  },
+  {
+   "index": 5,
+   "type": "RawFile",
+   "name": "safemode_mp.cfg",
+   "file": "rawfiles/safemode_mp.cfg"
+  },
+  {
+   "index": 6,
+   "type": "RawFile",
+   "name": "safemode_mp_server.cfg",
+   "file": "rawfiles/safemode_mp_server.cfg"
+  },
+  {
+   "index": 7,
+   "type": "RawFile",
+   "name": "server_map.cfg",
+   "file": "rawfiles/server_map.cfg"
+  },
+  {
+   "index": 8,
+   "type": "RawFile",
+   "name": "default_dedicated.cfg",
+   "file": "rawfiles/default_dedicated.cfg"
+  },
+  {
+   "index": 9,
+   "type": "RawFile",
+   "name": "buttons_default.cfg",
+   "file": "rawfiles/buttons_default.cfg"
+  },
+  {
+   "index": 10,
+   "type": "RawFile",
+   "name": "buttons_default_alt.cfg",
+   "file": "rawfiles/buttons_default_alt.cfg"
+  },
+  {
+   "index": 11,
+   "type": "RawFile",
+   "name": "buttons_experimental.cfg",
+   "file": "rawfiles/buttons_experimental.cfg"
+  },
+  {
+   "index": 12,
+   "type": "RawFile",
+   "name": "buttons_experimental_alt.cfg",
+   "file": "rawfiles/buttons_experimental_alt.cfg"
+  },
+  {
+   "index": 13,
+   "type": "RawFile",
+   "name": "buttons_lefty.cfg",
+   "file": "rawfiles/buttons_lefty.cfg"
+  },
+  {
+   "index": 14,
+   "type": "RawFile",
+   "name": "buttons_lefty_alt.cfg",
+   "file": "rawfiles/buttons_lefty_alt.cfg"
+  },
+  {
+   "index": 15,
+   "type": "RawFile",
+   "name": "buttons_nomad.cfg",
+   "file": "rawfiles/buttons_nomad.cfg"
+  },
+  {
+   "index": 16,
+   "type": "RawFile",
+   "name": "buttons_nomad_alt.cfg",
+   "file": "rawfiles/buttons_nomad_alt.cfg"
+  },
+  {
+   "index": 17,
+   "type": "RawFile",
+   "name": "buttons_charlie.cfg",
+   "file": "rawfiles/buttons_charlie.cfg"
+  },
+  {
+   "index": 18,
+   "type": "RawFile",
+   "name": "thumbstick_default.cfg",
+   "file": "rawfiles/thumbstick_default.cfg"
+  },
+  {
+   "index": 19,
+   "type": "RawFile",
+   "name": "thumbstick_southpaw.cfg",
+   "file": "rawfiles/thumbstick_southpaw.cfg"
+  },
+  {
+   "index": 20,
+   "type": "RawFile",
+   "name": "thumbstick_legacy.cfg",
+   "file": "rawfiles/thumbstick_legacy.cfg"
+  },
+  {
+   "index": 21,
+   "type": "RawFile",
+   "name": "thumbstick_legacysouthpaw.cfg",
+   "file": "rawfiles/thumbstick_legacysouthpaw.cfg"
+  },
+  {
+   "index": 22,
+   "type": "RawFile",
+   "name": "otherkeysdefaults.cfg",
+   "file": "rawfiles/otherkeysdefaults.cfg"
+  },
+  {
+   "index": 23,
+   "type": "RawFile",
+   "name": "default_controller.cfg",
+   "file": "rawfiles/default_controller.cfg"
+  },
+  {
+   "index": 24,
+   "type": "RawFile",
+   "name": "default_options.cfg",
+   "file": "rawfiles/default_options.cfg"
+  },
+  {
+   "index": 25,
+   "type": "RawFile",
+   "name": "dvar_defaults.cfg",
+   "file": "rawfiles/dvar_defaults.cfg"
+  },
+  {
+   "index": 26,
+   "type": "RawFile",
+   "name": "default_filter.cfg",
+   "file": "rawfiles/default_filter.cfg"
+  },
+  {
+   "index": 27,
+   "type": "RawFile",
+   "name": "default_statversion.cfg",
+   "file": "rawfiles/default_statversion.cfg"
+  },
+  {
+   "index": 28,
+   "type": "RawFile",
+   "name": "default_mp_gamesettings.cfg",
+   "file": "rawfiles/default_mp_gamesettings.cfg"
+  },
+  {
+   "index": 29,
+   "type": "RawFile",
+   "name": "default_mp_gametypes.cfg",
+   "file": "rawfiles/default_mp_gametypes.cfg"
+  },
+  {
+   "index": 30,
+   "type": "RawFile",
+   "name": "default_splitscreen.cfg",
+   "file": "rawfiles/default_splitscreen.cfg"
+  },
+  {
+   "index": 31,
+   "type": "RawFile",
+   "name": "default_systemlink.cfg",
+   "file": "rawfiles/default_systemlink.cfg"
+  },
+  {
+   "index": 32,
+   "type": "RawFile",
+   "name": "default_xboxlive.cfg",
+   "file": "rawfiles/default_xboxlive.cfg"
+  },
+  {
+   "index": 33,
+   "type": "RawFile",
+   "name": "hardcore_settings.cfg",
+   "file": "rawfiles/hardcore_settings.cfg"
+  },
+  {
+   "index": 34,
+   "type": "RawFile",
+   "name": "hardcore_disable.cfg",
+   "file": "rawfiles/hardcore_disable.cfg"
+  },
+  {
+   "index": 35,
+   "type": "RawFile",
+   "name": "ui/options_graphics.cfg",
+   "file": "rawfiles/ui/options_graphics.cfg"
+  },
+  {
+   "index": 36,
+   "type": "RawFile",
+   "name": "ui/options_graphics_set.cfg",
+   "file": "rawfiles/ui/options_graphics_set.cfg"
+  },
+  {
+   "index": 37,
+   "type": "RawFile",
+   "name": "init_dvars_pc_mp.cfg",
+   "file": "rawfiles/init_dvars_pc_mp.cfg"
+  },
+  {
+   "index": 38,
+   "type": "RawFile",
+   "name": "init_dvars_pc_dedicated_mp.cfg",
+   "file": "rawfiles/init_dvars_pc_dedicated_mp.cfg"
+  },
+  {
+   "index": 39,
+   "type": "RawFile",
+   "name": "reset_bindings.cfg",
+   "file": "rawfiles/reset_bindings.cfg"
+  },
+  {
+   "index": 40,
+   "type": "RawFile",
+   "name": "officialranked.cfg",
+   "file": "rawfiles/officialranked.cfg"
+  },
+  {
+   "index": 41,
+   "type": "RawFile",
+   "name": "rentedranked.cfg",
+   "file": "rawfiles/rentedranked.cfg"
+  },
+  {
+   "index": 42,
+   "type": "RawFile",
+   "name": "default_private.cfg",
+   "file": "rawfiles/default_private.cfg"
+  },
+  {
+   "index": 43,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_tdm.cfg",
+   "file": "rawfiles/arenaconfigstrings_tdm.cfg"
+  },
+  {
+   "index": 44,
+   "type": "RawFile",
+   "name": "arenaconfigstrings.cfg",
+   "file": "rawfiles/arenaconfigstrings.cfg"
+  },
+  {
+   "index": 45,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_ctf.cfg",
+   "file": "rawfiles/arenaconfigstrings_ctf.cfg"
+  },
+  {
+   "index": 46,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_dem.cfg",
+   "file": "rawfiles/arenaconfigstrings_dem.cfg"
+  },
+  {
+   "index": 47,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_dm.cfg",
+   "file": "rawfiles/arenaconfigstrings_dm.cfg"
+  },
+  {
+   "index": 48,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_dom.cfg",
+   "file": "rawfiles/arenaconfigstrings_dom.cfg"
+  },
+  {
+   "index": 49,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_gun.cfg",
+   "file": "rawfiles/arenaconfigstrings_gun.cfg"
+  },
+  {
+   "index": 50,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_hlnd.cfg",
+   "file": "rawfiles/arenaconfigstrings_hlnd.cfg"
+  },
+  {
+   "index": 51,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_hq.cfg",
+   "file": "rawfiles/arenaconfigstrings_hq.cfg"
+  },
+  {
+   "index": 52,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_oic.cfg",
+   "file": "rawfiles/arenaconfigstrings_oic.cfg"
+  },
+  {
+   "index": 53,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_sab.cfg",
+   "file": "rawfiles/arenaconfigstrings_sab.cfg"
+  },
+  {
+   "index": 54,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_sd.cfg",
+   "file": "rawfiles/arenaconfigstrings_sd.cfg"
+  },
+  {
+   "index": 55,
+   "type": "RawFile",
+   "name": "arenaconfigstrings_shrp.cfg",
+   "file": "rawfiles/arenaconfigstrings_shrp.cfg"
+  },
+  {
+   "index": 56,
+   "type": "RawFile",
+   "name": "mp/stats_init.cfg",
+   "file": "rawfiles/mp/stats_init.cfg"
+  },
+  {
+   "index": 57,
+   "type": "RawFile",
+   "name": "mp/unlock_menu.cfg",
+   "file": "rawfiles/mp/unlock_menu.cfg"
+  },
+  {
+   "index": 58,
+   "type": "RawFile",
+   "name": "mp/unlock_allweapon.cfg",
+   "file": "rawfiles/mp/unlock_allweapon.cfg"
+  },
+  {
+   "index": 59,
+   "type": "RawFile",
+   "name": "mp/unlock_allperks.cfg",
+   "file": "rawfiles/mp/unlock_allperks.cfg"
+  },
+  {
+   "index": 60,
+   "type": "RawFile",
+   "name": "mp/unlock_challenges.cfg",
+   "file": "rawfiles/mp/unlock_challenges.cfg"
+  },
+  {
+   "index": 61,
+   "type": "RawFile",
+   "name": "mp/prestige_reset.cfg",
+   "file": "rawfiles/mp/prestige_reset.cfg"
+  },
+  {
+   "index": 62,
+   "type": "RawFile",
+   "name": "mp/coop_challenges_reset.cfg",
+   "file": "rawfiles/mp/coop_challenges_reset.cfg"
+  },
+  {
+   "index": 63,
+   "type": "RawFile",
+   "name": "mp/playerstats_reset.cfg",
+   "file": "rawfiles/mp/playerstats_reset.cfg"
+  },
+  {
+   "index": 64,
+   "type": "RawFile",
+   "name": "mp/playerstats_prestige_reset.cfg",
+   "file": "rawfiles/mp/playerstats_prestige_reset.cfg"
+  },
+  {
+   "index": 65,
+   "type": "RawFile",
+   "name": "mp/weapon_perk_challenge_reset.cfg",
+   "file": "rawfiles/mp/weapon_perk_challenge_reset.cfg"
+  },
+  {
+   "index": 66,
+   "type": "RawFile",
+   "name": "ragdoll.cfg",
+   "file": "rawfiles/ragdoll.cfg"
+  },
+  {
+   "index": 67,
+   "type": "RawFile",
+   "name": "default_platform.cfg",
+   "file": "rawfiles/default_platform.cfg"
+  },
+  {
+   "index": 68,
+   "type": "RawFile",
+   "name": "mp/default_emblems.cfg",
+   "file": "rawfiles/mp/default_emblems.cfg"
+  },
+  {
+   "index": 69,
+   "type": "RawFile",
+   "name": "expressions/functions.txt",
+   "file": "rawfiles/expressions/functions.txt"
+  },
+  {
+   "index": 70,
+   "type": "RawFile",
+   "name": "code_pre_gfx_mp",
+   "file": "rawfiles/code_pre_gfx_mp"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
