@@ -1,0 +1,146 @@
+# asset trace: 144 walked assets
+first implausible XAnimParts: #26 at 0x7816
+#0 RawFile 0x715..0x796 len=129 name=clientscripts/zombie_theater_ffotd.csc
+#1 RawFile 0x796..0x15dc len=3654 name=clientscripts/zombie_theater_fx.csc
+#2 RawFile 0x15dc..0x2aa9 len=5325 name=maps/zombie_theater.gsc
+#3 RawFile 0x2aa9..0x2b46 len=157 name=maps/zombie_theater_ffotd.gsc
+#4 RawFile 0x2b46..0x4668 len=6946 name=maps/zombie_theater_teleporter.gsc
+#5 RawFile 0x4668..0x47ef len=391 name=maps/createart/zombie_theater_art.gsc
+#6 RawFile 0x47ef..0x4d50 len=1377 name=maps/zombie_theater_magic_box.gsc
+#7 RawFile 0x4d50..0x59ec len=3228 name=maps/zombie_theater_movie_screen.gsc
+#8 MaterialTechniqueSet 0x59ec..0x5c1e len=562 name=,mc_l_sm_r0c0n0s0_wpn_clrdtl_hero
+#9 MaterialTechniqueSet 0x5c1e..0x5e45 len=551 name=,mc_l_sm_b0c0n0s0_hero
+#10 MaterialTechniqueSet 0x5e45..0x6065 len=544 name=,mc_effect_hero
+#11 MaterialTechniqueSet 0x6065..0x6299 len=564 name=,mc_l_sm_r0c0d0n0s0_wpn_clrdtl_hero
+#12 MaterialTechniqueSet 0x6299..0x64b7 len=542 name=,mc_l_sm_r0c0
+#13 XModel 0x64b7..0x65d3 len=284 name=,t5_weapon_coltpython_viewmodel
+#14 MaterialTechniqueSet 0x65d3..0x67fa len=551 name=,mc_l_sm_skin_r0c0n0s0
+#15 MaterialTechniqueSet 0x67fa..0x6a1c len=546 name=,mc_l_sm_r0c0n0s0
+#16 XModel 0x6a1c..0x6b28 len=268 name=,viewhands_usmc
+#17 MaterialTechniqueSet 0x6b28..0x6d49 len=545 name=,effect_zfeather
+#18 MaterialTechniqueSet 0x6d49..0x6f7c len=563 name=,effect_zfeather_falloff_add_nofog
+#19 MaterialTechniqueSet 0x6f7c..0x71a7 len=555 name=,effect_zfeather_add_nofog
+#20 MaterialTechniqueSet 0x71a7..0x73d2 len=555 name=,distortion_scale_zfeather
+#21 FxEffectDef 0x73d2..0x7439 len=103 name=,weapon/muzzleflashes/fx_rifle1_flash_base
+#22 FxEffectDef 0x7439..0x748e len=85 name=,system_elements/fx_null
+#23 FxEffectDef 0x748e..0x74ea len=92 name=,weapon/shellejects/fx_revolver
+#24 MaterialTechniqueSet 0x74ea..0x76fe len=532 name=,2d
+#25 XModel 0x76fe..0x7816 len=280 name=,t5_weapon_coltpython_world
+#26 XAnimParts 0x7816..0x7898 len=130 name=,viewmodel_python_sw_idle nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#27 XAnimParts 0x7898..0x791a len=130 name=,viewmodel_python_sw_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#28 XAnimParts 0x791a..0x79a7 len=141 name=,viewmodel_python_manual_reload_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#29 XAnimParts 0x79a7..0x7a32 len=139 name=,viewmodel_python_manual_reload_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#30 XAnimParts 0x7a32..0x7abe len=140 name=,viewmodel_python_manual_reload_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#31 XAnimParts 0x7abe..0x7b43 len=133 name=,viewmodel_python_sw_pullout nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#32 XAnimParts 0x7b43..0x7bcc len=137 name=,viewmodel_python_sw_first_raise nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#33 XAnimParts 0x7bcc..0x7c51 len=133 name=,viewmodel_python_sw_putaway nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#34 XAnimParts 0x7c51..0x7cda len=137 name=,viewmodel_python_sw_sprint_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#35 XAnimParts 0x7cda..0x7d60 len=134 name=,viewmodel_python_sw_ads_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#36 XAnimParts 0x7d60..0x7de4 len=132 name=,viewmodel_python_sw_d2p_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#37 XAnimParts 0x7de4..0x7e6a len=134 name=,viewmodel_python_sw_d2p_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#38 XAnimParts 0x7e6a..0x7eef len=133 name=,viewmodel_python_sw_d2p_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#39 XAnimParts 0x7eef..0x7f73 len=132 name=,t5_viewmodel_camera_mantle nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#40 XAnimParts 0x7f73..0x7ff7 len=132 name=,viewmodel_python_sw_ads_up nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#41 XAnimParts 0x7ff7..0x807d len=134 name=,viewmodel_python_sw_ads_down nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#42 RawFile 0x807d..0x809d len=32 name=,rumble/pistol_fire
+#43 RawFile 0x809d..0x80c3 len=38 name=,rumble/pistol_fire_h.rmb
+#44 RawFile 0x80c3..0x80e9 len=38 name=,rumble/pistol_fire_l.rmb
+#45 WeaponVariantDef 0x80e9..0x912d len=4164 name=python_zm
+#46 FxEffectDef 0x912d..0x919e len=113 name=,weapon/muzzleflashes/fx_zombie_rifle1_flash_base_ug
+#47 XAnimParts 0x919e..0x9222 len=132 name=,viewmodel_python_sw_reload nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#48 WeaponVariantDef 0x9222..0x9cd1 len=2735 name=python_upgraded_zm
+#49 XModel 0x9cd1..0x9ded len=284 name=,t5_weapon_cz75_dw_rh_viewmodel
+#50 FxEffectDef 0x9ded..0x9e54 len=103 name=,weapon/muzzleflashes/fx_pistol_flash_base
+#51 XModel 0x9e54..0x9f61 len=269 name=,fx_pistol_shell
+#52 FxEffectDef 0x9f61..0x9fc3 len=98 name=,weapon/shellejects/fx_pistol_resting
+#53 MaterialTechniqueSet 0x9fc3..0xa1e5 len=546 name=,mc_l_sm_b0c0n0s0
+#54 XModel 0xa1e5..0xa2f7 len=274 name=,fx_pistol_shell_blur
+#55 FxEffectDef 0xa2f7..0xa351 len=90 name=,weapon/shellejects/fx_pistol
+#56 XModel 0xa351..0xa469 len=280 name=,t5_weapon_cz75_dw_rh_world
+#57 XAnimParts 0xa469..0xa4f4 len=139 name=,viewmodel_cz75_dw_right_idle_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#58 XAnimParts 0xa4f4..0xa57a len=134 name=,viewmodel_cz75_dw_right_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#59 XAnimParts 0xa57a..0xa605 len=139 name=,viewmodel_cz75_dw_right_last_shot nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#60 XAnimParts 0xa605..0xa68d len=136 name=,viewmodel_cz75_dw_right_reload nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#61 XAnimParts 0xa68d..0xa715 len=136 name=,viewmodel_cz75_dw_full_pullout nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#62 XAnimParts 0xa715..0xa7a1 len=140 name=,viewmodel_cz75_dw_full_first_raise nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#63 XAnimParts 0xa7a1..0xa829 len=136 name=,viewmodel_cz75_dw_full_putaway nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#64 XAnimParts 0xa829..0xa8b3 len=138 name=,viewmodel_cz75_dw_full_sprint_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#65 XAnimParts 0xa8b3..0xa93f len=140 name=,viewmodel_cz75_dw_full_sprint_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#66 XAnimParts 0xa93f..0xa9ca len=139 name=,viewmodel_cz75_dw_full_sprint_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#67 XAnimParts 0xa9ca..0xaa51 len=135 name=,viewmodel_cz75_dw_full_d2p_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#68 XAnimParts 0xaa51..0xaada len=137 name=,viewmodel_cz75_dw_full_d2p_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#69 XAnimParts 0xaada..0xab62 len=136 name=,viewmodel_cz75_dw_full_d2p_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#70 XAnimParts 0xab62..0xabe9 len=135 name=,viewmodel_cz75_dw_full_ads_up nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#71 XAnimParts 0xabe9..0xac72 len=137 name=,viewmodel_cz75_dw_full_ads_down nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#72 WeaponVariantDef 0xac72..0xbaf0 len=3710 name=cz75dw_zm
+#73 FxEffectDef 0xbaf0..0xbb61 len=113 name=,weapon/muzzleflashes/fx_zombie_pistol_flash_base_ug
+#74 WeaponVariantDef 0xbb61..0xc4fa len=2457 name=cz75dw_upgraded_zm
+#75 XModel 0xc4fa..0xc616 len=284 name=,t5_weapon_cz75_dw_lh_viewmodel
+#76 XModel 0xc616..0xc72e len=280 name=,t5_weapon_cz75_dw_lh_world
+#77 XAnimParts 0xc72e..0xc7b3 len=133 name=,viewmodel_cz75_dw_left_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#78 XAnimParts 0xc7b3..0xc83d len=138 name=,viewmodel_cz75_dw_left_last_shot nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#79 XAnimParts 0xc83d..0xc8c7 len=138 name=,viewmodel_cz75_dw_left_idle_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#80 XAnimParts 0xc8c7..0xc94e len=135 name=,viewmodel_cz75_dw_left_reload nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#81 WeaponVariantDef 0xc94e..0xd507 len=3001 name=-
+#82 FxEffectDef 0xd507..0xd568 len=97 name=,weapon/muzzleflashes/pistolflash_ug
+#83 WeaponVariantDef 0xd568..0xde6d len=2309 name=-
+#84 MaterialTechniqueSet 0xde6d..0xe0a0 len=563 name=,mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero
+#85 MaterialTechniqueSet 0xe0a0..0xe2d3 len=563 name=,mc_l_sm_t0c0n0s0sc0x0_clrdtl_hero
+#86 MaterialTechniqueSet 0xe2d3..0xe50a len=567 name=,mc_l_sm_r0c0n0s0sc0x0_sls_clrdtl_hero
+#87 MaterialTechniqueSet 0xe50a..0xe73b len=561 name=,mc_l_sm_b0c0s0sc0x0_clrdtl_hero
+#88 XModel 0xe73b..0xe857 len=284 name=,t5_weapon_thundergun_viewmodel
+#89 XModel 0xe857..0xe96d len=278 name=,viewmodel_base_viewhands
+#90 MaterialTechniqueSet 0xe96d..0xeb92 len=549 name=,effect_zfeather_add
+#91 MaterialTechniqueSet 0xeb92..0xedb8 len=550 name=,effect_add_eyeoffset
+#92 MaterialTechniqueSet 0xedb8..0xefd0 len=536 name=,effect
+#93 FxEffectDef 0xefd0..0xf035 len=101 name=,weapon/muzzleflashes/fx_thundergun_view
+#94 FxEffectDef 0xf035..0xf09b len=102 name=,weapon/muzzleflashes/fx_thundergun_world
+#95 XModel 0xf09b..0xf1b3 len=280 name=,t5_weapon_thundergun_world
+#96 XModel 0xf1b3..0xf2ba len=263 name=,tag_flash
+#97 XAnimParts 0xf2ba..0xf33d len=131 name=,viewmodel_thundergun_idle nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#98 XAnimParts 0xf33d..0xf3c6 len=137 name=,viewmodel_thundergun_empty_idle nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#99 XAnimParts 0xf3c6..0xf449 len=131 name=,viewmodel_thundergun_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#100 XAnimParts 0xf449..0xf4d1 len=136 name=,viewmodel_thundergun_last_fire nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#101 XAnimParts 0xf4d1..0xf55c len=139 name=,viewmodel_thundergun_reload_empty nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#102 XAnimParts 0xf55c..0xf5e2 len=134 name=,viewmodel_thundergun_pullout nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#103 XAnimParts 0xf5e2..0xf668 len=134 name=,viewmodel_thundergun_putaway nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#104 XAnimParts 0xf668..0xf6f4 len=140 name=,viewmodel_thundergun_pullout_quick nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#105 XAnimParts 0xf6f4..0xf780 len=140 name=,viewmodel_thundergun_putaway_quick nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#106 XAnimParts 0xf780..0xf80c len=140 name=,viewmodel_thundergun_pullout_empty nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#107 XAnimParts 0xf80c..0xf898 len=140 name=,viewmodel_thundergun_putaway_empty nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#108 XAnimParts 0xf898..0xf923 len=139 name=,viewmodel_thundergun_sprint_intro nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#109 XAnimParts 0xf923..0xf9ad len=138 name=,viewmodel_thundergun_sprint_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#110 XAnimParts 0xf9ad..0xfa38 len=139 name=,viewmodel_thundergun_sprint_outro nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#111 XAnimParts 0xfa38..0xfac9 len=145 name=,viewmodel_thundergun_sprint_empty_intro nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#112 XAnimParts 0xfac9..0xfb59 len=144 name=,viewmodel_thundergun_sprint_empty_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#113 XAnimParts 0xfb59..0xfbea len=145 name=,viewmodel_thundergun_sprint_empty_outro nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#114 XAnimParts 0xfbea..0xfc6f len=133 name=,viewmodel_thundergun_d2p_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#115 XAnimParts 0xfc6f..0xfcf6 len=135 name=,viewmodel_thundergun_d2p_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#116 XAnimParts 0xfcf6..0xfd7c len=134 name=,viewmodel_thundergun_d2p_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#117 XAnimParts 0xfd7c..0xfe07 len=139 name=,viewmodel_thundergun_empty_d2p_in nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#118 XAnimParts 0xfe07..0xfe94 len=141 name=,viewmodel_thundergun_empty_d2p_loop nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#119 XAnimParts 0xfe94..0xff20 len=140 name=,viewmodel_thundergun_empty_d2p_out nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#120 XAnimParts 0xff20..0xffa5 len=133 name=,viewmodel_thundergun_ads_up nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#121 XAnimParts 0xffa5..0x1002c len=135 name=,viewmodel_thundergun_ads_down nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#122 RawFile 0x1002c..0x1004b len=31 name=,rumble/dtp_rumble
+#123 RawFile 0x1004b..0x10076 len=43 name=,rumble/artillery_rumble_h.rmb
+#124 RawFile 0x10076..0x100a1 len=43 name=,rumble/artillery_rumble_l.rmb
+#125 WeaponVariantDef 0x100a1..0x1124f len=4526 name=thundergun_zm
+#126 FxEffectDef 0x1124f..0x112b7 len=104 name=,weapon/muzzleflashes/fx_thundergun_view_ug
+#127 FxEffectDef 0x112b7..0x11320 len=105 name=,weapon/muzzleflashes/fx_thundergun_world_ug
+#128 WeaponVariantDef 0x11320..0x11c3e len=2334 name=thundergun_upgraded_zm
+#129 MaterialTechniqueSet 0x11c3e..0x4229b len=198237 name=mc_l_sm_t0c0n0s0
+#130 MaterialTechniqueSet 0x4229b..0x6d3e7 len=176460 name=mc_l_sm_t0c0s0
+#131 XModel 0x6d3e7..0xacc8b len=260260 name=zombie_vending_three_gun
+#132 MaterialTechniqueSet 0xacc8b..0xad743 len=2744 name=mc_unlit_alphatest
+#133 XModel 0xad743..0xb643f len=36092 name=zombie_vending_three_gun_on
+#134 FxEffectDef 0xb643f..0xb6982 len=1347 name=misc/fx_zombie_cola_arsenal_on
+#135 Material 0xb6982..0xb6adc len=346 name=specialty_extraprimaryweapon_zombies
+#136 XModel 0xb6adc..0xbbbcb len=20719 name=zombie_3rd_perk_bottle_three_gun
+#137 XModel 0xbbbcb..0xc236a len=26527 name=zombie_perk_bottle_three_gun
+#138 XModel 0xc236a..0xc247d len=275 name=,viewmodel_hands_cloth
+#139 XAnimParts 0xc247d..0xc2507 len=138 name=,viewmodel_zombie_perksacola_idle nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#140 XAnimParts 0xc2507..0xc2592 len=139 name=,viewmodel_zombie_perksacola_lower nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#141 XAnimParts 0xc2592..0xc261d len=139 name=,viewmodel_zombie_perksacola_drink nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
+#142 WeaponVariantDef 0xc261d..0xc3405 len=3560 name=zombie_perk_bottle_additionalprimaryweapon
+#143 RawFile 0xc3405..0xc3427 len=34 name=zombie_theater_patch
