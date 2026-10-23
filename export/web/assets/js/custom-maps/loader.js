@@ -85,7 +85,7 @@ export function loadFromUrl(url, onProgress, include = null) {
 }
 
 export async function loadFromSketchfab({ uid, token }, onProgress, fetchImpl = globalThis.fetch.bind(globalThis)) {
-  if (!token) throw new Error('Enter your Sketchfab API token in the Custom Maps menu to download models.');
+  if (!token) throw new Error('Enter your Sketchfab API token in the Workshop menu to download models.');
   const response = await fetchImpl(`${SKETCHFAB}/models/${encodeURIComponent(uid)}/download`, { headers: { Authorization: `Token ${token}` } });
   if (response.status === 401 || response.status === 403) throw new Error('Sketchfab refused the download: check the API token, and that the model is downloadable.');
   if (!response.ok) throw new Error(`Sketchfab download request failed (${response.status}).`);

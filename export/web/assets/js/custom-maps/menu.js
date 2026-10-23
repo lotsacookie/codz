@@ -45,7 +45,7 @@ export function createCustomMenu({ root, onPlay, onClose }) {
   const detailDesc = el('p', { class: 'detail-desc' });
   const detailInfo = el('p', { class: 'detail-info' });
   const detail = el('aside', { class: 'cm-detail', 'aria-live': 'polite' }, el('div', { class: 'detail-art' }, detailImage), detailTitle, detailDesc, detailInfo);
-  const menu = el('div', { class: 'cm-menu' }, el('p', { class: 'cm-eyebrow', text: 'ZOMBIES / CUSTOM MAPS' }), el('h2', { text: 'CUSTOM MAPS' }), tabs, form, status, grid, pager);
+  const menu = el('div', { class: 'cm-menu' }, el('p', { class: 'cm-eyebrow', text: 'ZOMBIES / WORKSHOP' }), el('h2', { text: 'WORKSHOP' }), tabs, form, status, grid, pager);
   const panel = el('div', { class: 'cm-panel' }, menu, detail, picker);
   root.replaceChildren(panel);
 
