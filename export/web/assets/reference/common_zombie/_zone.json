@@ -48,6 +48,7 @@
   "_unwalked/tail_019af387_part1.bin"
  ],
  "errorReport": "_errors.txt",
+ "assetTrace": "_asset_trace.txt",
  "assets": [
   {
    "index": 0,
