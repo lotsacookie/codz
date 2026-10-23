@@ -1,0 +1,4617 @@
+{
+ "zone": "zone/Common/common_zombie.ff",
+ "status": "ok",
+ "error": null,
+ "complete": false,
+ "coverage": {
+  "streamPos": 26932103,
+  "streamSize": 79661349,
+  "percent": 33.81
+ },
+ "types": {
+  "XAnimParts": 1881,
+  "FxEffectDef": 190,
+  "XModel": 184,
+  "Material": 150,
+  "RawFile": 105,
+  "MaterialTechniqueSet": 83,
+  "WeaponVariantDef": 79,
+  "StringTable": 13,
+  "GfxImage": 4,
+  "SKIPPED": 1,
+  "FxImpactTable": 1,
+  "MenuList": 1,
+  "SndBank": 1
+ },
+ "resyncs": 2,
+ "failures": [
+  [
+   "XAnimParts",
+   "stream exhausted at N need N (trace=['<zone>', 'asset#N:XAnimParts', 'XAnimParts.randomDataShort'])",
+   1
+  ]
+ ],
+ "softErrors": [],
+ "failedSpans": [
+  {
+   "index": 2212,
+   "type": "XAnimParts",
+   "error": "stream exhausted at 0x198aeb7 need 1204288126 (trace=['<zone>', 'asset#2212:XAnimParts', 'XAnimParts.randomDataShort'])",
+   "start": 26783311,
+   "end": 26783563,
+   "resyncedTo": 2213,
+   "file": "_failed/asset_2212_XAnimParts.bin"
+  }
+ ],
+ "unwalkedTail": [
+  "_unwalked/tail_019af387_part0.bin",
+  "_unwalked/tail_019af387_part1.bin"
+ ],
+ "assets": [
+  {
+   "index": 0,
+   "type": "MaterialTechniqueSet",
+   "name": ",2d",
+   "file": "assets/MaterialTechniqueSet/,2d.json"
+  },
+  {
+   "index": 1,
+   "type": "Material",
+   "name": "loadscreen_locked",
+   "file": "assets/Material/loadscreen_locked.json"
+  },
+  {
+   "index": 2,
+   "type": "RawFile",
+   "name": "animscripts/anims.gsc",
+   "file": "rawfiles/animscripts/anims.gsc"
+  },
+  {
+   "index": 3,
+   "type": "RawFile",
+   "name": "animscripts/battlechatter.gsc",
+   "file": "rawfiles/animscripts/battlechatter.gsc"
+  },
+  {
+   "index": 4,
+   "type": "RawFile",
+   "name": "animscripts/battlechatter_ai.gsc",
+   "file": "rawfiles/animscripts/battlechatter_ai.gsc"
+  },
+  {
+   "index": 5,
+   "type": "RawFile",
+   "name": "animscripts/combat_utility.gsc",
+   "file": "rawfiles/animscripts/combat_utility.gsc"
+  },
+  {
+   "index": 6,
+   "type": "RawFile",
+   "name": "animscripts/debug.gsc",
+   "file": "rawfiles/animscripts/debug.gsc"
+  },
+  {
+   "index": 7,
+   "type": "RawFile",
+   "name": "animscripts/face.gsc",
+   "file": "rawfiles/animscripts/face.gsc"
+  },
+  {
+   "index": 8,
+   "type": "RawFile",
+   "name": "animscripts/revive.gsc",
+   "file": "rawfiles/animscripts/revive.gsc"
+  },
+  {
+   "index": 9,
+   "type": "RawFile",
+   "name": "animscripts/setposemovement.gsc",
+   "file": "rawfiles/animscripts/setposemovement.gsc"
+  },
+  {
+   "index": 10,
+   "type": "RawFile",
+   "name": "animscripts/shared.gsc",
+   "file": "rawfiles/animscripts/shared.gsc"
+  },
+  {
+   "index": 11,
+   "type": "RawFile",
+   "name": "animscripts/squadmanager.gsc",
+   "file": "rawfiles/animscripts/squadmanager.gsc"
+  },
+  {
+   "index": 12,
+   "type": "RawFile",
+   "name": "animscripts/utility.gsc",
+   "file": "rawfiles/animscripts/utility.gsc"
+  },
+  {
+   "index": 13,
+   "type": "RawFile",
+   "name": "animscripts/walk.gsc",
+   "file": "rawfiles/animscripts/walk.gsc"
+  },
+  {
+   "index": 14,
+   "type": "RawFile",
+   "name": "animscripts/weaponlist.gsc",
+   "file": "rawfiles/animscripts/weaponlist.gsc"
+  },
+  {
+   "index": 15,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_shared.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_shared.gsc"
+  },
+  {
+   "index": 16,
+   "type": "RawFile",
+   "name": "animscripts/zombie_combat.gsc",
+   "file": "rawfiles/animscripts/zombie_combat.gsc"
+  },
+  {
+   "index": 17,
+   "type": "RawFile",
+   "name": "animscripts/zombie_death.gsc",
+   "file": "rawfiles/animscripts/zombie_death.gsc"
+  },
+  {
+   "index": 18,
+   "type": "RawFile",
+   "name": "animscripts/zombie_init.gsc",
+   "file": "rawfiles/animscripts/zombie_init.gsc"
+  },
+  {
+   "index": 19,
+   "type": "RawFile",
+   "name": "animscripts/zombie_melee.gsc",
+   "file": "rawfiles/animscripts/zombie_melee.gsc"
+  },
+  {
+   "index": 20,
+   "type": "RawFile",
+   "name": "animscripts/zombie_move.gsc",
+   "file": "rawfiles/animscripts/zombie_move.gsc"
+  },
+  {
+   "index": 21,
+   "type": "RawFile",
+   "name": "animscripts/zombie_pain.gsc",
+   "file": "rawfiles/animscripts/zombie_pain.gsc"
+  },
+  {
+   "index": 22,
+   "type": "RawFile",
+   "name": "animscripts/zombie_run.gsc",
+   "file": "rawfiles/animscripts/zombie_run.gsc"
+  },
+  {
+   "index": 23,
+   "type": "RawFile",
+   "name": "animscripts/zombie_scripted.gsc",
+   "file": "rawfiles/animscripts/zombie_scripted.gsc"
+  },
+  {
+   "index": 24,
+   "type": "RawFile",
+   "name": "animscripts/zombie_setposemovement.gsc",
+   "file": "rawfiles/animscripts/zombie_setposemovement.gsc"
+  },
+  {
+   "index": 25,
+   "type": "RawFile",
+   "name": "animscripts/zombie_shared.gsc",
+   "file": "rawfiles/animscripts/zombie_shared.gsc"
+  },
+  {
+   "index": 26,
+   "type": "RawFile",
+   "name": "animscripts/zombie_stop.gsc",
+   "file": "rawfiles/animscripts/zombie_stop.gsc"
+  },
+  {
+   "index": 27,
+   "type": "RawFile",
+   "name": "animscripts/zombie_utility.gsc",
+   "file": "rawfiles/animscripts/zombie_utility.gsc"
+  },
+  {
+   "index": 28,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_40.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_40.gsc"
+  },
+  {
+   "index": 29,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_72.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_72.gsc"
+  },
+  {
+   "index": 30,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_127.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_127.gsc"
+  },
+  {
+   "index": 31,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_184.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_184.gsc"
+  },
+  {
+   "index": 32,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_190.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_190.gsc"
+  },
+  {
+   "index": 33,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_222.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_222.gsc"
+  },
+  {
+   "index": 34,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_240.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_240.gsc"
+  },
+  {
+   "index": 35,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_up_222.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_up_222.gsc"
+  },
+  {
+   "index": 36,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_wall_crawl_drop.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_wall_crawl_drop.gsc"
+  },
+  {
+   "index": 37,
+   "type": "Material",
+   "name": "hudfriendlyfire",
+   "file": "assets/Material/hudfriendlyfire.json"
+  },
+  {
+   "index": 38,
+   "type": "Material",
+   "name": "hint_usable",
+   "file": "assets/Material/hint_usable.json"
+  },
+  {
+   "index": 39,
+   "type": "Material",
+   "name": "hint_mantle",
+   "file": "assets/Material/hint_mantle.json"
+  },
+  {
+   "index": 40,
+   "type": "Material",
+   "name": "stance_stand",
+   "file": "assets/Material/stance_stand.json"
+  },
+  {
+   "index": 41,
+   "type": "Material",
+   "name": "stance_crouch",
+   "file": "assets/Material/stance_crouch.json"
+  },
+  {
+   "index": 42,
+   "type": "Material",
+   "name": "stance_prone",
+   "file": "assets/Material/stance_prone.json"
+  },
+  {
+   "index": 43,
+   "type": "Material",
+   "name": "stance_swim",
+   "file": "assets/Material/stance_swim.json"
+  },
+  {
+   "index": 44,
+   "type": "Material",
+   "name": "stance_flash",
+   "file": "assets/Material/stance_flash.json"
+  },
+  {
+   "index": 45,
+   "type": "Material",
+   "name": "objective",
+   "file": "assets/Material/objective.json"
+  },
+  {
+   "index": 46,
+   "type": "Material",
+   "name": "objective_arrow",
+   "file": "assets/Material/objective_arrow.json"
+  },
+  {
+   "index": 47,
+   "type": "Material",
+   "name": "objective_ring",
+   "file": "assets/Material/objective_ring.json"
+  },
+  {
+   "index": 48,
+   "type": "Material",
+   "name": "objective_coop",
+   "file": "assets/Material/objective_coop.json"
+  },
+  {
+   "index": 49,
+   "type": "Material",
+   "name": "hit_direction",
+   "file": "assets/Material/hit_direction.json"
+  },
+  {
+   "index": 50,
+   "type": "Material",
+   "name": "watch_face",
+   "file": "assets/Material/watch_face.json"
+  },
+  {
+   "index": 51,
+   "type": "Material",
+   "name": "watch_second",
+   "file": "assets/Material/watch_second.json"
+  },
+  {
+   "index": 52,
+   "type": "Material",
+   "name": "watch_minute",
+   "file": "assets/Material/watch_minute.json"
+  },
+  {
+   "index": 53,
+   "type": "Material",
+   "name": "watch_hour",
+   "file": "assets/Material/watch_hour.json"
+  },
+  {
+   "index": 54,
+   "type": "Material",
+   "name": "minimap_light_on",
+   "file": "assets/Material/minimap_light_on.json"
+  },
+  {
+   "index": 55,
+   "type": "MaterialTechniqueSet",
+   "name": "effect",
+   "file": "assets/MaterialTechniqueSet/effect.json"
+  },
+  {
+   "index": 56,
+   "type": "Material",
+   "name": "gfx_rain_drop",
+   "file": "assets/Material/gfx_rain_drop.json"
+  },
+  {
+   "index": 57,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_add_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_add_nofog.json"
+  },
+  {
+   "index": 58,
+   "type": "Material",
+   "name": "gfx_red_tracer",
+   "file": "assets/Material/gfx_red_tracer.json"
+  },
+  {
+   "index": 59,
+   "type": "Material",
+   "name": "gfx_green_tracer",
+   "file": "assets/Material/gfx_green_tracer.json"
+  },
+  {
+   "index": 60,
+   "type": "MaterialTechniqueSet",
+   "name": ",distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/,distortion_scale_zfeather.json"
+  },
+  {
+   "index": 61,
+   "type": "Material",
+   "name": "gfx_bullet",
+   "file": "assets/Material/gfx_bullet.json"
+  },
+  {
+   "index": 62,
+   "type": "MaterialTechniqueSet",
+   "name": "laser",
+   "file": "assets/MaterialTechniqueSet/laser.json"
+  },
+  {
+   "index": 63,
+   "type": "Material",
+   "name": "gfx_laser",
+   "file": "assets/Material/gfx_laser.json"
+  },
+  {
+   "index": 64,
+   "type": "MaterialTechniqueSet",
+   "name": "post_light",
+   "file": "assets/MaterialTechniqueSet/post_light.json"
+  },
+  {
+   "index": 65,
+   "type": "Material",
+   "name": "gfx_laser_light",
+   "file": "assets/Material/gfx_laser_light.json"
+  },
+  {
+   "index": 66,
+   "type": "Material",
+   "name": "gfx_fxt_fx_distortion_water_droplet",
+   "file": "assets/Material/gfx_fxt_fx_distortion_water_droplet.json"
+  },
+  {
+   "index": 67,
+   "type": "Material",
+   "name": "hudstopwatch",
+   "file": "assets/Material/hudstopwatch.json"
+  },
+  {
+   "index": 68,
+   "type": "Material",
+   "name": "hudstopwatchneedle",
+   "file": "assets/Material/hudstopwatchneedle.json"
+  },
+  {
+   "index": 69,
+   "type": "Material",
+   "name": "hud_dpad_outer_frame_highlight_side",
+   "file": "assets/Material/hud_dpad_outer_frame_highlight_side.json"
+  },
+  {
+   "index": 70,
+   "type": "Material",
+   "name": "objectivea",
+   "file": "assets/Material/objectivea.json"
+  },
+  {
+   "index": 71,
+   "type": "Material",
+   "name": "objectiveb",
+   "file": "assets/Material/objectiveb.json"
+  },
+  {
+   "index": 72,
+   "type": "Material",
+   "name": "objectivec",
+   "file": "assets/Material/objectivec.json"
+  },
+  {
+   "index": 73,
+   "type": "Material",
+   "name": "objectived",
+   "file": "assets/Material/objectived.json"
+  },
+  {
+   "index": 74,
+   "type": "Material",
+   "name": "objectivee",
+   "file": "assets/Material/objectivee.json"
+  },
+  {
+   "index": 75,
+   "type": "Material",
+   "name": "objectivef",
+   "file": "assets/Material/objectivef.json"
+  },
+  {
+   "index": 76,
+   "type": "Material",
+   "name": "overlay_low_health",
+   "file": "assets/Material/overlay_low_health.json"
+  },
+  {
+   "index": 77,
+   "type": "Material",
+   "name": "overlay_low_health_compass",
+   "file": "assets/Material/overlay_low_health_compass.json"
+  },
+  {
+   "index": 78,
+   "type": "Material",
+   "name": "menu_screenbg",
+   "file": "assets/Material/menu_screenbg.json"
+  },
+  {
+   "index": 79,
+   "type": "Material",
+   "name": "hint_friendly",
+   "file": "assets/Material/hint_friendly.json"
+  },
+  {
+   "index": 80,
+   "type": "Material",
+   "name": "hud_bullets_rifle",
+   "file": "assets/Material/hud_bullets_rifle.json"
+  },
+  {
+   "index": 81,
+   "type": "Material",
+   "name": "hud_bullets_pistol",
+   "file": "assets/Material/hud_bullets_pistol.json"
+  },
+  {
+   "index": 82,
+   "type": "Material",
+   "name": "hud_bullets_sniper",
+   "file": "assets/Material/hud_bullets_sniper.json"
+  },
+  {
+   "index": 83,
+   "type": "Material",
+   "name": "hud_bullets_spread",
+   "file": "assets/Material/hud_bullets_spread.json"
+  },
+  {
+   "index": 84,
+   "type": "Material",
+   "name": "hud_bullets_support_front",
+   "file": "assets/Material/hud_bullets_support_front.json"
+  },
+  {
+   "index": 85,
+   "type": "Material",
+   "name": "hud_bullets_support_back",
+   "file": "assets/Material/hud_bullets_support_back.json"
+  },
+  {
+   "index": 86,
+   "type": "Material",
+   "name": "hud_burningcaricon",
+   "file": "assets/Material/hud_burningcaricon.json"
+  },
+  {
+   "index": 87,
+   "type": "Material",
+   "name": "hud_burningbarrelicon",
+   "file": "assets/Material/hud_burningbarrelicon.json"
+  },
+  {
+   "index": 88,
+   "type": "Material",
+   "name": "hud_dpad_eqip_count_backing",
+   "file": "assets/Material/hud_dpad_eqip_count_backing.json"
+  },
+  {
+   "index": 89,
+   "type": "Material",
+   "name": "hud_grenadethrowback",
+   "file": "assets/Material/hud_grenadethrowback.json"
+  },
+  {
+   "index": 90,
+   "type": "Material",
+   "name": "hud_offscreenobjectivepointer",
+   "file": "assets/Material/hud_offscreenobjectivepointer.json"
+  },
+  {
+   "index": 91,
+   "type": "Material",
+   "name": "minimap_icon_mystery_box",
+   "file": "assets/Material/minimap_icon_mystery_box.json"
+  },
+  {
+   "index": 92,
+   "type": "Material",
+   "name": "minimap_icon_candolier",
+   "file": "assets/Material/minimap_icon_candolier.json"
+  },
+  {
+   "index": 93,
+   "type": "Material",
+   "name": "minimap_icon_damageade",
+   "file": "assets/Material/minimap_icon_damageade.json"
+  },
+  {
+   "index": 94,
+   "type": "Material",
+   "name": "minimap_icon_juggernog",
+   "file": "assets/Material/minimap_icon_juggernog.json"
+  },
+  {
+   "index": 95,
+   "type": "Material",
+   "name": "minimap_icon_reload",
+   "file": "assets/Material/minimap_icon_reload.json"
+  },
+  {
+   "index": 96,
+   "type": "Material",
+   "name": "minimap_icon_revive",
+   "file": "assets/Material/minimap_icon_revive.json"
+  },
+  {
+   "index": 97,
+   "type": "Material",
+   "name": "compassping_friendly",
+   "file": "assets/Material/compassping_friendly.json"
+  },
+  {
+   "index": 98,
+   "type": "Material",
+   "name": "compassping_friendlyfiring",
+   "file": "assets/Material/compassping_friendlyfiring.json"
+  },
+  {
+   "index": 99,
+   "type": "Material",
+   "name": "compassping_friendlyyelling",
+   "file": "assets/Material/compassping_friendlyyelling.json"
+  },
+  {
+   "index": 100,
+   "type": "Material",
+   "name": "compassping_squad_mp",
+   "file": "assets/Material/compassping_squad_mp.json"
+  },
+  {
+   "index": 101,
+   "type": "Material",
+   "name": "compassping_squad_fire_mp",
+   "file": "assets/Material/compassping_squad_fire_mp.json"
+  },
+  {
+   "index": 102,
+   "type": "Material",
+   "name": "compassping_enemy",
+   "file": "assets/Material/compassping_enemy.json"
+  },
+  {
+   "index": 103,
+   "type": "Material",
+   "name": "compassping_enemydirectional",
+   "file": "assets/Material/compassping_enemydirectional.json"
+  },
+  {
+   "index": 104,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/104.json"
+  },
+  {
+   "index": 105,
+   "type": "Material",
+   "name": "compassping_enemyyelling",
+   "file": "assets/Material/compassping_enemyyelling.json"
+  },
+  {
+   "index": 106,
+   "type": "Material",
+   "name": "offscreen_icon_us",
+   "file": "assets/Material/offscreen_icon_us.json"
+  },
+  {
+   "index": 107,
+   "type": "Material",
+   "name": "offscreen_icon_us_down",
+   "file": "assets/Material/offscreen_icon_us_down.json"
+  },
+  {
+   "index": 108,
+   "type": "Material",
+   "name": "offscreen_arrow",
+   "file": "assets/Material/offscreen_arrow.json"
+  },
+  {
+   "index": 109,
+   "type": "Material",
+   "name": "hint_health",
+   "file": "assets/Material/hint_health.json"
+  },
+  {
+   "index": 110,
+   "type": "Material",
+   "name": "hud_dpad",
+   "file": "assets/Material/hud_dpad.json"
+  },
+  {
+   "index": 111,
+   "type": "Material",
+   "name": "hud_dpad_arrow",
+   "file": "assets/Material/hud_dpad_arrow.json"
+  },
+  {
+   "index": 112,
+   "type": "Material",
+   "name": "ammo_counter_beltbullet",
+   "file": "assets/Material/ammo_counter_beltbullet.json"
+  },
+  {
+   "index": 113,
+   "type": "Material",
+   "name": "ammo_counter_bullet",
+   "file": "assets/Material/ammo_counter_bullet.json"
+  },
+  {
+   "index": 114,
+   "type": "Material",
+   "name": "ammo_counter_riflebullet",
+   "file": "assets/Material/ammo_counter_riflebullet.json"
+  },
+  {
+   "index": 115,
+   "type": "Material",
+   "name": "ammo_counter_rocket",
+   "file": "assets/Material/ammo_counter_rocket.json"
+  },
+  {
+   "index": 116,
+   "type": "Material",
+   "name": "ammo_counter_shotgunshell",
+   "file": "assets/Material/ammo_counter_shotgunshell.json"
+  },
+  {
+   "index": 117,
+   "type": "Material",
+   "name": "damage_feedback",
+   "file": "assets/Material/damage_feedback.json"
+  },
+  {
+   "index": 118,
+   "type": "Material",
+   "name": "ui_perforation",
+   "file": "assets/Material/ui_perforation.json"
+  },
+  {
+   "index": 119,
+   "type": "MaterialTechniqueSet",
+   "name": "water_particle",
+   "file": "assets/MaterialTechniqueSet/water_particle.json"
+  },
+  {
+   "index": 120,
+   "type": "Material",
+   "name": "water_dynamic_spray",
+   "file": "assets/Material/water_dynamic_spray.json"
+  },
+  {
+   "index": 121,
+   "type": "Material",
+   "name": "abbr_indicator",
+   "file": "assets/Material/abbr_indicator.json"
+  },
+  {
+   "index": 122,
+   "type": "Material",
+   "name": "weapon_missing_image",
+   "file": "assets/Material/weapon_missing_image.json"
+  },
+  {
+   "index": 123,
+   "type": "Material",
+   "name": "lagometer",
+   "file": "assets/Material/lagometer.json"
+  },
+  {
+   "index": 124,
+   "type": "Material",
+   "name": "headicontalkballoon",
+   "file": "assets/Material/headicontalkballoon.json"
+  },
+  {
+   "index": 125,
+   "type": "Material",
+   "name": "headicondisconnected",
+   "file": "assets/Material/headicondisconnected.json"
+  },
+  {
+   "index": 126,
+   "type": "Material",
+   "name": "hud_status_dead",
+   "file": "assets/Material/hud_status_dead.json"
+  },
+  {
+   "index": 127,
+   "type": "Material",
+   "name": "hud_chalk_1",
+   "file": "assets/Material/hud_chalk_1.json"
+  },
+  {
+   "index": 128,
+   "type": "Material",
+   "name": "hud_chalk_2",
+   "file": "assets/Material/hud_chalk_2.json"
+  },
+  {
+   "index": 129,
+   "type": "Material",
+   "name": "hud_chalk_3",
+   "file": "assets/Material/hud_chalk_3.json"
+  },
+  {
+   "index": 130,
+   "type": "Material",
+   "name": "hud_chalk_4",
+   "file": "assets/Material/hud_chalk_4.json"
+  },
+  {
+   "index": 131,
+   "type": "Material",
+   "name": "hud_chalk_5",
+   "file": "assets/Material/hud_chalk_5.json"
+  },
+  {
+   "index": 132,
+   "type": "Material",
+   "name": "zombie_stopwatch",
+   "file": "assets/Material/zombie_stopwatch.json"
+  },
+  {
+   "index": 133,
+   "type": "Material",
+   "name": "zombie_stopwatchneedle",
+   "file": "assets/Material/zombie_stopwatchneedle.json"
+  },
+  {
+   "index": 134,
+   "type": "Material",
+   "name": "zombie_stopwatch_glass",
+   "file": "assets/Material/zombie_stopwatch_glass.json"
+  },
+  {
+   "index": 135,
+   "type": "Material",
+   "name": "scorebar_zom_1",
+   "file": "assets/Material/scorebar_zom_1.json"
+  },
+  {
+   "index": 136,
+   "type": "Material",
+   "name": "scorebar_zom_2",
+   "file": "assets/Material/scorebar_zom_2.json"
+  },
+  {
+   "index": 137,
+   "type": "Material",
+   "name": "scorebar_zom_3",
+   "file": "assets/Material/scorebar_zom_3.json"
+  },
+  {
+   "index": 138,
+   "type": "Material",
+   "name": "scorebar_zom_4",
+   "file": "assets/Material/scorebar_zom_4.json"
+  },
+  {
+   "index": 139,
+   "type": "Material",
+   "name": "scorebar_zom_long_1",
+   "file": "assets/Material/scorebar_zom_long_1.json"
+  },
+  {
+   "index": 140,
+   "type": "Material",
+   "name": "scorebar_zom_long_2",
+   "file": "assets/Material/scorebar_zom_long_2.json"
+  },
+  {
+   "index": 141,
+   "type": "Material",
+   "name": "scorebar_zom_long_3",
+   "file": "assets/Material/scorebar_zom_long_3.json"
+  },
+  {
+   "index": 142,
+   "type": "Material",
+   "name": "scorebar_zom_long_4",
+   "file": "assets/Material/scorebar_zom_long_4.json"
+  },
+  {
+   "index": 143,
+   "type": "Material",
+   "name": "zom_icon_community_pot",
+   "file": "assets/Material/zom_icon_community_pot.json"
+  },
+  {
+   "index": 144,
+   "type": "Material",
+   "name": "zom_icon_community_pot_strip",
+   "file": "assets/Material/zom_icon_community_pot_strip.json"
+  },
+  {
+   "index": 145,
+   "type": "Material",
+   "name": "zom_icon_player_life",
+   "file": "assets/Material/zom_icon_player_life.json"
+  },
+  {
+   "index": 146,
+   "type": "Material",
+   "name": "mtl_weapon_camo_packapunch_diffuse",
+   "file": "assets/Material/mtl_weapon_camo_packapunch_diffuse.json"
+  },
+  {
+   "index": 147,
+   "type": "Material",
+   "name": "mtl_weapon_camo_packapunch_specular",
+   "file": "assets/Material/mtl_weapon_camo_packapunch_specular.json"
+  },
+  {
+   "index": 148,
+   "type": "Material",
+   "name": "mtl_weapon_camo_packapunch_env",
+   "file": "assets/Material/mtl_weapon_camo_packapunch_env.json"
+  },
+  {
+   "index": 149,
+   "type": "Material",
+   "name": "mtl_weapon_acog_lens_red",
+   "file": "assets/Material/mtl_weapon_acog_lens_red.json"
+  },
+  {
+   "index": 150,
+   "type": "Material",
+   "name": "mtl_weapon_acog_lens_green",
+   "file": "assets/Material/mtl_weapon_acog_lens_green.json"
+  },
+  {
+   "index": 151,
+   "type": "Material",
+   "name": "mtl_weapon_acog_lens_orange",
+   "file": "assets/Material/mtl_weapon_acog_lens_orange.json"
+  },
+  {
+   "index": 152,
+   "type": "Material",
+   "name": "mtl_weapon_acog_lens_yellow",
+   "file": "assets/Material/mtl_weapon_acog_lens_yellow.json"
+  },
+  {
+   "index": 153,
+   "type": "GfxImage",
+   "name": "~-gmtl_weapon_reflex_lens_blue_c",
+   "file": "assets/GfxImage/~-gmtl_weapon_reflex_lens_blue_c.json"
+  },
+  {
+   "index": 154,
+   "type": "GfxImage",
+   "name": "~-gmtl_weapon_reflex_lens_green_c",
+   "file": "assets/GfxImage/~-gmtl_weapon_reflex_lens_green_c.json"
+  },
+  {
+   "index": 155,
+   "type": "GfxImage",
+   "name": "~-gmtl_weapon_reflex_lens_orange_c",
+   "file": "assets/GfxImage/~-gmtl_weapon_reflex_lens_orange_c.json"
+  },
+  {
+   "index": 156,
+   "type": "GfxImage",
+   "name": "~-gmtl_weapon_reflex_lens_red_c",
+   "file": "assets/GfxImage/~-gmtl_weapon_reflex_lens_red_c.json"
+  },
+  {
+   "index": 157,
+   "type": "Material",
+   "name": "mtl_weapon_reticle04_reflexsight",
+   "file": "assets/Material/mtl_weapon_reticle04_reflexsight.json"
+  },
+  {
+   "index": 158,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_3e",
+   "file": "assets/Material/mtl_weapon_reticle_zom_3e.json"
+  },
+  {
+   "index": 159,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_a",
+   "file": "assets/Material/mtl_weapon_reticle_zom_a.json"
+  },
+  {
+   "index": 160,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_adapter",
+   "file": "assets/Material/mtl_weapon_reticle_zom_adapter.json"
+  },
+  {
+   "index": 161,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_beef",
+   "file": "assets/Material/mtl_weapon_reticle_zom_beef.json"
+  },
+  {
+   "index": 162,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_brain",
+   "file": "assets/Material/mtl_weapon_reticle_zom_brain.json"
+  },
+  {
+   "index": 163,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_button",
+   "file": "assets/Material/mtl_weapon_reticle_zom_button.json"
+  },
+  {
+   "index": 164,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_e",
+   "file": "assets/Material/mtl_weapon_reticle_zom_e.json"
+  },
+  {
+   "index": 165,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_eyes",
+   "file": "assets/Material/mtl_weapon_reticle_zom_eyes.json"
+  },
+  {
+   "index": 166,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_illuminati",
+   "file": "assets/Material/mtl_weapon_reticle_zom_illuminati.json"
+  },
+  {
+   "index": 167,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_masa",
+   "file": "assets/Material/mtl_weapon_reticle_zom_masa.json"
+  },
+  {
+   "index": 168,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_og",
+   "file": "assets/Material/mtl_weapon_reticle_zom_og.json"
+  },
+  {
+   "index": 169,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_pentagram",
+   "file": "assets/Material/mtl_weapon_reticle_zom_pentagram.json"
+  },
+  {
+   "index": 170,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_planets",
+   "file": "assets/Material/mtl_weapon_reticle_zom_planets.json"
+  },
+  {
+   "index": 171,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_s",
+   "file": "assets/Material/mtl_weapon_reticle_zom_s.json"
+  },
+  {
+   "index": 172,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_sun01",
+   "file": "assets/Material/mtl_weapon_reticle_zom_sun01.json"
+  },
+  {
+   "index": 173,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_sun02",
+   "file": "assets/Material/mtl_weapon_reticle_zom_sun02.json"
+  },
+  {
+   "index": 174,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_triangle",
+   "file": "assets/Material/mtl_weapon_reticle_zom_triangle.json"
+  },
+  {
+   "index": 175,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_w",
+   "file": "assets/Material/mtl_weapon_reticle_zom_w.json"
+  },
+  {
+   "index": 176,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_wip",
+   "file": "assets/Material/mtl_weapon_reticle_zom_wip.json"
+  },
+  {
+   "index": 177,
+   "type": "Material",
+   "name": "mtl_weapon_reticle_zom_wu",
+   "file": "assets/Material/mtl_weapon_reticle_zom_wu.json"
+  },
+  {
+   "index": 178,
+   "type": "RawFile",
+   "name": "maps/_zombiemode.gsc",
+   "file": "rawfiles/maps/_zombiemode.gsc"
+  },
+  {
+   "index": 179,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_auto_turret.gsc",
+   "file": "rawfiles/maps/_zombiemode_auto_turret.gsc"
+  },
+  {
+   "index": 180,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_audio.gsc",
+   "file": "rawfiles/maps/_zombiemode_audio.gsc"
+  },
+  {
+   "index": 181,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_bowie.gsc",
+   "file": "rawfiles/maps/_zombiemode_bowie.gsc"
+  },
+  {
+   "index": 182,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_blockers.gsc",
+   "file": "rawfiles/maps/_zombiemode_blockers.gsc"
+  },
+  {
+   "index": 183,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_claymore.gsc",
+   "file": "rawfiles/maps/_zombiemode_claymore.gsc"
+  },
+  {
+   "index": 184,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_deathcard.gsc",
+   "file": "rawfiles/maps/_zombiemode_deathcard.gsc"
+  },
+  {
+   "index": 185,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_devgui.gsc",
+   "file": "rawfiles/maps/_zombiemode_devgui.gsc"
+  },
+  {
+   "index": 186,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_load.gsc",
+   "file": "rawfiles/maps/_zombiemode_load.gsc"
+  },
+  {
+   "index": 187,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_money.gsc",
+   "file": "rawfiles/maps/_zombiemode_money.gsc"
+  },
+  {
+   "index": 188,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_net.gsc",
+   "file": "rawfiles/maps/_zombiemode_net.gsc"
+  },
+  {
+   "index": 189,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_perks.gsc",
+   "file": "rawfiles/maps/_zombiemode_perks.gsc"
+  },
+  {
+   "index": 190,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_powerups.gsc",
+   "file": "rawfiles/maps/_zombiemode_powerups.gsc"
+  },
+  {
+   "index": 191,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_score.gsc",
+   "file": "rawfiles/maps/_zombiemode_score.gsc"
+  },
+  {
+   "index": 192,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_server_throttle.gsc",
+   "file": "rawfiles/maps/_zombiemode_server_throttle.gsc"
+  },
+  {
+   "index": 193,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_spawner.gsc",
+   "file": "rawfiles/maps/_zombiemode_spawner.gsc"
+  },
+  {
+   "index": 194,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_traps.gsc",
+   "file": "rawfiles/maps/_zombiemode_traps.gsc"
+  },
+  {
+   "index": 195,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_user.gsc",
+   "file": "rawfiles/maps/_zombiemode_user.gsc"
+  },
+  {
+   "index": 196,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_utility.gsc",
+   "file": "rawfiles/maps/_zombiemode_utility.gsc"
+  },
+  {
+   "index": 197,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_cymbal_monkey.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_cymbal_monkey.gsc"
+  },
+  {
+   "index": 198,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_freezegun.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_freezegun.gsc"
+  },
+  {
+   "index": 199,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_tesla.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_tesla.gsc"
+  },
+  {
+   "index": 200,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_thundergun.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_thundergun.gsc"
+  },
+  {
+   "index": 201,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_crossbow.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_crossbow.gsc"
+  },
+  {
+   "index": 202,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weapon_box.gsc",
+   "file": "rawfiles/maps/_zombiemode_weapon_box.gsc"
+  },
+  {
+   "index": 203,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weapons.gsc",
+   "file": "rawfiles/maps/_zombiemode_weapons.gsc"
+  },
+  {
+   "index": 204,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_zone_manager.gsc",
+   "file": "rawfiles/maps/_zombiemode_zone_manager.gsc"
+  },
+  {
+   "index": 205,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode.csc",
+   "file": "rawfiles/clientscripts/_zombiemode.csc"
+  },
+  {
+   "index": 206,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_deathcard.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_deathcard.csc"
+  },
+  {
+   "index": 207,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_dissolve.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_dissolve.csc"
+  },
+  {
+   "index": 208,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_freezegun.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_freezegun.csc"
+  },
+  {
+   "index": 209,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_tesla.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_tesla.csc"
+  },
+  {
+   "index": 210,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_thundergun.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_thundergun.csc"
+  },
+  {
+   "index": 211,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weapons.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weapons.csc"
+  },
+  {
+   "index": 212,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0s0.json"
+  },
+  {
+   "index": 214,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_skin_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_skin_r0c0n0s0.json"
+  },
+  {
+   "index": 215,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 222,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_wpn_clrdtl_hero.json"
+  },
+  {
+   "index": 229,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0s0.json"
+  },
+  {
+   "index": 230,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0.json"
+  },
+  {
+   "index": 232,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0.json"
+  },
+  {
+   "index": 240,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather.json"
+  },
+  {
+   "index": 241,
+   "type": "FxEffectDef",
+   "name": "weapon/grenade/fx_trail_grenade",
+   "file": "assets/FxEffectDef/weapon/grenade/fx_trail_grenade.json"
+  },
+  {
+   "index": 247,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_unlit_add",
+   "file": "assets/MaterialTechniqueSet/mc_unlit_add.json"
+  },
+  {
+   "index": 249,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add_nofog.json"
+  },
+  {
+   "index": 250,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_falloff_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_falloff_add_nofog.json"
+  },
+  {
+   "index": 251,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_pistol_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_pistol_flash_base.json"
+  },
+  {
+   "index": 253,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_pistol_resting",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_pistol_resting.json"
+  },
+  {
+   "index": 254,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0.json"
+  },
+  {
+   "index": 256,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_pistol",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_pistol.json"
+  },
+  {
+   "index": 281,
+   "type": "RawFile",
+   "name": "rumble/pistol_fire",
+   "file": "rawfiles/rumble/pistol_fire"
+  },
+  {
+   "index": 282,
+   "type": "RawFile",
+   "name": "rumble/pistol_fire_h.rmb",
+   "file": "rawfiles/rumble/pistol_fire_h.rmb"
+  },
+  {
+   "index": 283,
+   "type": "RawFile",
+   "name": "rumble/pistol_fire_l.rmb",
+   "file": "rawfiles/rumble/pistol_fire_l.rmb"
+  },
+  {
+   "index": 307,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_falloff",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_falloff.json"
+  },
+  {
+   "index": 308,
+   "type": "MaterialTechniqueSet",
+   "name": "wc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_b0c0n0s0.json"
+  },
+  {
+   "index": 309,
+   "type": "FxEffectDef",
+   "name": "impacts/fx_flesh_hit_splat",
+   "file": "assets/FxEffectDef/impacts/fx_flesh_hit_splat.json"
+  },
+  {
+   "index": 310,
+   "type": "FxEffectDef",
+   "name": "system_elements/fx_blood_drops_decal_emit",
+   "file": "assets/FxEffectDef/system_elements/fx_blood_drops_decal_emit.json"
+  },
+  {
+   "index": 311,
+   "type": "FxEffectDef",
+   "name": "impacts/flesh_hit_knife",
+   "file": "assets/FxEffectDef/impacts/flesh_hit_knife.json"
+  },
+  {
+   "index": 312,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_projected_decal_lit",
+   "file": "assets/MaterialTechniqueSet/mc_projected_decal_lit.json"
+  },
+  {
+   "index": 314,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_nofog.json"
+  },
+  {
+   "index": 315,
+   "type": "FxEffectDef",
+   "name": "impacts/fx_flesh_hit_neck_fatal",
+   "file": "assets/FxEffectDef/impacts/fx_flesh_hit_neck_fatal.json"
+  },
+  {
+   "index": 317,
+   "type": "FxEffectDef",
+   "name": "temp_effects/fx_tmp_m203_flash",
+   "file": "assets/FxEffectDef/temp_effects/fx_tmp_m203_flash.json"
+  },
+  {
+   "index": 343,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0n0s0_hero.json"
+  },
+  {
+   "index": 344,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_effect_hero",
+   "file": "assets/MaterialTechniqueSet/mc_effect_hero.json"
+  },
+  {
+   "index": 345,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0d0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0_wpn_clrdtl_hero.json"
+  },
+  {
+   "index": 347,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_rifle1_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_rifle1_flash_base.json"
+  },
+  {
+   "index": 348,
+   "type": "FxEffectDef",
+   "name": "system_elements/fx_null",
+   "file": "assets/FxEffectDef/system_elements/fx_null.json"
+  },
+  {
+   "index": 349,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_revolver",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_revolver.json"
+  },
+  {
+   "index": 367,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_rifle1_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_rifle1_flash_base_ug.json"
+  },
+  {
+   "index": 371,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0.json"
+  },
+  {
+   "index": 389,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_pistol_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_pistol_flash_base_ug.json"
+  },
+  {
+   "index": 391,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_wpn_clrdtl",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_wpn_clrdtl.json"
+  },
+  {
+   "index": 392,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0d0n0s0_wpn_clrdtl",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0_wpn_clrdtl.json"
+  },
+  {
+   "index": 393,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0sc0x0_clrdtl",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0sc0x0_clrdtl.json"
+  },
+  {
+   "index": 394,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_unlit_replace",
+   "file": "assets/MaterialTechniqueSet/mc_unlit_replace.json"
+  },
+  {
+   "index": 395,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 396,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_reflexsight",
+   "file": "assets/MaterialTechniqueSet/mc_reflexsight.json"
+  },
+  {
+   "index": 397,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_player_icon_transparent",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_player_icon_transparent.json"
+  },
+  {
+   "index": 398,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_clan_tag_transparent",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_clan_tag_transparent.json"
+  },
+  {
+   "index": 400,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_rifle_resting",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_rifle_resting.json"
+  },
+  {
+   "index": 401,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_rifle",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_rifle.json"
+  },
+  {
+   "index": 422,
+   "type": "RawFile",
+   "name": "rumble/assault_fire",
+   "file": "rawfiles/rumble/assault_fire"
+  },
+  {
+   "index": 423,
+   "type": "RawFile",
+   "name": "rumble/assault_fire_h.rmb",
+   "file": "rawfiles/rumble/assault_fire_h.rmb"
+  },
+  {
+   "index": 424,
+   "type": "RawFile",
+   "name": "rumble/assault_fire_l.rmb",
+   "file": "rawfiles/rumble/assault_fire_l.rmb"
+  },
+  {
+   "index": 446,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_hero.json"
+  },
+  {
+   "index": 448,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_rifle2_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_rifle2_flash_base.json"
+  },
+  {
+   "index": 469,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_rifle2_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_rifle2_flash_base_ug.json"
+  },
+  {
+   "index": 490,
+   "type": "FxEffectDef",
+   "name": "impacts/fx_dud_m203",
+   "file": "assets/FxEffectDef/impacts/fx_dud_m203.json"
+  },
+  {
+   "index": 506,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 507,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0s0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0s0_hero.json"
+  },
+  {
+   "index": 555,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_smg_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_smg_flash_base.json"
+  },
+  {
+   "index": 575,
+   "type": "RawFile",
+   "name": "rumble/smg_fire",
+   "file": "rawfiles/rumble/smg_fire"
+  },
+  {
+   "index": 576,
+   "type": "RawFile",
+   "name": "rumble/smg_fire_h.rmb",
+   "file": "rawfiles/rumble/smg_fire_h.rmb"
+  },
+  {
+   "index": 577,
+   "type": "RawFile",
+   "name": "rumble/smg_fire_l.rmb",
+   "file": "rawfiles/rumble/smg_fire_l.rmb"
+  },
+  {
+   "index": 579,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_smg_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_smg_flash_base_ug.json"
+  },
+  {
+   "index": 583,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0d0n0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 606,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0s0_wpn_clrdtl",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0s0_wpn_clrdtl.json"
+  },
+  {
+   "index": 607,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_effect",
+   "file": "assets/MaterialTechniqueSet/mc_effect.json"
+  },
+  {
+   "index": 767,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/pistolflash_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/pistolflash_ug.json"
+  },
+  {
+   "index": 770,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_shotgun_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_shotgun_flash_base.json"
+  },
+  {
+   "index": 772,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_shotgun_resting",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_shotgun_resting.json"
+  },
+  {
+   "index": 774,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_shotgun",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_shotgun.json"
+  },
+  {
+   "index": 797,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire",
+   "file": "rawfiles/rumble/shotgun_fire"
+  },
+  {
+   "index": 798,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire_h.rmb",
+   "file": "rawfiles/rumble/shotgun_fire_h.rmb"
+  },
+  {
+   "index": 799,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire_l.rmb",
+   "file": "rawfiles/rumble/shotgun_fire_l.rmb"
+  },
+  {
+   "index": 801,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_shotgun_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_shotgun_flash_base_ug.json"
+  },
+  {
+   "index": 867,
+   "type": "MaterialTechniqueSet",
+   "name": "particle_cloud_add",
+   "file": "assets/MaterialTechniqueSet/particle_cloud_add.json"
+  },
+  {
+   "index": 868,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_dragons_breath_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_dragons_breath_ug.json"
+  },
+  {
+   "index": 912,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/shotgunflash_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/shotgunflash_ug.json"
+  },
+  {
+   "index": 919,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_effect_adszscale",
+   "file": "assets/MaterialTechniqueSet/mc_effect_adszscale.json"
+  },
+  {
+   "index": 920,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0n0s0_adszscale_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0n0s0_adszscale_hero.json"
+  },
+  {
+   "index": 921,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_wpn_adszscale_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_wpn_adszscale_clrdtl_hero.json"
+  },
+  {
+   "index": 922,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0_hero.json"
+  },
+  {
+   "index": 923,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0s0_wpn_adszscale_clrdtl",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0s0_wpn_adszscale_clrdtl.json"
+  },
+  {
+   "index": 1005,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0_hero.json"
+  },
+  {
+   "index": 1093,
+   "type": "RawFile",
+   "name": "rumble/sniper_fire",
+   "file": "rawfiles/rumble/sniper_fire"
+  },
+  {
+   "index": 1099,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_heavy_flash_base",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_heavy_flash_base.json"
+  },
+  {
+   "index": 1122,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_zombie_heavy_flash_base_ug",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_heavy_flash_base_ug.json"
+  },
+  {
+   "index": 1128,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1128.json"
+  },
+  {
+   "index": 1130,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1130.json"
+  },
+  {
+   "index": 1151,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1151.json"
+  },
+  {
+   "index": 1152,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1152.json"
+  },
+  {
+   "index": 1153,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1153.json"
+  },
+  {
+   "index": 1179,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1179.json"
+  },
+  {
+   "index": 1183,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1183.json"
+  },
+  {
+   "index": 1184,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1184.json"
+  },
+  {
+   "index": 1228,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1228.json"
+  },
+  {
+   "index": 1231,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1231.json"
+  },
+  {
+   "index": 1232,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1232.json"
+  },
+  {
+   "index": 1233,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1233.json"
+  },
+  {
+   "index": 1236,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1236.json"
+  },
+  {
+   "index": 1237,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1237.json"
+  },
+  {
+   "index": 1238,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1238.json"
+  },
+  {
+   "index": 1250,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1250.json"
+  },
+  {
+   "index": 1252,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1252.json"
+  },
+  {
+   "index": 1253,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1253.json"
+  },
+  {
+   "index": 1254,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1254.json"
+  },
+  {
+   "index": 1255,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1255.json"
+  },
+  {
+   "index": 1256,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1256.json"
+  },
+  {
+   "index": 1258,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1258.json"
+  },
+  {
+   "index": 1260,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1260.json"
+  },
+  {
+   "index": 1262,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1262.json"
+  },
+  {
+   "index": 1290,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1290.json"
+  },
+  {
+   "index": 1291,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1291.json"
+  },
+  {
+   "index": 1292,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1292.json"
+  },
+  {
+   "index": 1293,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1293.json"
+  },
+  {
+   "index": 1294,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1294.json"
+  },
+  {
+   "index": 1295,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1295.json"
+  },
+  {
+   "index": 1296,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1296.json"
+  },
+  {
+   "index": 1297,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1297.json"
+  },
+  {
+   "index": 1298,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1298.json"
+  },
+  {
+   "index": 1299,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1299.json"
+  },
+  {
+   "index": 1300,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1300.json"
+  },
+  {
+   "index": 1301,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1301.json"
+  },
+  {
+   "index": 1302,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1302.json"
+  },
+  {
+   "index": 1304,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1304.json"
+  },
+  {
+   "index": 1305,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1305.json"
+  },
+  {
+   "index": 1306,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1306.json"
+  },
+  {
+   "index": 1307,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1307.json"
+  },
+  {
+   "index": 1308,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1308.json"
+  },
+  {
+   "index": 1309,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1309.json"
+  },
+  {
+   "index": 1310,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1310.json"
+  },
+  {
+   "index": 1311,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1311.json"
+  },
+  {
+   "index": 1312,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1312.json"
+  },
+  {
+   "index": 1313,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1313.json"
+  },
+  {
+   "index": 1314,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/1314.json"
+  },
+  {
+   "index": 1376,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1376.json"
+  },
+  {
+   "index": 1377,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1377.json"
+  },
+  {
+   "index": 1378,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1378.json"
+  },
+  {
+   "index": 1379,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1379.json"
+  },
+  {
+   "index": 1380,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1380.json"
+  },
+  {
+   "index": 1381,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1381.json"
+  },
+  {
+   "index": 1382,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1382.json"
+  },
+  {
+   "index": 1386,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1386.json"
+  },
+  {
+   "index": 1387,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1387.json"
+  },
+  {
+   "index": 1388,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1388.json"
+  },
+  {
+   "index": 1389,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1389.json"
+  },
+  {
+   "index": 1390,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1390.json"
+  },
+  {
+   "index": 1391,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1391.json"
+  },
+  {
+   "index": 1392,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1392.json"
+  },
+  {
+   "index": 1393,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1393.json"
+  },
+  {
+   "index": 1394,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1394.json"
+  },
+  {
+   "index": 1395,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1395.json"
+  },
+  {
+   "index": 1396,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1396.json"
+  },
+  {
+   "index": 1397,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1397.json"
+  },
+  {
+   "index": 1398,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1398.json"
+  },
+  {
+   "index": 1399,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1399.json"
+  },
+  {
+   "index": 1400,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/1400.json"
+  },
+  {
+   "index": 1401,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1401.json"
+  },
+  {
+   "index": 1402,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1402.json"
+  },
+  {
+   "index": 1408,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/1408.json"
+  },
+  {
+   "index": 1410,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1410.json"
+  },
+  {
+   "index": 1411,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1411.json"
+  },
+  {
+   "index": 1412,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1412.json"
+  },
+  {
+   "index": 1417,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1417.json"
+  },
+  {
+   "index": 1418,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1418.json"
+  },
+  {
+   "index": 1419,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1419.json"
+  },
+  {
+   "index": 1420,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1420.json"
+  },
+  {
+   "index": 1421,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1421.json"
+  },
+  {
+   "index": 1426,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1426.json"
+  },
+  {
+   "index": 1427,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1427.json"
+  },
+  {
+   "index": 1428,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/1428.json"
+  },
+  {
+   "index": 1433,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1433.json"
+  },
+  {
+   "index": 1435,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1435.json"
+  },
+  {
+   "index": 1436,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1436.json"
+  },
+  {
+   "index": 1437,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1437.json"
+  },
+  {
+   "index": 1438,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/1438.json"
+  },
+  {
+   "index": 2252,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2252.json"
+  },
+  {
+   "index": 2253,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2253.json"
+  },
+  {
+   "index": 2254,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2254.json"
+  },
+  {
+   "index": 2255,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2255.json"
+  },
+  {
+   "index": 2256,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2256.json"
+  },
+  {
+   "index": 2288,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2288.json"
+  },
+  {
+   "index": 2289,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2289.json"
+  },
+  {
+   "index": 2290,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2290.json"
+  },
+  {
+   "index": 2291,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2291.json"
+  },
+  {
+   "index": 2292,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2292.json"
+  },
+  {
+   "index": 2293,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2293.json"
+  },
+  {
+   "index": 2294,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2294.json"
+  },
+  {
+   "index": 2297,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2297.json"
+  },
+  {
+   "index": 2298,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2298.json"
+  },
+  {
+   "index": 2299,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2299.json"
+  },
+  {
+   "index": 2300,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2300.json"
+  },
+  {
+   "index": 2301,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2301.json"
+  },
+  {
+   "index": 2302,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2302.json"
+  },
+  {
+   "index": 2303,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2303.json"
+  },
+  {
+   "index": 2304,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/2304.json"
+  },
+  {
+   "index": 2305,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/2305.json"
+  },
+  {
+   "index": 2306,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2306.json"
+  },
+  {
+   "index": 2307,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2307.json"
+  },
+  {
+   "index": 2308,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2308.json"
+  },
+  {
+   "index": 2309,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2309.json"
+  },
+  {
+   "index": 2311,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2311.json"
+  },
+  {
+   "index": 2317,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2317.json"
+  },
+  {
+   "index": 2318,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2318.json"
+  },
+  {
+   "index": 2319,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2319.json"
+  },
+  {
+   "index": 2320,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2320.json"
+  },
+  {
+   "index": 2321,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2321.json"
+  },
+  {
+   "index": 2322,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2322.json"
+  },
+  {
+   "index": 2324,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2324.json"
+  },
+  {
+   "index": 2325,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2325.json"
+  },
+  {
+   "index": 2327,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2327.json"
+  },
+  {
+   "index": 2329,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2329.json"
+  },
+  {
+   "index": 2331,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2331.json"
+  },
+  {
+   "index": 2333,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2333.json"
+  },
+  {
+   "index": 2335,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2335.json"
+  },
+  {
+   "index": 2336,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2336.json"
+  },
+  {
+   "index": 2341,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2341.json"
+  },
+  {
+   "index": 2342,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2342.json"
+  },
+  {
+   "index": 2343,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/2343.json"
+  },
+  {
+   "index": 2344,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2344.json"
+  },
+  {
+   "index": 2345,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2345.json"
+  },
+  {
+   "index": 2346,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2346.json"
+  },
+  {
+   "index": 2347,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2347.json"
+  },
+  {
+   "index": 2350,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2350.json"
+  },
+  {
+   "index": 2351,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2351.json"
+  },
+  {
+   "index": 2352,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2352.json"
+  },
+  {
+   "index": 2353,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2353.json"
+  },
+  {
+   "index": 2354,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2354.json"
+  },
+  {
+   "index": 2355,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2355.json"
+  },
+  {
+   "index": 2356,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2356.json"
+  },
+  {
+   "index": 2357,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2357.json"
+  },
+  {
+   "index": 2358,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2358.json"
+  },
+  {
+   "index": 2361,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2361.json"
+  },
+  {
+   "index": 2362,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2362.json"
+  },
+  {
+   "index": 2363,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2363.json"
+  },
+  {
+   "index": 2364,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2364.json"
+  },
+  {
+   "index": 2365,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2365.json"
+  },
+  {
+   "index": 2366,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2366.json"
+  },
+  {
+   "index": 2367,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2367.json"
+  },
+  {
+   "index": 2368,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2368.json"
+  },
+  {
+   "index": 2369,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2369.json"
+  },
+  {
+   "index": 2370,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2370.json"
+  },
+  {
+   "index": 2371,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2371.json"
+  },
+  {
+   "index": 2372,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2372.json"
+  },
+  {
+   "index": 2373,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2373.json"
+  },
+  {
+   "index": 2374,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2374.json"
+  },
+  {
+   "index": 2375,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2375.json"
+  },
+  {
+   "index": 2377,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2377.json"
+  },
+  {
+   "index": 2378,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2378.json"
+  },
+  {
+   "index": 2379,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2379.json"
+  },
+  {
+   "index": 2381,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2381.json"
+  },
+  {
+   "index": 2382,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2382.json"
+  },
+  {
+   "index": 2383,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2383.json"
+  },
+  {
+   "index": 2384,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2384.json"
+  },
+  {
+   "index": 2385,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2385.json"
+  },
+  {
+   "index": 2386,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2386.json"
+  },
+  {
+   "index": 2387,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2387.json"
+  },
+  {
+   "index": 2388,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2388.json"
+  },
+  {
+   "index": 2389,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2389.json"
+  },
+  {
+   "index": 2390,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2390.json"
+  },
+  {
+   "index": 2391,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2391.json"
+  },
+  {
+   "index": 2392,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2392.json"
+  },
+  {
+   "index": 2393,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2393.json"
+  },
+  {
+   "index": 2394,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2394.json"
+  },
+  {
+   "index": 2395,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2395.json"
+  },
+  {
+   "index": 2396,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2396.json"
+  },
+  {
+   "index": 2397,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2397.json"
+  },
+  {
+   "index": 2398,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2398.json"
+  },
+  {
+   "index": 2399,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2399.json"
+  },
+  {
+   "index": 2400,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2400.json"
+  },
+  {
+   "index": 2401,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2401.json"
+  },
+  {
+   "index": 2402,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2402.json"
+  },
+  {
+   "index": 2403,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2403.json"
+  },
+  {
+   "index": 2404,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2404.json"
+  },
+  {
+   "index": 2405,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2405.json"
+  },
+  {
+   "index": 2406,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2406.json"
+  },
+  {
+   "index": 2407,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2407.json"
+  },
+  {
+   "index": 2408,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2408.json"
+  },
+  {
+   "index": 2409,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2409.json"
+  },
+  {
+   "index": 2410,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2410.json"
+  },
+  {
+   "index": 2411,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2411.json"
+  },
+  {
+   "index": 2412,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2412.json"
+  },
+  {
+   "index": 2413,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2413.json"
+  },
+  {
+   "index": 2414,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2414.json"
+  },
+  {
+   "index": 2415,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2415.json"
+  },
+  {
+   "index": 2416,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2416.json"
+  },
+  {
+   "index": 2417,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2417.json"
+  },
+  {
+   "index": 2418,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2418.json"
+  },
+  {
+   "index": 2419,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2419.json"
+  },
+  {
+   "index": 2420,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2420.json"
+  },
+  {
+   "index": 2421,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2421.json"
+  },
+  {
+   "index": 2422,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2422.json"
+  },
+  {
+   "index": 2423,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2423.json"
+  },
+  {
+   "index": 2424,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2424.json"
+  },
+  {
+   "index": 2425,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2425.json"
+  },
+  {
+   "index": 2426,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2426.json"
+  },
+  {
+   "index": 2427,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2427.json"
+  },
+  {
+   "index": 2428,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2428.json"
+  },
+  {
+   "index": 2429,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2429.json"
+  },
+  {
+   "index": 2430,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2430.json"
+  },
+  {
+   "index": 2432,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2432.json"
+  },
+  {
+   "index": 2434,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2434.json"
+  },
+  {
+   "index": 2435,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2435.json"
+  },
+  {
+   "index": 2436,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2436.json"
+  },
+  {
+   "index": 2437,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2437.json"
+  },
+  {
+   "index": 2438,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2438.json"
+  },
+  {
+   "index": 2439,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2439.json"
+  },
+  {
+   "index": 2440,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2440.json"
+  },
+  {
+   "index": 2441,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2441.json"
+  },
+  {
+   "index": 2442,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2442.json"
+  },
+  {
+   "index": 2443,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2443.json"
+  },
+  {
+   "index": 2444,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2444.json"
+  },
+  {
+   "index": 2445,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2445.json"
+  },
+  {
+   "index": 2446,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2446.json"
+  },
+  {
+   "index": 2447,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2447.json"
+  },
+  {
+   "index": 2448,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2448.json"
+  },
+  {
+   "index": 2449,
+   "type": "FxImpactTable",
+   "name": null,
+   "file": "assets/FxImpactTable/_unnamed/2449.json"
+  },
+  {
+   "index": 2450,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2450.json"
+  },
+  {
+   "index": 2451,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2451.json"
+  },
+  {
+   "index": 2453,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2453.json"
+  },
+  {
+   "index": 2454,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2454.json"
+  },
+  {
+   "index": 2455,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2455.json"
+  },
+  {
+   "index": 2466,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/2466.json"
+  },
+  {
+   "index": 2467,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2467.json"
+  },
+  {
+   "index": 2468,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2468.json"
+  },
+  {
+   "index": 2620,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2620.json"
+  },
+  {
+   "index": 2621,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2621.json"
+  },
+  {
+   "index": 2622,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2622.json"
+  },
+  {
+   "index": 2672,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/2672.json"
+  },
+  {
+   "index": 2674,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2674.json"
+  },
+  {
+   "index": 2675,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2675.json"
+  },
+  {
+   "index": 2676,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2676.json"
+  },
+  {
+   "index": 2677,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2677.json"
+  },
+  {
+   "index": 2678,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2678.json"
+  },
+  {
+   "index": 2679,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2679.json"
+  },
+  {
+   "index": 2680,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/2680.json"
+  },
+  {
+   "index": 2685,
+   "type": "SndBank",
+   "name": null,
+   "file": "assets/SndBank/_unnamed/2685.json"
+  },
+  {
+   "index": 2686,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2686.json"
+  },
+  {
+   "index": 2692,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/2692.json"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [
+    "t5_viewmodel_camera_dtp_in",
+    "t5_viewmodel_camera_dtp_loop",
+    "t5_viewmodel_camera_dtp_out",
+    "t5_viewmodel_camera_mantle",
+    "viewmodel_ak74u_ads_down",
+    "viewmodel_ak74u_ads_fire",
+    "viewmodel_ak74u_ads_up",
+    "viewmodel_ak74u_d2p_in",
+    "viewmodel_ak74u_d2p_loop",
+    "viewmodel_ak74u_d2p_out",
+    "viewmodel_ak74u_elbit_ads_down",
+    "viewmodel_ak74u_elbit_ads_up",
+    "viewmodel_ak74u_fire",
+    "viewmodel_ak74u_first_raise",
+    "viewmodel_ak74u_idle",
+    "viewmodel_ak74u_pullout",
+    "viewmodel_ak74u_pullout_quick",
+    "viewmodel_ak74u_putaway",
+    "viewmodel_ak74u_putaway_quick",
+    "viewmodel_ak74u_reload",
+    "viewmodel_ak74u_reload_empty",
+    "viewmodel_ak74u_sprint_in",
+    "viewmodel_ak74u_sprint_loop",
+    "viewmodel_ak74u_sprint_out",
+    "viewmodel_aug_acog_ads_down",
+    "viewmodel_aug_acog_ads_up",
+    "viewmodel_aug_grip_ads_fire",
+    "viewmodel_aug_grip_d2p_in",
+    "viewmodel_aug_grip_d2p_loop",
+    "viewmodel_aug_grip_d2p_out",
+    "viewmodel_aug_grip_fire",
+    "viewmodel_aug_grip_first_raise",
+    "viewmodel_aug_grip_idle",
+    "viewmodel_aug_grip_pullout",
+    "viewmodel_aug_grip_pullout_quick",
+    "viewmodel_aug_grip_putaway",
+    "viewmodel_aug_grip_putaway_quick",
+    "viewmodel_aug_grip_reload",
+    "viewmodel_aug_grip_reload_empty",
+    "viewmodel_aug_grip_sprint_in",
+    "viewmodel_aug_grip_sprint_loop",
+    "viewmodel_aug_grip_sprint_out",
+    "viewmodel_aug_masterkey_ads_fire",
+    "viewmodel_aug_masterkey_d2p_in",
+    "viewmodel_aug_masterkey_d2p_loop",
+    "viewmodel_aug_masterkey_d2p_out",
+    "viewmodel_aug_masterkey_fire",
+    "viewmodel_aug_masterkey_first_raise",
+    "viewmodel_aug_masterkey_from_mk",
+    "viewmodel_aug_masterkey_idle",
+    "viewmodel_aug_masterkey_mk_ads_down",
+    "viewmodel_aug_masterkey_mk_ads_up",
+    "viewmodel_aug_masterkey_mk_d2p_in",
+    "viewmodel_aug_masterkey_mk_d2p_loop",
+    "viewmodel_aug_masterkey_mk_d2p_out",
+    "viewmodel_aug_masterkey_mk_fire",
+    "viewmodel_aug_masterkey_mk_idle",
+    "viewmodel_aug_masterkey_mk_pullout_quick",
+    "viewmodel_aug_masterkey_mk_putaway_quick",
+    "viewmodel_aug_masterkey_mk_rechamber",
+    "viewmodel_aug_masterkey_mk_reload_in",
+    "viewmodel_aug_masterkey_mk_reload_loop",
+    "viewmodel_aug_masterkey_mk_reload_out",
+    "viewmodel_aug_masterkey_mk_sprint_in",
+    "viewmodel_aug_masterkey_mk_sprint_loop",
+    "viewmodel_aug_masterkey_mk_sprint_out",
+    "viewmodel_aug_masterkey_pullout",
+    "viewmodel_aug_masterkey_pullout_quick",
+    "viewmodel_aug_masterkey_putaway",
+    "viewmodel_aug_masterkey_putaway_quick",
+    "viewmodel_aug_masterkey_reload",
+    "viewmodel_aug_masterkey_reload_empty",
+    "viewmodel_aug_masterkey_sprint_in",
+    "viewmodel_aug_masterkey_sprint_loop",
+    "viewmodel_aug_masterkey_sprint_out",
+    "viewmodel_aug_masterkey_to_mk",
+    "viewmodel_beretta682_ads_down",
+    "viewmodel_beretta682_ads_fire",
+    "viewmodel_beretta682_ads_up",
+    "viewmodel_beretta682_d2p_in",
+    "viewmodel_beretta682_d2p_loop",
+    "viewmodel_beretta682_d2p_out",
+    "viewmodel_beretta682_fire",
+    "viewmodel_beretta682_first_raise",
+    "viewmodel_beretta682_idle",
+    "viewmodel_beretta682_pullout",
+    "viewmodel_beretta682_pullout_quick",
+    "viewmodel_beretta682_putaway",
+    "viewmodel_beretta682_putaway_quick",
+    "viewmodel_beretta682_reload",
+    "viewmodel_beretta682_reload_empty",
+    "viewmodel_beretta682_sprint_in",
+    "viewmodel_beretta682_sprint_loop",
+    "viewmodel_beretta682_sprint_out",
+    "viewmodel_bowie_slash",
+    "viewmodel_bowie_stick",
+    "viewmodel_claymore_d2p_in",
+    "viewmodel_claymore_d2p_loop",
+    "viewmodel_claymore_d2p_out",
+    "viewmodel_claymore_empty_idle",
+    "viewmodel_claymore_fire",
+    "viewmodel_claymore_hold_fire",
+    "viewmodel_claymore_idle",
+    "viewmodel_claymore_last_shot_fire",
+    "viewmodel_claymore_pullout",
+    "viewmodel_claymore_putaway",
+    "viewmodel_claymore_quick_pullout",
+    "viewmodel_claymore_sprint_in",
+    "viewmodel_claymore_sprint_loop",
+    "viewmodel_claymore_sprint_out",
+    "viewmodel_colt1911_dw_full_ads_down",
+    "viewmodel_colt1911_dw_full_ads_up",
+    "viewmodel_colt1911_dw_full_d2p_in",
+    "viewmodel_colt1911_dw_full_d2p_loop",
+    "viewmodel_colt1911_dw_full_d2p_out",
+    "viewmodel_colt1911_dw_full_first_raise",
+    "viewmodel_colt1911_dw_full_pullout",
+    "viewmodel_colt1911_dw_full_putaway",
+    "viewmodel_colt1911_dw_full_sprint_in",
+    "viewmodel_colt1911_dw_full_sprint_loop",
+    "viewmodel_colt1911_dw_full_sprint_out",
+    "viewmodel_colt1911_dw_left_fire",
+    "viewmodel_colt1911_dw_left_idle_loop",
+    "viewmodel_colt1911_dw_left_last_shot",
+    "viewmodel_colt1911_dw_left_reload_empty",
+    "viewmodel_colt1911_dw_right_fire",
+    "viewmodel_colt1911_dw_right_idle_loop",
+    "viewmodel_colt1911_dw_right_last_shot",
+    "viewmodel_colt1911_dw_right_reload_empty",
+    "viewmodel_colt1911_sw_ads_down",
+    "viewmodel_colt1911_sw_ads_fire",
+    "viewmodel_colt1911_sw_ads_up",
+    "viewmodel_colt1911_sw_dtp_in",
+    "viewmodel_colt1911_sw_dtp_loop",
+    "viewmodel_colt1911_sw_dtp_out",
+    "viewmodel_colt1911_sw_empty_dtp_in",
+    "viewmodel_colt1911_sw_empty_dtp_loop",
+    "viewmodel_colt1911_sw_empty_dtp_out",
+    "viewmodel_colt1911_sw_empty_idle",
+    "viewmodel_colt1911_sw_empty_pullout",
+    "viewmodel_colt1911_sw_empty_putaway",
+    "viewmodel_colt1911_sw_empty_sprint_loop",
+    "viewmodel_colt1911_sw_fire",
+    "viewmodel_colt1911_sw_first_raise",
+    "viewmodel_colt1911_sw_idle",
+    "viewmodel_colt1911_sw_lastshot",
+    "viewmodel_colt1911_sw_pullout",
+    "viewmodel_colt1911_sw_putaway",
+    "viewmodel_colt1911_sw_reload",
+    "viewmodel_colt1911_sw_reload_empty",
+    "viewmodel_colt1911_sw_sprint_loop",
+    "viewmodel_commando_ads_down",
+    "viewmodel_commando_ads_fire",
+    "viewmodel_commando_ads_up",
+    "viewmodel_commando_d2p_in",
+    "viewmodel_commando_d2p_loop",
+    "viewmodel_commando_d2p_out",
+    "viewmodel_commando_dualclip_reload",
+    "viewmodel_commando_dualclip_reload_empty",
+    "viewmodel_commando_dualclip_reload_empty_quick",
+    "viewmodel_commando_dualclip_reload_quick",
+    "viewmodel_commando_fire",
+    "viewmodel_commando_first_raise",
+    "viewmodel_commando_idle",
+    "viewmodel_commando_masterkey_mk_ads_down",
+    "viewmodel_commando_masterkey_mk_ads_up",
+    "viewmodel_commando_masterkey_mk_d2p_in",
+    "viewmodel_commando_masterkey_mk_d2p_loop",
+    "viewmodel_commando_masterkey_mk_d2p_out",
+    "viewmodel_commando_masterkey_mk_fire",
+    "viewmodel_commando_masterkey_mk_idle_loop",
+    "viewmodel_commando_masterkey_mk_pullout",
+    "viewmodel_commando_masterkey_mk_putaway",
+    "viewmodel_commando_masterkey_mk_rechamber",
+    "viewmodel_commando_masterkey_mk_reload_in",
+    "viewmodel_commando_masterkey_mk_reload_loop",
+    "viewmodel_commando_masterkey_mk_reload_out",
+    "viewmodel_commando_masterkey_mk_sprint_in",
+    "viewmodel_commando_masterkey_mk_sprint_loop",
+    "viewmodel_commando_masterkey_mk_sprint_out",
+    "viewmodel_commando_masterkey_to_mk",
+    "viewmodel_commando_pullout",
+    "viewmodel_commando_pullout_quick",
+    "viewmodel_commando_putaway",
+    "viewmodel_commando_putaway_quick",
+    "viewmodel_commando_reload",
+    "viewmodel_commando_reload_empty",
+    "viewmodel_commando_sprint_in",
+    "viewmodel_commando_sprint_loop",
+    "viewmodel_commando_sprint_out",
+    "viewmodel_cz75_dw_full_ads_down",
+    "viewmodel_cz75_dw_full_ads_up",
+    "viewmodel_cz75_dw_full_d2p_in",
+    "viewmodel_cz75_dw_full_d2p_loop",
+    "viewmodel_cz75_dw_full_d2p_out",
+    "viewmodel_cz75_dw_full_first_raise",
+    "viewmodel_cz75_dw_full_pullout",
+    "viewmodel_cz75_dw_full_pullout_empty",
+    "viewmodel_cz75_dw_full_putaway",
+    "viewmodel_cz75_dw_full_putaway_empty",
+    "viewmodel_cz75_dw_full_sprint_in",
+    "viewmodel_cz75_dw_full_sprint_loop",
+    "viewmodel_cz75_dw_full_sprint_out",
+    "viewmodel_cz75_dw_left_fire",
+    "viewmodel_cz75_dw_left_idle_loop",
+    "viewmodel_cz75_dw_left_last_shot",
+    "viewmodel_cz75_dw_left_reload",
+    "viewmodel_cz75_dw_left_reload_empty",
+    "viewmodel_cz75_dw_right_fire",
+    "viewmodel_cz75_dw_right_idle_loop",
+    "viewmodel_cz75_dw_right_idle_loop_empty",
+    "viewmodel_cz75_dw_right_last_shot",
+    "viewmodel_cz75_dw_right_reload",
+    "viewmodel_cz75_dw_right_reload_empty",
+    "viewmodel_cz75_sw_ads_down",
+    "viewmodel_cz75_sw_ads_fire",
+    "viewmodel_cz75_sw_ads_up",
+    "viewmodel_cz75_sw_dtp_in",
+    "viewmodel_cz75_sw_dtp_loop",
+    "viewmodel_cz75_sw_dtp_out",
+    "viewmodel_cz75_sw_fire",
+    "viewmodel_cz75_sw_first_raise",
+    "viewmodel_cz75_sw_idle",
+    "viewmodel_cz75_sw_lastshot",
+    "viewmodel_cz75_sw_pullout",
+    "viewmodel_cz75_sw_putaway",
+    "viewmodel_cz75_sw_reload",
+    "viewmodel_cz75_sw_reload_empty",
+    "viewmodel_cz75_sw_sprint_loop",
+    "viewmodel_dragunov_ads_down",
+    "viewmodel_dragunov_ads_up",
+    "viewmodel_dragunov_d2p_in",
+    "viewmodel_dragunov_d2p_loop",
+    "viewmodel_dragunov_d2p_out",
+    "viewmodel_dragunov_fire",
+    "viewmodel_dragunov_first_raise",
+    "viewmodel_dragunov_idle",
+    "viewmodel_dragunov_pullout",
+    "viewmodel_dragunov_pullout_quick",
+    "viewmodel_dragunov_putaway",
+    "viewmodel_dragunov_putaway_quick",
+    "viewmodel_dragunov_reload",
+    "viewmodel_dragunov_reload_empty",
+    "viewmodel_dragunov_sprint_in",
+    "viewmodel_dragunov_sprint_loop",
+    "viewmodel_dragunov_sprint_out",
+    "viewmodel_dragunov_vzoom_ads_down",
+    "viewmodel_dragunov_vzoom_ads_up",
+    "viewmodel_famas_ads_down",
+    "viewmodel_famas_ads_fire",
+    "viewmodel_famas_ads_up",
+    "viewmodel_famas_d2p_in",
+    "viewmodel_famas_d2p_loop",
+    "viewmodel_famas_d2p_out",
+    "viewmodel_famas_elbit_ads_down",
+    "viewmodel_famas_elbit_ads_up",
+    "viewmodel_famas_fire",
+    "viewmodel_famas_first_raise",
+    "viewmodel_famas_idle_loop",
+    "viewmodel_famas_pullout",
+    "viewmodel_famas_pullout_quick",
+    "viewmodel_famas_putaway",
+    "viewmodel_famas_putaway_quick",
+    "viewmodel_famas_reload",
+    "viewmodel_famas_reload_empty",
+    "viewmodel_famas_sprint_in",
+    "viewmodel_famas_sprint_loop",
+    "viewmodel_famas_sprint_out",
+    "viewmodel_fn_fal_ads_down",
+    "viewmodel_fn_fal_ads_fire",
+    "viewmodel_fn_fal_ads_up",
+    "viewmodel_fn_fal_aimpoint_ads_down",
+    "viewmodel_fn_fal_aimpoint_ads_up",
+    "viewmodel_fn_fal_d2p_in",
+    "viewmodel_fn_fal_d2p_loop",
+    "viewmodel_fn_fal_d2p_out",
+    "viewmodel_fn_fal_fire",
+    "viewmodel_fn_fal_first_raise",
+    "viewmodel_fn_fal_idle_loop",
+    "viewmodel_fn_fal_pullout",
+    "viewmodel_fn_fal_pullout_quick",
+    "viewmodel_fn_fal_putaway",
+    "viewmodel_fn_fal_putaway_quick",
+    "viewmodel_fn_fal_reload",
+    "viewmodel_fn_fal_reload_empty",
+    "viewmodel_fn_fal_sprint_in",
+    "viewmodel_fn_fal_sprint_loop",
+    "viewmodel_fn_fal_sprint_out",
+    "viewmodel_g11_ads_fire",
+    "viewmodel_g11_d2p_in",
+    "viewmodel_g11_d2p_loop",
+    "viewmodel_g11_d2p_out",
+    "viewmodel_g11_fire",
+    "viewmodel_g11_first_raise",
+    "viewmodel_g11_idle",
+    "viewmodel_g11_pullout",
+    "viewmodel_g11_pullout_quick",
+    "viewmodel_g11_putaway",
+    "viewmodel_g11_putaway_quick",
+    "viewmodel_g11_reload",
+    "viewmodel_g11_reload_empty",
+    "viewmodel_g11_scope_ads_down",
+    "viewmodel_g11_scope_ads_up",
+    "viewmodel_g11_sprint_in",
+    "viewmodel_g11_sprint_loop",
+    "viewmodel_g11_sprint_out",
+    "viewmodel_galil_ads_down",
+    "viewmodel_galil_ads_fire",
+    "viewmodel_galil_ads_up",
+    "viewmodel_galil_d2p_in",
+    "viewmodel_galil_d2p_loop",
+    "viewmodel_galil_d2p_out",
+    "viewmodel_galil_elbit_ads_down",
+    "viewmodel_galil_elbit_ads_up",
+    "viewmodel_galil_fire",
+    "viewmodel_galil_first_raise",
+    "viewmodel_galil_idle_loop",
+    "viewmodel_galil_pullout",
+    "viewmodel_galil_pullout_quick",
+    "viewmodel_galil_putaway",
+    "viewmodel_galil_putaway_quick",
+    "viewmodel_galil_reload",
+    "viewmodel_galil_reload_empty",
+    "viewmodel_galil_sprint_in",
+    "viewmodel_galil_sprint_loop",
+    "viewmodel_galil_sprint_out",
+    "viewmodel_hs10_ads_down",
+    "viewmodel_hs10_ads_fire",
+    "viewmodel_hs10_ads_up",
+    "viewmodel_hs10_d2p_in",
+    "viewmodel_hs10_d2p_loop",
+    "viewmodel_hs10_d2p_out",
+    "viewmodel_hs10_dw_full_ads_down",
+    "viewmodel_hs10_dw_full_ads_up",
+    "viewmodel_hs10_dw_full_d2p_in",
+    "viewmodel_hs10_dw_full_d2p_loop",
+    "viewmodel_hs10_dw_full_d2p_out",
+    "viewmodel_hs10_dw_full_pullout",
+    "viewmodel_hs10_dw_full_pullout_quick",
+    "viewmodel_hs10_dw_full_putaway",
+    "viewmodel_hs10_dw_full_putaway_quick",
+    "viewmodel_hs10_dw_full_sprint_in",
+    "viewmodel_hs10_dw_full_sprint_loop",
+    "viewmodel_hs10_dw_full_sprint_out",
+    "viewmodel_hs10_dw_left_fire",
+    "viewmodel_hs10_dw_left_idle_loop",
+    "viewmodel_hs10_dw_left_reload",
+    "viewmodel_hs10_dw_left_reload_empty",
+    "viewmodel_hs10_dw_right_fire",
+    "viewmodel_hs10_dw_right_idle_loop",
+    "viewmodel_hs10_dw_right_reload",
+    "viewmodel_hs10_dw_right_reload_empty",
+    "viewmodel_hs10_fire",
+    "viewmodel_hs10_first_raise",
+    "viewmodel_hs10_idle_loop",
+    "viewmodel_hs10_pullout",
+    "viewmodel_hs10_pullout_quick",
+    "viewmodel_hs10_putaway",
+    "viewmodel_hs10_putaway_quick",
+    "viewmodel_hs10_reload_in",
+    "viewmodel_hs10_reload_loop",
+    "viewmodel_hs10_reload_out",
+    "viewmodel_hs10_sprint_in",
+    "viewmodel_hs10_sprint_loop",
+    "viewmodel_hs10_sprint_out",
+    "viewmodel_ithaca_ads_down",
+    "viewmodel_ithaca_ads_fire",
+    "viewmodel_ithaca_ads_rechamber",
+    "viewmodel_ithaca_ads_up",
+    "viewmodel_ithaca_d2p_in",
+    "viewmodel_ithaca_d2p_loop",
+    "viewmodel_ithaca_d2p_out",
+    "viewmodel_ithaca_fire",
+    "viewmodel_ithaca_first_raise",
+    "viewmodel_ithaca_grip_ads_down",
+    "viewmodel_ithaca_grip_ads_fire",
+    "viewmodel_ithaca_grip_ads_rechamber",
+    "viewmodel_ithaca_grip_ads_up",
+    "viewmodel_ithaca_grip_d2p_in",
+    "viewmodel_ithaca_grip_d2p_loop",
+    "viewmodel_ithaca_grip_d2p_out",
+    "viewmodel_ithaca_grip_fire",
+    "viewmodel_ithaca_grip_idle_loop",
+    "viewmodel_ithaca_grip_pullout",
+    "viewmodel_ithaca_grip_pullout_quick",
+    "viewmodel_ithaca_grip_putaway",
+    "viewmodel_ithaca_grip_putaway_quick",
+    "viewmodel_ithaca_grip_rechamber",
+    "viewmodel_ithaca_grip_reload_in",
+    "viewmodel_ithaca_grip_reload_loop",
+    "viewmodel_ithaca_grip_reload_out",
+    "viewmodel_ithaca_grip_sprint_in",
+    "viewmodel_ithaca_grip_sprint_loop",
+    "viewmodel_ithaca_grip_sprint_out",
+    "viewmodel_ithaca_idle",
+    "viewmodel_ithaca_pullout",
+    "viewmodel_ithaca_pullout_quick",
+    "viewmodel_ithaca_putaway",
+    "viewmodel_ithaca_putaway_quick",
+    "viewmodel_ithaca_rechamber",
+    "viewmodel_ithaca_reload_in",
+    "viewmodel_ithaca_reload_loop",
+    "viewmodel_ithaca_reload_out",
+    "viewmodel_ithaca_sprint_in",
+    "viewmodel_ithaca_sprint_loop",
+    "viewmodel_ithaca_sprint_out",
+    "viewmodel_l96a1_ads_down",
+    "viewmodel_l96a1_ads_fire",
+    "viewmodel_l96a1_ads_rechamber",
+    "viewmodel_l96a1_ads_up",
+    "viewmodel_l96a1_d2p_in",
+    "viewmodel_l96a1_d2p_loop",
+    "viewmodel_l96a1_d2p_out",
+    "viewmodel_l96a1_fire",
+    "viewmodel_l96a1_first_raise",
+    "viewmodel_l96a1_idle_loop",
+    "viewmodel_l96a1_pullout",
+    "viewmodel_l96a1_pullout_quick",
+    "viewmodel_l96a1_putaway",
+    "viewmodel_l96a1_putaway_quick",
+    "viewmodel_l96a1_rechamber",
+    "viewmodel_l96a1_reload",
+    "viewmodel_l96a1_reload_empty",
+    "viewmodel_l96a1_sprint_in",
+    "viewmodel_l96a1_sprint_loop",
+    "viewmodel_l96a1_sprint_out",
+    "viewmodel_m14_ads_down",
+    "viewmodel_m14_ads_fire",
+    "viewmodel_m14_ads_up",
+    "viewmodel_m14_d2p_in",
+    "viewmodel_m14_d2p_loop",
+    "viewmodel_m14_d2p_out",
+    "viewmodel_m14_fire",
+    "viewmodel_m14_first_raise",
+    "viewmodel_m14_grip_ads_down",
+    "viewmodel_m14_grip_ads_fire",
+    "viewmodel_m14_grip_ads_up",
+    "viewmodel_m14_grip_d2p_in",
+    "viewmodel_m14_grip_d2p_loop",
+    "viewmodel_m14_grip_d2p_out",
+    "viewmodel_m14_grip_fire",
+    "viewmodel_m14_grip_first_raise",
+    "viewmodel_m14_grip_idle_loop",
+    "viewmodel_m14_grip_last_shot",
+    "viewmodel_m14_grip_pullout",
+    "viewmodel_m14_grip_pullout_quick",
+    "viewmodel_m14_grip_putaway",
+    "viewmodel_m14_grip_putaway_quick",
+    "viewmodel_m14_grip_reload",
+    "viewmodel_m14_grip_reload_empty",
+    "viewmodel_m14_grip_sprint_in",
+    "viewmodel_m14_grip_sprint_loop",
+    "viewmodel_m14_grip_sprint_out",
+    "viewmodel_m14_idle_loop",
+    "viewmodel_m14_last_shot",
+    "viewmodel_m14_pullout",
+    "viewmodel_m14_pullout_quick",
+    "viewmodel_m14_putaway",
+    "viewmodel_m14_putaway_quick",
+    "viewmodel_m14_reload",
+    "viewmodel_m14_reload_empty",
+    "viewmodel_m14_sprint_in",
+    "viewmodel_m14_sprint_loop",
+    "viewmodel_m14_sprint_out",
+    "viewmodel_m16a1_ads_down",
+    "viewmodel_m16a1_ads_fire",
+    "viewmodel_m16a1_ads_up",
+    "viewmodel_m16a1_d2p_in",
+    "viewmodel_m16a1_d2p_loop",
+    "viewmodel_m16a1_d2p_out",
+    "viewmodel_m16a1_fire",
+    "viewmodel_m16a1_first_raise",
+    "viewmodel_m16a1_grenadier_ads_down",
+    "viewmodel_m16a1_grenadier_ads_fire",
+    "viewmodel_m16a1_grenadier_ads_up",
+    "viewmodel_m16a1_grenadier_d2p_in",
+    "viewmodel_m16a1_grenadier_d2p_loop",
+    "viewmodel_m16a1_grenadier_d2p_out",
+    "viewmodel_m16a1_grenadier_fire",
+    "viewmodel_m16a1_grenadier_first_raise",
+    "viewmodel_m16a1_grenadier_fromgrenade",
+    "viewmodel_m16a1_grenadier_gl_ads_down",
+    "viewmodel_m16a1_grenadier_gl_ads_up",
+    "viewmodel_m16a1_grenadier_gl_d2p_in",
+    "viewmodel_m16a1_grenadier_gl_d2p_loop",
+    "viewmodel_m16a1_grenadier_gl_d2p_out",
+    "viewmodel_m16a1_grenadier_gl_fire",
+    "viewmodel_m16a1_grenadier_gl_idle",
+    "viewmodel_m16a1_grenadier_gl_pullout",
+    "viewmodel_m16a1_grenadier_gl_putaway",
+    "viewmodel_m16a1_grenadier_gl_reload",
+    "viewmodel_m16a1_grenadier_gl_sprint_in",
+    "viewmodel_m16a1_grenadier_gl_sprint_loop",
+    "viewmodel_m16a1_grenadier_gl_sprint_out",
+    "viewmodel_m16a1_grenadier_idle",
+    "viewmodel_m16a1_grenadier_pullout",
+    "viewmodel_m16a1_grenadier_pullout_quick",
+    "viewmodel_m16a1_grenadier_putaway",
+    "viewmodel_m16a1_grenadier_putaway_quick",
+    "viewmodel_m16a1_grenadier_reload",
+    "viewmodel_m16a1_grenadier_reload_empty",
+    "viewmodel_m16a1_grenadier_sprint_in",
+    "viewmodel_m16a1_grenadier_sprint_loop",
+    "viewmodel_m16a1_grenadier_sprint_out",
+    "viewmodel_m16a1_grenadier_togrenade",
+    "viewmodel_m16a1_idle",
+    "viewmodel_m16a1_pullout",
+    "viewmodel_m16a1_pullout_quick",
+    "viewmodel_m16a1_putaway",
+    "viewmodel_m16a1_putaway_quick",
+    "viewmodel_m16a1_reload",
+    "viewmodel_m16a1_reload_empty",
+    "viewmodel_m16a1_sprint_in",
+    "viewmodel_m16a1_sprint_loop",
+    "viewmodel_m16a1_sprint_out",
+    "viewmodel_m4m203_knife_melee_1",
+    "viewmodel_m4m203_knife_melee_2",
+    "viewmodel_m67_idle",
+    "viewmodel_m67_pickup_livenade",
+    "viewmodel_m67_pullpin",
+    "viewmodel_m67_throw",
+    "viewmodel_mp40_ads_down_pc",
+    "viewmodel_mp40_ads_up_pc",
+    "viewmodel_mp40_d2p_in",
+    "viewmodel_mp40_d2p_loop",
+    "viewmodel_mp40_d2p_out",
+    "viewmodel_mp40_empty_d2p_in",
+    "viewmodel_mp40_empty_d2p_loop",
+    "viewmodel_mp40_empty_d2p_out",
+    "viewmodel_mp40_empty_sprint_in",
+    "viewmodel_mp40_empty_sprint_loop",
+    "viewmodel_mp40_empty_sprint_out",
+    "viewmodel_mp40_fire",
+    "viewmodel_mp40_idle",
+    "viewmodel_mp40_idle_empty",
+    "viewmodel_mp40_lastshot",
+    "viewmodel_mp40_pullout",
+    "viewmodel_mp40_pullout_empty",
+    "viewmodel_mp40_pullout_fast",
+    "viewmodel_mp40_putaway",
+    "viewmodel_mp40_putaway_empty",
+    "viewmodel_mp40_putaway_fast",
+    "viewmodel_mp40_reload",
+    "viewmodel_mp40_reload_empty",
+    "viewmodel_mp40_sprint_in",
+    "viewmodel_mp40_sprint_loop",
+    "viewmodel_mp40_sprint_out",
+    "viewmodel_mp5_grip_ads_down",
+    "viewmodel_mp5_grip_ads_fire",
+    "viewmodel_mp5_grip_ads_up",
+    "viewmodel_mp5_grip_d2p_in",
+    "viewmodel_mp5_grip_d2p_loop",
+    "viewmodel_mp5_grip_d2p_out",
+    "viewmodel_mp5_grip_fire",
+    "viewmodel_mp5_grip_first_raise",
+    "viewmodel_mp5_grip_idle",
+    "viewmodel_mp5_grip_pullout",
+    "viewmodel_mp5_grip_pullout_quick",
+    "viewmodel_mp5_grip_putaway",
+    "viewmodel_mp5_grip_putaway_quick",
+    "viewmodel_mp5_grip_reload",
+    "viewmodel_mp5_grip_reload_empty",
+    "viewmodel_mp5_sprint_in",
+    "viewmodel_mp5_sprint_loop",
+    "viewmodel_mp5_sprint_out",
+    "viewmodel_mpl_elbit_ads_down",
+    "viewmodel_mpl_elbit_ads_up",
+    "viewmodel_mpl_sw_ads_down",
+    "viewmodel_mpl_sw_ads_fire",
+    "viewmodel_mpl_sw_ads_up",
+    "viewmodel_mpl_sw_d2p_in",
+    "viewmodel_mpl_sw_d2p_loop",
+    "viewmodel_mpl_sw_d2p_out",
+    "viewmodel_mpl_sw_fire",
+    "viewmodel_mpl_sw_first_raise",
+    "viewmodel_mpl_sw_idle_loop",
+    "viewmodel_mpl_sw_pullout",
+    "viewmodel_mpl_sw_pullout_quick",
+    "viewmodel_mpl_sw_putaway",
+    "viewmodel_mpl_sw_reload",
+    "viewmodel_mpl_sw_reload_empty",
+    "viewmodel_mpl_sw_sprint_in",
+    "viewmodel_mpl_sw_sprint_loop",
+    "viewmodel_mpl_sw_sprint_out",
+    "viewmodel_pm63_dw_full_ads_down",
+    "viewmodel_pm63_dw_full_ads_up",
+    "viewmodel_pm63_dw_full_d2p_in",
+    "viewmodel_pm63_dw_full_d2p_loop",
+    "viewmodel_pm63_dw_full_d2p_out",
+    "viewmodel_pm63_dw_full_pull_out",
+    "viewmodel_pm63_dw_full_put_away",
+    "viewmodel_pm63_dw_full_sprint_in",
+    "viewmodel_pm63_dw_full_sprint_loop",
+    "viewmodel_pm63_dw_full_sprint_out",
+    "viewmodel_pm63_dw_left_fire",
+    "viewmodel_pm63_dw_left_idle_loop",
+    "viewmodel_pm63_dw_left_lastshot",
+    "viewmodel_pm63_dw_left_reload",
+    "viewmodel_pm63_dw_left_reload_empty",
+    "viewmodel_pm63_dw_right_fire",
+    "viewmodel_pm63_dw_right_idle_loop",
+    "viewmodel_pm63_dw_right_lastshot",
+    "viewmodel_pm63_dw_right_reload",
+    "viewmodel_pm63_dw_right_reload_empty",
+    "viewmodel_pm63_grip_ads_down",
+    "viewmodel_pm63_grip_ads_fire",
+    "viewmodel_pm63_grip_ads_up",
+    "viewmodel_pm63_grip_d2p_in",
+    "viewmodel_pm63_grip_d2p_loop",
+    "viewmodel_pm63_grip_d2p_out",
+    "viewmodel_pm63_grip_fire",
+    "viewmodel_pm63_grip_idle",
+    "viewmodel_pm63_grip_last_shot",
+    "viewmodel_pm63_grip_pullout",
+    "viewmodel_pm63_grip_pullout_quick",
+    "viewmodel_pm63_grip_putaway",
+    "viewmodel_pm63_grip_putaway_quick",
+    "viewmodel_pm63_grip_reload",
+    "viewmodel_pm63_grip_reload_empty",
+    "viewmodel_pm63_grip_sprint_in",
+    "viewmodel_pm63_grip_sprint_loop",
+    "viewmodel_pm63_grip_sprint_out",
+    "viewmodel_pm63_sw_first_raise",
+    "viewmodel_python_manual_reload_in",
+    "viewmodel_python_manual_reload_loop",
+    "viewmodel_python_manual_reload_out",
+    "viewmodel_python_sw_ads_down",
+    "viewmodel_python_sw_ads_fire",
+    "viewmodel_python_sw_ads_up",
+    "viewmodel_python_sw_d2p_in",
+    "viewmodel_python_sw_d2p_loop",
+    "viewmodel_python_sw_d2p_out",
+    "viewmodel_python_sw_fire",
+    "viewmodel_python_sw_first_raise",
+    "viewmodel_python_sw_idle",
+    "viewmodel_python_sw_pullout",
+    "viewmodel_python_sw_putaway",
+    "viewmodel_python_sw_reload",
+    "viewmodel_python_sw_sprint_loop",
+    "viewmodel_spas12_ads_down",
+    "viewmodel_spas12_ads_fire",
+    "viewmodel_spas12_ads_up",
+    "viewmodel_spas12_d2p_in",
+    "viewmodel_spas12_d2p_loop",
+    "viewmodel_spas12_d2p_out",
+    "viewmodel_spas12_fire",
+    "viewmodel_spas12_first_raise",
+    "viewmodel_spas12_idle",
+    "viewmodel_spas12_pullout",
+    "viewmodel_spas12_pullout_quick",
+    "viewmodel_spas12_putaway",
+    "viewmodel_spas12_putaway_quick",
+    "viewmodel_spas12_reload_intro",
+    "viewmodel_spas12_reload_loop",
+    "viewmodel_spas12_reload_outro",
+    "viewmodel_spas12_sprint_in",
+    "viewmodel_spas12_sprint_loop",
+    "viewmodel_spas12_sprint_out",
+    "viewmodel_spectre_aimpoint_ads_down",
+    "viewmodel_spectre_aimpoint_ads_up",
+    "viewmodel_spectre_sw_ads_down",
+    "viewmodel_spectre_sw_ads_fire",
+    "viewmodel_spectre_sw_ads_up",
+    "viewmodel_spectre_sw_d2p_in",
+    "viewmodel_spectre_sw_d2p_loop",
+    "viewmodel_spectre_sw_d2p_out",
+    "viewmodel_spectre_sw_fire",
+    "viewmodel_spectre_sw_first_raise",
+    "viewmodel_spectre_sw_idle",
+    "viewmodel_spectre_sw_pullout",
+    "viewmodel_spectre_sw_pullout_quick",
+    "viewmodel_spectre_sw_putaway",
+    "viewmodel_spectre_sw_putaway_quick",
+    "viewmodel_spectre_sw_reload",
+    "viewmodel_spectre_sw_reload_empty",
+    "viewmodel_spectre_sw_sprint_in",
+    "viewmodel_spectre_sw_sprint_loop",
+    "viewmodel_spectre_sw_sprint_out",
+    "viewmodel_syrette_pullout",
+    "viewmodel_ussmokegrenade_idle",
+    "viewmodel_vorkuta_empty_hands",
+    "viewmodel_zombie_bowie",
+    "viewmodel_zombie_perksacola_idle",
+    "viewmodel_zombie_perksacola_lower"
+   ],
+   "references": []
+  },
+  "models": {
+   "names": [
+    "fx_decal_character_blood",
+    "fx_pistol_shell",
+    "fx_pistol_shell_blur",
+    "fx_shotgun_shell",
+    "fx_shotgun_shell_blur",
+    "projectile_m203grenade",
+    "projectile_m67fraggrenade",
+    "t5_spectre_viewmodel",
+    "t5_weapon_1911_lh_viewmodel",
+    "t5_weapon_1911_lh_world",
+    "t5_weapon_1911_rh_viewmodel",
+    "t5_weapon_1911_rh_world",
+    "t5_weapon_1911_viewmodel",
+    "t5_weapon_1911_world",
+    "t5_weapon_ak74u_viewmodel",
+    "t5_weapon_ak74u_world",
+    "t5_weapon_aug_viewmodel",
+    "t5_weapon_aug_world",
+    "t5_weapon_beretta682_viewmodel",
+    "t5_weapon_beretta682_world",
+    "t5_weapon_coltpython_viewmodel",
+    "t5_weapon_coltpython_world",
+    "t5_weapon_commando_viewmodel",
+    "t5_weapon_commando_world",
+    "t5_weapon_cz75_dw_lh_viewmodel",
+    "t5_weapon_cz75_dw_lh_world",
+    "t5_weapon_cz75_dw_rh_viewmodel",
+    "t5_weapon_cz75_dw_rh_world",
+    "t5_weapon_cz75_world",
+    "t5_weapon_dragunov_viewmodel",
+    "t5_weapon_dragunov_world",
+    "t5_weapon_fal_viewmodel",
+    "t5_weapon_fal_world",
+    "t5_weapon_famas_viewmodel",
+    "t5_weapon_famas_world",
+    "t5_weapon_g11_viewmodel",
+    "t5_weapon_g11_world_mp",
+    "t5_weapon_galil_viewmodel",
+    "t5_weapon_galil_world",
+    "t5_weapon_hs10_dw_lh_viewmodel",
+    "t5_weapon_hs10_dw_lh_world",
+    "t5_weapon_hs10_dw_rh_viewmodel",
+    "t5_weapon_hs10_dw_rh_world",
+    "t5_weapon_hs10_viewmodel",
+    "t5_weapon_hs10_world",
+    "t5_weapon_ithaca_viewmodel",
+    "t5_weapon_ithaca_world",
+    "t5_weapon_l96a1_viewmodel",
+    "t5_weapon_l96a1_world",
+    "t5_weapon_m14_viewmodel",
+    "t5_weapon_m14_world",
+    "t5_weapon_m16a1_world",
+    "t5_weapon_mp5_viewmodel",
+    "t5_weapon_mp5_world",
+    "t5_weapon_mpl_viewmodel",
+    "t5_weapon_mpl_world",
+    "t5_weapon_pm63_dw_lh_viewmodel",
+    "t5_weapon_pm63_dw_lh_world",
+    "t5_weapon_pm63_dw_rh_viewmodel",
+    "t5_weapon_pm63_dw_rh_world",
+    "t5_weapon_pm63_viewmodel",
+    "t5_weapon_pm63_world",
+    "t5_weapon_spas_viewmodel",
+    "t5_weapon_spas_world",
+    "t5_weapon_spectre_world",
+    "t5_weapon_viewmodel_cz75",
+    "t5_weapon_viewmodel_m16a1",
+    "viewhands_usmc",
+    "viewmodel_claymore",
+    "viewmodel_hands_cloth",
+    "viewmodel_knife",
+    "viewmodel_knife_bowie",
+    "viewmodel_m67",
+    "viewmodel_mp_mp40",
+    "viewmodel_usa_morphine",
+    "weapon_claymore",
+    "weapon_claymore_no_legs",
+    "weapon_m67_grenade",
+    "weapon_mp_mp40_smg",
+    "weapon_parabolic_knife",
+    "world_knife_bowie"
+   ],
+   "references": []
+  },
+  "weapons": {
+   "names": [
+    "ak74u_upgraded_zm",
+    "ak74u_zm",
+    "aug_acog_mk_upgraded_zm",
+    "aug_acog_zm",
+    "bowie_knife_zm",
+    "claymore_zm",
+    "commando_upgraded_zm",
+    "commando_zm",
+    "cz75_upgraded_zm",
+    "cz75_zm",
+    "cz75dw_upgraded_zm",
+    "cz75dw_zm",
+    "default_vehicle_weapon",
+    "dragunov_upgraded_zm",
+    "dragunov_zm",
+    "famas_upgraded_zm",
+    "famas_zm",
+    "fnfal_upgraded_zm",
+    "fnfal_zm",
+    "frag_grenade_zm",
+    "g11_lps_upgraded_zm",
+    "g11_lps_zm",
+    "galil_upgraded_zm",
+    "galil_zm",
+    "hs10_upgraded_zm",
+    "hs10_zm",
+    "ithaca_upgraded_zm",
+    "ithaca_zm",
+    "knife_zm",
+    "l96a1_zm",
+    "m14_upgraded_zm",
+    "m14_zm",
+    "m16_gl_upgraded_zm",
+    "m16_zm",
+    "m1911_upgraded_zm",
+    "m1911_zm",
+    "mk_commando_upgraded_zm",
+    "mp40_upgraded_zm",
+    "mp40_zm",
+    "mp5k_upgraded_zm",
+    "mp5k_zm",
+    "mpl_upgraded_zm",
+    "mpl_zm",
+    "pm63_upgraded_zm",
+    "pm63_zm",
+    "python_upgraded_zm",
+    "python_zm",
+    "rottweil72_upgraded_zm",
+    "rottweil72_zm",
+    "spas_upgraded_zm",
+    "spas_zm",
+    "spectre_upgraded_zm",
+    "spectre_zm",
+    "syrette_sp",
+    "zombie_bowie_flourish"
+   ],
+   "references": [],
+   "links": {
+    "knife_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_M4m203_knife_melee_1",
+      "viewmodel_M4m203_knife_melee_2"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "bowie_knife_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "default_vehicle_weapon": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "syrette_sp": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "frag_grenade_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m1911_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "zombie_bowie_flourish": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "claymore_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m1911_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "python_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "python_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m14_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m14_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m16_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "m16_gl_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "g11_lps_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "g11_lps_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "famas_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "famas_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "ak74u_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "ak74u_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mp5k_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mp5k_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mp40_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_mp40_ADS_down_PC",
+      "viewmodel_mp40_ADS_up_PC"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mp40_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mpl_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mpl_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "pm63_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "pm63_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "spectre_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "spectre_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75dw_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75dw_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "ithaca_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "ithaca_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "spas_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "spas_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "rottweil72_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "rottweil72_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "0",
+      "11\ufffd\ufffd",
+      "2",
+      "3",
+      "4",
+      "9",
+      "<<\ufffdm",
+      "<<\ufffd\ufffd",
+      "KKK\ufffd",
+      "RTX",
+      "c",
+      "cA\ufffd\ufffd",
+      "colorTint",
+      "falloffBegin",
+      "falloffEndCo",
+      "falloffParms",
+      "featherParms",
+      "fxt_fire_anim_lick",
+      "fxt_light_phosphorous",
+      "fxt_smk_scattered",
+      "fxt_spark_anim_blink",
+      "fxt_spark_pcloud_02",
+      "gfx_fxt_fire_anim_lick_add_gr",
+      "gfx_fxt_light_flare_phosphorous",
+      "gfx_fxt_smk_gen",
+      "gfx_fxt_smk_scattered",
+      "gfx_fxt_spark_anim_blink",
+      "gfx_fxt_spark_pcloud_02",
+      "p",
+      "wx{\ufffd",
+      "}}}",
+      "\ufffd++\ufffd",
+      "\ufffdE\ufffd\ufffd",
+      "\ufffdG\ufffd\ufffd",
+      "\ufffdJ\ufffd\ufffd",
+      "\ufffdNu\ufffd",
+      "\ufffdSS",
+      "\ufffdSS%",
+      "\ufffdSS\ufffd",
+      "\ufffd\ufffd\u079a",
+      "\ufffd\ufffd\ufffd",
+      "\ufffd\ufffd\ufffd*",
+      "\ufffd\ufffd\ufffd4",
+      "\ufffd\ufffd\ufffdZ",
+      "\ufffd\ufffd\ufffd]",
+      "\ufffd\ufffd\ufffd\ufffd"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "hs10_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "hs10_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "aug_acog_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "aug_acog_mk_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "galil_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "galil_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "commando_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "commando_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "mk_commando_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "fnfal_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "fnfal_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "dragunov_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "dragunov_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "l96a1_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    }
+   }
+  }
+ }
+}

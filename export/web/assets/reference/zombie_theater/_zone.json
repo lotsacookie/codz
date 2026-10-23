@@ -1,0 +1,2644 @@
+{
+ "zone": "zone/Common/zombie_theater.ff",
+ "status": "ok",
+ "error": null,
+ "complete": false,
+ "coverage": {
+  "streamPos": 19508681,
+  "streamSize": 111197376,
+  "percent": 17.54
+ },
+ "types": {
+  "XModel": 328,
+  "MaterialTechniqueSet": 198,
+  "XAnimParts": 176,
+  "FxEffectDef": 128,
+  "RawFile": 50,
+  "WeaponVariantDef": 13,
+  "Material": 5,
+  "SKIPPED": 2,
+  "StringTable": 1,
+  "PhysPreset": 1,
+  "ComWorld": 1,
+  "GfxLightDef": 1,
+  "GfxWorld": 1,
+  "GameWorldSp": 1,
+  "clipMap_t": 1,
+  "SndBank": 1
+ },
+ "resyncs": 4,
+ "failures": [
+  [
+   "XAnimParts",
+   "stream exhausted at N need N (trace=['<zone>', 'asset#N:XAnimParts', 'XAnimParts.randomDataShort'])",
+   1
+  ],
+  [
+   "FxEffectDef",
+   "implausible array count N (trace=['<zone>', 'asset#N:FxEffectDef', 'FxEffectDef.elemDefs'])",
+   1
+  ]
+ ],
+ "softErrors": [],
+ "failedSpans": [
+  {
+   "index": 595,
+   "type": "XAnimParts",
+   "error": "stream exhausted at 0x128fb5f need 1929379990 (trace=['<zone>', 'asset#595:XAnimParts', 'XAnimParts.randomDataShort'])",
+   "start": 19462903,
+   "end": 19463019,
+   "resyncedTo": 596,
+   "file": "_failed/asset_595_XAnimParts.bin"
+  },
+  {
+   "index": 890,
+   "type": "FxEffectDef",
+   "error": "implausible array count 50528513 (trace=['<zone>', 'asset#890:FxEffectDef', 'FxEffectDef.elemDefs'])",
+   "start": 19497720,
+   "end": 19497792,
+   "resyncedTo": 891,
+   "file": "_failed/asset_890_FxEffectDef.bin"
+  }
+ ],
+ "unwalkedTail": [
+  "_unwalked/tail_0129adc9_part0.bin",
+  "_unwalked/tail_0129adc9_part1.bin",
+  "_unwalked/tail_0129adc9_part2.bin"
+ ],
+ "assets": [
+  {
+   "index": 0,
+   "type": "StringTable",
+   "name": "sp/configstrings/configstrings_pc_zombie_theater_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombie_theater_zom.csv.json"
+  },
+  {
+   "index": 1,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0s0.json"
+  },
+  {
+   "index": 2,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0x0.json"
+  },
+  {
+   "index": 4,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_t0c0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_t0c0.json"
+  },
+  {
+   "index": 5,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 15,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_unlit_replace",
+   "file": "assets/MaterialTechniqueSet/,mc_unlit_replace.json"
+  },
+  {
+   "index": 18,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_t0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_t0c0n0s0.json"
+  },
+  {
+   "index": 38,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_sw4_3d_char_skin",
+   "file": "assets/MaterialTechniqueSet/,mc_sw4_3d_char_skin.json"
+  },
+  {
+   "index": 39,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_r0c0n0s0_eyeball_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_r0c0n0s0_eyeball_hero.json"
+  },
+  {
+   "index": 45,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0.json"
+  },
+  {
+   "index": 51,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0n0s0x0.json"
+  },
+  {
+   "index": 55,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 56,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_t0c0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_t0c0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 57,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0_sls",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0_sls.json"
+  },
+  {
+   "index": 61,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_r0c0n0s0sc0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_r0c0n0s0sc0x0.json"
+  },
+  {
+   "index": 65,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sm_treecanopy_sway",
+   "file": "assets/MaterialTechniqueSet/mc_sm_treecanopy_sway.json"
+  },
+  {
+   "index": 73,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_char_cloth",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_cloth.json"
+  },
+  {
+   "index": 74,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_clothcharr_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_clothcharr_hero.json"
+  },
+  {
+   "index": 75,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_clothcharr",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_clothcharr.json"
+  },
+  {
+   "index": 81,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0d0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0d0n0s0x0.json"
+  },
+  {
+   "index": 86,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0sc0x0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0sc0x0.json"
+  },
+  {
+   "index": 87,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sm_treecanopy",
+   "file": "assets/MaterialTechniqueSet/mc_sm_treecanopy.json"
+  },
+  {
+   "index": 89,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0x0.json"
+  },
+  {
+   "index": 112,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_animated_unlit",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_animated_unlit.json"
+  },
+  {
+   "index": 115,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0.json"
+  },
+  {
+   "index": 119,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0n0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0n0x0.json"
+  },
+  {
+   "index": 150,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_unlit_scroll",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_unlit_scroll.json"
+  },
+  {
+   "index": 151,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_rotate",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_rotate.json"
+  },
+  {
+   "index": 155,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0s0.json"
+  },
+  {
+   "index": 196,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0d0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0.json"
+  },
+  {
+   "index": 197,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0s0_sls",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0s0_sls.json"
+  },
+  {
+   "index": 200,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_unlitdecalblend_add",
+   "file": "assets/MaterialTechniqueSet/mc_unlitdecalblend_add.json"
+  },
+  {
+   "index": 208,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0x0.json"
+  },
+  {
+   "index": 215,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0x0.json"
+  },
+  {
+   "index": 233,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_sco",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_sco.json"
+  },
+  {
+   "index": 242,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0x0_sco",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0x0_sco.json"
+  },
+  {
+   "index": 256,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0s0.json"
+  },
+  {
+   "index": 270,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_sw4_3d_animated_unlit_normals",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_animated_unlit_normals.json"
+  },
+  {
+   "index": 272,
+   "type": "MaterialTechniqueSet",
+   "name": ",m_rope",
+   "file": "assets/MaterialTechniqueSet/,m_rope.json"
+  },
+  {
+   "index": 276,
+   "type": "FxEffectDef",
+   "name": "system_elements/fx_paper_dest_flat",
+   "file": "assets/FxEffectDef/system_elements/fx_paper_dest_flat.json"
+  },
+  {
+   "index": 277,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_spot",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_spot.json"
+  },
+  {
+   "index": 278,
+   "type": "FxEffectDef",
+   "name": "destructibles/fx_dest_paper_pile",
+   "file": "assets/FxEffectDef/destructibles/fx_dest_paper_pile.json"
+  },
+  {
+   "index": 279,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/279.json"
+  },
+  {
+   "index": 280,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/280.json"
+  },
+  {
+   "index": 281,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/281.json"
+  },
+  {
+   "index": 282,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/282.json"
+  },
+  {
+   "index": 283,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/283.json"
+  },
+  {
+   "index": 284,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/284.json"
+  },
+  {
+   "index": 285,
+   "type": "PhysPreset",
+   "name": null,
+   "file": "assets/PhysPreset/_unnamed/285.json"
+  },
+  {
+   "index": 289,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/289.json"
+  },
+  {
+   "index": 293,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/293.json"
+  },
+  {
+   "index": 294,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/294.json"
+  },
+  {
+   "index": 295,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/295.json"
+  },
+  {
+   "index": 296,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/296.json"
+  },
+  {
+   "index": 297,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/297.json"
+  },
+  {
+   "index": 298,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/298.json"
+  },
+  {
+   "index": 299,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/299.json"
+  },
+  {
+   "index": 300,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/300.json"
+  },
+  {
+   "index": 301,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/301.json"
+  },
+  {
+   "index": 309,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/309.json"
+  },
+  {
+   "index": 310,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/310.json"
+  },
+  {
+   "index": 311,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/311.json"
+  },
+  {
+   "index": 314,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/314.json"
+  },
+  {
+   "index": 319,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/319.json"
+  },
+  {
+   "index": 320,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/320.json"
+  },
+  {
+   "index": 321,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/321.json"
+  },
+  {
+   "index": 322,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/322.json"
+  },
+  {
+   "index": 325,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/325.json"
+  },
+  {
+   "index": 328,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/328.json"
+  },
+  {
+   "index": 332,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/332.json"
+  },
+  {
+   "index": 335,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/335.json"
+  },
+  {
+   "index": 338,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/338.json"
+  },
+  {
+   "index": 340,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/340.json"
+  },
+  {
+   "index": 345,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/345.json"
+  },
+  {
+   "index": 346,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/346.json"
+  },
+  {
+   "index": 347,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/347.json"
+  },
+  {
+   "index": 348,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/348.json"
+  },
+  {
+   "index": 349,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/349.json"
+  },
+  {
+   "index": 350,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/350.json"
+  },
+  {
+   "index": 351,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/351.json"
+  },
+  {
+   "index": 352,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/352.json"
+  },
+  {
+   "index": 353,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/353.json"
+  },
+  {
+   "index": 355,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/355.json"
+  },
+  {
+   "index": 356,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/356.json"
+  },
+  {
+   "index": 357,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/357.json"
+  },
+  {
+   "index": 358,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/358.json"
+  },
+  {
+   "index": 359,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/359.json"
+  },
+  {
+   "index": 360,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/360.json"
+  },
+  {
+   "index": 361,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/361.json"
+  },
+  {
+   "index": 382,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/382.json"
+  },
+  {
+   "index": 383,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/383.json"
+  },
+  {
+   "index": 384,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/384.json"
+  },
+  {
+   "index": 388,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/388.json"
+  },
+  {
+   "index": 389,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/389.json"
+  },
+  {
+   "index": 398,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/398.json"
+  },
+  {
+   "index": 399,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/399.json"
+  },
+  {
+   "index": 403,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/403.json"
+  },
+  {
+   "index": 404,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/404.json"
+  },
+  {
+   "index": 405,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/405.json"
+  },
+  {
+   "index": 406,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/406.json"
+  },
+  {
+   "index": 407,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/407.json"
+  },
+  {
+   "index": 408,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/408.json"
+  },
+  {
+   "index": 409,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/409.json"
+  },
+  {
+   "index": 410,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/410.json"
+  },
+  {
+   "index": 412,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/412.json"
+  },
+  {
+   "index": 413,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/413.json"
+  },
+  {
+   "index": 414,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/414.json"
+  },
+  {
+   "index": 428,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/428.json"
+  },
+  {
+   "index": 430,
+   "type": "ComWorld",
+   "name": null,
+   "file": "assets/ComWorld/_unnamed/430.json"
+  },
+  {
+   "index": 431,
+   "type": "GfxLightDef",
+   "name": null,
+   "file": "assets/GfxLightDef/_unnamed/431.json"
+  },
+  {
+   "index": 432,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/432.json"
+  },
+  {
+   "index": 433,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/433.json"
+  },
+  {
+   "index": 434,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/434.json"
+  },
+  {
+   "index": 435,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/435.json"
+  },
+  {
+   "index": 436,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/436.json"
+  },
+  {
+   "index": 437,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/437.json"
+  },
+  {
+   "index": 438,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/438.json"
+  },
+  {
+   "index": 439,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/439.json"
+  },
+  {
+   "index": 440,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/440.json"
+  },
+  {
+   "index": 441,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/441.json"
+  },
+  {
+   "index": 442,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/442.json"
+  },
+  {
+   "index": 443,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/443.json"
+  },
+  {
+   "index": 444,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/444.json"
+  },
+  {
+   "index": 445,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/445.json"
+  },
+  {
+   "index": 446,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/446.json"
+  },
+  {
+   "index": 447,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/447.json"
+  },
+  {
+   "index": 448,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/448.json"
+  },
+  {
+   "index": 449,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/449.json"
+  },
+  {
+   "index": 450,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/450.json"
+  },
+  {
+   "index": 451,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/451.json"
+  },
+  {
+   "index": 452,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/452.json"
+  },
+  {
+   "index": 453,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/453.json"
+  },
+  {
+   "index": 454,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/454.json"
+  },
+  {
+   "index": 455,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/455.json"
+  },
+  {
+   "index": 456,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/456.json"
+  },
+  {
+   "index": 457,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/457.json"
+  },
+  {
+   "index": 458,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/458.json"
+  },
+  {
+   "index": 459,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/459.json"
+  },
+  {
+   "index": 460,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/460.json"
+  },
+  {
+   "index": 461,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/461.json"
+  },
+  {
+   "index": 462,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/462.json"
+  },
+  {
+   "index": 463,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/463.json"
+  },
+  {
+   "index": 464,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/464.json"
+  },
+  {
+   "index": 465,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/465.json"
+  },
+  {
+   "index": 466,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/466.json"
+  },
+  {
+   "index": 467,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/467.json"
+  },
+  {
+   "index": 468,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/468.json"
+  },
+  {
+   "index": 469,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/469.json"
+  },
+  {
+   "index": 470,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/470.json"
+  },
+  {
+   "index": 471,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/471.json"
+  },
+  {
+   "index": 472,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/472.json"
+  },
+  {
+   "index": 473,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/473.json"
+  },
+  {
+   "index": 474,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/474.json"
+  },
+  {
+   "index": 475,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/475.json"
+  },
+  {
+   "index": 476,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/476.json"
+  },
+  {
+   "index": 477,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/477.json"
+  },
+  {
+   "index": 478,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/478.json"
+  },
+  {
+   "index": 479,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/479.json"
+  },
+  {
+   "index": 480,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/480.json"
+  },
+  {
+   "index": 481,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/481.json"
+  },
+  {
+   "index": 482,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/482.json"
+  },
+  {
+   "index": 483,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/483.json"
+  },
+  {
+   "index": 484,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/484.json"
+  },
+  {
+   "index": 485,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/485.json"
+  },
+  {
+   "index": 486,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/486.json"
+  },
+  {
+   "index": 487,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/487.json"
+  },
+  {
+   "index": 488,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/488.json"
+  },
+  {
+   "index": 489,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/489.json"
+  },
+  {
+   "index": 490,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/490.json"
+  },
+  {
+   "index": 491,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/491.json"
+  },
+  {
+   "index": 492,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/492.json"
+  },
+  {
+   "index": 493,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/493.json"
+  },
+  {
+   "index": 494,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/494.json"
+  },
+  {
+   "index": 495,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/495.json"
+  },
+  {
+   "index": 496,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/496.json"
+  },
+  {
+   "index": 497,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/497.json"
+  },
+  {
+   "index": 498,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/498.json"
+  },
+  {
+   "index": 499,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/499.json"
+  },
+  {
+   "index": 500,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/500.json"
+  },
+  {
+   "index": 501,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/501.json"
+  },
+  {
+   "index": 502,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/502.json"
+  },
+  {
+   "index": 503,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/503.json"
+  },
+  {
+   "index": 504,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/504.json"
+  },
+  {
+   "index": 505,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/505.json"
+  },
+  {
+   "index": 506,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/506.json"
+  },
+  {
+   "index": 507,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/507.json"
+  },
+  {
+   "index": 508,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/508.json"
+  },
+  {
+   "index": 509,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/509.json"
+  },
+  {
+   "index": 510,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/510.json"
+  },
+  {
+   "index": 511,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/511.json"
+  },
+  {
+   "index": 512,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/512.json"
+  },
+  {
+   "index": 513,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/513.json"
+  },
+  {
+   "index": 514,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/514.json"
+  },
+  {
+   "index": 515,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/515.json"
+  },
+  {
+   "index": 516,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/516.json"
+  },
+  {
+   "index": 517,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/517.json"
+  },
+  {
+   "index": 518,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/518.json"
+  },
+  {
+   "index": 519,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/519.json"
+  },
+  {
+   "index": 520,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/520.json"
+  },
+  {
+   "index": 521,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/521.json"
+  },
+  {
+   "index": 522,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/522.json"
+  },
+  {
+   "index": 523,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/523.json"
+  },
+  {
+   "index": 524,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/524.json"
+  },
+  {
+   "index": 525,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/525.json"
+  },
+  {
+   "index": 526,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/526.json"
+  },
+  {
+   "index": 527,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/527.json"
+  },
+  {
+   "index": 528,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/528.json"
+  },
+  {
+   "index": 529,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/529.json"
+  },
+  {
+   "index": 530,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/530.json"
+  },
+  {
+   "index": 531,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/531.json"
+  },
+  {
+   "index": 532,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/532.json"
+  },
+  {
+   "index": 533,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/533.json"
+  },
+  {
+   "index": 534,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/534.json"
+  },
+  {
+   "index": 535,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/535.json"
+  },
+  {
+   "index": 536,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/536.json"
+  },
+  {
+   "index": 537,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/537.json"
+  },
+  {
+   "index": 538,
+   "type": "GfxWorld",
+   "name": null,
+   "file": "assets/GfxWorld/_unnamed/538.json"
+  },
+  {
+   "index": 539,
+   "type": "GameWorldSp",
+   "name": null,
+   "file": "assets/GameWorldSp/_unnamed/539.json"
+  },
+  {
+   "index": 540,
+   "type": "clipMap_t",
+   "name": null,
+   "file": "assets/clipMap_t/_unnamed/540.json"
+  },
+  {
+   "index": 601,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/601.json"
+  },
+  {
+   "index": 602,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/602.json"
+  },
+  {
+   "index": 603,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/603.json"
+  },
+  {
+   "index": 604,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/604.json"
+  },
+  {
+   "index": 605,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/605.json"
+  },
+  {
+   "index": 606,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/606.json"
+  },
+  {
+   "index": 607,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/607.json"
+  },
+  {
+   "index": 608,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/608.json"
+  },
+  {
+   "index": 609,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/609.json"
+  },
+  {
+   "index": 610,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/610.json"
+  },
+  {
+   "index": 611,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/611.json"
+  },
+  {
+   "index": 612,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/612.json"
+  },
+  {
+   "index": 613,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/613.json"
+  },
+  {
+   "index": 614,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/614.json"
+  },
+  {
+   "index": 615,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/615.json"
+  },
+  {
+   "index": 616,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/616.json"
+  },
+  {
+   "index": 617,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/617.json"
+  },
+  {
+   "index": 618,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/618.json"
+  },
+  {
+   "index": 619,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/619.json"
+  },
+  {
+   "index": 620,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/620.json"
+  },
+  {
+   "index": 621,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/621.json"
+  },
+  {
+   "index": 622,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/622.json"
+  },
+  {
+   "index": 623,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/623.json"
+  },
+  {
+   "index": 624,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/624.json"
+  },
+  {
+   "index": 625,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/625.json"
+  },
+  {
+   "index": 626,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/626.json"
+  },
+  {
+   "index": 627,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/627.json"
+  },
+  {
+   "index": 628,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/628.json"
+  },
+  {
+   "index": 629,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/629.json"
+  },
+  {
+   "index": 630,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/630.json"
+  },
+  {
+   "index": 631,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/631.json"
+  },
+  {
+   "index": 632,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/632.json"
+  },
+  {
+   "index": 633,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/633.json"
+  },
+  {
+   "index": 634,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/634.json"
+  },
+  {
+   "index": 635,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/635.json"
+  },
+  {
+   "index": 636,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/636.json"
+  },
+  {
+   "index": 637,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/637.json"
+  },
+  {
+   "index": 638,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/638.json"
+  },
+  {
+   "index": 639,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/639.json"
+  },
+  {
+   "index": 640,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/640.json"
+  },
+  {
+   "index": 641,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/641.json"
+  },
+  {
+   "index": 642,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/642.json"
+  },
+  {
+   "index": 643,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/643.json"
+  },
+  {
+   "index": 644,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/644.json"
+  },
+  {
+   "index": 645,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/645.json"
+  },
+  {
+   "index": 646,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/646.json"
+  },
+  {
+   "index": 647,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/647.json"
+  },
+  {
+   "index": 648,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/648.json"
+  },
+  {
+   "index": 649,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/649.json"
+  },
+  {
+   "index": 650,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/650.json"
+  },
+  {
+   "index": 651,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/651.json"
+  },
+  {
+   "index": 652,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/652.json"
+  },
+  {
+   "index": 653,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/653.json"
+  },
+  {
+   "index": 654,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/654.json"
+  },
+  {
+   "index": 655,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/655.json"
+  },
+  {
+   "index": 656,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/656.json"
+  },
+  {
+   "index": 658,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/658.json"
+  },
+  {
+   "index": 659,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/659.json"
+  },
+  {
+   "index": 660,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/660.json"
+  },
+  {
+   "index": 661,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/661.json"
+  },
+  {
+   "index": 662,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/662.json"
+  },
+  {
+   "index": 663,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/663.json"
+  },
+  {
+   "index": 664,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/664.json"
+  },
+  {
+   "index": 665,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/665.json"
+  },
+  {
+   "index": 666,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/666.json"
+  },
+  {
+   "index": 667,
+   "type": "SndBank",
+   "name": null,
+   "file": "assets/SndBank/_unnamed/667.json"
+  },
+  {
+   "index": 668,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/668.json"
+  },
+  {
+   "index": 669,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/669.json"
+  },
+  {
+   "index": 670,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/670.json"
+  },
+  {
+   "index": 671,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/671.json"
+  },
+  {
+   "index": 672,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/672.json"
+  },
+  {
+   "index": 673,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/673.json"
+  },
+  {
+   "index": 674,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/674.json"
+  },
+  {
+   "index": 675,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/675.json"
+  },
+  {
+   "index": 676,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/676.json"
+  },
+  {
+   "index": 677,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/677.json"
+  },
+  {
+   "index": 678,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/678.json"
+  },
+  {
+   "index": 679,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/679.json"
+  },
+  {
+   "index": 680,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/680.json"
+  },
+  {
+   "index": 681,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/681.json"
+  },
+  {
+   "index": 682,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/682.json"
+  },
+  {
+   "index": 683,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/683.json"
+  },
+  {
+   "index": 684,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/684.json"
+  },
+  {
+   "index": 685,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/685.json"
+  },
+  {
+   "index": 686,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/686.json"
+  },
+  {
+   "index": 688,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/688.json"
+  },
+  {
+   "index": 689,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/689.json"
+  },
+  {
+   "index": 690,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/690.json"
+  },
+  {
+   "index": 692,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/692.json"
+  },
+  {
+   "index": 693,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/693.json"
+  },
+  {
+   "index": 694,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/694.json"
+  },
+  {
+   "index": 695,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/695.json"
+  },
+  {
+   "index": 696,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/696.json"
+  },
+  {
+   "index": 697,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/697.json"
+  },
+  {
+   "index": 698,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/698.json"
+  },
+  {
+   "index": 699,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/699.json"
+  },
+  {
+   "index": 700,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/700.json"
+  },
+  {
+   "index": 703,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/703.json"
+  },
+  {
+   "index": 704,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/704.json"
+  },
+  {
+   "index": 732,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/732.json"
+  },
+  {
+   "index": 733,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/733.json"
+  },
+  {
+   "index": 758,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/758.json"
+  },
+  {
+   "index": 762,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/762.json"
+  },
+  {
+   "index": 798,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/798.json"
+  },
+  {
+   "index": 799,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/799.json"
+  },
+  {
+   "index": 804,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/804.json"
+  },
+  {
+   "index": 829,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/829.json"
+  },
+  {
+   "index": 830,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/830.json"
+  },
+  {
+   "index": 831,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/831.json"
+  },
+  {
+   "index": 832,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/832.json"
+  },
+  {
+   "index": 833,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/833.json"
+  },
+  {
+   "index": 834,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/834.json"
+  },
+  {
+   "index": 835,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/835.json"
+  },
+  {
+   "index": 836,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/836.json"
+  },
+  {
+   "index": 837,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/837.json"
+  },
+  {
+   "index": 838,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/838.json"
+  },
+  {
+   "index": 843,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/843.json"
+  },
+  {
+   "index": 844,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/844.json"
+  },
+  {
+   "index": 845,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/845.json"
+  },
+  {
+   "index": 846,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/846.json"
+  },
+  {
+   "index": 847,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/847.json"
+  },
+  {
+   "index": 848,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/848.json"
+  },
+  {
+   "index": 849,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/849.json"
+  },
+  {
+   "index": 850,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/850.json"
+  },
+  {
+   "index": 851,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/851.json"
+  },
+  {
+   "index": 852,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/852.json"
+  },
+  {
+   "index": 855,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/855.json"
+  },
+  {
+   "index": 856,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/856.json"
+  },
+  {
+   "index": 857,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/857.json"
+  },
+  {
+   "index": 858,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/858.json"
+  },
+  {
+   "index": 859,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/859.json"
+  },
+  {
+   "index": 860,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/860.json"
+  },
+  {
+   "index": 861,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/861.json"
+  },
+  {
+   "index": 862,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/862.json"
+  },
+  {
+   "index": 863,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/863.json"
+  },
+  {
+   "index": 864,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/864.json"
+  },
+  {
+   "index": 865,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/865.json"
+  },
+  {
+   "index": 866,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/866.json"
+  },
+  {
+   "index": 867,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/867.json"
+  },
+  {
+   "index": 868,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/868.json"
+  },
+  {
+   "index": 869,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/869.json"
+  },
+  {
+   "index": 870,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/870.json"
+  },
+  {
+   "index": 871,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/871.json"
+  },
+  {
+   "index": 872,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/872.json"
+  },
+  {
+   "index": 873,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/873.json"
+  },
+  {
+   "index": 874,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/874.json"
+  },
+  {
+   "index": 875,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/875.json"
+  },
+  {
+   "index": 876,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/876.json"
+  },
+  {
+   "index": 877,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/877.json"
+  },
+  {
+   "index": 878,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/878.json"
+  },
+  {
+   "index": 879,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/879.json"
+  },
+  {
+   "index": 880,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/880.json"
+  },
+  {
+   "index": 881,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/881.json"
+  },
+  {
+   "index": 882,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/882.json"
+  },
+  {
+   "index": 883,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/883.json"
+  },
+  {
+   "index": 884,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/884.json"
+  },
+  {
+   "index": 885,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/885.json"
+  },
+  {
+   "index": 886,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/886.json"
+  },
+  {
+   "index": 887,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/887.json"
+  },
+  {
+   "index": 888,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/888.json"
+  },
+  {
+   "index": 889,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/889.json"
+  },
+  {
+   "index": 891,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/891.json"
+  },
+  {
+   "index": 892,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/892.json"
+  },
+  {
+   "index": 893,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/893.json"
+  },
+  {
+   "index": 895,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/895.json"
+  },
+  {
+   "index": 896,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/896.json"
+  },
+  {
+   "index": 898,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/898.json"
+  },
+  {
+   "index": 899,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/899.json"
+  },
+  {
+   "index": 901,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/901.json"
+  },
+  {
+   "index": 907,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/907.json"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [
+    "anim_jun_clthsline_shirt_collar",
+    "cub_pottedplant",
+    "dest_glo_paper_02_d0",
+    "fx_debris_stone_03_clump",
+    "fx_decal_burnt_paper",
+    "fx_decal_burnt_paper2",
+    "fx_decal_burnt_paper3",
+    "fxanim_vorkuta_elevator_wires_mod",
+    "lights_hang_lamp_on",
+    "lights_hang_single_on",
+    "lights_sconce_off",
+    "lights_sconce_on",
+    "mp_cracked_debris_slab_003",
+    "p_cub_ashtray_glass",
+    "p_cub_barstool",
+    "p_cub_folding_chair",
+    "p_cub_playing_card_single",
+    "p_dest_electrical_boxes01_base02",
+    "p_dest_electrical_boxes01_base03",
+    "p_dest_paper_stack02",
+    "p_dest_pot_lg_chunk_01",
+    "p_dest_pot_lg_chunk_02",
+    "p_eb_streetlight_east",
+    "p_ger_bulletin_board",
+    "p_ger_desk_old",
+    "p_ger_radio",
+    "p_glo_barbed_wire02",
+    "p_glo_bed_3",
+    "p_glo_books_open",
+    "p_glo_books_pile",
+    "p_glo_books_row01",
+    "p_glo_books_row02",
+    "p_glo_books_row03",
+    "p_glo_books_row04",
+    "p_glo_books_single",
+    "p_glo_bookshelf_wide_d",
+    "p_glo_bucket_metal",
+    "p_glo_cinder_block",
+    "p_glo_clock_table",
+    "p_glo_clothes_sheet",
+    "p_glo_coffee_table_sm_ber2",
+    "p_glo_corkboard_metaltrim_4x8",
+    "p_glo_curtain_white",
+    "p_glo_data_recorder01",
+    "p_glo_dresser1",
+    "p_glo_dresser_d",
+    "p_glo_dresser_drawer",
+    "p_glo_dresser_open_1",
+    "p_glo_dresser_open_2",
+    "p_glo_electronic_cabinet04",
+    "p_glo_garbage_bin",
+    "p_glo_hat_rack",
+    "p_glo_palacepot",
+    "p_glo_pipes_d4_90deg",
+    "p_glo_pipes_d4_coupling",
+    "p_glo_pipes_d4_fitting",
+    "p_glo_pipes_d4_l128",
+    "p_glo_pipes_d4_l32",
+    "p_glo_pipes_d4_l64",
+    "p_glo_pipes_d4_l96",
+    "p_glo_rubble_small_rocks",
+    "p_glo_sandbag",
+    "p_glo_stage_light",
+    "p_glo_stage_light_on",
+    "p_glo_table_bunker",
+    "p_glo_table_bunker_wood_old",
+    "p_glo_tools_wheelbarrow",
+    "p_glo_wall_light01",
+    "p_glo_water_cooler01",
+    "p_glo_wood_chair_1",
+    "p_glo_wood_chair_2",
+    "p_int_light_overhead",
+    "p_int_light_overhead_bracket",
+    "p_int_light_overhead_hinge",
+    "p_int_light_overhead_mount",
+    "p_int_monitor_pentagon05",
+    "p_int_surgical_clip",
+    "p_int_surgical_hammer",
+    "p_int_surgical_knife",
+    "p_int_surgical_razor",
+    "p_jun_int_table_sm",
+    "p_jun_officetable",
+    "p_jun_plate_dine",
+    "p_jun_projector",
+    "p_jun_projector_screen",
+    "p_jun_surgical_bonesaw",
+    "p_jun_wood_plank_large01",
+    "p_jun_wood_plank_large02",
+    "p_jun_wood_plank_small01",
+    "p_lights_kerosene_lamp_off",
+    "p_lights_tinhatcage01_off",
+    "p_pent_av_cart",
+    "p_pent_bookcase",
+    "p_pent_chair_office_simple",
+    "p_pent_con_table",
+    "p_pent_cords_2",
+    "p_pent_cords_5",
+    "p_pent_cords_6",
+    "p_pent_curtains_short",
+    "p_pent_desk_wood",
+    "p_pent_door_wood",
+    "p_pent_gov_seal_air",
+    "p_pent_manila_folder_1",
+    "p_pent_manila_folder_2",
+    "p_pent_manila_folder_3",
+    "p_pent_papers_1",
+    "p_pent_papers_2",
+    "p_pent_papers_3",
+    "p_pent_papers_4",
+    "p_pent_phone_office",
+    "p_pent_printer",
+    "p_pent_reel_large_gray_plastic",
+    "p_pent_reel_large_metal",
+    "p_pent_reel_large_white_plastic",
+    "p_pent_reel_medium_gray_plastic",
+    "p_pent_reel_medium_metal",
+    "p_pent_reel_medium_white_plastic",
+    "p_pent_reel_rack_t",
+    "p_pent_reel_small_gray_plastic",
+    "p_pent_reel_small_metal",
+    "p_pent_reel_small_white_plastic",
+    "p_pent_tv_base",
+    "p_phys_trash_paper_scrap03",
+    "p_phys_trash_paper_scrap05",
+    "p_rus_bookcase_fncy",
+    "p_rus_cabinet_metal_large",
+    "p_rus_cabinet_metal_lower",
+    "p_rus_cabinet_metal_upper",
+    "p_rus_cabinetdoor_metal_left",
+    "p_rus_cabinetdoor_metal_right",
+    "p_rus_chair_dining_fancy",
+    "p_rus_coffeemug",
+    "p_rus_dumpster",
+    "p_rus_electric_boxes",
+    "p_rus_filing_cabinet_modern_dkgrn",
+    "p_rus_generator_big",
+    "p_rus_hose_modular_connect_end",
+    "p_rus_industrial_cart",
+    "p_rus_lab_equip1_beeker_pi",
+    "p_rus_lab_equip1_bottle_brown2_pi",
+    "p_rus_lab_equip1_bottle_brown_pi",
+    "p_rus_lab_equip1_testtube_pi",
+    "p_rus_lab_equip_stand_pi",
+    "p_rus_lab_equip_testtubetray_pi",
+    "p_rus_pipes_modular_clampb",
+    "p_rus_stapler",
+    "p_rus_storage_cabinet",
+    "p_rus_towel_stack_lrg",
+    "p_us_chess",
+    "p_us_oval_diningtable",
+    "p_us_picture_frame_painting_large02",
+    "p_us_walltable",
+    "p_zom_clock",
+    "russian_pipes_cap",
+    "static_berlin_dining_table_oval",
+    "static_berlin_stair_railing",
+    "static_berlin_victorian_couch_d",
+    "static_zombie_clothes_rack",
+    "static_zombie_folding_chair",
+    "static_zombie_mannequin",
+    "static_zombie_pitcher",
+    "static_zombie_rubble01",
+    "static_zombie_trash_2x2",
+    "static_zombie_trash_4x4",
+    "t5_foliage_grass_weed01",
+    "t5_foliage_plants_flowers02",
+    "t5_foliage_plants_flowers04",
+    "t5_foliage_plants_flowers05",
+    "t5_foliage_tree_aspen01b",
+    "t5_veh_civ_smallcar_blue",
+    "t5_veh_civ_vw_bus",
+    "test_sphere_cod7_50_75_50",
+    "test_sphere_cod7_b_25_25",
+    "test_sphere_cod7_w_75_50",
+    "zombie_chalkboard",
+    "zombie_difference_engine",
+    "zombie_generator",
+    "zombie_ground_debris",
+    "zombie_meteor_chunk_sml1",
+    "zombie_meteor_chunk_sml2",
+    "zombie_meteor_chunk_sml_group",
+    "zombie_monkey_bomber",
+    "zombie_nameplate_maxis",
+    "zombie_pipe_4x64",
+    "zombie_power_lever",
+    "zombie_subway_ctrl_panel",
+    "zombie_sumpf_power_switch",
+    "zombie_tank",
+    "zombie_tank_open",
+    "zombie_tank_stacker",
+    "zombie_teleporter_b",
+    "zombie_teleporter_c",
+    "zombie_teleporter_d",
+    "zombie_theater_chair_set",
+    "zombie_theater_chair_single",
+    "zombie_theater_clubchair",
+    "zombie_theater_control1",
+    "zombie_theater_control2",
+    "zombie_theater_costumes1",
+    "zombie_theater_costumes2",
+    "zombie_theater_dining_post",
+    "zombie_theater_dresslight1",
+    "zombie_theater_dresslight2",
+    "zombie_theater_dresslight3",
+    "zombie_theater_folded_chair",
+    "zombie_theater_frame_c",
+    "zombie_theater_glass_bottle01",
+    "zombie_theater_glass_shot",
+    "zombie_theater_marquee",
+    "zombie_theater_pedestal",
+    "zombie_theater_projector",
+    "zombie_theater_reel1",
+    "zombie_theater_reel2",
+    "zombie_theater_reel3",
+    "zombie_theater_reelcase1",
+    "zombie_theater_reelcase2",
+    "zombie_theater_shelf",
+    "zombie_theater_teleporter1",
+    "zombie_theater_teleporter2",
+    "zombie_theater_trunk",
+    "zombie_theater_trunk_open",
+    "zombie_theater_vrope_clip",
+    "zombie_theater_vrope_stand",
+    "zombie_zapper_tesla_coil"
+   ],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
