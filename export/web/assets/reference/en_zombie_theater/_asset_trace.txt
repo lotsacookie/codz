@@ -1,0 +1,34 @@
+# asset trace: 32 walked assets
+first implausible XAnimParts: none
+#0 LocalizeEntry 0x15d..0x1ac len=79 name=ZOMBIE_THEATER_USE_TELEPORTER
+#1 LocalizeEntry 0x1ac..0x1fc len=80 name=ZOMBIE_THEATER_LINK_CORE
+#2 LocalizeEntry 0x1fc..0x249 len=77 name=ZOMBIE_THEATER_LINK_PAD
+#3 LocalizeEntry 0x249..0x297 len=78 name=ZOMBIE_THEATER_FILM_REEL
+#4 LocalizeEntry 0x297..0x2e3 len=76 name=ZOMBIE_THEATER_REEL_PROJECTOR
+#5 LocalizeEntry 0x2e3..0x316 len=51 name=ZOMBIE_THEATER_START_CORE
+#6 SndBank 0x316..0x521e8 len=335570 name=zmb_theater.english
+#7 MaterialTechniqueSet 0x521e8..0x523f8 len=528 name=-
+#8 Material 0x523f8..0x524b8 len=192 name=-
+#9 Material 0x524b8..0x52578 len=192 name=-
+#10 Material 0x52578..0x52638 len=192 name=-
+#11 Material 0x52638..0x526f8 len=192 name=-
+#12 MaterialTechniqueSet 0x526f8..0x52908 len=528 name=-
+#13 MaterialTechniqueSet 0x52908..0x52b18 len=528 name=-
+#14 MaterialTechniqueSet 0x52b18..0x52d28 len=528 name=-
+#15 XModel 0x52d28..0x52e24 len=252 name=-
+#16 MaterialTechniqueSet 0x52e24..0x53034 len=528 name=-
+#17 Material 0x53034..0x530f4 len=192 name=-
+#18 XModel 0x530f4..0x531f0 len=252 name=-
+#19 Material 0x531f0..0x532b0 len=192 name=-
+#20 Material 0x532b0..0x53370 len=192 name=-
+#21 Material 0x53370..0x53430 len=192 name=-
+#22 Material 0x53430..0x534f0 len=192 name=-
+#23 MaterialTechniqueSet 0x534f0..0x53700 len=528 name=-
+#24 Material 0x53700..0x537c0 len=192 name=-
+#25 MaterialTechniqueSet 0x537c0..0x539d0 len=528 name=-
+#26 Material 0x539d0..0x53a90 len=192 name=-
+#27 MaterialTechniqueSet 0x53a90..0x53ca0 len=528 name=-
+#28 Material 0x53ca0..0x53d60 len=192 name=-
+#29 MaterialTechniqueSet 0x53d60..0x53f70 len=528 name=-
+#30 Material 0x53f70..0x54030 len=192 name=-
+#31 RawFile 0x54030..0x5403c len=12 name=-
