@@ -1,0 +1,30 @@
+# error report: code_post_gfx
+status: ok
+stream: walked 0x568e8 of 0x5ef261 bytes (5.7%), 5867897 unwalked
+errors: 2 (1 failed assets, 0 soft errors, 0 poisoned pointers)
+
+[1] FAILED ASSET #496 SndDriverGlobals
+  error: implausible array count 4294967168 (trace=['<zone>', 'asset#496:SndDriverGlobals', 'SndDriverGlobals.snapshotGroups'])
+  stream: start=0x42aa4 end=0x42adc bytes=56 resyncedTo=#497
+  previous walked asset: #495 RawFile unnamed stream=0x42a98..0x42aa4
+  bytes around the start (16 before):
+    0x00042a94  99 3d 70 69 6d 70 5f 74 65 63 68 6e 69 71 75 65  .=pimp_technique
+    0x00042aa4  5f 6c 70 72 6f 62 65 5f 66 65 31 34 65 33 39 36  _lprobe_fe14e396
+    0x00042ab4  00 ff ff ff ff 90 00 01 00 21 b2 03 80 ff ff ff  .........!......
+    0x00042ac4  ff ff ff ff ff 02 03 1e 01 ff ff ff ff ff ff ff  ................
+    0x00042ad4  ff 00 00 00 00 ff ff ff ff 03 02 00 00 70 69 6d  .............pim
+
+[2] WALK STOPPED at 0x568e8
+  5867897 bytes after this were not turned into assets
+  the zone's asset list ended here (786 entries, all walked); the bytes after it are not covered by the list
+  last walked asset: #785 RawFile stream=0x568dc..0x568e8
+  bytes at the stop (16 before):
+    0x000568d8  00 d5 04 00 00 02 00 26 00 01 00 00 00 20 03 00  .......&..... ..
+    0x000568e8  00 00 00 00 00 e1 04 00 00 02 00 05 00 01 00 00  ................
+    0x000568f8  00 20 03 00 00 00 00 00 00 f5 04 00 00 03 00 0b  . ..............
+    0x00056908  00 01 00 00 00 0c 05 00 00 00 00 00 00 1c 05 00  ................
+    0x00056918  00 03 00 01 00 01 00 00 00 fc 02 00 00 00 00 00  ................
+
+## raw walker output
+  asset#496 (SndDriverGlobals) failed (implausible array count 4294967168 (trace=['<zone>', 'asset#496:SndDriverGlobals', 'SndDriverGlobals.snapshotGroups'])); resyncing
+  resync -> asset#497 (Font_s) @ 0x42adc

@@ -338,6 +338,72 @@ def capture_walk(zone_path):
     return zone, status, error, lines
 
 
+def _hex_rows(data, start, before=16, length=64):
+    low = max(0, start - before)
+    chunk = data[low:start + length]
+    rows = []
+    for i in range(0, len(chunk), 16):
+        part = chunk[i:i + 16]
+        text = "".join(chr(c) if 32 <= c < 127 else "." for c in part)
+        rows.append(f"    {low + i:#010x}  {part.hex(' '):<47}  {text}")
+    return rows
+
+
+def build_error_report(zone_name, zone, status, error, lines):
+    """Raw text listing of every error the walk hit and where it began, so a failure can be traced to the asset before it."""
+    out = [f"# error report: {zone_name}", f"status: {status}"]
+    if error:
+        out.append(f"walk error: {error}")
+    if zone is None:
+        out.append("zone could not be opened; nothing was walked")
+        out += ["", "## raw walker output"] + list(lines)
+        return "\n".join(out) + "\n"
+    data = zone.data
+    spans = {span["index"]: span for span in getattr(zone, "asset_spans", [])}
+    names = {i: asset for i, asset in enumerate(zone.assets)}
+    size, pos = len(data), zone.pos
+    total = len(zone.failed_spans) + len(zone.soft_errors) + len(zone.poison_events) + (1 if pos < size or status != "ok" else 0)
+    out.append(f"stream: walked {pos:#x} of {size:#x} bytes ({round(100 * pos / size, 2) if size else 0}%), {max(0, size - pos)} unwalked")
+    out.append(f"errors: {total} ({len(zone.failed_spans)} failed assets, {len(zone.soft_errors)} soft errors, {len(zone.poison_events)} poisoned pointers)")
+    number = 0
+    for span in zone.failed_spans:
+        number += 1
+        index = span["index"]
+        out += ["", f"[{number}] FAILED ASSET #{index} {span['type']}", f"  error: {span['error']}",
+                f"  stream: start={span['start']:#x} end={span['end']:#x} bytes={span['end'] - span['start']}" + (f" resyncedTo=#{span['resyncedTo']}" if "resyncedTo" in span else " no resync (walk stopped here)")]
+        before = spans.get(index - 1)
+        if before is None:
+            before = next((spans[i] for i in range(index - 1, -1, -1) if i in spans), None)
+        if before:
+            asset = names.get(before["index"])
+            label = asset[2] if asset and asset[2] else "unnamed"
+            out.append(f"  previous walked asset: #{before['index']} {before['type']} {label} stream={before['start']:#x}..{before['end']:#x}")
+            if before["end"] != span["start"]:
+                out.append(f"  note: previous asset ended at {before['end']:#x} but this one started at {span['start']:#x}")
+        out.append("  bytes around the start (16 before):")
+        out += _hex_rows(data, span["start"])
+    for error_item in zone.soft_errors:
+        number += 1
+        out += ["", f"[{number}] SOFT ERROR", f"  {error_item!r}"]
+    for position, label in zone.poison_events:
+        number += 1
+        out += ["", f"[{number}] POISONED POINTER {label}", f"  stream={position:#x}"]
+        out += _hex_rows(data, position)
+    if pos < size or status != "ok":
+        number += 1
+        last = max(spans.values(), key=lambda span: span["end"], default=None)
+        out += ["", f"[{number}] WALK STOPPED at {pos:#x}", f"  {max(0, size - pos)} bytes after this were not turned into assets"]
+        entries = getattr(zone, "asset_total", None)
+        if entries is not None and last and last["index"] + 1 >= entries:
+            out.append(f"  the zone's asset list ended here ({entries} entries, all walked); the bytes after it are not covered by the list")
+        if last:
+            out.append(f"  last walked asset: #{last['index']} {last['type']} stream={last['start']:#x}..{last['end']:#x}")
+        out.append("  bytes at the stop (16 before):")
+        out += _hex_rows(data, pos)
+    out += ["", "## raw walker output"] + list(lines)
+    return "\n".join(out) + "\n"
+
+
 def run(zone_path, zone_name, out, kinds, only, overwrite):
     zone, status, error, lines = capture_walk(zone_path)
     assets = zone.assets if zone is not None else []
@@ -475,6 +541,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
     extra_rows, listing = export_everything(assets, out, zone_name, only, overwrite, resolve_name)
     rows += extra_rows
     failed, tail = dump_unwalked(zone, out, overwrite) if zone is not None else ([], [])
+    write_file(out, "_errors.txt", build_error_report(zone_name, zone, status, error, lines).encode("utf-8"), True)
     if status != "ok":
         rows.append({"archive": zone_name, "kind": "zone", "status": status, "error": error})
     types = Counter(type_name for _i, type_name, _n, _o in assets)
@@ -492,6 +559,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "softErrors": zone.soft_errors[:200] if zone is not None else [],
         "failedSpans": failed,
         "unwalkedTail": tail,
+        "errorReport": "_errors.txt",
         "assets": listing,
         "named": index,
     }

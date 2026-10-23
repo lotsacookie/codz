@@ -549,6 +549,7 @@ class T5Zone:
         self.poison = False
         self.poison_events = []
         self.soft_errors = []   # recoverable problems (the asset is kept, its bad pointer becomes None)
+        self.asset_spans = []   # {index, type, start, end}: where each walked asset sat in the stream
         self.failed_spans = []  # raw stream spans of assets that failed: {index, type, error, start, end}
 
     # ----- stream -----
@@ -1231,6 +1232,7 @@ class T5Zone:
                 t, p = struct.unpack_from("<iI", raw, i * 8)
                 entries.append((t, p))
 
+        self.asset_total = len(entries)
         skipped = 0
         idx = 0
         while idx < len(entries):
@@ -1251,6 +1253,7 @@ class T5Zone:
                     ref = self._load_ptr_target(tname, [], BLOCK_TEMP, 4, kind)
                     name = self._asset_name(ref.obj if isinstance(ref, Ref) else ref)
                     self.assets.append((t, tname, name, ref))
+                self.asset_spans.append({"index": idx, "type": tname, "start": start_pos, "end": self.pos})
             except (ZoneError, struct.error, ValueError, KeyError) as ex:
                 if not self.resync:
                     raise
@@ -1294,6 +1297,7 @@ class T5Zone:
                 while len(self.assets) < t2idx:
                     self.assets.append((-1, "SKIPPED", None, None))
                 self.assets.append((t, tname2, name, ref))
+                self.asset_spans.append({"index": t2idx, "type": tname2, "start": pos_before, "end": self.pos})
                 idx = t2idx
             finally:
                 self.ctx_trace.pop()
