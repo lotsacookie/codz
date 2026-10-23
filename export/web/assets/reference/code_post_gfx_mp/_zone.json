@@ -1,0 +1,3968 @@
+{
+ "zone": "zone/Common/code_post_gfx_mp.ff",
+ "status": "ok",
+ "error": null,
+ "complete": false,
+ "coverage": {
+  "streamPos": 2346502,
+  "streamSize": 3840157,
+  "percent": 61.1
+ },
+ "types": {
+  "Material": 446,
+  "MaterialTechniqueSet": 104,
+  "StringTable": 41,
+  "RawFile": 29,
+  "XAnimParts": 8,
+  "XModel": 8,
+  "GfxImage": 7,
+  "ddlRoot_t": 6,
+  "FxEffectDef": 4,
+  "MenuList": 2,
+  "PhysPreset": 1,
+  "PhysConstraints": 1,
+  "GfxLightDef": 1,
+  "WeaponVariantDef": 1,
+  "FxImpactTable": 1,
+  "SndDriverGlobals": 1,
+  "Font_s": 1,
+  "SndBank": 1,
+  "EmblemSet": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [
+  "_unwalked/tail_0023ce06_part0.bin"
+ ],
+ "assets": [
+  {
+   "index": 0,
+   "type": "MaterialTechniqueSet",
+   "name": "default",
+   "file": "assets/MaterialTechniqueSet/default.json"
+  },
+  {
+   "index": 1,
+   "type": "GfxImage",
+   "name": "$white",
+   "file": "assets/GfxImage/$white.json"
+  },
+  {
+   "index": 2,
+   "type": "MaterialTechniqueSet",
+   "name": "2d",
+   "file": "assets/MaterialTechniqueSet/2d.json"
+  },
+  {
+   "index": 3,
+   "type": "Material",
+   "name": "$default",
+   "file": "assets/Material/$default.json"
+  },
+  {
+   "index": 4,
+   "type": "PhysPreset",
+   "name": null,
+   "file": "assets/PhysPreset/_unnamed/4.json"
+  },
+  {
+   "index": 5,
+   "type": "PhysConstraints",
+   "name": null,
+   "file": "assets/PhysConstraints/_unnamed/5.json"
+  },
+  {
+   "index": 7,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_effect_nofog",
+   "file": "assets/MaterialTechniqueSet/mc_effect_nofog.json"
+  },
+  {
+   "index": 9,
+   "type": "GfxLightDef",
+   "name": "light_dynamic",
+   "file": "assets/GfxLightDef/light_dynamic.json"
+  },
+  {
+   "index": 10,
+   "type": "MenuList",
+   "name": "ui/default.menu",
+   "file": "assets/MenuList/ui/default.menu.json"
+  },
+  {
+   "index": 11,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0s0.json"
+  },
+  {
+   "index": 13,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_skin_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_skin_r0c0n0s0.json"
+  },
+  {
+   "index": 14,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 16,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather.json"
+  },
+  {
+   "index": 17,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_add_nofog.json"
+  },
+  {
+   "index": 18,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_falloff_add_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_falloff_add_nofog.json"
+  },
+  {
+   "index": 19,
+   "type": "MaterialTechniqueSet",
+   "name": "distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/distortion_scale_zfeather.json"
+  },
+  {
+   "index": 20,
+   "type": "FxEffectDef",
+   "name": "weapon/muzzleflashes/fx_pistol_flash_base",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_pistol_flash_base.json"
+  },
+  {
+   "index": 22,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_rifle_resting",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_rifle_resting.json"
+  },
+  {
+   "index": 23,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0n0s0.json"
+  },
+  {
+   "index": 25,
+   "type": "FxEffectDef",
+   "name": "weapon/shellejects/fx_rifle",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_rifle.json"
+  },
+  {
+   "index": 26,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0.json"
+  },
+  {
+   "index": 35,
+   "type": "StringTable",
+   "name": "mp/defaultstringtable.csv",
+   "file": "assets/StringTable/mp/defaultstringtable.csv.json"
+  },
+  {
+   "index": 36,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_nofog.json"
+  },
+  {
+   "index": 37,
+   "type": "FxEffectDef",
+   "name": "misc/missing_fx",
+   "file": "assets/FxEffectDef/misc/missing_fx.json"
+  },
+  {
+   "index": 38,
+   "type": "FxImpactTable",
+   "name": null,
+   "file": "assets/FxImpactTable/_unnamed/38.json"
+  },
+  {
+   "index": 39,
+   "type": "Material",
+   "name": "loadscreen_mp_array",
+   "file": "assets/Material/loadscreen_mp_array.json"
+  },
+  {
+   "index": 40,
+   "type": "Material",
+   "name": "loadscreen_mp_cosmodrome",
+   "file": "assets/Material/loadscreen_mp_cosmodrome.json"
+  },
+  {
+   "index": 41,
+   "type": "Material",
+   "name": "loadscreen_mp_cairo",
+   "file": "assets/Material/loadscreen_mp_cairo.json"
+  },
+  {
+   "index": 42,
+   "type": "Material",
+   "name": "loadscreen_mp_cracked",
+   "file": "assets/Material/loadscreen_mp_cracked.json"
+  },
+  {
+   "index": 43,
+   "type": "Material",
+   "name": "loadscreen_mp_crisis",
+   "file": "assets/Material/loadscreen_mp_crisis.json"
+  },
+  {
+   "index": 44,
+   "type": "Material",
+   "name": "loadscreen_mp_duga",
+   "file": "assets/Material/loadscreen_mp_duga.json"
+  },
+  {
+   "index": 45,
+   "type": "Material",
+   "name": "loadscreen_mp_firingrange",
+   "file": "assets/Material/loadscreen_mp_firingrange.json"
+  },
+  {
+   "index": 46,
+   "type": "Material",
+   "name": "loadscreen_mp_hanoi",
+   "file": "assets/Material/loadscreen_mp_hanoi.json"
+  },
+  {
+   "index": 47,
+   "type": "Material",
+   "name": "loadscreen_mp_havoc",
+   "file": "assets/Material/loadscreen_mp_havoc.json"
+  },
+  {
+   "index": 48,
+   "type": "Material",
+   "name": "loadscreen_mp_mountain",
+   "file": "assets/Material/loadscreen_mp_mountain.json"
+  },
+  {
+   "index": 49,
+   "type": "Material",
+   "name": "loadscreen_mp_nuked",
+   "file": "assets/Material/loadscreen_mp_nuked.json"
+  },
+  {
+   "index": 50,
+   "type": "Material",
+   "name": "loadscreen_mp_radiation",
+   "file": "assets/Material/loadscreen_mp_radiation.json"
+  },
+  {
+   "index": 51,
+   "type": "Material",
+   "name": "loadscreen_mp_russianbase",
+   "file": "assets/Material/loadscreen_mp_russianbase.json"
+  },
+  {
+   "index": 52,
+   "type": "Material",
+   "name": "loadscreen_mp_villa",
+   "file": "assets/Material/loadscreen_mp_villa.json"
+  },
+  {
+   "index": 53,
+   "type": "Material",
+   "name": "compass_map_mp_array",
+   "file": "assets/Material/compass_map_mp_array.json"
+  },
+  {
+   "index": 54,
+   "type": "Material",
+   "name": "compass_overlay_map_array",
+   "file": "assets/Material/compass_overlay_map_array.json"
+  },
+  {
+   "index": 55,
+   "type": "Material",
+   "name": "compass_map_mp_array_wager",
+   "file": "assets/Material/compass_map_mp_array_wager.json"
+  },
+  {
+   "index": 56,
+   "type": "Material",
+   "name": "compass_map_mp_berlinwall",
+   "file": "assets/Material/compass_map_mp_berlinwall.json"
+  },
+  {
+   "index": 57,
+   "type": "Material",
+   "name": "compass_overlay_map_berlinwall",
+   "file": "assets/Material/compass_overlay_map_berlinwall.json"
+  },
+  {
+   "index": 58,
+   "type": "Material",
+   "name": "compass_map_mp_cairo",
+   "file": "assets/Material/compass_map_mp_cairo.json"
+  },
+  {
+   "index": 59,
+   "type": "Material",
+   "name": "compass_overlay_map_cairo",
+   "file": "assets/Material/compass_overlay_map_cairo.json"
+  },
+  {
+   "index": 60,
+   "type": "Material",
+   "name": "compass_map_mp_cairo_wager",
+   "file": "assets/Material/compass_map_mp_cairo_wager.json"
+  },
+  {
+   "index": 61,
+   "type": "Material",
+   "name": "compass_map_mp_castle",
+   "file": "assets/Material/compass_map_mp_castle.json"
+  },
+  {
+   "index": 62,
+   "type": "Material",
+   "name": "compass_overlay_map_castle",
+   "file": "assets/Material/compass_overlay_map_castle.json"
+  },
+  {
+   "index": 63,
+   "type": "Material",
+   "name": "compass_map_mp_cosmodrome",
+   "file": "assets/Material/compass_map_mp_cosmodrome.json"
+  },
+  {
+   "index": 64,
+   "type": "Material",
+   "name": "compass_overlay_map_cosmodrome",
+   "file": "assets/Material/compass_overlay_map_cosmodrome.json"
+  },
+  {
+   "index": 65,
+   "type": "Material",
+   "name": "compass_map_mp_cosmodrome_wager",
+   "file": "assets/Material/compass_map_mp_cosmodrome_wager.json"
+  },
+  {
+   "index": 66,
+   "type": "Material",
+   "name": "compass_map_mp_cracked",
+   "file": "assets/Material/compass_map_mp_cracked.json"
+  },
+  {
+   "index": 67,
+   "type": "Material",
+   "name": "compass_overlay_map_cracked",
+   "file": "assets/Material/compass_overlay_map_cracked.json"
+  },
+  {
+   "index": 68,
+   "type": "Material",
+   "name": "compass_map_mp_cracked_wager",
+   "file": "assets/Material/compass_map_mp_cracked_wager.json"
+  },
+  {
+   "index": 69,
+   "type": "Material",
+   "name": "compass_map_mp_crisis",
+   "file": "assets/Material/compass_map_mp_crisis.json"
+  },
+  {
+   "index": 70,
+   "type": "Material",
+   "name": "compass_overlay_map_crisis",
+   "file": "assets/Material/compass_overlay_map_crisis.json"
+  },
+  {
+   "index": 71,
+   "type": "Material",
+   "name": "compass_map_mp_crisis_wager",
+   "file": "assets/Material/compass_map_mp_crisis_wager.json"
+  },
+  {
+   "index": 72,
+   "type": "Material",
+   "name": "compass_map_mp_discovery",
+   "file": "assets/Material/compass_map_mp_discovery.json"
+  },
+  {
+   "index": 73,
+   "type": "Material",
+   "name": "compass_overlay_map_discovery",
+   "file": "assets/Material/compass_overlay_map_discovery.json"
+  },
+  {
+   "index": 74,
+   "type": "Material",
+   "name": "compass_map_mp_duga",
+   "file": "assets/Material/compass_map_mp_duga.json"
+  },
+  {
+   "index": 75,
+   "type": "Material",
+   "name": "compass_overlay_map_duga",
+   "file": "assets/Material/compass_overlay_map_duga.json"
+  },
+  {
+   "index": 76,
+   "type": "Material",
+   "name": "compass_map_mp_duga_wager",
+   "file": "assets/Material/compass_map_mp_duga_wager.json"
+  },
+  {
+   "index": 77,
+   "type": "Material",
+   "name": "compass_map_mp_firingrange",
+   "file": "assets/Material/compass_map_mp_firingrange.json"
+  },
+  {
+   "index": 78,
+   "type": "Material",
+   "name": "compass_overlay_map_firingrange",
+   "file": "assets/Material/compass_overlay_map_firingrange.json"
+  },
+  {
+   "index": 79,
+   "type": "Material",
+   "name": "compass_map_mp_hanoi",
+   "file": "assets/Material/compass_map_mp_hanoi.json"
+  },
+  {
+   "index": 80,
+   "type": "Material",
+   "name": "compass_overlay_map_hanoi",
+   "file": "assets/Material/compass_overlay_map_hanoi.json"
+  },
+  {
+   "index": 81,
+   "type": "Material",
+   "name": "compass_map_mp_hanoi_wager",
+   "file": "assets/Material/compass_map_mp_hanoi_wager.json"
+  },
+  {
+   "index": 82,
+   "type": "Material",
+   "name": "compass_map_mp_havana",
+   "file": "assets/Material/compass_map_mp_havana.json"
+  },
+  {
+   "index": 83,
+   "type": "Material",
+   "name": "compass_overlay_map_havana",
+   "file": "assets/Material/compass_overlay_map_havana.json"
+  },
+  {
+   "index": 84,
+   "type": "Material",
+   "name": "compass_map_mp_havoc",
+   "file": "assets/Material/compass_map_mp_havoc.json"
+  },
+  {
+   "index": 85,
+   "type": "Material",
+   "name": "compass_overlay_map_havoc",
+   "file": "assets/Material/compass_overlay_map_havoc.json"
+  },
+  {
+   "index": 86,
+   "type": "Material",
+   "name": "compass_map_mp_havoc_wager",
+   "file": "assets/Material/compass_map_mp_havoc_wager.json"
+  },
+  {
+   "index": 87,
+   "type": "Material",
+   "name": "compass_map_mp_hotel",
+   "file": "assets/Material/compass_map_mp_hotel.json"
+  },
+  {
+   "index": 88,
+   "type": "Material",
+   "name": "compass_overlay_map_hotel",
+   "file": "assets/Material/compass_overlay_map_hotel.json"
+  },
+  {
+   "index": 89,
+   "type": "Material",
+   "name": "compass_map_mp_jungle",
+   "file": "assets/Material/compass_map_mp_jungle.json"
+  },
+  {
+   "index": 90,
+   "type": "Material",
+   "name": "compass_overlay_map_jungle",
+   "file": "assets/Material/compass_overlay_map_jungle.json"
+  },
+  {
+   "index": 91,
+   "type": "Material",
+   "name": "compass_map_mp_landing",
+   "file": "assets/Material/compass_map_mp_landing.json"
+  },
+  {
+   "index": 92,
+   "type": "Material",
+   "name": "compass_overlay_map_landing",
+   "file": "assets/Material/compass_overlay_map_landing.json"
+  },
+  {
+   "index": 93,
+   "type": "Material",
+   "name": "compass_map_mp_mountain",
+   "file": "assets/Material/compass_map_mp_mountain.json"
+  },
+  {
+   "index": 94,
+   "type": "Material",
+   "name": "compass_overlay_map_mountain",
+   "file": "assets/Material/compass_overlay_map_mountain.json"
+  },
+  {
+   "index": 95,
+   "type": "Material",
+   "name": "compass_map_mp_mountain_wager",
+   "file": "assets/Material/compass_map_mp_mountain_wager.json"
+  },
+  {
+   "index": 96,
+   "type": "Material",
+   "name": "compass_map_mp_munich",
+   "file": "assets/Material/compass_map_mp_munich.json"
+  },
+  {
+   "index": 97,
+   "type": "Material",
+   "name": "compass_overlay_map_munich",
+   "file": "assets/Material/compass_overlay_map_munich.json"
+  },
+  {
+   "index": 98,
+   "type": "Material",
+   "name": "compass_map_mp_nuked",
+   "file": "assets/Material/compass_map_mp_nuked.json"
+  },
+  {
+   "index": 99,
+   "type": "Material",
+   "name": "compass_overlay_map_nuked",
+   "file": "assets/Material/compass_overlay_map_nuked.json"
+  },
+  {
+   "index": 100,
+   "type": "Material",
+   "name": "compass_map_mp_pentagon",
+   "file": "assets/Material/compass_map_mp_pentagon.json"
+  },
+  {
+   "index": 101,
+   "type": "Material",
+   "name": "compass_overlay_map_pentagon",
+   "file": "assets/Material/compass_overlay_map_pentagon.json"
+  },
+  {
+   "index": 102,
+   "type": "Material",
+   "name": "compass_map_mp_port",
+   "file": "assets/Material/compass_map_mp_port.json"
+  },
+  {
+   "index": 103,
+   "type": "Material",
+   "name": "compass_overlay_map_port",
+   "file": "assets/Material/compass_overlay_map_port.json"
+  },
+  {
+   "index": 104,
+   "type": "Material",
+   "name": "compass_map_mp_radiation",
+   "file": "assets/Material/compass_map_mp_radiation.json"
+  },
+  {
+   "index": 105,
+   "type": "Material",
+   "name": "compass_overlay_map_radiation",
+   "file": "assets/Material/compass_overlay_map_radiation.json"
+  },
+  {
+   "index": 106,
+   "type": "Material",
+   "name": "compass_map_mp_radiation_wager",
+   "file": "assets/Material/compass_map_mp_radiation_wager.json"
+  },
+  {
+   "index": 107,
+   "type": "Material",
+   "name": "compass_map_mp_rooftops",
+   "file": "assets/Material/compass_map_mp_rooftops.json"
+  },
+  {
+   "index": 108,
+   "type": "Material",
+   "name": "compass_overlay_map_rooftops",
+   "file": "assets/Material/compass_overlay_map_rooftops.json"
+  },
+  {
+   "index": 109,
+   "type": "Material",
+   "name": "compass_map_mp_russianbase",
+   "file": "assets/Material/compass_map_mp_russianbase.json"
+  },
+  {
+   "index": 110,
+   "type": "Material",
+   "name": "compass_overlay_map_russianbase",
+   "file": "assets/Material/compass_overlay_map_russianbase.json"
+  },
+  {
+   "index": 111,
+   "type": "Material",
+   "name": "compass_map_mp_russianbase_wager",
+   "file": "assets/Material/compass_map_mp_russianbase_wager.json"
+  },
+  {
+   "index": 112,
+   "type": "Material",
+   "name": "compass_map_mp_sandstorm",
+   "file": "assets/Material/compass_map_mp_sandstorm.json"
+  },
+  {
+   "index": 113,
+   "type": "Material",
+   "name": "compass_overlay_map_sandstorm",
+   "file": "assets/Material/compass_overlay_map_sandstorm.json"
+  },
+  {
+   "index": 114,
+   "type": "Material",
+   "name": "compass_map_mp_sealab",
+   "file": "assets/Material/compass_map_mp_sealab.json"
+  },
+  {
+   "index": 115,
+   "type": "Material",
+   "name": "compass_overlay_map_sealab",
+   "file": "assets/Material/compass_overlay_map_sealab.json"
+  },
+  {
+   "index": 116,
+   "type": "Material",
+   "name": "compass_map_mp_shipyard",
+   "file": "assets/Material/compass_map_mp_shipyard.json"
+  },
+  {
+   "index": 117,
+   "type": "Material",
+   "name": "compass_overlay_map_shipyard",
+   "file": "assets/Material/compass_overlay_map_shipyard.json"
+  },
+  {
+   "index": 118,
+   "type": "Material",
+   "name": "compass_map_mp_underwater",
+   "file": "assets/Material/compass_map_mp_underwater.json"
+  },
+  {
+   "index": 119,
+   "type": "Material",
+   "name": "compass_overlay_map_underwater",
+   "file": "assets/Material/compass_overlay_map_underwater.json"
+  },
+  {
+   "index": 120,
+   "type": "Material",
+   "name": "compass_map_mp_villa",
+   "file": "assets/Material/compass_map_mp_villa.json"
+  },
+  {
+   "index": 121,
+   "type": "Material",
+   "name": "compass_overlay_map_villa",
+   "file": "assets/Material/compass_overlay_map_villa.json"
+  },
+  {
+   "index": 122,
+   "type": "Material",
+   "name": "compass_map_mp_villa_wager",
+   "file": "assets/Material/compass_map_mp_villa_wager.json"
+  },
+  {
+   "index": 123,
+   "type": "StringTable",
+   "name": "mp/clantagfeatures.csv",
+   "file": "assets/StringTable/mp/clantagfeatures.csv.json"
+  },
+  {
+   "index": 124,
+   "type": "StringTable",
+   "name": "mp/globalcounters.csv",
+   "file": "assets/StringTable/mp/globalcounters.csv.json"
+  },
+  {
+   "index": 125,
+   "type": "StringTable",
+   "name": "mp/globalcounterrefs.csv",
+   "file": "assets/StringTable/mp/globalcounterrefs.csv.json"
+  },
+  {
+   "index": 126,
+   "type": "StringTable",
+   "name": "mp/reportuser.csv",
+   "file": "assets/StringTable/mp/reportuser.csv.json"
+  },
+  {
+   "index": 127,
+   "type": "SndDriverGlobals",
+   "name": "singleton",
+   "file": "assets/SndDriverGlobals/singleton.json"
+  },
+  {
+   "index": 128,
+   "type": "RawFile",
+   "name": "level_dependencies.csv",
+   "file": "rawfiles/level_dependencies.csv"
+  },
+  {
+   "index": 129,
+   "type": "GfxImage",
+   "name": "$black",
+   "file": "assets/GfxImage/$black.json"
+  },
+  {
+   "index": 130,
+   "type": "GfxImage",
+   "name": "$blank",
+   "file": "assets/GfxImage/$blank.json"
+  },
+  {
+   "index": 131,
+   "type": "GfxImage",
+   "name": "$gray",
+   "file": "assets/GfxImage/$gray.json"
+  },
+  {
+   "index": 132,
+   "type": "GfxImage",
+   "name": "$pixelcostcolorcode",
+   "file": "assets/GfxImage/$pixelcostcolorcode.json"
+  },
+  {
+   "index": 133,
+   "type": "GfxImage",
+   "name": "logo_small_cod5",
+   "file": "assets/GfxImage/logo_small_cod5.json"
+  },
+  {
+   "index": 134,
+   "type": "GfxImage",
+   "name": "$white_r32f",
+   "file": "assets/GfxImage/$white_r32f.json"
+  },
+  {
+   "index": 135,
+   "type": "Material",
+   "name": "white",
+   "file": "assets/Material/white.json"
+  },
+  {
+   "index": 136,
+   "type": "Material",
+   "name": "white_r32f",
+   "file": "assets/Material/white_r32f.json"
+  },
+  {
+   "index": 137,
+   "type": "MaterialTechniqueSet",
+   "name": "tools",
+   "file": "assets/MaterialTechniqueSet/tools.json"
+  },
+  {
+   "index": 138,
+   "type": "Material",
+   "name": "$additive",
+   "file": "assets/Material/$additive.json"
+  },
+  {
+   "index": 139,
+   "type": "Material",
+   "name": "$additive_nodepth",
+   "file": "assets/Material/$additive_nodepth.json"
+  },
+  {
+   "index": 140,
+   "type": "Material",
+   "name": "$glare_blind",
+   "file": "assets/Material/$glare_blind.json"
+  },
+  {
+   "index": 141,
+   "type": "Material",
+   "name": "$point",
+   "file": "assets/Material/$point.json"
+  },
+  {
+   "index": 142,
+   "type": "Material",
+   "name": "$line",
+   "file": "assets/Material/$line.json"
+  },
+  {
+   "index": 143,
+   "type": "Material",
+   "name": "$line_nodepth",
+   "file": "assets/Material/$line_nodepth.json"
+  },
+  {
+   "index": 144,
+   "type": "Material",
+   "name": "$blend",
+   "file": "assets/Material/$blend.json"
+  },
+  {
+   "index": 145,
+   "type": "MaterialTechniqueSet",
+   "name": "m_rope",
+   "file": "assets/MaterialTechniqueSet/m_rope.json"
+  },
+  {
+   "index": 146,
+   "type": "Material",
+   "name": "rope",
+   "file": "assets/Material/rope.json"
+  },
+  {
+   "index": 147,
+   "type": "Material",
+   "name": "$blend_nodepth",
+   "file": "assets/Material/$blend_nodepth.json"
+  },
+  {
+   "index": 151,
+   "type": "MaterialTechniqueSet",
+   "name": "composite_result",
+   "file": "assets/MaterialTechniqueSet/composite_result.json"
+  },
+  {
+   "index": 152,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/152.json"
+  },
+  {
+   "index": 153,
+   "type": "Material",
+   "name": "light_corona",
+   "file": "assets/Material/light_corona.json"
+  },
+  {
+   "index": 154,
+   "type": "MaterialTechniqueSet",
+   "name": "clear_alpha",
+   "file": "assets/MaterialTechniqueSet/clear_alpha.json"
+  },
+  {
+   "index": 155,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/155.json"
+  },
+  {
+   "index": 156,
+   "type": "MaterialTechniqueSet",
+   "name": "set_alpha",
+   "file": "assets/MaterialTechniqueSet/set_alpha.json"
+  },
+  {
+   "index": 157,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/157.json"
+  },
+  {
+   "index": 158,
+   "type": "MaterialTechniqueSet",
+   "name": "clear_alpha_stencil",
+   "file": "assets/MaterialTechniqueSet/clear_alpha_stencil.json"
+  },
+  {
+   "index": 159,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/159.json"
+  },
+  {
+   "index": 160,
+   "type": "MaterialTechniqueSet",
+   "name": "depthprepass",
+   "file": "assets/MaterialTechniqueSet/depthprepass.json"
+  },
+  {
+   "index": 161,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/161.json"
+  },
+  {
+   "index": 162,
+   "type": "MaterialTechniqueSet",
+   "name": "shadowclear",
+   "file": "assets/MaterialTechniqueSet/shadowclear.json"
+  },
+  {
+   "index": 163,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/163.json"
+  },
+  {
+   "index": 164,
+   "type": "MaterialTechniqueSet",
+   "name": "shadowcaster",
+   "file": "assets/MaterialTechniqueSet/shadowcaster.json"
+  },
+  {
+   "index": 165,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/165.json"
+  },
+  {
+   "index": 166,
+   "type": "MaterialTechniqueSet",
+   "name": "shadowoverlay",
+   "file": "assets/MaterialTechniqueSet/shadowoverlay.json"
+  },
+  {
+   "index": 167,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/167.json"
+  },
+  {
+   "index": 168,
+   "type": "MaterialTechniqueSet",
+   "name": "stencilshadow",
+   "file": "assets/MaterialTechniqueSet/stencilshadow.json"
+  },
+  {
+   "index": 169,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/169.json"
+  },
+  {
+   "index": 170,
+   "type": "MaterialTechniqueSet",
+   "name": "stencildisplay",
+   "file": "assets/MaterialTechniqueSet/stencildisplay.json"
+  },
+  {
+   "index": 171,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/171.json"
+  },
+  {
+   "index": 172,
+   "type": "MaterialTechniqueSet",
+   "name": "floatzdisplay",
+   "file": "assets/MaterialTechniqueSet/floatzdisplay.json"
+  },
+  {
+   "index": 173,
+   "type": "Material",
+   "name": "floatz_display",
+   "file": "assets/Material/floatz_display.json"
+  },
+  {
+   "index": 174,
+   "type": "MaterialTechniqueSet",
+   "name": "floatz",
+   "file": "assets/MaterialTechniqueSet/floatz.json"
+  },
+  {
+   "index": 175,
+   "type": "Material",
+   "name": "$floatz",
+   "file": "assets/Material/$floatz.json"
+  },
+  {
+   "index": 176,
+   "type": "MaterialTechniqueSet",
+   "name": "processed_floatz",
+   "file": "assets/MaterialTechniqueSet/processed_floatz.json"
+  },
+  {
+   "index": 177,
+   "type": "Material",
+   "name": "$processed_floatz",
+   "file": "assets/Material/$processed_floatz.json"
+  },
+  {
+   "index": 178,
+   "type": "MaterialTechniqueSet",
+   "name": "shell_shock",
+   "file": "assets/MaterialTechniqueSet/shell_shock.json"
+  },
+  {
+   "index": 179,
+   "type": "Material",
+   "name": "shellshock",
+   "file": "assets/Material/shellshock.json"
+  },
+  {
+   "index": 180,
+   "type": "MaterialTechniqueSet",
+   "name": "shell_shock_flashed",
+   "file": "assets/MaterialTechniqueSet/shell_shock_flashed.json"
+  },
+  {
+   "index": 181,
+   "type": "Material",
+   "name": "shellshock_flashed",
+   "file": "assets/Material/shellshock_flashed.json"
+  },
+  {
+   "index": 182,
+   "type": "MaterialTechniqueSet",
+   "name": "color_channel_mixer",
+   "file": "assets/MaterialTechniqueSet/color_channel_mixer.json"
+  },
+  {
+   "index": 183,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/183.json"
+  },
+  {
+   "index": 184,
+   "type": "Material",
+   "name": "frame_color_debug",
+   "file": "assets/Material/frame_color_debug.json"
+  },
+  {
+   "index": 185,
+   "type": "Material",
+   "name": "frame_alpha_debug",
+   "file": "assets/Material/frame_alpha_debug.json"
+  },
+  {
+   "index": 186,
+   "type": "MaterialTechniqueSet",
+   "name": "passthru_vertalpha",
+   "file": "assets/MaterialTechniqueSet/passthru_vertalpha.json"
+  },
+  {
+   "index": 187,
+   "type": "Material",
+   "name": "feedbackblend",
+   "file": "assets/Material/feedbackblend.json"
+  },
+  {
+   "index": 188,
+   "type": "MaterialTechniqueSet",
+   "name": "passthru_film",
+   "file": "assets/MaterialTechniqueSet/passthru_film.json"
+  },
+  {
+   "index": 189,
+   "type": "Material",
+   "name": "feedbackfilmblend",
+   "file": "assets/Material/feedbackfilmblend.json"
+  },
+  {
+   "index": 190,
+   "type": "MaterialTechniqueSet",
+   "name": "passthru_alpha",
+   "file": "assets/MaterialTechniqueSet/passthru_alpha.json"
+  },
+  {
+   "index": 191,
+   "type": "Material",
+   "name": "feedbackreplace",
+   "file": "assets/Material/feedbackreplace.json"
+  },
+  {
+   "index": 192,
+   "type": "MaterialTechniqueSet",
+   "name": "ps3_aadownsample",
+   "file": "assets/MaterialTechniqueSet/ps3_aadownsample.json"
+  },
+  {
+   "index": 193,
+   "type": "Material",
+   "name": "$ps3_aadownsample",
+   "file": "assets/Material/$ps3_aadownsample.json"
+  },
+  {
+   "index": 194,
+   "type": "MaterialTechniqueSet",
+   "name": "cinematic",
+   "file": "assets/MaterialTechniqueSet/cinematic.json"
+  },
+  {
+   "index": 195,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/195.json"
+  },
+  {
+   "index": 196,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_lut",
+   "file": "assets/MaterialTechniqueSet/postfx_lut.json"
+  },
+  {
+   "index": 197,
+   "type": "Material",
+   "name": "postfx_lut_0",
+   "file": "assets/Material/postfx_lut_0.json"
+  },
+  {
+   "index": 198,
+   "type": "Material",
+   "name": "postfx_lut_1",
+   "file": "assets/Material/postfx_lut_1.json"
+  },
+  {
+   "index": 199,
+   "type": "Material",
+   "name": "postfx_lut_2",
+   "file": "assets/Material/postfx_lut_2.json"
+  },
+  {
+   "index": 200,
+   "type": "Material",
+   "name": "postfx_lut_3",
+   "file": "assets/Material/postfx_lut_3.json"
+  },
+  {
+   "index": 201,
+   "type": "Material",
+   "name": "postfx_lut_4",
+   "file": "assets/Material/postfx_lut_4.json"
+  },
+  {
+   "index": 202,
+   "type": "Material",
+   "name": "postfx_lut_5",
+   "file": "assets/Material/postfx_lut_5.json"
+  },
+  {
+   "index": 203,
+   "type": "Material",
+   "name": "postfx_lut_6",
+   "file": "assets/Material/postfx_lut_6.json"
+  },
+  {
+   "index": 204,
+   "type": "Material",
+   "name": "postfx_lut_7",
+   "file": "assets/Material/postfx_lut_7.json"
+  },
+  {
+   "index": 205,
+   "type": "Material",
+   "name": "postfx_lut_8",
+   "file": "assets/Material/postfx_lut_8.json"
+  },
+  {
+   "index": 206,
+   "type": "Material",
+   "name": "postfx_lut_9",
+   "file": "assets/Material/postfx_lut_9.json"
+  },
+  {
+   "index": 207,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_downsample_ldr",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_ldr.json"
+  },
+  {
+   "index": 208,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/208.json"
+  },
+  {
+   "index": 209,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_downsample_hdr",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_hdr.json"
+  },
+  {
+   "index": 210,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/210.json"
+  },
+  {
+   "index": 211,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_downsample_convolution",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_convolution.json"
+  },
+  {
+   "index": 212,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/212.json"
+  },
+  {
+   "index": 213,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_remap",
+   "file": "assets/MaterialTechniqueSet/bloom_remap.json"
+  },
+  {
+   "index": 214,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/214.json"
+  },
+  {
+   "index": 215,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_expansion",
+   "file": "assets/MaterialTechniqueSet/bloom_expansion.json"
+  },
+  {
+   "index": 216,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/216.json"
+  },
+  {
+   "index": 217,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_remap_streak",
+   "file": "assets/MaterialTechniqueSet/bloom_remap_streak.json"
+  },
+  {
+   "index": 218,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/218.json"
+  },
+  {
+   "index": 219,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_streak_x",
+   "file": "assets/MaterialTechniqueSet/bloom_streak_x.json"
+  },
+  {
+   "index": 220,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/220.json"
+  },
+  {
+   "index": 221,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_streak_y",
+   "file": "assets/MaterialTechniqueSet/bloom_streak_y.json"
+  },
+  {
+   "index": 222,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/222.json"
+  },
+  {
+   "index": 223,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_apply_streak",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_streak.json"
+  },
+  {
+   "index": 224,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/224.json"
+  },
+  {
+   "index": 225,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_blur_x",
+   "file": "assets/MaterialTechniqueSet/bloom_blur_x.json"
+  },
+  {
+   "index": 226,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/226.json"
+  },
+  {
+   "index": 227,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_blur_y",
+   "file": "assets/MaterialTechniqueSet/bloom_blur_y.json"
+  },
+  {
+   "index": 228,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/228.json"
+  },
+  {
+   "index": 229,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_apply_hdr",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_hdr.json"
+  },
+  {
+   "index": 230,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/230.json"
+  },
+  {
+   "index": 231,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_apply_ldr",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_ldr.json"
+  },
+  {
+   "index": 232,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/232.json"
+  },
+  {
+   "index": 233,
+   "type": "MaterialTechniqueSet",
+   "name": "create_lut2dv",
+   "file": "assets/MaterialTechniqueSet/create_lut2dv.json"
+  },
+  {
+   "index": 234,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/234.json"
+  },
+  {
+   "index": 235,
+   "type": "MaterialTechniqueSet",
+   "name": "resample_final",
+   "file": "assets/MaterialTechniqueSet/resample_final.json"
+  },
+  {
+   "index": 236,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/236.json"
+  },
+  {
+   "index": 237,
+   "type": "MaterialTechniqueSet",
+   "name": "resample_shift",
+   "file": "assets/MaterialTechniqueSet/resample_shift.json"
+  },
+  {
+   "index": 238,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/238.json"
+  },
+  {
+   "index": 239,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_smooth_a",
+   "file": "assets/MaterialTechniqueSet/bloom_smooth_a.json"
+  },
+  {
+   "index": 240,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/240.json"
+  },
+  {
+   "index": 241,
+   "type": "MaterialTechniqueSet",
+   "name": "bloom_smooth_b",
+   "file": "assets/MaterialTechniqueSet/bloom_smooth_b.json"
+  },
+  {
+   "index": 242,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/242.json"
+  },
+  {
+   "index": 243,
+   "type": "MaterialTechniqueSet",
+   "name": "create_lut2d",
+   "file": "assets/MaterialTechniqueSet/create_lut2d.json"
+  },
+  {
+   "index": 244,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/244.json"
+  },
+  {
+   "index": 245,
+   "type": "MaterialTechniqueSet",
+   "name": "apply_lut2d",
+   "file": "assets/MaterialTechniqueSet/apply_lut2d.json"
+  },
+  {
+   "index": 246,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/246.json"
+  },
+  {
+   "index": 247,
+   "type": "MaterialTechniqueSet",
+   "name": "apply_lut3d",
+   "file": "assets/MaterialTechniqueSet/apply_lut3d.json"
+  },
+  {
+   "index": 248,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/248.json"
+  },
+  {
+   "index": 249,
+   "type": "MaterialTechniqueSet",
+   "name": "dof_downsample",
+   "file": "assets/MaterialTechniqueSet/dof_downsample.json"
+  },
+  {
+   "index": 250,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/250.json"
+  },
+  {
+   "index": 251,
+   "type": "MaterialTechniqueSet",
+   "name": "dof_downsample_nv_intz",
+   "file": "assets/MaterialTechniqueSet/dof_downsample_nv_intz.json"
+  },
+  {
+   "index": 252,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/252.json"
+  },
+  {
+   "index": 253,
+   "type": "MaterialTechniqueSet",
+   "name": "dof_near_coc",
+   "file": "assets/MaterialTechniqueSet/dof_near_coc.json"
+  },
+  {
+   "index": 254,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/254.json"
+  },
+  {
+   "index": 255,
+   "type": "MaterialTechniqueSet",
+   "name": "small_blur",
+   "file": "assets/MaterialTechniqueSet/small_blur.json"
+  },
+  {
+   "index": 256,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/256.json"
+  },
+  {
+   "index": 257,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter1",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter1.json"
+  },
+  {
+   "index": 258,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/258.json"
+  },
+  {
+   "index": 259,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter2",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter2.json"
+  },
+  {
+   "index": 260,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/260.json"
+  },
+  {
+   "index": 261,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter3",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter3.json"
+  },
+  {
+   "index": 262,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/262.json"
+  },
+  {
+   "index": 263,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter4",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter4.json"
+  },
+  {
+   "index": 264,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/264.json"
+  },
+  {
+   "index": 265,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter5",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter5.json"
+  },
+  {
+   "index": 266,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/266.json"
+  },
+  {
+   "index": 267,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter6",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter6.json"
+  },
+  {
+   "index": 268,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/268.json"
+  },
+  {
+   "index": 269,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter7",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter7.json"
+  },
+  {
+   "index": 270,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/270.json"
+  },
+  {
+   "index": 271,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurfilter8",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter8.json"
+  },
+  {
+   "index": 272,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/272.json"
+  },
+  {
+   "index": 273,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurframebased",
+   "file": "assets/MaterialTechniqueSet/motionblurframebased.json"
+  },
+  {
+   "index": 274,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/274.json"
+  },
+  {
+   "index": 275,
+   "type": "MaterialTechniqueSet",
+   "name": "motionblurradial",
+   "file": "assets/MaterialTechniqueSet/motionblurradial.json"
+  },
+  {
+   "index": 276,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/276.json"
+  },
+  {
+   "index": 277,
+   "type": "MaterialTechniqueSet",
+   "name": "flamethrowerfx_color_distort_overlay_bloom",
+   "file": "assets/MaterialTechniqueSet/flamethrowerfx_color_distort_overlay_bloom.json"
+  },
+  {
+   "index": 278,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/278.json"
+  },
+  {
+   "index": 279,
+   "type": "MaterialTechniqueSet",
+   "name": "watersheeting_color_distort_blur",
+   "file": "assets/MaterialTechniqueSet/watersheeting_color_distort_blur.json"
+  },
+  {
+   "index": 280,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/280.json"
+  },
+  {
+   "index": 281,
+   "type": "MaterialTechniqueSet",
+   "name": "revivefx",
+   "file": "assets/MaterialTechniqueSet/revivefx.json"
+  },
+  {
+   "index": 282,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/282.json"
+  },
+  {
+   "index": 283,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_dof",
+   "file": "assets/MaterialTechniqueSet/postfx_dof.json"
+  },
+  {
+   "index": 284,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/284.json"
+  },
+  {
+   "index": 285,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_dof_nv_intz",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_nv_intz.json"
+  },
+  {
+   "index": 286,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/286.json"
+  },
+  {
+   "index": 287,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_dof_color",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_color.json"
+  },
+  {
+   "index": 288,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/288.json"
+  },
+  {
+   "index": 289,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_dof_color_nv_intz",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_color_nv_intz.json"
+  },
+  {
+   "index": 290,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/290.json"
+  },
+  {
+   "index": 291,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx_color",
+   "file": "assets/MaterialTechniqueSet/postfx_color.json"
+  },
+  {
+   "index": 292,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/292.json"
+  },
+  {
+   "index": 293,
+   "type": "MaterialTechniqueSet",
+   "name": "postfx",
+   "file": "assets/MaterialTechniqueSet/postfx.json"
+  },
+  {
+   "index": 294,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/294.json"
+  },
+  {
+   "index": 295,
+   "type": "MaterialTechniqueSet",
+   "name": "glow_consistent_setup",
+   "file": "assets/MaterialTechniqueSet/glow_consistent_setup.json"
+  },
+  {
+   "index": 296,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/296.json"
+  },
+  {
+   "index": 297,
+   "type": "MaterialTechniqueSet",
+   "name": "glow_apply_bloom",
+   "file": "assets/MaterialTechniqueSet/glow_apply_bloom.json"
+  },
+  {
+   "index": 298,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/298.json"
+  },
+  {
+   "index": 299,
+   "type": "MaterialTechniqueSet",
+   "name": "glow_godrays",
+   "file": "assets/MaterialTechniqueSet/glow_godrays.json"
+  },
+  {
+   "index": 300,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/300.json"
+  },
+  {
+   "index": 301,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_1",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_1.json"
+  },
+  {
+   "index": 302,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/302.json"
+  },
+  {
+   "index": 303,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_2",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_2.json"
+  },
+  {
+   "index": 304,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/304.json"
+  },
+  {
+   "index": 305,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_3",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_3.json"
+  },
+  {
+   "index": 306,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/306.json"
+  },
+  {
+   "index": 307,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_4",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_4.json"
+  },
+  {
+   "index": 308,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/308.json"
+  },
+  {
+   "index": 309,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_5",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_5.json"
+  },
+  {
+   "index": 310,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/310.json"
+  },
+  {
+   "index": 311,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_6",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_6.json"
+  },
+  {
+   "index": 312,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/312.json"
+  },
+  {
+   "index": 313,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_7",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_7.json"
+  },
+  {
+   "index": 314,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/314.json"
+  },
+  {
+   "index": 315,
+   "type": "MaterialTechniqueSet",
+   "name": "filter_symmetric_8",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_8.json"
+  },
+  {
+   "index": 316,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/316.json"
+  },
+  {
+   "index": 317,
+   "type": "MaterialTechniqueSet",
+   "name": "pixel_cost_add",
+   "file": "assets/MaterialTechniqueSet/pixel_cost_add.json"
+  },
+  {
+   "index": 318,
+   "type": "Material",
+   "name": "pixel_cost_add_depth_always",
+   "file": "assets/Material/pixel_cost_add_depth_always.json"
+  },
+  {
+   "index": 319,
+   "type": "Material",
+   "name": "pixel_cost_add_depth_disable",
+   "file": "assets/Material/pixel_cost_add_depth_disable.json"
+  },
+  {
+   "index": 320,
+   "type": "Material",
+   "name": "pixel_cost_add_depth_equal",
+   "file": "assets/Material/pixel_cost_add_depth_equal.json"
+  },
+  {
+   "index": 321,
+   "type": "Material",
+   "name": "pixel_cost_add_depth_less",
+   "file": "assets/Material/pixel_cost_add_depth_less.json"
+  },
+  {
+   "index": 322,
+   "type": "Material",
+   "name": "pixel_cost_add_depthwrite",
+   "file": "assets/Material/pixel_cost_add_depthwrite.json"
+  },
+  {
+   "index": 323,
+   "type": "Material",
+   "name": "pixel_cost_add_nodepthwrite",
+   "file": "assets/Material/pixel_cost_add_nodepthwrite.json"
+  },
+  {
+   "index": 324,
+   "type": "MaterialTechniqueSet",
+   "name": "pixel_cost_color_code",
+   "file": "assets/MaterialTechniqueSet/pixel_cost_color_code.json"
+  },
+  {
+   "index": 325,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/325.json"
+  },
+  {
+   "index": 326,
+   "type": "Material",
+   "name": "statmon_warning_tris",
+   "file": "assets/Material/statmon_warning_tris.json"
+  },
+  {
+   "index": 327,
+   "type": "MaterialTechniqueSet",
+   "name": "poison",
+   "file": "assets/MaterialTechniqueSet/poison.json"
+  },
+  {
+   "index": 328,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/328.json"
+  },
+  {
+   "index": 329,
+   "type": "Material",
+   "name": "logo",
+   "file": "assets/Material/logo.json"
+  },
+  {
+   "index": 330,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_hero",
+   "file": "assets/MaterialTechniqueSet/effect_hero.json"
+  },
+  {
+   "index": 331,
+   "type": "Material",
+   "name": "infrared_white",
+   "file": "assets/Material/infrared_white.json"
+  },
+  {
+   "index": 332,
+   "type": "Font_s",
+   "name": null,
+   "file": "assets/Font_s/_unnamed/332.json"
+  },
+  {
+   "index": 333,
+   "type": "Material",
+   "name": "console",
+   "file": "assets/Material/console.json"
+  },
+  {
+   "index": 334,
+   "type": "Material",
+   "name": "spinner_wedge",
+   "file": "assets/Material/spinner_wedge.json"
+  },
+  {
+   "index": 335,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/stats.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/stats.ddl.json"
+  },
+  {
+   "index": 336,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/stats_archive.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/stats_archive.ddl.json"
+  },
+  {
+   "index": 337,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/player.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/player.ddl.json"
+  },
+  {
+   "index": 338,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/match_record.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/match_record.ddl.json"
+  },
+  {
+   "index": 339,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/file_share.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/file_share.ddl.json"
+  },
+  {
+   "index": 340,
+   "type": "ddlRoot_t",
+   "name": "ddl_mp/file_share_public.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/file_share_public.ddl.json"
+  },
+  {
+   "index": 341,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/_gametypes.txt",
+   "file": "rawfiles/maps/mp/gametypes/_gametypes.txt"
+  },
+  {
+   "index": 342,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/dm.txt",
+   "file": "rawfiles/maps/mp/gametypes/dm.txt"
+  },
+  {
+   "index": 343,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/dom.txt",
+   "file": "rawfiles/maps/mp/gametypes/dom.txt"
+  },
+  {
+   "index": 344,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/ctf.txt",
+   "file": "rawfiles/maps/mp/gametypes/ctf.txt"
+  },
+  {
+   "index": 345,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/sd.txt",
+   "file": "rawfiles/maps/mp/gametypes/sd.txt"
+  },
+  {
+   "index": 346,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/sab.txt",
+   "file": "rawfiles/maps/mp/gametypes/sab.txt"
+  },
+  {
+   "index": 347,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/tdm.txt",
+   "file": "rawfiles/maps/mp/gametypes/tdm.txt"
+  },
+  {
+   "index": 348,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/koth.txt",
+   "file": "rawfiles/maps/mp/gametypes/koth.txt"
+  },
+  {
+   "index": 349,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/twar.txt",
+   "file": "rawfiles/maps/mp/gametypes/twar.txt"
+  },
+  {
+   "index": 350,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/sur.txt",
+   "file": "rawfiles/maps/mp/gametypes/sur.txt"
+  },
+  {
+   "index": 351,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/vdm.txt",
+   "file": "rawfiles/maps/mp/gametypes/vdm.txt"
+  },
+  {
+   "index": 352,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/vtdm.txt",
+   "file": "rawfiles/maps/mp/gametypes/vtdm.txt"
+  },
+  {
+   "index": 353,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/mini.txt",
+   "file": "rawfiles/maps/mp/gametypes/mini.txt"
+  },
+  {
+   "index": 354,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/dem.txt",
+   "file": "rawfiles/maps/mp/gametypes/dem.txt"
+  },
+  {
+   "index": 355,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/oic.txt",
+   "file": "rawfiles/maps/mp/gametypes/oic.txt"
+  },
+  {
+   "index": 356,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/rps.txt",
+   "file": "rawfiles/maps/mp/gametypes/rps.txt"
+  },
+  {
+   "index": 357,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/wkh.txt",
+   "file": "rawfiles/maps/mp/gametypes/wkh.txt"
+  },
+  {
+   "index": 358,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/cp.txt",
+   "file": "rawfiles/maps/mp/gametypes/cp.txt"
+  },
+  {
+   "index": 359,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/rcrace.txt",
+   "file": "rawfiles/maps/mp/gametypes/rcrace.txt"
+  },
+  {
+   "index": 360,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/nvc.txt",
+   "file": "rawfiles/maps/mp/gametypes/nvc.txt"
+  },
+  {
+   "index": 361,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/wdom.txt",
+   "file": "rawfiles/maps/mp/gametypes/wdom.txt"
+  },
+  {
+   "index": 362,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/hlnd.txt",
+   "file": "rawfiles/maps/mp/gametypes/hlnd.txt"
+  },
+  {
+   "index": 363,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/gun.txt",
+   "file": "rawfiles/maps/mp/gametypes/gun.txt"
+  },
+  {
+   "index": 364,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/shrp.txt",
+   "file": "rawfiles/maps/mp/gametypes/shrp.txt"
+  },
+  {
+   "index": 365,
+   "type": "RawFile",
+   "name": "mp/mpmaps.arena",
+   "file": "rawfiles/mp/mpmaps.arena"
+  },
+  {
+   "index": 366,
+   "type": "Material",
+   "name": "ui_scrollbar",
+   "file": "assets/Material/ui_scrollbar.json"
+  },
+  {
+   "index": 367,
+   "type": "Material",
+   "name": "ui_scrollbar_arrow_dwn_a",
+   "file": "assets/Material/ui_scrollbar_arrow_dwn_a.json"
+  },
+  {
+   "index": 368,
+   "type": "Material",
+   "name": "ui_scrollbar_arrow_up_a",
+   "file": "assets/Material/ui_scrollbar_arrow_up_a.json"
+  },
+  {
+   "index": 369,
+   "type": "Material",
+   "name": "ui_scrollbar_arrow_left",
+   "file": "assets/Material/ui_scrollbar_arrow_left.json"
+  },
+  {
+   "index": 370,
+   "type": "Material",
+   "name": "ui_scrollbar_arrow_right",
+   "file": "assets/Material/ui_scrollbar_arrow_right.json"
+  },
+  {
+   "index": 371,
+   "type": "Material",
+   "name": "ui_scrollbar_thumb",
+   "file": "assets/Material/ui_scrollbar_thumb.json"
+  },
+  {
+   "index": 372,
+   "type": "Material",
+   "name": "ui_slider2",
+   "file": "assets/Material/ui_slider2.json"
+  },
+  {
+   "index": 373,
+   "type": "Material",
+   "name": "ui_sliderbutt_1",
+   "file": "assets/Material/ui_sliderbutt_1.json"
+  },
+  {
+   "index": 374,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_line_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_line_transparent.json"
+  },
+  {
+   "index": 375,
+   "type": "Material",
+   "name": "ui_line",
+   "file": "assets/Material/ui_line.json"
+  },
+  {
+   "index": 376,
+   "type": "Material",
+   "name": "nottalkingicon",
+   "file": "assets/Material/nottalkingicon.json"
+  },
+  {
+   "index": 377,
+   "type": "Material",
+   "name": "talkingicon",
+   "file": "assets/Material/talkingicon.json"
+  },
+  {
+   "index": 378,
+   "type": "Material",
+   "name": "ui_cursor",
+   "file": "assets/Material/ui_cursor.json"
+  },
+  {
+   "index": 379,
+   "type": "Material",
+   "name": "voice_off",
+   "file": "assets/Material/voice_off.json"
+  },
+  {
+   "index": 380,
+   "type": "Material",
+   "name": "debug_sphere_exterior",
+   "file": "assets/Material/debug_sphere_exterior.json"
+  },
+  {
+   "index": 381,
+   "type": "Material",
+   "name": "debug_sphere_interior",
+   "file": "assets/Material/debug_sphere_interior.json"
+  },
+  {
+   "index": 382,
+   "type": "Material",
+   "name": "menu_mp_killstreak_select",
+   "file": "assets/Material/menu_mp_killstreak_select.json"
+  },
+  {
+   "index": 383,
+   "type": "Material",
+   "name": "ui_arrow_rotation_left",
+   "file": "assets/Material/ui_arrow_rotation_left.json"
+  },
+  {
+   "index": 384,
+   "type": "Material",
+   "name": "ui_arrow_rotation_right",
+   "file": "assets/Material/ui_arrow_rotation_right.json"
+  },
+  {
+   "index": 385,
+   "type": "Material",
+   "name": "code_warning_file",
+   "file": "assets/Material/code_warning_file.json"
+  },
+  {
+   "index": 386,
+   "type": "Material",
+   "name": "code_warning_fps",
+   "file": "assets/Material/code_warning_fps.json"
+  },
+  {
+   "index": 387,
+   "type": "Material",
+   "name": "code_warning_bandwidth",
+   "file": "assets/Material/code_warning_bandwidth.json"
+  },
+  {
+   "index": 388,
+   "type": "Material",
+   "name": "code_warning_bandwidthlimited",
+   "file": "assets/Material/code_warning_bandwidthlimited.json"
+  },
+  {
+   "index": 389,
+   "type": "Material",
+   "name": "code_warning_scripterrors",
+   "file": "assets/Material/code_warning_scripterrors.json"
+  },
+  {
+   "index": 390,
+   "type": "Material",
+   "name": "code_warning_gamestate",
+   "file": "assets/Material/code_warning_gamestate.json"
+  },
+  {
+   "index": 391,
+   "type": "Material",
+   "name": "gradient",
+   "file": "assets/Material/gradient.json"
+  },
+  {
+   "index": 392,
+   "type": "Material",
+   "name": "whitetransparent",
+   "file": "assets/Material/whitetransparent.json"
+  },
+  {
+   "index": 393,
+   "type": "Material",
+   "name": "line_horizontal",
+   "file": "assets/Material/line_horizontal.json"
+  },
+  {
+   "index": 394,
+   "type": "Material",
+   "name": "gradient_top",
+   "file": "assets/Material/gradient_top.json"
+  },
+  {
+   "index": 395,
+   "type": "Material",
+   "name": "gradient_bottom",
+   "file": "assets/Material/gradient_bottom.json"
+  },
+  {
+   "index": 396,
+   "type": "Material",
+   "name": "ui_host",
+   "file": "assets/Material/ui_host.json"
+  },
+  {
+   "index": 397,
+   "type": "StringTable",
+   "name": "mp/mapstable.csv",
+   "file": "assets/StringTable/mp/mapstable.csv.json"
+  },
+  {
+   "index": 398,
+   "type": "StringTable",
+   "name": "mp/tickerweights.csv",
+   "file": "assets/StringTable/mp/tickerweights.csv.json"
+  },
+  {
+   "index": 399,
+   "type": "StringTable",
+   "name": "mp/rankicontable.csv",
+   "file": "assets/StringTable/mp/rankicontable.csv.json"
+  },
+  {
+   "index": 400,
+   "type": "StringTable",
+   "name": "mp/didyouknow.csv",
+   "file": "assets/StringTable/mp/didyouknow.csv.json"
+  },
+  {
+   "index": 401,
+   "type": "StringTable",
+   "name": "mp/didyouknow_wager.csv",
+   "file": "assets/StringTable/mp/didyouknow_wager.csv.json"
+  },
+  {
+   "index": 402,
+   "type": "StringTable",
+   "name": "mp/didyouknow_theater.csv",
+   "file": "assets/StringTable/mp/didyouknow_theater.csv.json"
+  },
+  {
+   "index": 403,
+   "type": "StringTable",
+   "name": "mp/statstable.csv",
+   "file": "assets/StringTable/mp/statstable.csv.json"
+  },
+  {
+   "index": 404,
+   "type": "StringTable",
+   "name": "mp/attachmenttable.csv",
+   "file": "assets/StringTable/mp/attachmenttable.csv.json"
+  },
+  {
+   "index": 405,
+   "type": "StringTable",
+   "name": "mp/weaponoptions.csv",
+   "file": "assets/StringTable/mp/weaponoptions.csv.json"
+  },
+  {
+   "index": 406,
+   "type": "StringTable",
+   "name": "mp/ranktable.csv",
+   "file": "assets/StringTable/mp/ranktable.csv.json"
+  },
+  {
+   "index": 407,
+   "type": "StringTable",
+   "name": "mp/attributestable.csv",
+   "file": "assets/StringTable/mp/attributestable.csv.json"
+  },
+  {
+   "index": 408,
+   "type": "StringTable",
+   "name": "mp/gametypestable.csv",
+   "file": "assets/StringTable/mp/gametypestable.csv.json"
+  },
+  {
+   "index": 409,
+   "type": "StringTable",
+   "name": "mp/filesharetags.csv",
+   "file": "assets/StringTable/mp/filesharetags.csv.json"
+  },
+  {
+   "index": 410,
+   "type": "StringTable",
+   "name": "mp/challengetable.csv",
+   "file": "assets/StringTable/mp/challengetable.csv.json"
+  },
+  {
+   "index": 411,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier1.csv",
+   "file": "assets/StringTable/mp/challengetable_tier1.csv.json"
+  },
+  {
+   "index": 412,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier2.csv",
+   "file": "assets/StringTable/mp/challengetable_tier2.csv.json"
+  },
+  {
+   "index": 413,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier3.csv",
+   "file": "assets/StringTable/mp/challengetable_tier3.csv.json"
+  },
+  {
+   "index": 414,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier4.csv",
+   "file": "assets/StringTable/mp/challengetable_tier4.csv.json"
+  },
+  {
+   "index": 415,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier5.csv",
+   "file": "assets/StringTable/mp/challengetable_tier5.csv.json"
+  },
+  {
+   "index": 416,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier6.csv",
+   "file": "assets/StringTable/mp/challengetable_tier6.csv.json"
+  },
+  {
+   "index": 417,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier7.csv",
+   "file": "assets/StringTable/mp/challengetable_tier7.csv.json"
+  },
+  {
+   "index": 418,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier8.csv",
+   "file": "assets/StringTable/mp/challengetable_tier8.csv.json"
+  },
+  {
+   "index": 419,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier9.csv",
+   "file": "assets/StringTable/mp/challengetable_tier9.csv.json"
+  },
+  {
+   "index": 420,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier10.csv",
+   "file": "assets/StringTable/mp/challengetable_tier10.csv.json"
+  },
+  {
+   "index": 421,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier11.csv",
+   "file": "assets/StringTable/mp/challengetable_tier11.csv.json"
+  },
+  {
+   "index": 422,
+   "type": "StringTable",
+   "name": "mp/challengetable_tier12.csv",
+   "file": "assets/StringTable/mp/challengetable_tier12.csv.json"
+  },
+  {
+   "index": 423,
+   "type": "StringTable",
+   "name": "mp/medaltable.csv",
+   "file": "assets/StringTable/mp/medaltable.csv.json"
+  },
+  {
+   "index": 424,
+   "type": "StringTable",
+   "name": "mp/wagercpmedaltable.csv",
+   "file": "assets/StringTable/mp/wagercpmedaltable.csv.json"
+  },
+  {
+   "index": 425,
+   "type": "StringTable",
+   "name": "mp/ui_viewer_camera.csv",
+   "file": "assets/StringTable/mp/ui_viewer_camera.csv.json"
+  },
+  {
+   "index": 426,
+   "type": "StringTable",
+   "name": "mp/bodyheadtable.csv",
+   "file": "assets/StringTable/mp/bodyheadtable.csv.json"
+  },
+  {
+   "index": 427,
+   "type": "StringTable",
+   "name": "mp/classbonustable.csv",
+   "file": "assets/StringTable/mp/classbonustable.csv.json"
+  },
+  {
+   "index": 428,
+   "type": "StringTable",
+   "name": "mp/statsmilestones1.csv",
+   "file": "assets/StringTable/mp/statsmilestones1.csv.json"
+  },
+  {
+   "index": 429,
+   "type": "StringTable",
+   "name": "mp/statsmilestones2.csv",
+   "file": "assets/StringTable/mp/statsmilestones2.csv.json"
+  },
+  {
+   "index": 430,
+   "type": "StringTable",
+   "name": "mp/statsmilestones3.csv",
+   "file": "assets/StringTable/mp/statsmilestones3.csv.json"
+  },
+  {
+   "index": 431,
+   "type": "StringTable",
+   "name": "mp/statsmilestones4.csv",
+   "file": "assets/StringTable/mp/statsmilestones4.csv.json"
+  },
+  {
+   "index": 432,
+   "type": "StringTable",
+   "name": "mp/personalbests.csv",
+   "file": "assets/StringTable/mp/personalbests.csv.json"
+  },
+  {
+   "index": 433,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/433.json"
+  },
+  {
+   "index": 434,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/434.json"
+  },
+  {
+   "index": 435,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/435.json"
+  },
+  {
+   "index": 436,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/436.json"
+  },
+  {
+   "index": 437,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/437.json"
+  },
+  {
+   "index": 438,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/438.json"
+  },
+  {
+   "index": 439,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/439.json"
+  },
+  {
+   "index": 440,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/440.json"
+  },
+  {
+   "index": 441,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/441.json"
+  },
+  {
+   "index": 442,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/442.json"
+  },
+  {
+   "index": 443,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/443.json"
+  },
+  {
+   "index": 444,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/444.json"
+  },
+  {
+   "index": 445,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/445.json"
+  },
+  {
+   "index": 446,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/446.json"
+  },
+  {
+   "index": 447,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/447.json"
+  },
+  {
+   "index": 448,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/448.json"
+  },
+  {
+   "index": 449,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/449.json"
+  },
+  {
+   "index": 450,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/450.json"
+  },
+  {
+   "index": 451,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/451.json"
+  },
+  {
+   "index": 452,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/452.json"
+  },
+  {
+   "index": 453,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/453.json"
+  },
+  {
+   "index": 454,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/454.json"
+  },
+  {
+   "index": 455,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/455.json"
+  },
+  {
+   "index": 456,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/456.json"
+  },
+  {
+   "index": 457,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/457.json"
+  },
+  {
+   "index": 458,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/458.json"
+  },
+  {
+   "index": 459,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/459.json"
+  },
+  {
+   "index": 460,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/460.json"
+  },
+  {
+   "index": 461,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/461.json"
+  },
+  {
+   "index": 462,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/462.json"
+  },
+  {
+   "index": 463,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/463.json"
+  },
+  {
+   "index": 464,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/464.json"
+  },
+  {
+   "index": 465,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/465.json"
+  },
+  {
+   "index": 466,
+   "type": "SndBank",
+   "name": "mpl_ui.all",
+   "file": "assets/SndBank/mpl_ui.all.json"
+  },
+  {
+   "index": 467,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/467.json"
+  },
+  {
+   "index": 468,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/468.json"
+  },
+  {
+   "index": 469,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/469.json"
+  },
+  {
+   "index": 470,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/470.json"
+  },
+  {
+   "index": 471,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/471.json"
+  },
+  {
+   "index": 472,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/472.json"
+  },
+  {
+   "index": 473,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/473.json"
+  },
+  {
+   "index": 474,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/474.json"
+  },
+  {
+   "index": 475,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/475.json"
+  },
+  {
+   "index": 476,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/476.json"
+  },
+  {
+   "index": 477,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/477.json"
+  },
+  {
+   "index": 478,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/478.json"
+  },
+  {
+   "index": 479,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/479.json"
+  },
+  {
+   "index": 480,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/480.json"
+  },
+  {
+   "index": 481,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/481.json"
+  },
+  {
+   "index": 482,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/482.json"
+  },
+  {
+   "index": 483,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/483.json"
+  },
+  {
+   "index": 484,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/484.json"
+  },
+  {
+   "index": 485,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/485.json"
+  },
+  {
+   "index": 486,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/486.json"
+  },
+  {
+   "index": 487,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/487.json"
+  },
+  {
+   "index": 488,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/488.json"
+  },
+  {
+   "index": 489,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/489.json"
+  },
+  {
+   "index": 490,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/490.json"
+  },
+  {
+   "index": 491,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/491.json"
+  },
+  {
+   "index": 492,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/492.json"
+  },
+  {
+   "index": 493,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/493.json"
+  },
+  {
+   "index": 494,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/494.json"
+  },
+  {
+   "index": 495,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/495.json"
+  },
+  {
+   "index": 496,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/496.json"
+  },
+  {
+   "index": 497,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/497.json"
+  },
+  {
+   "index": 498,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/498.json"
+  },
+  {
+   "index": 499,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/499.json"
+  },
+  {
+   "index": 500,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/500.json"
+  },
+  {
+   "index": 501,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/501.json"
+  },
+  {
+   "index": 502,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/502.json"
+  },
+  {
+   "index": 503,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/503.json"
+  },
+  {
+   "index": 504,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/504.json"
+  },
+  {
+   "index": 505,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/505.json"
+  },
+  {
+   "index": 506,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/506.json"
+  },
+  {
+   "index": 507,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/507.json"
+  },
+  {
+   "index": 508,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/508.json"
+  },
+  {
+   "index": 509,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/509.json"
+  },
+  {
+   "index": 510,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/510.json"
+  },
+  {
+   "index": 511,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/511.json"
+  },
+  {
+   "index": 512,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/512.json"
+  },
+  {
+   "index": 513,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/513.json"
+  },
+  {
+   "index": 514,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/514.json"
+  },
+  {
+   "index": 515,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/515.json"
+  },
+  {
+   "index": 516,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/516.json"
+  },
+  {
+   "index": 517,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/517.json"
+  },
+  {
+   "index": 518,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/518.json"
+  },
+  {
+   "index": 519,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/519.json"
+  },
+  {
+   "index": 520,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/520.json"
+  },
+  {
+   "index": 521,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/521.json"
+  },
+  {
+   "index": 522,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/522.json"
+  },
+  {
+   "index": 523,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/523.json"
+  },
+  {
+   "index": 524,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/524.json"
+  },
+  {
+   "index": 525,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/525.json"
+  },
+  {
+   "index": 526,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/526.json"
+  },
+  {
+   "index": 527,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/527.json"
+  },
+  {
+   "index": 528,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/528.json"
+  },
+  {
+   "index": 529,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/529.json"
+  },
+  {
+   "index": 530,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/530.json"
+  },
+  {
+   "index": 531,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/531.json"
+  },
+  {
+   "index": 532,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/532.json"
+  },
+  {
+   "index": 533,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/533.json"
+  },
+  {
+   "index": 534,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/534.json"
+  },
+  {
+   "index": 535,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/535.json"
+  },
+  {
+   "index": 536,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/536.json"
+  },
+  {
+   "index": 537,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/537.json"
+  },
+  {
+   "index": 538,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/538.json"
+  },
+  {
+   "index": 539,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/539.json"
+  },
+  {
+   "index": 540,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/540.json"
+  },
+  {
+   "index": 541,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/541.json"
+  },
+  {
+   "index": 542,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/542.json"
+  },
+  {
+   "index": 543,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/543.json"
+  },
+  {
+   "index": 544,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/544.json"
+  },
+  {
+   "index": 545,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/545.json"
+  },
+  {
+   "index": 546,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/546.json"
+  },
+  {
+   "index": 547,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/547.json"
+  },
+  {
+   "index": 548,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/548.json"
+  },
+  {
+   "index": 549,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/549.json"
+  },
+  {
+   "index": 550,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/550.json"
+  },
+  {
+   "index": 551,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/551.json"
+  },
+  {
+   "index": 552,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/552.json"
+  },
+  {
+   "index": 553,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/553.json"
+  },
+  {
+   "index": 554,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/554.json"
+  },
+  {
+   "index": 555,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/555.json"
+  },
+  {
+   "index": 556,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/556.json"
+  },
+  {
+   "index": 557,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/557.json"
+  },
+  {
+   "index": 558,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/558.json"
+  },
+  {
+   "index": 559,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/559.json"
+  },
+  {
+   "index": 560,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/560.json"
+  },
+  {
+   "index": 561,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/561.json"
+  },
+  {
+   "index": 562,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/562.json"
+  },
+  {
+   "index": 563,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/563.json"
+  },
+  {
+   "index": 564,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/564.json"
+  },
+  {
+   "index": 565,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/565.json"
+  },
+  {
+   "index": 566,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/566.json"
+  },
+  {
+   "index": 567,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/567.json"
+  },
+  {
+   "index": 568,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/568.json"
+  },
+  {
+   "index": 569,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/569.json"
+  },
+  {
+   "index": 570,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/570.json"
+  },
+  {
+   "index": 571,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/571.json"
+  },
+  {
+   "index": 572,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/572.json"
+  },
+  {
+   "index": 573,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/573.json"
+  },
+  {
+   "index": 574,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/574.json"
+  },
+  {
+   "index": 575,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/575.json"
+  },
+  {
+   "index": 576,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/576.json"
+  },
+  {
+   "index": 577,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/577.json"
+  },
+  {
+   "index": 578,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/578.json"
+  },
+  {
+   "index": 579,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/579.json"
+  },
+  {
+   "index": 580,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/580.json"
+  },
+  {
+   "index": 581,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/581.json"
+  },
+  {
+   "index": 582,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/582.json"
+  },
+  {
+   "index": 583,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/583.json"
+  },
+  {
+   "index": 584,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/584.json"
+  },
+  {
+   "index": 585,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/585.json"
+  },
+  {
+   "index": 586,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/586.json"
+  },
+  {
+   "index": 587,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/587.json"
+  },
+  {
+   "index": 588,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/588.json"
+  },
+  {
+   "index": 589,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/589.json"
+  },
+  {
+   "index": 590,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/590.json"
+  },
+  {
+   "index": 591,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/591.json"
+  },
+  {
+   "index": 592,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/592.json"
+  },
+  {
+   "index": 593,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/593.json"
+  },
+  {
+   "index": 594,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/594.json"
+  },
+  {
+   "index": 595,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/595.json"
+  },
+  {
+   "index": 596,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/596.json"
+  },
+  {
+   "index": 597,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/597.json"
+  },
+  {
+   "index": 598,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/598.json"
+  },
+  {
+   "index": 599,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/599.json"
+  },
+  {
+   "index": 600,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/600.json"
+  },
+  {
+   "index": 601,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/601.json"
+  },
+  {
+   "index": 602,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/602.json"
+  },
+  {
+   "index": 603,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/603.json"
+  },
+  {
+   "index": 604,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/604.json"
+  },
+  {
+   "index": 605,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/605.json"
+  },
+  {
+   "index": 606,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/606.json"
+  },
+  {
+   "index": 607,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/607.json"
+  },
+  {
+   "index": 608,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/608.json"
+  },
+  {
+   "index": 609,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/609.json"
+  },
+  {
+   "index": 610,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/610.json"
+  },
+  {
+   "index": 611,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/611.json"
+  },
+  {
+   "index": 612,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/612.json"
+  },
+  {
+   "index": 613,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/613.json"
+  },
+  {
+   "index": 614,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/614.json"
+  },
+  {
+   "index": 615,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/615.json"
+  },
+  {
+   "index": 616,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/616.json"
+  },
+  {
+   "index": 617,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/617.json"
+  },
+  {
+   "index": 618,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/618.json"
+  },
+  {
+   "index": 619,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/619.json"
+  },
+  {
+   "index": 620,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/620.json"
+  },
+  {
+   "index": 621,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/621.json"
+  },
+  {
+   "index": 622,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/622.json"
+  },
+  {
+   "index": 623,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/623.json"
+  },
+  {
+   "index": 624,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/624.json"
+  },
+  {
+   "index": 625,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/625.json"
+  },
+  {
+   "index": 626,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/626.json"
+  },
+  {
+   "index": 627,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/627.json"
+  },
+  {
+   "index": 628,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/628.json"
+  },
+  {
+   "index": 629,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/629.json"
+  },
+  {
+   "index": 630,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/630.json"
+  },
+  {
+   "index": 631,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/631.json"
+  },
+  {
+   "index": 632,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/632.json"
+  },
+  {
+   "index": 633,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/633.json"
+  },
+  {
+   "index": 634,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/634.json"
+  },
+  {
+   "index": 635,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/635.json"
+  },
+  {
+   "index": 636,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/636.json"
+  },
+  {
+   "index": 637,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/637.json"
+  },
+  {
+   "index": 638,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/638.json"
+  },
+  {
+   "index": 639,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/639.json"
+  },
+  {
+   "index": 640,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/640.json"
+  },
+  {
+   "index": 641,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/641.json"
+  },
+  {
+   "index": 642,
+   "type": "EmblemSet",
+   "name": null,
+   "file": "assets/EmblemSet/_unnamed/642.json"
+  },
+  {
+   "index": 643,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/643.json"
+  },
+  {
+   "index": 644,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/644.json"
+  },
+  {
+   "index": 645,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/645.json"
+  },
+  {
+   "index": 646,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/646.json"
+  },
+  {
+   "index": 647,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/647.json"
+  },
+  {
+   "index": 648,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/648.json"
+  },
+  {
+   "index": 649,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/649.json"
+  },
+  {
+   "index": 650,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/650.json"
+  },
+  {
+   "index": 651,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/651.json"
+  },
+  {
+   "index": 652,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/652.json"
+  },
+  {
+   "index": 653,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/653.json"
+  },
+  {
+   "index": 654,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/654.json"
+  },
+  {
+   "index": 655,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/655.json"
+  },
+  {
+   "index": 656,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/656.json"
+  },
+  {
+   "index": 657,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/657.json"
+  },
+  {
+   "index": 658,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/658.json"
+  },
+  {
+   "index": 659,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/659.json"
+  },
+  {
+   "index": 660,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/660.json"
+  },
+  {
+   "index": 661,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/661.json"
+  },
+  {
+   "index": 662,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/662.json"
+  },
+  {
+   "index": 663,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/663.json"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [
+    "viewmodel_default_ads_down",
+    "viewmodel_default_ads_up",
+    "viewmodel_default_fire",
+    "viewmodel_default_idle",
+    "viewmodel_default_pullout",
+    "viewmodel_default_putaway",
+    "void",
+    "void_loop"
+   ],
+   "references": []
+  },
+  "models": {
+   "names": [
+    "defaultactor",
+    "defaultvehicle",
+    "defaultweapon",
+    "fx_rifle_shell",
+    "fx_rifle_shell_blur",
+    "viewmodel_base_viewhands",
+    "viewmodel_default"
+   ],
+   "references": []
+  },
+  "weapons": {
+   "names": [
+    "defaultweapon_mp"
+   ],
+   "references": [],
+   "links": {
+    "defaultweapon_mp": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_default_ADS_down",
+      "viewmodel_default_ADS_up"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    }
+   }
+  }
+ }
+}
