@@ -48,9 +48,10 @@ SCRATCH_TYPES = {  # typedef'd leaf types: name -> (size, align)
 
 
 class Member:
-    __slots__ = ("name", "type_name", "ptr", "array", "offset", "size", "flex")
+    __slots__ = ("name", "type_name", "ptr", "array", "offset", "size", "flex", "elem_mult")
 
-    def __init__(self, name, type_name, ptr, array, offset, size, flex=False):
+    def __init__(self, name, type_name, ptr, array, offset, size, flex=False, elem_mult=1):
+        self.elem_mult = elem_mult
         self.name = name
         self.type_name = type_name
         self.ptr = ptr  # pointer depth: 0 = value, 1 = T*, 2 = T**
@@ -309,7 +310,8 @@ class HeaderParser:
                 off = 0
             else:
                 off = (offset + eal - 1) & ~(eal - 1)
-            mem = Member(mname, base, depth if is_ptr else 0, array, off, total, flex)
+            mem = Member(mname, base, depth if is_ptr else 0, array, off, total, flex,
+                         (tarr or 1) if is_ptr else 1)
             members.append(mem)
             if is_union:
                 offset = max(offset, total)
@@ -1062,6 +1064,7 @@ class T5Zone:
             vals[name] = ref
         else:
             esz, eal = self.hdr.type_size_align(tname)
+            esz *= m.elem_mult
             use_align = info["align"] or eal
             ref = self.alloc(block, use_align, RawArray(tname, count))
             ref.obj.data = self.read(esz * count, block=block, align=use_align)
