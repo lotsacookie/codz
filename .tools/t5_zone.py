@@ -504,6 +504,16 @@ class PendingRef:
         self.offset = offset
 
 
+class StructArray(list):
+    """Decoded embedded array of structs (e.g. PhysConstraints.data[16]).
+    String keys fall through to element 0 so older path lookups still work."""
+
+    def __getitem__(self, k):
+        if isinstance(k, str):
+            return list.__getitem__(self, 0)[k]
+        return list.__getitem__(self, k)
+
+
 class T5Zone:
     def __init__(self, path):
         raw = open(path, "rb").read()
@@ -819,15 +829,21 @@ class T5Zone:
             return
         if not m.ptr:
             # embedded struct: treat its own pointer members
-            if m.type_name in self.structs and isinstance(vals.get(name), dict):
+            if m.type_name in self.structs and isinstance(vals.get(name), (dict, StructArray)):
                 esd = self.structs[m.type_name]
                 edsl = self.struct_dsl(m.type_name)
                 if dsl is not None and dsl.has_use:
                     child_scopes = scopes + [(dsl, name)]
                 else:
                     child_scopes = [(d, f"{p}::{name}" if p else name) for d, p in scopes]
-                self.treat_members(esd, edsl, vals[name], ctx + [(m.type_name, vals[name])],
-                                   scopes=child_scopes)
+                els = vals[name] if isinstance(vals[name], StructArray) else [vals[name]]
+                for i, el in enumerate(els):
+                    self.ctx_trace.append(f"{m.type_name}[{i}]")
+                    try:
+                        self.treat_members(esd, edsl, el, ctx + [(m.type_name, el)],
+                                           scopes=child_scopes)
+                    finally:
+                        self.ctx_trace.pop()
             return
         pv = vals.get(name)
         if info["string"]:
@@ -1091,6 +1107,12 @@ class T5Zone:
             return v
         if m.type_name in self.structs:
             sub = self.structs[m.type_name]
+            if m.array and sub.size and len(chunk) >= 2 * sub.size:
+                # every element of an inline struct array is its own struct;
+                # decoding only the first left the others' string/pointer
+                # members untreated and shifted the rest of the zone stream
+                return StructArray(self.decode(sub, chunk[i * sub.size:(i + 1) * sub.size], None, m.type_name)
+                                   for i in range(len(chunk) // sub.size))
             return self.decode(sub, chunk, None, m.type_name)
         fmt = self.SCALAR_FMT.get(self.hdr.resolve(m.type_name) if self.hdr.resolve(m.type_name) in self.SCALAR_FMT else m.type_name)
         if fmt is None and m.type_name in self.enums:

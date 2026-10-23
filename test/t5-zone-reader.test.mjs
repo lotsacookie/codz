@@ -103,3 +103,23 @@ print(json.dumps({'decal': ev(decal, 3), 'sprite': ev(0, 3), 'single': ev(0, 1)}
   assert.equal(out.sprite, true);
   assert.equal(out.single, false);
 });
+
+test('inline struct arrays decode every element, so PhysConstraints.data[16] keeps all 16 entries', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+z = T5Zone.__new__(T5Zone)
+hp = HeaderParser(open(os.path.join(t5_zone.OAT, 'T5_Assets.h'), errors='ignore').read())
+z.structs = hp.structs; z.enums = hp.enums; z.hdr = hp
+sd = hp.structs['PhysConstraints']
+m = next(x for x in sd.members if x.name == 'data')
+el = hp.structs['PhysConstraint'].size
+raw = bytearray(el * 16)
+struct.pack_into('<I', raw, el * 2 + 0x14, 0xFFFFFFFF)  # entry 2 target_bone1 = FOLLOWING
+vals = z._decode_member(m, bytes(raw))
+print(json.dumps({'n': len(vals), 'e2': vals[2]['target_bone1'], 'e0': vals[0]['target_bone1'], 'first': vals['target_bone1']}))
+`);
+  assert.equal(out.n, 16);
+  assert.equal(out.e2, 0xFFFFFFFF);
+  assert.equal(out.e0, 0);
+  assert.equal(out.first, 0);
+});
