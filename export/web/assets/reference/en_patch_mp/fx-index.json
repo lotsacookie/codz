@@ -1,0 +1,24 @@
+{
+ "zone": "zone/english/en_patch_mp.ff",
+ "names": [
+  "FIREBASE",
+  "Firebase",
+  "Firebase.",
+  "MENU_MATCHMAKING_IMPACTED_DUE_TO_PARTY",
+  "MENU_PACKAGE_SELECTION_DESCRIPTION",
+  "MPUI_DESC_MAP_FIREBASE",
+  "MPUI_FIREBASE",
+  "MPUI_FIREBASE_CAPS",
+  "MPUI_FREE_MEMBERSHIP_CAPS",
+  "PLATFORM_STEAM_AUTH_DENIED",
+  "Select",
+  "Steam",
+  "explorers",
+  "firefights",
+  "firefights.",
+  "impact",
+  "members",
+  "membership",
+  "select"
+ ]
+}

@@ -1,0 +1,1741 @@
+{
+ "zone": "zone/english/en_patch_mp.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 22735,
+  "streamSize": 22735,
+  "percent": 100.0
+ },
+ "types": {
+  "LocalizeEntry": 283,
+  "RawFile": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "assets": [
+  {
+   "index": 0,
+   "type": "LocalizeEntry",
+   "name": "PATCH_NOMAD",
+   "file": "assets/LocalizeEntry/PATCH_NOMAD.json"
+  },
+  {
+   "index": 1,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SYSTEMLINK_WARNING",
+   "file": "assets/LocalizeEntry/PATCH_SYSTEMLINK_WARNING.json"
+  },
+  {
+   "index": 2,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SCRIPTS_OUT_OF_DATE",
+   "file": "assets/LocalizeEntry/PATCH_SCRIPTS_OUT_OF_DATE.json"
+  },
+  {
+   "index": 3,
+   "type": "LocalizeEntry",
+   "name": "PATCH_TEAM_ALTERNATE_COLOR",
+   "file": "assets/LocalizeEntry/PATCH_TEAM_ALTERNATE_COLOR.json"
+  },
+  {
+   "index": 4,
+   "type": "LocalizeEntry",
+   "name": "PATCH_WRONGNETCODE",
+   "file": "assets/LocalizeEntry/PATCH_WRONGNETCODE.json"
+  },
+  {
+   "index": 5,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SERVER_NAME_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_SERVER_NAME_CAPS.json"
+  },
+  {
+   "index": 6,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MAXIMUM_PLAYERS_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MAXIMUM_PLAYERS_CAPS.json"
+  },
+  {
+   "index": 7,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MINIMUM_PING_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MINIMUM_PING_CAPS.json"
+  },
+  {
+   "index": 8,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MAXIMUM_PING_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MAXIMUM_PING_CAPS.json"
+  },
+  {
+   "index": 9,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PASSWORD1_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_PASSWORD1_CAPS.json"
+  },
+  {
+   "index": 10,
+   "type": "LocalizeEntry",
+   "name": "PATCH_AUTOBALANCE_TEAMS_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_AUTOBALANCE_TEAMS_CAPS.json"
+  },
+  {
+   "index": 11,
+   "type": "LocalizeEntry",
+   "name": "PATCH_ALLOW_VOTING_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_ALLOW_VOTING_CAPS.json"
+  },
+  {
+   "index": 12,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PREGAME_ENABLED_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_PREGAME_ENABLED_CAPS.json"
+  },
+  {
+   "index": 13,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PREGAME_MINPLAYERS_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_PREGAME_MINPLAYERS_CAPS.json"
+  },
+  {
+   "index": 14,
+   "type": "LocalizeEntry",
+   "name": "PATCH_TOGGLE_COMPARE_FRIENDS",
+   "file": "assets/LocalizeEntry/PATCH_TOGGLE_COMPARE_FRIENDS.json"
+  },
+  {
+   "index": 15,
+   "type": "LocalizeEntry",
+   "name": "PATCH_GAME_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_GAME_CAPS.json"
+  },
+  {
+   "index": 16,
+   "type": "LocalizeEntry",
+   "name": "PATCH_COOPERATIVE_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_COOPERATIVE_CAPS.json"
+  },
+  {
+   "index": 17,
+   "type": "LocalizeEntry",
+   "name": "PATCH_LAPTOP_OR_SMALL_SPEAKERS_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_LAPTOP_OR_SMALL_SPEAKERS_CAPS.json"
+  },
+  {
+   "index": 18,
+   "type": "LocalizeEntry",
+   "name": "PATCH_RESTORE_CONTROLS",
+   "file": "assets/LocalizeEntry/PATCH_RESTORE_CONTROLS.json"
+  },
+  {
+   "index": 19,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SERVER_NAME_DESC",
+   "file": "assets/LocalizeEntry/PATCH_SERVER_NAME_DESC.json"
+  },
+  {
+   "index": 20,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MINIMUM_PING_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MINIMUM_PING_DESC.json"
+  },
+  {
+   "index": 21,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MAXIMUM_PING_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MAXIMUM_PING_DESC.json"
+  },
+  {
+   "index": 22,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PASSWORD_DESC",
+   "file": "assets/LocalizeEntry/PATCH_PASSWORD_DESC.json"
+  },
+  {
+   "index": 23,
+   "type": "LocalizeEntry",
+   "name": "PATCH_VOICECHAT_DESC",
+   "file": "assets/LocalizeEntry/PATCH_VOICECHAT_DESC.json"
+  },
+  {
+   "index": 24,
+   "type": "LocalizeEntry",
+   "name": "PATCH_AUTO_BALANCE_DESC",
+   "file": "assets/LocalizeEntry/PATCH_AUTO_BALANCE_DESC.json"
+  },
+  {
+   "index": 25,
+   "type": "LocalizeEntry",
+   "name": "PATCH_ALLOW_VOTING_DESC",
+   "file": "assets/LocalizeEntry/PATCH_ALLOW_VOTING_DESC.json"
+  },
+  {
+   "index": 26,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PRE_MATCH_DESC",
+   "file": "assets/LocalizeEntry/PATCH_PRE_MATCH_DESC.json"
+  },
+  {
+   "index": 27,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MINIMUM_PLAYERS_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MINIMUM_PLAYERS_DESC.json"
+  },
+  {
+   "index": 28,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MAXIMUM_PLAYERS_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MAXIMUM_PLAYERS_DESC.json"
+  },
+  {
+   "index": 29,
+   "type": "LocalizeEntry",
+   "name": "PATCH_VALVE_ANTI_CHEAT_DESC",
+   "file": "assets/LocalizeEntry/PATCH_VALVE_ANTI_CHEAT_DESC.json"
+  },
+  {
+   "index": 30,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SCREENSHOT_PAN",
+   "file": "assets/LocalizeEntry/PATCH_SCREENSHOT_PAN.json"
+  },
+  {
+   "index": 31,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SCREENSHOT_ZOOM",
+   "file": "assets/LocalizeEntry/PATCH_SCREENSHOT_ZOOM.json"
+  },
+  {
+   "index": 32,
+   "type": "LocalizeEntry",
+   "name": "PATCH_CONNECTING_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_CONNECTING_CAPS.json"
+  },
+  {
+   "index": 33,
+   "type": "LocalizeEntry",
+   "name": "PATCH_BANNED_FROM_SERVER",
+   "file": "assets/LocalizeEntry/PATCH_BANNED_FROM_SERVER.json"
+  },
+  {
+   "index": 34,
+   "type": "LocalizeEntry",
+   "name": "PATCH_NO_INVITES",
+   "file": "assets/LocalizeEntry/PATCH_NO_INVITES.json"
+  },
+  {
+   "index": 35,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_CHANGE_CAMERA",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_CHANGE_CAMERA.json"
+  },
+  {
+   "index": 36,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_TOGGLE_HUD",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_TOGGLE_HUD.json"
+  },
+  {
+   "index": 37,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_TOGGLE_CONTROLS_HUD",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_TOGGLE_CONTROLS_HUD.json"
+  },
+  {
+   "index": 38,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_SKIPBACK",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_SKIPBACK.json"
+  },
+  {
+   "index": 39,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_SKIPFOWARD",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_SKIPFOWARD.json"
+  },
+  {
+   "index": 40,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_SPEED_DOWN",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_SPEED_DOWN.json"
+  },
+  {
+   "index": 41,
+   "type": "LocalizeEntry",
+   "name": "PATCH_DEMO_SPEED_UP",
+   "file": "assets/LocalizeEntry/PATCH_DEMO_SPEED_UP.json"
+  },
+  {
+   "index": 42,
+   "type": "LocalizeEntry",
+   "name": "PATCH_BAD_STATS",
+   "file": "assets/LocalizeEntry/PATCH_BAD_STATS.json"
+  },
+  {
+   "index": 43,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PLAYLISTISOLD",
+   "file": "assets/LocalizeEntry/PATCH_PLAYLISTISOLD.json"
+  },
+  {
+   "index": 44,
+   "type": "LocalizeEntry",
+   "name": "PATCH_PLAYLISTISNEW",
+   "file": "assets/LocalizeEntry/PATCH_PLAYLISTISNEW.json"
+  },
+  {
+   "index": 45,
+   "type": "LocalizeEntry",
+   "name": "PATCH_EXE_KICKRESERVEDSLOT",
+   "file": "assets/LocalizeEntry/PATCH_EXE_KICKRESERVEDSLOT.json"
+  },
+  {
+   "index": 46,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_CANNOT_JOIN_TEAM",
+   "file": "assets/LocalizeEntry/PATCH_MP_CANNOT_JOIN_TEAM.json"
+  },
+  {
+   "index": 47,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAM_UP_PERIOD",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAM_UP_PERIOD.json"
+  },
+  {
+   "index": 48,
+   "type": "LocalizeEntry",
+   "name": "PATCH_SHADER_WARMING",
+   "file": "assets/LocalizeEntry/PATCH_SHADER_WARMING.json"
+  },
+  {
+   "index": 49,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MENU_OPTION_SHADERWARMING_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MENU_OPTION_SHADERWARMING_CAPS.json"
+  },
+  {
+   "index": 50,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_ALLOW_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_ALLOW_CAPS.json"
+  },
+  {
+   "index": 51,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_ALLOW_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_ALLOW_DESC.json"
+  },
+  {
+   "index": 52,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_KEEPBALANCED_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_KEEPBALANCED_CAPS.json"
+  },
+  {
+   "index": 53,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_KEEPBALANCED_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_KEEPBALANCED_DESC.json"
+  },
+  {
+   "index": 54,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_GRACEPERIOD_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_GRACEPERIOD_CAPS.json"
+  },
+  {
+   "index": 55,
+   "type": "LocalizeEntry",
+   "name": "PATCH_MP_TEAMCHANGE_GRACEPERIOD_DESC",
+   "file": "assets/LocalizeEntry/PATCH_MP_TEAMCHANGE_GRACEPERIOD_DESC.json"
+  },
+  {
+   "index": 56,
+   "type": "LocalizeEntry",
+   "name": "PATCH_OPTIONS_COLOR_FRIENDS_CAPS",
+   "file": "assets/LocalizeEntry/PATCH_OPTIONS_COLOR_FRIENDS_CAPS.json"
+  },
+  {
+   "index": 57,
+   "type": "LocalizeEntry",
+   "name": "PATCH_LOADMOD_DEMO",
+   "file": "assets/LocalizeEntry/PATCH_LOADMOD_DEMO.json"
+  },
+  {
+   "index": 58,
+   "type": "LocalizeEntry",
+   "name": "PATCH_LOADMOD_FILM",
+   "file": "assets/LocalizeEntry/PATCH_LOADMOD_FILM.json"
+  },
+  {
+   "index": 59,
+   "type": "LocalizeEntry",
+   "name": "PATCH_UNLOADMOD_DEMO",
+   "file": "assets/LocalizeEntry/PATCH_UNLOADMOD_DEMO.json"
+  },
+  {
+   "index": 60,
+   "type": "LocalizeEntry",
+   "name": "PATCH_UNLOADMOD_FILM",
+   "file": "assets/LocalizeEntry/PATCH_UNLOADMOD_FILM.json"
+  },
+  {
+   "index": 61,
+   "type": "LocalizeEntry",
+   "name": "CUSTOM_RADAR_ALWAYS_ON",
+   "file": "assets/LocalizeEntry/CUSTOM_RADAR_ALWAYS_ON.json"
+  },
+  {
+   "index": 62,
+   "type": "LocalizeEntry",
+   "name": "CUSTOM_RADAR_ALWAYS_ON_DESC",
+   "file": "assets/LocalizeEntry/CUSTOM_RADAR_ALWAYS_ON_DESC.json"
+  },
+  {
+   "index": 63,
+   "type": "LocalizeEntry",
+   "name": "CUSTOM_PRE_MATCH_TIMER_CAPS",
+   "file": "assets/LocalizeEntry/CUSTOM_PRE_MATCH_TIMER_CAPS.json"
+  },
+  {
+   "index": 64,
+   "type": "LocalizeEntry",
+   "name": "CUSTOM_PRE_MATCH_TIMER_DESC",
+   "file": "assets/LocalizeEntry/CUSTOM_PRE_MATCH_TIMER_DESC.json"
+  },
+  {
+   "index": 65,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_TEMP_BAN_HOURS",
+   "file": "assets/LocalizeEntry/EXE_COD_TEMP_BAN_HOURS.json"
+  },
+  {
+   "index": 66,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_TEMP_BAN_DAYS",
+   "file": "assets/LocalizeEntry/EXE_COD_TEMP_BAN_DAYS.json"
+  },
+  {
+   "index": 67,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_ONLINE_PERM_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_ONLINE_PERM_BAN_CONSOLE.json"
+  },
+  {
+   "index": 68,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_ONLINE_TEMP_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_ONLINE_TEMP_BAN_CONSOLE.json"
+  },
+  {
+   "index": 69,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_FEATURE_PERM_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_FEATURE_PERM_BAN_CONSOLE.json"
+  },
+  {
+   "index": 70,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_FEATURE_TEMP_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_FEATURE_TEMP_BAN_CONSOLE.json"
+  },
+  {
+   "index": 71,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_PIRACY_PERM_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_PIRACY_PERM_BAN_PLAYER.json"
+  },
+  {
+   "index": 72,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_PIRACY_TEMP_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_PIRACY_TEMP_BAN_PLAYER.json"
+  },
+  {
+   "index": 73,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_ONLINE_PERM_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_ONLINE_PERM_BAN_PLAYER.json"
+  },
+  {
+   "index": 74,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_ONLINE_TEMP_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_ONLINE_TEMP_BAN_PLAYER.json"
+  },
+  {
+   "index": 75,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_FEATURE_PERM_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_FEATURE_PERM_BAN_PLAYER.json"
+  },
+  {
+   "index": 76,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_FEATURE_TEMP_BAN_PLAYER",
+   "file": "assets/LocalizeEntry/EXE_COD_FEATURE_TEMP_BAN_PLAYER.json"
+  },
+  {
+   "index": 77,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_LEADERBOARD_WRITE_BAN",
+   "file": "assets/LocalizeEntry/EXE_COD_LEADERBOARD_WRITE_BAN.json"
+  },
+  {
+   "index": 78,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_BOOSTER_RESET",
+   "file": "assets/LocalizeEntry/EXE_COD_BOOSTER_RESET.json"
+  },
+  {
+   "index": 79,
+   "type": "LocalizeEntry",
+   "name": "EXE_SV_INFO_SCORE",
+   "file": "assets/LocalizeEntry/EXE_SV_INFO_SCORE.json"
+  },
+  {
+   "index": 80,
+   "type": "LocalizeEntry",
+   "name": "EXE_SV_INFO_PING",
+   "file": "assets/LocalizeEntry/EXE_SV_INFO_PING.json"
+  },
+  {
+   "index": 81,
+   "type": "LocalizeEntry",
+   "name": "EXE_SV_INFO_NAME",
+   "file": "assets/LocalizeEntry/EXE_SV_INFO_NAME.json"
+  },
+  {
+   "index": 82,
+   "type": "LocalizeEntry",
+   "name": "EXE_INVALID_GAMERTAG",
+   "file": "assets/LocalizeEntry/EXE_INVALID_GAMERTAG.json"
+  },
+  {
+   "index": 83,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_PIRACY_TEMP_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_PIRACY_TEMP_BAN_CONSOLE.json"
+  },
+  {
+   "index": 84,
+   "type": "LocalizeEntry",
+   "name": "EXE_COD_PIRACY_PERM_BAN_CONSOLE",
+   "file": "assets/LocalizeEntry/EXE_COD_PIRACY_PERM_BAN_CONSOLE.json"
+  },
+  {
+   "index": 85,
+   "type": "LocalizeEntry",
+   "name": "EXE_DOWNLOADSFULL",
+   "file": "assets/LocalizeEntry/EXE_DOWNLOADSFULL.json"
+  },
+  {
+   "index": 86,
+   "type": "LocalizeEntry",
+   "name": "MENU_TESTINGBANDWIDTH",
+   "file": "assets/LocalizeEntry/MENU_TESTINGBANDWIDTH.json"
+  },
+  {
+   "index": 87,
+   "type": "LocalizeEntry",
+   "name": "MENU_DOWNLOADING_GAME_SETTINGS_CAPS",
+   "file": "assets/LocalizeEntry/MENU_DOWNLOADING_GAME_SETTINGS_CAPS.json"
+  },
+  {
+   "index": 88,
+   "type": "LocalizeEntry",
+   "name": "MENU_CONNECTING_TO_DW",
+   "file": "assets/LocalizeEntry/MENU_CONNECTING_TO_DW.json"
+  },
+  {
+   "index": 89,
+   "type": "LocalizeEntry",
+   "name": "MENU_PACKAGE_SELECTION_DESCRIPTION",
+   "file": "assets/LocalizeEntry/MENU_PACKAGE_SELECTION_DESCRIPTION.json"
+  },
+  {
+   "index": 90,
+   "type": "LocalizeEntry",
+   "name": "MENU_NO_RECENT_PLAYERS",
+   "file": "assets/LocalizeEntry/MENU_NO_RECENT_PLAYERS.json"
+  },
+  {
+   "index": 91,
+   "type": "LocalizeEntry",
+   "name": "MENU_NO_FRIENDS",
+   "file": "assets/LocalizeEntry/MENU_NO_FRIENDS.json"
+  },
+  {
+   "index": 92,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MAX_POINTS",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MAX_POINTS.json"
+  },
+  {
+   "index": 93,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SAME_TIME",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SAME_TIME.json"
+  },
+  {
+   "index": 94,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_FREE_ROAM_MODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_FREE_ROAM_MODE.json"
+  },
+  {
+   "index": 95,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_EDIT_CAMERA_MODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_EDIT_CAMERA_MODE.json"
+  },
+  {
+   "index": 96,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLY_CAMERA_MODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLY_CAMERA_MODE.json"
+  },
+  {
+   "index": 97,
+   "type": "LocalizeEntry",
+   "name": "MENU_PACKAGE_BOUGHT_AND_DOWNLOADED_DESCRIPTION",
+   "file": "assets/LocalizeEntry/MENU_PACKAGE_BOUGHT_AND_DOWNLOADED_DESCRIPTION.json"
+  },
+  {
+   "index": 98,
+   "type": "LocalizeEntry",
+   "name": "MENU_PACKAGE_DOWNLOAD_DESCRIPTION",
+   "file": "assets/LocalizeEntry/MENU_PACKAGE_DOWNLOAD_DESCRIPTION.json"
+  },
+  {
+   "index": 99,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_COSMODROME_CAPS",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_COSMODROME_CAPS.json"
+  },
+  {
+   "index": 100,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_COSMODROME_DESC",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_COSMODROME_DESC.json"
+  },
+  {
+   "index": 101,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_EDIT",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_EDIT.json"
+  },
+  {
+   "index": 102,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_SPEED",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_SPEED.json"
+  },
+  {
+   "index": 103,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_REMOVE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_REMOVE.json"
+  },
+  {
+   "index": 104,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_REMOVE_ALL",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_REMOVE_ALL.json"
+  },
+  {
+   "index": 105,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_REMOVE_ALL_CONFIRMATION",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_REMOVE_ALL_CONFIRMATION.json"
+  },
+  {
+   "index": 106,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_COAST_CAPS",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_COAST_CAPS.json"
+  },
+  {
+   "index": 107,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_COAST_DESC",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_COAST_DESC.json"
+  },
+  {
+   "index": 108,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_NO_MARKERS",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_NO_MARKERS.json"
+  },
+  {
+   "index": 109,
+   "type": "LocalizeEntry",
+   "name": "MENU_USE_GUEST",
+   "file": "assets/LocalizeEntry/MENU_USE_GUEST.json"
+  },
+  {
+   "index": 110,
+   "type": "LocalizeEntry",
+   "name": "MENU_STORE_PS3_CAPS",
+   "file": "assets/LocalizeEntry/MENU_STORE_PS3_CAPS.json"
+  },
+  {
+   "index": 111,
+   "type": "LocalizeEntry",
+   "name": "MENU_INGAMESTORE",
+   "file": "assets/LocalizeEntry/MENU_INGAMESTORE.json"
+  },
+  {
+   "index": 112,
+   "type": "LocalizeEntry",
+   "name": "MENU_TAB_STORE_MAP_PACKS",
+   "file": "assets/LocalizeEntry/MENU_TAB_STORE_MAP_PACKS.json"
+  },
+  {
+   "index": 113,
+   "type": "LocalizeEntry",
+   "name": "MENU_TAB_STORE_AVATARS",
+   "file": "assets/LocalizeEntry/MENU_TAB_STORE_AVATARS.json"
+  },
+  {
+   "index": 114,
+   "type": "LocalizeEntry",
+   "name": "MENU_TAB_STORE_THEMES",
+   "file": "assets/LocalizeEntry/MENU_TAB_STORE_THEMES.json"
+  },
+  {
+   "index": 115,
+   "type": "LocalizeEntry",
+   "name": "MENU_STORE_FREE_PRODUCT",
+   "file": "assets/LocalizeEntry/MENU_STORE_FREE_PRODUCT.json"
+  },
+  {
+   "index": 116,
+   "type": "LocalizeEntry",
+   "name": "MENU_PURCHASE_CONFIRMAITON",
+   "file": "assets/LocalizeEntry/MENU_PURCHASE_CONFIRMAITON.json"
+  },
+  {
+   "index": 117,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_REPOSITION",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_REPOSITION.json"
+  },
+  {
+   "index": 118,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_MARKER_NUMBER",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_MARKER_NUMBER.json"
+  },
+  {
+   "index": 119,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SPEED_SETTING_MODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SPEED_SETTING_MODE.json"
+  },
+  {
+   "index": 120,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SPEED_SETTING_MANUAL",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SPEED_SETTING_MANUAL.json"
+  },
+  {
+   "index": 121,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SPEED_SETTING_FIXED",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SPEED_SETTING_FIXED.json"
+  },
+  {
+   "index": 122,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SPEED_SETTING_LINEAR",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SPEED_SETTING_LINEAR.json"
+  },
+  {
+   "index": 123,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_SPEED_SETTING_VALUE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_SPEED_SETTING_VALUE.json"
+  },
+  {
+   "index": 124,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_PREVIEW_CAM_NUMBER_CAPS",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_PREVIEW_CAM_NUMBER_CAPS.json"
+  },
+  {
+   "index": 125,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_DOLLYCAM_CAM_NUMBER_CAPS",
+   "file": "assets/LocalizeEntry/MENU_DEMO_DOLLYCAM_CAM_NUMBER_CAPS.json"
+  },
+  {
+   "index": 126,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_PREVFREECAMMODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_PREVFREECAMMODE.json"
+  },
+  {
+   "index": 127,
+   "type": "LocalizeEntry",
+   "name": "MENU_DEMO_NEXTFREECAMMODE",
+   "file": "assets/LocalizeEntry/MENU_DEMO_NEXTFREECAMMODE.json"
+  },
+  {
+   "index": 128,
+   "type": "LocalizeEntry",
+   "name": "MENU_MATCHMAKING_IMPACTED_DUE_TO_PARTY",
+   "file": "assets/LocalizeEntry/MENU_MATCHMAKING_IMPACTED_DUE_TO_PARTY.json"
+  },
+  {
+   "index": 129,
+   "type": "LocalizeEntry",
+   "name": "MENU_STORE_FETCHING",
+   "file": "assets/LocalizeEntry/MENU_STORE_FETCHING.json"
+  },
+  {
+   "index": 130,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_TEMPLE",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_TEMPLE.json"
+  },
+  {
+   "index": 131,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_TEMPLE_CAPS",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_TEMPLE_CAPS.json"
+  },
+  {
+   "index": 132,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_TEMPLE_DESC",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_TEMPLE_DESC.json"
+  },
+  {
+   "index": 133,
+   "type": "LocalizeEntry",
+   "name": "MENU_LEVEL_DESC_ZOMBIE_TEMPLE",
+   "file": "assets/LocalizeEntry/MENU_LEVEL_DESC_ZOMBIE_TEMPLE.json"
+  },
+  {
+   "index": 134,
+   "type": "LocalizeEntry",
+   "name": "MENU_LEVEL_ZOMBIE_TEMPLE",
+   "file": "assets/LocalizeEntry/MENU_LEVEL_ZOMBIE_TEMPLE.json"
+  },
+  {
+   "index": 135,
+   "type": "LocalizeEntry",
+   "name": "MENU_WAW_ZOMBIE_MAPS",
+   "file": "assets/LocalizeEntry/MENU_WAW_ZOMBIE_MAPS.json"
+  },
+  {
+   "index": 136,
+   "type": "LocalizeEntry",
+   "name": "MENU_DLC2_MAPS",
+   "file": "assets/LocalizeEntry/MENU_DLC2_MAPS.json"
+  },
+  {
+   "index": 137,
+   "type": "LocalizeEntry",
+   "name": "MENU_DLC3_MAPS",
+   "file": "assets/LocalizeEntry/MENU_DLC3_MAPS.json"
+  },
+  {
+   "index": 138,
+   "type": "LocalizeEntry",
+   "name": "MENU_DLC4_MAPS",
+   "file": "assets/LocalizeEntry/MENU_DLC4_MAPS.json"
+  },
+  {
+   "index": 139,
+   "type": "LocalizeEntry",
+   "name": "MENU_DLC5_MAPS",
+   "file": "assets/LocalizeEntry/MENU_DLC5_MAPS.json"
+  },
+  {
+   "index": 140,
+   "type": "LocalizeEntry",
+   "name": "MENU_DLC1_MAPS",
+   "file": "assets/LocalizeEntry/MENU_DLC1_MAPS.json"
+  },
+  {
+   "index": 141,
+   "type": "LocalizeEntry",
+   "name": "MENU_HC_KILL_PLAYERS_ON_THE_OPPOSING",
+   "file": "assets/LocalizeEntry/MENU_HC_KILL_PLAYERS_ON_THE_OPPOSING.json"
+  },
+  {
+   "index": 142,
+   "type": "LocalizeEntry",
+   "name": "MENU_HC_KILL_EVERYONE_FIRST_PLAYER",
+   "file": "assets/LocalizeEntry/MENU_HC_KILL_EVERYONE_FIRST_PLAYER.json"
+  },
+  {
+   "index": 143,
+   "type": "LocalizeEntry",
+   "name": "MENU_HLND_DESC",
+   "file": "assets/LocalizeEntry/MENU_HLND_DESC.json"
+  },
+  {
+   "index": 144,
+   "type": "LocalizeEntry",
+   "name": "MENU_OIC_DESC",
+   "file": "assets/LocalizeEntry/MENU_OIC_DESC.json"
+  },
+  {
+   "index": 145,
+   "type": "LocalizeEntry",
+   "name": "MENU_GUN_DESC",
+   "file": "assets/LocalizeEntry/MENU_GUN_DESC.json"
+  },
+  {
+   "index": 146,
+   "type": "LocalizeEntry",
+   "name": "MENU_SHRP_DESC",
+   "file": "assets/LocalizeEntry/MENU_SHRP_DESC.json"
+  },
+  {
+   "index": 147,
+   "type": "LocalizeEntry",
+   "name": "MENU_SYSINFO_Q",
+   "file": "assets/LocalizeEntry/MENU_SYSINFO_Q.json"
+  },
+  {
+   "index": 148,
+   "type": "LocalizeEntry",
+   "name": "MENU_UNLOAD_MODS_CAPS",
+   "file": "assets/LocalizeEntry/MENU_UNLOAD_MODS_CAPS.json"
+  },
+  {
+   "index": 149,
+   "type": "LocalizeEntry",
+   "name": "MENU_UNLOAD_MODS_DESC",
+   "file": "assets/LocalizeEntry/MENU_UNLOAD_MODS_DESC.json"
+  },
+  {
+   "index": 150,
+   "type": "LocalizeEntry",
+   "name": "MENU_MOD_CONFIRM",
+   "file": "assets/LocalizeEntry/MENU_MOD_CONFIRM.json"
+  },
+  {
+   "index": 151,
+   "type": "LocalizeEntry",
+   "name": "MENU_MODS_LOADED_CAPS",
+   "file": "assets/LocalizeEntry/MENU_MODS_LOADED_CAPS.json"
+  },
+  {
+   "index": 152,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_MOON",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_MOON.json"
+  },
+  {
+   "index": 153,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_MOON_CAPS",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_MOON_CAPS.json"
+  },
+  {
+   "index": 154,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIE_MOON_DESC",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIE_MOON_DESC.json"
+  },
+  {
+   "index": 155,
+   "type": "LocalizeEntry",
+   "name": "MENU_LEVEL_DESC_ZOMBIE_MOON",
+   "file": "assets/LocalizeEntry/MENU_LEVEL_DESC_ZOMBIE_MOON.json"
+  },
+  {
+   "index": 156,
+   "type": "LocalizeEntry",
+   "name": "MENU_LEVEL_ZOMBIE_MOON",
+   "file": "assets/LocalizeEntry/MENU_LEVEL_ZOMBIE_MOON.json"
+  },
+  {
+   "index": 157,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIES_NOMANS_SURVIVAL_TIME",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIES_NOMANS_SURVIVAL_TIME.json"
+  },
+  {
+   "index": 158,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIES_NOMANS_SOLO_SURVIVAL_TIME",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIES_NOMANS_SOLO_SURVIVAL_TIME.json"
+  },
+  {
+   "index": 159,
+   "type": "LocalizeEntry",
+   "name": "MENU_ZOMBIES_SOUNDTRACK",
+   "file": "assets/LocalizeEntry/MENU_ZOMBIES_SOUNDTRACK.json"
+  },
+  {
+   "index": 160,
+   "type": "LocalizeEntry",
+   "name": "MENU_FREE_OFFER",
+   "file": "assets/LocalizeEntry/MENU_FREE_OFFER.json"
+  },
+  {
+   "index": 161,
+   "type": "LocalizeEntry",
+   "name": "MENU_VISIT",
+   "file": "assets/LocalizeEntry/MENU_VISIT.json"
+  },
+  {
+   "index": 162,
+   "type": "LocalizeEntry",
+   "name": "MENU_VISIT_DESC",
+   "file": "assets/LocalizeEntry/MENU_VISIT_DESC.json"
+  },
+  {
+   "index": 163,
+   "type": "LocalizeEntry",
+   "name": "MENU_OFFER_CODE",
+   "file": "assets/LocalizeEntry/MENU_OFFER_CODE.json"
+  },
+  {
+   "index": 164,
+   "type": "LocalizeEntry",
+   "name": "MENU_VISIT_COMPLETE_DESC",
+   "file": "assets/LocalizeEntry/MENU_VISIT_COMPLETE_DESC.json"
+  },
+  {
+   "index": 165,
+   "type": "LocalizeEntry",
+   "name": "MP_CONTROL_HQ",
+   "file": "assets/LocalizeEntry/MP_CONTROL_HQ.json"
+  },
+  {
+   "index": 166,
+   "type": "LocalizeEntry",
+   "name": "MP_CAPTURE_HQ",
+   "file": "assets/LocalizeEntry/MP_CAPTURE_HQ.json"
+  },
+  {
+   "index": 167,
+   "type": "LocalizeEntry",
+   "name": "MP_DESTROY_HQ",
+   "file": "assets/LocalizeEntry/MP_DESTROY_HQ.json"
+  },
+  {
+   "index": 168,
+   "type": "LocalizeEntry",
+   "name": "MP_DEFEND_HQ",
+   "file": "assets/LocalizeEntry/MP_DEFEND_HQ.json"
+  },
+  {
+   "index": 169,
+   "type": "LocalizeEntry",
+   "name": "MP_HOST_COMMS_FAILURE",
+   "file": "assets/LocalizeEntry/MP_HOST_COMMS_FAILURE.json"
+  },
+  {
+   "index": 170,
+   "type": "LocalizeEntry",
+   "name": "MP_ROUND_END_KILLCAM",
+   "file": "assets/LocalizeEntry/MP_ROUND_END_KILLCAM.json"
+  },
+  {
+   "index": 171,
+   "type": "LocalizeEntry",
+   "name": "MP_ZIPLINE",
+   "file": "assets/LocalizeEntry/MP_ZIPLINE.json"
+  },
+  {
+   "index": 172,
+   "type": "LocalizeEntry",
+   "name": "MP_ELEVATOR_UNAVAILABLE",
+   "file": "assets/LocalizeEntry/MP_ELEVATOR_UNAVAILABLE.json"
+  },
+  {
+   "index": 173,
+   "type": "LocalizeEntry",
+   "name": "MP_USE_ELEVATOR",
+   "file": "assets/LocalizeEntry/MP_USE_ELEVATOR.json"
+  },
+  {
+   "index": 174,
+   "type": "LocalizeEntry",
+   "name": "MP_CALL_ELEVATOR",
+   "file": "assets/LocalizeEntry/MP_CALL_ELEVATOR.json"
+  },
+  {
+   "index": 175,
+   "type": "LocalizeEntry",
+   "name": "MP_OPERATE_DOOR",
+   "file": "assets/LocalizeEntry/MP_OPERATE_DOOR.json"
+  },
+  {
+   "index": 176,
+   "type": "LocalizeEntry",
+   "name": "MP_ELEVATOR_OVER_MAX",
+   "file": "assets/LocalizeEntry/MP_ELEVATOR_OVER_MAX.json"
+  },
+  {
+   "index": 177,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DISCOVERY",
+   "file": "assets/LocalizeEntry/MPUI_DISCOVERY.json"
+  },
+  {
+   "index": 178,
+   "type": "LocalizeEntry",
+   "name": "MPUI_AIRBASE",
+   "file": "assets/LocalizeEntry/MPUI_AIRBASE.json"
+  },
+  {
+   "index": 179,
+   "type": "LocalizeEntry",
+   "name": "MPUI_TRAINWRECK",
+   "file": "assets/LocalizeEntry/MPUI_TRAINWRECK.json"
+  },
+  {
+   "index": 180,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CUBATOWN",
+   "file": "assets/LocalizeEntry/MPUI_CUBATOWN.json"
+  },
+  {
+   "index": 181,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CARGO",
+   "file": "assets/LocalizeEntry/MPUI_CARGO.json"
+  },
+  {
+   "index": 182,
+   "type": "LocalizeEntry",
+   "name": "MPUI_BERLINWALL2",
+   "file": "assets/LocalizeEntry/MPUI_BERLINWALL2.json"
+  },
+  {
+   "index": 183,
+   "type": "LocalizeEntry",
+   "name": "MPUI_KOWLOON",
+   "file": "assets/LocalizeEntry/MPUI_KOWLOON.json"
+  },
+  {
+   "index": 184,
+   "type": "LocalizeEntry",
+   "name": "MPUI_STADIUM",
+   "file": "assets/LocalizeEntry/MPUI_STADIUM.json"
+  },
+  {
+   "index": 185,
+   "type": "LocalizeEntry",
+   "name": "MPUI_AIRBASE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_AIRBASE_CAPS.json"
+  },
+  {
+   "index": 186,
+   "type": "LocalizeEntry",
+   "name": "MPUI_TRAINWRECK_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_TRAINWRECK_CAPS.json"
+  },
+  {
+   "index": 187,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CUBATOWN_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_CUBATOWN_CAPS.json"
+  },
+  {
+   "index": 188,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CARGO_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_CARGO_CAPS.json"
+  },
+  {
+   "index": 189,
+   "type": "LocalizeEntry",
+   "name": "MPUI_BERLINWALL2_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_BERLINWALL2_CAPS.json"
+  },
+  {
+   "index": 190,
+   "type": "LocalizeEntry",
+   "name": "MPUI_KOWLOON_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_KOWLOON_CAPS.json"
+  },
+  {
+   "index": 191,
+   "type": "LocalizeEntry",
+   "name": "MPUI_STADIUM_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_STADIUM_CAPS.json"
+  },
+  {
+   "index": 192,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_DISCOVERY",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_DISCOVERY.json"
+  },
+  {
+   "index": 193,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_BERLINWALL2",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_BERLINWALL2.json"
+  },
+  {
+   "index": 194,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_KOWLOON",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_KOWLOON.json"
+  },
+  {
+   "index": 195,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_STADIUM",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_STADIUM.json"
+  },
+  {
+   "index": 196,
+   "type": "LocalizeEntry",
+   "name": "MPUI_PLAYLIST_REQUIRES_DLC",
+   "file": "assets/LocalizeEntry/MPUI_PLAYLIST_REQUIRES_DLC.json"
+  },
+  {
+   "index": 197,
+   "type": "LocalizeEntry",
+   "name": "MPUI_PLAYLIST_MAPS_NOT_ENABLED",
+   "file": "assets/LocalizeEntry/MPUI_PLAYLIST_MAPS_NOT_ENABLED.json"
+  },
+  {
+   "index": 198,
+   "type": "LocalizeEntry",
+   "name": "MPUI_GAMEMODE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_GAMEMODE_CAPS.json"
+  },
+  {
+   "index": 199,
+   "type": "LocalizeEntry",
+   "name": "MPUI_OFFLINE_EDIT_GAME_OPTIONS_DESC",
+   "file": "assets/LocalizeEntry/MPUI_OFFLINE_EDIT_GAME_OPTIONS_DESC.json"
+  },
+  {
+   "index": 200,
+   "type": "LocalizeEntry",
+   "name": "MPUI_PREV_DISABLED_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_PREV_DISABLED_CAPS.json"
+  },
+  {
+   "index": 201,
+   "type": "LocalizeEntry",
+   "name": "MPUI_COD_ELITE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_COD_ELITE_CAPS.json"
+  },
+  {
+   "index": 202,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CONNECT_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_CONNECT_CAPS.json"
+  },
+  {
+   "index": 203,
+   "type": "LocalizeEntry",
+   "name": "MPUI_CONNECT_DESC",
+   "file": "assets/LocalizeEntry/MPUI_CONNECT_DESC.json"
+  },
+  {
+   "index": 204,
+   "type": "LocalizeEntry",
+   "name": "MPUI_COMPETE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_COMPETE_CAPS.json"
+  },
+  {
+   "index": 205,
+   "type": "LocalizeEntry",
+   "name": "MPUI_COMPETE_DESC",
+   "file": "assets/LocalizeEntry/MPUI_COMPETE_DESC.json"
+  },
+  {
+   "index": 206,
+   "type": "LocalizeEntry",
+   "name": "MPUI_IMPROVE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_IMPROVE_CAPS.json"
+  },
+  {
+   "index": 207,
+   "type": "LocalizeEntry",
+   "name": "MPUI_IMPROVE_DESC",
+   "file": "assets/LocalizeEntry/MPUI_IMPROVE_DESC.json"
+  },
+  {
+   "index": 208,
+   "type": "LocalizeEntry",
+   "name": "MPUI_JOIN_UP_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_JOIN_UP_CAPS.json"
+  },
+  {
+   "index": 209,
+   "type": "LocalizeEntry",
+   "name": "MPUI_ENTER_VALID_EMAIL",
+   "file": "assets/LocalizeEntry/MPUI_ENTER_VALID_EMAIL.json"
+  },
+  {
+   "index": 210,
+   "type": "LocalizeEntry",
+   "name": "MPUI_ELITE_DISCLAIMER",
+   "file": "assets/LocalizeEntry/MPUI_ELITE_DISCLAIMER.json"
+  },
+  {
+   "index": 211,
+   "type": "LocalizeEntry",
+   "name": "MPUI_FREE_MEMBERSHIP_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_FREE_MEMBERSHIP_CAPS.json"
+  },
+  {
+   "index": 212,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SUBMIT_EMAIL_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_SUBMIT_EMAIL_CAPS.json"
+  },
+  {
+   "index": 213,
+   "type": "LocalizeEntry",
+   "name": "MPUI_EDIT_EMAIL",
+   "file": "assets/LocalizeEntry/MPUI_EDIT_EMAIL.json"
+  },
+  {
+   "index": 214,
+   "type": "LocalizeEntry",
+   "name": "MPUI_MAPS_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_MAPS_CAPS.json"
+  },
+  {
+   "index": 215,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DLC_MAPS_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_DLC_MAPS_CAPS.json"
+  },
+  {
+   "index": 216,
+   "type": "LocalizeEntry",
+   "name": "MPUI_EMAIL_ACCEPTED",
+   "file": "assets/LocalizeEntry/MPUI_EMAIL_ACCEPTED.json"
+  },
+  {
+   "index": 217,
+   "type": "LocalizeEntry",
+   "name": "MPUI_EMAIL_REJECTED_TITLE",
+   "file": "assets/LocalizeEntry/MPUI_EMAIL_REJECTED_TITLE.json"
+  },
+  {
+   "index": 218,
+   "type": "LocalizeEntry",
+   "name": "MPUI_OUTSKIRTS",
+   "file": "assets/LocalizeEntry/MPUI_OUTSKIRTS.json"
+  },
+  {
+   "index": 219,
+   "type": "LocalizeEntry",
+   "name": "MPUI_OUTSKIRTS_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_OUTSKIRTS_CAPS.json"
+  },
+  {
+   "index": 220,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_OUTSKIRTS",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_OUTSKIRTS.json"
+  },
+  {
+   "index": 221,
+   "type": "LocalizeEntry",
+   "name": "MPUI_HOTEL",
+   "file": "assets/LocalizeEntry/MPUI_HOTEL.json"
+  },
+  {
+   "index": 222,
+   "type": "LocalizeEntry",
+   "name": "MPUI_HOTEL_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_HOTEL_CAPS.json"
+  },
+  {
+   "index": 223,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_HOTEL",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_HOTEL.json"
+  },
+  {
+   "index": 224,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SILO",
+   "file": "assets/LocalizeEntry/MPUI_SILO.json"
+  },
+  {
+   "index": 225,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SILO_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_SILO_CAPS.json"
+  },
+  {
+   "index": 226,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_SILO",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_SILO.json"
+  },
+  {
+   "index": 227,
+   "type": "LocalizeEntry",
+   "name": "MPUI_PRESTIGE_LB_PURCHASE_CONF",
+   "file": "assets/LocalizeEntry/MPUI_PRESTIGE_LB_PURCHASE_CONF.json"
+  },
+  {
+   "index": 228,
+   "type": "LocalizeEntry",
+   "name": "MPUI_THEATER_PARTY_MISSING_MAP",
+   "file": "assets/LocalizeEntry/MPUI_THEATER_PARTY_MISSING_MAP.json"
+  },
+  {
+   "index": 229,
+   "type": "LocalizeEntry",
+   "name": "MPUI_ZOO",
+   "file": "assets/LocalizeEntry/MPUI_ZOO.json"
+  },
+  {
+   "index": 230,
+   "type": "LocalizeEntry",
+   "name": "MPUI_ZOO_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_ZOO_CAPS.json"
+  },
+  {
+   "index": 231,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_ZOO",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_ZOO.json"
+  },
+  {
+   "index": 232,
+   "type": "LocalizeEntry",
+   "name": "MPUI_GRIDLOCK",
+   "file": "assets/LocalizeEntry/MPUI_GRIDLOCK.json"
+  },
+  {
+   "index": 233,
+   "type": "LocalizeEntry",
+   "name": "MPUI_GRIDLOCK_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_GRIDLOCK_CAPS.json"
+  },
+  {
+   "index": 234,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_GRIDLOCK",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_GRIDLOCK.json"
+  },
+  {
+   "index": 235,
+   "type": "LocalizeEntry",
+   "name": "MPUI_AREA51",
+   "file": "assets/LocalizeEntry/MPUI_AREA51.json"
+  },
+  {
+   "index": 236,
+   "type": "LocalizeEntry",
+   "name": "MPUI_AREA51_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_AREA51_CAPS.json"
+  },
+  {
+   "index": 237,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_AREA51",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_AREA51.json"
+  },
+  {
+   "index": 238,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DRIVEIN",
+   "file": "assets/LocalizeEntry/MPUI_DRIVEIN.json"
+  },
+  {
+   "index": 239,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DRIVEIN_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_DRIVEIN_CAPS.json"
+  },
+  {
+   "index": 240,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_DRIVEIN",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_DRIVEIN.json"
+  },
+  {
+   "index": 241,
+   "type": "LocalizeEntry",
+   "name": "MPUI_FIREBASE",
+   "file": "assets/LocalizeEntry/MPUI_FIREBASE.json"
+  },
+  {
+   "index": 242,
+   "type": "LocalizeEntry",
+   "name": "MPUI_FIREBASE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_FIREBASE_CAPS.json"
+  },
+  {
+   "index": 243,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_FIREBASE",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_FIREBASE.json"
+  },
+  {
+   "index": 244,
+   "type": "LocalizeEntry",
+   "name": "MPUI_GOLFCOURSE",
+   "file": "assets/LocalizeEntry/MPUI_GOLFCOURSE.json"
+  },
+  {
+   "index": 245,
+   "type": "LocalizeEntry",
+   "name": "MPUI_GOLFCOURSE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_GOLFCOURSE_CAPS.json"
+  },
+  {
+   "index": 246,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_GOLFCOURSE",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_GOLFCOURSE.json"
+  },
+  {
+   "index": 247,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SALVAGE",
+   "file": "assets/LocalizeEntry/MPUI_SALVAGE.json"
+  },
+  {
+   "index": 248,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SALVAGE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_SALVAGE_CAPS.json"
+  },
+  {
+   "index": 249,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_SALVAGE",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_SALVAGE.json"
+  },
+  {
+   "index": 250,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SNOWMINE",
+   "file": "assets/LocalizeEntry/MPUI_SNOWMINE.json"
+  },
+  {
+   "index": 251,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SNOWMINE_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_SNOWMINE_CAPS.json"
+  },
+  {
+   "index": 252,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_SNOWMINE",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_SNOWMINE.json"
+  },
+  {
+   "index": 253,
+   "type": "LocalizeEntry",
+   "name": "MPUI_WARMUSEUM",
+   "file": "assets/LocalizeEntry/MPUI_WARMUSEUM.json"
+  },
+  {
+   "index": 254,
+   "type": "LocalizeEntry",
+   "name": "MPUI_WARMUSEUM_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_WARMUSEUM_CAPS.json"
+  },
+  {
+   "index": 255,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DESC_MAP_WARMUSEUM",
+   "file": "assets/LocalizeEntry/MPUI_DESC_MAP_WARMUSEUM.json"
+  },
+  {
+   "index": 256,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DISCOVERY_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_DISCOVERY_CAPS.json"
+  },
+  {
+   "index": 257,
+   "type": "LocalizeEntry",
+   "name": "MPUI_HIDE_DLC",
+   "file": "assets/LocalizeEntry/MPUI_HIDE_DLC.json"
+  },
+  {
+   "index": 258,
+   "type": "LocalizeEntry",
+   "name": "MPUI_BASIC_TRAINING_HC_TDM",
+   "file": "assets/LocalizeEntry/MPUI_BASIC_TRAINING_HC_TDM.json"
+  },
+  {
+   "index": 259,
+   "type": "LocalizeEntry",
+   "name": "MPUI_RULES_6_5MINUTES_CAPS",
+   "file": "assets/LocalizeEntry/MPUI_RULES_6_5MINUTES_CAPS.json"
+  },
+  {
+   "index": 260,
+   "type": "LocalizeEntry",
+   "name": "MPUI_SHOW_DLC_CONTENT",
+   "file": "assets/LocalizeEntry/MPUI_SHOW_DLC_CONTENT.json"
+  },
+  {
+   "index": 261,
+   "type": "LocalizeEntry",
+   "name": "MPUI_DLC_CONTENT",
+   "file": "assets/LocalizeEntry/MPUI_DLC_CONTENT.json"
+  },
+  {
+   "index": 262,
+   "type": "LocalizeEntry",
+   "name": "MPUI_OWNED",
+   "file": "assets/LocalizeEntry/MPUI_OWNED.json"
+  },
+  {
+   "index": 263,
+   "type": "LocalizeEntry",
+   "name": "MPUI_PURCHASED",
+   "file": "assets/LocalizeEntry/MPUI_PURCHASED.json"
+  },
+  {
+   "index": 264,
+   "type": "LocalizeEntry",
+   "name": "MPUI_I_HAVE",
+   "file": "assets/LocalizeEntry/MPUI_I_HAVE.json"
+  },
+  {
+   "index": 265,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_DEMO_INSERT_CAMERA_MARKER",
+   "file": "assets/LocalizeEntry/PLATFORM_DEMO_INSERT_CAMERA_MARKER.json"
+  },
+  {
+   "index": 266,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_DEMO_EDIT_CAMERA_MARKER",
+   "file": "assets/LocalizeEntry/PLATFORM_DEMO_EDIT_CAMERA_MARKER.json"
+  },
+  {
+   "index": 267,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_DEMO_PLACE_CAMERA_MARKER",
+   "file": "assets/LocalizeEntry/PLATFORM_DEMO_PLACE_CAMERA_MARKER.json"
+  },
+  {
+   "index": 268,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_STEAM_AUTH_DENIED",
+   "file": "assets/LocalizeEntry/PLATFORM_STEAM_AUTH_DENIED.json"
+  },
+  {
+   "index": 269,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_MISSINGMAP",
+   "file": "assets/LocalizeEntry/PLATFORM_MISSINGMAP.json"
+  },
+  {
+   "index": 270,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_ENABLE_DOWNLOADS",
+   "file": "assets/LocalizeEntry/PLATFORM_ENABLE_DOWNLOADS.json"
+  },
+  {
+   "index": 271,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_CANT_DOWNLOAD",
+   "file": "assets/LocalizeEntry/PLATFORM_CANT_DOWNLOAD.json"
+  },
+  {
+   "index": 272,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_CHEATSREQUIREAMOD",
+   "file": "assets/LocalizeEntry/PLATFORM_CHEATSREQUIREAMOD.json"
+  },
+  {
+   "index": 273,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_OPTIONS_RESTRICT_EMBLEMS_CAPS",
+   "file": "assets/LocalizeEntry/PLATFORM_OPTIONS_RESTRICT_EMBLEMS_CAPS.json"
+  },
+  {
+   "index": 274,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_LOCAL_FILE_EXISTS_WITH_WRONG_CHECKSUM",
+   "file": "assets/LocalizeEntry/PLATFORM_LOCAL_FILE_EXISTS_WITH_WRONG_CHECKSUM.json"
+  },
+  {
+   "index": 275,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_LOCAL_FILE_EXISTS_WITH_WRONG_FILESIZE",
+   "file": "assets/LocalizeEntry/PLATFORM_LOCAL_FILE_EXISTS_WITH_WRONG_FILESIZE.json"
+  },
+  {
+   "index": 276,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_BANNED",
+   "file": "assets/LocalizeEntry/PLATFORM_BANNED.json"
+  },
+  {
+   "index": 277,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_ZOMBIE_NOMANS_SOLO_CAPS",
+   "file": "assets/LocalizeEntry/PLATFORM_ZOMBIE_NOMANS_SOLO_CAPS.json"
+  },
+  {
+   "index": 278,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_ZOMBIE_SOUNDTRACK_LOCATION_DESC",
+   "file": "assets/LocalizeEntry/PLATFORM_ZOMBIE_SOUNDTRACK_LOCATION_DESC.json"
+  },
+  {
+   "index": 279,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_OPEN_SOUNDTRACK_FOLDER",
+   "file": "assets/LocalizeEntry/PLATFORM_OPEN_SOUNDTRACK_FOLDER.json"
+  },
+  {
+   "index": 280,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_UNKNOWN",
+   "file": "assets/LocalizeEntry/PLATFORM_UNKNOWN.json"
+  },
+  {
+   "index": 281,
+   "type": "LocalizeEntry",
+   "name": "PLATFORM_MISSINGMAP_YOU_NEED_CONTENTPACK",
+   "file": "assets/LocalizeEntry/PLATFORM_MISSINGMAP_YOU_NEED_CONTENTPACK.json"
+  },
+  {
+   "index": 282,
+   "type": "LocalizeEntry",
+   "name": "WEAPON_ZIPLINE",
+   "file": "assets/LocalizeEntry/WEAPON_ZIPLINE.json"
+  },
+  {
+   "index": 283,
+   "type": "RawFile",
+   "name": "localized_patch_mp",
+   "file": "rawfiles/localized_patch_mp"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
