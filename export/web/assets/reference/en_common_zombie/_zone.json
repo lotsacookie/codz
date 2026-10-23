@@ -1,0 +1,1990 @@
+{
+ "zone": "zone/english/en_common_zombie.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 122932,
+  "streamSize": 122932,
+  "percent": 100.0
+ },
+ "types": {
+  "LocalizeEntry": 321,
+  "SndBank": 1,
+  "MaterialTechniqueSet": 1,
+  "Material": 1,
+  "RawFile": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "assets": [
+  {
+   "index": 0,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_PISTOL_LOW_AMMO",
+   "file": "assets/LocalizeEntry/ZM_PT_PISTOL_LOW_AMMO.json"
+  },
+  {
+   "index": 1,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_WHY_DONT_YOU_BUY_WEAPONS_PART2",
+   "file": "assets/LocalizeEntry/ZM_PT_WHY_DONT_YOU_BUY_WEAPONS_PART2.json"
+  },
+  {
+   "index": 2,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_WHY_DONT_YOU_BUY_WEAPONS_PART1",
+   "file": "assets/LocalizeEntry/ZM_PT_WHY_DONT_YOU_BUY_WEAPONS_PART1.json"
+  },
+  {
+   "index": 3,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_ENTER_NML",
+   "file": "assets/LocalizeEntry/ZM_PT_ENTER_NML.json"
+  },
+  {
+   "index": 4,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_DEATH_CARD",
+   "file": "assets/LocalizeEntry/ZM_PT_DEATH_CARD.json"
+  },
+  {
+   "index": 5,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_MONEY_DROP",
+   "file": "assets/LocalizeEntry/ZM_PT_MONEY_DROP.json"
+  },
+  {
+   "index": 6,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_WALL_WEAPONS",
+   "file": "assets/LocalizeEntry/ZM_PT_WALL_WEAPONS.json"
+  },
+  {
+   "index": 7,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_REPAIR_BOARDS",
+   "file": "assets/LocalizeEntry/ZM_PT_REPAIR_BOARDS.json"
+  },
+  {
+   "index": 8,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_ZOMBIE_BREAKOUT",
+   "file": "assets/LocalizeEntry/ZM_PT_ZOMBIE_BREAKOUT.json"
+  },
+  {
+   "index": 9,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_BACK_FOR_MAP",
+   "file": "assets/LocalizeEntry/ZM_PT_BACK_FOR_MAP.json"
+  },
+  {
+   "index": 10,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_REINFORCEMENTS",
+   "file": "assets/LocalizeEntry/ZM_PT_REINFORCEMENTS.json"
+  },
+  {
+   "index": 11,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_UNLOCK_DOORS",
+   "file": "assets/LocalizeEntry/ZM_PT_UNLOCK_DOORS.json"
+  },
+  {
+   "index": 12,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_SECRET_WEAPONS",
+   "file": "assets/LocalizeEntry/ZM_PT_SECRET_WEAPONS.json"
+  },
+  {
+   "index": 13,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_WEAPON_BOX",
+   "file": "assets/LocalizeEntry/ZM_PT_WEAPON_BOX.json"
+  },
+  {
+   "index": 14,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_MACHINES_ON",
+   "file": "assets/LocalizeEntry/ZM_PT_MACHINES_ON.json"
+  },
+  {
+   "index": 15,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_PLAYER_NEEDS_REVIVING",
+   "file": "assets/LocalizeEntry/ZM_PT_PLAYER_NEEDS_REVIVING.json"
+  },
+  {
+   "index": 16,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_PLAYER_DOWN",
+   "file": "assets/LocalizeEntry/ZM_PT_PLAYER_DOWN.json"
+  },
+  {
+   "index": 17,
+   "type": "LocalizeEntry",
+   "name": "ZM_PT_WEAPON_BOX2",
+   "file": "assets/LocalizeEntry/ZM_PT_WEAPON_BOX2.json"
+  },
+  {
+   "index": 18,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_LANDER_HAS_ARRIVED",
+   "file": "assets/LocalizeEntry/ZOMBIE_LANDER_HAS_ARRIVED.json"
+  },
+  {
+   "index": 19,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_LANDER_LAUNCH_IN",
+   "file": "assets/LocalizeEntry/ZOMBIE_LANDER_LAUNCH_IN.json"
+  },
+  {
+   "index": 20,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CALLING_LANDER",
+   "file": "assets/LocalizeEntry/ZOMBIE_CALLING_LANDER.json"
+  },
+  {
+   "index": 21,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CHAINSAW_PICKUP",
+   "file": "assets/LocalizeEntry/ZOMBIE_CHAINSAW_PICKUP.json"
+  },
+  {
+   "index": 22,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SOLO_LIFE_LOST",
+   "file": "assets/LocalizeEntry/ZOMBIE_SOLO_LIFE_LOST.json"
+  },
+  {
+   "index": 23,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EXTRA_LIFE",
+   "file": "assets/LocalizeEntry/ZOMBIE_EXTRA_LIFE.json"
+  },
+  {
+   "index": 24,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PARIS_TRANSPORTER_ACTIVATED",
+   "file": "assets/LocalizeEntry/ZOMBIE_PARIS_TRANSPORTER_ACTIVATED.json"
+  },
+  {
+   "index": 25,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PARIS_TRANSPORTER_WAITING",
+   "file": "assets/LocalizeEntry/ZOMBIE_PARIS_TRANSPORTER_WAITING.json"
+  },
+  {
+   "index": 26,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ZIPLINE_DEACTIVATED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ZIPLINE_DEACTIVATED.json"
+  },
+  {
+   "index": 27,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RANDOM_WEAPON_950",
+   "file": "assets/LocalizeEntry/ZOMBIE_RANDOM_WEAPON_950.json"
+  },
+  {
+   "index": 28,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPONCOSTAMMO",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPONCOSTAMMO.json"
+  },
+  {
+   "index": 29,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPONCOSTAMMO_UPGRADE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPONCOSTAMMO_UPGRADE.json"
+  },
+  {
+   "index": 30,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_BEGIN",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_BEGIN.json"
+  },
+  {
+   "index": 31,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_END",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_END.json"
+  },
+  {
+   "index": 32,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND.json"
+  },
+  {
+   "index": 33,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_UNDEFINED",
+   "file": "assets/LocalizeEntry/ZOMBIE_UNDEFINED.json"
+  },
+  {
+   "index": 34,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_BACK_BARRIER_10",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_BACK_BARRIER_10.json"
+  },
+  {
+   "index": 35,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_BACK_BARRIER_20",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_BACK_BARRIER_20.json"
+  },
+  {
+   "index": 36,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_BACK_BARRIER_50",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_BACK_BARRIER_50.json"
+  },
+  {
+   "index": 37,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_BACK_BARRIER_100",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_BACK_BARRIER_100.json"
+  },
+  {
+   "index": 38,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_100",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_100.json"
+  },
+  {
+   "index": 39,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_200",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_200.json"
+  },
+  {
+   "index": 40,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_250.json"
+  },
+  {
+   "index": 41,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_500.json"
+  },
+  {
+   "index": 42,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_750.json"
+  },
+  {
+   "index": 43,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1000.json"
+  },
+  {
+   "index": 44,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1250.json"
+  },
+  {
+   "index": 45,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1500.json"
+  },
+  {
+   "index": 46,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_1750.json"
+  },
+  {
+   "index": 47,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_2000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_CLEAR_DEBRIS_2000.json"
+  },
+  {
+   "index": 48,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_100",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_100.json"
+  },
+  {
+   "index": 49,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_200",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_200.json"
+  },
+  {
+   "index": 50,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_250.json"
+  },
+  {
+   "index": 51,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_500.json"
+  },
+  {
+   "index": 52,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_750.json"
+  },
+  {
+   "index": 53,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_1000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_1000.json"
+  },
+  {
+   "index": 54,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_1250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_1250.json"
+  },
+  {
+   "index": 55,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_1500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_1500.json"
+  },
+  {
+   "index": 56,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_1750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_1750.json"
+  },
+  {
+   "index": 57,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_2500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_2500.json"
+  },
+  {
+   "index": 58,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_DOOR_2000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_DOOR_2000.json"
+  },
+  {
+   "index": 59,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_100",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_100.json"
+  },
+  {
+   "index": 60,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_200",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_200.json"
+  },
+  {
+   "index": 61,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_250.json"
+  },
+  {
+   "index": 62,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_500.json"
+  },
+  {
+   "index": 63,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_750.json"
+  },
+  {
+   "index": 64,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_1000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_1000.json"
+  },
+  {
+   "index": 65,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_1250",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_1250.json"
+  },
+  {
+   "index": 66,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_1500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_1500.json"
+  },
+  {
+   "index": 67,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_1750",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_1750.json"
+  },
+  {
+   "index": 68,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_2000",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_2000.json"
+  },
+  {
+   "index": 69,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CABINET_OPEN_500",
+   "file": "assets/LocalizeEntry/ZOMBIE_CABINET_OPEN_500.json"
+  },
+  {
+   "index": 70,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CABINET_OPEN_1000",
+   "file": "assets/LocalizeEntry/ZOMBIE_CABINET_OPEN_1000.json"
+  },
+  {
+   "index": 71,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CABINET_OPEN_1500",
+   "file": "assets/LocalizeEntry/ZOMBIE_CABINET_OPEN_1500.json"
+  },
+  {
+   "index": 72,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CABINET_OPEN_2000",
+   "file": "assets/LocalizeEntry/ZOMBIE_CABINET_OPEN_2000.json"
+  },
+  {
+   "index": 73,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_AK47",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_AK47.json"
+  },
+  {
+   "index": 74,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_BOWIE_BUY",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_BOWIE_BUY.json"
+  },
+  {
+   "index": 75,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PLAYERZOMBIE_DOWNED",
+   "file": "assets/LocalizeEntry/ZOMBIE_PLAYERZOMBIE_DOWNED.json"
+  },
+  {
+   "index": 76,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_QUICKREVIVE",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_QUICKREVIVE.json"
+  },
+  {
+   "index": 77,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_QUICKREVIVE_SOLO",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_QUICKREVIVE_SOLO.json"
+  },
+  {
+   "index": 78,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_FASTRELOAD",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_FASTRELOAD.json"
+  },
+  {
+   "index": 79,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_DOUBLETAP",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_DOUBLETAP.json"
+  },
+  {
+   "index": 80,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_JUGGERNAUT",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_JUGGERNAUT.json"
+  },
+  {
+   "index": 81,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_PACKAPUNCH",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_PACKAPUNCH.json"
+  },
+  {
+   "index": 82,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERUP_INSTA_KILL",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERUP_INSTA_KILL.json"
+  },
+  {
+   "index": 83,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERUP_NUKE",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERUP_NUKE.json"
+  },
+  {
+   "index": 84,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERUP_DOUBLE_POINTS",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERUP_DOUBLE_POINTS.json"
+  },
+  {
+   "index": 85,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERUP_MINIGUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERUP_MINIGUN.json"
+  },
+  {
+   "index": 86,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERUP_MAX_AMMO",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERUP_MAX_AMMO.json"
+  },
+  {
+   "index": 87,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER_10",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER_10.json"
+  },
+  {
+   "index": 88,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER_20",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER_20.json"
+  },
+  {
+   "index": 89,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER_30",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER_30.json"
+  },
+  {
+   "index": 90,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER_40",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER_40.json"
+  },
+  {
+   "index": 91,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_GAME_OVER",
+   "file": "assets/LocalizeEntry/ZOMBIE_GAME_OVER.json"
+  },
+  {
+   "index": 92,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER_50",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER_50.json"
+  },
+  {
+   "index": 93,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SURVIVED_ROUNDS",
+   "file": "assets/LocalizeEntry/ZOMBIE_SURVIVED_ROUNDS.json"
+  },
+  {
+   "index": 94,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SURVIVED_ROUND",
+   "file": "assets/LocalizeEntry/ZOMBIE_SURVIVED_ROUND.json"
+  },
+  {
+   "index": 95,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RANDOM_WEAPON_850",
+   "file": "assets/LocalizeEntry/ZOMBIE_RANDOM_WEAPON_850.json"
+  },
+  {
+   "index": 96,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RANDOM_WEAPON_750",
+   "file": "assets/LocalizeEntry/ZOMBIE_RANDOM_WEAPON_750.json"
+  },
+  {
+   "index": 97,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RANDOM_WEAPON_650",
+   "file": "assets/LocalizeEntry/ZOMBIE_RANDOM_WEAPON_650.json"
+  },
+  {
+   "index": 98,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_REWARD_BARRIER",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_REWARD_BARRIER.json"
+  },
+  {
+   "index": 99,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_NEED_POWER",
+   "file": "assets/LocalizeEntry/ZOMBIE_NEED_POWER.json"
+  },
+  {
+   "index": 100,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_SOUTH_FLAMES",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_SOUTH_FLAMES.json"
+  },
+  {
+   "index": 101,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_OPEN_AREA_2500",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_OPEN_AREA_2500.json"
+  },
+  {
+   "index": 102,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUTTON_BUY_TRAP",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUTTON_BUY_TRAP.json"
+  },
+  {
+   "index": 103,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BETTY_PURCHASE",
+   "file": "assets/LocalizeEntry/ZOMBIE_BETTY_PURCHASE.json"
+  },
+  {
+   "index": 104,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BETTY_ALREADY_PURCHASED",
+   "file": "assets/LocalizeEntry/ZOMBIE_BETTY_ALREADY_PURCHASED.json"
+  },
+  {
+   "index": 105,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BETTY_HOWTO",
+   "file": "assets/LocalizeEntry/ZOMBIE_BETTY_HOWTO.json"
+  },
+  {
+   "index": 106,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CLAYMORE_PURCHASE",
+   "file": "assets/LocalizeEntry/ZOMBIE_CLAYMORE_PURCHASE.json"
+  },
+  {
+   "index": 107,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CLAYMORE_ALREADY_PURCHASED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CLAYMORE_ALREADY_PURCHASED.json"
+  },
+  {
+   "index": 108,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CLAYMORE_HOWTO",
+   "file": "assets/LocalizeEntry/ZOMBIE_CLAYMORE_HOWTO.json"
+  },
+  {
+   "index": 109,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_USE_AUTO_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_USE_AUTO_TURRET.json"
+  },
+  {
+   "index": 110,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ELECTRIC_SWITCH",
+   "file": "assets/LocalizeEntry/ZOMBIE_ELECTRIC_SWITCH.json"
+  },
+  {
+   "index": 111,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_TESLA",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_TESLA.json"
+  },
+  {
+   "index": 112,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_STICKY",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_STICKY.json"
+  },
+  {
+   "index": 113,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CLEAR_DEBRIS",
+   "file": "assets/LocalizeEntry/ZOMBIE_CLEAR_DEBRIS.json"
+  },
+  {
+   "index": 114,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TRADE_WEAPONS",
+   "file": "assets/LocalizeEntry/ZOMBIE_TRADE_WEAPONS.json"
+  },
+  {
+   "index": 115,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ZIPLINE_USE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ZIPLINE_USE.json"
+  },
+  {
+   "index": 116,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ZIPLINE_ACTIVATE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ZIPLINE_ACTIVATE.json"
+  },
+  {
+   "index": 117,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_GENERIC",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_GENERIC.json"
+  },
+  {
+   "index": 118,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWER_UP_TPAD",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWER_UP_TPAD.json"
+  },
+  {
+   "index": 119,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TELEPORT_TO_CORE",
+   "file": "assets/LocalizeEntry/ZOMBIE_TELEPORT_TO_CORE.json"
+  },
+  {
+   "index": 120,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_LINK_TPAD",
+   "file": "assets/LocalizeEntry/ZOMBIE_LINK_TPAD.json"
+  },
+  {
+   "index": 121,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_LINK_ACTIVE",
+   "file": "assets/LocalizeEntry/ZOMBIE_LINK_ACTIVE.json"
+  },
+  {
+   "index": 122,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_INACTIVE_TPAD",
+   "file": "assets/LocalizeEntry/ZOMBIE_INACTIVE_TPAD.json"
+  },
+  {
+   "index": 123,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_START_TPAD",
+   "file": "assets/LocalizeEntry/ZOMBIE_START_TPAD.json"
+  },
+  {
+   "index": 124,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TELEPORT_COOLDOWN",
+   "file": "assets/LocalizeEntry/ZOMBIE_TELEPORT_COOLDOWN.json"
+  },
+  {
+   "index": 125,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TRAP_DOOR",
+   "file": "assets/LocalizeEntry/ZOMBIE_TRAP_DOOR.json"
+  },
+  {
+   "index": 126,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PROJ_DOOR",
+   "file": "assets/LocalizeEntry/ZOMBIE_PROJ_DOOR.json"
+  },
+  {
+   "index": 127,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PROJ_LIFT",
+   "file": "assets/LocalizeEntry/ZOMBIE_PROJ_LIFT.json"
+  },
+  {
+   "index": 128,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PAY_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_PAY_TURRET.json"
+  },
+  {
+   "index": 129,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AUTO_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_AUTO_TURRET.json"
+  },
+  {
+   "index": 130,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BUILD_BRIDGE",
+   "file": "assets/LocalizeEntry/ZOMBIE_BUILD_BRIDGE.json"
+  },
+  {
+   "index": 131,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_GET_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_GET_UPGRADED.json"
+  },
+  {
+   "index": 132,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_USE_TELEPORTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_USE_TELEPORTER.json"
+  },
+  {
+   "index": 133,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ACTIVATE_TELEPORTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_ACTIVATE_TELEPORTER.json"
+  },
+  {
+   "index": 134,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COAST_ZIPLINE",
+   "file": "assets/LocalizeEntry/ZOMBIE_COAST_ZIPLINE.json"
+  },
+  {
+   "index": 135,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COAST_ZIPLINE_WAIT",
+   "file": "assets/LocalizeEntry/ZOMBIE_COAST_ZIPLINE_WAIT.json"
+  },
+  {
+   "index": 136,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COAST_ZIPLINE_ACTIVATE",
+   "file": "assets/LocalizeEntry/ZOMBIE_COAST_ZIPLINE_ACTIVATE.json"
+  },
+  {
+   "index": 137,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_FIRE_SALE_COST",
+   "file": "assets/LocalizeEntry/ZOMBIE_FIRE_SALE_COST.json"
+  },
+  {
+   "index": 138,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_P90",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_P90.json"
+  },
+  {
+   "index": 139,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_AK74U",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_AK74U.json"
+  },
+  {
+   "index": 140,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_SKORPION",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_SKORPION.json"
+  },
+  {
+   "index": 141,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_UZI",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_UZI.json"
+  },
+  {
+   "index": 142,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M14",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M14.json"
+  },
+  {
+   "index": 143,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M16",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M16.json"
+  },
+  {
+   "index": 144,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_DRAGUNOV",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_DRAGUNOV.json"
+  },
+  {
+   "index": 145,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_RPK",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_RPK.json"
+  },
+  {
+   "index": 146,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_STONER63",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_STONER63.json"
+  },
+  {
+   "index": 147,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_AK47_MK",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_AK47_MK.json"
+  },
+  {
+   "index": 148,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M16_GL",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M16_GL.json"
+  },
+  {
+   "index": 149,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AIRSTRIKE_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_AIRSTRIKE_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 150,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_BOX_STORE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_BOX_STORE.json"
+  },
+  {
+   "index": 151,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_THUNDERGUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_THUNDERGUN.json"
+  },
+  {
+   "index": 152,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_STOPPINGPOWER",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_STOPPINGPOWER.json"
+  },
+  {
+   "index": 153,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PERK_BANDOLIER",
+   "file": "assets/LocalizeEntry/ZOMBIE_PERK_BANDOLIER.json"
+  },
+  {
+   "index": 154,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_DOOR_ACTIVATE_COUNTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_DOOR_ACTIVATE_COUNTER.json"
+  },
+  {
+   "index": 155,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M1911",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M1911.json"
+  },
+  {
+   "index": 156,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_PYTHON",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_PYTHON.json"
+  },
+  {
+   "index": 157,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_KIPARIS",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_KIPARIS.json"
+  },
+  {
+   "index": 158,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_MAC11",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_MAC11.json"
+  },
+  {
+   "index": 159,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_AUG",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_AUG.json"
+  },
+  {
+   "index": 160,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_G11",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_G11.json"
+  },
+  {
+   "index": 161,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M60",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M60.json"
+  },
+  {
+   "index": 162,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_MINIGUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_MINIGUN.json"
+  },
+  {
+   "index": 163,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_MP5K",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_MP5K.json"
+  },
+  {
+   "index": 164,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_MP40",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_MP40.json"
+  },
+  {
+   "index": 165,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_MPL",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_MPL.json"
+  },
+  {
+   "index": 166,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_PM63",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_PM63.json"
+  },
+  {
+   "index": 167,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_ENFIELD",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_ENFIELD.json"
+  },
+  {
+   "index": 168,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_ROTTWEIL72",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_ROTTWEIL72.json"
+  },
+  {
+   "index": 169,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_ITHACA",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_ITHACA.json"
+  },
+  {
+   "index": 170,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_SPAS",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_SPAS.json"
+  },
+  {
+   "index": 171,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_WA2000",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_WA2000.json"
+  },
+  {
+   "index": 172,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERCELL_PICKUP",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERCELL_PICKUP.json"
+  },
+  {
+   "index": 173,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_POWERCELL_DROPOFF",
+   "file": "assets/LocalizeEntry/ZOMBIE_POWERCELL_DROPOFF.json"
+  },
+  {
+   "index": 174,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_SABERTOOTH",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_SABERTOOTH.json"
+  },
+  {
+   "index": 175,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_RAYGUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_RAYGUN.json"
+  },
+  {
+   "index": 176,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_FRAG_GRENADE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_FRAG_GRENADE.json"
+  },
+  {
+   "index": 177,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_CLAYMORE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_CLAYMORE.json"
+  },
+  {
+   "index": 178,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M202_FLASH",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M202_FLASH.json"
+  },
+  {
+   "index": 179,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_RADAR",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_RADAR.json"
+  },
+  {
+   "index": 180,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_ARTILLERY",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_ARTILLERY.json"
+  },
+  {
+   "index": 181,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_AIRSTRIKE",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_AIRSTRIKE.json"
+  },
+  {
+   "index": 182,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_NAPALM",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_NAPALM.json"
+  },
+  {
+   "index": 183,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_DOGS",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_DOGS.json"
+  },
+  {
+   "index": 184,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_HELICOPTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_HELICOPTER.json"
+  },
+  {
+   "index": 185,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_HELICOPTER_X2",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_HELICOPTER_X2.json"
+  },
+  {
+   "index": 186,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_HELICOPTER_COMLINK",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_HELICOPTER_COMLINK.json"
+  },
+  {
+   "index": 187,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RADAR_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_RADAR_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 188,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ARTILLERY_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ARTILLERY_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 189,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_NAPALM_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_NAPALM_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 190,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_DOGS_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_DOGS_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 191,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 192,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_X2_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_X2_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 193,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_COMLINK_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_COMLINK_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 194,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AIRSTRIKE_INBOUND_NEAR_YOUR_POSITION",
+   "file": "assets/LocalizeEntry/ZOMBIE_AIRSTRIKE_INBOUND_NEAR_YOUR_POSITION.json"
+  },
+  {
+   "index": 195,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_NAPALM_INBOUND_NEAR_YOUR_POSITION",
+   "file": "assets/LocalizeEntry/ZOMBIE_NAPALM_INBOUND_NEAR_YOUR_POSITION.json"
+  },
+  {
+   "index": 196,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ARTILLERY_INBOUND_NEAR_YOUR_POSITION",
+   "file": "assets/LocalizeEntry/ZOMBIE_ARTILLERY_INBOUND_NEAR_YOUR_POSITION.json"
+  },
+  {
+   "index": 197,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_X2_INBOUND",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_X2_INBOUND.json"
+  },
+  {
+   "index": 198,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_COMLINK_INBOUND",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_COMLINK_INBOUND.json"
+  },
+  {
+   "index": 199,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HELICOPTER_INBOUND",
+   "file": "assets/LocalizeEntry/ZOMBIE_HELICOPTER_INBOUND.json"
+  },
+  {
+   "index": 200,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BARRACKS",
+   "file": "assets/LocalizeEntry/ZOMBIE_BARRACKS.json"
+  },
+  {
+   "index": 201,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CHALLENGES",
+   "file": "assets/LocalizeEntry/ZOMBIE_CHALLENGES.json"
+  },
+  {
+   "index": 202,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PLAYER_ABILITIES",
+   "file": "assets/LocalizeEntry/ZOMBIE_PLAYER_ABILITIES.json"
+  },
+  {
+   "index": 203,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MUTATORS",
+   "file": "assets/LocalizeEntry/ZOMBIE_MUTATORS.json"
+  },
+  {
+   "index": 204,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_LEADERBOARDS",
+   "file": "assets/LocalizeEntry/ZOMBIE_LEADERBOARDS.json"
+  },
+  {
+   "index": 205,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AWARDS_AND_TITLES",
+   "file": "assets/LocalizeEntry/ZOMBIE_AWARDS_AND_TITLES.json"
+  },
+  {
+   "index": 206,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CHALLENGES_DONE",
+   "file": "assets/LocalizeEntry/ZOMBIE_CHALLENGES_DONE.json"
+  },
+  {
+   "index": 207,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_XP_REWARD",
+   "file": "assets/LocalizeEntry/ZOMBIE_XP_REWARD.json"
+  },
+  {
+   "index": 208,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_BACK",
+   "file": "assets/LocalizeEntry/ZOMBIE_BACK.json"
+  },
+  {
+   "index": 209,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MAIN_MENU",
+   "file": "assets/LocalizeEntry/ZOMBIE_MAIN_MENU.json"
+  },
+  {
+   "index": 210,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SOLO",
+   "file": "assets/LocalizeEntry/ZOMBIE_SOLO.json"
+  },
+  {
+   "index": 211,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COOP",
+   "file": "assets/LocalizeEntry/ZOMBIE_COOP.json"
+  },
+  {
+   "index": 212,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_VERSUS",
+   "file": "assets/LocalizeEntry/ZOMBIE_VERSUS.json"
+  },
+  {
+   "index": 213,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_OPTIONS",
+   "file": "assets/LocalizeEntry/ZOMBIE_OPTIONS.json"
+  },
+  {
+   "index": 214,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CREDITS",
+   "file": "assets/LocalizeEntry/ZOMBIE_CREDITS.json"
+  },
+  {
+   "index": 215,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MISSION_SELECT",
+   "file": "assets/LocalizeEntry/ZOMBIE_MISSION_SELECT.json"
+  },
+  {
+   "index": 216,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_XP",
+   "file": "assets/LocalizeEntry/ZOMBIE_XP.json"
+  },
+  {
+   "index": 217,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_REWARD",
+   "file": "assets/LocalizeEntry/ZOMBIE_REWARD.json"
+  },
+  {
+   "index": 218,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_AIRSTRIKE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_AIRSTRIKE.json"
+  },
+  {
+   "index": 219,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_TURRET.json"
+  },
+  {
+   "index": 220,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_PORTAL",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_PORTAL.json"
+  },
+  {
+   "index": 221,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_NAPALM",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_NAPALM.json"
+  },
+  {
+   "index": 222,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_ARTILLERY",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_ARTILLERY.json"
+  },
+  {
+   "index": 223,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_DOGS",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_DOGS.json"
+  },
+  {
+   "index": 224,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_HELICOPTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_HELICOPTER.json"
+  },
+  {
+   "index": 225,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_RCBOMB",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_RCBOMB.json"
+  },
+  {
+   "index": 226,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_TIMEDISTORTION",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_TIMEDISTORTION.json"
+  },
+  {
+   "index": 227,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_CLOAK",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_CLOAK.json"
+  },
+  {
+   "index": 228,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROUND_ENDURANCE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROUND_ENDURANCE.json"
+  },
+  {
+   "index": 229,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_AIRSTRIKE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_AIRSTRIKE.json"
+  },
+  {
+   "index": 230,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_TURRET.json"
+  },
+  {
+   "index": 231,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_PORTAL",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_PORTAL.json"
+  },
+  {
+   "index": 232,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_NAPALM",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_NAPALM.json"
+  },
+  {
+   "index": 233,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_ARTILLERY",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_ARTILLERY.json"
+  },
+  {
+   "index": 234,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_DOGS",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_DOGS.json"
+  },
+  {
+   "index": 235,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_HELICOPTER",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_HELICOPTER.json"
+  },
+  {
+   "index": 236,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_RCBOMB",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_RCBOMB.json"
+  },
+  {
+   "index": 237,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_TIMEDISTORTION",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_TIMEDISTORTION.json"
+  },
+  {
+   "index": 238,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_CLOAK",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_CLOAK.json"
+  },
+  {
+   "index": 239,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_ENDURANCE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_ENDURANCE.json"
+  },
+  {
+   "index": 240,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COOLDOWN_WAIT",
+   "file": "assets/LocalizeEntry/ZOMBIE_COOLDOWN_WAIT.json"
+  },
+  {
+   "index": 241,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_APE_ENTRY",
+   "file": "assets/LocalizeEntry/ZOMBIE_APE_ENTRY.json"
+  },
+  {
+   "index": 242,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TRAP_ACTIVE",
+   "file": "assets/LocalizeEntry/ZOMBIE_TRAP_ACTIVE.json"
+  },
+  {
+   "index": 243,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TRAP_COOLDOWN",
+   "file": "assets/LocalizeEntry/ZOMBIE_TRAP_COOLDOWN.json"
+  },
+  {
+   "index": 244,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_TURRET",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_TURRET.json"
+  },
+  {
+   "index": 245,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_PORTAL",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_PORTAL.json"
+  },
+  {
+   "index": 246,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HAS_ABILITY",
+   "file": "assets/LocalizeEntry/ZOMBIE_HAS_ABILITY.json"
+  },
+  {
+   "index": 247,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_ARTILLERY_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_ARTILLERY_USED.json"
+  },
+  {
+   "index": 248,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_AIRSTRIKE_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_AIRSTRIKE_USED.json"
+  },
+  {
+   "index": 249,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_NAPALM_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_NAPALM_USED.json"
+  },
+  {
+   "index": 250,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_DOGS_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_DOGS_USED.json"
+  },
+  {
+   "index": 251,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_RCCAR_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_RCCAR_USED.json"
+  },
+  {
+   "index": 252,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_CLOAK_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_CLOAK_USED.json"
+  },
+  {
+   "index": 253,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_ENDURANCE_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_ENDURANCE_USED.json"
+  },
+  {
+   "index": 254,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_HELI_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_HELI_USED.json"
+  },
+  {
+   "index": 255,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_TURRET_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_TURRET_USED.json"
+  },
+  {
+   "index": 256,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ABILITY_PORTAL_USED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ABILITY_PORTAL_USED.json"
+  },
+  {
+   "index": 257,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_RCBOMB",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_RCBOMB.json"
+  },
+  {
+   "index": 258,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_CLOAK",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_CLOAK.json"
+  },
+  {
+   "index": 259,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_EARNED_ENDURANCE",
+   "file": "assets/LocalizeEntry/ZOMBIE_EARNED_ENDURANCE.json"
+  },
+  {
+   "index": 260,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PORTAL_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_PORTAL_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 261,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TURRET_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_TURRET_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 262,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ENDURANCE_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_ENDURANCE_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 263,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CLOAK_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_CLOAK_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 264,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RCBOMB_NOT_AVAILABLE",
+   "file": "assets/LocalizeEntry/ZOMBIE_RCBOMB_NOT_AVAILABLE.json"
+  },
+  {
+   "index": 265,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_GALIL",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_GALIL.json"
+  },
+  {
+   "index": 266,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_COMMANDO",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_COMMANDO.json"
+  },
+  {
+   "index": 267,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_FNFAL",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_FNFAL.json"
+  },
+  {
+   "index": 268,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_FAMAS",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_FAMAS.json"
+  },
+  {
+   "index": 269,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_HK21",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_HK21.json"
+  },
+  {
+   "index": 270,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_SPECTRE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_SPECTRE.json"
+  },
+  {
+   "index": 271,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_CZ75DW",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_CZ75DW.json"
+  },
+  {
+   "index": 272,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_M72_LAW",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_M72_LAW.json"
+  },
+  {
+   "index": 273,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_CHINA_LAKE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_CHINA_LAKE.json"
+  },
+  {
+   "index": 274,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_L96A1",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_L96A1.json"
+  },
+  {
+   "index": 275,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_CROSSBOW_EXPLOSIVE",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_CROSSBOW_EXPLOSIVE.json"
+  },
+  {
+   "index": 276,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_WEAPON_HS10",
+   "file": "assets/LocalizeEntry/ZOMBIE_WEAPON_HS10.json"
+  },
+  {
+   "index": 277,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_REVIVING_SOLO",
+   "file": "assets/LocalizeEntry/ZOMBIE_REVIVING_SOLO.json"
+  },
+  {
+   "index": 278,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PYTHON_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_PYTHON_UPGRADED.json"
+  },
+  {
+   "index": 279,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_M1911_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_M1911_UPGRADED.json"
+  },
+  {
+   "index": 280,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_M14_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_M14_UPGRADED.json"
+  },
+  {
+   "index": 281,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_M16_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_M16_UPGRADED.json"
+  },
+  {
+   "index": 282,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_G11_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_G11_UPGRADED.json"
+  },
+  {
+   "index": 283,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_FAMAS_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_FAMAS_UPGRADED.json"
+  },
+  {
+   "index": 284,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AK74U_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_AK74U_UPGRADED.json"
+  },
+  {
+   "index": 285,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MP5K_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_MP5K_UPGRADED.json"
+  },
+  {
+   "index": 286,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MP40_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_MP40_UPGRADED.json"
+  },
+  {
+   "index": 287,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MPL_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_MPL_UPGRADED.json"
+  },
+  {
+   "index": 288,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_PM63_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_PM63_UPGRADED.json"
+  },
+  {
+   "index": 289,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_MAC11_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_MAC11_UPGRADED.json"
+  },
+  {
+   "index": 290,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SPECTRE_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_SPECTRE_UPGRADED.json"
+  },
+  {
+   "index": 291,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CZ75_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CZ75_UPGRADED.json"
+  },
+  {
+   "index": 292,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CZ75_DW_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CZ75_DW_UPGRADED.json"
+  },
+  {
+   "index": 293,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ITHACA_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ITHACA_UPGRADED.json"
+  },
+  {
+   "index": 294,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ROTTWEIL72_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ROTTWEIL72_UPGRADED.json"
+  },
+  {
+   "index": 295,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SPAS_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_SPAS_UPGRADED.json"
+  },
+  {
+   "index": 296,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HS10_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_HS10_UPGRADED.json"
+  },
+  {
+   "index": 297,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_ENFIELD_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_ENFIELD_UPGRADED.json"
+  },
+  {
+   "index": 298,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AUG_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_AUG_UPGRADED.json"
+  },
+  {
+   "index": 299,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_AUG_GL_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_AUG_GL_UPGRADED.json"
+  },
+  {
+   "index": 300,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_GALIL_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_GALIL_UPGRADED.json"
+  },
+  {
+   "index": 301,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_COMMANDO_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_COMMANDO_UPGRADED.json"
+  },
+  {
+   "index": 302,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_FNFAL_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_FNFAL_UPGRADED.json"
+  },
+  {
+   "index": 303,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_DRAGUNOV_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_DRAGUNOV_UPGRADED.json"
+  },
+  {
+   "index": 304,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_L96A1_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_L96A1_UPGRADED.json"
+  },
+  {
+   "index": 305,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RPK_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_RPK_UPGRADED.json"
+  },
+  {
+   "index": 306,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_HK21_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_HK21_UPGRADED.json"
+  },
+  {
+   "index": 307,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_M202_FLASH_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_M202_FLASH_UPGRADED.json"
+  },
+  {
+   "index": 308,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_M72_LAW_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_M72_LAW_UPGRADED.json"
+  },
+  {
+   "index": 309,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CHINA_LAKE_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CHINA_LAKE_UPGRADED.json"
+  },
+  {
+   "index": 310,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_RAY_GUN_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_RAY_GUN_UPGRADED.json"
+  },
+  {
+   "index": 311,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TESLA_GUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_TESLA_GUN.json"
+  },
+  {
+   "index": 312,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_TESLA_GUN_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_TESLA_GUN_UPGRADED.json"
+  },
+  {
+   "index": 313,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_THUNDERGUN_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_THUNDERGUN_UPGRADED.json"
+  },
+  {
+   "index": 314,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_FREEZEGUN",
+   "file": "assets/LocalizeEntry/ZOMBIE_FREEZEGUN.json"
+  },
+  {
+   "index": 315,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_FREEZEGUN_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_FREEZEGUN_UPGRADED.json"
+  },
+  {
+   "index": 316,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CROSSBOW_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CROSSBOW_UPGRADED.json"
+  },
+  {
+   "index": 317,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_CROSSBOW_EXPLOSIVE_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_CROSSBOW_EXPLOSIVE_UPGRADED.json"
+  },
+  {
+   "index": 318,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_KNIFE_BALLISTIC_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_KNIFE_BALLISTIC_UPGRADED.json"
+  },
+  {
+   "index": 319,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_G11_LPS_UPGRADED",
+   "file": "assets/LocalizeEntry/ZOMBIE_G11_LPS_UPGRADED.json"
+  },
+  {
+   "index": 320,
+   "type": "LocalizeEntry",
+   "name": "ZOMBIE_SURVIVED_NONE",
+   "file": "assets/LocalizeEntry/ZOMBIE_SURVIVED_NONE.json"
+  },
+  {
+   "index": 321,
+   "type": "SndBank",
+   "name": "zmb_common.english",
+   "file": "assets/SndBank/zmb_common.english.json"
+  },
+  {
+   "index": 322,
+   "type": "MaterialTechniqueSet",
+   "name": "2d",
+   "file": "assets/MaterialTechniqueSet/2d.json"
+  },
+  {
+   "index": 323,
+   "type": "Material",
+   "name": "waypoint_revive",
+   "file": "assets/Material/waypoint_revive.json"
+  },
+  {
+   "index": 324,
+   "type": "RawFile",
+   "name": "localized_common_zombie",
+   "file": "rawfiles/localized_common_zombie"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
