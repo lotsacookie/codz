@@ -604,7 +604,10 @@ class T5Zone:
         if v == PTR_INSERT:
             return "insert", None
         v -= 1
-        return "offset", (v >> BLOCK_SHIFT, v & OFFSET_MASK)
+        block = v >> BLOCK_SHIFT
+        if block >= len(BLOCK_NAMES):
+            return "null", None
+        return "offset", (block, v & OFFSET_MASK)
 
     def resolve(self, block, offset):
         if not (0 <= block < 7):
