@@ -23,6 +23,7 @@
  "unwalkedTail": [
   "_unwalked/tail_00108bbf_part0.bin"
  ],
+ "errorReport": "_errors.txt",
  "assets": [
   {
    "index": 0,
