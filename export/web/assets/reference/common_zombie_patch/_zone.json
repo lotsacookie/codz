@@ -1,0 +1,543 @@
+{
+ "zone": "zone/Common/common_zombie_patch.ff",
+ "status": "ok",
+ "error": null,
+ "complete": false,
+ "coverage": {
+  "streamPos": 1084351,
+  "streamSize": 1119345,
+  "percent": 96.87
+ },
+ "types": {
+  "RawFile": 75,
+  "XAnimParts": 11,
+  "XModel": 5,
+  "MaterialTechniqueSet": 4,
+  "StringTable": 1,
+  "FxEffectDef": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [
+  "_unwalked/tail_00108bbf_part0.bin"
+ ],
+ "assets": [
+  {
+   "index": 0,
+   "type": "RawFile",
+   "name": "animtrees/generic_human.atr",
+   "file": "rawfiles/animtrees/generic_human.atr"
+  },
+  {
+   "index": 1,
+   "type": "RawFile",
+   "name": "animscripts/debug.gsc",
+   "file": "rawfiles/animscripts/debug.gsc"
+  },
+  {
+   "index": 2,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_40.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_40.gsc"
+  },
+  {
+   "index": 3,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_72.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_72.gsc"
+  },
+  {
+   "index": 4,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_127.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_127.gsc"
+  },
+  {
+   "index": 5,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_184.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_184.gsc"
+  },
+  {
+   "index": 6,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_190.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_190.gsc"
+  },
+  {
+   "index": 7,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_222.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_222.gsc"
+  },
+  {
+   "index": 8,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_down_240.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_down_240.gsc"
+  },
+  {
+   "index": 9,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_jump_up_222.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_jump_up_222.gsc"
+  },
+  {
+   "index": 10,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_wall_crawl_drop.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_wall_crawl_drop.gsc"
+  },
+  {
+   "index": 11,
+   "type": "RawFile",
+   "name": "animscripts/traverse/zombie_shared.gsc",
+   "file": "rawfiles/animscripts/traverse/zombie_shared.gsc"
+  },
+  {
+   "index": 12,
+   "type": "RawFile",
+   "name": "animscripts/zombie_combat.gsc",
+   "file": "rawfiles/animscripts/zombie_combat.gsc"
+  },
+  {
+   "index": 13,
+   "type": "RawFile",
+   "name": "animscripts/zombie_death.gsc",
+   "file": "rawfiles/animscripts/zombie_death.gsc"
+  },
+  {
+   "index": 14,
+   "type": "RawFile",
+   "name": "animscripts/zombie_dog_death.gsc",
+   "file": "rawfiles/animscripts/zombie_dog_death.gsc"
+  },
+  {
+   "index": 15,
+   "type": "RawFile",
+   "name": "animscripts/zombie_init.gsc",
+   "file": "rawfiles/animscripts/zombie_init.gsc"
+  },
+  {
+   "index": 16,
+   "type": "RawFile",
+   "name": "animscripts/zombie_melee.gsc",
+   "file": "rawfiles/animscripts/zombie_melee.gsc"
+  },
+  {
+   "index": 17,
+   "type": "RawFile",
+   "name": "animscripts/zombie_move.gsc",
+   "file": "rawfiles/animscripts/zombie_move.gsc"
+  },
+  {
+   "index": 18,
+   "type": "RawFile",
+   "name": "animscripts/zombie_pain.gsc",
+   "file": "rawfiles/animscripts/zombie_pain.gsc"
+  },
+  {
+   "index": 19,
+   "type": "RawFile",
+   "name": "animscripts/zombie_run.gsc",
+   "file": "rawfiles/animscripts/zombie_run.gsc"
+  },
+  {
+   "index": 20,
+   "type": "RawFile",
+   "name": "animscripts/zombie_shared.gsc",
+   "file": "rawfiles/animscripts/zombie_shared.gsc"
+  },
+  {
+   "index": 21,
+   "type": "RawFile",
+   "name": "clientscripts/_audio.csc",
+   "file": "rawfiles/clientscripts/_audio.csc"
+  },
+  {
+   "index": 22,
+   "type": "RawFile",
+   "name": "clientscripts/_callbacks.csc",
+   "file": "rawfiles/clientscripts/_callbacks.csc"
+  },
+  {
+   "index": 23,
+   "type": "RawFile",
+   "name": "clientscripts/_fx.csc",
+   "file": "rawfiles/clientscripts/_fx.csc"
+  },
+  {
+   "index": 24,
+   "type": "RawFile",
+   "name": "clientscripts/_filter.csc",
+   "file": "rawfiles/clientscripts/_filter.csc"
+  },
+  {
+   "index": 25,
+   "type": "RawFile",
+   "name": "clientscripts/_load.csc",
+   "file": "rawfiles/clientscripts/_load.csc"
+  },
+  {
+   "index": 26,
+   "type": "RawFile",
+   "name": "clientscripts/_utility.csc",
+   "file": "rawfiles/clientscripts/_utility.csc"
+  },
+  {
+   "index": 27,
+   "type": "RawFile",
+   "name": "clientscripts/_footsteps.csc",
+   "file": "rawfiles/clientscripts/_footsteps.csc"
+  },
+  {
+   "index": 28,
+   "type": "RawFile",
+   "name": "clientscripts/_clientfaceanim.csc",
+   "file": "rawfiles/clientscripts/_clientfaceanim.csc"
+  },
+  {
+   "index": 29,
+   "type": "RawFile",
+   "name": "clientscripts/_face_utility.csc",
+   "file": "rawfiles/clientscripts/_face_utility.csc"
+  },
+  {
+   "index": 30,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode.csc",
+   "file": "rawfiles/clientscripts/_zombiemode.csc"
+  },
+  {
+   "index": 31,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_equipment.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_equipment.csc"
+  },
+  {
+   "index": 32,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_ffotd.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_ffotd.csc"
+  },
+  {
+   "index": 33,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weapons.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weapons.csc"
+  },
+  {
+   "index": 34,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_freezegun.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_freezegun.csc"
+  },
+  {
+   "index": 35,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_tesla.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_tesla.csc"
+  },
+  {
+   "index": 36,
+   "type": "RawFile",
+   "name": "clientscripts/_zombiemode_weap_thundergun.csc",
+   "file": "rawfiles/clientscripts/_zombiemode_weap_thundergun.csc"
+  },
+  {
+   "index": 37,
+   "type": "RawFile",
+   "name": "maps/_ballistic_knife.gsc",
+   "file": "rawfiles/maps/_ballistic_knife.gsc"
+  },
+  {
+   "index": 38,
+   "type": "RawFile",
+   "name": "maps/_callbackglobal.gsc",
+   "file": "rawfiles/maps/_callbackglobal.gsc"
+  },
+  {
+   "index": 39,
+   "type": "RawFile",
+   "name": "maps/_gameskill.gsc",
+   "file": "rawfiles/maps/_gameskill.gsc"
+  },
+  {
+   "index": 40,
+   "type": "RawFile",
+   "name": "maps/_hud_message.gsc",
+   "file": "rawfiles/maps/_hud_message.gsc"
+  },
+  {
+   "index": 41,
+   "type": "RawFile",
+   "name": "maps/_laststand.gsc",
+   "file": "rawfiles/maps/_laststand.gsc"
+  },
+  {
+   "index": 42,
+   "type": "RawFile",
+   "name": "maps/_loadout.gsc",
+   "file": "rawfiles/maps/_loadout.gsc"
+  },
+  {
+   "index": 43,
+   "type": "RawFile",
+   "name": "maps/_utility.gsc",
+   "file": "rawfiles/maps/_utility.gsc"
+  },
+  {
+   "index": 44,
+   "type": "RawFile",
+   "name": "maps/_weapons.gsc",
+   "file": "rawfiles/maps/_weapons.gsc"
+  },
+  {
+   "index": 45,
+   "type": "RawFile",
+   "name": "maps/_weaponobjects.gsc",
+   "file": "rawfiles/maps/_weaponobjects.gsc"
+  },
+  {
+   "index": 46,
+   "type": "RawFile",
+   "name": "maps/_zombiemode.gsc",
+   "file": "rawfiles/maps/_zombiemode.gsc"
+  },
+  {
+   "index": 47,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_ai_ape.gsc",
+   "file": "rawfiles/maps/_zombiemode_ai_ape.gsc"
+  },
+  {
+   "index": 48,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_ai_dogs.gsc",
+   "file": "rawfiles/maps/_zombiemode_ai_dogs.gsc"
+  },
+  {
+   "index": 49,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_audio.gsc",
+   "file": "rawfiles/maps/_zombiemode_audio.gsc"
+  },
+  {
+   "index": 50,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_auto_turret.gsc",
+   "file": "rawfiles/maps/_zombiemode_auto_turret.gsc"
+  },
+  {
+   "index": 51,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_blockers.gsc",
+   "file": "rawfiles/maps/_zombiemode_blockers.gsc"
+  },
+  {
+   "index": 52,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_bowie.gsc",
+   "file": "rawfiles/maps/_zombiemode_bowie.gsc"
+  },
+  {
+   "index": 53,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_claymore.gsc",
+   "file": "rawfiles/maps/_zombiemode_claymore.gsc"
+  },
+  {
+   "index": 54,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_devgui.gsc",
+   "file": "rawfiles/maps/_zombiemode_devgui.gsc"
+  },
+  {
+   "index": 55,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_equipment.gsc",
+   "file": "rawfiles/maps/_zombiemode_equipment.gsc"
+  },
+  {
+   "index": 56,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_ffotd.gsc",
+   "file": "rawfiles/maps/_zombiemode_ffotd.gsc"
+  },
+  {
+   "index": 57,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_perks.gsc",
+   "file": "rawfiles/maps/_zombiemode_perks.gsc"
+  },
+  {
+   "index": 58,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_powerups.gsc",
+   "file": "rawfiles/maps/_zombiemode_powerups.gsc"
+  },
+  {
+   "index": 59,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_load.gsc",
+   "file": "rawfiles/maps/_zombiemode_load.gsc"
+  },
+  {
+   "index": 60,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_score.gsc",
+   "file": "rawfiles/maps/_zombiemode_score.gsc"
+  },
+  {
+   "index": 61,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_spawner.gsc",
+   "file": "rawfiles/maps/_zombiemode_spawner.gsc"
+  },
+  {
+   "index": 62,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_traps.gsc",
+   "file": "rawfiles/maps/_zombiemode_traps.gsc"
+  },
+  {
+   "index": 63,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_utility.gsc",
+   "file": "rawfiles/maps/_zombiemode_utility.gsc"
+  },
+  {
+   "index": 64,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_cymbal_monkey.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_cymbal_monkey.gsc"
+  },
+  {
+   "index": 65,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_crossbow.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_crossbow.gsc"
+  },
+  {
+   "index": 66,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_freezegun.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_freezegun.gsc"
+  },
+  {
+   "index": 67,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_tesla.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_tesla.gsc"
+  },
+  {
+   "index": 68,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weap_thundergun.gsc",
+   "file": "rawfiles/maps/_zombiemode_weap_thundergun.gsc"
+  },
+  {
+   "index": 69,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_weapons.gsc",
+   "file": "rawfiles/maps/_zombiemode_weapons.gsc"
+  },
+  {
+   "index": 70,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_zone_manager.gsc",
+   "file": "rawfiles/maps/_zombiemode_zone_manager.gsc"
+  },
+  {
+   "index": 71,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_server_throttle.gsc",
+   "file": "rawfiles/maps/_zombiemode_server_throttle.gsc"
+  },
+  {
+   "index": 72,
+   "type": "RawFile",
+   "name": "maps/_zombiemode_sidequests.gsc",
+   "file": "rawfiles/maps/_zombiemode_sidequests.gsc"
+  },
+  {
+   "index": 73,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 78,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0s0sc0x0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0s0sc0x0.json"
+  },
+  {
+   "index": 91,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/91.json"
+  },
+  {
+   "index": 92,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/92.json"
+  },
+  {
+   "index": 93,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/93.json"
+  },
+  {
+   "index": 94,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/94.json"
+  },
+  {
+   "index": 95,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/95.json"
+  },
+  {
+   "index": 96,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/96.json"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [
+    "pb_stand_alert_pistol",
+    "pb_stand_shoot_walk_forward_unarmed",
+    "pb_terrain_slide",
+    "pf_firing",
+    "pf_melee",
+    "pt_laststand_fire",
+    "pt_rifle_stand_putaway"
+   ],
+   "references": []
+  },
+  "models": {
+   "names": [
+    "zombie_3rd_perk_bottle_doubletap",
+    "zombie_3rd_perk_bottle_jugg",
+    "zombie_3rd_perk_bottle_revive",
+    "zombie_3rd_perk_bottle_sleight",
+    "zombie_pickup_perk_bottle"
+   ],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
