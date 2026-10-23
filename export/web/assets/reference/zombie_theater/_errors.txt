@@ -1,0 +1,51 @@
+# error report: zone/Common/zombie_theater.ff
+status: ok
+stream: walked 0x129adc9 of 0x6a0bcc0 bytes (17.54%), 91688695 unwalked
+errors: 4 (2 failed assets, 0 soft errors, 1 poisoned pointers)
+
+[1] FAILED ASSET #595 XAnimParts
+  error: stream exhausted at 0x128fb5f need 1929379990 (trace=['<zone>', 'asset#595:XAnimParts', 'XAnimParts.randomDataShort'])
+  stream: start=0x128faf7 end=0x128fb6b bytes=116 resyncedTo=#596
+  previous walked asset: #594 XAnimParts unnamed stream=0x128fa8f..0x128faf7
+  bytes around the start (16 before):
+    0x0128fae7  00 00 00 ff ff ff ff 00 00 00 00 00 00 00 00 00  ................
+    0x0128faf7  00 00 00 00 00 00 00 00 00 00 00 ff ff ff ff 00  ................
+    0x0128fb07  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x0128fb17  00 00 00 51 4b 00 80 59 4b 00 80 39 49 00 80 ff  ...QK..YK..9I...
+    0x0128fb27  ff ff ff 01 01 01 00 ff ff ff ff 00 00 00 00 00  ................
+
+[2] FAILED ASSET #890 FxEffectDef
+  error: implausible array count 50528513 (trace=['<zone>', 'asset#890:FxEffectDef', 'FxEffectDef.elemDefs'])
+  stream: start=0x12982f8 end=0x1298340 bytes=72 resyncedTo=#891
+  previous walked asset: #889 FxEffectDef unnamed stream=0x12982bc..0x12982f8
+  bytes around the start (16 before):
+    0x012982e8  c2 b8 b2 c0 c2 b8 32 41 00 00 00 00 00 00 00 00  ......2A........
+    0x012982f8  00 00 00 00 08 d7 23 3c ec 51 b8 3d 05 00 00 01  ......#<.Q.=....
+    0x01298308  01 00 02 02 00 00 00 00 00 01 01 01 ff ff ff ff  ................
+    0x01298318  ff ff ff ff ff ff ff ff 00 00 00 00 00 00 00 00  ................
+    0x01298328  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+
+[3] POISONED POINTER FxElemVisuals.model->XModel
+  stream=0x127306a
+    0x0127305a  ff ff ff ff ff ff ff ff ff 00 00 ff ff 01 ff ff  ................
+    0x0127306a  ff ff 01 03 02 10 02 00 69 4b 00 80 ff ff ff ff  ........iK......
+    0x0127307a  ff ff ff ff ff ff ff ff 67 66 78 5f 66 78 74 5f  ........gfx_fxt_
+    0x0127308a  73 6d 6b 5f 73 63 61 74 74 65 72 65 64 5f 7a 31  smk_scattered_z1
+    0x0127309a  30 5f 73 70 6f 74 00 41 10 ab a0 63 70 ea 02 00  0_spot.A...cp...
+
+[4] WALK STOPPED at 0x129adc9
+  91688695 bytes after this were not turned into assets
+  the zone's asset list ended here (908 entries, all walked); the bytes after it are not covered by the list
+  last walked asset: #907 RawFile stream=0x129adbd..0x129adc9
+  bytes at the stop (16 before):
+    0x0129adb9  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x0129adc9  00 ca 6e 1a 3d ad 3e 9b 3c 5e ec aa 3c a0 25 e7  ..n.=.>.<^..<.%.
+    0x0129add9  3b fa 6c 12 bd 00 10 32 bd 51 59 86 3e 64 23 c8  ;.l....2.QY.>d#.
+    0x0129ade9  3d ba 9c 38 3d d6 01 b4 bc d8 ce 38 be 49 fd 85  =..8=......8.I..
+    0x0129adf9  be 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+
+## raw walker output
+  asset#595 (XAnimParts) failed (stream exhausted at 0x128fb5f need 1929379990 (trace=['<zone>', 'asset#595:XAnimParts', 'XAnimParts.randomDataShort'])); resyncing
+  resync -> asset#596 (XAnimParts) @ 0x128fb6b
+  asset#890 (FxEffectDef) failed (implausible array count 50528513 (trace=['<zone>', 'asset#890:FxEffectDef', 'FxEffectDef.elemDefs'])); resyncing
+  resync -> asset#891 (FxEffectDef) @ 0x1298340
