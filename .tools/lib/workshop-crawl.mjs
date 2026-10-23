@@ -166,19 +166,20 @@ export async function fetchDetails(ids, { fetchImpl, sleep }) {
 
 // A Workshop item ships compiled zone files, which this game cannot read. Authors who publish the Radiant source
 // (a GitHub repo or a .map link) often say so in the description; that link is what can be loaded in the browser.
-export function sourceLink(description) {
+export function sourceLinks(description) {
   const text = decode(String(description ?? '')).replace(/\[url=([^\]]+)\]/gi, ' $1 ').replace(/\[\/?[a-z*]+[^\]]*\]/gi, ' ');
-  const direct = [...text.matchAll(/https?:\/\/[^\s<>"'\])\[]+?\.map(?:\?[^\s<>"'\])\[]*)?(?=[\s<>"'\])\[]|$)/gi)]
-    .map(match => match[0]).find(link => !/\/_prefabs\//i.test(link) && !/steamcommunity\.com/i.test(link));
-  const links = [...text.matchAll(/https?:\/\/(?:www\.)?(?:github\.com|raw\.githubusercontent\.com|gist\.github\.com)\/[^\s<>"'\])\[]+/gi)]
-    .map(match => match[0].replace(/[.,;:!?]+$/, '').replace(/\/$/, ''));
-  const map = links.find(link => /\.map(?:$|\?)/i.test(link) && !/\/_prefabs\//i.test(link));
-  if (map) return map;
-  if (direct) return direct;
-  const repo = links.map(link => /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/#?]+?)(?:\.git)?(?:\/tree\/([^/#?]+))?(?:[/#?].*)?$/i.exec(link))
-    .find(match => match && !/^(?:sponsors|orgs|topics|settings|features|about|marketplace)$/i.test(match[1]));
-  return repo ? `https://github.com/${repo[1]}/${repo[2]}${repo[3] ? `/tree/${repo[3]}` : ''}` : '';
+  const clean = link => link.replace(/[.,;:!?]+$/, '').replace(/\/$/, '');
+  const direct = [...text.matchAll(/https?:\/\/[^\s<>"'\])\[]+?\.map(?:\?[^\s<>"'\])\[]*)?(?=[\s<>"'\])\[]|$)/gi)].map(match => match[0])
+    .filter(link => !/\/_prefabs\//i.test(link) && !/steamcommunity\.com/i.test(link));
+  const github = [...text.matchAll(/https?:\/\/(?:www\.)?(?:github\.com|raw\.githubusercontent\.com)\/[^\s<>"'\])\[]+/gi)].map(match => clean(match[0]));
+  const maps = github.filter(link => /\.map(?:$|\?)/i.test(link) && !/\/_prefabs\//i.test(link));
+  const repos = github.map(link => /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/#?]+?)(?:\.git)?(?:\/tree\/([^/#?]+))?(?:[/#?].*)?$/i.exec(link))
+    .filter(match => match && !/^(?:sponsors|orgs|topics|settings|features|about|marketplace)$/i.test(match[1]))
+    .map(match => `https://github.com/${match[1]}/${match[2]}${match[3] ? `/tree/${match[3]}` : ''}`);
+  return [...new Set([...maps, ...direct, ...repos])];
 }
+
+export const sourceLink = description => sourceLinks(description)[0] ?? '';
 
 export function merge(entry, details) {
   const more = details.get(entry.id);
@@ -194,7 +195,7 @@ export function merge(entry, details) {
     size: Number(more?.file_size) || 0,
     updated: Number(more?.time_updated) || 0,
     tags: (more?.tags ?? []).map(tag => tag.tag).filter(Boolean).slice(0, 6),
-    ...(sourceLink(more?.description) ? { source: sourceLink(more.description) } : {}),
+    ...(sourceLink(more?.description) ? { source: sourceLink(more.description), candidates: sourceLinks(more.description) } : {}),
   };
 }
 
@@ -228,6 +229,9 @@ export async function crawl({
   sleep = defaultSleep,
   delay = 2000,
   limit = DEFAULT_LIMIT,
+  skip = () => false,
+  verify = async item => item,
+  idlePages = 15,
   log = () => {},
   dump = () => {},
 } = {}) {
@@ -235,6 +239,7 @@ export async function crawl({
   const kept = new Map();
   const tools = { fetchImpl, sleep };
   for (const list of lists) {
+    let idle = 0;
     for (let page = 1; page <= list.pages && kept.size < limit; page++) {
       let result;
       try {
@@ -252,11 +257,19 @@ export async function crawl({
       const fresh = parsed.items.filter(item => !found.has(item.id));
       fresh.forEach(item => found.add(item.id));
       const details = await fetchDetails(fresh.map(item => item.id), tools);
+      const before = kept.size;
       for (const entry of fresh) {
-        const item = merge(entry, details);
-        if (item?.name && hasSource(item) && kept.size < limit) kept.set(item.id, item);
+        if (kept.size >= limit) break;
+        const merged = merge(entry, details);
+        if (!merged?.name || !hasSource(merged)) continue;
+        const { candidates, ...item } = merged;
+        const checked = await verify(item, candidates);
+        if (checked && !skip(checked)) kept.set(checked.id, checked);
       }
-      log(`${list.query ?? list.sort} page ${page}: ${parsed.items.length} items, ${fresh.length} new, ${kept.size}/${limit} with a source`);
+      const added = kept.size - before;
+      idle = added ? 0 : idle + 1;
+      log(`${list.query ?? list.sort} page ${page}: ${fresh.length} new Steam items, +${added} with a source, ${kept.size}/${limit} total`);
+      if (idle >= idlePages) { log(`${list.query ?? list.sort}: ${idlePages} pages in a row without a source link, moving on.`); break; }
       if (!fresh.length || (parsed.total && page >= Math.ceil(parsed.total / PER_PAGE))) break;
       await sleep(delay);
     }

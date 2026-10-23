@@ -230,3 +230,13 @@ test('the crawl stops as soon as the item limit is reached', async () => {
   assert.equal(items.length, 2);
   assert.equal(calls.filter(url => url.includes('steamcommunity.com')).length, 1);
 });
+
+test('a list is dropped after pages in a row without new source items, and skip hides duplicates', async () => {
+  const { fetchImpl, calls } = fakeSteam((sort, page) => listing([card(String(7000000 + page), `P${page}`, 'Ann')]));
+  const items = await crawl({ lists: [{ sort: 'trend', pages: 50 }], idlePages: 3, fetchImpl, sleep: async () => {} });
+  assert.deepEqual(items, []);
+  assert.equal(calls.filter(url => url.includes('steamcommunity.com')).length, 3);
+  const { fetchImpl: again } = fakeSteam(() => HTML);
+  const skipped = await crawl({ lists: [{ sort: 'trend', pages: 1 }], skip: item => item.id === '1111111', fetchImpl: again, sleep: async () => {} });
+  assert.deepEqual(skipped.map(item => item.id), ['2222222']);
+});

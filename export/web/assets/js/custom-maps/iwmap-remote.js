@@ -1,5 +1,6 @@
 import { parseIwmap } from './iwmap-parse.js';
 import { normalizeName } from './iwmap-flatten.js';
+import { pickMapFile } from './map-pick.js';
 
 // A GitHub map repo (github.com/<user>/<repo>[/tree|blob/<ref>/...]) or a raw/blob link to one .map file.
 export function parseGithubMapUrl(text) {
@@ -66,10 +67,9 @@ export async function loadGithubMap(target, { fetchImpl = globalThis.fetch.bind(
   let tree = null;
   if (!path) {
     tree = (await api(`https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(ref)}?recursive=1`)).tree.filter(node => node.type === 'blob');
-    const maps = tree.filter(node => /\.map$/i.test(node.path) && !/(^|\/)_prefabs\//i.test(node.path));
-    if (!maps.length) throw new Error('This repository has no .map file outside its _prefabs folder.');
-    const preferred = maps.filter(node => /(^|\/)map_source\//i.test(node.path));
-    path = (preferred.length ? preferred : maps).reduce((best, node) => ((node.size ?? 0) > (best.size ?? 0) ? node : best)).path;
+    const picked = pickMapFile(tree);
+    if (!picked) throw new Error('This repository has no .map file outside its _prefabs folder.');
+    path = picked.path;
   }
   const source = { owner, repo, ref };
   const response = await fetchImpl(rawUrl(source, path));

@@ -1,12 +1,14 @@
 // Finds Black Ops 3 map repos straight on GitHub, so the Workshop list does not depend on authors linking their source
 // in a Steam description. Only repos that really contain a Radiant .map file are kept.
+import { pickMapFile } from '../../export/web/assets/js/custom-maps/map-pick.js';
+
 const API = 'https://api.github.com';
 export const GH_QUERIES = [
   'topic:black-ops-3', 'topic:bo3', 'topic:call-of-duty-black-ops-3', 'topic:bo3-mod-tools', 'topic:radiant', 'topic:zombies-map',
   'bo3 zombies map in:name,description', 'black ops 3 custom zombie map in:name,description', 'black ops iii map radiant in:name,description',
   'zm_ bo3 in:name', 'treyarch radiant map in:name,description', 'bo3 mod tools custom map in:name,description', 'cod zombies custom map bo3 in:description',
 ];
-const RELEVANT = /bo3|bo-3|black[\s_-]?ops[\s_-]?(?:3|iii)|zm_|treyarch|radiant|zombie|mod[\s_-]?tools/i;
+const RELEVANT = /bo3|bo-3|black[\s_-]?ops[\s_-]?(?:3|iii)|\bt7\b|treyarch|\bzm_/i;
 const defaultSleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function call(url, { fetchImpl, token }) {
@@ -15,10 +17,7 @@ async function call(url, { fetchImpl, token }) {
   return response.json();
 }
 
-export function pickMap(tree) {
-  const maps = (tree?.tree ?? []).filter(node => node.type === 'blob' && /\.map$/i.test(node.path) && !/(?:^|\/)_prefabs\//i.test(node.path));
-  return maps.sort((a, b) => (b.size ?? 0) - (a.size ?? 0))[0]?.path ?? '';
-}
+export const pickMap = tree => pickMapFile((tree?.tree ?? []))?.path ?? '';
 
 export async function discover({ fetchImpl = globalThis.fetch.bind(globalThis), token = '', sleep = defaultSleep, queries = GH_QUERIES, pages = 5, maxRepos = 600, delay = 2500, log = () => {} } = {}) {
   const tools = { fetchImpl, token };
