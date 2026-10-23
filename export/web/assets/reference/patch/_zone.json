@@ -1,0 +1,435 @@
+{
+ "zone": "zone/Common/patch.ff",
+ "status": "ok",
+ "error": null,
+ "complete": false,
+ "coverage": {
+  "streamPos": 124931,
+  "streamSize": 4203998,
+  "percent": 2.97
+ },
+ "types": {
+  "Material": 30,
+  "MenuList": 11,
+  "RawFile": 8,
+  "MaterialTechniqueSet": 7,
+  "StringTable": 7,
+  "XModel": 3,
+  "ddlRoot_t": 2,
+  "XAnimParts": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [
+  "_unwalked/tail_0001e803_part0.bin"
+ ],
+ "assets": [
+  {
+   "index": 0,
+   "type": "ddlRoot_t",
+   "name": "ddl/stats.ddl",
+   "file": "assets/ddlRoot_t/ddl/stats.ddl.json"
+  },
+  {
+   "index": 1,
+   "type": "ddlRoot_t",
+   "name": "ddl/stats_archive.ddl",
+   "file": "assets/ddlRoot_t/ddl/stats_archive.ddl.json"
+  },
+  {
+   "index": 2,
+   "type": "RawFile",
+   "name": "maps/hue_city_event1.gsc",
+   "file": "rawfiles/maps/hue_city_event1.gsc"
+  },
+  {
+   "index": 3,
+   "type": "RawFile",
+   "name": "maps/pentagon_code.gsc",
+   "file": "rawfiles/maps/pentagon_code.gsc"
+  },
+  {
+   "index": 4,
+   "type": "RawFile",
+   "name": "maps/frontend_anim.gsc",
+   "file": "rawfiles/maps/frontend_anim.gsc"
+  },
+  {
+   "index": 5,
+   "type": "RawFile",
+   "name": "maps/underwaterbase_snipe.gsc",
+   "file": "rawfiles/maps/underwaterbase_snipe.gsc"
+  },
+  {
+   "index": 6,
+   "type": "RawFile",
+   "name": "maps/_zombietron_pickups.gsc",
+   "file": "rawfiles/maps/_zombietron_pickups.gsc"
+  },
+  {
+   "index": 7,
+   "type": "RawFile",
+   "name": "video/cin_levels.txt",
+   "file": "rawfiles/video/cin_levels.txt"
+  },
+  {
+   "index": 8,
+   "type": "MaterialTechniqueSet",
+   "name": "2d",
+   "file": "assets/MaterialTechniqueSet/2d.json"
+  },
+  {
+   "index": 9,
+   "type": "MenuList",
+   "name": "ui/patch_menus.txt",
+   "file": "assets/MenuList/ui/patch_menus.txt.json"
+  },
+  {
+   "index": 10,
+   "type": "MenuList",
+   "name": "\u0004",
+   "file": "assets/MenuList/_.json"
+  },
+  {
+   "index": 11,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/11.json"
+  },
+  {
+   "index": 12,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/12.json"
+  },
+  {
+   "index": 13,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/13.json"
+  },
+  {
+   "index": 14,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/14.json"
+  },
+  {
+   "index": 15,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/15.json"
+  },
+  {
+   "index": 16,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/16.json"
+  },
+  {
+   "index": 17,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/17.json"
+  },
+  {
+   "index": 18,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/18.json"
+  },
+  {
+   "index": 19,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/19.json"
+  },
+  {
+   "index": 20,
+   "type": "MenuList",
+   "name": null,
+   "file": "assets/MenuList/_unnamed/20.json"
+  },
+  {
+   "index": 21,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/21.json"
+  },
+  {
+   "index": 22,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/22.json"
+  },
+  {
+   "index": 23,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/23.json"
+  },
+  {
+   "index": 24,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/24.json"
+  },
+  {
+   "index": 25,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/25.json"
+  },
+  {
+   "index": 26,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/26.json"
+  },
+  {
+   "index": 27,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/27.json"
+  },
+  {
+   "index": 28,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/28.json"
+  },
+  {
+   "index": 29,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/29.json"
+  },
+  {
+   "index": 30,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/30.json"
+  },
+  {
+   "index": 31,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/31.json"
+  },
+  {
+   "index": 32,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/32.json"
+  },
+  {
+   "index": 33,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/33.json"
+  },
+  {
+   "index": 34,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/34.json"
+  },
+  {
+   "index": 35,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/35.json"
+  },
+  {
+   "index": 36,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/36.json"
+  },
+  {
+   "index": 37,
+   "type": "MaterialTechniqueSet",
+   "name": null,
+   "file": "assets/MaterialTechniqueSet/_unnamed/37.json"
+  },
+  {
+   "index": 41,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/41.json"
+  },
+  {
+   "index": 42,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/42.json"
+  },
+  {
+   "index": 43,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/43.json"
+  },
+  {
+   "index": 44,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/44.json"
+  },
+  {
+   "index": 45,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/45.json"
+  },
+  {
+   "index": 46,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/46.json"
+  },
+  {
+   "index": 47,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/47.json"
+  },
+  {
+   "index": 48,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/48.json"
+  },
+  {
+   "index": 49,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/49.json"
+  },
+  {
+   "index": 50,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/50.json"
+  },
+  {
+   "index": 51,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/51.json"
+  },
+  {
+   "index": 52,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/52.json"
+  },
+  {
+   "index": 53,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/53.json"
+  },
+  {
+   "index": 54,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/54.json"
+  },
+  {
+   "index": 55,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/55.json"
+  },
+  {
+   "index": 56,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/56.json"
+  },
+  {
+   "index": 57,
+   "type": "Material",
+   "name": "\u0001",
+   "file": "assets/Material/_.json"
+  },
+  {
+   "index": 58,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/58.json"
+  },
+  {
+   "index": 59,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/59.json"
+  },
+  {
+   "index": 60,
+   "type": "Material",
+   "name": null,
+   "file": "assets/Material/_unnamed/60.json"
+  },
+  {
+   "index": 61,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/61.json"
+  },
+  {
+   "index": 63,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/63.json"
+  },
+  {
+   "index": 64,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/64.json"
+  },
+  {
+   "index": 65,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/65.json"
+  },
+  {
+   "index": 66,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/66.json"
+  },
+  {
+   "index": 67,
+   "type": "StringTable",
+   "name": null,
+   "file": "assets/StringTable/_unnamed/67.json"
+  },
+  {
+   "index": 68,
+   "type": "RawFile",
+   "name": null,
+   "file": "assets/RawFile/_unnamed/68.json"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
