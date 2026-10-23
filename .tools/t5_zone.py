@@ -1273,19 +1273,52 @@ class T5Zone:
         return None
 
     def _settle_pending(self):
-        """Resolve forward-reference PendingRefs now that all landings exist."""
-        def fix(obj, depth=0):
-            if depth > 12 or obj is None:
-                return obj
-            if isinstance(obj, PendingRef):
-                got = self.mem[obj.block].get(obj.offset)
-                return got if got is not None else obj
-            if isinstance(obj, list):
-                return [fix(o, depth + 1) for o in obj]
-            if isinstance(obj, dict):
-                return {k: fix(v, depth + 1) for k, v in obj.items()}
-            return obj
-        self.assets = [(t, tn, fix(n), fix(o)) for (t, tn, n, o) in self.assets]
+        """Resolve forward-reference PendingRefs in place now that all landings exist.
+
+        In-place so object identity survives (weapon bundles link models and
+        animations by identity), then re-derive names that were unresolvable
+        while their string pointers were still forward references.
+        """
+        seen = set()
+        stack = [o for (_t, _tn, _n, o) in self.assets if o is not None]
+        stack += [n for (_t, _tn, n, _o) in self.assets if isinstance(n, PendingRef)]
+
+        def landed(p):
+            if not (0 <= p.block < 7):
+                return p
+            got = self.mem[p.block].get(p.offset)
+            return p if got is None else got
+
+        while stack:
+            obj = stack.pop()
+            if isinstance(obj, Ref):
+                obj = obj.obj
+            elif isinstance(obj, (RawArray, ScriptStringRef)):
+                obj = obj.data
+            if not isinstance(obj, (dict, list)) or id(obj) in seen:
+                continue
+            seen.add(id(obj))
+            items = obj.items() if isinstance(obj, dict) else enumerate(obj)
+            for key, value in list(items):
+                if isinstance(value, PendingRef):
+                    value = landed(value)
+                    obj[key] = value
+                if isinstance(value, (Ref, RawArray, ScriptStringRef, dict, list)):
+                    stack.append(value)
+
+        fixed = []
+        for (t, tn, n, o) in self.assets:
+            if isinstance(n, PendingRef):
+                got = landed(n)
+                n = got.obj if isinstance(got, Ref) else got
+                if isinstance(n, (bytes, bytearray)):
+                    n = bytes(n).split(b"\x00", 1)[0].decode("utf-8", "replace")
+                elif not isinstance(n, str):
+                    n = None
+            if not n and o is not None:
+                n = self._asset_name(o)
+            fixed.append((t, tn, n, o))
+        self.assets = fixed
 
     def _asset_name(self, obj):
         def as_str(v):
