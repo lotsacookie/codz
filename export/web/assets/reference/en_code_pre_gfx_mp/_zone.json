@@ -18,6 +18,7 @@
  "failedSpans": [],
  "unwalkedTail": [],
  "errorReport": "_errors.txt",
+ "assetTrace": "_asset_trace.txt",
  "assets": [
   {
    "index": 0,
