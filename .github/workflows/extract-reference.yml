@@ -2,7 +2,7 @@ name: Extract reference assets
 
 # Manual only. Pulls one map's pack from UMMMM-GUYSSS/Call-of-Duty-Black-Ops-Zombies (sparse, that map's folder only),
 # verifies it against its manifest, then extracts textures (IWI -> PNG), sounds, scripts (GSC/CSC source from the zones), an FX name index, animations and models (XAnimParts/XModel walked out of the zones as JSON), and every weapon (WeaponVariantDef as JSON with the weapon animations, viewmodels and hand models it uses) into one fixed folder.
-# Re-running never replaces a file that already exists in that folder; only new files are added and committed.
+# Each zone gets its own folder (common_zombie, common_zombie_patch, patch, ...) holding everything the zone contains. Zone files are rewritten on every run (clean=true also deletes the old layout first); images and sounds from the archives are still only added.
 
 on:
   workflow_dispatch:
@@ -21,6 +21,10 @@ on:
       out_dir:
         description: Output folder in this repo
         default: export/web/assets/reference
+      clean:
+        description: Delete the previous zone folders and flat animations/models/weapons/scripts folders first, then re-extract from scratch
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -67,6 +71,16 @@ jobs:
           MAP: ${{ inputs.map }}
         run: node .tools/reference-pack/fetch.mjs --source ref/v1 --map "$MAP" --out .work/reference
 
+      - name: Clean previous zone output
+        if: ${{ inputs.clean }}
+        env:
+          OUT_DIR: ${{ inputs.out_dir }}
+        run: |
+          rm -rf "$OUT_DIR/animations" "$OUT_DIR/models" "$OUT_DIR/weapons" "$OUT_DIR/scripts" "$OUT_DIR/fx-index.json"
+          if [ -d "$OUT_DIR" ]; then
+            find "$OUT_DIR" -maxdepth 2 -name _zone.json -printf '%h\n' | while read -r dir; do echo "removing $dir"; rm -rf "$dir"; done
+          fi
+
       - name: Extract (existing files are kept, never replaced)
         env:
           KINDS: ${{ inputs.kinds }}
@@ -89,30 +103,41 @@ jobs:
         run: |
           walk=$(echo "$KINDS" | tr -d ' ' | tr ',' '\n' | grep -xE 'animations|models|weapons' | paste -sd, - || true)
           if [ -z "$walk" ]; then echo "No weapons, animations or models requested."; exit 0; fi
-          args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract-zone-assets --kinds "$walk")
+          args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract-zone-assets --kinds "$walk,scripts,fx" --overwrite)
           if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
           node .tools/reference-pack/extract.mjs "${args[@]}"
 
-      - name: Commit new files only
+      - name: Commit and push (one commit per zone folder)
         env:
           OUT_DIR: ${{ inputs.out_dir }}
           MAP: ${{ inputs.map }}
           MAX_COMMIT_BYTES: 150000000
         run: |
-          git add -- "$OUT_DIR"
-          if git diff --cached --quiet; then echo "Nothing new to commit."; exit 0; fi
-          git diff --cached --stat | tail -1
-          new_bytes=$(git diff --cached --name-only --diff-filter=A -z | xargs -0 -r du -cb | tail -1 | cut -f1)
-          echo "New files total ${new_bytes:-0} bytes (limit $MAX_COMMIT_BYTES)"
-          if [ "${new_bytes:-0}" -gt "$MAX_COMMIT_BYTES" ]; then
-            echo "Refusing to commit: new files exceed the size limit. Re-run with a narrower 'only' regex or fewer kinds."
-            exit 1
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "reference: extract new $MAP assets into $OUT_DIR"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          commit_group() {
+            label="$1"; shift
+            git add -A -- "$@"
+            if git diff --cached --quiet; then echo "$label: nothing changed."; return 0; fi
+            git diff --cached --stat | tail -1
+            new_bytes=$(git diff --cached --name-only --diff-filter=AM -z | xargs -0 -r du -cb | tail -1 | cut -f1)
+            echo "$label: ${new_bytes:-0} bytes changed (limit $MAX_COMMIT_BYTES)"
+            if [ "${new_bytes:-0}" -gt "$MAX_COMMIT_BYTES" ]; then
+              echo "Refusing to commit $label: over the size limit. Re-run with a narrower 'only' regex."
+              git reset -q; return 1
+            fi
+            git commit -q -m "reference: extract $MAP $label into $OUT_DIR"
+            git pull -q --rebase origin main
+            git push -q origin HEAD:main
+          }
+          status=0
+          # deletions from the clean step first, then each zone folder, then the shared archive folders (images, sounds, ...)
+          for dir in "$OUT_DIR"/*/; do
+            [ -d "$dir" ] || continue
+            commit_group "$(basename "$dir")" "$dir" || status=1
+          done
+          commit_group "cleanup and index files" "$OUT_DIR" || status=1
+          exit $status
 
       - name: Upload report
         if: always()

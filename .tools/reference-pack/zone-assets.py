@@ -9,6 +9,7 @@ import math
 import os
 import re
 import sys
+import zlib
 from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -365,6 +366,157 @@ def run(zone_path, zone_name, out, kinds, only, overwrite):
     }
 
 
+CHUNK_BYTES = 40 * 1024 * 1024
+EXPORT_HANDLED_TYPES = set(KIND_FOR_TYPE)
+
+
+def rawfile_bytes(obj):
+    """Decoded contents of a RawFile asset (zlib payloads are inflated, plain ones kept)."""
+    inner = obj.obj if isinstance(obj, Ref) else obj
+    if not isinstance(inner, dict):
+        return None
+    buffer = inner.get("buffer")
+    buffer = buffer.obj if isinstance(buffer, Ref) else buffer
+    data = buffer.data if isinstance(buffer, RawArray) else buffer
+    data = data.obj if isinstance(data, Ref) else data
+    if not isinstance(data, (bytes, bytearray)):
+        return None
+    data = bytes(data)
+    for skip in (8, 0):
+        if len(data) > skip + 2 and data[skip] == 0x78:
+            try:
+                return zlib.decompressobj().decompress(data[skip:])
+            except zlib.error:
+                continue
+    return data.rstrip(b"\x00")
+
+
+def unique_target(out, relative, used, index):
+    candidate = relative
+    if candidate in used:
+        stem, ext = os.path.splitext(relative)
+        candidate = f"{stem}~{index}{ext}"
+    used.add(candidate)
+    return candidate
+
+
+def write_file(out, relative, payload, overwrite):
+    target = os.path.join(out, *relative.split("/"))
+    if not overwrite and os.path.exists(target):
+        return "exists"
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    with open(target, "wb") as handle:
+        handle.write(payload)
+    return "ok"
+
+
+def export_everything(assets, out, zone_name, only=None, overwrite=True, resolve_name=None):
+    """Writes every walked asset that export_assets does not already cover (materials, techsets, fx, snd, rawfiles, menus, tables, ...)."""
+    stubs, _walked = build_stubs(assets, resolve_name)
+    rows, used, listing = [], set(), []
+    for index, (_type_index, type_name, name, obj) in enumerate(assets):
+        if type_name == "SKIPPED" or obj is None or type_name in EXPORT_HANDLED_TYPES:
+            continue
+        if not name and resolve_name is not None:
+            name = resolve_name(obj)
+        if only is not None and name and not only.search(name):
+            continue
+        if type_name == "RawFile" and name:
+            payload = rawfile_bytes(obj)
+            relative = safe_relative(f"rawfiles/{name}")
+            if payload is not None and relative:
+                relative = unique_target(out, relative, used, index)
+                status = write_file(out, relative, payload, overwrite)
+                rows.append({"archive": zone_name, "entry": name, "kind": "rawfiles", "file": relative, "sha256": hashlib.sha256(payload).hexdigest(), "status": status})
+                listing.append({"index": index, "type": type_name, "name": name, "file": relative})
+                continue
+        relative = safe_relative(f"assets/{type_name}/{name}.json") if name else f"assets/{type_name}/_unnamed/{index}.json"
+        if relative is None:
+            relative = f"assets/{type_name}/_unnamed/{index}.json"
+        relative = unique_target(out, relative, used, index)
+        record = {"type": type_name, "name": name, "zone": zone_name, "index": index, "asset": jsonable(obj, stubs=stubs)}
+        payload = json.dumps(record, separators=(",", ":"), allow_nan=False).encode("utf-8")
+        status = write_file(out, relative, payload, overwrite)
+        rows.append({"archive": zone_name, "entry": name, "kind": type_name, "file": relative, "sha256": hashlib.sha256(payload).hexdigest(), "status": status})
+        listing.append({"index": index, "type": type_name, "name": name, "file": relative})
+    return rows, listing
+
+
+def dump_unwalked(zone, out, overwrite=True):
+    """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
+    files = []
+    data = zone.data
+    for span in zone.failed_spans:
+        start, end = span["start"], min(span["end"], len(data))
+        if end <= start:
+            continue
+        relative = f"_failed/asset_{span['index']}_{span['type']}.bin"
+        write_file(out, relative, data[start:end], overwrite)
+        files.append({**span, "file": relative})
+    tail_start = zone.pos
+    tail = []
+    if tail_start < len(data):
+        part = 0
+        for at in range(tail_start, len(data), CHUNK_BYTES):
+            relative = f"_unwalked/tail_{tail_start:08x}_part{part}.bin"
+            write_file(out, relative, data[at:at + CHUNK_BYTES], overwrite)
+            tail.append(relative)
+            part += 1
+    return files, tail
+
+
+def run_zone(zone_path, zone_name, out, only, overwrite):
+    """One folder per zone: weapons/animations/models (+links), every other asset, rawfiles, failed spans, unwalked tail and _zone.json."""
+    zone, status, error, lines = capture_walk(zone_path)
+    assets = zone.assets if zone is not None else []
+    resolve_name = zone._asset_name if zone is not None else None
+    os.makedirs(out, exist_ok=True)
+    rows, index, summary = export_assets(assets, out, ["animations", "models", "weapons"], only, overwrite, zone_name, resolve_name)
+    extra_rows, listing = export_everything(assets, out, zone_name, only, overwrite, resolve_name)
+    rows += extra_rows
+    failed, tail = dump_unwalked(zone, out, overwrite) if zone is not None else ([], [])
+    if status != "ok":
+        rows.append({"archive": zone_name, "kind": "zone", "status": status, "error": error})
+    types = Counter(type_name for _i, type_name, _n, _o in assets)
+    size = len(zone.data) if zone is not None else 0
+    pos = zone.pos if zone is not None else 0
+    manifest = {
+        "zone": zone_name,
+        "status": status,
+        "error": error,
+        "complete": status == "ok" and not failed and pos >= size,
+        "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
+        "types": dict(types.most_common()),
+        "resyncs": sum(1 for line in lines if "resync" in line),
+        "failures": summarize_failures(lines, 40),
+        "softErrors": zone.soft_errors[:200] if zone is not None else [],
+        "failedSpans": failed,
+        "unwalkedTail": tail,
+        "assets": listing,
+        "named": index,
+    }
+    write_file(out, "_zone.json", json.dumps(manifest, indent=1).encode("utf-8"), True)
+    resyncs = manifest["resyncs"]
+    return {
+        "zone": zone_name,
+        "status": status,
+        "error": error,
+        "assets": len(assets),
+        "coverage": {"streamPos": pos, "streamSize": size},
+        "types": dict(types.most_common(40)),
+        "resyncs": resyncs,
+        "failures": summarize_failures(lines),
+        "named": dict(Counter(row["kind"] for row in rows if row.get("entry") and row["status"] in ("ok", "exists"))),
+        "warnings": lines[:WARNING_LINES],
+        "rows": rows,
+        "index": index,
+        "summary": summary,
+        "softErrors": len(zone.soft_errors) if zone is not None else 0,
+        "failedSpans": len(failed),
+        "unwalkedBytes": max(0, size - pos),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--zone", required=True)
@@ -374,10 +526,14 @@ def main():
     parser.add_argument("--only", default=None)
     parser.add_argument("--report", required=True)
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--per-zone", action="store_true", help="dump everything this zone holds into --out (one folder per zone)")
     args = parser.parse_args()
     kinds = [kind for kind in (item.strip() for item in args.kinds.split(",")) if kind in KIND_FOR_TYPE.values()]
     only = re.compile(args.only, re.IGNORECASE) if args.only else None
-    result = run(args.zone, args.zone_name or args.zone, args.out, kinds, only, args.overwrite)
+    if args.per_zone:
+        result = run_zone(args.zone, args.zone_name or args.zone, args.out, only, args.overwrite)
+    else:
+        result = run(args.zone, args.zone_name or args.zone, args.out, kinds, only, args.overwrite)
     os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
     with open(args.report, "w", encoding="utf-8") as handle:
         json.dump(result, handle, separators=(",", ":"))

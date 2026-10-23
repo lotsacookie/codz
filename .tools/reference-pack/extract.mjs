@@ -7,6 +7,8 @@
 // animations/models: XAnimParts and XModel assets walked out of the .ff zones by zone-assets.py (python3), one JSON per asset under animations/ and models/,
 // with animations-index.json and models-index.json listing the names per zone. Names starting with a comma are empty reference stubs: they are listed
 // under references and not written, so they cannot take the place of the real asset. IWD entries that look like xanim/xmodel files are copied as-is.
+// Zone output is split per zone (--flat keeps the old single folder): <out>/<zone>/{animations,models,weapons,assets/<Type>,rawfiles,scripts,_failed,_unwalked,_zone.json}.
+// _zone.json says how much of the zone was walked; bytes the walker could not turn into assets are kept raw under _failed/ and _unwalked/ so nothing is dropped.
 // weapons: every WeaponVariantDef walked out of the zones, written to weapons/ with a links block (the animations and models it uses, found here or external).
 // Asking for weapons also writes the XAnimParts and XModel assets those weapons use, plus viewmodel, hand and arm assets, even when animations/models are not requested.
 import { mkdir, mkdtemp, rm, writeFile, readFile, access } from 'node:fs/promises';
@@ -21,6 +23,16 @@ import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, scanRawFiles, de
 const execFileAsync = promisify(execFile);
 const ZONE_ASSETS_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'zone-assets.py');
 export const ZONE_ASSET_KINDS = ['animations', 'models', 'weapons'];
+
+// One output folder per zone: zone/Common/common_zombie_patch.ff -> common_zombie_patch (parent folder is prefixed only when two zones share a name).
+export function zoneFolder(zonePath, taken = new Set()) {
+  const parts = String(zonePath).replace(/\\/g, '/').split('/').filter(Boolean);
+  const stem = (parts.pop() ?? 'zone').replace(/\.ff$/i, '');
+  let name = safeRelative(stem) ?? 'zone';
+  if (taken.has(name) && parts.length) name = safeRelative(`${parts.pop()}_${stem}`) ?? name;
+  taken.add(name);
+  return name;
+}
 
 export function classifyEntry(name) {
   const lower = name.toLowerCase();
@@ -104,13 +116,14 @@ export async function indexZone(file, zone) {
   return { zone: file, names: fxNames(scanNames(zone)) };
 }
 
-export async function extractZoneAssets(file, zoneName, { out, kinds, only, report, overwrite, python = process.env.ZONE_ASSETS_PYTHON || 'python3' }) {
+export async function extractZoneAssets(file, zoneName, { out, kinds, only, report, overwrite, perZone = false, python = process.env.ZONE_ASSETS_PYTHON || 'python3' }) {
   const walkKinds = zoneAssetKinds(kinds);
   const work = await mkdtemp(join(tmpdir(), 'zone-assets-'));
   const reportFile = join(work, 'report.json');
   const args = [ZONE_ASSETS_SCRIPT, '--zone', file, '--zone-name', zoneName, '--out', out, '--kinds', walkKinds.join(','), '--report', reportFile];
   if (only) args.push('--only', only.source);
   if (overwrite) args.push('--overwrite');
+  if (perZone) args.push('--per-zone');
   try {
     await execFileAsync(python, args, { maxBuffer: 1 << 26 });
     const result = JSON.parse(await readFile(reportFile, 'utf8'));
@@ -154,22 +167,29 @@ async function main() {
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
   const report = [], zones = [];
+  const taken = new Set();
+  const perZone = !argv.includes('--flat');
   const walked = { animations: [], models: [], weapons: [] };
   for (const item of resolved.entries) {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
     if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
     else if (item.kind === 'zone') {
+      const zoneOut = perZone ? join(out, zoneFolder(item.path, taken)) : out;
       if (kinds.has('fx') || kinds.has('scripts')) {
         const zone = inflateZone(await readFile(item.file));
         if (zone.error) report.push({ archive: item.path, kind: 'zone', status: zone.error });
         else {
-          if (kinds.has('fx')) zones.push(await indexZone(item.path, zone.data));
-          if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out, report, overwrite });
+          if (kinds.has('fx')) {
+            const index = await indexZone(item.path, zone.data);
+            zones.push(index);
+            if (perZone) { await mkdir(zoneOut, { recursive: true }); await writeFile(join(zoneOut, 'fx-index.json'), JSON.stringify(index, null, 1)); }
+          }
+          if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out: zoneOut, report, overwrite });
         }
       }
       if (zoneAssetKinds(kinds).length) {
-        const result = await extractZoneAssets(item.file, item.path, { out, kinds, only, report, overwrite });
+        const result = await extractZoneAssets(item.file, item.path, { out: zoneOut, kinds, only, report, overwrite, perZone });
         for (const kind of ZONE_ASSET_KINDS) {
           const found = result.index[kind];
           if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references, ...(found.links ? { links: found.links } : {}) });

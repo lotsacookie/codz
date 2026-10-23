@@ -548,6 +548,8 @@ class T5Zone:
         self.insert_slots = []
         self.poison = False
         self.poison_events = []
+        self.soft_errors = []   # recoverable problems (the asset is kept, its bad pointer becomes None)
+        self.failed_spans = []  # raw stream spans of assets that failed: {index, type, error, start, end}
 
     # ----- stream -----
     def read_stream(self, n):
@@ -611,7 +613,10 @@ class T5Zone:
 
     def resolve(self, block, offset):
         if not (0 <= block < 7):
-            raise ZoneError(f"OFFSET with invalid block {block} (trace={self.ctx_trace[-6:]})")
+            # a pointer into a block that does not exist: keep the asset (partial) instead of losing it
+            if len(self.soft_errors) < 2000:
+                self.soft_errors.append(f"OFFSET with invalid block {block} (trace={self.ctx_trace[-6:]})")
+            return None
         obj = self.mem[block].get(offset)
         if obj is None:
             if self.deferred:
@@ -1232,6 +1237,7 @@ class T5Zone:
             t, p = entries[idx]
             tname = ASSET_TYPES[t] if 0 <= t < len(ASSET_TYPES) else f"type{t}"
             self.poison = False
+            start_pos = self.pos
             self.ctx_trace.append(f"asset#{idx}:{tname}")
             try:
                 kind, tgt = self.classify(p)
@@ -1252,6 +1258,7 @@ class T5Zone:
                 if target is None:
                     print(f"  asset#{idx} ({tname}) failed ({ex}); no resync target",
                           file=sys.stderr)
+                    self.failed_spans.append({"index": idx, "type": tname, "error": str(ex), "start": start_pos, "end": len(self.data)})
                     raise
                 print(f"  asset#{idx} ({tname}) failed ({ex}); resyncing",
                       file=sys.stderr, flush=True)
@@ -1278,8 +1285,10 @@ class T5Zone:
                         continue
                 if not placed:
                     print(f"  resync gave up after asset#{idx}", file=sys.stderr, flush=True)
+                    self.failed_spans.append({"index": idx, "type": tname, "error": str(ex), "start": start_pos, "end": len(self.data)})
                     raise
                 skipped += t2idx - idx
+                self.failed_spans.append({"index": idx, "type": tname, "error": str(ex), "start": start_pos, "end": pos_before, "resyncedTo": t2idx})
                 print(f"  resync -> asset#{t2idx} ({tname2}) @ {pos_before:#x}",
                       file=sys.stderr, flush=True)
                 while len(self.assets) < t2idx:
