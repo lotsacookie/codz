@@ -748,10 +748,30 @@ class T5Zone:
 
     INLINE_ARRAY_CAPACITY = 4
 
+    @staticmethod
+    def _owner_ctx(ctx, owner):
+        if owner is not None:
+            for i in range(len(ctx) - 1, -1, -1):
+                if ctx[i][0] == owner:
+                    return ctx[:i + 1]
+        return ctx
+
+    def _eval_count(self, expr, ctx, info=None):
+        try:
+            return self.eval_expr(expr, ctx)
+        except ZoneError:
+            owner = info.get("count_owner") if info else None
+            if owner is None:
+                raise
+            for i in range(len(ctx) - 1, -1, -1):
+                if ctx[i][0] == owner:
+                    return self.eval_expr(expr, ctx[:i + 1])
+            raise
+
     def _treat_inline_indices(self, sd, dsl, m, info, vals, ctx, scopes):
         if m.name == "_2":
             sibling = self._member_info(dsl, sd, "_1", scopes)
-            if sibling["cond"] is not None and self.eval_cond(sibling["cond"], ctx):
+            if sibling["cond"] is not None and self.eval_cond(sibling["cond"], self._owner_ctx(ctx, sibling["cond_owner"])):
                 return
         owner = info["arraysize_owner"]
         scope_ctx = ctx
@@ -775,7 +795,7 @@ class T5Zone:
         "u::water". Own section first, then ancestors (innermost first)."""
         info = {"count": None, "reusable": False, "block": None, "align": None,
                 "string": False, "scriptstring": False, "cond_never": False, "cond": None,
-                "arraysize": None, "arraysize_owner": None}
+                "arraysize": None, "arraysize_owner": None, "count_owner": None, "cond_owner": None}
 
         def apply_from(d, keys):
             if d is None:
@@ -785,6 +805,7 @@ class T5Zone:
                     continue
                 if key in d.counts:
                     info["count"] = d.counts[key]
+                    info["count_owner"] = d.name
                 if key in d.reusable:
                     info["reusable"] = True
                 if key in d.blocks:
@@ -799,6 +820,7 @@ class T5Zone:
                     info["cond_never"] = True
                 if key in d.cond_expr:
                     info["cond"] = d.cond_expr[key]
+                    info["cond_owner"] = d.name
                 if key in d.arraysize:
                     info["arraysize"] = d.arraysize[key]
                     info["arraysize_owner"] = d.name
@@ -852,7 +874,7 @@ class T5Zone:
         info = self._member_info(dsl, sd, name, scopes)
         if info["cond_never"]:
             return
-        if info["cond"] is not None and not self.eval_cond(info["cond"], ctx):
+        if info["cond"] is not None and not self.eval_cond(info["cond"], self._owner_ctx(ctx, info["cond_owner"])):
             return
         if not m.ptr and info["arraysize"] is not None and sd.is_union and m.array == 1:
             self._treat_inline_indices(sd, dsl, m, info, vals, ctx, scopes)
@@ -884,7 +906,7 @@ class T5Zone:
                 # char** (szXAnims, bounceSound, ...): an array of `count` string
                 # pointers follows, then the strings of every FOLLOWING entry. Reading a
                 # single C string here ate the first slots as text and shifted the weapon.
-                count = self.eval_expr(info["count"], ctx) if info["count"] else 1
+                count = self._eval_count(info["count"], ctx, info) if info["count"] else 1
                 top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
                 block = info["block"] if info["block"] is not None else top
                 raw = self.read(4 * count, block=block, align=4)
@@ -913,7 +935,7 @@ class T5Zone:
             return
         if isinstance(pv, (list, tuple)):
             # embedded array of pointers (T* x[N]): values inline in struct
-            count = self.eval_expr(info["count"], ctx) if info["count"] else len(pv)
+            count = self._eval_count(info["count"], ctx, info) if info["count"] else len(pv)
             top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
             block = info["block"] if info["block"] is not None else top
             align = info["align"] or 4
@@ -950,7 +972,7 @@ class T5Zone:
             return
         if kind not in ("following", "insert"):
             raise ZoneError(f"bad ptr kind {kind} for {sd.name}.{name}")
-        count = self.eval_expr(info["count"], ctx) if info["count"] else 1
+        count = self._eval_count(info["count"], ctx, info) if info["count"] else 1
         top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
         block = info["block"] if info["block"] is not None else top
         align = info["align"] or 4
