@@ -1,0 +1,6 @@
+# error report: zone/english/en_code_pre_gfx_mp.ff
+status: ok
+stream: walked 0x156f of 0x156f bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
