@@ -20,6 +20,7 @@
  "softErrors": [],
  "failedSpans": [],
  "unwalkedTail": [],
+ "errorReport": "_errors.txt",
  "assets": [
   {
    "index": 0,

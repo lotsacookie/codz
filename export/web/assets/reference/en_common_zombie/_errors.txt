@@ -1,0 +1,6 @@
+# error report: zone/english/en_common_zombie.ff
+status: ok
+stream: walked 0x1e034 of 0x1e034 bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
