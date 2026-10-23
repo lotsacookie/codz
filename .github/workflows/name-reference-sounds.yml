@@ -53,8 +53,8 @@ jobs:
           MAP: ${{ inputs.map }}
         run: |
           git clone --depth 1 --filter=blob:none --sparse "https://github.com/$REFERENCE_REPO.git" ref
-          git -C ref sparse-checkout set "$MAP/pack/web/sound"
-          ls -l "ref/$MAP/pack/web/sound"
+          git -C ref sparse-checkout set "v1/$MAP/pack/web/sound"
+          ls -l "ref/v1/$MAP/pack/web/sound"
 
       - name: Unit tests
         run: node --test test/reference-clip-names.test.mjs
@@ -65,7 +65,7 @@ jobs:
           APPLY: ${{ inputs.apply }}
           OUT_DIR: ${{ inputs.out_dir }}
         run: |
-          args=(--pack "ref/$MAP/pack/web/sound/sounds.pack" --map "$MAP" --repo "$REFERENCE_REPO" --out "$OUT_DIR")
+          args=(--pack "ref/v1/$MAP/pack/web/sound/sounds.pack" --map "$MAP" --repo "$REFERENCE_REPO" --out "$OUT_DIR")
           if [ "$APPLY" = "true" ]; then args+=(--apply); fi
           node .tools/reference-pack/name-clips.mjs "${args[@]}"
 

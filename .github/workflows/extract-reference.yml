@@ -59,13 +59,13 @@ jobs:
           MAP: ${{ inputs.map }}
         run: |
           git clone --depth 1 --filter=blob:none --sparse "https://github.com/$REFERENCE_REPO.git" ref
-          git -C ref sparse-checkout set "$MAP"
-          du -sh "ref/$MAP"
+          git -C ref sparse-checkout set "v1/$MAP"
+          du -sh "ref/v1/$MAP"
 
       - name: Verify pack against manifest
         env:
           MAP: ${{ inputs.map }}
-        run: node .tools/reference-pack/fetch.mjs --source ref --map "$MAP" --out .work/reference
+        run: node .tools/reference-pack/fetch.mjs --source ref/v1 --map "$MAP" --out .work/reference
 
       - name: Extract (existing files are kept, never replaced)
         env:
