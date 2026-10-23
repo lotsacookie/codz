@@ -1,0 +1,469 @@
+{
+ "zone": "zone/english/en_code_pre_gfx_mp.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 5487,
+  "streamSize": 5487,
+  "percent": 100.0
+ },
+ "types": {
+  "LocalizeEntry": 68,
+  "RawFile": 4
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "assets": [
+  {
+   "index": 0,
+   "type": "RawFile",
+   "name": "default_mp.cfg",
+   "file": "rawfiles/default_mp.cfg"
+  },
+  {
+   "index": 1,
+   "type": "RawFile",
+   "name": "default_mp_controls.cfg",
+   "file": "rawfiles/default_mp_controls.cfg"
+  },
+  {
+   "index": 2,
+   "type": "RawFile",
+   "name": "language.cfg",
+   "file": "rawfiles/language.cfg"
+  },
+  {
+   "index": 3,
+   "type": "LocalizeEntry",
+   "name": "CLASS_NEWPROF",
+   "file": "assets/LocalizeEntry/CLASS_NEWPROF.json"
+  },
+  {
+   "index": 4,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS",
+   "file": "assets/LocalizeEntry/CLASS_CLASS.json"
+  },
+  {
+   "index": 5,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS1",
+   "file": "assets/LocalizeEntry/CLASS_CLASS1.json"
+  },
+  {
+   "index": 6,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS2",
+   "file": "assets/LocalizeEntry/CLASS_CLASS2.json"
+  },
+  {
+   "index": 7,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS3",
+   "file": "assets/LocalizeEntry/CLASS_CLASS3.json"
+  },
+  {
+   "index": 8,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS4",
+   "file": "assets/LocalizeEntry/CLASS_CLASS4.json"
+  },
+  {
+   "index": 9,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLASS5",
+   "file": "assets/LocalizeEntry/CLASS_CLASS5.json"
+  },
+  {
+   "index": 10,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PROFICIENCY",
+   "file": "assets/LocalizeEntry/CLASS_PROFICIENCY.json"
+  },
+  {
+   "index": 11,
+   "type": "LocalizeEntry",
+   "name": "CLASS_RIFLEMAN",
+   "file": "assets/LocalizeEntry/CLASS_RIFLEMAN.json"
+  },
+  {
+   "index": 12,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLOSEQUARTERS",
+   "file": "assets/LocalizeEntry/CLASS_CLOSEQUARTERS.json"
+  },
+  {
+   "index": 13,
+   "type": "LocalizeEntry",
+   "name": "CLASS_ASSAULT",
+   "file": "assets/LocalizeEntry/CLASS_ASSAULT.json"
+  },
+  {
+   "index": 14,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SNIPER",
+   "file": "assets/LocalizeEntry/CLASS_SNIPER.json"
+  },
+  {
+   "index": 15,
+   "type": "LocalizeEntry",
+   "name": "CLASS_DEFAULT_ASSAULT",
+   "file": "assets/LocalizeEntry/CLASS_DEFAULT_ASSAULT.json"
+  },
+  {
+   "index": 16,
+   "type": "LocalizeEntry",
+   "name": "CLASS_DEFAULT_SPECOPS",
+   "file": "assets/LocalizeEntry/CLASS_DEFAULT_SPECOPS.json"
+  },
+  {
+   "index": 17,
+   "type": "LocalizeEntry",
+   "name": "CLASS_DEFAULT_HEAVYGUNNER",
+   "file": "assets/LocalizeEntry/CLASS_DEFAULT_HEAVYGUNNER.json"
+  },
+  {
+   "index": 18,
+   "type": "LocalizeEntry",
+   "name": "CLASS_ANTIARMOR",
+   "file": "assets/LocalizeEntry/CLASS_ANTIARMOR.json"
+  },
+  {
+   "index": 19,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SUPPORT",
+   "file": "assets/LocalizeEntry/CLASS_SUPPORT.json"
+  },
+  {
+   "index": 20,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CLOSEQUARTERS_UC",
+   "file": "assets/LocalizeEntry/CLASS_CLOSEQUARTERS_UC.json"
+  },
+  {
+   "index": 21,
+   "type": "LocalizeEntry",
+   "name": "CLASS_ASSAULT_UC",
+   "file": "assets/LocalizeEntry/CLASS_ASSAULT_UC.json"
+  },
+  {
+   "index": 22,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SNIPER_UC",
+   "file": "assets/LocalizeEntry/CLASS_SNIPER_UC.json"
+  },
+  {
+   "index": 23,
+   "type": "LocalizeEntry",
+   "name": "CLASS_ENGINEER_UC",
+   "file": "assets/LocalizeEntry/CLASS_ENGINEER_UC.json"
+  },
+  {
+   "index": 24,
+   "type": "LocalizeEntry",
+   "name": "CLASS_ANTIARMOR_UC",
+   "file": "assets/LocalizeEntry/CLASS_ANTIARMOR_UC.json"
+  },
+  {
+   "index": 25,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SUPPORT_UC",
+   "file": "assets/LocalizeEntry/CLASS_SUPPORT_UC.json"
+  },
+  {
+   "index": 26,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PROFICIENCY_MARKSMAN",
+   "file": "assets/LocalizeEntry/CLASS_PROFICIENCY_MARKSMAN.json"
+  },
+  {
+   "index": 27,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PROFICIENCY_SHARPSHOOTER",
+   "file": "assets/LocalizeEntry/CLASS_PROFICIENCY_SHARPSHOOTER.json"
+  },
+  {
+   "index": 28,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PROFICIENCY_EXPERT",
+   "file": "assets/LocalizeEntry/CLASS_PROFICIENCY_EXPERT.json"
+  },
+  {
+   "index": 29,
+   "type": "LocalizeEntry",
+   "name": "CLASS_MARINES_CLASSES_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_MARINES_CLASSES_CAPS.json"
+  },
+  {
+   "index": 30,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OPFOR_CLASSES_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_OPFOR_CLASSES_CAPS.json"
+  },
+  {
+   "index": 31,
+   "type": "LocalizeEntry",
+   "name": "CLASS_GRENADIER",
+   "file": "assets/LocalizeEntry/CLASS_GRENADIER.json"
+  },
+  {
+   "index": 32,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM1",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM1.json"
+  },
+  {
+   "index": 33,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM2",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM2.json"
+  },
+  {
+   "index": 34,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM3",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM3.json"
+  },
+  {
+   "index": 35,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM5",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM5.json"
+  },
+  {
+   "index": 36,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM4",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM4.json"
+  },
+  {
+   "index": 37,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SLOT1_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_SLOT1_CAPS.json"
+  },
+  {
+   "index": 38,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SLOT2_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_SLOT2_CAPS.json"
+  },
+  {
+   "index": 39,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SLOT3_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_SLOT3_CAPS.json"
+  },
+  {
+   "index": 40,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SLOT4_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_SLOT4_CAPS.json"
+  },
+  {
+   "index": 41,
+   "type": "LocalizeEntry",
+   "name": "CLASS_SLOT5_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_SLOT5_CAPS.json"
+  },
+  {
+   "index": 42,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS1",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS1.json"
+  },
+  {
+   "index": 43,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS2",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS2.json"
+  },
+  {
+   "index": 44,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS3",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS3.json"
+  },
+  {
+   "index": 45,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS4",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS4.json"
+  },
+  {
+   "index": 46,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS5",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS5.json"
+  },
+  {
+   "index": 47,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS6",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS6.json"
+  },
+  {
+   "index": 48,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS7",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS7.json"
+  },
+  {
+   "index": 49,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS8",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS8.json"
+  },
+  {
+   "index": 50,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS9",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS9.json"
+  },
+  {
+   "index": 51,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS10",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS10.json"
+  },
+  {
+   "index": 52,
+   "type": "LocalizeEntry",
+   "name": "CLASS_OFFLINE_CLASS11",
+   "file": "assets/LocalizeEntry/CLASS_OFFLINE_CLASS11.json"
+  },
+  {
+   "index": 53,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE1",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE1.json"
+  },
+  {
+   "index": 54,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE2",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE2.json"
+  },
+  {
+   "index": 55,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE3",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE3.json"
+  },
+  {
+   "index": 56,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE4",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE4.json"
+  },
+  {
+   "index": 57,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE5",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE5.json"
+  },
+  {
+   "index": 58,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM6",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM6.json"
+  },
+  {
+   "index": 59,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM7",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM7.json"
+  },
+  {
+   "index": 60,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM8",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM8.json"
+  },
+  {
+   "index": 61,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM9",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM9.json"
+  },
+  {
+   "index": 62,
+   "type": "LocalizeEntry",
+   "name": "CLASS_CUSTOM10",
+   "file": "assets/LocalizeEntry/CLASS_CUSTOM10.json"
+  },
+  {
+   "index": 63,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE_UNLOCK_DESC",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE_UNLOCK_DESC.json"
+  },
+  {
+   "index": 64,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE1_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE1_CAPS.json"
+  },
+  {
+   "index": 65,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE2_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE2_CAPS.json"
+  },
+  {
+   "index": 66,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE3_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE3_CAPS.json"
+  },
+  {
+   "index": 67,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE4_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE4_CAPS.json"
+  },
+  {
+   "index": 68,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE5_CAPS",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE5_CAPS.json"
+  },
+  {
+   "index": 69,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PRESTIGE_UNCLASSIFY_DESC",
+   "file": "assets/LocalizeEntry/CLASS_PRESTIGE_UNCLASSIFY_DESC.json"
+  },
+  {
+   "index": 70,
+   "type": "LocalizeEntry",
+   "name": "CLASS_PURCHASE_TO_UNLOCK",
+   "file": "assets/LocalizeEntry/CLASS_PURCHASE_TO_UNLOCK.json"
+  },
+  {
+   "index": 71,
+   "type": "RawFile",
+   "name": "localized_code_pre_gfx_mp",
+   "file": "rawfiles/localized_code_pre_gfx_mp"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": []
+  },
+  "models": {
+   "names": [],
+   "references": []
+  },
+  "weapons": {
+   "names": [],
+   "references": [],
+   "links": {}
+  }
+ }
+}
