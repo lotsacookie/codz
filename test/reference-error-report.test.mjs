@@ -42,3 +42,21 @@ test('error report still explains a zone that could not be opened', { skip: !has
   assert.match(text, /status: walk-error/);
   assert.match(text, /zone could not be opened/);
 });
+
+test('asset trace lists every walked asset and flags the first implausible animation', { skip: !hasPython }, () => {
+  const text = report(`
+good = {"framerate": 30.0, "numframes": 2, "dataByteCount": 77, "dataShortCount": 284, "dataIntCount": 219, "randomDataShortCount": 0, "indexCount": 0}
+bad = dict(good, framerate=-11.66, numframes=65535)
+zone = SimpleNamespace(
+    assets=[(3, "XAnimParts", "viewmodel_idle", good), (3, "XAnimParts", None, bad), (35, "RawFile", "a.gsc", None)],
+    asset_spans=[{"index": 0, "type": "XAnimParts", "start": 16, "end": 1824}, {"index": 1, "type": "XAnimParts", "start": 1824, "end": 1928}, {"index": 2, "type": "RawFile", "start": 1928, "end": 1940}],
+)
+sys.stdout.write(module.build_asset_trace(zone))
+`);
+  assert.match(text, /# asset trace: 3 walked assets/);
+  assert.match(text, /first implausible XAnimParts: #1 at 0x720/);
+  assert.match(text, /#0 XAnimParts 0x10\.\.0x720 len=1808 name=viewmodel_idle nf=2 fps=30\.0/);
+  assert.doesNotMatch(text, /#0 .*IMPLAUSIBLE/);
+  assert.match(text, /#1 XAnimParts .* IMPLAUSIBLE/);
+  assert.match(text, /#2 RawFile 0x788\.\.0x794 len=12 name=a\.gsc/);
+});

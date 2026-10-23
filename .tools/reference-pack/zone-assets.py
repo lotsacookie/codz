@@ -349,6 +349,36 @@ def _hex_rows(data, start, before=16, length=64):
     return rows
 
 
+def _plausible_anim(obj):
+    """XAnimParts header values a real animation can have; garbage headers (walker out of step) usually break one of these."""
+    try:
+        framerate = float(obj["framerate"])
+        return 0 < framerate < 1000 and obj["numframes"] < 5000 and obj["dataByteCount"] < 60000 and obj["dataShortCount"] < 60000 and obj["dataIntCount"] < 60000 and obj["randomDataShortCount"] < 1000000 and obj["indexCount"] < 1000000
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
+def build_asset_trace(zone):
+    """One raw line per walked asset (type, stream range, name; XAnimParts header values) plus the first implausible animation."""
+    spans = getattr(zone, "asset_spans", [])
+    rows, first_bad = [], None
+    for span in spans:
+        asset = zone.assets[span["index"]] if span["index"] < len(zone.assets) else None
+        name = asset[2] if asset and isinstance(asset[2], str) else "-"
+        obj = asset[3] if asset else None
+        obj = getattr(obj, "obj", obj)
+        line = f"#{span['index']} {span['type']} {span['start']:#x}..{span['end']:#x} len={span['end'] - span['start']} name={name}"
+        if span["type"] == "XAnimParts" and isinstance(obj, dict):
+            ok = _plausible_anim(obj)
+            line += f" nf={obj.get('numframes')} fps={obj.get('framerate')} db={obj.get('dataByteCount')} ds={obj.get('dataShortCount')} di={obj.get('dataIntCount')} rs={obj.get('randomDataShortCount')} ix={obj.get('indexCount')}" + ("" if ok else " IMPLAUSIBLE")
+            if not ok and first_bad is None:
+                first_bad = span
+        rows.append(line)
+    head = [f"# asset trace: {len(rows)} walked assets"]
+    head.append(f"first implausible XAnimParts: #{first_bad['index']} at {first_bad['start']:#x}" if first_bad else "first implausible XAnimParts: none")
+    return "\n".join(head + rows) + "\n"
+
+
 def build_error_report(zone_name, zone, status, error, lines):
     """Raw text listing of every error the walk hit and where it began, so a failure can be traced to the asset before it."""
     out = [f"# error report: {zone_name}", f"status: {status}"]
@@ -542,6 +572,8 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
     rows += extra_rows
     failed, tail = dump_unwalked(zone, out, overwrite) if zone is not None else ([], [])
     write_file(out, "_errors.txt", build_error_report(zone_name, zone, status, error, lines).encode("utf-8"), True)
+    if zone is not None:
+        write_file(out, "_asset_trace.txt", build_asset_trace(zone).encode("utf-8"), True)
     if status != "ok":
         rows.append({"archive": zone_name, "kind": "zone", "status": status, "error": error})
     types = Counter(type_name for _i, type_name, _n, _o in assets)
@@ -560,6 +592,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "failedSpans": failed,
         "unwalkedTail": tail,
         "errorReport": "_errors.txt",
+        "assetTrace": "_asset_trace.txt",
         "assets": listing,
         "named": index,
     }
