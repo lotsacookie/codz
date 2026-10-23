@@ -1,7 +1,7 @@
 import { enabledMods } from './mod-store.js';
 import { modRuntime } from './runtime.js';
 
-const CSS = `#mod-menu{position:fixed;top:12px;right:12px;z-index:60;width:min(360px,calc(100vw - 24px));max-height:calc(100vh - 24px);display:flex;flex-direction:column;background:rgba(10,10,12,.93);border:1px solid #6b6b72;color:#e8e8ea;font:14px/1.3 system-ui,sans-serif}
+const CSS = `#mod-menu{position:fixed;top:12px;right:12px;z-index:2147483000;outline:none;width:min(360px,calc(100vw - 24px));max-height:calc(100vh - 24px);display:flex;flex-direction:column;background:rgba(10,10,12,.93);border:1px solid #6b6b72;color:#e8e8ea;font:14px/1.3 system-ui,sans-serif}
 #mod-menu[hidden]{display:none}#mod-menu header{padding:10px 12px;border-bottom:1px solid #3a3a40;display:flex;justify-content:space-between;gap:8px}
 #mod-menu h2{margin:0;font-size:15px;letter-spacing:.06em;text-transform:uppercase}#mod-menu .mm-sub{opacity:.6;font-size:12px}
 #mod-menu ul{list-style:none;margin:0;padding:4px 0;overflow:auto}#mod-menu li button{all:unset;box-sizing:border-box;display:flex;justify-content:space-between;gap:12px;width:100%;padding:7px 12px;cursor:pointer}
@@ -37,7 +37,7 @@ export function resolveMenu(mod, name, session) {
   return out;
 }
 
-export const isSupported = (item, bindings) => Boolean(item.submenu || bindings.actions?.[item.command] || bindings.toggles?.[item.command] || bindings.stores?.has(item.command));
+export const isSupported = (item, bindings) => Boolean(item.synthetic || item.submenu || bindings.actions?.[item.command] || bindings.toggles?.[item.command] || bindings.stores?.has(item.command));
 
 export function createModMenu() {
   if (typeof document === 'undefined') return null;
@@ -47,6 +47,7 @@ export function createModMenu() {
   const root = document.createElement('div');
   root.id = 'mod-menu';
   root.hidden = true;
+  root.tabIndex = -1;
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-label', 'Mod menu');
   const title = document.createElement('h2'), sub = document.createElement('span'), list = document.createElement('ul'), foot = document.createElement('footer');
@@ -71,10 +72,11 @@ export function createModMenu() {
 
   function render() {
     const { mod } = state;
-    state.items = resolveMenu(mod, state.stack.at(-1), session());
+    // The repo's menus have no Back row (its menu uses a button for that), so one is always added for keyboard/touch.
+    state.items = [...resolveMenu(mod, state.stack.at(-1), session()), { kind: 'option', text: state.stack.length > 1 ? 'Back' : 'Close', synthetic: true, description: '↑↓ move · Enter select · ←/→ change values · Esc back · ` or F4 close' }];
     state.index = Math.min(state.index, Math.max(0, state.items.length - 1));
     title.textContent = state.stack.at(-1);
-    sub.textContent = mod.name;
+    sub.textContent = '↑↓ Enter ←/Esc';
     list.replaceChildren(...state.items.map((item, i) => {
       const li = document.createElement('li'), button = document.createElement('button'), [left, right] = label(item, i);
       const ok = isSupported(item, mod.bindings);
@@ -95,6 +97,7 @@ export function createModMenu() {
     const item = state.items[state.index];
     const { bindings } = state.mod;
     if (!item || !isSupported(item, bindings)) return render();
+    if (item.synthetic) return back();
     if (item.submenu) { state.stack.push(item.submenu); state.index = 0; return render(); }
     const s = session();
     if (!s) { foot.textContent = 'Start a match first.'; return; }
@@ -136,14 +139,22 @@ export function createModMenu() {
     document.exitPointerLock?.();
     root.hidden = false;
     render();
+    root.focus({ preventScroll: true });
     return true;
   }
   function close() { root.hidden = true; }
 
+  // Keep keyboard focus in the menu: the pause screen grabs it when the mouse is released.
+  document.addEventListener('focusin', event => { if (!root.hidden && !root.contains(event.target)) root.focus({ preventScroll: true }); }, true);
+  const swallow = event => { if (!root.hidden) { event.stopImmediatePropagation(); event.stopPropagation(); } };
+  addEventListener('keyup', swallow, true);
+  addEventListener('keypress', swallow, true);
+
   addEventListener('keydown', event => {
-    const toggleKey = event.code === 'Backquote' || event.code === 'F4';
+    const code = event.code === 'NumpadEnter' ? 'Enter' : event.code || { ArrowUp: 'ArrowUp', ArrowDown: 'ArrowDown', ArrowLeft: 'ArrowLeft', ArrowRight: 'ArrowRight', Enter: 'Enter', Escape: 'Escape' }[event.key];
+    const toggleKey = code === 'Backquote' || code === 'F4';
     if (root.hidden) {
-      if (toggleKey && session() && open()) { event.preventDefault(); event.stopPropagation(); }
+      if (toggleKey && session() && open()) { event.preventDefault(); event.stopImmediatePropagation(); }
       return;
     }
     const n = state.items.length;
@@ -154,7 +165,8 @@ export function createModMenu() {
       ArrowRight: () => { if (!adjust(1)) activate(); },
       ArrowLeft: () => { if (!adjust(-1)) back(); },
       Enter: activate, Space: activate,
-    }[event.code];
+    }[code];
+    event.stopImmediatePropagation();
     event.stopPropagation();
     event.preventDefault();
     handled?.();
