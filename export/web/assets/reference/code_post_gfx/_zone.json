@@ -51,6 +51,7 @@
  "unwalkedTail": [
   "_unwalked/tail_000568e8_part0.bin"
  ],
+ "errorReport": "_errors.txt",
  "assets": [
   {
    "index": 0,
