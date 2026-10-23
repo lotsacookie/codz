@@ -1,0 +1,6 @@
+# error report: zone/english/en_patch_mp.ff
+status: ok
+stream: walked 0x58cf of 0x58cf bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
