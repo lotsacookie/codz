@@ -23,6 +23,11 @@ VIEWMODEL_PATTERN = re.compile(
     r"viewmodel|viewhands|view_hands|viewarms|view_arms|(^|_)(weapon|wpn|hand|hands|arms)(_|$)|^v_|^t5_weapon",
     re.IGNORECASE,
 )
+CHARACTER_PATTERN = re.compile(
+    r"^(c|char|body|head|hat|player|pb|viewbody)_|richtofen|dempsey|nikolai|takeo|rooftop|hazmat|astronaut",
+    re.IGNORECASE,
+)
+FRAME_COUNTS = ("dataByteCount", "dataShortCount", "dataIntCount", "randomDataByteCount", "randomDataIntCount")
 MAX_DEPTH = 64
 SAMPLES_PER_KIND = 3
 WARNING_LINES = 25
@@ -72,6 +77,27 @@ def jsonable(value, depth=0, active=None, stubs=None):
         finally:
             active.discard(marker)
     return repr(value)
+
+
+def keyframe_stats(obj):
+    if not isinstance(obj, dict):
+        return None
+    counts = {key: obj.get(key) for key in FRAME_COUNTS}
+    declared = sum(v for v in counts.values() if isinstance(v, int))
+    filled = 0
+    for key in ("dataByte", "dataShort", "dataInt", "randomDataByte", "randomDataShort", "randomDataInt"):
+        item = obj.get(key)
+        if isinstance(item, RawArray):
+            item = item.data
+        if isinstance(item, (bytes, bytearray, list, tuple)):
+            filled += len(item)
+    return {
+        "numframes": obj.get("numframes"),
+        "streamable": bool(obj.get("bStreamable")),
+        "declared": declared,
+        "filled": filled,
+        "hollow": declared > 0 and filled == 0,
+    }
 
 
 def is_reference(name):
@@ -229,7 +255,8 @@ def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name="", 
                 samples[kind].append({"type": type_name, "nameField": field, "fields": shallow(obj)})
             continue
         if implicit and not is_reference(name) and name not in linked[kind]:
-            if not VIEWMODEL_PATTERN.search(name) or (only is not None and not only.search(name)):
+            wanted_name = VIEWMODEL_PATTERN.search(name) or CHARACTER_PATTERN.search(name)
+            if not wanted_name or (only is not None and not only.search(name)):
                 continue
         elif not implicit and only is not None and not only.search(name):
             continue
@@ -252,6 +279,8 @@ def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name="", 
             record["asset"] = jsonable(obj, stubs=stubs)
         else:
             record["asset"] = jsonable(obj)
+            if kind == "animations":
+                record["keyframes"] = keyframe_stats(obj)
         payload = json.dumps(record, separators=(",", ":"), allow_nan=False).encode("utf-8")
         os.makedirs(os.path.dirname(target), exist_ok=True)
         with open(target, "wb") as handle:
@@ -266,6 +295,9 @@ def export_assets(assets, out, kinds, only=None, overwrite=False, zone_name="", 
                 "status": "ok",
             }
         )
+        stats = record.get("keyframes")
+        if stats and (stats["hollow"] or stats["streamable"]):
+            rows[-1]["keyframes"] = "streamed" if stats["streamable"] else "hollow"
     index = {kind: {"names": sorted(names[kind]), "references": sorted(references[kind])} for kind in tracked}
     if bundle:
         index["weapons"]["links"] = links
