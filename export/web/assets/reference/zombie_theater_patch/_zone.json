@@ -1,0 +1,568 @@
+{
+ "zone": "zone/Common/zombie_theater_patch.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 799783,
+  "streamSize": 799783,
+  "percent": 100.0
+ },
+ "types": {
+  "XAnimParts": 64,
+  "MaterialTechniqueSet": 23,
+  "XModel": 18,
+  "RawFile": 15,
+  "FxEffectDef": 14,
+  "WeaponVariantDef": 9,
+  "Material": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "assets": [
+  {
+   "index": 0,
+   "type": "RawFile",
+   "name": "clientscripts/zombie_theater_ffotd.csc",
+   "file": "rawfiles/clientscripts/zombie_theater_ffotd.csc"
+  },
+  {
+   "index": 1,
+   "type": "RawFile",
+   "name": "clientscripts/zombie_theater_fx.csc",
+   "file": "rawfiles/clientscripts/zombie_theater_fx.csc"
+  },
+  {
+   "index": 2,
+   "type": "RawFile",
+   "name": "maps/zombie_theater.gsc",
+   "file": "rawfiles/maps/zombie_theater.gsc"
+  },
+  {
+   "index": 3,
+   "type": "RawFile",
+   "name": "maps/zombie_theater_ffotd.gsc",
+   "file": "rawfiles/maps/zombie_theater_ffotd.gsc"
+  },
+  {
+   "index": 4,
+   "type": "RawFile",
+   "name": "maps/zombie_theater_teleporter.gsc",
+   "file": "rawfiles/maps/zombie_theater_teleporter.gsc"
+  },
+  {
+   "index": 5,
+   "type": "RawFile",
+   "name": "maps/createart/zombie_theater_art.gsc",
+   "file": "rawfiles/maps/createart/zombie_theater_art.gsc"
+  },
+  {
+   "index": 6,
+   "type": "RawFile",
+   "name": "maps/zombie_theater_magic_box.gsc",
+   "file": "rawfiles/maps/zombie_theater_magic_box.gsc"
+  },
+  {
+   "index": 7,
+   "type": "RawFile",
+   "name": "maps/zombie_theater_movie_screen.gsc",
+   "file": "rawfiles/maps/zombie_theater_movie_screen.gsc"
+  },
+  {
+   "index": 8,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0_wpn_clrdtl_hero.json"
+  },
+  {
+   "index": 9,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0_hero.json"
+  },
+  {
+   "index": 10,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_effect_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_effect_hero.json"
+  },
+  {
+   "index": 11,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0d0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0d0n0s0_wpn_clrdtl_hero.json"
+  },
+  {
+   "index": 12,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0.json"
+  },
+  {
+   "index": 14,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_skin_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_skin_r0c0n0s0.json"
+  },
+  {
+   "index": 15,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 17,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather.json"
+  },
+  {
+   "index": 18,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_falloff_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_falloff_add_nofog.json"
+  },
+  {
+   "index": 19,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add_nofog.json"
+  },
+  {
+   "index": 20,
+   "type": "MaterialTechniqueSet",
+   "name": ",distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/,distortion_scale_zfeather.json"
+  },
+  {
+   "index": 21,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_rifle1_flash_base",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_rifle1_flash_base.json"
+  },
+  {
+   "index": 22,
+   "type": "FxEffectDef",
+   "name": ",system_elements/fx_null",
+   "file": "assets/FxEffectDef/,system_elements/fx_null.json"
+  },
+  {
+   "index": 23,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_revolver",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_revolver.json"
+  },
+  {
+   "index": 24,
+   "type": "MaterialTechniqueSet",
+   "name": ",2d",
+   "file": "assets/MaterialTechniqueSet/,2d.json"
+  },
+  {
+   "index": 42,
+   "type": "RawFile",
+   "name": ",rumble/pistol_fire",
+   "file": "assets/RawFile/,rumble/pistol_fire.json"
+  },
+  {
+   "index": 43,
+   "type": "RawFile",
+   "name": ",rumble/pistol_fire_h.rmb",
+   "file": "assets/RawFile/,rumble/pistol_fire_h.rmb.json"
+  },
+  {
+   "index": 44,
+   "type": "RawFile",
+   "name": ",rumble/pistol_fire_l.rmb",
+   "file": "assets/RawFile/,rumble/pistol_fire_l.rmb.json"
+  },
+  {
+   "index": 46,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_zombie_rifle1_flash_base_ug",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_zombie_rifle1_flash_base_ug.json"
+  },
+  {
+   "index": 50,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_pistol_flash_base",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_pistol_flash_base.json"
+  },
+  {
+   "index": 52,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_pistol_resting",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_pistol_resting.json"
+  },
+  {
+   "index": 53,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0.json"
+  },
+  {
+   "index": 55,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_pistol",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_pistol.json"
+  },
+  {
+   "index": 73,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_zombie_pistol_flash_base_ug",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_zombie_pistol_flash_base_ug.json"
+  },
+  {
+   "index": 82,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/pistolflash_ug",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/pistolflash_ug.json"
+  },
+  {
+   "index": 84,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 85,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_t0c0n0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_t0c0n0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 86,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0sc0x0_sls_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0sc0x0_sls_clrdtl_hero.json"
+  },
+  {
+   "index": 87,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_b0c0s0sc0x0_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0s0sc0x0_clrdtl_hero.json"
+  },
+  {
+   "index": 90,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_add",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add.json"
+  },
+  {
+   "index": 91,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_add_eyeoffset",
+   "file": "assets/MaterialTechniqueSet/,effect_add_eyeoffset.json"
+  },
+  {
+   "index": 92,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect",
+   "file": "assets/MaterialTechniqueSet/,effect.json"
+  },
+  {
+   "index": 93,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_thundergun_view",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_thundergun_view.json"
+  },
+  {
+   "index": 94,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_thundergun_world",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_thundergun_world.json"
+  },
+  {
+   "index": 122,
+   "type": "RawFile",
+   "name": ",rumble/dtp_rumble",
+   "file": "assets/RawFile/,rumble/dtp_rumble.json"
+  },
+  {
+   "index": 123,
+   "type": "RawFile",
+   "name": ",rumble/artillery_rumble_h.rmb",
+   "file": "assets/RawFile/,rumble/artillery_rumble_h.rmb.json"
+  },
+  {
+   "index": 124,
+   "type": "RawFile",
+   "name": ",rumble/artillery_rumble_l.rmb",
+   "file": "assets/RawFile/,rumble/artillery_rumble_l.rmb.json"
+  },
+  {
+   "index": 126,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_thundergun_view_ug",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_thundergun_view_ug.json"
+  },
+  {
+   "index": 127,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_thundergun_world_ug",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_thundergun_world_ug.json"
+  },
+  {
+   "index": 129,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0n0s0.json"
+  },
+  {
+   "index": 130,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_t0c0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0s0.json"
+  },
+  {
+   "index": 132,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_unlit_alphatest",
+   "file": "assets/MaterialTechniqueSet/mc_unlit_alphatest.json"
+  },
+  {
+   "index": 134,
+   "type": "FxEffectDef",
+   "name": "misc/fx_zombie_cola_arsenal_on",
+   "file": "assets/FxEffectDef/misc/fx_zombie_cola_arsenal_on.json"
+  },
+  {
+   "index": 135,
+   "type": "Material",
+   "name": "specialty_extraprimaryweapon_zombies",
+   "file": "assets/Material/specialty_extraprimaryweapon_zombies.json"
+  },
+  {
+   "index": 143,
+   "type": "RawFile",
+   "name": "zombie_theater_patch",
+   "file": "rawfiles/zombie_theater_patch"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [],
+   "references": [
+    "t5_viewmodel_camera_mantle",
+    "viewmodel_cz75_dw_full_ads_down",
+    "viewmodel_cz75_dw_full_ads_up",
+    "viewmodel_cz75_dw_full_d2p_in",
+    "viewmodel_cz75_dw_full_d2p_loop",
+    "viewmodel_cz75_dw_full_d2p_out",
+    "viewmodel_cz75_dw_full_first_raise",
+    "viewmodel_cz75_dw_full_pullout",
+    "viewmodel_cz75_dw_full_putaway",
+    "viewmodel_cz75_dw_full_sprint_in",
+    "viewmodel_cz75_dw_full_sprint_loop",
+    "viewmodel_cz75_dw_full_sprint_out",
+    "viewmodel_cz75_dw_left_fire",
+    "viewmodel_cz75_dw_left_idle_loop",
+    "viewmodel_cz75_dw_left_last_shot",
+    "viewmodel_cz75_dw_left_reload",
+    "viewmodel_cz75_dw_right_fire",
+    "viewmodel_cz75_dw_right_idle_loop",
+    "viewmodel_cz75_dw_right_last_shot",
+    "viewmodel_cz75_dw_right_reload",
+    "viewmodel_python_manual_reload_in",
+    "viewmodel_python_manual_reload_loop",
+    "viewmodel_python_manual_reload_out",
+    "viewmodel_python_sw_ads_down",
+    "viewmodel_python_sw_ads_fire",
+    "viewmodel_python_sw_ads_up",
+    "viewmodel_python_sw_d2p_in",
+    "viewmodel_python_sw_d2p_loop",
+    "viewmodel_python_sw_d2p_out",
+    "viewmodel_python_sw_fire",
+    "viewmodel_python_sw_first_raise",
+    "viewmodel_python_sw_idle",
+    "viewmodel_python_sw_pullout",
+    "viewmodel_python_sw_putaway",
+    "viewmodel_python_sw_reload",
+    "viewmodel_python_sw_sprint_loop",
+    "viewmodel_thundergun_ads_down",
+    "viewmodel_thundergun_ads_up",
+    "viewmodel_thundergun_d2p_in",
+    "viewmodel_thundergun_d2p_loop",
+    "viewmodel_thundergun_d2p_out",
+    "viewmodel_thundergun_empty_d2p_in",
+    "viewmodel_thundergun_empty_d2p_loop",
+    "viewmodel_thundergun_empty_d2p_out",
+    "viewmodel_thundergun_empty_idle",
+    "viewmodel_thundergun_fire",
+    "viewmodel_thundergun_idle",
+    "viewmodel_thundergun_last_fire",
+    "viewmodel_thundergun_pullout",
+    "viewmodel_thundergun_pullout_empty",
+    "viewmodel_thundergun_pullout_quick",
+    "viewmodel_thundergun_putaway",
+    "viewmodel_thundergun_putaway_empty",
+    "viewmodel_thundergun_putaway_quick",
+    "viewmodel_thundergun_reload_empty",
+    "viewmodel_thundergun_sprint_empty_intro",
+    "viewmodel_thundergun_sprint_empty_loop",
+    "viewmodel_thundergun_sprint_empty_outro",
+    "viewmodel_thundergun_sprint_intro",
+    "viewmodel_thundergun_sprint_loop",
+    "viewmodel_thundergun_sprint_outro",
+    "viewmodel_zombie_perksacola_drink",
+    "viewmodel_zombie_perksacola_idle",
+    "viewmodel_zombie_perksacola_lower"
+   ]
+  },
+  "models": {
+   "names": [
+    "zombie_3rd_perk_bottle_three_gun",
+    "zombie_perk_bottle_three_gun",
+    "zombie_vending_three_gun",
+    "zombie_vending_three_gun_on"
+   ],
+   "references": [
+    "fx_pistol_shell",
+    "fx_pistol_shell_blur",
+    "t5_weapon_coltpython_viewmodel",
+    "t5_weapon_coltpython_world",
+    "t5_weapon_cz75_dw_lh_viewmodel",
+    "t5_weapon_cz75_dw_lh_world",
+    "t5_weapon_cz75_dw_rh_viewmodel",
+    "t5_weapon_cz75_dw_rh_world",
+    "t5_weapon_thundergun_viewmodel",
+    "t5_weapon_thundergun_world",
+    "tag_flash",
+    "viewhands_usmc",
+    "viewmodel_base_viewhands",
+    "viewmodel_hands_cloth"
+   ]
+  },
+  "weapons": {
+   "names": [
+    "cz75dw_upgraded_zm",
+    "cz75dw_zm",
+    "python_upgraded_zm",
+    "python_zm",
+    "thundergun_upgraded_zm",
+    "thundergun_zm",
+    "zombie_perk_bottle_additionalprimaryweapon"
+   ],
+   "references": [],
+   "links": {
+    "python_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "t5_viewmodel_camera_mantle",
+      "viewmodel_python_manual_reload_in",
+      "viewmodel_python_manual_reload_loop",
+      "viewmodel_python_manual_reload_out",
+      "viewmodel_python_sw_ads_down",
+      "viewmodel_python_sw_ads_fire",
+      "viewmodel_python_sw_ads_up",
+      "viewmodel_python_sw_d2p_in",
+      "viewmodel_python_sw_d2p_loop",
+      "viewmodel_python_sw_d2p_out",
+      "viewmodel_python_sw_fire",
+      "viewmodel_python_sw_first_raise",
+      "viewmodel_python_sw_idle",
+      "viewmodel_python_sw_pullout",
+      "viewmodel_python_sw_putaway",
+      "viewmodel_python_sw_sprint_loop"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "python_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_python_sw_reload"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75dw_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_cz75_dw_full_ads_down",
+      "viewmodel_cz75_dw_full_ads_up",
+      "viewmodel_cz75_dw_full_d2p_in",
+      "viewmodel_cz75_dw_full_d2p_loop",
+      "viewmodel_cz75_dw_full_d2p_out",
+      "viewmodel_cz75_dw_full_first_raise",
+      "viewmodel_cz75_dw_full_pullout",
+      "viewmodel_cz75_dw_full_putaway",
+      "viewmodel_cz75_dw_full_sprint_in",
+      "viewmodel_cz75_dw_full_sprint_loop",
+      "viewmodel_cz75_dw_full_sprint_out",
+      "viewmodel_cz75_dw_right_fire",
+      "viewmodel_cz75_dw_right_idle_loop",
+      "viewmodel_cz75_dw_right_last_shot",
+      "viewmodel_cz75_dw_right_reload"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "cz75dw_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "thundergun_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_thundergun_ads_down",
+      "viewmodel_thundergun_ads_up",
+      "viewmodel_thundergun_d2p_in",
+      "viewmodel_thundergun_d2p_loop",
+      "viewmodel_thundergun_d2p_out",
+      "viewmodel_thundergun_empty_d2p_in",
+      "viewmodel_thundergun_empty_d2p_loop",
+      "viewmodel_thundergun_empty_d2p_out",
+      "viewmodel_thundergun_empty_idle",
+      "viewmodel_thundergun_fire",
+      "viewmodel_thundergun_idle",
+      "viewmodel_thundergun_last_fire",
+      "viewmodel_thundergun_pullout",
+      "viewmodel_thundergun_pullout_empty",
+      "viewmodel_thundergun_pullout_quick",
+      "viewmodel_thundergun_putaway",
+      "viewmodel_thundergun_putaway_empty",
+      "viewmodel_thundergun_putaway_quick",
+      "viewmodel_thundergun_reload_empty",
+      "viewmodel_thundergun_sprint_empty_intro",
+      "viewmodel_thundergun_sprint_empty_loop",
+      "viewmodel_thundergun_sprint_empty_outro",
+      "viewmodel_thundergun_sprint_intro",
+      "viewmodel_thundergun_sprint_loop",
+      "viewmodel_thundergun_sprint_outro"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "thundergun_upgraded_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "zombie_perk_bottle_additionalprimaryweapon": {
+     "animations": [],
+     "missingAnimations": [
+      "viewmodel_zombie_perksacola_drink",
+      "viewmodel_zombie_perksacola_idle",
+      "viewmodel_zombie_perksacola_lower"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    }
+   }
+  }
+ }
+}
