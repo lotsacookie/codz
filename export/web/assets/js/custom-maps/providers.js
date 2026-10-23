@@ -1,3 +1,4 @@
+import { CATALOG, modState, installMod, setEnabled, uninstallMod } from '../mods/mod-store.js';
 export const PAGE_SIZE = 12;
 
 const SKETCHFAB = 'https://api.sketchfab.com/v3';
@@ -289,5 +290,24 @@ export const workshop = {
   },
 };
 
-export const PROVIDERS = [bsp, workshop, polyhaven, khronos, sketchfab];
+const modLabel = id => { const st = modState(id); return !st.installed ? 'NOT INSTALLED' : st.enabled ? 'ENABLED' : 'DISABLED'; };
+const modItem = mod => ({ id: mod.id, name: `${mod.name} — ${modLabel(mod.id)}`, author: mod.author, license: mod.license, description: mod.description, detail: 'Installed mods are saved in a cookie and re-downloaded on every load.', source: 'mods' });
+
+// Mods are not maps: picking one installs/enables/disables it instead of starting a game.
+export const mods = {
+  id: 'mods',
+  label: 'Mods',
+  needsToken: false,
+  hint: 'Click to install and enable, click again to disable or re-enable. Right-click to uninstall. In a match press ` or F4.',
+  async search() { return { items: CATALOG.map(modItem), next: null }; },
+  async activate(item) {
+    const st = modState(item.id);
+    if (!st.installed) { await installMod(item.id); return 'Installed and enabled. Open it in a match with ` or F4.'; }
+    setEnabled(item.id, !st.enabled);
+    return st.enabled ? 'Disabled. It stays installed.' : 'Enabled.';
+  },
+  async remove(item) { uninstallMod(item.id); return 'Uninstalled.'; },
+};
+
+export const PROVIDERS = [bsp, workshop, polyhaven, khronos, sketchfab, mods];
 export const providerById = id => PROVIDERS.find(provider => provider.id === id) ?? PROVIDERS[0];

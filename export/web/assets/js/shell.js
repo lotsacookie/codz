@@ -8,6 +8,7 @@ import { GraphicsSettings, detectLowEndBrowser } from './graphics.js';
 import { MenuNav, getGamepads, padSettings } from './gamepad.js';
 import { MODIFIERS, activeModifiers, setModifier, clearModifiers, onModifiersChange } from './modifiers.js';
 import { createCustomMenu } from './custom-maps/menu.js';
+import { initMods } from './mods/index.js';
 import { createMultiplayerMenu } from './net/menu.js';
 import { builtinBspMap } from './custom-maps/providers.js';
 import { cycleHands, handsLabel } from './viewmodel.js';
@@ -727,3 +728,4 @@ modPanel.addEventListener('click', event => { if (event.target === modPanel) set
 addEventListener('keydown', event => {
   if (event.key === 'Escape' && !modPanel.hidden) { event.preventDefault(); event.stopPropagation(); setModifiersOpen(false); }
 }, true);
+initMods({ pauseAnchor: pauseEls.options });

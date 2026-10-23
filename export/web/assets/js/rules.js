@@ -1,4 +1,5 @@
 import { activeModifiers, hasModifier } from './modifiers.js';
+import { attachSession, tickMods } from './mods/runtime.js';
 // Ported from the locally extracted T5 GSC and mp/zombiemode.csv.
 export function zombieHealth(round, rules = {}) {
   let health=rules.zombie_health_start??150;
@@ -48,7 +49,7 @@ export class Session {
   get perkLimit(){return this.mods.has('no_perk_limit')?Infinity:4;}
   get quota(){return roundPopulation(this.round,this.data.rules);}
   reset() {
-    this.mods=activeModifiers();
+    this.mods=activeModifiers();attachSession(this);
     this.time=0;this.round=1;this.countdown=6;this.phase='preparing';this.health=100;
     this.points=this.data.rules.zombie_score_start_1p??500;this.kills=0;this.headshots=0;this.shots=0;this.hits=0;
     this.inventory=[makeWeapon(this.data.weapons.m1911_zm)];this.slot=0;this.adsShot=false;this.reloadLeft=0;this.reloadStage=null;this.reloadSerial=0;this.reloadDuration=0;this.fireLeft=0;

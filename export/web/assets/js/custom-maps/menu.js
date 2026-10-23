@@ -3,7 +3,7 @@ import { isGithubRepoUrl } from './iwmap-remote.js';
 
 const TOKEN_KEY = 'zombies.sketchfabToken';
 const SOURCE_KEY = 'zombies.customSource';
-const SHORT_LABELS = { bsp: 'NZ:P Maps', workshop: 'BO3 Workshop', polyhaven: 'Poly Haven', khronos: 'glTF Samples', sketchfab: 'Sketchfab' };
+const SHORT_LABELS = { bsp: 'NZ:P Maps', workshop: 'BO3 Workshop', polyhaven: 'Poly Haven', khronos: 'glTF Samples', sketchfab: 'Sketchfab', mods: 'Mods' };
 
 const store = {
   get(key) { try { return localStorage.getItem(key) ?? ''; } catch { return ''; } },
@@ -114,7 +114,20 @@ export function createCustomMenu({ root, onPlay, onClose }) {
     return go(0);
   }
 
+  async function modAction(item, name) {
+    try {
+      setStatus('Working…');
+      const message = await state.provider[name](item);
+      state.items = (await state.provider.search({})).items;
+      render();
+      setStatus(message);
+    } catch (error) {
+      setStatus(error?.message ?? String(error), true);
+    }
+  }
+
   async function play(item) {
+    if (state.provider.activate) return modAction(item, 'activate');
     const secret = token.value.trim();
     if (state.provider.needsToken && !secret) {
       setStatus('Paste your Sketchfab API token above to download models (sketchfab.com → Settings → Password & API).', true);
@@ -175,6 +188,10 @@ export function createCustomMenu({ root, onPlay, onClose }) {
   grid.addEventListener('click', event => {
     const button = event.target.closest('button[data-index]');
     if (button) play(state.items[Number(button.dataset.index)]);
+  });
+  grid.addEventListener('contextmenu', event => {
+    const button = event.target.closest('button[data-index]');
+    if (button && state.provider.remove) { event.preventDefault(); modAction(state.items[Number(button.dataset.index)], 'remove'); }
   });
   prev.addEventListener('click', () => go(state.page - 1));
   next.addEventListener('click', () => go(state.page + 1));
