@@ -1043,6 +1043,8 @@ class T5Zone:
             vals[name] = ref
         elif tsd is not None:
             align = info["align"] or tsd.align
+            if count < 0 or count > 0x1000000:
+                raise ZoneError(f"implausible array count {count} (trace={self.ctx_trace[-6:]})")
             arr = [None] * count
             ref = self.alloc(block, align, arr)
             inline_raw = self.read(tsd.size * count, block=block, align=align)
