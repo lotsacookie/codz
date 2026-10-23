@@ -24,6 +24,7 @@
   "_unwalked/tail_00108bbf_part0.bin"
  ],
  "errorReport": "_errors.txt",
+ "assetTrace": "_asset_trace.txt",
  "assets": [
   {
    "index": 0,

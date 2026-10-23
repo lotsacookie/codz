@@ -1,0 +1,99 @@
+# asset trace: 97 walked assets
+first implausible XAnimParts: #87 at 0xda2c0
+#0 RawFile 0xef6..0x45e5f len=282473 name=animtrees/generic_human.atr
+#1 RawFile 0x45e5f..0x46a01 len=2978 name=animscripts/debug.gsc
+#2 RawFile 0x46a01..0x46b6d len=364 name=animscripts/traverse/zombie_jump_down_40.gsc
+#3 RawFile 0x46b6d..0x46d1e len=433 name=animscripts/traverse/zombie_jump_down_72.gsc
+#4 RawFile 0x46d1e..0x46ed3 len=437 name=animscripts/traverse/zombie_jump_down_127.gsc
+#5 RawFile 0x46ed3..0x47089 len=438 name=animscripts/traverse/zombie_jump_down_184.gsc
+#6 RawFile 0x47089..0x47220 len=407 name=animscripts/traverse/zombie_jump_down_190.gsc
+#7 RawFile 0x47220..0x473d4 len=436 name=animscripts/traverse/zombie_jump_down_222.gsc
+#8 RawFile 0x473d4..0x47563 len=399 name=animscripts/traverse/zombie_jump_down_240.gsc
+#9 RawFile 0x47563..0x47710 len=429 name=animscripts/traverse/zombie_jump_up_222.gsc
+#10 RawFile 0x47710..0x47eb4 len=1956 name=animscripts/traverse/zombie_wall_crawl_drop.gsc
+#11 RawFile 0x47eb4..0x48b13 len=3167 name=animscripts/traverse/zombie_shared.gsc
+#12 RawFile 0x48b13..0x49848 len=3381 name=animscripts/zombie_combat.gsc
+#13 RawFile 0x49848..0x4bf2f len=9959 name=animscripts/zombie_death.gsc
+#14 RawFile 0x4bf2f..0x4c1a2 len=627 name=animscripts/zombie_dog_death.gsc
+#15 RawFile 0x4c1a2..0x4e770 len=9678 name=animscripts/zombie_init.gsc
+#16 RawFile 0x4e770..0x4f994 len=4644 name=animscripts/zombie_melee.gsc
+#17 RawFile 0x4f994..0x50947 len=4019 name=animscripts/zombie_move.gsc
+#18 RawFile 0x50947..0x518df len=3992 name=animscripts/zombie_pain.gsc
+#19 RawFile 0x518df..0x5236a len=2699 name=animscripts/zombie_run.gsc
+#20 RawFile 0x5236a..0x5347b len=4369 name=animscripts/zombie_shared.gsc
+#21 RawFile 0x5347b..0x5466e len=4595 name=clientscripts/_audio.csc
+#22 RawFile 0x5466e..0x55636 len=4040 name=clientscripts/_callbacks.csc
+#23 RawFile 0x55636..0x566e5 len=4271 name=clientscripts/_fx.csc
+#24 RawFile 0x566e5..0x56f55 len=2160 name=clientscripts/_filter.csc
+#25 RawFile 0x56f55..0x579f9 len=2724 name=clientscripts/_load.csc
+#26 RawFile 0x579f9..0x5a172 len=10105 name=clientscripts/_utility.csc
+#27 RawFile 0x5a172..0x5a72d len=1467 name=clientscripts/_footsteps.csc
+#28 RawFile 0x5a72d..0x5aaab len=894 name=clientscripts/_clientfaceanim.csc
+#29 RawFile 0x5aaab..0x5b32a len=2175 name=clientscripts/_face_utility.csc
+#30 RawFile 0x5b32a..0x5cf59 len=7215 name=clientscripts/_zombiemode.csc
+#31 RawFile 0x5cf59..0x5d066 len=269 name=clientscripts/_zombiemode_equipment.csc
+#32 RawFile 0x5d066..0x5d0e4 len=126 name=clientscripts/_zombiemode_ffotd.csc
+#33 RawFile 0x5d0e4..0x5d586 len=1186 name=clientscripts/_zombiemode_weapons.csc
+#34 RawFile 0x5d586..0x5ded3 len=2381 name=clientscripts/_zombiemode_weap_freezegun.csc
+#35 RawFile 0x5ded3..0x5e35e len=1163 name=clientscripts/_zombiemode_weap_tesla.csc
+#36 RawFile 0x5e35e..0x5e919 len=1467 name=clientscripts/_zombiemode_weap_thundergun.csc
+#37 RawFile 0x5e919..0x5f1e4 len=2251 name=maps/_ballistic_knife.gsc
+#38 RawFile 0x5f1e4..0x617fb len=9751 name=maps/_callbackglobal.gsc
+#39 RawFile 0x617fb..0x66cb7 len=21692 name=maps/_gameskill.gsc
+#40 RawFile 0x66cb7..0x677cc len=2837 name=maps/_hud_message.gsc
+#41 RawFile 0x677cc..0x691df len=6675 name=maps/_laststand.gsc
+#42 RawFile 0x691df..0x6ab1e len=6463 name=maps/_loadout.gsc
+#43 RawFile 0x6ab1e..0x7cbad len=73871 name=maps/_utility.gsc
+#44 RawFile 0x7cbad..0x7d6b4 len=2823 name=maps/_weapons.gsc
+#45 RawFile 0x7d6b4..0x7e77d len=4297 name=maps/_weaponobjects.gsc
+#46 RawFile 0x7e77d..0x886fe len=40833 name=maps/_zombiemode.gsc
+#47 RawFile 0x886fe..0x8b148 len=10826 name=maps/_zombiemode_ai_ape.gsc
+#48 RawFile 0x8b148..0x8c9b0 len=6248 name=maps/_zombiemode_ai_dogs.gsc
+#49 RawFile 0x8c9b0..0x8f5e5 len=11317 name=maps/_zombiemode_audio.gsc
+#50 RawFile 0x8f5e5..0x8fd43 len=1886 name=maps/_zombiemode_auto_turret.gsc
+#51 RawFile 0x8fd43..0x94919 len=19414 name=maps/_zombiemode_blockers.gsc
+#52 RawFile 0x94919..0x95246 len=2349 name=maps/_zombiemode_bowie.gsc
+#53 RawFile 0x95246..0x95db1 len=2923 name=maps/_zombiemode_claymore.gsc
+#54 RawFile 0x95db1..0x96edf len=4398 name=maps/_zombiemode_devgui.gsc
+#55 RawFile 0x96edf..0x97874 len=2453 name=maps/_zombiemode_equipment.gsc
+#56 RawFile 0x97874..0x97cd6 len=1122 name=maps/_zombiemode_ffotd.gsc
+#57 RawFile 0x97cd6..0x9a822 len=11084 name=maps/_zombiemode_perks.gsc
+#58 RawFile 0x9a822..0x9e5af len=15757 name=maps/_zombiemode_powerups.gsc
+#59 RawFile 0x9e5af..0xa0665 len=8374 name=maps/_zombiemode_load.gsc
+#60 RawFile 0xa0665..0xa1586 len=3873 name=maps/_zombiemode_score.gsc
+#61 RawFile 0xa1586..0xa842d len=28327 name=maps/_zombiemode_spawner.gsc
+#62 RawFile 0xa842d..0xaa1a4 len=7543 name=maps/_zombiemode_traps.gsc
+#63 RawFile 0xaa1a4..0xaec15 len=19057 name=maps/_zombiemode_utility.gsc
+#64 RawFile 0xaec15..0xaf2c2 len=1709 name=maps/_zombiemode_weap_cymbal_monkey.gsc
+#65 RawFile 0xaf2c2..0xafc1c len=2394 name=maps/_zombiemode_weap_crossbow.gsc
+#66 RawFile 0xafc1c..0xb0b56 len=3898 name=maps/_zombiemode_weap_freezegun.gsc
+#67 RawFile 0xb0b56..0xb1963 len=3597 name=maps/_zombiemode_weap_tesla.gsc
+#68 RawFile 0xb1963..0xb25f3 len=3216 name=maps/_zombiemode_weap_thundergun.gsc
+#69 RawFile 0xb25f3..0xb6ce1 len=18158 name=maps/_zombiemode_weapons.gsc
+#70 RawFile 0xb6ce1..0xb8153 len=5234 name=maps/_zombiemode_zone_manager.gsc
+#71 RawFile 0xb8153..0xb8386 len=563 name=maps/_zombiemode_server_throttle.gsc
+#72 RawFile 0xb8386..0xb999e len=5656 name=maps/_zombiemode_sidequests.gsc
+#73 MaterialTechniqueSet 0xb999e..0xb9bc0 len=546 name=,mc_l_sm_r0c0n0s0
+#74 XModel 0xb9bc0..0xbeaf0 len=20272 name=zombie_3rd_perk_bottle_doubletap
+#75 XModel 0xbeaf0..0xbee74 len=900 name=zombie_3rd_perk_bottle_jugg
+#76 XModel 0xbee74..0xbf1fc len=904 name=zombie_3rd_perk_bottle_revive
+#77 XModel 0xbf1fc..0xbf586 len=906 name=zombie_3rd_perk_bottle_sleight
+#78 MaterialTechniqueSet 0xbf586..0xbf7ab len=549 name=,mc_l_sm_r0c0s0sc0x0
+#79 XModel 0xbf7ab..0xc4614 len=20073 name=zombie_pickup_perk_bottle
+#80 XAnimParts 0xc4614..0xc866d len=16473 name=pb_stand_alert_pistol nf=125 fps=30.0 db=1911 ds=175 di=60 rs=6532 ix=0
+#81 XAnimParts 0xc866d..0xcda50 len=21475 name=pb_terrain_slide nf=119 fps=30.0 db=2438 ds=185 di=54 rs=8888 ix=0
+#82 XAnimParts 0xcda50..0xcefc2 len=5490 name=pf_melee nf=84 fps=30.0 db=726 ds=177 di=192 rs=1100 ix=0
+#83 XAnimParts 0xcefc2..0xd07e1 len=6175 name=pf_firing nf=140 fps=30.0 db=857 ds=177 di=192 rs=1228 ix=0
+#84 XAnimParts 0xd07e1..0xd22ba len=6873 name=pt_laststand_fire nf=46 fps=30.0 db=785 ds=154 di=45 rs=2586 ix=0
+#85 XAnimParts 0xd22ba..0xd3b4b len=6289 name=pt_rifle_stand_putaway nf=11 fps=30.0 db=715 ds=66 di=51 rs=2432 ix=0
+#86 XAnimParts 0xd3b4b..0xda2c0 len=26485 name=pb_stand_shoot_walk_forward_unarmed nf=88 fps=30.0 db=3149 ds=324 di=60 rs=10375 ix=0
+#87 XAnimParts 0xda2c0..0x1085ff len=189247 name=- nf=0 fps=2.4008299636890844e+29 db=38937 ds=56064 di=9472 rs=85 ix=0 IMPLAUSIBLE
+#88 XAnimParts 0x1085ff..0x108667 len=104 name=- nf=8306 fps=1.8890782451696141e+31 db=8299 ds=26999 di=26740 rs=1718183023 ix=1952539497 IMPLAUSIBLE
+#89 XAnimParts 0x108667..0x1086cf len=104 name=- nf=28787 fps=1.0937630624678118e+31 db=29295 ds=3444 di=26890 rs=153121902 ix=1701146739 IMPLAUSIBLE
+#90 XAnimParts 0x1086cf..0x108737 len=104 name=- nf=2420 fps=1.9140148033855233e+28 db=2407 ds=24942 di=25965 rs=1936026985 ix=1931501856 IMPLAUSIBLE
+#91 StringTable 0x108737..0x10874b len=20 name=-
+#92 RawFile 0x10874b..0x108757 len=12 name=-
+#93 MaterialTechniqueSet 0x108757..0x108967 len=528 name=-
+#94 MaterialTechniqueSet 0x108967..0x108b77 len=528 name=-
+#95 FxEffectDef 0x108b77..0x108bb3 len=60 name=-
+#96 RawFile 0x108bb3..0x108bbf len=12 name=-
