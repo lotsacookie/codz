@@ -1,0 +1,6 @@
+# error report: zone/Common/zombie_theater_patch.ff
+status: ok
+stream: walked 0xc3427 of 0xc3427 bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output
