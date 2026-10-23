@@ -66,6 +66,7 @@
   "_unwalked/tail_0129adc9_part2.bin"
  ],
  "errorReport": "_errors.txt",
+ "assetTrace": "_asset_trace.txt",
  "assets": [
   {
    "index": 0,
