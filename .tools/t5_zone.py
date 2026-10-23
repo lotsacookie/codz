@@ -746,12 +746,36 @@ class T5Zone:
             finally:
                 self.ctx_trace.pop()
 
+    INLINE_ARRAY_CAPACITY = 4
+
+    def _treat_inline_indices(self, sd, dsl, m, info, vals, ctx, scopes):
+        if m.name == "_2":
+            sibling = self._member_info(dsl, sd, "_1", scopes)
+            if sibling["cond"] is not None and self.eval_cond(sibling["cond"], ctx):
+                return
+        owner = info["arraysize_owner"]
+        scope_ctx = ctx
+        for i in range(len(ctx) - 1, -1, -1):
+            if ctx[i][0] == owner:
+                scope_ctx = ctx[:i + 1]
+                break
+        count = self.eval_expr(info["arraysize"], scope_ctx)
+        esz = max(1, m.size // (m.array or 1))
+        extra = count * esz - self.INLINE_ARRAY_CAPACITY
+        if extra <= 0:
+            return
+        top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
+        tail = self.read(extra, block=top)
+        head = vals.get(m.name)
+        vals[m.name] = (bytes(head) + tail) if isinstance(head, (bytes, bytearray)) else tail
+
     def _member_info(self, dsl, sd, name, scopes):
         """Resolve DSL flags for member `name`. Keys match by path suffix:
         a DSL entry "u::water" applies to any member whose full path ends with
         "u::water". Own section first, then ancestors (innermost first)."""
         info = {"count": None, "reusable": False, "block": None, "align": None,
-                "string": False, "scriptstring": False, "cond_never": False, "cond": None}
+                "string": False, "scriptstring": False, "cond_never": False, "cond": None,
+                "arraysize": None, "arraysize_owner": None}
 
         def apply_from(d, keys):
             if d is None:
@@ -775,6 +799,9 @@ class T5Zone:
                     info["cond_never"] = True
                 if key in d.cond_expr:
                     info["cond"] = d.cond_expr[key]
+                if key in d.arraysize:
+                    info["arraysize"] = d.arraysize[key]
+                    info["arraysize_owner"] = d.name
 
         # candidate keys: for each scope, suffixes of (scope prefix :: name)
         candidates = []
@@ -826,6 +853,9 @@ class T5Zone:
         if info["cond_never"]:
             return
         if info["cond"] is not None and not self.eval_cond(info["cond"], ctx):
+            return
+        if not m.ptr and info["arraysize"] is not None and sd.is_union and m.array == 1:
+            self._treat_inline_indices(sd, dsl, m, info, vals, ctx, scopes)
             return
         if not m.ptr:
             # embedded struct: treat its own pointer members
