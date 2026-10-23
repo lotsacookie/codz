@@ -1,3 +1,4 @@
+import { attachPlayer } from './mods/runtime.js';
 import * as THREE from 'three';
 import { Capsule } from 'three/addons/math/Capsule.js';
 import { Octree } from 'three/addons/math/Octree.js';
@@ -166,6 +167,8 @@ export class PlayerController {
     this.moveSpeed = Math.max(0, numberOr(options.moveSpeed, 380));
     this.sprintSpeed = Math.max(0, numberOr(options.sprintSpeed, 900));
     this.crouchSpeed = Math.max(0, numberOr(options.crouchSpeed, 190));
+    this.modBase = null;
+    attachPlayer(this);
     // Visual-only camera easing (crouch, stairs, landing). Off unless the game asks for it.
     this._smoother = options.smoothCamera ? new CameraSmoother() : null;
     this._eyeSmooth = null;

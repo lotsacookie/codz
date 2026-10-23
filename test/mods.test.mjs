@@ -73,3 +73,24 @@ test('bindings drive the real session; unbound commands are marked unavailable',
   mod.bindings.actions.give_perkaholic(s);
   assert.equal(s.perks.size, Object.keys(data.perkDrinks).length);
 });
+
+test('enabled toggles run from Session.update itself, not only when ticked by hand', () => {
+  clearModifiers();
+  const mod = CATALOG[0];
+  modRuntime.mods.set('synergy', { bindings: mod.bindings, enabled: true });
+  const s = new Session(data);
+  s.phase = 'fighting';
+  modRuntime.flags.god_mode = true;
+  modRuntime.flags.infinite_ammo = true;
+  s.update(0.1);
+  assert.equal(s.damage(40), false);
+  s.fireLeft = 0;
+  const mag = s.weapon.mag;
+  assert.ok(s.fire());
+  assert.equal(s.weapon.mag, mag);
+  let redraws = 0;
+  modRuntime.reequip = () => { redraws++; };
+  mod.bindings.actions.give_weapon(s, ['mp40_zm'], 0, modRuntime);
+  assert.equal(s.weapon.id, 'mp40_zm');
+  assert.equal(redraws, 1);
+});

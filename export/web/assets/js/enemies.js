@@ -1,3 +1,4 @@
+import { attachEnemies, zombieTimeScale } from './mods/runtime.js';
 import * as THREE from 'three';
 import { DOG_SPAWN_DELAY } from './dog-spawn-fx.js';
 const FIRE_CAUSE=/^(fire|flame|burn|dragon|incendiary|molotov)/i,FIRE_WEAPON=/dragon|flame|molotov|incendi/i;
@@ -36,7 +37,7 @@ export function rollGait(round, rules = {}, random = Math.random) {
 
 export class Enemies {
   routeBudgetMs=Infinity;routeSpent=0;
-  constructor(scene,world,data,session,{damage,kill,hit,sound,voice,event}){Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice,onEvent:event});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
+  constructor(scene,world,data,session,{damage,kill,hit,sound,voice,event}){attachEnemies(this);Object.assign(this,{scene,world,data,session,onDamage:damage,onKill:kill,onHit:hit,onSound:sound,onVoice:voice,onEvent:event});this.list=[];this.dead=[];this.nextSpawn=0;this.serial=0;this.templates=[];this.anims={};this.net=null;this.currentShooter=null;}
   async load(){
     const chars=this.data.characters;
     this.templates=await Promise.all(['c_ger_honorguard_body1','c_ger_honorguard_body2'].map(k=>loadModel(chars[k])));
@@ -77,6 +78,7 @@ export class Enemies {
     z.maxHealth=z.health;this.list.push(z);this.session.spawned++;if(kind==='dog'&&this.spawnEffects){z.spawnFx=DOG_SPAWN_DELAY;z.root.visible=false;z.root.scale.multiplyScalar(.001);z.fxScale=1000;}if(kind==='dog'||kind==='nova')this.onEvent?.('spawn',z);return z;
   }
   update(dt,player){
+    dt*=zombieTimeScale();
     const s=this.session,remotes=this.remoteTargets?.();
     const localDown=!!remotes?.length&&(s.spectating||s.phase==='reviving'||s.phase==='gameover');
     const anchor=localDown?nearestTarget(player,remotes,null):player;

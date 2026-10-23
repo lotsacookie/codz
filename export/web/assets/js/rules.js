@@ -83,6 +83,7 @@ export class Session {
   }
   update(dt){
     if(this.phase==='gameover')return;
+    tickMods(this,dt);
     this.time+=dt;this.fireLeft=Math.max(0,this.fireLeft-dt);this.meleeLeft=Math.max(0,this.meleeLeft-dt);
     this.drops.observe(this);
     if(this.mods.has('insta_kill'))this.effects.insta_kill=this.time+999;

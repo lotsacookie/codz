@@ -1,5 +1,5 @@
 // Bridges enabled mods to the live game session. Node-safe: no DOM at import.
-const rt = { session: null, mods: new Map(), flags: {}, values: {} };
+const rt = { session: null, enemies: null, player: null, reequip: null, mods: new Map(), flags: {}, values: {} };
 
 export const modRuntime = rt;
 export const attachSession = session => { rt.session = session; rt.flags = {}; rt.values = {}; };
@@ -20,3 +20,8 @@ export function tickMods(session, dt) {
     for (const [command, on] of Object.entries(rt.flags)) if (on) bindings.toggles?.[command]?.tick?.(session, dt, rt);
   }
 }
+
+export const attachEnemies = enemies => { rt.enemies = enemies; };
+export const attachPlayer = player => { rt.player = player; };
+// 0 when zombies are frozen, slower when slowed; Enemies.update scales its dt with this.
+export const zombieTimeScale = () => (rt.flags.freeze_zombies ? 0 : rt.flags.slow_zombies ? 0.3 : 1);

@@ -1,3 +1,4 @@
+import { modRuntime } from './mods/runtime.js';
 import { CharacterFire } from './character-fire.js';
 import { FlopFx } from './perk-fx.js';
 import * as THREE from 'three';
@@ -48,6 +49,7 @@ export class Combat {
       ...Object.entries(this.data.equipment).map(async([id,d])=>this.equipmentModels[id]=await loadModel(d.worldModel))]);
   }
   async equip(lower=false){
+    modRuntime.reequip=()=>{this.view.currentId=null;return this.equip();};
     const suit=!!this.features?.state.suit;
     if(suit!==this.handSuit){this.view.currentId=null;this.handSuit=suit;}
     const adjust=d=>{if(suit)d.handsModel=this.data.props.viewmodel_zom_pressure_suit_arms;return d;};
