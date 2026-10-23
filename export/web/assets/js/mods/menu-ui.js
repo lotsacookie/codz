@@ -73,10 +73,10 @@ export function createModMenu() {
   function render() {
     const { mod } = state;
     // The repo's menus have no Back row (its menu uses a button for that), so one is always added for keyboard/touch.
-    state.items = [...resolveMenu(mod, state.stack.at(-1), session()), { kind: 'option', text: state.stack.length > 1 ? 'Back' : 'Close', synthetic: true, description: '↑↓ move · Enter select · ←/→ change values · Esc back · ` or F4 close' }];
+    state.items = [...resolveMenu(mod, state.stack.at(-1), session()), { kind: 'option', text: state.stack.length > 1 ? 'Back' : 'Close', synthetic: true, description: '↑↓ move · Enter select · ←/→ change values · Backspace back · ` or F4 close · the game keeps running' }];
     state.index = Math.min(state.index, Math.max(0, state.items.length - 1));
     title.textContent = state.stack.at(-1);
-    sub.textContent = '↑↓ Enter ←/Esc';
+    sub.textContent = '↑↓ Enter ⌫';
     list.replaceChildren(...state.items.map((item, i) => {
       const li = document.createElement('li'), button = document.createElement('button'), [left, right] = label(item, i);
       const ok = isSupported(item, mod.bindings);
@@ -136,38 +136,32 @@ export function createModMenu() {
     state.mod = mods[0];
     state.stack = [state.mod.menu.root];
     state.index = 0;
-    document.exitPointerLock?.();
     root.hidden = false;
     render();
-    root.focus({ preventScroll: true });
     return true;
   }
   function close() { root.hidden = true; }
 
-  // Keep keyboard focus in the menu: the pause screen grabs it when the mouse is released.
-  document.addEventListener('focusin', event => { if (!root.hidden && !root.contains(event.target)) root.focus({ preventScroll: true }); }, true);
-  const swallow = event => { if (!root.hidden) { event.stopImmediatePropagation(); event.stopPropagation(); } };
-  addEventListener('keyup', swallow, true);
-  addEventListener('keypress', swallow, true);
-
+  // The game keeps running and keeps the mouse while the menu is open, so only the menu's own keys are taken:
+  // arrows, Enter, Backspace and the open/close key. WASD, jump, shoot, reload and the rest reach the game.
+  const MENU_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'NumpadEnter', 'Backspace', 'Backquote', 'F4']);
   addEventListener('keydown', event => {
-    const code = event.code === 'NumpadEnter' ? 'Enter' : event.code || { ArrowUp: 'ArrowUp', ArrowDown: 'ArrowDown', ArrowLeft: 'ArrowLeft', ArrowRight: 'ArrowRight', Enter: 'Enter', Escape: 'Escape' }[event.key];
-    const toggleKey = code === 'Backquote' || code === 'F4';
+    if (!MENU_KEYS.has(event.code)) return;
+    const toggleKey = event.code === 'Backquote' || event.code === 'F4';
     if (root.hidden) {
       if (toggleKey && session() && open()) { event.preventDefault(); event.stopImmediatePropagation(); }
       return;
     }
-    const n = state.items.length;
+    const n = Math.max(1, state.items.length);
     const handled = {
-      Backquote: close, F4: close, Escape: back, Backspace: back,
-      ArrowDown: () => { state.index = (state.index + 1) % Math.max(1, n); render(); },
-      ArrowUp: () => { state.index = (state.index - 1 + Math.max(1, n)) % Math.max(1, n); render(); },
+      Backquote: close, F4: close, Backspace: back,
+      ArrowDown: () => { state.index = (state.index + 1) % n; render(); },
+      ArrowUp: () => { state.index = (state.index - 1 + n) % n; render(); },
       ArrowRight: () => { if (!adjust(1)) activate(); },
       ArrowLeft: () => { if (!adjust(-1)) back(); },
-      Enter: activate, Space: activate,
-    }[code];
+      Enter: activate, NumpadEnter: activate,
+    }[event.code];
     event.stopImmediatePropagation();
-    event.stopPropagation();
     event.preventDefault();
     handled?.();
   }, true);
