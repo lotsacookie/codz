@@ -1,0 +1,30 @@
+# error report: zone/Common/common_zombie.ff
+status: ok
+stream: walked 0x19af387 of 0x4bf8925 bytes (33.81%), 52729246 unwalked
+errors: 2 (1 failed assets, 0 soft errors, 0 poisoned pointers)
+
+[1] FAILED ASSET #2212 XAnimParts
+  error: stream exhausted at 0x198aeb7 need 1204288126 (trace=['<zone>', 'asset#2212:XAnimParts', 'XAnimParts.randomDataShort'])
+  stream: start=0x198ae4f end=0x198af4b bytes=252 resyncedTo=#2213
+  previous walked asset: #2211 XAnimParts unnamed stream=0x198ade7..0x198ae4f
+  bytes around the start (16 before):
+    0x0198ae3f  3f 86 fe 78 3f 9a e0 44 40 e0 2f be be c4 06 4f  ?..x?..D@./....O
+    0x0198ae4f  3f 00 00 80 bf ff ff ff ff a1 3a b1 39 01 87 8c  ?.........:.9...
+    0x0198ae5f  3f 86 fd 71 3f 40 02 26 01 00 00 5e 01 ff ff ff  ?..q?@.&...^....
+    0x0198ae6f  ff a0 34 1f c0 55 f6 15 3f fd e3 23 41 51 cf ff  ..4..U..?..#AQ..
+    0x0198ae7f  45 49 81 5a 47 6a e4 b7 45 28 00 00 00 ff ff ff  EI.ZGj..E(......
+
+[2] WALK STOPPED at 0x19af387
+  52729246 bytes after this were not turned into assets
+  the zone's asset list ended here (2693 entries, all walked); the bytes after it are not covered by the list
+  last walked asset: #2692 RawFile stream=0x19af37b..0x19af387
+  bytes at the stop (16 before):
+    0x019af377  39 00 7f 7f 3f 7f 12 3d 3f be 34 32 40 7c 28 e1  9...?..=?.42@|(.
+    0x019af387  3e e5 60 61 40 00 00 80 bf ff ff ff ff bd 36 04  >.`a@.........6.
+    0x019af397  3a 00 7f 7f 3f 7f 13 3c 3f be 34 32 40 49 a2 0b  :...?..<?.42@I..
+    0x019af3a7  3f 0d a3 6f 40 00 00 80 bf ff ff ff ff 91 36 e4  ?..o@.........6.
+    0x019af3b7  39 00 7f 7f 3f 7f 12 3e 3f 26 74 18 40 1e 51 8d  9...?..>?&t.@.Q.
+
+## raw walker output
+  asset#2212 (XAnimParts) failed (stream exhausted at 0x198aeb7 need 1204288126 (trace=['<zone>', 'asset#2212:XAnimParts', 'XAnimParts.randomDataShort'])); resyncing
+  resync -> asset#2213 (XAnimParts) @ 0x198af4b
