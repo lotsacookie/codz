@@ -1,0 +1,17 @@
+# error report: zone/english/en_zombie_theater.ff
+status: ok
+stream: walked 0x5403c of 0x194039 bytes (20.79%), 1310717 unwalked
+errors: 1 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+[1] WALK STOPPED at 0x5403c
+  1310717 bytes after this were not turned into assets
+  the zone's asset list ended here (32 entries, all walked); the bytes after it are not covered by the list
+  last walked asset: #31 RawFile stream=0x54030..0x5403c
+  bytes at the stop (16 before):
+    0x0005402c  1f 14 5a 19 04 be 22 83 09 00 88 00 42 43 c1 42  ..Z...".....BC.B
+    0x0005403c  b5 89 c4 08 a7 18 11 4c 4c 81 5e 14 99 ca 91 95  .......LL.^.....
+    0x0005404c  10 00 af 2e 10 a2 04 c9 12 48 90 1a 48 20 ce 2d  .........H..H .-
+    0x0005405c  44 5e 0c 14 ec 73 7a 4e 73 5c 88 83 9b c6 70 31  D^...szNs\....p1
+    0x0005406c  d8 0c da ef 5b 85 ab ba e5 e6 ea 73 83 7d 31 7d  ....[......s.}1}
+
+## raw walker output
