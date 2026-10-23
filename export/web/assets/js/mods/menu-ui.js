@@ -76,7 +76,7 @@ export function createModMenu() {
     state.items = [...resolveMenu(mod, state.stack.at(-1), session()), { kind: 'option', text: state.stack.length > 1 ? 'Back' : 'Close', synthetic: true, description: '↑↓ move · Enter select · ←/→ change values · Backspace back · ` or F4 close · the game keeps running' }];
     state.index = Math.min(state.index, Math.max(0, state.items.length - 1));
     title.textContent = state.stack.at(-1);
-    sub.textContent = '↑↓ Enter ⌫';
+    sub.textContent = 'v4 · game keys pass through';
     list.replaceChildren(...state.items.map((item, i) => {
       const li = document.createElement('li'), button = document.createElement('button'), [left, right] = label(item, i);
       const ok = isSupported(item, mod.bindings);
