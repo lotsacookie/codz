@@ -506,6 +506,9 @@ def write_file(out, relative, payload, overwrite):
     return "ok"
 
 
+MAX_ASSET_JSON = 40000000
+
+
 def export_everything(assets, out, zone_name, only=None, overwrite=True, resolve_name=None):
     """Writes every walked asset that export_assets does not already cover (materials, techsets, fx, snd, rawfiles, menus, tables, ...)."""
     stubs, _walked = build_stubs(assets, resolve_name)
@@ -532,6 +535,9 @@ def export_everything(assets, out, zone_name, only=None, overwrite=True, resolve
         relative = unique_target(out, relative, used, index)
         record = {"type": type_name, "name": name, "zone": zone_name, "index": index, "asset": jsonable(obj, stubs=stubs)}
         payload = json.dumps(record, separators=(",", ":"), allow_nan=False).encode("utf-8")
+        if len(payload) > MAX_ASSET_JSON:
+            record = {"type": type_name, "name": name, "zone": zone_name, "index": index, "oversized": len(payload)}
+            payload = json.dumps(record, separators=(",", ":"), allow_nan=False).encode("utf-8")
         status = write_file(out, relative, payload, overwrite)
         rows.append({"archive": zone_name, "entry": name, "kind": type_name, "file": relative, "sha256": hashlib.sha256(payload).hexdigest(), "status": status})
         listing.append({"index": index, "type": type_name, "name": name, "file": relative})
