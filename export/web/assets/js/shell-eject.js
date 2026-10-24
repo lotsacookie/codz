@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { SHELLS } from './shell-kinds.js';
-export { SHELLS, ENABLED, shellKindFor } from './shell-kinds.js';
+export { SHELLS, ENABLED, shellKindFor, linkKindFor } from './shell-kinds.js';
 
 // Shell casings use the reference fx_*_shell XModels (baked by .tools/bake-shells.mjs into assets/data/shell-models.json).
 // and their reference colour textures. Only the kinds listed in ENABLED eject a casing.

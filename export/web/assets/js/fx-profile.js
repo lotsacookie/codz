@@ -19,6 +19,7 @@ export function weaponFxProfile(def) {
   const scale = def.upgraded ? 1.15 : 1;
   return {
     kind: found ? found[0] : 'rifle',
+    revolver: /python|357|revolver/i.test(def.id),
     upgraded: !!def.upgraded,
     size: base.size * scale,
     puffs: base.puffs + (def.upgraded ? 1 : 0),

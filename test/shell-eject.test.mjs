@@ -1,14 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SHELLS, ENABLED, shellKindFor } from '../export/web/assets/js/shell-kinds.js';
+import { SHELLS, ENABLED, shellKindFor, linkKindFor } from '../export/web/assets/js/shell-kinds.js';
 
-test('pistols and shotguns eject shells', () => {
-  assert.deepEqual([...ENABLED], ['pistol', 'shotgun']);
+test('pistols, SMGs, rifles, LMGs and shotguns eject shells', () => {
+  assert.deepEqual([...ENABLED], ['pistol', 'rifle', 'link', 'shotgun']);
   assert.equal(shellKindFor({ kind: 'pistol' }), 'pistol');
+  assert.equal(shellKindFor({ kind: 'smg' }), 'pistol');
+  assert.equal(shellKindFor({ kind: 'rifle' }), 'rifle');
+  assert.equal(shellKindFor({ kind: 'lmg' }), 'rifle');
   assert.equal(shellKindFor({ kind: 'shotgun' }), 'shotgun');
-  assert.equal(shellKindFor({ kind: 'smg' }), null);
+  assert.equal(shellKindFor({ kind: 'sniper' }), null);
+  assert.equal(shellKindFor({ kind: 'pistol', revolver: true }), null);
   assert.equal(shellKindFor(null), null);
+});
+
+test('only belt-fed LMGs eject chain links', () => {
+  assert.equal(linkKindFor({ kind: 'lmg' }), 'link');
+  assert.equal(linkKindFor({ kind: 'rifle' }), null);
+  assert.equal(linkKindFor(null), null);
 });
 
 test('baked reference shell meshes are valid', () => {
