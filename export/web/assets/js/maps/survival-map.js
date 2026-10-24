@@ -1,6 +1,7 @@
 import { createCoop } from '../net/coop-client.js';
 import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
+import { hideWallGunAttachments } from '../wall-gun-attachments.js';
 import { loadMapGltf } from '../map-assets.js';
 import { loadManifest, loadPacks, ensureTextures, prewarm } from '../load-flow.js';
 import { preloadShared } from '../shared-assets.js';
@@ -578,7 +579,7 @@ async function load() {
   await navigation.prepare({ onStatus: showStatus });
   if (navigation.health && !navigation.health.reachable) showNotice('No verified zombie route found. Using fallback movement.', 8);
   combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
-  for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) wallGuns.set(triggerId, [o]); }
+  for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) { hideWallGunAttachments(o, combat.data.weapons[data.entities[triggerId]?.zombie_weapon_upgrade]); wallGuns.set(triggerId, [o]); } }
   worldNet = combat.coop?.attachWorld({ applyDoor: remoteDoor, applyWall: remoteWall }) ?? null;
   const buy = features.interact.bind(features);
   features.interact = t => {

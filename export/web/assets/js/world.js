@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { init, importNavMesh, NavMeshQuery } from '@recast-navigation/core';
 import { loadCollisionWorld, CollisionWorld } from './collision-world.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
+import { hideWallGunAttachments } from './wall-gun-attachments.js';
 import { chunkWorldMeshes } from './world-chunks.js';
 import { loadModel } from './animation.js';
 import { censorFlags } from './flag-censorship.js';
@@ -87,7 +88,7 @@ export class World {
     for(const t of this.interactions){
       if(!((t.targetname==='weapon_upgrade'&&this.data.weapons[t.zombie_weapon_upgrade])||t.targetname==='claymore_purchase'))continue;
       const model=ents.find(m=>m.classname==='script_model'&&m.targetname===t.target),root=model&&this.entities.get(model.id);
-      if(root)this.wallGuns.set(t.id,root);
+      if(root){hideWallGunAttachments(root,this.data.weapons[t.zombie_weapon_upgrade]);this.wallGuns.set(t.id,root);}
     }
     this.resetWallGuns();
     this.boxBeam=new THREE.Mesh(new THREE.CylinderGeometry(8,28,1600,12,1,true),new THREE.MeshBasicMaterial({color:0x8cacdd,transparent:true,opacity:.1,side:THREE.DoubleSide,depthWrite:false}));
