@@ -1,0 +1,6 @@
+# error report: zone/Common/patch_mp.ff
+status: ok
+stream: walked 0xa7137f of 0xa7137f bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+
+## raw walker output

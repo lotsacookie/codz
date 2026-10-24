@@ -1,0 +1,3171 @@
+{
+ "zone": "zone/Common/patch_mp.ff",
+ "status": "ok",
+ "error": null,
+ "complete": true,
+ "coverage": {
+  "streamPos": 10949503,
+  "streamSize": 10949503,
+  "percent": 100.0
+ },
+ "types": {
+  "StringTable": 312,
+  "Material": 110,
+  "RawFile": 50,
+  "MaterialTechniqueSet": 18,
+  "MenuList": 15,
+  "FxEffectDef": 11,
+  "XModel": 5,
+  "XAnimParts": 4,
+  "SndPatch": 1,
+  "WeaponVariantDef": 1
+ },
+ "resyncs": 0,
+ "failures": [],
+ "softErrors": [],
+ "failedSpans": [],
+ "unwalkedTail": [],
+ "errorReport": "_errors.txt",
+ "assetTrace": "_asset_trace.txt",
+ "assets": [
+  {
+   "index": 0,
+   "type": "MaterialTechniqueSet",
+   "name": "2d",
+   "file": "assets/MaterialTechniqueSet/2d.json"
+  },
+  {
+   "index": 1,
+   "type": "MenuList",
+   "name": "ui_mp/custom_settings_general.menu",
+   "file": "assets/MenuList/ui_mp/custom_settings_general.menu.json"
+  },
+  {
+   "index": 2,
+   "type": "MenuList",
+   "name": "ui_mp/fileshare_playercard.menu",
+   "file": "assets/MenuList/ui_mp/fileshare_playercard.menu.json"
+  },
+  {
+   "index": 3,
+   "type": "MenuList",
+   "name": "ui_mp/after_action_report.menu",
+   "file": "assets/MenuList/ui_mp/after_action_report.menu.json"
+  },
+  {
+   "index": 4,
+   "type": "MenuList",
+   "name": "ui/options_graphics_pc.menu",
+   "file": "assets/MenuList/ui/options_graphics_pc.menu.json"
+  },
+  {
+   "index": 5,
+   "type": "MaterialTechniqueSet",
+   "name": "cinematic",
+   "file": "assets/MaterialTechniqueSet/cinematic.json"
+  },
+  {
+   "index": 6,
+   "type": "MenuList",
+   "name": "ui/error.menu",
+   "file": "assets/MenuList/ui/error.menu.json"
+  },
+  {
+   "index": 7,
+   "type": "MenuList",
+   "name": "ui_mp/options_multi.menu",
+   "file": "assets/MenuList/ui_mp/options_multi.menu.json"
+  },
+  {
+   "index": 8,
+   "type": "MenuList",
+   "name": "ui_mp/scriptmenus/callvote.menu",
+   "file": "assets/MenuList/ui_mp/scriptmenus/callvote.menu.json"
+  },
+  {
+   "index": 9,
+   "type": "MenuList",
+   "name": "ui_mp/scriptmenus/changeclass.menu",
+   "file": "assets/MenuList/ui_mp/scriptmenus/changeclass.menu.json"
+  },
+  {
+   "index": 10,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_blood_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_blood_transparent.json"
+  },
+  {
+   "index": 11,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_flicker_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_flicker_transparent.json"
+  },
+  {
+   "index": 12,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_overlay_scanline_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_overlay_scanline_transparent.json"
+  },
+  {
+   "index": 13,
+   "type": "MaterialTechniqueSet",
+   "name": "grain_overlay",
+   "file": "assets/MaterialTechniqueSet/grain_overlay.json"
+  },
+  {
+   "index": 14,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_anim_icon_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_anim_icon_transparent.json"
+  },
+  {
+   "index": 15,
+   "type": "MenuList",
+   "name": "ui_mp/hud_hardcore.menu",
+   "file": "assets/MenuList/ui_mp/hud_hardcore.menu.json"
+  },
+  {
+   "index": 16,
+   "type": "MenuList",
+   "name": "ui_mp/players.menu",
+   "file": "assets/MenuList/ui_mp/players.menu.json"
+  },
+  {
+   "index": 17,
+   "type": "MenuList",
+   "name": "ui_mp/scriptmenus/class.menu",
+   "file": "assets/MenuList/ui_mp/scriptmenus/class.menu.json"
+  },
+  {
+   "index": 18,
+   "type": "MenuList",
+   "name": "ui_mp/hud_team.menu",
+   "file": "assets/MenuList/ui_mp/hud_team.menu.json"
+  },
+  {
+   "index": 19,
+   "type": "MenuList",
+   "name": "ui_mp/hud_ffa.menu",
+   "file": "assets/MenuList/ui_mp/hud_ffa.menu.json"
+  },
+  {
+   "index": 20,
+   "type": "MenuList",
+   "name": "ui_mp/playercards_clantag.menu",
+   "file": "assets/MenuList/ui_mp/playercards_clantag.menu.json"
+  },
+  {
+   "index": 21,
+   "type": "MenuList",
+   "name": "ui_mp/patch.txt",
+   "file": "assets/MenuList/ui_mp/patch.txt.json"
+  },
+  {
+   "index": 22,
+   "type": "RawFile",
+   "name": "maps/mp/_dogs.gsc",
+   "file": "rawfiles/maps/mp/_dogs.gsc"
+  },
+  {
+   "index": 23,
+   "type": "RawFile",
+   "name": "maps/mp/_utility.gsc",
+   "file": "rawfiles/maps/mp/_utility.gsc"
+  },
+  {
+   "index": 24,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/_globallogic_player.gsc",
+   "file": "rawfiles/maps/mp/gametypes/_globallogic_player.gsc"
+  },
+  {
+   "index": 25,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/_globallogic_score.gsc",
+   "file": "rawfiles/maps/mp/gametypes/_globallogic_score.gsc"
+  },
+  {
+   "index": 26,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/_spawning.gsc",
+   "file": "rawfiles/maps/mp/gametypes/_spawning.gsc"
+  },
+  {
+   "index": 27,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/ctf.gsc",
+   "file": "rawfiles/maps/mp/gametypes/ctf.gsc"
+  },
+  {
+   "index": 28,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/dem.gsc",
+   "file": "rawfiles/maps/mp/gametypes/dem.gsc"
+  },
+  {
+   "index": 29,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/dom.gsc",
+   "file": "rawfiles/maps/mp/gametypes/dom.gsc"
+  },
+  {
+   "index": 30,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/koth.gsc",
+   "file": "rawfiles/maps/mp/gametypes/koth.gsc"
+  },
+  {
+   "index": 31,
+   "type": "RawFile",
+   "name": "maps/mp/gametypes/sab.gsc",
+   "file": "rawfiles/maps/mp/gametypes/sab.gsc"
+  },
+  {
+   "index": 32,
+   "type": "RawFile",
+   "name": "maps/mp/mp_array.gsc",
+   "file": "rawfiles/maps/mp/mp_array.gsc"
+  },
+  {
+   "index": 33,
+   "type": "RawFile",
+   "name": "maps/mp/mp_cairo.gsc",
+   "file": "rawfiles/maps/mp/mp_cairo.gsc"
+  },
+  {
+   "index": 34,
+   "type": "RawFile",
+   "name": "maps/mp/mp_cosmodrome.gsc",
+   "file": "rawfiles/maps/mp/mp_cosmodrome.gsc"
+  },
+  {
+   "index": 35,
+   "type": "RawFile",
+   "name": "maps/mp/mp_crisis.gsc",
+   "file": "rawfiles/maps/mp/mp_crisis.gsc"
+  },
+  {
+   "index": 36,
+   "type": "RawFile",
+   "name": "maps/mp/mp_duga.gsc",
+   "file": "rawfiles/maps/mp/mp_duga.gsc"
+  },
+  {
+   "index": 37,
+   "type": "RawFile",
+   "name": "maps/mp/mp_firingrange.gsc",
+   "file": "rawfiles/maps/mp/mp_firingrange.gsc"
+  },
+  {
+   "index": 38,
+   "type": "RawFile",
+   "name": "maps/mp/mp_mountain.gsc",
+   "file": "rawfiles/maps/mp/mp_mountain.gsc"
+  },
+  {
+   "index": 39,
+   "type": "RawFile",
+   "name": "maps/mp/mp_nuked.gsc",
+   "file": "rawfiles/maps/mp/mp_nuked.gsc"
+  },
+  {
+   "index": 40,
+   "type": "RawFile",
+   "name": "maps/mp/mp_radiation.gsc",
+   "file": "rawfiles/maps/mp/mp_radiation.gsc"
+  },
+  {
+   "index": 41,
+   "type": "RawFile",
+   "name": "maps/mp/mp_russianbase.gsc",
+   "file": "rawfiles/maps/mp/mp_russianbase.gsc"
+  },
+  {
+   "index": 42,
+   "type": "RawFile",
+   "name": "maps/mp/mp_villa.gsc",
+   "file": "rawfiles/maps/mp/mp_villa.gsc"
+  },
+  {
+   "index": 43,
+   "type": "RawFile",
+   "name": "maps/mp/mp_zoo.gsc",
+   "file": "rawfiles/maps/mp/mp_zoo.gsc"
+  },
+  {
+   "index": 44,
+   "type": "RawFile",
+   "name": "maps/mp/mp_golfcourse.gsc",
+   "file": "rawfiles/maps/mp/mp_golfcourse.gsc"
+  },
+  {
+   "index": 45,
+   "type": "RawFile",
+   "name": "maps/mp/mp_silo.gsc",
+   "file": "rawfiles/maps/mp/mp_silo.gsc"
+  },
+  {
+   "index": 46,
+   "type": "RawFile",
+   "name": "clientscripts/mp/_claymore.csc",
+   "file": "rawfiles/clientscripts/mp/_claymore.csc"
+  },
+  {
+   "index": 47,
+   "type": "SndPatch",
+   "name": "patch",
+   "file": "assets/SndPatch/patch.json"
+  },
+  {
+   "index": 48,
+   "type": "Material",
+   "name": "menu_mp_area51_map_select",
+   "file": "assets/Material/menu_mp_area51_map_select.json"
+  },
+  {
+   "index": 49,
+   "type": "Material",
+   "name": "menu_mp_area51_map_select_big",
+   "file": "assets/Material/menu_mp_area51_map_select_big.json"
+  },
+  {
+   "index": 50,
+   "type": "Material",
+   "name": "menu_mp_area51_map_select_bw",
+   "file": "assets/Material/menu_mp_area51_map_select_bw.json"
+  },
+  {
+   "index": 51,
+   "type": "Material",
+   "name": "menu_mp_area51_map_select_final",
+   "file": "assets/Material/menu_mp_area51_map_select_final.json"
+  },
+  {
+   "index": 52,
+   "type": "Material",
+   "name": "menu_mp_berlinwall2_map_select",
+   "file": "assets/Material/menu_mp_berlinwall2_map_select.json"
+  },
+  {
+   "index": 53,
+   "type": "Material",
+   "name": "menu_mp_berlinwall2_map_select_big",
+   "file": "assets/Material/menu_mp_berlinwall2_map_select_big.json"
+  },
+  {
+   "index": 54,
+   "type": "Material",
+   "name": "menu_mp_berlinwall2_map_select_bw",
+   "file": "assets/Material/menu_mp_berlinwall2_map_select_bw.json"
+  },
+  {
+   "index": 55,
+   "type": "Material",
+   "name": "menu_mp_berlinwall2_map_select_final",
+   "file": "assets/Material/menu_mp_berlinwall2_map_select_final.json"
+  },
+  {
+   "index": 56,
+   "type": "Material",
+   "name": "menu_mp_discovery_map_select",
+   "file": "assets/Material/menu_mp_discovery_map_select.json"
+  },
+  {
+   "index": 57,
+   "type": "Material",
+   "name": "menu_mp_discovery_map_select_big",
+   "file": "assets/Material/menu_mp_discovery_map_select_big.json"
+  },
+  {
+   "index": 58,
+   "type": "Material",
+   "name": "menu_mp_discovery_map_select_bw",
+   "file": "assets/Material/menu_mp_discovery_map_select_bw.json"
+  },
+  {
+   "index": 59,
+   "type": "Material",
+   "name": "menu_mp_discovery_map_select_final",
+   "file": "assets/Material/menu_mp_discovery_map_select_final.json"
+  },
+  {
+   "index": 60,
+   "type": "Material",
+   "name": "menu_mp_drivein_map_select",
+   "file": "assets/Material/menu_mp_drivein_map_select.json"
+  },
+  {
+   "index": 61,
+   "type": "Material",
+   "name": "menu_mp_drivein_map_select_big",
+   "file": "assets/Material/menu_mp_drivein_map_select_big.json"
+  },
+  {
+   "index": 62,
+   "type": "Material",
+   "name": "menu_mp_drivein_map_select_bw",
+   "file": "assets/Material/menu_mp_drivein_map_select_bw.json"
+  },
+  {
+   "index": 63,
+   "type": "Material",
+   "name": "menu_mp_drivein_map_select_final",
+   "file": "assets/Material/menu_mp_drivein_map_select_final.json"
+  },
+  {
+   "index": 64,
+   "type": "Material",
+   "name": "menu_mp_golfcourse_map_select",
+   "file": "assets/Material/menu_mp_golfcourse_map_select.json"
+  },
+  {
+   "index": 65,
+   "type": "Material",
+   "name": "menu_mp_golfcourse_map_select_big",
+   "file": "assets/Material/menu_mp_golfcourse_map_select_big.json"
+  },
+  {
+   "index": 66,
+   "type": "Material",
+   "name": "menu_mp_golfcourse_map_select_bw",
+   "file": "assets/Material/menu_mp_golfcourse_map_select_bw.json"
+  },
+  {
+   "index": 67,
+   "type": "Material",
+   "name": "menu_mp_golfcourse_map_select_final",
+   "file": "assets/Material/menu_mp_golfcourse_map_select_final.json"
+  },
+  {
+   "index": 68,
+   "type": "Material",
+   "name": "menu_mp_gridlock_map_select",
+   "file": "assets/Material/menu_mp_gridlock_map_select.json"
+  },
+  {
+   "index": 69,
+   "type": "Material",
+   "name": "menu_mp_gridlock_map_select_big",
+   "file": "assets/Material/menu_mp_gridlock_map_select_big.json"
+  },
+  {
+   "index": 70,
+   "type": "Material",
+   "name": "menu_mp_gridlock_map_select_bw",
+   "file": "assets/Material/menu_mp_gridlock_map_select_bw.json"
+  },
+  {
+   "index": 71,
+   "type": "Material",
+   "name": "menu_mp_gridlock_map_select_final",
+   "file": "assets/Material/menu_mp_gridlock_map_select_final.json"
+  },
+  {
+   "index": 72,
+   "type": "Material",
+   "name": "menu_mp_hotel2_map_select",
+   "file": "assets/Material/menu_mp_hotel2_map_select.json"
+  },
+  {
+   "index": 73,
+   "type": "Material",
+   "name": "menu_mp_hotel2_map_select_big",
+   "file": "assets/Material/menu_mp_hotel2_map_select_big.json"
+  },
+  {
+   "index": 74,
+   "type": "Material",
+   "name": "menu_mp_hotel2_map_select_bw",
+   "file": "assets/Material/menu_mp_hotel2_map_select_bw.json"
+  },
+  {
+   "index": 75,
+   "type": "Material",
+   "name": "menu_mp_hotel2_map_select_final",
+   "file": "assets/Material/menu_mp_hotel2_map_select_final.json"
+  },
+  {
+   "index": 76,
+   "type": "Material",
+   "name": "menu_mp_hotel_map_select",
+   "file": "assets/Material/menu_mp_hotel_map_select.json"
+  },
+  {
+   "index": 77,
+   "type": "Material",
+   "name": "menu_mp_hotel_map_select_big",
+   "file": "assets/Material/menu_mp_hotel_map_select_big.json"
+  },
+  {
+   "index": 78,
+   "type": "Material",
+   "name": "menu_mp_hotel_map_select_bw",
+   "file": "assets/Material/menu_mp_hotel_map_select_bw.json"
+  },
+  {
+   "index": 79,
+   "type": "Material",
+   "name": "menu_mp_hotel_map_select_final",
+   "file": "assets/Material/menu_mp_hotel_map_select_final.json"
+  },
+  {
+   "index": 80,
+   "type": "Material",
+   "name": "menu_mp_kowloon_map_select",
+   "file": "assets/Material/menu_mp_kowloon_map_select.json"
+  },
+  {
+   "index": 81,
+   "type": "Material",
+   "name": "menu_mp_kowloon_map_select_big",
+   "file": "assets/Material/menu_mp_kowloon_map_select_big.json"
+  },
+  {
+   "index": 82,
+   "type": "Material",
+   "name": "menu_mp_kowloon_map_select_bw",
+   "file": "assets/Material/menu_mp_kowloon_map_select_bw.json"
+  },
+  {
+   "index": 83,
+   "type": "Material",
+   "name": "menu_mp_kowloon_map_select_final",
+   "file": "assets/Material/menu_mp_kowloon_map_select_final.json"
+  },
+  {
+   "index": 84,
+   "type": "Material",
+   "name": "menu_mp_outskirts_map_select",
+   "file": "assets/Material/menu_mp_outskirts_map_select.json"
+  },
+  {
+   "index": 85,
+   "type": "Material",
+   "name": "menu_mp_outskirts_map_select_big",
+   "file": "assets/Material/menu_mp_outskirts_map_select_big.json"
+  },
+  {
+   "index": 86,
+   "type": "Material",
+   "name": "menu_mp_outskirts_map_select_bw",
+   "file": "assets/Material/menu_mp_outskirts_map_select_bw.json"
+  },
+  {
+   "index": 87,
+   "type": "Material",
+   "name": "menu_mp_outskirts_map_select_final",
+   "file": "assets/Material/menu_mp_outskirts_map_select_final.json"
+  },
+  {
+   "index": 88,
+   "type": "Material",
+   "name": "menu_mp_silo_map_select",
+   "file": "assets/Material/menu_mp_silo_map_select.json"
+  },
+  {
+   "index": 89,
+   "type": "Material",
+   "name": "menu_mp_silo_map_select_big",
+   "file": "assets/Material/menu_mp_silo_map_select_big.json"
+  },
+  {
+   "index": 90,
+   "type": "Material",
+   "name": "menu_mp_silo_map_select_bw",
+   "file": "assets/Material/menu_mp_silo_map_select_bw.json"
+  },
+  {
+   "index": 91,
+   "type": "Material",
+   "name": "menu_mp_silo_map_select_final",
+   "file": "assets/Material/menu_mp_silo_map_select_final.json"
+  },
+  {
+   "index": 92,
+   "type": "Material",
+   "name": "menu_mp_stadium_map_select",
+   "file": "assets/Material/menu_mp_stadium_map_select.json"
+  },
+  {
+   "index": 93,
+   "type": "Material",
+   "name": "menu_mp_stadium_map_select_big",
+   "file": "assets/Material/menu_mp_stadium_map_select_big.json"
+  },
+  {
+   "index": 94,
+   "type": "Material",
+   "name": "menu_mp_stadium_map_select_bw",
+   "file": "assets/Material/menu_mp_stadium_map_select_bw.json"
+  },
+  {
+   "index": 95,
+   "type": "Material",
+   "name": "menu_mp_stadium_map_select_final",
+   "file": "assets/Material/menu_mp_stadium_map_select_final.json"
+  },
+  {
+   "index": 96,
+   "type": "Material",
+   "name": "menu_mp_zoo_map_select",
+   "file": "assets/Material/menu_mp_zoo_map_select.json"
+  },
+  {
+   "index": 97,
+   "type": "Material",
+   "name": "menu_mp_zoo_map_select_big",
+   "file": "assets/Material/menu_mp_zoo_map_select_big.json"
+  },
+  {
+   "index": 98,
+   "type": "Material",
+   "name": "menu_mp_zoo_map_select_bw",
+   "file": "assets/Material/menu_mp_zoo_map_select_bw.json"
+  },
+  {
+   "index": 99,
+   "type": "Material",
+   "name": "menu_mp_zoo_map_select_final",
+   "file": "assets/Material/menu_mp_zoo_map_select_final.json"
+  },
+  {
+   "index": 100,
+   "type": "MaterialTechniqueSet",
+   "name": "sw4_2d_extracam",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_extracam.json"
+  },
+  {
+   "index": 101,
+   "type": "Material",
+   "name": "dollycam2d",
+   "file": "assets/Material/dollycam2d.json"
+  },
+  {
+   "index": 102,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_add_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_add_nofog.json"
+  },
+  {
+   "index": 103,
+   "type": "Material",
+   "name": "gfx_dollycam_tracer",
+   "file": "assets/Material/gfx_dollycam_tracer.json"
+  },
+  {
+   "index": 104,
+   "type": "Material",
+   "name": "listen_server_mod",
+   "file": "assets/Material/listen_server_mod.json"
+  },
+  {
+   "index": 105,
+   "type": "Material",
+   "name": "no_ors_mod",
+   "file": "assets/Material/no_ors_mod.json"
+  },
+  {
+   "index": 106,
+   "type": "Material",
+   "name": "compass_map_mp_berlinwall2",
+   "file": "assets/Material/compass_map_mp_berlinwall2.json"
+  },
+  {
+   "index": 107,
+   "type": "Material",
+   "name": "compass_map_mp_berlinwall2_wager",
+   "file": "assets/Material/compass_map_mp_berlinwall2_wager.json"
+  },
+  {
+   "index": 108,
+   "type": "Material",
+   "name": "compass_overlay_map_berlinwall2",
+   "file": "assets/Material/compass_overlay_map_berlinwall2.json"
+  },
+  {
+   "index": 109,
+   "type": "Material",
+   "name": "compass_map_mp_discovery2",
+   "file": "assets/Material/compass_map_mp_discovery2.json"
+  },
+  {
+   "index": 110,
+   "type": "Material",
+   "name": "compass_map_mp_discovery2_wager",
+   "file": "assets/Material/compass_map_mp_discovery2_wager.json"
+  },
+  {
+   "index": 111,
+   "type": "Material",
+   "name": "compass_overlay_map_discovery2",
+   "file": "assets/Material/compass_overlay_map_discovery2.json"
+  },
+  {
+   "index": 112,
+   "type": "Material",
+   "name": "compass_map_mp_stadium",
+   "file": "assets/Material/compass_map_mp_stadium.json"
+  },
+  {
+   "index": 113,
+   "type": "Material",
+   "name": "compass_map_mp_stadium_wager",
+   "file": "assets/Material/compass_map_mp_stadium_wager.json"
+  },
+  {
+   "index": 114,
+   "type": "Material",
+   "name": "compass_overlay_map_stadium",
+   "file": "assets/Material/compass_overlay_map_stadium.json"
+  },
+  {
+   "index": 115,
+   "type": "Material",
+   "name": "compass_map_mp_kowloon",
+   "file": "assets/Material/compass_map_mp_kowloon.json"
+  },
+  {
+   "index": 116,
+   "type": "Material",
+   "name": "compass_map_mp_kowloon_wager",
+   "file": "assets/Material/compass_map_mp_kowloon_wager.json"
+  },
+  {
+   "index": 117,
+   "type": "Material",
+   "name": "compass_overlay_map_kowloon",
+   "file": "assets/Material/compass_overlay_map_kowloon.json"
+  },
+  {
+   "index": 118,
+   "type": "Material",
+   "name": "compass_map_mp_convoy",
+   "file": "assets/Material/compass_map_mp_convoy.json"
+  },
+  {
+   "index": 119,
+   "type": "Material",
+   "name": "compass_map_mp_convoy_wager",
+   "file": "assets/Material/compass_map_mp_convoy_wager.json"
+  },
+  {
+   "index": 120,
+   "type": "Material",
+   "name": "compass_overlay_map_convoy",
+   "file": "assets/Material/compass_overlay_map_convoy.json"
+  },
+  {
+   "index": 121,
+   "type": "Material",
+   "name": "compass_map_mp_hotel2",
+   "file": "assets/Material/compass_map_mp_hotel2.json"
+  },
+  {
+   "index": 122,
+   "type": "Material",
+   "name": "compass_map_mp_hotel2_wager",
+   "file": "assets/Material/compass_map_mp_hotel2_wager.json"
+  },
+  {
+   "index": 123,
+   "type": "Material",
+   "name": "compass_overlay_map_hotel2",
+   "file": "assets/Material/compass_overlay_map_hotel2.json"
+  },
+  {
+   "index": 124,
+   "type": "Material",
+   "name": "compass_map_mp_stockpile",
+   "file": "assets/Material/compass_map_mp_stockpile.json"
+  },
+  {
+   "index": 125,
+   "type": "Material",
+   "name": "compass_map_mp_stockpile_wager",
+   "file": "assets/Material/compass_map_mp_stockpile_wager.json"
+  },
+  {
+   "index": 126,
+   "type": "Material",
+   "name": "compass_overlay_map_stockpile",
+   "file": "assets/Material/compass_overlay_map_stockpile.json"
+  },
+  {
+   "index": 127,
+   "type": "Material",
+   "name": "compass_map_mp_zoo",
+   "file": "assets/Material/compass_map_mp_zoo.json"
+  },
+  {
+   "index": 128,
+   "type": "Material",
+   "name": "compass_map_mp_zoo_wager",
+   "file": "assets/Material/compass_map_mp_zoo_wager.json"
+  },
+  {
+   "index": 129,
+   "type": "Material",
+   "name": "compass_overlay_map_zoo",
+   "file": "assets/Material/compass_overlay_map_zoo.json"
+  },
+  {
+   "index": 130,
+   "type": "Material",
+   "name": "compass_map_mp_area51",
+   "file": "assets/Material/compass_map_mp_area51.json"
+  },
+  {
+   "index": 131,
+   "type": "Material",
+   "name": "compass_map_mp_area51_wager",
+   "file": "assets/Material/compass_map_mp_area51_wager.json"
+  },
+  {
+   "index": 132,
+   "type": "Material",
+   "name": "compass_overlay_map_area51",
+   "file": "assets/Material/compass_overlay_map_area51.json"
+  },
+  {
+   "index": 133,
+   "type": "Material",
+   "name": "compass_map_mp_drivein",
+   "file": "assets/Material/compass_map_mp_drivein.json"
+  },
+  {
+   "index": 134,
+   "type": "Material",
+   "name": "compass_map_mp_drivein_wager",
+   "file": "assets/Material/compass_map_mp_drivein_wager.json"
+  },
+  {
+   "index": 135,
+   "type": "Material",
+   "name": "compass_overlay_map_drivein",
+   "file": "assets/Material/compass_overlay_map_drivein.json"
+  },
+  {
+   "index": 136,
+   "type": "Material",
+   "name": "compass_map_mp_golfcourse",
+   "file": "assets/Material/compass_map_mp_golfcourse.json"
+  },
+  {
+   "index": 137,
+   "type": "Material",
+   "name": "compass_map_mp_golfcourse_wager",
+   "file": "assets/Material/compass_map_mp_golfcourse_wager.json"
+  },
+  {
+   "index": 138,
+   "type": "Material",
+   "name": "compass_overlay_map_golfcourse",
+   "file": "assets/Material/compass_overlay_map_golfcourse.json"
+  },
+  {
+   "index": 139,
+   "type": "Material",
+   "name": "compass_map_mp_silo",
+   "file": "assets/Material/compass_map_mp_silo.json"
+  },
+  {
+   "index": 140,
+   "type": "Material",
+   "name": "compass_map_mp_silo_wager",
+   "file": "assets/Material/compass_map_mp_silo_wager.json"
+  },
+  {
+   "index": 141,
+   "type": "Material",
+   "name": "compass_overlay_map_silo",
+   "file": "assets/Material/compass_overlay_map_silo.json"
+  },
+  {
+   "index": 142,
+   "type": "Material",
+   "name": "loadscreen_mp_berlinwall2",
+   "file": "assets/Material/loadscreen_mp_berlinwall2.json"
+  },
+  {
+   "index": 143,
+   "type": "Material",
+   "name": "loadscreen_mp_discovery",
+   "file": "assets/Material/loadscreen_mp_discovery.json"
+  },
+  {
+   "index": 144,
+   "type": "Material",
+   "name": "loadscreen_mp_kowloon",
+   "file": "assets/Material/loadscreen_mp_kowloon.json"
+  },
+  {
+   "index": 145,
+   "type": "Material",
+   "name": "loadscreen_mp_stadium",
+   "file": "assets/Material/loadscreen_mp_stadium.json"
+  },
+  {
+   "index": 146,
+   "type": "Material",
+   "name": "loadscreen_zombie_cosmodrome",
+   "file": "assets/Material/loadscreen_zombie_cosmodrome.json"
+  },
+  {
+   "index": 147,
+   "type": "Material",
+   "name": "loadscreen_zombie_coast",
+   "file": "assets/Material/loadscreen_zombie_coast.json"
+  },
+  {
+   "index": 148,
+   "type": "Material",
+   "name": "loadscreen_mp_hotel2",
+   "file": "assets/Material/loadscreen_mp_hotel2.json"
+  },
+  {
+   "index": 149,
+   "type": "Material",
+   "name": "loadscreen_mp_outskirts",
+   "file": "assets/Material/loadscreen_mp_outskirts.json"
+  },
+  {
+   "index": 150,
+   "type": "Material",
+   "name": "loadscreen_mp_zoo",
+   "file": "assets/Material/loadscreen_mp_zoo.json"
+  },
+  {
+   "index": 151,
+   "type": "Material",
+   "name": "loadscreen_mp_gridlock",
+   "file": "assets/Material/loadscreen_mp_gridlock.json"
+  },
+  {
+   "index": 152,
+   "type": "Material",
+   "name": "loadscreen_mp_area51",
+   "file": "assets/Material/loadscreen_mp_area51.json"
+  },
+  {
+   "index": 153,
+   "type": "Material",
+   "name": "loadscreen_mp_drivein",
+   "file": "assets/Material/loadscreen_mp_drivein.json"
+  },
+  {
+   "index": 154,
+   "type": "Material",
+   "name": "loadscreen_mp_golfcourse",
+   "file": "assets/Material/loadscreen_mp_golfcourse.json"
+  },
+  {
+   "index": 155,
+   "type": "Material",
+   "name": "loadscreen_mp_silo",
+   "file": "assets/Material/loadscreen_mp_silo.json"
+  },
+  {
+   "index": 156,
+   "type": "Material",
+   "name": "loadscreen_zombie_temple",
+   "file": "assets/Material/loadscreen_zombie_temple.json"
+  },
+  {
+   "index": 157,
+   "type": "MaterialTechniqueSet",
+   "name": "mc_l_sm_r0c0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0_wpn_clrdtl_hero.json"
+  },
+  {
+   "index": 159,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head.json"
+  },
+  {
+   "index": 160,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather.json"
+  },
+  {
+   "index": 161,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head_select",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head_select.json"
+  },
+  {
+   "index": 162,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_add",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_add.json"
+  },
+  {
+   "index": 163,
+   "type": "MaterialTechniqueSet",
+   "name": "effect_zfeather_falloff_add_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_zfeather_falloff_add_nofog.json"
+  },
+  {
+   "index": 164,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head_glow_grn",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head_glow_grn.json"
+  },
+  {
+   "index": 165,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head_glow_red",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head_glow_red.json"
+  },
+  {
+   "index": 166,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head_glow_white",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head_glow_white.json"
+  },
+  {
+   "index": 167,
+   "type": "FxEffectDef",
+   "name": "misc/fx_theater_mode_camera_head_glow_yllw",
+   "file": "assets/FxEffectDef/misc/fx_theater_mode_camera_head_glow_yllw.json"
+  },
+  {
+   "index": 168,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_dm.csv.json"
+  },
+  {
+   "index": 169,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_sab.csv.json"
+  },
+  {
+   "index": 170,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_sd.csv.json"
+  },
+  {
+   "index": 171,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_tdm.csv.json"
+  },
+  {
+   "index": 172,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_ctf.csv.json"
+  },
+  {
+   "index": 173,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_koth.csv.json"
+  },
+  {
+   "index": 174,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_dom.csv.json"
+  },
+  {
+   "index": 175,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_dem.csv.json"
+  },
+  {
+   "index": 176,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_hlnd.csv.json"
+  },
+  {
+   "index": 177,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_oic.csv.json"
+  },
+  {
+   "index": 178,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_gun.csv.json"
+  },
+  {
+   "index": 179,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_array_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_array_shrp.csv.json"
+  },
+  {
+   "index": 180,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_dm.csv.json"
+  },
+  {
+   "index": 181,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_sab.csv.json"
+  },
+  {
+   "index": 182,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_sd.csv.json"
+  },
+  {
+   "index": 183,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_tdm.csv.json"
+  },
+  {
+   "index": 184,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_ctf.csv.json"
+  },
+  {
+   "index": 185,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_koth.csv.json"
+  },
+  {
+   "index": 186,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_dom.csv.json"
+  },
+  {
+   "index": 187,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_dem.csv.json"
+  },
+  {
+   "index": 188,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_hlnd.csv.json"
+  },
+  {
+   "index": 189,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_oic.csv.json"
+  },
+  {
+   "index": 190,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_gun.csv.json"
+  },
+  {
+   "index": 191,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cracked_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cracked_shrp.csv.json"
+  },
+  {
+   "index": 192,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_dm.csv.json"
+  },
+  {
+   "index": 193,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_sab.csv.json"
+  },
+  {
+   "index": 194,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_sd.csv.json"
+  },
+  {
+   "index": 195,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_tdm.csv.json"
+  },
+  {
+   "index": 196,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_ctf.csv.json"
+  },
+  {
+   "index": 197,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_koth.csv.json"
+  },
+  {
+   "index": 198,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_dom.csv.json"
+  },
+  {
+   "index": 199,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_dem.csv.json"
+  },
+  {
+   "index": 200,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_hlnd.csv.json"
+  },
+  {
+   "index": 201,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_oic.csv.json"
+  },
+  {
+   "index": 202,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_gun.csv.json"
+  },
+  {
+   "index": 203,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_crisis_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_crisis_shrp.csv.json"
+  },
+  {
+   "index": 204,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_dm.csv.json"
+  },
+  {
+   "index": 205,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_sab.csv.json"
+  },
+  {
+   "index": 206,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_sd.csv.json"
+  },
+  {
+   "index": 207,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_tdm.csv.json"
+  },
+  {
+   "index": 208,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_ctf.csv.json"
+  },
+  {
+   "index": 209,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_koth.csv.json"
+  },
+  {
+   "index": 210,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_dom.csv.json"
+  },
+  {
+   "index": 211,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_dem.csv.json"
+  },
+  {
+   "index": 212,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_hlnd.csv.json"
+  },
+  {
+   "index": 213,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_oic.csv.json"
+  },
+  {
+   "index": 214,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_gun.csv.json"
+  },
+  {
+   "index": 215,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_firingrange_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_firingrange_shrp.csv.json"
+  },
+  {
+   "index": 216,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_dm.csv.json"
+  },
+  {
+   "index": 217,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_sab.csv.json"
+  },
+  {
+   "index": 218,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_sd.csv.json"
+  },
+  {
+   "index": 219,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_tdm.csv.json"
+  },
+  {
+   "index": 220,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_ctf.csv.json"
+  },
+  {
+   "index": 221,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_koth.csv.json"
+  },
+  {
+   "index": 222,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_dom.csv.json"
+  },
+  {
+   "index": 223,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_dem.csv.json"
+  },
+  {
+   "index": 224,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_hlnd.csv.json"
+  },
+  {
+   "index": 225,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_oic.csv.json"
+  },
+  {
+   "index": 226,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_gun.csv.json"
+  },
+  {
+   "index": 227,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_duga_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_duga_shrp.csv.json"
+  },
+  {
+   "index": 228,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_dm.csv.json"
+  },
+  {
+   "index": 229,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_sab.csv.json"
+  },
+  {
+   "index": 230,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_sd.csv.json"
+  },
+  {
+   "index": 231,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_tdm.csv.json"
+  },
+  {
+   "index": 232,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_ctf.csv.json"
+  },
+  {
+   "index": 233,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_koth.csv.json"
+  },
+  {
+   "index": 234,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_dom.csv.json"
+  },
+  {
+   "index": 235,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_dem.csv.json"
+  },
+  {
+   "index": 236,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_hlnd.csv.json"
+  },
+  {
+   "index": 237,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_oic.csv.json"
+  },
+  {
+   "index": 238,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_gun.csv.json"
+  },
+  {
+   "index": 239,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_hanoi_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_hanoi_shrp.csv.json"
+  },
+  {
+   "index": 240,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_dm.csv.json"
+  },
+  {
+   "index": 241,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_sab.csv.json"
+  },
+  {
+   "index": 242,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_sd.csv.json"
+  },
+  {
+   "index": 243,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_tdm.csv.json"
+  },
+  {
+   "index": 244,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_ctf.csv.json"
+  },
+  {
+   "index": 245,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_koth.csv.json"
+  },
+  {
+   "index": 246,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_dom.csv.json"
+  },
+  {
+   "index": 247,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_dem.csv.json"
+  },
+  {
+   "index": 248,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_hlnd.csv.json"
+  },
+  {
+   "index": 249,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_oic.csv.json"
+  },
+  {
+   "index": 250,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_gun.csv.json"
+  },
+  {
+   "index": 251,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cairo_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cairo_shrp.csv.json"
+  },
+  {
+   "index": 252,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_dm.csv.json"
+  },
+  {
+   "index": 253,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_sab.csv.json"
+  },
+  {
+   "index": 254,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_sd.csv.json"
+  },
+  {
+   "index": 255,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_tdm.csv.json"
+  },
+  {
+   "index": 256,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_ctf.csv.json"
+  },
+  {
+   "index": 257,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_koth.csv.json"
+  },
+  {
+   "index": 258,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_dom.csv.json"
+  },
+  {
+   "index": 259,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_dem.csv.json"
+  },
+  {
+   "index": 260,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_hlnd.csv.json"
+  },
+  {
+   "index": 261,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_oic.csv.json"
+  },
+  {
+   "index": 262,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_gun.csv.json"
+  },
+  {
+   "index": 263,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_havoc_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_havoc_shrp.csv.json"
+  },
+  {
+   "index": 264,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dm.csv.json"
+  },
+  {
+   "index": 265,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_sab.csv.json"
+  },
+  {
+   "index": 266,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_sd.csv.json"
+  },
+  {
+   "index": 267,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_tdm.csv.json"
+  },
+  {
+   "index": 268,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_ctf.csv.json"
+  },
+  {
+   "index": 269,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_koth.csv.json"
+  },
+  {
+   "index": 270,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dom.csv.json"
+  },
+  {
+   "index": 271,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_dem.csv.json"
+  },
+  {
+   "index": 272,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_hlnd.csv.json"
+  },
+  {
+   "index": 273,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_oic.csv.json"
+  },
+  {
+   "index": 274,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_gun.csv.json"
+  },
+  {
+   "index": 275,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_cosmodrome_shrp.csv.json"
+  },
+  {
+   "index": 276,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_dm.csv.json"
+  },
+  {
+   "index": 277,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_sab.csv.json"
+  },
+  {
+   "index": 278,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_sd.csv.json"
+  },
+  {
+   "index": 279,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_tdm.csv.json"
+  },
+  {
+   "index": 280,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_ctf.csv.json"
+  },
+  {
+   "index": 281,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_koth.csv.json"
+  },
+  {
+   "index": 282,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_dom.csv.json"
+  },
+  {
+   "index": 283,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_dem.csv.json"
+  },
+  {
+   "index": 284,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_hlnd.csv.json"
+  },
+  {
+   "index": 285,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_oic.csv.json"
+  },
+  {
+   "index": 286,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_gun.csv.json"
+  },
+  {
+   "index": 287,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_nuked_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_nuked_shrp.csv.json"
+  },
+  {
+   "index": 288,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_dm.csv.json"
+  },
+  {
+   "index": 289,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_sab.csv.json"
+  },
+  {
+   "index": 290,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_sd.csv.json"
+  },
+  {
+   "index": 291,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_tdm.csv.json"
+  },
+  {
+   "index": 292,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_ctf.csv.json"
+  },
+  {
+   "index": 293,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_koth.csv.json"
+  },
+  {
+   "index": 294,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_dom.csv.json"
+  },
+  {
+   "index": 295,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_dem.csv.json"
+  },
+  {
+   "index": 296,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_hlnd.csv.json"
+  },
+  {
+   "index": 297,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_oic.csv.json"
+  },
+  {
+   "index": 298,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_gun.csv.json"
+  },
+  {
+   "index": 299,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_radiation_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_radiation_shrp.csv.json"
+  },
+  {
+   "index": 300,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_dm.csv.json"
+  },
+  {
+   "index": 301,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_sab.csv.json"
+  },
+  {
+   "index": 302,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_sd.csv.json"
+  },
+  {
+   "index": 303,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_tdm.csv.json"
+  },
+  {
+   "index": 304,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_ctf.csv.json"
+  },
+  {
+   "index": 305,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_koth.csv.json"
+  },
+  {
+   "index": 306,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_dom.csv.json"
+  },
+  {
+   "index": 307,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_dem.csv.json"
+  },
+  {
+   "index": 308,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_hlnd.csv.json"
+  },
+  {
+   "index": 309,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_oic.csv.json"
+  },
+  {
+   "index": 310,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_gun.csv.json"
+  },
+  {
+   "index": 311,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_mountain_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_mountain_shrp.csv.json"
+  },
+  {
+   "index": 312,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_dm.csv.json"
+  },
+  {
+   "index": 313,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_sab.csv.json"
+  },
+  {
+   "index": 314,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_sd.csv.json"
+  },
+  {
+   "index": 315,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_tdm.csv.json"
+  },
+  {
+   "index": 316,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_ctf.csv.json"
+  },
+  {
+   "index": 317,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_koth.csv.json"
+  },
+  {
+   "index": 318,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_dom.csv.json"
+  },
+  {
+   "index": 319,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_dem.csv.json"
+  },
+  {
+   "index": 320,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_hlnd.csv.json"
+  },
+  {
+   "index": 321,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_oic.csv.json"
+  },
+  {
+   "index": 322,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_gun.csv.json"
+  },
+  {
+   "index": 323,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_villa_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_villa_shrp.csv.json"
+  },
+  {
+   "index": 324,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_dm.csv.json"
+  },
+  {
+   "index": 325,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_sab.csv.json"
+  },
+  {
+   "index": 326,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_sd.csv.json"
+  },
+  {
+   "index": 327,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_tdm.csv.json"
+  },
+  {
+   "index": 328,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_ctf.csv.json"
+  },
+  {
+   "index": 329,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_koth.csv.json"
+  },
+  {
+   "index": 330,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_dom.csv.json"
+  },
+  {
+   "index": 331,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_dem.csv.json"
+  },
+  {
+   "index": 332,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_hlnd.csv.json"
+  },
+  {
+   "index": 333,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_oic.csv.json"
+  },
+  {
+   "index": 334,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_gun.csv.json"
+  },
+  {
+   "index": 335,
+   "type": "StringTable",
+   "name": "mp/configstrings/ver1/configstrings_pc_mp_russianbase_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/ver1/configstrings_pc_mp_russianbase_shrp.csv.json"
+  },
+  {
+   "index": 336,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_dm.csv.json"
+  },
+  {
+   "index": 337,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_sab.csv.json"
+  },
+  {
+   "index": 338,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_sd.csv.json"
+  },
+  {
+   "index": 339,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_tdm.csv.json"
+  },
+  {
+   "index": 340,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_ctf.csv.json"
+  },
+  {
+   "index": 341,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_koth.csv.json"
+  },
+  {
+   "index": 342,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_dom.csv.json"
+  },
+  {
+   "index": 343,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_dem.csv.json"
+  },
+  {
+   "index": 344,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_hlnd.csv.json"
+  },
+  {
+   "index": 345,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_oic.csv.json"
+  },
+  {
+   "index": 346,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_gun.csv.json"
+  },
+  {
+   "index": 347,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_berlinwall2_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_berlinwall2_shrp.csv.json"
+  },
+  {
+   "index": 348,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_dm.csv.json"
+  },
+  {
+   "index": 349,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_sab.csv.json"
+  },
+  {
+   "index": 350,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_sd.csv.json"
+  },
+  {
+   "index": 351,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_tdm.csv.json"
+  },
+  {
+   "index": 352,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_ctf.csv.json"
+  },
+  {
+   "index": 353,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_koth.csv.json"
+  },
+  {
+   "index": 354,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_dom.csv.json"
+  },
+  {
+   "index": 355,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_dem.csv.json"
+  },
+  {
+   "index": 356,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_hlnd.csv.json"
+  },
+  {
+   "index": 357,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_oic.csv.json"
+  },
+  {
+   "index": 358,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_gun.csv.json"
+  },
+  {
+   "index": 359,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_discovery_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_discovery_shrp.csv.json"
+  },
+  {
+   "index": 360,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_dm.csv.json"
+  },
+  {
+   "index": 361,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_sab.csv.json"
+  },
+  {
+   "index": 362,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_sd.csv.json"
+  },
+  {
+   "index": 363,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_tdm.csv.json"
+  },
+  {
+   "index": 364,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_ctf.csv.json"
+  },
+  {
+   "index": 365,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_koth.csv.json"
+  },
+  {
+   "index": 366,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_dom.csv.json"
+  },
+  {
+   "index": 367,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_dem.csv.json"
+  },
+  {
+   "index": 368,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_hlnd.csv.json"
+  },
+  {
+   "index": 369,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_oic.csv.json"
+  },
+  {
+   "index": 370,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_gun.csv.json"
+  },
+  {
+   "index": 371,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_kowloon_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_kowloon_shrp.csv.json"
+  },
+  {
+   "index": 372,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_dm.csv.json"
+  },
+  {
+   "index": 373,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_sab.csv.json"
+  },
+  {
+   "index": 374,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_sd.csv.json"
+  },
+  {
+   "index": 375,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_tdm.csv.json"
+  },
+  {
+   "index": 376,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_ctf.csv.json"
+  },
+  {
+   "index": 377,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_koth.csv.json"
+  },
+  {
+   "index": 378,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_dom.csv.json"
+  },
+  {
+   "index": 379,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_dem.csv.json"
+  },
+  {
+   "index": 380,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_hlnd.csv.json"
+  },
+  {
+   "index": 381,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_oic.csv.json"
+  },
+  {
+   "index": 382,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_gun.csv.json"
+  },
+  {
+   "index": 383,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_stadium_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_stadium_shrp.csv.json"
+  },
+  {
+   "index": 384,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_dm.csv.json"
+  },
+  {
+   "index": 385,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_sab.csv.json"
+  },
+  {
+   "index": 386,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_sd.csv.json"
+  },
+  {
+   "index": 387,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_tdm.csv.json"
+  },
+  {
+   "index": 388,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_ctf.csv.json"
+  },
+  {
+   "index": 389,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_koth.csv.json"
+  },
+  {
+   "index": 390,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_dom.csv.json"
+  },
+  {
+   "index": 391,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_dem.csv.json"
+  },
+  {
+   "index": 392,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_hlnd.csv.json"
+  },
+  {
+   "index": 393,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_oic.csv.json"
+  },
+  {
+   "index": 394,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_gun.csv.json"
+  },
+  {
+   "index": 395,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_gridlock_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_gridlock_shrp.csv.json"
+  },
+  {
+   "index": 396,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_dm.csv.json"
+  },
+  {
+   "index": 397,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_sab.csv.json"
+  },
+  {
+   "index": 398,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_sd.csv.json"
+  },
+  {
+   "index": 399,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_tdm.csv.json"
+  },
+  {
+   "index": 400,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_ctf.csv.json"
+  },
+  {
+   "index": 401,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_koth.csv.json"
+  },
+  {
+   "index": 402,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_dom.csv.json"
+  },
+  {
+   "index": 403,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_dem.csv.json"
+  },
+  {
+   "index": 404,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_hlnd.csv.json"
+  },
+  {
+   "index": 405,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_oic.csv.json"
+  },
+  {
+   "index": 406,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_gun.csv.json"
+  },
+  {
+   "index": 407,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_hotel_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_hotel_shrp.csv.json"
+  },
+  {
+   "index": 408,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_dm.csv.json"
+  },
+  {
+   "index": 409,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_sab.csv.json"
+  },
+  {
+   "index": 410,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_sd.csv.json"
+  },
+  {
+   "index": 411,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_tdm.csv.json"
+  },
+  {
+   "index": 412,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_ctf.csv.json"
+  },
+  {
+   "index": 413,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_koth.csv.json"
+  },
+  {
+   "index": 414,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_dom.csv.json"
+  },
+  {
+   "index": 415,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_dem.csv.json"
+  },
+  {
+   "index": 416,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_hlnd.csv.json"
+  },
+  {
+   "index": 417,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_oic.csv.json"
+  },
+  {
+   "index": 418,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_gun.csv.json"
+  },
+  {
+   "index": 419,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_outskirts_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_outskirts_shrp.csv.json"
+  },
+  {
+   "index": 420,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_dm.csv.json"
+  },
+  {
+   "index": 421,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_sab.csv.json"
+  },
+  {
+   "index": 422,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_sd.csv.json"
+  },
+  {
+   "index": 423,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_tdm.csv.json"
+  },
+  {
+   "index": 424,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_ctf.csv.json"
+  },
+  {
+   "index": 425,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_koth.csv.json"
+  },
+  {
+   "index": 426,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_dom.csv.json"
+  },
+  {
+   "index": 427,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_dem.csv.json"
+  },
+  {
+   "index": 428,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_hlnd.csv.json"
+  },
+  {
+   "index": 429,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_oic.csv.json"
+  },
+  {
+   "index": 430,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_gun.csv.json"
+  },
+  {
+   "index": 431,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_zoo_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_zoo_shrp.csv.json"
+  },
+  {
+   "index": 432,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_dm.csv.json"
+  },
+  {
+   "index": 433,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_sab.csv.json"
+  },
+  {
+   "index": 434,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_sd.csv.json"
+  },
+  {
+   "index": 435,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_tdm.csv.json"
+  },
+  {
+   "index": 436,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_ctf.csv.json"
+  },
+  {
+   "index": 437,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_koth.csv.json"
+  },
+  {
+   "index": 438,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_dom.csv.json"
+  },
+  {
+   "index": 439,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_dem.csv.json"
+  },
+  {
+   "index": 440,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_hlnd.csv.json"
+  },
+  {
+   "index": 441,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_oic.csv.json"
+  },
+  {
+   "index": 442,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_gun.csv.json"
+  },
+  {
+   "index": 443,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_area51_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_area51_shrp.csv.json"
+  },
+  {
+   "index": 444,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_dm.csv.json"
+  },
+  {
+   "index": 445,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_sab.csv.json"
+  },
+  {
+   "index": 446,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_sd.csv.json"
+  },
+  {
+   "index": 447,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_tdm.csv.json"
+  },
+  {
+   "index": 448,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_ctf.csv.json"
+  },
+  {
+   "index": 449,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_koth.csv.json"
+  },
+  {
+   "index": 450,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_dom.csv.json"
+  },
+  {
+   "index": 451,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_dem.csv.json"
+  },
+  {
+   "index": 452,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_hlnd.csv.json"
+  },
+  {
+   "index": 453,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_oic.csv.json"
+  },
+  {
+   "index": 454,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_gun.csv.json"
+  },
+  {
+   "index": 455,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_drivein_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_drivein_shrp.csv.json"
+  },
+  {
+   "index": 456,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_dm.csv.json"
+  },
+  {
+   "index": 457,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_sab.csv.json"
+  },
+  {
+   "index": 458,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_sd.csv.json"
+  },
+  {
+   "index": 459,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_tdm.csv.json"
+  },
+  {
+   "index": 460,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_ctf.csv.json"
+  },
+  {
+   "index": 461,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_koth.csv.json"
+  },
+  {
+   "index": 462,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_dom.csv.json"
+  },
+  {
+   "index": 463,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_dem.csv.json"
+  },
+  {
+   "index": 464,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_hlnd.csv.json"
+  },
+  {
+   "index": 465,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_oic.csv.json"
+  },
+  {
+   "index": 466,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_gun.csv.json"
+  },
+  {
+   "index": 467,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_golfcourse_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_golfcourse_shrp.csv.json"
+  },
+  {
+   "index": 468,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_dm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_dm.csv.json"
+  },
+  {
+   "index": 469,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_sab.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_sab.csv.json"
+  },
+  {
+   "index": 470,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_sd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_sd.csv.json"
+  },
+  {
+   "index": 471,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_tdm.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_tdm.csv.json"
+  },
+  {
+   "index": 472,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_ctf.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_ctf.csv.json"
+  },
+  {
+   "index": 473,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_koth.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_koth.csv.json"
+  },
+  {
+   "index": 474,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_dom.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_dom.csv.json"
+  },
+  {
+   "index": 475,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_dem.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_dem.csv.json"
+  },
+  {
+   "index": 476,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_hlnd.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_hlnd.csv.json"
+  },
+  {
+   "index": 477,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_oic.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_oic.csv.json"
+  },
+  {
+   "index": 478,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_gun.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_gun.csv.json"
+  },
+  {
+   "index": 479,
+   "type": "StringTable",
+   "name": "mp/configstrings/configstrings_pc_mp_silo_shrp.csv",
+   "file": "assets/StringTable/mp/configstrings/configstrings_pc_mp_silo_shrp.csv.json"
+  },
+  {
+   "index": 480,
+   "type": "Material",
+   "name": "voice_off_mute_xboxlive",
+   "file": "assets/Material/voice_off_mute_xboxlive.json"
+  },
+  {
+   "index": 481,
+   "type": "Material",
+   "name": "voice_off_xboxlive",
+   "file": "assets/Material/voice_off_xboxlive.json"
+  },
+  {
+   "index": 482,
+   "type": "Material",
+   "name": "voice_on_xboxlive",
+   "file": "assets/Material/voice_on_xboxlive.json"
+  },
+  {
+   "index": 487,
+   "type": "RawFile",
+   "name": "mp/playeranim_v1.script",
+   "file": "rawfiles/mp/playeranim_v1.script"
+  },
+  {
+   "index": 488,
+   "type": "RawFile",
+   "name": "animtrees/multiplayer_v1.atr",
+   "file": "rawfiles/animtrees/multiplayer_v1.atr"
+  },
+  {
+   "index": 489,
+   "type": "RawFile",
+   "name": "rumble/sniper_fire",
+   "file": "rawfiles/rumble/sniper_fire"
+  },
+  {
+   "index": 490,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire",
+   "file": "rawfiles/rumble/shotgun_fire"
+  },
+  {
+   "index": 491,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire_h.rmb",
+   "file": "rawfiles/rumble/shotgun_fire_h.rmb"
+  },
+  {
+   "index": 492,
+   "type": "RawFile",
+   "name": "rumble/shotgun_fire_l.rmb",
+   "file": "rawfiles/rumble/shotgun_fire_l.rmb"
+  },
+  {
+   "index": 493,
+   "type": "RawFile",
+   "name": "rumble/silencer_fire",
+   "file": "rawfiles/rumble/silencer_fire"
+  },
+  {
+   "index": 494,
+   "type": "RawFile",
+   "name": "rumble/silencer_fire_h.rmb",
+   "file": "rawfiles/rumble/silencer_fire_h.rmb"
+  },
+  {
+   "index": 495,
+   "type": "RawFile",
+   "name": "rumble/silencer_fire_l.rmb",
+   "file": "rawfiles/rumble/silencer_fire_l.rmb"
+  },
+  {
+   "index": 496,
+   "type": "RawFile",
+   "name": "rumble/heavygun_fire",
+   "file": "rawfiles/rumble/heavygun_fire"
+  },
+  {
+   "index": 497,
+   "type": "RawFile",
+   "name": "rumble/heavygun_fire_h.rmb",
+   "file": "rawfiles/rumble/heavygun_fire_h.rmb"
+  },
+  {
+   "index": 498,
+   "type": "RawFile",
+   "name": "rumble/heavygun_fire_l.rmb",
+   "file": "rawfiles/rumble/heavygun_fire_l.rmb"
+  },
+  {
+   "index": 499,
+   "type": "RawFile",
+   "name": "rumble/smg_fire",
+   "file": "rawfiles/rumble/smg_fire"
+  },
+  {
+   "index": 500,
+   "type": "RawFile",
+   "name": "rumble/smg_fire_h.rmb",
+   "file": "rawfiles/rumble/smg_fire_h.rmb"
+  },
+  {
+   "index": 501,
+   "type": "RawFile",
+   "name": "rumble/smg_fire_l.rmb",
+   "file": "rawfiles/rumble/smg_fire_l.rmb"
+  },
+  {
+   "index": 502,
+   "type": "RawFile",
+   "name": "rumble/assault_fire",
+   "file": "rawfiles/rumble/assault_fire"
+  },
+  {
+   "index": 503,
+   "type": "RawFile",
+   "name": "rumble/assault_fire_h.rmb",
+   "file": "rawfiles/rumble/assault_fire_h.rmb"
+  },
+  {
+   "index": 504,
+   "type": "RawFile",
+   "name": "rumble/assault_fire_l.rmb",
+   "file": "rawfiles/rumble/assault_fire_l.rmb"
+  },
+  {
+   "index": 505,
+   "type": "RawFile",
+   "name": "rumble/flamethrower",
+   "file": "rawfiles/rumble/flamethrower"
+  },
+  {
+   "index": 506,
+   "type": "RawFile",
+   "name": "rumble/flamethrower_h.rmb",
+   "file": "rawfiles/rumble/flamethrower_h.rmb"
+  },
+  {
+   "index": 507,
+   "type": "RawFile",
+   "name": "rumble/flamethrower_l.rmb",
+   "file": "rawfiles/rumble/flamethrower_l.rmb"
+  },
+  {
+   "index": 508,
+   "type": "RawFile",
+   "name": "rumble/damage_heavy",
+   "file": "rawfiles/rumble/damage_heavy"
+  },
+  {
+   "index": 509,
+   "type": "RawFile",
+   "name": "rumble/damage_heavy_h.rmb",
+   "file": "rawfiles/rumble/damage_heavy_h.rmb"
+  },
+  {
+   "index": 510,
+   "type": "RawFile",
+   "name": "rumble/damage_heavy_l.rmb",
+   "file": "rawfiles/rumble/damage_heavy_l.rmb"
+  },
+  {
+   "index": 511,
+   "type": "MaterialTechniqueSet",
+   "name": ",effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add_nofog.json"
+  },
+  {
+   "index": 512,
+   "type": "MaterialTechniqueSet",
+   "name": ",distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/,distortion_scale_zfeather.json"
+  },
+  {
+   "index": 513,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_mini_cannon_flash_base1st",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_mini_cannon_flash_base1st.json"
+  },
+  {
+   "index": 514,
+   "type": "FxEffectDef",
+   "name": ",weapon/muzzleflashes/fx_heavy_flash_base",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_heavy_flash_base.json"
+  },
+  {
+   "index": 515,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0s0.json"
+  },
+  {
+   "index": 517,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_saw_link_resting",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_saw_link_resting.json"
+  },
+  {
+   "index": 518,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
+  },
+  {
+   "index": 520,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_rifle_resting",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_rifle_resting.json"
+  },
+  {
+   "index": 521,
+   "type": "FxEffectDef",
+   "name": ",weapon/shellejects/fx_minigun",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_minigun.json"
+  },
+  {
+   "index": 522,
+   "type": "MaterialTechniqueSet",
+   "name": ",mc_sw4_3d_detectable_transparent",
+   "file": "assets/MaterialTechniqueSet/,mc_sw4_3d_detectable_transparent.json"
+  },
+  {
+   "index": 526,
+   "type": "RawFile",
+   "name": "patch_mp",
+   "file": "rawfiles/patch_mp"
+  }
+ ],
+ "named": {
+  "animations": {
+   "names": [
+    "pb_zipline_grab",
+    "pb_zipline_loop",
+    "pb_zipline_release",
+    "viewmodel_briefcase_bomb_pullout"
+   ],
+   "references": []
+  },
+  "models": {
+   "names": [
+    "t5_weapon_camera_head_world"
+   ],
+   "references": [
+    "fx_bullet_chain",
+    "fx_rifle_shell",
+    "projectile_s5rocket",
+    "t5_weapon_minigun_turret_detect"
+   ]
+  },
+  "weapons": {
+   "names": [
+    "minigun_turret_mp"
+   ],
+   "references": [],
+   "links": {
+    "minigun_turret_mp": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    }
+   }
+  }
+ }
+}
