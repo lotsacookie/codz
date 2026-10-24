@@ -18,7 +18,7 @@ import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { FX_PATTERN, openZip, openKspk, inflateZone, scanNames, scanRawFiles, decodeIwi, encodePng, safeRelative } from './lib.mjs';
+import { FX_PATTERN, characterNames, openZip, openKspk, inflateZone, scanNames, scanRawFiles, decodeIwi, encodePng, safeRelative } from './lib.mjs';
 
 const execFileAsync = promisify(execFile);
 const ZONE_ASSETS_SCRIPT = join(dirname(fileURLToPath(import.meta.url)), 'zone-assets.py');
@@ -44,8 +44,12 @@ export function classifyEntry(name) {
   return 'raw';
 }
 
+// 'characters' lists every player/character name found in the raw zone strings, so models and mtl_ materials
+// are still named when the zone walk stops early. With no --only it also walks models for those names.
+export const CHARACTER_ONLY = /(^|[^a-z0-9])(mtl_)?((c|char|body|head|hat|player|pb|viewbody)_|[a-z0-9_]*(richtofen|dempsey|nikolai|takeo))/i;
+
 export function zoneAssetKinds(kinds) {
-  return ZONE_ASSET_KINDS.filter(kind => kinds.has(kind));
+  return ZONE_ASSET_KINDS.filter(kind => kinds.has(kind) || (kind === 'models' && kinds.has('characters')));
 }
 
 export function iwiToPng(buffer) {
@@ -176,7 +180,7 @@ async function main() {
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
     else if (item.kind === 'zone') {
       const zoneOut = perZone ? join(out, zoneFolder(item.path, taken)) : out;
-      if (kinds.has('fx') || kinds.has('scripts')) {
+      if (kinds.has('fx') || kinds.has('scripts') || kinds.has('characters')) {
         const zone = inflateZone(await readFile(item.file));
         if (zone.error) report.push({ archive: item.path, kind: 'zone', status: zone.error });
         else {
@@ -185,11 +189,17 @@ async function main() {
             zones.push(index);
             if (perZone) { await mkdir(zoneOut, { recursive: true }); await writeFile(join(zoneOut, 'fx-index.json'), JSON.stringify(index, null, 1)); }
           }
+          if (kinds.has('characters')) {
+            const groups = characterNames(scanNames(zone.data));
+            const index = { zone: item.path, ...groups };
+            if (perZone) { await mkdir(zoneOut, { recursive: true }); await writeFile(join(zoneOut, 'characters-index.json'), JSON.stringify(index, null, 1)); }
+            console.log(`${item.path}: ${groups.models.length} character models, ${groups.materials.length} materials, ${groups.other.length} other`);
+          }
           if (kinds.has('scripts')) await extractScripts(item.path, zone.data, { out: zoneOut, report, overwrite });
         }
       }
       if (zoneAssetKinds(kinds).length) {
-        const result = await extractZoneAssets(item.file, item.path, { out: zoneOut, kinds, only, report, overwrite, perZone });
+        const result = await extractZoneAssets(item.file, item.path, { out: zoneOut, kinds, only: only ?? (kinds.has('characters') ? CHARACTER_ONLY : null), report, overwrite, perZone });
         for (const kind of ZONE_ASSET_KINDS) {
           const found = result.index[kind];
           if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references, ...(found.links ? { links: found.links } : {}) });

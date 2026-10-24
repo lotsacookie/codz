@@ -162,6 +162,18 @@ export function inflateZone(buffer) {
   }
 }
 
+// Player/character asset names (models c_usa_dempsey_body, materials mtl_c_usa_dempsey_body, heads, hats, viewbodies).
+export const CHARACTER_NAME_PATTERN = /^(mtl_)?(c|char|body|head|hat|player|pb|viewbody)_[a-z0-9_]+$|^(mtl_)?[a-z0-9_]*(richtofen|dempsey|nikolai|takeo)[a-z0-9_]*$/i;
+
+export function characterNames(names) {
+  const groups = { models: [], materials: [], other: [] };
+  for (const name of [...names].sort()) {
+    if (!CHARACTER_NAME_PATTERN.test(name) || /^mtl_?$/i.test(name)) continue;
+    (/^mtl_/i.test(name) ? groups.materials : /^(c|char|body|head|hat|player|pb|viewbody)_/i.test(name) ? groups.models : groups.other).push(name);
+  }
+  return groups;
+}
+
 export function scanNames(data, minLength = 5, maxLength = 160) {
   const found = new Set();
   const chunk = 1 << 25;
