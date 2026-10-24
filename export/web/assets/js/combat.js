@@ -1,4 +1,5 @@
 import { modRuntime } from './mods/runtime.js';
+import { RaygunFx } from './raygun-fx.js';
 import { CharacterFire } from './character-fire.js';
 import { FlopFx } from './perk-fx.js';
 import * as THREE from 'three';
@@ -113,7 +114,8 @@ export class Combat {
     }
     if(s.def.explosionRadius>0){
       const mesh=new THREE.Mesh(new THREE.SphereGeometry(3,8,6),new THREE.MeshBasicMaterial({color:s.def.id==='ray_gun_zm'?0x65ff73:0xffe699}));mesh.position.copy(this.camera.position);this.scene.add(mesh);
-      this.grenades.push({mesh,velocity:forward.multiplyScalar(s.def.projectileSpeed||1600),life:4,rocket:true,radius:s.def.explosionRadius,damage:s.def.explosionInnerDamage||s.def.damage});return true;
+      const ray=/^ray_gun/.test(s.def.id),ug=ray&&(/upgraded|_ug/.test(s.def.id)||!!s.weapon.upgraded);if(ray)(this.rayFx??=new RaygunFx(this.scene)).muzzle(this.camera.position.clone().addScaledVector(forward,18),ug);
+      this.grenades.push({mesh,ray,ug,velocity:forward.multiplyScalar(s.def.projectileSpeed||1600),life:4,rocket:true,radius:s.def.explosionRadius,damage:s.def.explosionInnerDamage||s.def.damage});return true;
     }
     for(let i=0;i<Math.max(1,s.def.pellets);i++){
       const direction=forward.clone(),spread=(s.def.pellets>1?.055:this.ads?0:.012)*(s.perks.has('specialty_deadshot')?.65:1);
@@ -222,12 +224,14 @@ export class Combat {
     if(s.area==='moon'&&(s.corePhase??s.phase)==='fighting'&&s.round!==this.lastRound){this.lastRound=s.round;this.notice('Round '+s.round,4);this.audio.play('round');}
     {const core=s.corePhase??s.phase;if(core!==this.lastPhase){if(core==='preparing'&&s.round>1&&this.lastPhase==='fighting')this.audio.play('round_end');this.lastPhase=core;}}
     this.pickups.update(dt,this.feet(),!['gameover','reviving'].includes(s.phase)&&!this.features?.hack,(a,b)=>this.world.lineClear(a,b));
+    this.rayFx?.update(dt);
     for(const g of [...this.grenades]){
-      g.life-=dt;if(!g.rocket)g.velocity.y-=(this.world.lowGravity(g.mesh.position)?136:650)*dt;
+      g.life-=dt;if(g.ray)this.rayFx.trail(g.mesh.position,dt,g.ug);if(!g.rocket)g.velocity.y-=(this.world.lowGravity(g.mesh.position)?136:650)*dt;
       const travel=g.velocity.clone().multiplyScalar(dt),hit=this.world.raycast(new THREE.Ray(g.mesh.position.clone(),travel.clone().normalize()),0,travel.length()+4);
       if(hit){const normal=hit.triangle.getNormal(new THREE.Vector3());if(normal.dot(g.velocity)>0)normal.negate();g.velocity.reflect(normal).multiplyScalar(.45);g.mesh.position.copy(hit.position).addScaledVector(normal,4);if(g.rocket)g.life=0;else if(!g.equipment)this.audio.grenadeBounce();}else g.mesh.position.add(travel);
       if(g.life<=0){
         if(g.equipment){this.features?.equipment(g.equipment,g.mesh.position.clone());this.removeEffect(this.grenades,g);continue;}
+        if(g.ray)this.rayFx.impact(g.mesh.position,g.ug);
         this.audio.blast(g.rocket?'rocket':'grenade');if(!this.explosions.blast(g.mesh.position,{radius:g.radius||300,kind:g.rocket?'explosion':'grenade'}))this.effect(g.mesh.position,0xffb347,25);this.features?.blast(g.mesh.position,g.rocket?'explosion':'grenade');
         const radius=g.radius||300,damage=g.damage||1500;
         for(const z of [...this.enemies.list]){const d=z.root.position.distanceTo(g.mesh.position);if(d<radius&&this.world.lineClear(g.mesh.position,z.root.position.clone().add(new THREE.Vector3(0,30,0))))this.enemies.hurt(z,Math.max(75,damage*(1-d/radius)),false,false,g.rocket?'explosion':'grenade');}

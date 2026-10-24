@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { loadModel, loadAnimation, Rig } from './animation.js';
 import { KinoEvents } from './kino-events.js';
+import { RaygunFx } from './raygun-fx.js';
 import { disposeSkeletons } from './runtime-assets.js';
 
 const up=new THREE.Vector3(0,1,0),v=a=>new THREE.Vector3(...a);
@@ -58,6 +59,7 @@ export class KinoFeatures {
   }
   blast(position,def,{playerDamage=true,score=true}={}){
     const radius=def.explosionRadius??200;
+    if(/^ray_gun/.test(def.id))(this.rayFx??=new RaygunFx(this.scene)).impact(position,/upgraded|_ug/.test(def.id)||!!def.upgraded);
     if(def.id==='ray_gun_zm'||!this.explosion?.(position,radius,def.projectileType==='rocket'?'explosion':'grenade'))this.effect(position,def.id==='ray_gun_zm'?0x8df565:0xffb347,25);this.audio.blast(def.id==='ray_gun_zm'?'raygun':def.projectileType==='rocket'?'rocket':'grenade',.6);
     for(const z of [...this.enemies.list]){const point=z.root.position.clone().addScaledVector(up,25),d=point.distanceTo(position);if(d<radius&&this.world.lineClear(position,point))this.enemies.hurt(z,THREE.MathUtils.lerp(def.explosionInnerDamage,def.explosionOuterDamage,d/radius),false,false,'explosion',score);}
     const feet=this.player.getFeetPosition().addScaledVector(up,30),distance=feet.distanceTo(position);
@@ -85,8 +87,10 @@ export class KinoFeatures {
   }
   update(dt){
     const s=this.session;
+    (this.rayFx??=new RaygunFx(this.scene)).update(dt);
     for(const p of [...this.projectiles]){
       p.life-=dt;
+      if(/^ray_gun/.test(p.def.id)&&!p.stuck)this.rayFx.trail(p.mesh.position,dt,/upgraded|_ug/.test(p.def.id)||!!p.def.upgraded);
       if(p.stuck&&p.rig){p.rig.play('cymbals');p.rig.update(dt);}
       if(p.stuck&&p.target&&this.enemies.list.includes(p.target))p.mesh.position.copy(p.target.root.position).add(p.offset);
       if(!p.stuck){
