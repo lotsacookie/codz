@@ -1,0 +1,12 @@
+{
+ "zone": "zone/english/en_zombie_theater.ff",
+ "sha256": "d26cbc49349ff971ca12cb8cace8cc147bd64564974ece106d6ce08ae4e75756",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
