@@ -1,0 +1,12 @@
+{
+ "zone": "zone/english/en_patch_mp.ff",
+ "sha256": "3fed41f7d2451e455363ec992705b9f469cce74e2e06e10a9da18ad16de14edc",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
