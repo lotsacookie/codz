@@ -1,0 +1,12 @@
+{
+ "zone": "zone/Common/common_zombie_patch.ff",
+ "sha256": "3311182f5cb9af07d69d628b8223ab43e47992e4951b46e761d4f0152f33787e",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
