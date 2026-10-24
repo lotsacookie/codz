@@ -43,7 +43,7 @@ export class Combat {
     const response=await fetch('moon/combat-data.json');if(!response.ok)throw new Error('Missing Moon combat assets; rebuild Moon.');
     this.data=await response.json();this.session=new this.sessionClass(this.data);
     this.view=new ViewWeapon(this.viewScene,this.data,(name,def)=>this.audio.notify(name,def));
-    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:(n,from)=>this.damage(n,from),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind==='board'?'boardTear':kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='burn')this.fire.ignite(z,{death:cause==='death'});this.audio.zombieEvent(type,z.kind,z.root.position,1,cause);}});
+    this.enemies=new this.enemiesClass(this.scene,this.world,this.data,this.session,{damage:(n,from)=>this.damage(n,from),kill:z=>this.onKill(z),hit:(z,head)=>this.hit(z,head),sound:(kind,p)=>this.audio.play(kind==='board'?'boardTear':kind,Math.max(0,1-p.distanceTo(this.camera.position)/1000)),voice:(z,gait,kind)=>this.audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='burn')this.fire.ignite(z,{death:cause==='death'});this.sharedFx?.hell.event(type,z);this.audio.zombieEvent(type,z.kind,z.root.position,1,cause);}});
     guardEnemies(this.enemies,{onFault:(where,error)=>this.faultNotice?.(where,error)});
     this.pickups=new Powerups(this.scene,this.data,this.audio,(type,position,info)=>this.collect(type,info));
     this.perkDrink=new PerkDrink(this.viewScene,this.data,this.audio);this.equipmentModels={};

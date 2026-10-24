@@ -1,4 +1,6 @@
 import { DogSpawnFx } from './dog-spawn-fx.js';
+import { PerkLights } from './perk-lights.js';
+import { HellhoundFx } from './hellhound-fx.js';
 
 // Effects Kino had on its own, shared by every map that runs through Combat (Moon, Shangri-La, Ascension, ...):
 // blast and drop screen shake, the dog-round lightning that precedes a power-up drop, and wall dust on knife hits.
@@ -12,6 +14,7 @@ export function quakeAt(camera, view, position, magnitude = .5, radius = 1000) {
 
 export function installSharedFx(combat, { DogFx = DogSpawnFx, delay = 1500 } = {}) {
   const dogFx = new DogFx(combat.scene, { shake: () => combat.view?.cameraFx?.build?.() });
+  const perkLights = new PerkLights(combat.scene), hell = new HellhoundFx(combat.scene);
   const quake = (position, magnitude, radius) => quakeAt(combat.camera, combat.view, position, magnitude, radius);
   combat.quake = quake;
   if (combat.explosions) combat.explosions.onBlast = (p, r) => quake(p, .5, r > 600 ? r : 1000);
@@ -22,5 +25,9 @@ export function installSharedFx(combat, { DogFx = DogSpawnFx, delay = 1500 } = {
     dogFx.begin(at);
     setTimeout(() => { if (combat.session !== session) return; quake(at, .5, 1000); combat.pickups.spawn(type, at); }, delay);
   };
-  return { dogFx, update: dt => dogFx.update(dt), clear: () => dogFx.clear() };
+  return {
+    dogFx, perkLights, hell,
+    update: dt => { dogFx.update(dt); perkLights.update(dt, combat.session, combat.data?.entities, combat.world); hell.update(dt, combat.enemies?.list); },
+    clear: () => { dogFx.clear(); perkLights.clear(); hell.clear(); },
+  };
 }

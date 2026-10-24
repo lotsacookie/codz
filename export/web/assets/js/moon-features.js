@@ -35,7 +35,7 @@ export class MoonFeatures {
     for(const e of this.all('zombie_vending'))this.targets.push({e,kind:'perk',perk:e.script_noteworthy});
     // Mule Kick is spawned by the DLC perk scripts, rather than a BSP trigger.
     const mule={id:'mule',targetname:'zombie_vending',script_noteworthy:'specialty_additionalprimaryweapon',position:[-760,-8,-550],yaw:Math.PI/2};
-    this.mule=this.spawnModel('zombie_vending_three_gun',mule.position,mule.yaw);this.targets.push({e:mule,kind:'perk',perk:mule.script_noteworthy});
+    this.mule=this.spawnModel('zombie_vending_three_gun',mule.position,mule.yaw);this.combat.sharedFx?.perkLights.addObject('specialty_additionalprimaryweapon',this.mule);this.targets.push({e:mule,kind:'perk',perk:mule.script_noteworthy});
     for(const e of locations)this.targets.push({e,kind:'box'});
     this.barriers=this.all('exterior_goal').map(e=>{
       const members=this.all(e.target),center=members.find(n=>n.classname==='script_struct')?.position??e.position,outside=V(e.position),inside=V(center);
