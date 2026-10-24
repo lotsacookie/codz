@@ -2,11 +2,11 @@
  "zone": "zone/english/en_zombie_theater.ff",
  "status": "ok",
  "error": null,
- "complete": false,
+ "complete": true,
  "coverage": {
-  "streamPos": 344124,
+  "streamPos": 1654841,
   "streamSize": 1654841,
-  "percent": 20.79
+  "percent": 100.0
  },
  "types": {
   "Material": 13,
@@ -20,9 +20,7 @@
  "failures": [],
  "softErrors": [],
  "failedSpans": [],
- "unwalkedTail": [
-  "_unwalked/tail_0005403c_part0.bin"
- ],
+ "unwalkedTail": [],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
  "assets": [
@@ -71,140 +69,140 @@
   {
    "index": 7,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/7.json"
+   "name": "mc_sw4_3d_char_cloth",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_cloth.json"
   },
   {
    "index": 8,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/8.json"
+   "name": "mc/mtl_c_ger_richtofen_body_linen",
+   "file": "assets/Material/mc/mtl_c_ger_richtofen_body_linen.json"
   },
   {
    "index": 9,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/9.json"
+   "name": "mc/mtl_c_ger_richtofen_body_lthr",
+   "file": "assets/Material/mc/mtl_c_ger_richtofen_body_lthr.json"
   },
   {
    "index": 10,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/10.json"
+   "name": "mc/mtl_c_ger_richtofen_body_metal",
+   "file": "assets/Material/mc/mtl_c_ger_richtofen_body_metal.json"
   },
   {
    "index": 11,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/11.json"
+   "name": "mc/mtl_c_ger_richtofen_body",
+   "file": "assets/Material/mc/mtl_c_ger_richtofen_body.json"
   },
   {
    "index": 12,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/12.json"
+   "name": ",mc_l_sm_r0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0x0.json"
   },
   {
    "index": 13,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/13.json"
+   "name": ",mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0.json"
   },
   {
    "index": 14,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/14.json"
+   "name": "mc_l_sm_t0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0n0s0x0.json"
   },
   {
    "index": 16,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/16.json"
+   "name": ",mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0.json"
   },
   {
    "index": 17,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/17.json"
+   "name": "mc/mtl_zombie_teleporter_2",
+   "file": "assets/Material/mc/mtl_zombie_teleporter_2.json"
   },
   {
    "index": 19,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/19.json"
+   "name": "mc/mtl_c_ger_honorguard_zombie_linen",
+   "file": "assets/Material/mc/mtl_c_ger_honorguard_zombie_linen.json"
   },
   {
    "index": 20,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/20.json"
+   "name": "mc/mtl_c_ger_honorguard_zombie_lthr",
+   "file": "assets/Material/mc/mtl_c_ger_honorguard_zombie_lthr.json"
   },
   {
    "index": 21,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/21.json"
+   "name": "mc/mtl_c_ger_honorguard_zombie_metal",
+   "file": "assets/Material/mc/mtl_c_ger_honorguard_zombie_metal.json"
   },
   {
    "index": 22,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/22.json"
+   "name": "mc/mtl_c_ger_honorguard_zombie_body1",
+   "file": "assets/Material/mc/mtl_c_ger_honorguard_zombie_body1.json"
   },
   {
    "index": 23,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/23.json"
+   "name": "wc_l_sm_t0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0n0s0x0.json"
   },
   {
    "index": 24,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/24.json"
+   "name": "wc/decal_flag_nazi_theater",
+   "file": "assets/Material/wc/decal_flag_nazi_theater.json"
   },
   {
    "index": 25,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/25.json"
+   "name": "mc_unlitdecalblend_add",
+   "file": "assets/MaterialTechniqueSet/mc_unlitdecalblend_add.json"
   },
   {
    "index": 26,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/26.json"
+   "name": "mc/zombie_logo",
+   "file": "assets/Material/mc/zombie_logo.json"
   },
   {
    "index": 27,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/27.json"
+   "name": ",wc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,wc_l_sm_b0c0n0s0.json"
   },
   {
    "index": 28,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/28.json"
+   "name": "wc/glo_dec_blood_splat_drips_medium02",
+   "file": "assets/Material/wc/glo_dec_blood_splat_drips_medium02.json"
   },
   {
    "index": 29,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/29.json"
+   "name": "l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/l_sm_b0c0n0s0.json"
   },
   {
    "index": 30,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/30.json"
+   "name": "glo_dec_blood_splat_drips_medium02",
+   "file": "assets/Material/glo_dec_blood_splat_drips_medium02.json"
   },
   {
    "index": 31,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/31.json"
+   "name": "localized_zombie_theater",
+   "file": "rawfiles/localized_zombie_theater"
   }
  ],
  "named": {
@@ -213,7 +211,10 @@
    "references": []
   },
   "models": {
-   "names": [],
+   "names": [
+    "zombie_theater_lobby_door_tearin",
+    "zombie_theater_lobby_door_tearin_white"
+   ],
    "references": []
   },
   "weapons": {
