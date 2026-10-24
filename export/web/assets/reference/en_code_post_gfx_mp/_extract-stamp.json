@@ -1,0 +1,12 @@
+{
+ "zone": "zone/english/en_code_post_gfx_mp.ff",
+ "sha256": "059f032d3a58f51cb6ec758f95332103daefb0702c193214a46750fbbd7082a9",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
