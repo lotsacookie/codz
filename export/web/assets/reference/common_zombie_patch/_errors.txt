@@ -1,17 +1,6 @@
 # error report: zone/Common/common_zombie_patch.ff
 status: ok
-stream: walked 0x108bbf of 0x111471 bytes (96.87%), 34994 unwalked
-errors: 1 (0 failed assets, 0 soft errors, 0 poisoned pointers)
-
-[1] WALK STOPPED at 0x108bbf
-  34994 bytes after this were not turned into assets
-  the zone's asset list ended here (97 entries, all walked); the bytes after it are not covered by the list
-  last walked asset: #96 RawFile stream=0x108bb3..0x108bbf
-  bytes at the stop (16 before):
-    0x00108baf  65 20 73 6f 6d 65 20 66 75 6e 63 74 69 6f 6e 61  e some functiona
-    0x00108bbf  6c 69 74 79 20 62 75 74 20 62 65 20 66 61 72 20  lity but be far 
-    0x00108bcf  66 65 77 65 72 20 76 61 72 69 61 62 6c 65 73 0d  fewer variables.
-    0x00108bdf  0a 69 6e 74 09 09 73 63 72 69 70 74 5f 70 61 63  .int..script_pac
-    0x00108bef  69 66 69 73 74 09 09 09 09 2f 2f 20 6d 61 6b 65  ifist....// make
+stream: walked 0x111471 of 0x111471 bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
 
 ## raw walker output

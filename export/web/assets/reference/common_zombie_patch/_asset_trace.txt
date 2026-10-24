@@ -1,5 +1,5 @@
 # asset trace: 97 walked assets
-first implausible XAnimParts: #87 at 0xda2c0
+first implausible XAnimParts: none
 #0 RawFile 0xef6..0x45e5f len=282473 name=animtrees/generic_human.atr
 #1 RawFile 0x45e5f..0x46a01 len=2978 name=animscripts/debug.gsc
 #2 RawFile 0x46a01..0x46b6d len=364 name=animscripts/traverse/zombie_jump_down_40.gsc
@@ -86,14 +86,14 @@ first implausible XAnimParts: #87 at 0xda2c0
 #83 XAnimParts 0xcefc2..0xd07e1 len=6175 name=pf_firing nf=140 fps=30.0 db=857 ds=177 di=192 rs=1228 ix=0
 #84 XAnimParts 0xd07e1..0xd22ba len=6873 name=pt_laststand_fire nf=46 fps=30.0 db=785 ds=154 di=45 rs=2586 ix=0
 #85 XAnimParts 0xd22ba..0xd3b4b len=6289 name=pt_rifle_stand_putaway nf=11 fps=30.0 db=715 ds=66 di=51 rs=2432 ix=0
-#86 XAnimParts 0xd3b4b..0xda2c0 len=26485 name=pb_stand_shoot_walk_forward_unarmed nf=88 fps=30.0 db=3149 ds=324 di=60 rs=10375 ix=0
-#87 XAnimParts 0xda2c0..0x1085ff len=189247 name=- nf=0 fps=2.4008299636890844e+29 db=38937 ds=56064 di=9472 rs=85 ix=0 IMPLAUSIBLE
-#88 XAnimParts 0x1085ff..0x108667 len=104 name=- nf=8306 fps=1.8890782451696141e+31 db=8299 ds=26999 di=26740 rs=1718183023 ix=1952539497 IMPLAUSIBLE
-#89 XAnimParts 0x108667..0x1086cf len=104 name=- nf=28787 fps=1.0937630624678118e+31 db=29295 ds=3444 di=26890 rs=153121902 ix=1701146739 IMPLAUSIBLE
-#90 XAnimParts 0x1086cf..0x108737 len=104 name=- nf=2420 fps=1.9140148033855233e+28 db=2407 ds=24942 di=25965 rs=1936026985 ix=1931501856 IMPLAUSIBLE
-#91 StringTable 0x108737..0x10874b len=20 name=-
-#92 RawFile 0x10874b..0x108757 len=12 name=-
-#93 MaterialTechniqueSet 0x108757..0x108967 len=528 name=-
-#94 MaterialTechniqueSet 0x108967..0x108b77 len=528 name=-
-#95 FxEffectDef 0x108b77..0x108bb3 len=60 name=-
-#96 RawFile 0x108bb3..0x108bbf len=12 name=-
+#86 XAnimParts 0xd3b4b..0xda2bf len=26484 name=pb_stand_shoot_walk_forward_unarmed nf=88 fps=30.0 db=3149 ds=324 di=60 rs=10375 ix=0
+#87 XAnimParts 0xda2bf..0xe7454 len=53653 name=ai_zombie_window_attack_crawl_l nf=169 fps=30.0 db=6412 ds=152 di=219 rs=21768 ix=0
+#88 XAnimParts 0xe7454..0xf345d len=49161 name=ai_zombie_window_attack_crawl_m nf=146 fps=30.0 db=5822 ds=143 di=219 rs=20070 ix=0
+#89 XAnimParts 0xf345d..0x101680 len=57891 name=ai_zombie_window_attack_crawl_r nf=175 fps=30.0 db=6907 ds=139 di=219 rs=23608 ix=0
+#90 XAnimParts 0x101680..0x10486b len=12779 name=viewmodel_zombie_perksacola_drink nf=64 fps=30.0 db=1354 ds=88 di=231 rs=4977 ix=0
+#91 StringTable 0x10486b..0x108560 len=15605 name=weaponoptions.csv
+#92 RawFile 0x108560..0x10fd6b len=30731 name=radiant/keys.txt
+#93 MaterialTechniqueSet 0x10fd6b..0x10ff96 len=555 name=,distortion_scale_zfeather
+#94 MaterialTechniqueSet 0x10ff96..0x1101c1 len=555 name=,effect_zfeather_add_nofog
+#95 FxEffectDef 0x1101c1..0x111450 len=4751 name=misc/fx_zombie_powerup_solo_wave
+#96 RawFile 0x111450..0x111471 len=33 name=common_zombie_patch

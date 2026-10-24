@@ -2,11 +2,11 @@
  "zone": "zone/Common/common_zombie_patch.ff",
  "status": "ok",
  "error": null,
- "complete": false,
+ "complete": true,
  "coverage": {
-  "streamPos": 1084351,
+  "streamPos": 1119345,
   "streamSize": 1119345,
-  "percent": 96.87
+  "percent": 100.0
  },
  "types": {
   "RawFile": 75,
@@ -20,9 +20,7 @@
  "failures": [],
  "softErrors": [],
  "failedSpans": [],
- "unwalkedTail": [
-  "_unwalked/tail_00108bbf_part0.bin"
- ],
+ "unwalkedTail": [],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
  "assets": [
@@ -479,50 +477,54 @@
   {
    "index": 91,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/91.json"
+   "name": "weaponoptions.csv",
+   "file": "assets/StringTable/weaponoptions.csv.json"
   },
   {
    "index": 92,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/92.json"
+   "name": "radiant/keys.txt",
+   "file": "rawfiles/radiant/keys.txt"
   },
   {
    "index": 93,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/93.json"
+   "name": ",distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/,distortion_scale_zfeather.json"
   },
   {
    "index": 94,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/94.json"
+   "name": ",effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add_nofog.json"
   },
   {
    "index": 95,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/95.json"
+   "name": "misc/fx_zombie_powerup_solo_wave",
+   "file": "assets/FxEffectDef/misc/fx_zombie_powerup_solo_wave.json"
   },
   {
    "index": 96,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/96.json"
+   "name": "common_zombie_patch",
+   "file": "rawfiles/common_zombie_patch"
   }
  ],
  "named": {
   "animations": {
    "names": [
+    "ai_zombie_window_attack_crawl_l",
+    "ai_zombie_window_attack_crawl_m",
+    "ai_zombie_window_attack_crawl_r",
     "pb_stand_alert_pistol",
     "pb_stand_shoot_walk_forward_unarmed",
     "pb_terrain_slide",
     "pf_firing",
     "pf_melee",
     "pt_laststand_fire",
-    "pt_rifle_stand_putaway"
+    "pt_rifle_stand_putaway",
+    "viewmodel_zombie_perksacola_drink"
    ],
    "references": []
   },
