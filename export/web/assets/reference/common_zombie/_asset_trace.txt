@@ -1,5 +1,5 @@
-# asset trace: 2684 walked assets
-first implausible XAnimParts: #2124 at 0x299b2e2
+# asset trace: 2693 walked assets
+first implausible XAnimParts: none
 #0 MaterialTechniqueSet 0x9966..0x9b7a len=532 name=,2d
 #1 Material 0x9b7a..0x9cb1 len=311 name=loadscreen_locked
 #2 RawFile 0x9cb1..0xa500 len=2127 name=animscripts/anims.gsc
@@ -2123,564 +2123,573 @@ first implausible XAnimParts: #2124 at 0x299b2e2
 #2120 XAnimParts 0x2987d5e..0x2989a9a len=7484 name=pb_breach_shoulder nf=18 fps=30.0 db=861 ds=78 di=57 rs=2781 ix=0
 #2121 XAnimParts 0x2989a9a..0x2991e11 len=33655 name=pb_breach_slide nf=120 fps=30.0 db=3828 ds=83 di=72 rs=13830 ix=0
 #2122 XAnimParts 0x2991e11..0x299ab0b len=36090 name=pb_breach_lift nf=128 fps=30.0 db=4218 ds=84 di=60 rs=15075 ix=0
-#2123 XAnimParts 0x299ab0b..0x299b2e2 len=2007 name=pb_standmg42gunner_aim_45right_15up nf=1 fps=30.0 db=162 ds=174 di=63 rs=316 ix=0
-#2124 XAnimParts 0x299b2e2..0x299b34a len=104 name=- nf=11266 fps=1.7849680984034018e-38 db=20994 ds=36098 di=36354 rs=3670095388 ix=406880039 IMPLAUSIBLE
-#2125 XAnimParts 0x299b34a..0x299b3b2 len=104 name=- nf=1 fps=1.000698685238124e-34 db=1 ds=1 di=1 rs=1246185025 ix=33620043 IMPLAUSIBLE
-#2126 XAnimParts 0x299b3b2..0x299b41a len=104 name=- nf=256 fps=2.3510604481259484e-38 db=256 ds=256 di=256 rs=16777472 ix=16777472 IMPLAUSIBLE
-#2127 XAnimParts 0x299b41a..0x299b482 len=104 name=- nf=21494 fps=-1.301985609981833e+34 db=33405 ds=13507 di=16057 rs=1734658 ix=539826944 IMPLAUSIBLE
-#2128 XAnimParts 0x299b482..0x299b4ea len=104 name=- nf=8240 fps=-9.920602294443202e+27 db=9722 ds=40705 di=64768 rs=387637491 ix=2284139124 IMPLAUSIBLE
-#2129 XAnimParts 0x299b4ea..0x299b552 len=104 name=- nf=34045 fps=-11172570112.0 db=31746 ds=57178 di=31485 rs=638408710 ix=3875199103 IMPLAUSIBLE
-#2130 XAnimParts 0x299b552..0x299b5ba len=104 name=- nf=2463 fps=1.6249830878223293e-05 db=46016 ds=11249 di=59457 rs=463700544 ix=593167553 IMPLAUSIBLE
-#2131 XAnimParts 0x299b5ba..0x299b622 len=104 name=- nf=63589 fps=5.549376712110947e-22 db=43833 ds=38950 di=39999 rs=3091791935 ix=3120562233 IMPLAUSIBLE
-#2132 XAnimParts 0x299b622..0x299b68a len=104 name=- nf=21609 fps=-4.996971226202468e-27 db=11893 ds=51975 di=11647 rs=1509051291 ix=4108441933 IMPLAUSIBLE
-#2133 XAnimParts 0x299b68a..0x299b6f2 len=104 name=- nf=7170 fps=9.903520314283042e+27 db=56398 ds=7682 di=5379 rs=2046820352 ix=787583 IMPLAUSIBLE
-#2134 XAnimParts 0x299b6f2..0x299b75a len=104 name=- nf=16120 fps=-2.253699769778045e+18 db=56170 ds=186 di=0 rs=2435780874 ix=16746870 IMPLAUSIBLE
-#2135 XAnimParts 0x299b75a..0x299b7c2 len=104 name=- nf=58102 fps=-0.0005392633029259741 db=36207 ds=58102 di=10237 rs=3104660313 ix=2688620606 IMPLAUSIBLE
-#2136 XAnimParts 0x299b7c2..0x299b82a len=104 name=- nf=255 fps=-2.9459450285714154e+24 db=331 ds=65280 di=65535 rs=1716560896 ix=355 IMPLAUSIBLE
-#2137 XAnimParts 0x299b82a..0x299bc92 len=1128 name=- nf=9222 fps=0.0 db=0 ds=1 di=0 rs=4026531905 ix=65 IMPLAUSIBLE
-#2138 XAnimParts 0x299bc92..0x299bcfa len=104 name=- nf=64305 fps=4.536086085888521e-38 db=38901 ds=61596 di=26603 rs=6427862 ix=3305111552 IMPLAUSIBLE
-#2139 XAnimParts 0x299bcfa..0x299bd62 len=104 name=- nf=0 fps=-2.334862121353143e-12 db=6 ds=0 di=55552 rs=354656545 ix=885349530 IMPLAUSIBLE
-#2140 XAnimParts 0x299bd62..0x299bdca len=104 name=- nf=14080 fps=1.2937572856029614e+33 db=15618 ds=4362 di=37167 rs=1987511087 ix=1460023039 IMPLAUSIBLE
-#2141 XAnimParts 0x299bdca..0x299be32 len=104 name=- nf=25903 fps=2937021043572736.0 db=23613 ds=26159 di=49632 rs=1411837768 ix=2666860129 IMPLAUSIBLE
-#2142 XAnimParts 0x299be32..0x299be9a len=104 name=- nf=62719 fps=1.1533997976755853e-38 db=256 ds=41984 di=26192 rs=7888171 ix=2902458368 IMPLAUSIBLE
-#2143 XAnimParts 0x299be9a..0x29d4c6c len=232914 name=- nf=29696 fps=3.587324068671532e-43 db=0 ds=29952 di=33605 rs=956347392 ix=0 IMPLAUSIBLE
-#2144 XAnimParts 0x29d4c6c..0x29d4cd4 len=104 name=- nf=0 fps=3.240074875066057e-12 db=0 ds=0 di=0 rs=47413 ix=0
-#2145 XAnimParts 0x29d4cd4..0x29d4d3c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=592707584 ix=14854 IMPLAUSIBLE
-#2146 XAnimParts 0x29d4d3c..0x29d4da4 len=104 name=- nf=0 fps=6.681951597286458e-41 db=0 ds=0 di=0 rs=0 ix=2910584832 IMPLAUSIBLE
-#2147 XAnimParts 0x29d4da4..0x29d4e0c len=104 name=- nf=62452 fps=0.0 db=14917 ds=0 di=0 rs=47783 ix=0 IMPLAUSIBLE
-#2148 XAnimParts 0x29d4e0c..0x29d4e74 len=104 name=- nf=0 fps=0.0 db=0 ds=46998 di=47663 rs=0 ix=0 IMPLAUSIBLE
-#2149 XAnimParts 0x29d4e74..0x29d4edc len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2150 XAnimParts 0x29d4edc..0x29d4f44 len=104 name=- nf=17078 fps=0.0 db=15257 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2151 XAnimParts 0x29d4f44..0x29d4fac len=104 name=- nf=0 fps=0.0 db=0 ds=9268 di=48012 rs=0 ix=0 IMPLAUSIBLE
-#2152 XAnimParts 0x29d4fac..0x29d5014 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2153 XAnimParts 0x29d5014..0x29d507c len=104 name=- nf=0 fps=4177920.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2154 XAnimParts 0x29d507c..0x29d50e4 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=2290614272 ix=15112 IMPLAUSIBLE
-#2155 XAnimParts 0x29d50e4..0x29d514c len=104 name=- nf=0 fps=1.078520768856852e-31 db=0 ds=0 di=0 rs=338116578 ix=16354 IMPLAUSIBLE
-#2156 XAnimParts 0x29d514c..0x29d51b4 len=104 name=- nf=0 fps=-1.0214083204254102e+27 db=14568 ds=18253 di=16428 rs=269484032 ix=3964907537 IMPLAUSIBLE
-#2157 XAnimParts 0x29d51b4..0x29d521c len=104 name=- nf=60499 fps=2.8175786043663974e+17 db=16453 ds=0 di=0 rs=3964877032 ix=1551514088 IMPLAUSIBLE
-#2158 XAnimParts 0x29d521c..0x29d5284 len=104 name=- nf=23447 fps=6.668269634246826e-07 db=39987 ds=60499 di=47208 rs=3220062315 ix=16491 IMPLAUSIBLE
-#2159 XAnimParts 0x29d5284..0x29d52ec len=104 name=- nf=0 fps=5.612288149377473e-36 db=47592 ds=31800 di=16651 rs=993525760 ix=3964873788 IMPLAUSIBLE
-#2160 XAnimParts 0x29d52ec..0x29d5354 len=104 name=- nf=60499 fps=6.381152051204708e-09 db=16679 ds=0 di=0 rs=578336872 ix=836483616 IMPLAUSIBLE
-#2161 XAnimParts 0x29d5354..0x29d53bc len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2162 XAnimParts 0x29d53bc..0x29d5424 len=104 name=- nf=443 fps=0.0 db=15437 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2163 XAnimParts 0x29d5424..0x29d548c len=104 name=- nf=0 fps=0.0 db=0 ds=18564 di=48240 rs=0 ix=0 IMPLAUSIBLE
-#2164 XAnimParts 0x29d548c..0x29d54f4 len=104 name=- nf=58452 fps=3.5344990823027445e-17 db=61467 ds=33612 di=47317 rs=876888167 ix=16487 IMPLAUSIBLE
-#2165 XAnimParts 0x29d54f4..0x29d555c len=104 name=- nf=0 fps=-6.016238865813333e-37 db=47520 ds=9360 di=16671 rs=943063040 ix=2202831417 IMPLAUSIBLE
-#2166 XAnimParts 0x29d555c..0x29d55c4 len=104 name=- nf=33612 fps=6.986934152169456e+37 db=16716 ds=0 di=0 rs=578468053 ix=2119350816 IMPLAUSIBLE
-#2167 XAnimParts 0x29d55c4..0x29d562c len=104 name=- nf=0 fps=6.730156264459231e-41 db=0 ds=0 di=0 rs=0 ix=3361210368 IMPLAUSIBLE
-#2168 XAnimParts 0x29d562c..0x29d5694 len=104 name=- nf=27183 fps=-2.117582368135751e-22 db=48357 ds=50084 di=47901 rs=48166 ix=0 IMPLAUSIBLE
-#2169 XAnimParts 0x29d5694..0x29d56fc len=104 name=- nf=0 fps=0.0 db=48513 ds=27809 di=15747 rs=2301296640 ix=15760 IMPLAUSIBLE
-#2170 XAnimParts 0x29d56fc..0x29d5764 len=104 name=- nf=5964 fps=0.0 db=65403 ds=37542 di=15019 rs=2631712749 ix=49261 IMPLAUSIBLE
-#2171 XAnimParts 0x29d5764..0x29d57cc len=104 name=- nf=52429 fps=876544.0 db=48588 ds=43146 di=47955 rs=0 ix=0 IMPLAUSIBLE
-#2172 XAnimParts 0x29d57cc..0x29d5834 len=104 name=- nf=45852 fps=0.0 db=48122 ds=6919 di=15373 rs=0 ix=15872 IMPLAUSIBLE
-#2173 XAnimParts 0x29d5834..0x29d589c len=104 name=- nf=51948 fps=0.0 db=65530 ds=42300 di=47970 rs=16672 ix=16800 IMPLAUSIBLE
-#2174 XAnimParts 0x29d589c..0x29d5904 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=48382 ix=0 IMPLAUSIBLE
-#2175 XAnimParts 0x29d5904..0x29d596c len=104 name=- nf=9974 fps=1.2248221374833575e-30 db=0 ds=0 di=0 rs=2301639895 ix=2059156880 IMPLAUSIBLE
-#2176 XAnimParts 0x29d596c..0x29d59d4 len=104 name=- nf=28088 fps=nan db=25823 ds=37542 di=15019 rs=2455814228 ix=49236 IMPLAUSIBLE
-#2177 XAnimParts 0x29d59d4..0x29d5a3c len=104 name=- nf=0 fps=877524.4375 db=0 ds=0 di=0 rs=3264217088 ix=3446684917 IMPLAUSIBLE
-#2178 XAnimParts 0x29d5a3c..0x29d5aa4 len=104 name=- nf=0 fps=1.9495683457264527e+36 db=0 ds=0 di=0 rs=15222 ix=1706966528 IMPLAUSIBLE
-#2179 XAnimParts 0x29d5aa4..0x29d5b0c len=104 name=- nf=64710 fps=-7.776543498039246e-08 db=65462 ds=22648 di=47691 rs=557859162 ix=16730 IMPLAUSIBLE
-#2180 XAnimParts 0x29d5b0c..0x29d5b74 len=104 name=- nf=0 fps=9.183409485952689e-41 db=47863 ds=18738 di=49282 rs=0 ix=4294901760 IMPLAUSIBLE
-#2181 XAnimParts 0x29d5b74..0x29d5bdc len=104 name=- nf=60 fps=2.4280298491356105e-41 db=12895 ds=25971 di=99 rs=0 ix=0
-#2182 XAnimParts 0x29d5bdc..0x29d5c44 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2183 XAnimParts 0x29d5c44..0x29d5cac len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2184 XAnimParts 0x29d5cac..0x29d5d14 len=104 name=- nf=0 fps=6.910082987278538e-41 db=17302 ds=62259 di=17301 rs=26214400 ix=0 IMPLAUSIBLE
-#2185 XAnimParts 0x29d5d14..0x29d5d7c len=104 name=- nf=0 fps=6.767010414070974e-41 db=0 ds=0 di=0 rs=0 ix=3607756800 IMPLAUSIBLE
-#2186 XAnimParts 0x29d5d7c..0x29d5de4 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2187 XAnimParts 0x29d5de4..0x29d5e4c len=104 name=- nf=67 fps=2.313824024293138e-41 db=0 ds=0 di=17430 rs=16512 ix=49152
-#2188 XAnimParts 0x29d5e4c..0x29d5eb4 len=104 name=- nf=4059 fps=2.355508729971101e-38 db=0 ds=0 di=0 rs=33751296 ix=544 IMPLAUSIBLE
-#2189 XAnimParts 0x29d5eb4..0x29d5f1c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=16256 ix=0 IMPLAUSIBLE
-#2190 XAnimParts 0x29d5f1c..0x29d5f84 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2191 XAnimParts 0x29d5f84..0x29d5fec len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=65535 ix=0 IMPLAUSIBLE
-#2192 XAnimParts 0x29d5fec..0x29d6054 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=3889758208 ix=15382 IMPLAUSIBLE
-#2193 XAnimParts 0x29d6054..0x29d60bc len=104 name=- nf=0 fps=6.766590024531677e-41 db=0 ds=0 di=0 rs=0 ix=3024093184 IMPLAUSIBLE
-#2194 XAnimParts 0x29d60bc..0x29d6124 len=104 name=- nf=0 fps=2.0387491357461764e-41 db=0 ds=0 di=0 rs=3233808384 ix=2202796224 IMPLAUSIBLE
-#2195 XAnimParts 0x29d6124..0x29d618c len=104 name=- nf=33612 fps=5356885611905024.0 db=16492 ds=0 di=0 rs=2202810581 ix=1503148373 IMPLAUSIBLE
-#2196 XAnimParts 0x29d618c..0x29d61f4 len=104 name=- nf=19294 fps=-8.546314128218359e-34 db=44416 ds=33612 di=47189 rs=612515977 ix=16521 IMPLAUSIBLE
-#2197 XAnimParts 0x29d61f4..0x29d625c len=104 name=- nf=0 fps=-491172560896.0 db=47520 ds=55322 di=16667 rs=2442592256 ix=2202819727 IMPLAUSIBLE
-#2198 XAnimParts 0x29d625c..0x29d62c4 len=104 name=- nf=33612 fps=6.510520746648429e-13 db=16691 ds=0 di=0 rs=867743829 ix=725072368 IMPLAUSIBLE
-#2199 XAnimParts 0x29d62c4..0x29d632c len=104 name=- nf=35752 fps=-109051904.0 db=3530 ds=33612 di=14549 rs=3086172502 ix=16726 IMPLAUSIBLE
-#2200 XAnimParts 0x29d632c..0x29d6394 len=104 name=- nf=0 fps=0.0 db=15008 ds=860 di=16571 rs=48278 ix=0 IMPLAUSIBLE
-#2201 XAnimParts 0x29d6394..0x29d63fc len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=542965760 ix=15628 IMPLAUSIBLE
-#2202 XAnimParts 0x29d63fc..0x29d6464 len=104 name=- nf=15309 fps=-1.1938614500538858e-38 db=116 ds=5820 di=47173 rs=3738321025 ix=16513 IMPLAUSIBLE
-#2203 XAnimParts 0x29d6464..0x29d64cc len=104 name=- nf=0 fps=-38042619904.0 db=47301 ds=14131 di=16696 rs=2290745344 ix=381465473 IMPLAUSIBLE
-#2204 XAnimParts 0x29d64cc..0x29d6534 len=104 name=- nf=5820 fps=7.467139684358415e-10 db=16714 ds=0 di=0 rs=1550563397 ix=810400118 IMPLAUSIBLE
-#2205 XAnimParts 0x29d6534..0x29d659c len=104 name=- nf=53898 fps=-6.0 db=36032 ds=5820 di=14533 rs=733167973 ix=16741 IMPLAUSIBLE
-#2206 XAnimParts 0x29d659c..0x29d6604 len=104 name=- nf=0 fps=-0.0002827105636242777 db=14917 ds=52850 di=16577 rs=3233808384 ix=381430976 IMPLAUSIBLE
-#2207 XAnimParts 0x29d6604..0x29d666c len=104 name=- nf=5820 fps=-209155.390625 db=16593 ds=0 di=0 rs=2141337797 ix=3360438919 IMPLAUSIBLE
-#2208 XAnimParts 0x29d666c..0x29d66d4 len=104 name=- nf=36595 fps=0.0 db=171 ds=5820 di=47173 rs=3291758825 ix=16617 IMPLAUSIBLE
-#2209 XAnimParts 0x29d66d4..0x29d673c len=104 name=- nf=0 fps=-107479040.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2210 XAnimParts 0x29d673c..0x29d67a4 len=104 name=- nf=0 fps=5.759462109421572e-23 db=0 ds=0 di=0 rs=47173 ix=445317120 IMPLAUSIBLE
-#2211 XAnimParts 0x29d67a4..0x29d680c len=104 name=- nf=14492 fps=-6.0 db=20160 ds=5820 di=14533 rs=2062958959 ix=16751 IMPLAUSIBLE
-#2212 XAnimParts 0x29d680c..0x29d6874 len=104 name=- nf=0 fps=3.0408864728230163e-25 db=14739 ds=20 di=16584 rs=3233808384 ix=381457088 IMPLAUSIBLE
-#2213 XAnimParts 0x29d6874..0x29d68dc len=104 name=- nf=5820 fps=7.256542914300945e-13 db=16604 ds=0 di=0 rs=3507304645 ix=726415891 IMPLAUSIBLE
-#2214 XAnimParts 0x29d68dc..0x29d6944 len=104 name=- nf=52765 fps=-1.0909784360635388e-18 db=26262 ds=5820 di=47173 rs=4072947963 ix=16635 IMPLAUSIBLE
-#2215 XAnimParts 0x29d6944..0x29d69ac len=104 name=- nf=0 fps=nan db=47606 ds=32338 di=16806 rs=2846425088 ix=381426851 IMPLAUSIBLE
-#2216 XAnimParts 0x29d69ac..0x29d6a14 len=104 name=- nf=5820 fps=6.103419217083751e-35 db=16818 ds=0 di=0 rs=578467909 ix=111327776 IMPLAUSIBLE
-#2217 XAnimParts 0x29d6a14..0x29d6a7c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2218 XAnimParts 0x29d6a7c..0x29d6ae4 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2219 XAnimParts 0x29d6ae4..0x29d6b4c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2220 XAnimParts 0x29d6b4c..0x29d6bb4 len=104 name=- nf=28261 fps=1.7936620343357659e-41 db=0 ds=0 di=0 rs=1536 ix=66565 IMPLAUSIBLE
-#2221 XAnimParts 0x29d6bb4..0x29d6c1c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2222 XAnimParts 0x29d6c1c..0x29d6c84 len=104 name=- nf=13107 fps=0.0 db=256 ds=3840 di=513 rs=0 ix=0 IMPLAUSIBLE
-#2223 XAnimParts 0x29d6c84..0x29d6cec len=104 name=- nf=0 fps=0.0 db=63 ds=32768 di=63 rs=67 ix=0 IMPLAUSIBLE
-#2224 XAnimParts 0x29d6cec..0x29d6d54 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2225 XAnimParts 0x29d6d54..0x29d6dbc len=104 name=- nf=0 fps=0.0 db=65535 ds=65535 di=3583 rs=0 ix=0 IMPLAUSIBLE
-#2226 XAnimParts 0x29d6dbc..0x29d6e24 len=104 name=- nf=0 fps=1.0761972206014595e-40 db=20497 ds=0 di=25600 rs=66 ix=0
-#2228 XAnimParts 0x29d6e8c..0x29d6ef4 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2229 XAnimParts 0x29d6ef4..0x29d6f5c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2230 XAnimParts 0x29d6f5c..0x29d6fc4 len=104 name=- nf=0 fps=0.00830078125 db=0 ds=0 di=0 rs=0 ix=0
-#2231 XAnimParts 0x29d6fc4..0x29d702c len=104 name=- nf=0 fps=-8.828180325246348e-44 db=0 ds=0 di=0 rs=0 ix=2147483648 IMPLAUSIBLE
-#2232 XAnimParts 0x29d702c..0x29d7094 len=104 name=- nf=0 fps=0.0 db=6912 ds=0 di=8192 rs=0 ix=64 IMPLAUSIBLE
-#2233 XAnimParts 0x29d7094..0x29d70fc len=104 name=- nf=33554 fps=nan db=0 ds=0 di=0 rs=16843837 ix=4294967046 IMPLAUSIBLE
-#2234 XAnimParts 0x29d70fc..0x29d7164 len=104 name=- nf=0 fps=5.38392882978238e-41 db=0 ds=0 di=0 rs=0 ix=1536
-#2235 XAnimParts 0x29d7164..0x29d71cc len=104 name=- nf=0 fps=0.0 db=65 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2236 XAnimParts 0x29d71cc..0x29d7234 len=104 name=- nf=8194 fps=0.0 db=0 ds=0 di=2560 rs=0 ix=0 IMPLAUSIBLE
-#2237 XAnimParts 0x29d7234..0x29d729c len=104 name=- nf=0 fps=0.0 db=0 ds=32768 di=63 rs=3355443200 ix=67 IMPLAUSIBLE
-#2238 XAnimParts 0x29d729c..0x29d7304 len=104 name=- nf=0 fps=0.0 db=64 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2239 XAnimParts 0x29d7304..0x29d736c len=104 name=- nf=60840 fps=0.0 db=65291 ds=65535 di=65535 rs=0 ix=0 IMPLAUSIBLE
-#2240 XAnimParts 0x29d736c..0x29d73d4 len=104 name=- nf=0 fps=0.0 db=1024 ds=0 di=35333 rs=1207959552 ix=68 IMPLAUSIBLE
-#2242 XAnimParts 0x29d743c..0x29d74a4 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2243 XAnimParts 0x29d74a4..0x29d750c len=104 name=- nf=0 fps=0.0 db=68 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2244 XAnimParts 0x29d750c..0x29d7574 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=186 ix=0 IMPLAUSIBLE
-#2245 XAnimParts 0x29d7574..0x29d75dc len=104 name=- nf=0 fps=-0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2246 XAnimParts 0x29d75dc..0x29d7644 len=104 name=- nf=0 fps=9.10844001811131e-44 db=67 ds=0 di=5120 rs=0 ix=536870912 IMPLAUSIBLE
-#2247 XAnimParts 0x29d7644..0x29d76ac len=104 name=- nf=0 fps=nan db=56064 ds=18703 di=56255 rs=3435973890 ix=50397246 IMPLAUSIBLE
-#2248 XAnimParts 0x29d76ac..0x29d7714 len=104 name=- nf=0 fps=1.2914366647217514e-41 db=0 ds=0 di=0 rs=0 ix=0
-#2249 XAnimParts 0x29d7714..0x29d777c len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2250 XAnimParts 0x29d777c..0x29d77e4 len=104 name=- nf=15368 fps=0.0 db=0 ds=0 di=0 rs=130 ix=0 IMPLAUSIBLE
-#2251 XAnimParts 0x29d77e4..0x29d784c len=104 name=- nf=32768 fps=-0.003906281664967537 db=0 ds=0 di=0 rs=369518080 ix=2935803204 IMPLAUSIBLE
-#2252 FxEffectDef 0x29d784c..0x29d7888 len=60 name=-
-#2253 FxEffectDef 0x29d7888..0x29d78c4 len=60 name=-
-#2254 FxEffectDef 0x29d78c4..0x29d7900 len=60 name=-
-#2255 FxEffectDef 0x29d7900..0x29d793c len=60 name=-
-#2256 RawFile 0x29d793c..0x29d7948 len=12 name=-
-#2257 XAnimParts 0x29d7948..0x29d79b0 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2258 XAnimParts 0x29d79b0..0x29d7a18 len=104 name=- nf=0 fps=0.0 db=188 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2259 XAnimParts 0x29d7a18..0x29d7a80 len=104 name=- nf=0 fps=0.3182525336742401 db=0 ds=0 di=0 rs=0 ix=4260996608 IMPLAUSIBLE
-#2260 XAnimParts 0x29d7a80..0x29d7ae8 len=104 name=- nf=64740 fps=1.0842263416690275e-19 db=64 ds=8192 di=64 rs=1050866175 ix=3198349755 IMPLAUSIBLE
-#2261 XAnimParts 0x29d7ae8..0x29d7b50 len=104 name=- nf=36602 fps=37535600640.0 db=22784 ds=64442 di=61951 rs=1517555259 ix=1517555389 IMPLAUSIBLE
-#2262 XAnimParts 0x29d7b50..0x29d7bb8 len=104 name=- nf=0 fps=-1.7984148931413347e-26 db=0 ds=0 di=0 rs=3068812988 ix=2514927547 IMPLAUSIBLE
-#2263 XAnimParts 0x29d7bb8..0x29d7c20 len=104 name=- nf=54469 fps=8.586561360694727e+21 db=0 ds=0 di=0 rs=3602350908 ix=254592828 IMPLAUSIBLE
-#2264 XAnimParts 0x29d7c20..0x29d7c88 len=104 name=- nf=10922 fps=-1.0370051790271396e-15 db=25344 ds=29310 di=54587 rs=2246958397 ix=2241134525 IMPLAUSIBLE
-#2265 XAnimParts 0x29d7c88..0x29d7cf0 len=104 name=- nf=60642 fps=14187263.0 db=58 ds=0 di=6656 rs=192 ix=3265414912 IMPLAUSIBLE
-#2266 XAnimParts 0x29d7cf0..0x29d7d58 len=104 name=- nf=7181 fps=1.0842097980567764e-19 db=44352 ds=27504 di=65 rs=2558680063 ix=731031354 IMPLAUSIBLE
-#2267 XAnimParts 0x29d7d58..0x29d7dc0 len=104 name=- nf=0 fps=0.0 db=186 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2268 XAnimParts 0x29d7dc0..0x29d7e28 len=104 name=- nf=28871 fps=0.0 db=39608 ds=27751 di=65083 rs=0 ix=0 IMPLAUSIBLE
-#2269 XAnimParts 0x29d7e28..0x29d7e90 len=104 name=- nf=0 fps=0.0 db=56889 ds=53485 di=59193 rs=0 ix=0 IMPLAUSIBLE
-#2270 XAnimParts 0x29d7e90..0x29d7ef8 len=104 name=- nf=0 fps=0.0 db=188 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2271 XAnimParts 0x29d7ef8..0x29d7f60 len=104 name=- nf=16384 fps=3.1669345293740866e-43 db=0 ds=0 di=0 rs=192 ix=4225539072 IMPLAUSIBLE
-#2273 XAnimParts 0x2a41eee..0x2a41f56 len=104 name=- nf=9901 fps=-33476235493376.0 db=14628 ds=21421 di=50223 rs=938680153 ix=2544689116 IMPLAUSIBLE
-#2274 XAnimParts 0x2a41f56..0x2a41fbe len=104 name=- nf=5376 fps=2.5679803293646587e-39 db=0 ds=3072 di=9853 rs=1836668 ix=3825205248 IMPLAUSIBLE
-#2275 XAnimParts 0x2a41fbe..0x2a42026 len=104 name=- nf=63232 fps=2.749669885652086e-40 db=0 ds=63232 di=53887 rs=247679 ix=4043309056 IMPLAUSIBLE
-#2276 XAnimParts 0x2a42026..0x2a4208e len=104 name=- nf=11451 fps=0.09864494949579239 db=10760 ds=35515 di=52828 rs=499785565 ix=180046090 IMPLAUSIBLE
-#2277 XAnimParts 0x2a4208e..0x2a420f6 len=104 name=- nf=30909 fps=1.4425509398119374e-12 db=45579 ds=53437 di=33375 rs=2060159584 ix=1254030091 IMPLAUSIBLE
-#2278 XAnimParts 0x2a420f6..0x2a4215e len=104 name=- nf=8895 fps=-7.829262574216764e-32 db=61710 ds=60095 di=5217 rs=1338772832 ix=1522467597 IMPLAUSIBLE
-#2279 XAnimParts 0x2a4215e..0x2a421c6 len=104 name=- nf=13757 fps=1.8860940307398958e-35 db=6921 ds=31934 di=5726 rs=2311588957 ix=2763897097 IMPLAUSIBLE
-#2280 XAnimParts 0x2a421c6..0x2a4222e len=104 name=- nf=43707 fps=1.2227869033813477 db=44297 ds=3003 di=2653 rs=178021448 ix=3789858324 IMPLAUSIBLE
-#2281 XAnimParts 0x2a4222e..0x2a42296 len=104 name=- nf=63465 fps=-6.157093653683165e+30 db=29202 ds=35816 di=2120 rs=1721448009 ix=4176084240 IMPLAUSIBLE
-#2282 XAnimParts 0x2a42296..0x2a422fe len=104 name=- nf=53479 fps=-6.119181739980051e+30 db=5388 ds=56552 di=5193 rs=865802569 ix=904243468 IMPLAUSIBLE
-#2283 XAnimParts 0x2a422fe..0x2a42366 len=104 name=- nf=37861 fps=-7.191788853333492e-08 db=31245 ds=12517 di=13896 rs=3080376648 ix=3873731598 IMPLAUSIBLE
-#2284 XAnimParts 0x2a42366..0x2a423ce len=104 name=- nf=2787 fps=2.2979040637905652e+22 db=62482 ds=46819 di=28233 rs=2493272648 ix=3018070547 IMPLAUSIBLE
-#2285 XAnimParts 0x2a423ce..0x2a42436 len=104 name=- nf=49920 fps=-1.8480680565499125e+38 db=65280 ds=54015 di=49023 rs=602751 ix=2852126976 IMPLAUSIBLE
-#2286 XAnimParts 0x2a42436..0x2a4249e len=104 name=- nf=11776 fps=2.6839994344199676e-38 db=0 ds=23552 di=28287 rs=1154431 ix=3338665984 IMPLAUSIBLE
-#2287 XAnimParts 0x2a4249e..0x2a42506 len=104 name=- nf=30464 fps=5.587243223971267e-40 db=0 ds=29440 di=42367 rs=745855 ix=2097152000 IMPLAUSIBLE
-#2288 MaterialTechniqueSet 0x2a42506..0x2a42716 len=528 name=-
-#2289 FxEffectDef 0x2a42716..0x2a42752 len=60 name=-
-#2290 FxEffectDef 0x2a42752..0x2a4278e len=60 name=-
-#2291 FxEffectDef 0x2a4278e..0x2a427ca len=60 name=-
-#2292 MaterialTechniqueSet 0x2a427ca..0x2a429da len=528 name=-
-#2293 FxEffectDef 0x2a429da..0x2a42a16 len=60 name=-
-#2294 FxEffectDef 0x2a42a16..0x2a42a52 len=60 name=-
-#2295 XModel 0x2a42a52..0x2a42b4e len=252 name=-
-#2296 XModel 0x2a42b4e..0x2a42c4a len=252 name=-
-#2297 FxEffectDef 0x2a42c4a..0x2a42c86 len=60 name=-
-#2298 FxEffectDef 0x2a42c86..0x2a42cc2 len=60 name=-
-#2299 FxEffectDef 0x2a42cc2..0x2a42cfe len=60 name=-
-#2300 FxEffectDef 0x2a42cfe..0x2a42d3a len=60 name=-
-#2301 FxEffectDef 0x2a42d3a..0x2a42d76 len=60 name=-
-#2302 FxEffectDef 0x2a42d76..0x2a42db2 len=60 name=-
-#2303 RawFile 0x2a42db2..0x2a42dbe len=12 name=-
-#2304 StringTable 0x2a42dbe..0x2a42dd2 len=20 name=-
-#2305 StringTable 0x2a42dd2..0x2a42de6 len=20 name=-
-#2306 RawFile 0x2a42de6..0x2a42df2 len=12 name=-
-#2307 RawFile 0x2a42df2..0x2a42dfe len=12 name=-
-#2308 RawFile 0x2a42dfe..0x2a42e0a len=12 name=-
-#2309 MaterialTechniqueSet 0x2a42e0a..0x2a4301a len=528 name=-
-#2310 XModel 0x2a4301a..0x2a43116 len=252 name=-
-#2311 MaterialTechniqueSet 0x2a43116..0x2a43326 len=528 name=-
-#2312 XModel 0x2a43326..0x2a43422 len=252 name=-
-#2313 XModel 0x2a43422..0x2a4351e len=252 name=-
-#2314 XModel 0x2a4351e..0x2a4361a len=252 name=-
-#2315 XAnimParts 0x2a4361a..0x2a43682 len=104 name=- nf=35331 fps=-3.501188778563116e+27 db=8548 ds=59395 di=38122 rs=1899244506 ix=3137671790 IMPLAUSIBLE
-#2316 WeaponVariantDef 0x2a43682..0x2a43766 len=228 name=-
-#2317 FxEffectDef 0x2a43766..0x2a437a2 len=60 name=-
-#2318 FxEffectDef 0x2a437a2..0x2a437de len=60 name=-
-#2319 FxEffectDef 0x2a437de..0x2a4381a len=60 name=-
-#2320 FxEffectDef 0x2a4381a..0x2a43856 len=60 name=-
-#2321 FxEffectDef 0x2a43856..0x2a43892 len=60 name=-
-#2322 MaterialTechniqueSet 0x2a43892..0x2a43aa2 len=528 name=-
-#2323 XModel 0x2a43aa2..0x2a43b9e len=252 name=-
-#2324 FxEffectDef 0x2a43b9e..0x2a43bda len=60 name=-
-#2325 FxEffectDef 0x2a43bda..0x2a43c16 len=60 name=-
-#2326 XModel 0x2a43c16..0x2a43d12 len=252 name=-
-#2327 Material 0x2a43d12..0x2a43dd2 len=192 name=-
-#2328 XModel 0x2a43dd2..0x2a43ece len=252 name=-
-#2329 Material 0x2a43ece..0x2a43f8e len=192 name=-
-#2330 XModel 0x2a43f8e..0x2a4408a len=252 name=-
-#2331 Material 0x2a4408a..0x2a4414a len=192 name=-
-#2332 XModel 0x2a4414a..0x2a44246 len=252 name=-
-#2333 Material 0x2a44246..0x2a44306 len=192 name=-
-#2334 XModel 0x2a44306..0x2a44402 len=252 name=-
-#2335 Material 0x2a44402..0x2a444c2 len=192 name=-
-#2336 MaterialTechniqueSet 0x2a444c2..0x2a446d2 len=528 name=-
-#2337 XModel 0x2a446d2..0x2a447ce len=252 name=-
-#2338 XModel 0x2a447ce..0x2a448ca len=252 name=-
-#2339 XModel 0x2a448ca..0x2a449c6 len=252 name=-
-#2340 XModel 0x2a449c6..0x2a44ac2 len=252 name=-
-#2341 Material 0x2a44ac2..0x2a44b82 len=192 name=-
-#2342 Material 0x2a44b82..0x2a44c42 len=192 name=-
-#2343 Material 0x2a44c42..0x2a44d02 len=192 name=-
-#2344 FxEffectDef 0x2a44d02..0x2a44d3e len=60 name=-
-#2345 MaterialTechniqueSet 0x2a44d3e..0x2a44f4e len=528 name=-
-#2346 MaterialTechniqueSet 0x2a44f4e..0x2a4515e len=528 name=-
-#2347 FxEffectDef 0x2a4515e..0x2a4519a len=60 name=-
-#2348 XModel 0x2a4519a..0x2a45296 len=252 name=-
-#2349 XModel 0x2a45296..0x2a45392 len=252 name=-
-#2350 MaterialTechniqueSet 0x2a45392..0x2a45612 len=640 name=-
-#2351 MaterialTechniqueSet 0x2a45612..0x2a45822 len=528 name=-
-#2352 FxEffectDef 0x2a45822..0x2a4585e len=60 name=-
-#2353 FxEffectDef 0x2a4585e..0x2a4589a len=60 name=-
-#2354 FxEffectDef 0x2a4589a..0x2a458d6 len=60 name=-
-#2355 FxEffectDef 0x2a458d6..0x2a45912 len=60 name=-
-#2356 FxEffectDef 0x2a45912..0x2a4594e len=60 name=-
-#2357 FxEffectDef 0x2a4594e..0x2a4598a len=60 name=-
-#2358 FxEffectDef 0x2a4598a..0x2a459c6 len=60 name=-
-#2359 XModel 0x2a459c6..0x2a45ac2 len=252 name=-
-#2360 XModel 0x2a45ac2..0x2a45bbe len=252 name=-
-#2361 MaterialTechniqueSet 0x2a45bbe..0x2a45dce len=528 name=-
-#2362 FxEffectDef 0x2a45dce..0x2a45e0a len=60 name=-
-#2363 FxEffectDef 0x2a45e0a..0x2a45e46 len=60 name=-
-#2364 FxEffectDef 0x2a45e46..0x2a45e82 len=60 name=-
-#2365 FxEffectDef 0x2a45e82..0x2a45ebe len=60 name=-
-#2366 FxEffectDef 0x2a45ebe..0x2a45efa len=60 name=-
-#2367 FxEffectDef 0x2a45efa..0x2a45f36 len=60 name=-
-#2368 FxEffectDef 0x2a45f36..0x2a45f72 len=60 name=-
-#2369 FxEffectDef 0x2a45f72..0x2a45fae len=60 name=-
-#2370 FxEffectDef 0x2a45fae..0x2a45fea len=60 name=-
-#2371 FxEffectDef 0x2a45fea..0x2a46026 len=60 name=-
-#2372 FxEffectDef 0x2a46026..0x2a46062 len=60 name=-
-#2373 FxEffectDef 0x2a46062..0x2a4609e len=60 name=-
-#2374 FxEffectDef 0x2a4609e..0x2a460da len=60 name=-
-#2375 FxEffectDef 0x2a460da..0x2a46116 len=60 name=-
-#2376 XModel 0x2a46116..0x2a46212 len=252 name=-
-#2377 FxEffectDef 0x2a46212..0x2a4624e len=60 name=-
-#2378 FxEffectDef 0x2a4624e..0x2a4628a len=60 name=-
-#2379 FxEffectDef 0x2a4628a..0x2a462c6 len=60 name=-
-#2380 XModel 0x2a462c6..0x2a463c2 len=252 name=-
-#2381 FxEffectDef 0x2a463c2..0x2a463fe len=60 name=-
-#2382 FxEffectDef 0x2a463fe..0x2a4643a len=60 name=-
-#2383 FxEffectDef 0x2a4643a..0x2a46476 len=60 name=-
-#2384 FxEffectDef 0x2a46476..0x2a464b2 len=60 name=-
-#2385 FxEffectDef 0x2a464b2..0x2a464ee len=60 name=-
-#2386 FxEffectDef 0x2a464ee..0x2a4652a len=60 name=-
-#2387 FxEffectDef 0x2a4652a..0x2a46566 len=60 name=-
-#2388 FxEffectDef 0x2a46566..0x2a465a2 len=60 name=-
-#2389 FxEffectDef 0x2a465a2..0x2a465de len=60 name=-
-#2390 FxEffectDef 0x2a465de..0x2a4661a len=60 name=-
-#2391 FxEffectDef 0x2a4661a..0x2a46656 len=60 name=-
-#2392 FxEffectDef 0x2a46656..0x2a46692 len=60 name=-
-#2393 FxEffectDef 0x2a46692..0x2a466ce len=60 name=-
-#2394 FxEffectDef 0x2a466ce..0x2a4670a len=60 name=-
-#2395 FxEffectDef 0x2a4670a..0x2a46746 len=60 name=-
-#2396 FxEffectDef 0x2a46746..0x2a46782 len=60 name=-
-#2397 FxEffectDef 0x2a46782..0x2a467be len=60 name=-
-#2398 FxEffectDef 0x2a467be..0x2a467fa len=60 name=-
-#2399 MaterialTechniqueSet 0x2a467fa..0x2a47706 len=3852 name=-
-#2400 MaterialTechniqueSet 0x2a47706..0x2a4796a len=612 name=-
-#2401 FxEffectDef 0x2a4796a..0x2a479a6 len=60 name=-
-#2402 FxEffectDef 0x2a479a6..0x2a479e2 len=60 name=-
-#2403 FxEffectDef 0x2a479e2..0x2a47a1e len=60 name=-
-#2404 FxEffectDef 0x2a47a1e..0x2a47a5a len=60 name=-
-#2405 FxEffectDef 0x2a47a5a..0x2a47a96 len=60 name=-
-#2406 FxEffectDef 0x2a47a96..0x2a47ad2 len=60 name=-
-#2407 FxEffectDef 0x2a47ad2..0x2a47b0e len=60 name=-
-#2408 FxEffectDef 0x2a47b0e..0x2a47b4a len=60 name=-
-#2409 FxEffectDef 0x2a47b4a..0x2a47b86 len=60 name=-
-#2410 MaterialTechniqueSet 0x2a47b86..0x2a47d96 len=528 name=-
-#2411 FxEffectDef 0x2a47d96..0x2a47dd2 len=60 name=-
-#2412 FxEffectDef 0x2a47dd2..0x2a47e0e len=60 name=-
-#2413 FxEffectDef 0x2a47e0e..0x2a47e4a len=60 name=-
-#2414 FxEffectDef 0x2a47e4a..0x2a47e86 len=60 name=-
-#2415 FxEffectDef 0x2a47e86..0x2a47ec2 len=60 name=-
-#2416 FxEffectDef 0x2a47ec2..0x2a47efe len=60 name=-
-#2417 FxEffectDef 0x2a47efe..0x2a48875 len=2423 name=misc/fx_ir_tapereflect
-#2418 FxEffectDef 0x2a48875..0x2a48f94 len=1823 name=misc/fx_light_c4_blink
-#2419 FxEffectDef 0x2a48f94..0x2a49a9e len=2826 name=weapon/claymore/fx_claymore_laser
-#2420 FxEffectDef 0x2a49a9e..0x2a49adb len=61 name=-
-#2421 FxEffectDef 0x2a49adb..0x2a49b17 len=60 name=-
-#2422 FxEffectDef 0x2a49b17..0x2a49b53 len=60 name=-
-#2423 MaterialTechniqueSet 0x2a49b53..0x2a49d9b len=584 name=-
-#2424 FxEffectDef 0x2a49d9b..0x2a49dd7 len=60 name=-
-#2425 FxEffectDef 0x2a49dd7..0x2a49e13 len=60 name=-
-#2426 FxEffectDef 0x2a49e13..0x2a49e4f len=60 name=-
-#2427 FxEffectDef 0x2a49e4f..0x2a49e8b len=60 name=-
-#2428 FxEffectDef 0x2a49e8b..0x2a49ec7 len=60 name=-
-#2429 FxEffectDef 0x2a49ec7..0x2a49f03 len=60 name=-
-#2430 FxEffectDef 0x2a49f03..0x2a49f3f len=60 name=-
-#2431 XModel 0x2a49f3f..0x2a4a03b len=252 name=-
-#2432 FxEffectDef 0x2a4a03b..0x2a4a077 len=60 name=-
-#2433 XModel 0x2a4a077..0x2a4a173 len=252 name=-
-#2434 FxEffectDef 0x2a4a173..0x2a4a1af len=60 name=-
-#2435 FxEffectDef 0x2a4a1af..0x2a4a1eb len=60 name=-
-#2436 FxEffectDef 0x2a4a1eb..0x2a4a227 len=60 name=-
-#2437 FxEffectDef 0x2a4a227..0x2a4a263 len=60 name=-
-#2439 FxEffectDef 0x2a4a29f..0x2a4a2db len=60 name=-
-#2440 FxEffectDef 0x2a4a2db..0x2a4a317 len=60 name=-
-#2441 FxEffectDef 0x2a4a317..0x2a4a353 len=60 name=-
-#2442 FxEffectDef 0x2a4a353..0x2a4a38f len=60 name=-
-#2443 FxEffectDef 0x2a4a38f..0x2a4a3cb len=60 name=-
-#2444 FxEffectDef 0x2a4a3cb..0x2a4a407 len=60 name=-
-#2445 MaterialTechniqueSet 0x2a4a407..0x2a4a617 len=528 name=-
-#2446 FxEffectDef 0x2a4a617..0x2a4a655 len=62 name=h
-#2447 FxEffectDef 0x2a4a655..0x2a4a691 len=60 name=-
-#2448 FxEffectDef 0x2a4a691..0x2a4a6cd len=60 name=-
-#2449 FxImpactTable 0x2a4a6cd..0x2a4a6d5 len=8 name=-
-#2450 FxEffectDef 0x2a4a6d5..0x2a4a711 len=60 name=-
-#2451 MaterialTechniqueSet 0x2a4a711..0x2a4a979 len=616 name=-
-#2452 XModel 0x2a4a979..0x2a4aa75 len=252 name=-
-#2453 FxEffectDef 0x2a4aa75..0x2a4aab1 len=60 name=-
-#2454 FxEffectDef 0x2a4aab1..0x2a4aaed len=60 name=-
-#2455 FxEffectDef 0x2a4aaed..0x2a4ab29 len=60 name=-
-#2456 XModel 0x2a4ab29..0x2a4ac25 len=252 name=-
-#2457 XModel 0x2a4ac25..0x2a4ad21 len=252 name=-
-#2458 XModel 0x2a4ad21..0x2a4ae1d len=252 name=-
-#2459 XModel 0x2a4ae1d..0x2a4af19 len=252 name=-
-#2460 XModel 0x2a4af19..0x2a4b015 len=252 name=-
-#2464 XModel 0x2a4b83d..0x2a4b939 len=252 name=-
-#2465 XModel 0x2a4b939..0x2a4ba35 len=252 name=-
-#2466 MenuList 0x2a4ba35..0x2a4ba41 len=12 name=-
-#2467 RawFile 0x2a4ba41..0x2a4ba4d len=12 name=-
-#2468 RawFile 0x2a4ba4d..0x2a4ba59 len=12 name=-
-#2469 XAnimParts 0x2a4ba59..0x2a4bac1 len=104 name=- nf=52784 fps=6.485994463190162e+19 db=62 ds=32768 di=65471 rs=4294967231 ix=3241111807 IMPLAUSIBLE
-#2470 XAnimParts 0x2a4bac1..0x2a4bb29 len=104 name=- nf=32000 fps=-3.4543316835188024e-21 db=11263 ds=32048 di=2612 rs=1635517492 ix=2113962559 IMPLAUSIBLE
-#2471 XAnimParts 0x2a4bb29..0x2a4bb91 len=104 name=- nf=33148 fps=6.821322342696542e-14 db=23871 ds=29957 di=8255 rs=2171699263 ix=2435914429 IMPLAUSIBLE
-#2472 XAnimParts 0x2a4bb91..0x2a4bbf9 len=104 name=- nf=32768 fps=nan db=49214 ds=31924 di=13119 rs=281449279 ix=2147483839 IMPLAUSIBLE
-#2473 XAnimParts 0x2a4bbf9..0x2a4bc61 len=104 name=- nf=53294 fps=-4445.15283203125 db=63 ds=32768 di=65343 rs=4294967103 ix=36612863 IMPLAUSIBLE
-#2474 XAnimParts 0x2a4bc61..0x2a4bcc9 len=104 name=- nf=30208 fps=7.233939928105848e+37 db=41471 ds=8494 di=53305 rs=1520634676 ix=1778802751 IMPLAUSIBLE
-#2475 XAnimParts 0x2a4bcc9..0x2a4bd31 len=104 name=- nf=54945 fps=431155544064.0 db=33599 ds=31744 di=49215 rs=2325360703 ix=2600602687 IMPLAUSIBLE
-#2476 XAnimParts 0x2a4bd31..0x2a4bd99 len=104 name=- nf=32768 fps=nan db=51263 ds=25516 di=16063 rs=3829668030 ix=2147483837 IMPLAUSIBLE
-#2477 XAnimParts 0x2a4bd99..0x2a4be01 len=104 name=- nf=65072 fps=-1.7841236229709495e+22 db=190 ds=32768 di=65343 rs=4294967103 ix=1429174271 IMPLAUSIBLE
-#2478 XAnimParts 0x2a4be01..0x2a4be69 len=104 name=- nf=31747 fps=-1.8358785780492326e-07 db=61695 ds=47664 di=63032 rs=3549813560 ix=2198051391 IMPLAUSIBLE
-#2479 XAnimParts 0x2a4be69..0x2a4bed1 len=104 name=- nf=47832 fps=-1.1683519736782944e-32 db=32063 ds=29952 di=20543 rs=2485747775 ix=1766623422 IMPLAUSIBLE
-#2480 XAnimParts 0x2a4bed1..0x2a4bf39 len=104 name=- nf=32768 fps=nan db=21181 ds=40976 di=43071 rs=1672279998 ix=2147483711 IMPLAUSIBLE
-#2481 XAnimParts 0x2a4bf39..0x2a4bfa1 len=104 name=- nf=54062 fps=-4.593357097397426e+29 db=63 ds=32768 di=65343 rs=4294967231 ix=372895487 IMPLAUSIBLE
-#2482 XAnimParts 0x2a4bfa1..0x2a4c009 len=104 name=- nf=41519 fps=1.8008663855163975e-35 db=14847 ds=11321 di=34353 rs=4038690352 ix=2721045311 IMPLAUSIBLE
-#2483 XAnimParts 0x2a4c009..0x2a4c071 len=104 name=- nf=47832 fps=-3.8618090887927806e-26 db=55359 ds=36390 di=20543 rs=868347967 ix=3360685119 IMPLAUSIBLE
-#2484 XAnimParts 0x2a4c071..0x2a4c0d9 len=104 name=- nf=32768 fps=nan db=191 ds=32911 di=15167 rs=1416446015 ix=2147483710 IMPLAUSIBLE
-#2485 XAnimParts 0x2a4c0d9..0x2a4c141 len=104 name=- nf=10809 fps=-28546527232.0 db=62 ds=32768 di=65471 rs=4294967231 ix=2688133119 IMPLAUSIBLE
-#2486 XAnimParts 0x2a4c141..0x2a4c1a9 len=104 name=- nf=35895 fps=0.00015926452761050314 db=58367 ds=37432 di=45103 rs=2351619372 ix=3553343807 IMPLAUSIBLE
-#2487 XAnimParts 0x2a4c1a9..0x2a4c211 len=104 name=- nf=39682 fps=-1.3789441585540771 db=47167 ds=54219 di=12351 rs=2119807039 ix=1436737727 IMPLAUSIBLE
-#2488 XAnimParts 0x2a4c211..0x2a4c279 len=104 name=- nf=32768 fps=nan db=16575 ds=54945 di=49086 rs=1672279998 ix=2147483711 IMPLAUSIBLE
-#2489 XAnimParts 0x2a4c279..0x2a4c2e1 len=104 name=- nf=21817 fps=-3.9913653075232674e+30 db=63 ds=32768 di=65471 rs=4294967231 ix=2251870207 IMPLAUSIBLE
-#2490 XAnimParts 0x2a4c2e1..0x2a4c349 len=104 name=- nf=52193 fps=7.659453011285678e-31 db=62719 ds=51768 di=38957 rs=3727595567 ix=3437336639 IMPLAUSIBLE
-#2491 XAnimParts 0x2a4c349..0x2a4c3b1 len=104 name=- nf=31924 fps=-4.1929168802847197e-22 db=38719 ds=52449 di=49215 rs=3024429119 ix=1785722942 IMPLAUSIBLE
-#2492 XAnimParts 0x2a4c3b1..0x2a4c419 len=104 name=- nf=32768 fps=nan db=2623 ds=47832 di=39487 rs=2279247039 ix=2147483839 IMPLAUSIBLE
-#2493 XAnimParts 0x2a4c419..0x2a4c481 len=104 name=- nf=21306 fps=1.5041676793003944e-09 db=191 ds=32768 di=65471 rs=4294967231 ix=1111141119 IMPLAUSIBLE
-#2494 XAnimParts 0x2a4c481..0x2a4c4e9 len=104 name=- nf=7240 fps=7.530053211579744e+18 db=61183 ds=51769 di=53299 rs=817483827 ix=474498367 IMPLAUSIBLE
-#2495 XAnimParts 0x2a4c4e9..0x2a4c551 len=104 name=- nf=53024 fps=-7.013067809820318e-19 db=14911 ds=10560 di=32831 rs=2642575423 ix=2304422077 IMPLAUSIBLE
-#2496 XAnimParts 0x2a4c551..0x2a4c5b9 len=104 name=- nf=32768 fps=nan db=28733 ds=34660 di=34622 rs=2617078335 ix=2147483839 IMPLAUSIBLE
-#2497 XAnimParts 0x2a4c5b9..0x2a4c621 len=104 name=- nf=52281 fps=2752519077888.0 db=191 ds=32768 di=65471 rs=4294967103 ix=4248515839 IMPLAUSIBLE
-#2498 XAnimParts 0x2a4c621..0x2a4c689 len=104 name=- nf=26602 fps=1.3690513469555299e-06 db=13567 ds=25659 di=8379 rs=1295720635 ix=2045261887 IMPLAUSIBLE
-#2499 XAnimParts 0x2a4c689..0x2a4c6f1 len=104 name=- nf=20948 fps=-5.027484701898599e-23 db=25663 ds=39416 di=63 rs=464863295 ix=2620119103 IMPLAUSIBLE
-#2500 XAnimParts 0x2a4c6f1..0x2a4c759 len=104 name=- nf=32768 fps=nan db=49341 ds=43387 di=62783 rs=1603259712 ix=2147483710 IMPLAUSIBLE
-#2501 XAnimParts 0x2a4c759..0x2a4c7c1 len=104 name=- nf=64827 fps=-3.957371268788895e-13 db=191 ds=32768 di=65471 rs=4294967231 ix=4248515839 IMPLAUSIBLE
-#2502 XAnimParts 0x2a4c7c1..0x2a4c829 len=104 name=- nf=31208 fps=1.2679075320207526e-20 db=64255 ds=25659 di=57019 rs=3062690234 ix=2633524031 IMPLAUSIBLE
-#2503 XAnimParts 0x2a4c829..0x2a4c891 len=104 name=- nf=39979 fps=3.976874913907101e-14 db=30015 ds=51686 di=16447 rs=3580100671 ix=4234768958 IMPLAUSIBLE
-#2504 XAnimParts 0x2a4c891..0x2a4c8f9 len=104 name=- nf=32768 fps=nan db=56381 ds=13182 di=52544 rs=2714958400 ix=2147483711 IMPLAUSIBLE
-#2505 XAnimParts 0x2a4c8f9..0x2a4c961 len=104 name=- nf=0 fps=257066677567488.0 db=18431 ds=0 di=65280 rs=218103931 ix=2703604608 IMPLAUSIBLE
-#2506 XAnimParts 0x2a4c961..0x2a4c9c9 len=104 name=- nf=43174 fps=2.411877931484727e-35 db=53376 ds=40003 di=46 rs=21874029 ix=2332032914 IMPLAUSIBLE
-#2507 XAnimParts 0x2a4c9c9..0x2a4ca31 len=104 name=- nf=11264 fps=1076707328.0 db=9472 ds=6144 di=15872 rs=1484793600 ix=545278080 IMPLAUSIBLE
-#2508 XAnimParts 0x2a4ca31..0x2a4ca99 len=104 name=- nf=1024 fps=2.4077063040717504e-35 db=256 ds=512 di=512 rs=50332672 ix=100665600 IMPLAUSIBLE
-#2509 XAnimParts 0x2a4ca99..0x2a4cb01 len=104 name=- nf=3584 fps=1.6555224283585407e-24 db=3840 ds=3840 di=3328 rs=335549696 ix=352327168 IMPLAUSIBLE
-#2510 XAnimParts 0x2a4cb01..0x2a4cb69 len=104 name=- nf=8448 fps=1.1382561559969417e-13 db=9472 ds=8704 di=8960 rs=654321920 ix=587211520 IMPLAUSIBLE
-#2511 XAnimParts 0x2a4cb69..0x2a4cbd1 len=104 name=- nf=13824 fps=32.0625 db=13056 ds=13312 di=13056 rs=1073757952 ix=1090535168 IMPLAUSIBLE
-#2512 XAnimParts 0x2a4cbd1..0x2a4cc39 len=104 name=- nf=22784 fps=3.789307109191324e+22 db=21504 ds=22016 di=22272 rs=1644191744 ix=1677746944 IMPLAUSIBLE
-#2513 XAnimParts 0x2a4cc39..0x2a4cca1 len=104 name=- nf=29184 fps=1.0422306322426445e+34 db=28928 ds=28160 di=28672 rs=1996518400 ix=1979741696 IMPLAUSIBLE
-#2514 XAnimParts 0x2a4cca1..0x2a4cd09 len=104 name=- nf=19389 fps=nan db=43974 ds=29758 di=2902 rs=4278190080 ix=4294967295 IMPLAUSIBLE
-#2515 XAnimParts 0x2a4cd09..0x2a4cd71 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2516 XAnimParts 0x2a4cd71..0x2a4cdd9 len=104 name=- nf=49344 fps=0.0 db=4464 ds=22720 di=26959 rs=2048 ix=0 IMPLAUSIBLE
-#2517 XAnimParts 0x2a4cdd9..0x2a4ce41 len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2518 XAnimParts 0x2a4ce41..0x2a4d8b4 len=2675 name=?�?J�?����l)���4� nf=16292 fps=-0.7459769248962402 db=12504 ds=10239 di=45323 rs=1065825305 ix=1068228923 IMPLAUSIBLE
-#2519 XAnimParts 0x2a4d8b4..0x2a4d91c len=104 name=- nf=65535 fps=-8.465887002959544e+17 db=12094 ds=50480 di=63 rs=2147483711 ix=4294967103 IMPLAUSIBLE
-#2520 XAnimParts 0x2a4d91c..0x2a4d984 len=104 name=- nf=37122 fps=3.97570967970352e-32 db=65343 ds=65535 di=64255 rs=37434623 ix=2987158836 IMPLAUSIBLE
-#2521 XAnimParts 0x2a4d984..0x2a4d9ec len=104 name=- nf=35421 fps=-2.5027352565365956e+37 db=26165 ds=44555 di=24127 rs=190340159 ix=1088708671 IMPLAUSIBLE
-#2522 XAnimParts 0x2a4d9ec..0x2a4da54 len=104 name=- nf=49 fps=-8.828180325246348e-44 db=63 ds=36518 di=45119 rs=844245181 ix=4003087935 IMPLAUSIBLE
-#2523 XAnimParts 0x2a4da54..0x2a4dabc len=104 name=- nf=65535 fps=-3.9642627625429584e-20 db=23870 ds=55147 di=63 rs=2147483710 ix=4294967231 IMPLAUSIBLE
-#2524 XAnimParts 0x2a4dabc..0x2a4db24 len=104 name=- nf=19698 fps=1.5977468504159086e-31 db=65471 ds=65535 di=13567 rs=37485311 ix=1290965300 IMPLAUSIBLE
-#2525 XAnimParts 0x2a4db24..0x2a4db8c len=104 name=- nf=16612 fps=9.381357748832979e+21 db=38965 ds=20723 di=23615 rs=106916159 ix=2067742783 IMPLAUSIBLE
-#2526 XAnimParts 0x2a4db8c..0x2a4dbf4 len=104 name=- nf=41411 fps=-8.96831017167883e-44 db=32831 ds=63045 di=36926 rs=3043406013 ix=137432638 IMPLAUSIBLE
-#2527 XAnimParts 0x2a4dbf4..0x2a4dc5c len=104 name=- nf=65535 fps=-47270908.0 db=54335 ds=7320 di=63 rs=2147483709 ix=4294967231 IMPLAUSIBLE
-#2528 XAnimParts 0x2a4dc5c..0x2a4dcc4 len=104 name=- nf=52264 fps=-1.03489083623212e+35 db=65471 ds=65535 di=28671 rs=3543311359 ix=2636962342 IMPLAUSIBLE
-#2529 XAnimParts 0x2a4dcc4..0x2a4dd2c len=104 name=- nf=23386 fps=4.625389919965528e-05 db=50224 ds=44575 di=25919 rs=4005333055 ix=953727039 IMPLAUSIBLE
-#2530 XAnimParts 0x2a4dd2c..0x2a4dd94 len=104 name=- nf=396 fps=-2.634441112930656e-43 db=38975 ds=15580 di=24767 rs=487063743 ix=3389519422 IMPLAUSIBLE
-#2531 XAnimParts 0x2a4dd94..0x2a4ddfc len=104 name=- nf=65535 fps=6.100568018422338e+34 db=33342 ds=23155 di=63 rs=2147483709 ix=4294967231 IMPLAUSIBLE
-#2532 XAnimParts 0x2a4ddfc..0x2a4de64 len=104 name=- nf=43533 fps=-4.398970025142765e+32 db=65471 ds=65535 di=37375 rs=2218425855 ix=2836375864 IMPLAUSIBLE
-#2533 XAnimParts 0x2a4de64..0x2a4decc len=104 name=- nf=31608 fps=4.715667503081062e+16 db=44089 ds=40204 di=32831 rs=4171596095 ix=970731583 IMPLAUSIBLE
-#2534 XAnimParts 0x2a4decc..0x2a4df34 len=104 name=- nf=19438 fps=-2.6764800668604006e-43 db=41023 ds=4464 di=32960 rs=1264519359 ix=3631077311 IMPLAUSIBLE
-#2535 XAnimParts 0x2a4df34..0x2a4df9c len=104 name=- nf=26959 fps=3.5733110840282835e-43 db=65280 ds=65535 di=41215 rs=28415 ix=4294967040 IMPLAUSIBLE
-#2536 XAnimParts 0x2a4df9c..0x2a4e5cc len=1584 name=- nf=52818 fps=-1.9073485191256623e-06 db=6522 ds=3584 di=128 rs=593939840 ix=4279868683 IMPLAUSIBLE
-#2537 XAnimParts 0x2a4e5cc..0x2a4e634 len=104 name=- nf=22937 fps=nan db=56256 ds=18703 di=65 rs=16842752 ix=4294967044 IMPLAUSIBLE
-#2538 XAnimParts 0x2a4e634..0x2a4e69c len=104 name=- nf=0 fps=9.262582849187041e-43 db=0 ds=0 di=0 rs=0 ix=17920
-#2539 XAnimParts 0x2a4e69c..0x2a4e704 len=104 name=- nf=0 fps=0.0 db=64 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2540 XAnimParts 0x2a4e704..0x2a4e76c len=104 name=- nf=1025 fps=0.0 db=63 ds=0 di=256 rs=0 ix=0 IMPLAUSIBLE
-#2541 XAnimParts 0x2a4e76c..0x2a4e7d4 len=104 name=- nf=0 fps=0.0 db=0 ds=32768 di=63 rs=54525952 ix=69 IMPLAUSIBLE
-#2542 XAnimParts 0x2a4e7d4..0x2a4e83c len=104 name=- nf=32768 fps=0.0 db=63 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2543 XAnimParts 0x2a4e83c..0x2a4e8a4 len=104 name=- nf=9397 fps=0.0 db=65282 ds=65535 di=65535 rs=0 ix=0 IMPLAUSIBLE
-#2544 XAnimParts 0x2a4e8a4..0x2a4e90c len=104 name=- nf=0 fps=0.0 db=17920 ds=3 di=389 rs=3355443200 ix=322 IMPLAUSIBLE
-#2546 XAnimParts 0x2a4e974..0x2a4e9dc len=104 name=- nf=0 fps=0.0 db=0 ds=0 di=0 rs=0 ix=0 IMPLAUSIBLE
-#2547 XAnimParts 0x2a4e9dc..0x2a4ea44 len=104 name=- nf=0 fps=0.0 db=68 ds=0 di=0 rs=2147483648 ix=191 IMPLAUSIBLE
-#2548 XAnimParts 0x2a4ea44..0x2a5b432 len=51694 name=- nf=25795 fps=-1.5882127138483768e-23 db=35002 ds=25795 di=34875 rs=0 ix=1288490240 IMPLAUSIBLE
-#2549 XAnimParts 0x2a5b432..0x2a5b49a len=104 name=- nf=6911 fps=558.1187744140625 db=60947 ds=47745 di=34714 rs=1165785280 ix=3129077267 IMPLAUSIBLE
-#2550 XAnimParts 0x2a5b49a..0x2a5b502 len=104 name=- nf=42625 fps=-2388.8193359375 db=65535 ds=38655 di=17348 rs=4278945690 ix=3120562175 IMPLAUSIBLE
-#2551 XAnimParts 0x2a5b502..0x2a5b56a len=104 name=- nf=54657 fps=-2048.169189453125 db=60919 ds=54657 di=693 rs=3305112245 ix=3582062071 IMPLAUSIBLE
-#2552 XAnimParts 0x2a5b56a..0x2a5b5d2 len=104 name=- nf=54657 fps=-0.0001224034931510687 db=60919 ds=54657 di=693 rs=2997495870 ix=3414289915 IMPLAUSIBLE
-#2553 XAnimParts 0x2a5b5d2..0x2a5b63a len=104 name=- nf=12543 fps=-1.701416093910709e+38 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2554 XAnimParts 0x2a5b63a..0x2a5b6a2 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103785653 ix=92277792 IMPLAUSIBLE
-#2555 XAnimParts 0x2a5b6a2..0x2a5b70a len=104 name=- nf=54657 fps=-2443.553466796875 db=65535 ds=30975 di=45848 rs=4278190101 ix=3087007743 IMPLAUSIBLE
-#2556 XAnimParts 0x2a5b70a..0x2a5b772 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2557 XAnimParts 0x2a5b772..0x2a5b7da len=104 name=- nf=6786 fps=6.646689030090803e+35 db=41110 ds=44418 di=31214 rs=850691384 ix=3682721136 IMPLAUSIBLE
-#2558 XAnimParts 0x2a5b7da..0x2a5b842 len=104 name=- nf=48639 fps=-1.701416093910709e+38 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2559 XAnimParts 0x2a5b842..0x2a5b8aa len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103807856 ix=92277792 IMPLAUSIBLE
-#2560 XAnimParts 0x2a5b8aa..0x2a5b912 len=104 name=- nf=47745 fps=2316.08203125 db=65535 ds=62207 di=10483 rs=4278190101 ix=1577058303 IMPLAUSIBLE
-#2561 XAnimParts 0x2a5b912..0x2a5b97a len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2562 XAnimParts 0x2a5b97a..0x2a5b9e2 len=104 name=- nf=1408 fps=-0.00012240350770298392 db=60925 ds=59265 di=22896 rs=4285611436 ix=2449473535 IMPLAUSIBLE
-#2563 XAnimParts 0x2a5b9e2..0x2a5ba4a len=104 name=- nf=13311 fps=-1.701416093910709e+38 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2564 XAnimParts 0x2a5ba4a..0x2a5bab2 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103807856 ix=92277792 IMPLAUSIBLE
-#2565 XAnimParts 0x2a5bab2..0x2a5bb1a len=104 name=- nf=23425 fps=9.857121984752502e-31 db=65535 ds=26111 di=6933 rs=4278190101 ix=3674210303 IMPLAUSIBLE
-#2566 XAnimParts 0x2a5bb1a..0x2a5bb82 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2567 XAnimParts 0x2a5bb82..0x2a5bbea len=104 name=- nf=1408 fps=-0.00012240350770298392 db=60928 ds=2177 di=22897 rs=528664570 ix=142732800 IMPLAUSIBLE
-#2568 XAnimParts 0x2a5bbea..0x2a5bc52 len=104 name=- nf=49919 fps=-140737840676864.0 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2569 XAnimParts 0x2a5bc52..0x2a5bcba len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3104542933 ix=92277792 IMPLAUSIBLE
-#2570 XAnimParts 0x2a5bcba..0x2a5bd22 len=104 name=- nf=19585 fps=-54.04082489013672 db=65535 ds=50943 di=42276 rs=3758096405 ix=612376282 IMPLAUSIBLE
-#2571 XAnimParts 0x2a5bd22..0x2a5bd8a len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2572 XAnimParts 0x2a5bd8a..0x2a5bdf2 len=104 name=- nf=1408 fps=-0.0002407758147455752 db=65535 ds=10495 di=30921 rs=4293237252 ix=3892314111 IMPLAUSIBLE
-#2573 XAnimParts 0x2a5bdf2..0x2a5be5a len=104 name=- nf=22783 fps=-1.701416093910709e+38 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2574 XAnimParts 0x2a5be5a..0x2a5bec2 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3111942336 ix=92277792 IMPLAUSIBLE
-#2575 XAnimParts 0x2a5bec2..0x2a5bf2a len=104 name=- nf=42625 fps=-8.494507221361321e+21 db=57764 ds=12672 di=27461 rs=4278190101 ix=3774873599 IMPLAUSIBLE
-#2576 XAnimParts 0x2a5bf2a..0x2a5bf92 len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2577 XAnimParts 0x2a5bf92..0x2a5bffa len=104 name=- nf=1408 fps=-0.00024077606212813407 db=60947 ds=47745 di=34714 rs=741078373 ix=3951206556 IMPLAUSIBLE
-#2578 XAnimParts 0x2a5bffa..0x2a5c062 len=104 name=- nf=2303 fps=-1.5845672170731324e+29 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2579 XAnimParts 0x2a5c062..0x2a5c0ca len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3111942477 ix=92277792 IMPLAUSIBLE
-#2580 XAnimParts 0x2a5c0ca..0x2a5c132 len=104 name=- nf=51586 fps=-9.175889317702968e-06 db=65535 ds=65279 di=3698 rs=889192469 ix=3095504442 IMPLAUSIBLE
-#2581 XAnimParts 0x2a5c132..0x2a5c19a len=104 name=- nf=1408 fps=-0.0001220706180902198 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2582 XAnimParts 0x2a5c19a..0x2a5c202 len=104 name=- nf=1408 fps=-0.0001331002713413909 db=3104 ds=1408 di=21 rs=935150196 ix=2525097595 IMPLAUSIBLE
-#2583 XAnimParts 0x2a5c202..0x2a5c26a len=104 name=- nf=24704 fps=536872256.0 db=3104 ds=1408 di=21 rs=3103784981 ix=92277792 IMPLAUSIBLE
-#2584 XAnimParts 0x2a5c26a..0x2a5c2d2 len=104 name=- nf=26978 fps=4.504740794757353e+30 db=29541 ds=24944 di=28279 rs=1634035807 ix=1600681068 IMPLAUSIBLE
-#2585 XAnimParts 0x2a5c2d2..0x2a5c33a len=104 name=- nf=121 fps=1.7108376298008198e+25 db=28787 ds=30561 di=24430 rs=1987208564 ix=2046848097 IMPLAUSIBLE
-#2586 XAnimParts 0x2a5c33a..0x2a5c3a2 len=104 name=- nf=28767 fps=6.445786127073916e-10 db=31232 ds=28015 di=26978 rs=6649449 ix=3157552 IMPLAUSIBLE
-#2587 XAnimParts 0x2a5c3a2..0x2a5c40a len=104 name=- nf=25459 fps=4.7415772208376864e+30 db=29541 ds=31232 di=28015 rs=1836022272 ix=1600481634 IMPLAUSIBLE
-#2588 XAnimParts 0x2a5c40a..0x2a5c472 len=104 name=- nf=28015 fps=1.710506391040426e+19 db=13407 ds=112 di=13619 rs=1651339130 ix=1952408937 IMPLAUSIBLE
-#2589 XAnimParts 0x2a5c472..0x2a5c4da len=104 name=- nf=28724 fps=7.224957682977461e+28 db=29295 ds=24421 di=29811 rs=1953392991 ix=1768780389 IMPLAUSIBLE
-#2590 XAnimParts 0x2a5c4da..0x2a5c542 len=104 name=- nf=25459 fps=3.251240165980107e-09 db=29285 ds=31232 di=28015 rs=1919902579 ix=1768644453 IMPLAUSIBLE
-#2591 XAnimParts 0x2a5c542..0x2a5c5aa len=104 name=- nf=25459 fps=3.251240165980107e-09 db=28001 ds=31232 di=28015 rs=1919902579 ix=1768644453 IMPLAUSIBLE
-#2592 XAnimParts 0x2a5c5aa..0x2a5c612 len=104 name=- nf=24430 fps=2.96406302510242e+29 db=26727 ds=116 di=28769 rs=1634035807 ix=1600681068 IMPLAUSIBLE
-#2593 XAnimParts 0x2a5c612..0x2a5c67a len=104 name=- nf=26719 fps=1.7699265163883963e+31 db=28515 ds=25970 di=25183 rs=7037797 ix=1651339130 IMPLAUSIBLE
-#2594 XAnimParts 0x2a5c67a..0x2a5c6e2 len=104 name=- nf=27745 fps=4.6321503935809035e+27 db=25959 ds=28274 di=30049 rs=1918857829 ix=1684960623 IMPLAUSIBLE
-#2595 XAnimParts 0x2a5c6e2..0x2a5c74a len=104 name=- nf=25972 fps=1.1147030807131019e-38 db=29541 ds=27487 di=27753 rs=1969841249 ix=1701076851 IMPLAUSIBLE
-#2596 XAnimParts 0x2a5c74a..0x2a5c7b2 len=104 name=- nf=24434 fps=7.2059803016936445e+31 db=24417 ds=26987 di=27756 rs=1600938354 ix=1953394499 IMPLAUSIBLE
-#2597 XAnimParts 0x2a5c7b2..0x2a5c81a len=104 name=- nf=18783 fps=7.1940020984456025e+28 db=26723 ds=25961 di=25974 rs=1953391981 ix=1634027615 IMPLAUSIBLE
-#2598 XAnimParts 0x2a5c81a..0x2a5c882 len=104 name=- nf=28005 fps=14995798016.0 db=25961 ds=114 di=25409 rs=1701406819 ix=1701668214 IMPLAUSIBLE
-#2599 XAnimParts 0x2a5c882..0x2a5c8ea len=104 name=- nf=24948 fps=7.154042767831847e+22 db=30575 ds=29285 di=28789 rs=1919180656 ix=1767862383 IMPLAUSIBLE
-#2600 XAnimParts 0x2a5c8ea..0x2a5c952 len=104 name=- nf=29286 fps=4.8428957377598323e+27 db=25956 ds=26482 di=28277 rs=808595968 ix=828833840 IMPLAUSIBLE
-#2601 XAnimParts 0x2a5c952..0x2a5c9ba len=104 name=- nf=31349 fps=2.8522349341798102e+32 db=29295 ds=26992 di=28271 rs=1597453419 ix=2053073773 IMPLAUSIBLE
-#2602 XAnimParts 0x2a5c9ba..0x2a5ca22 len=104 name=- nf=31327 fps=1.817914947690581e+31 db=12909 ds=12848 di=26207 rs=1919381621 ix=1684366433 IMPLAUSIBLE
-#2603 XAnimParts 0x2a5ca22..0x2a5ca8a len=104 name=- nf=207 fps=5.179688457568266e-38 db=272 ds=217 di=212 rs=28967314 ix=31588584 IMPLAUSIBLE
-#2604 XAnimParts 0x2a5ca8a..0x2a5caf2 len=104 name=- nf=257 fps=4.114351300065324e-38 db=372 ds=312 di=132 rs=22413669 ix=22741164 IMPLAUSIBLE
-#2605 XAnimParts 0x2a5caf2..0x2a5cb5a len=104 name=- nf=223 fps=9.845110468078268e-38 db=318 ds=228 di=423 rs=9371856 ix=18219421 IMPLAUSIBLE
-#2606 XAnimParts 0x2a5cb5a..0x2a5cbc2 len=104 name=- nf=484 fps=1.8275479535403757e-38 db=298 ds=394 di=174 rs=10420508 ix=26804528 IMPLAUSIBLE
-#2607 XAnimParts 0x2a5cbc2..0x2a5cc2a len=104 name=- nf=459 fps=4.0592015174436636e-38 db=494 ds=229 di=319 rs=28115443 ix=16318808 IMPLAUSIBLE
-#2608 XAnimParts 0x2a5cc2a..0x2a5cc92 len=104 name=- nf=236 fps=2.5346720253870435e-38 db=114 ds=104 di=11 rs=19726530 ix=2818090 IMPLAUSIBLE
-#2609 XAnimParts 0x2a5cc92..0x2a5ccfa len=104 name=- nf=16 fps=2.993843900983142e-38 db=131 ds=201 di=146 rs=1900572 ix=1507350 IMPLAUSIBLE
-#2610 XAnimParts 0x2a5ccfa..0x2a5cd62 len=104 name=- nf=83 fps=2.1582028233375454e-38 db=336 ds=516 di=183 rs=10813560 ix=9503195 IMPLAUSIBLE
-#2611 XAnimParts 0x2a5cd62..0x2a5cdca len=104 name=- nf=225 fps=6.336744523196968e-39 db=180 ds=50 di=160 rs=4128830 ix=17104960 IMPLAUSIBLE
-#2612 XAnimParts 0x2a5cdca..0x2a694ce len=50948 name=- nf=496 fps=3.3428821250740963e-38 db=181 ds=186 di=98 rs=4587990 ix=1966155 IMPLAUSIBLE
-#2613 XAnimParts 0x2a694ce..0x2a69536 len=104 name=- nf=2688 fps=4.711734924755937e-38 db=2048 ds=2688 di=59648 rs=16973824 ix=25168896 IMPLAUSIBLE
-#2614 XAnimParts 0x2a69536..0x2a6959e len=104 name=- nf=128 fps=2.40608999933937e-38 db=0 ds=3 di=2048 rs=25166080 ix=92274688 IMPLAUSIBLE
-#2615 XAnimParts 0x2a6959e..0x2a69606 len=104 name=- nf=1408 fps=4.964686284765721e-32 db=0 ds=515 di=3584 rs=33751040 ix=41946880 IMPLAUSIBLE
-#2616 XAnimParts 0x2a69606..0x2a6966e len=104 name=- nf=1440 fps=1.5398975995771966e-36 db=1792 ds=896 di=58368 rs=94371840 ix=1116791808 IMPLAUSIBLE
-#2617 XAnimParts 0x2a6966e..0x2a696d6 len=104 name=- nf=417 fps=2.3548917102312896e-37 db=768 ds=1152 di=58368 rs=92277760 ix=41972736 IMPLAUSIBLE
-#2618 XAnimParts 0x2a696d6..0x2a6973e len=104 name=- nf=1283 fps=6.159590398308787e-36 db=58368 ds=1152 di=60928 rs=93377024 ix=92398592 IMPLAUSIBLE
-#2619 XModel 0x2a6973e..0x2a6983a len=252 name=-
-#2620 FxEffectDef 0x2a6983a..0x2a69876 len=60 name=-
-#2621 FxEffectDef 0x2a69876..0x2a698b2 len=60 name=-
-#2622 MaterialTechniqueSet 0x2a698b2..0x2a69ac2 len=528 name=-
-#2623 XModel 0x2a69ac2..0x2a69bbe len=252 name=-
-#2624 XModel 0x2a69bbe..0x2a69cba len=252 name=-
-#2625 XModel 0x2a69cba..0x2a69db6 len=252 name=-
-#2626 XModel 0x2a69db6..0x2a69eb2 len=252 name=-
-#2627 XModel 0x2a69eb2..0x2a69fae len=252 name=-
-#2628 XModel 0x2a69fae..0x2a6a0aa len=252 name=-
-#2630 XAnimParts 0x2a6c02a..0x2a6c092 len=104 name=- nf=1332 fps=9.187192991806366e-41 db=0 ds=2 di=6 rs=94502912 ix=131072 IMPLAUSIBLE
-#2631 XAnimParts 0x2a6c092..0x2a6c0fa len=104 name=- nf=0 fps=8.46355932592047e-36 db=8 ds=1 di=0 rs=131072 ix=65560
-#2632 XAnimParts 0x2a6c0fa..0x2a6c162 len=104 name=- nf=1621 fps=0.0 db=0 ds=1332 di=0 rs=65566 ix=87293952 IMPLAUSIBLE
-#2633 XAnimParts 0x2a6c162..0x2a6c1ca len=104 name=- nf=2 fps=7.598395483715266e-35 db=0 ds=0 di=0 rs=87293952 ix=0 IMPLAUSIBLE
-#2634 XAnimParts 0x2a6c1ca..0x2a6c232 len=104 name=- nf=1 fps=1.8367099231598242e-40 db=0 ds=1812 di=0 rs=0 ix=122290176 IMPLAUSIBLE
-#2635 XAnimParts 0x2a6c232..0x2a6c29a len=104 name=- nf=1332 fps=2.7891065249091536e+29 db=0 ds=2 di=17 rs=1698955264 ix=1818845556 IMPLAUSIBLE
-#2636 XAnimParts 0x2a6c29a..0x2a6c302 len=104 name=- nf=0 fps=1.1021796998068427e+24 db=3 ds=1 di=1 rs=1952793695 ix=1600940385 IMPLAUSIBLE
-#2637 XAnimParts 0x2a6c302..0x2a6c36a len=104 name=- nf=28494 fps=2.198917550218503e-41 db=0 ds=0 di=0 rs=2868933742 ix=3436030891 IMPLAUSIBLE
-#2638 XAnimParts 0x2a6c36a..0x2a6c3d2 len=104 name=- nf=29541 fps=0.0 db=29537 ds=107 di=28498 rs=3436030891 ix=16268 IMPLAUSIBLE
-#2639 XAnimParts 0x2a6c3d2..0x2a6c43a len=104 name=- nf=29800 fps=7.365175038612794e+31 db=0 ds=0 di=0 rs=0 ix=1818492928 IMPLAUSIBLE
-#2640 XAnimParts 0x2a6c43a..0x2a6c4a2 len=104 name=- nf=29800 fps=2.894588555200445e+26 db=29801 ds=28521 di=110 rs=1750299752 ix=2003788897 IMPLAUSIBLE
-#2641 XAnimParts 0x2a6c4a2..0x2a6c50a len=104 name=- nf=29800 fps=4.1555940992646025e+21 db=29300 ds=30825 di=51 rs=1751607660 ix=1869632372 IMPLAUSIBLE
-#2642 XAnimParts 0x2a6c50a..0x2a6c572 len=104 name=- nf=28528 fps=6.8986008235470485e+25 db=12920 ds=25600 di=26988 rs=1885433207 ix=1702390096 IMPLAUSIBLE
-#2643 XAnimParts 0x2a6c572..0x2a6c5da len=104 name=- nf=26996 fps=2.62088950639663e+20 db=71 ds=25960 di=28530 rs=1281846889 ix=1969975151 IMPLAUSIBLE
-#2644 XAnimParts 0x2a6c5da..0x2a6c642 len=104 name=- nf=4 fps=6.3295895006074164e+22 db=21349 ds=28001 di=27760 rs=3175023 ix=1769104243 IMPLAUSIBLE
-#2645 XAnimParts 0x2a6c642..0x2a6c6aa len=104 name=- nf=12383 fps=2.053175500702958e-19 db=30051 ds=24940 di=114 rs=1126199909 ix=1768975727 IMPLAUSIBLE
-#2646 XAnimParts 0x2a6c6aa..0x2a6c712 len=104 name=- nf=2 fps=-1.6622315503200813e-13 db=16384 ds=0 di=49024 rs=3316424719 ix=494745383 IMPLAUSIBLE
-#2647 XAnimParts 0x2a6c712..0x2a6c77a len=104 name=- nf=33386 fps=2.8985788669635625e-39 db=1280 ds=13 di=40975 rs=328192 ix=98305 IMPLAUSIBLE
-#2648 XAnimParts 0x2a6c77a..0x2a6c7e2 len=104 name=- nf=2049 fps=3.989157628950515e-34 db=36871 ds=31 di=512 rs=2072591 ix=512 IMPLAUSIBLE
-#2649 XAnimParts 0x2a6c7e2..0x2a6c84a len=104 name=- nf=0 fps=4.191185615903025e-40 db=40960 ds=2059 di=40975 rs=1736719 ix=106724 IMPLAUSIBLE
-#2650 XAnimParts 0x2a6c84a..0x2a6c8b2 len=104 name=- nf=30 fps=6.107379990556282e-39 db=768 ds=0 di=32771 rs=32783 ix=98788
-#2651 XAnimParts 0x2a6c8b2..0x2a6c91a len=104 name=- nf=30 fps=9.291169337859267e-41 db=768 ds=2 di=32771 rs=164068 ix=164084
-#2652 XAnimParts 0x2a6c91a..0x2a6c982 len=104 name=- nf=9 fps=8.84096016724099e-40 db=512 ds=0 di=32772 rs=299044 ix=303146
-#2653 XAnimParts 0x2a6c982..0x2a6c9ea len=104 name=- nf=1 fps=4.135792287608265e-40 db=41188 ds=9 di=768 rs=1024 ix=32774
-#2654 XAnimParts 0x2a6c9ea..0x2a6ca52 len=104 name=- nf=1 fps=4.59513792421394e-41 db=1024 ds=0 di=32772 rs=434414 ix=512
-#2655 XAnimParts 0x2a6ca52..0x2a6caba len=104 name=- nf=1 fps=4.59233532728529e-41 db=41045 ds=5 di=768 rs=368810 ix=768
-#2656 XAnimParts 0x2a6caba..0x2a6cb22 len=104 name=- nf=4 fps=4.136170638193633e-40 db=32776 ds=2 di=32996 rs=32769 ix=33023
-#2657 XAnimParts 0x2a6cb22..0x2a6cb8a len=104 name=- nf=5 fps=9.291169337859267e-41 db=32770 ds=0 di=32853 rs=557056 ix=368784
-#2658 XAnimParts 0x2a6cb8a..0x2a6cbf2 len=104 name=- nf=0 fps=6.113119709066156e-39 db=1024 ds=3 di=32775 rs=2654211 ix=368640 IMPLAUSIBLE
-#2659 XAnimParts 0x2a6cbf2..0x2a6cc5a len=104 name=- nf=1 fps=2.297512910168397e-40 db=1024 ds=3 di=32771 rs=197632 ix=360460
-#2660 XAnimParts 0x2a6cc5a..0x2a6ccc2 len=104 name=- nf=8 fps=1.377630533262371e-40 db=40960 ds=3 di=32996 rs=360703 ix=328448
-#2661 XAnimParts 0x2a6ccc2..0x2a6cd2a len=104 name=- nf=3 fps=2.295985494842283e-40 db=37119 ds=5 di=768 rs=295161 ix=197632
-#2662 XAnimParts 0x2a6cd2a..0x2a6cd92 len=104 name=- nf=2 fps=6.107417825614818e-39 db=41045 ds=6 di=512 rs=163848 ix=164095
-#2663 XAnimParts 0x2a6cd92..0x2a6cdfa len=104 name=- nf=3 fps=3.2142423655296924e-40 db=32853 ds=3 di=32853 rs=197376 ix=229377
-#2664 XAnimParts 0x2a6cdfa..0x2a6ce62 len=104 name=- nf=6 fps=5.969545471008364e-40 db=32996 ds=3 di=33016 rs=565248 ix=131840
-#2665 XAnimParts 0x2a6ce62..0x2a6ceca len=104 name=- nf=2 fps=2.2959995078269263e-40 db=768 ds=1 di=32775 rs=360703 ix=66304
-#2666 XAnimParts 0x2a6ceca..0x2a6cf32 len=104 name=- nf=5 fps=6.113119709066156e-39 db=512 ds=1 di=32776 rs=98532 ix=426239
-#2667 XAnimParts 0x2a6cf32..0x2a6cf9a len=104 name=- nf=2 fps=5.233569504560327e-41 db=32996 ds=29 di=40960 rs=590848 ix=98311
-#2668 XAnimParts 0x2a6cf9a..0x2a6d002 len=104 name=- nf=0 fps=1.847471895365839e-40 db=768 ds=0 di=32776 rs=98312 ix=164095
-#2669 XAnimParts 0x2a6d002..0x2a6d06a len=104 name=- nf=2 fps=7.809590484513281e-40 db=41045 ds=5 di=768 rs=98312 ix=164095
-#2670 XAnimParts 0x2a6d06a..0x2a6d0d2 len=104 name=- nf=1 fps=4.59289584667102e-41 db=33023 ds=0 di=33023 rs=426239 ix=512
-#2671 XAnimParts 0x2a6d0d2..0x2a6d13a len=104 name=- nf=2 fps=9.291169337859267e-41 db=512 ds=5 di=32785 rs=884991 ix=368640
-#2672 MaterialTechniqueSet 0x2a6d13a..0x2a6d34a len=528 name=-
-#2673 XModel 0x2a6d34a..0x2a6d446 len=252 name=-
-#2674 FxEffectDef 0x2a6d446..0x2a6d482 len=60 name=-
-#2675 FxEffectDef 0x2a6d482..0x2a6d4be len=60 name=-
-#2676 FxEffectDef 0x2a6d4be..0x2a6d4fa len=60 name=-
-#2677 FxEffectDef 0x2a6d4fa..0x2a6d536 len=60 name=-
-#2678 FxEffectDef 0x2a6d536..0x2a6d572 len=60 name=-
-#2679 FxEffectDef 0x2a6d572..0x2a6d5ae len=60 name=-
-#2680 FxEffectDef 0x2a6d5ae..0x2a6d5ea len=60 name=-
-#2681 XAnimParts 0x2a6d5ea..0x2a6d652 len=104 name=- nf=2 fps=4.135792287608265e-40 db=32775 ds=0 di=33023 rs=66304 ix=32775
-#2682 XAnimParts 0x2a6d652..0x2a6d6ba len=104 name=- nf=1 fps=4.592055067592426e-41 db=32775 ds=1 di=32996 rs=631012 ix=66304
-#2683 XAnimParts 0x2a6d6ba..0x2a6d722 len=104 name=- nf=33 fps=4.591914937745993e-41 db=768 ds=0 di=32791 rs=491520 ix=512
-#2684 XAnimParts 0x2a6d722..0x2a6d78a len=104 name=- nf=78 fps=2.143874546539824e-40 db=4 ds=199 di=768 rs=140759 ix=1198653444 IMPLAUSIBLE
-#2685 SndBank 0x2a6d78a..0x2a6d7b2 len=40 name=-
-#2686 RawFile 0x2a6d7b2..0x2a6d7be len=12 name=-
-#2687 XModel 0x2a6d7be..0x2a6d8ba len=252 name=-
-#2688 XModel 0x2a6d8ba..0x2a6d9b6 len=252 name=-
-#2689 XAnimParts 0x2a6d9b6..0x2a6da1e len=104 name=- nf=0 fps=0.0 db=1032 ds=0 di=1092 rs=1 ix=980 IMPLAUSIBLE
-#2690 XAnimParts 0x2a6da1e..0x2a6da86 len=104 name=- nf=9 fps=1.816082809764963e-42 db=0 ds=0 di=1246 rs=1032 ix=1280
-#2691 XAnimParts 0x2a6da86..0x2a6daee len=104 name=- nf=0 fps=9.183577641768408e-40 db=1388 ds=0 di=3 rs=0 ix=1427
-#2692 RawFile 0x2a6daee..0x2a6dafa len=12 name=-
+#2123 XAnimParts 0x299ab0b..0x299b1cd len=1730 name=pb_standmg42gunner_aim_45right_15up nf=1 fps=30.0 db=162 ds=174 di=63 rs=316 ix=0
+#2124 XAnimParts 0x299b1cd..0x299b81f len=1618 name=pb_standmg42gunner_aim_30right_15up nf=1 fps=30.0 db=148 ds=183 di=60 rs=264 ix=0
+#2125 XAnimParts 0x299b81f..0x299bebd len=1694 name=pb_standmg42gunner_aim_15right_15up nf=1 fps=30.0 db=162 ds=172 di=57 rs=312 ix=0
+#2126 XAnimParts 0x299bebd..0x299c567 len=1706 name=pb_standmg42gunner_aim_forward_15up nf=1 fps=30.0 db=158 ds=180 di=57 rs=304 ix=0
+#2127 XAnimParts 0x299c567..0x299cbd4 len=1645 name=pb_standmg42gunner_aim_15left_15up nf=1 fps=30.0 db=152 ds=183 di=54 rs=288 ix=0
+#2128 XAnimParts 0x299cbd4..0x299d245 len=1649 name=pb_standmg42gunner_aim_30left_15up nf=1 fps=30.0 db=152 ds=187 di=57 rs=280 ix=0
+#2129 XAnimParts 0x299d245..0x299d8f8 len=1715 name=pb_standmg42gunner_aim_45left_15up nf=1 fps=30.0 db=160 ds=177 di=63 rs=304 ix=0
+#2130 XAnimParts 0x299d8f8..0x299dfa3 len=1707 name=pb_standmg42gunner_aim_45right_level nf=1 fps=30.0 db=154 ds=186 di=63 rs=296 ix=0
+#2131 XAnimParts 0x299dfa3..0x299e65a len=1719 name=pb_standmg42gunner_aim_30right_level nf=1 fps=30.0 db=160 ds=181 di=63 rs=304 ix=0
+#2132 XAnimParts 0x299e65a..0x299ecf5 len=1691 name=pb_standmg42gunner_aim_15right_level nf=1 fps=30.0 db=158 ds=182 di=60 rs=296 ix=0
+#2133 XAnimParts 0x299ecf5..0x299f1ac len=1207 name=pb_standmg42gunner_aim_forward_level nf=1 fps=30.0 db=78 ds=280 di=60 rs=0 ix=0
+#2134 XAnimParts 0x299f1ac..0x299f832 len=1670 name=pb_standmg42gunner_aim_15left_level nf=1 fps=30.0 db=150 ds=186 di=63 rs=280 ix=0
+#2135 XAnimParts 0x299f832..0x299feb0 len=1662 name=pb_standmg42gunner_aim_30left_level nf=1 fps=30.0 db=152 ds=187 di=60 rs=280 ix=0
+#2136 XAnimParts 0x299feb0..0x29a0532 len=1666 name=pb_standmg42gunner_aim_45left_level nf=1 fps=30.0 db=154 ds=180 di=60 rs=288 ix=0
+#2137 XAnimParts 0x29a0532..0x29a0bb2 len=1664 name=pb_standmg42gunner_aim_45right_15down nf=1 fps=30.0 db=158 ds=180 di=60 rs=284 ix=0
+#2138 XAnimParts 0x29a0bb2..0x29a1272 len=1728 name=pb_standmg42gunner_aim_30right_15down nf=1 fps=30.0 db=160 ds=173 di=63 rs=316 ix=0
+#2139 XAnimParts 0x29a1272..0x29a1926 len=1716 name=pb_standmg42gunner_aim_15right_15down nf=1 fps=30.0 db=160 ds=175 di=63 rs=308 ix=0
+#2140 XAnimParts 0x29a1926..0x29a1fba len=1684 name=pb_standmg42gunner_aim_forward_15down nf=1 fps=30.0 db=150 ds=184 di=63 rs=280 ix=0
+#2141 XAnimParts 0x29a1fba..0x29a265d len=1699 name=pb_standmg42gunner_aim_15left_15down nf=1 fps=30.0 db=158 ds=176 di=63 rs=300 ix=0
+#2142 XAnimParts 0x29a265d..0x29a2d04 len=1703 name=pb_standmg42gunner_aim_30left_15down nf=1 fps=30.0 db=160 ds=177 di=63 rs=300 ix=0
+#2143 XAnimParts 0x29a2d04..0x29a33a5 len=1697 name=pb_standmg42gunner_aim_45left_15down nf=1 fps=30.0 db=156 ds=179 di=66 rs=288 ix=0
+#2144 XAnimParts 0x29a33a5..0x29a3fb2 len=3085 name=pb_standmg42gunner_fire_45right_15up nf=5 fps=30.0 db=318 ds=185 di=90 rs=784 ix=0
+#2145 XAnimParts 0x29a3fb2..0x29a4afa len=2888 name=pb_standmg42gunner_fire_30right_15up nf=5 fps=30.0 db=292 ds=190 di=78 rs=740 ix=0
+#2146 XAnimParts 0x29a4afa..0x29a5608 len=2830 name=pb_standmg42gunner_fire_15right_15up nf=5 fps=30.0 db=286 ds=182 di=81 rs=716 ix=0
+#2147 XAnimParts 0x29a5608..0x29a61a5 len=2973 name=pb_standmg42gunner_fire_forward_15up nf=5 fps=30.0 db=308 ds=181 di=81 rs=768 ix=0
+#2148 XAnimParts 0x29a61a5..0x29a6c2a len=2693 name=pb_standmg42gunner_fire_15left_15up nf=5 fps=30.0 db=270 ds=189 di=72 rs=676 ix=0
+#2149 XAnimParts 0x29a6c2a..0x29a770e len=2788 name=pb_standmg42gunner_fire_30left_15up nf=5 fps=30.0 db=279 ds=192 di=78 rs=680 ix=0
+#2150 XAnimParts 0x29a770e..0x29a8214 len=2822 name=pb_standmg42gunner_fire_45left_15up nf=5 fps=30.0 db=289 ds=185 di=81 rs=696 ix=0
+#2151 XAnimParts 0x29a8214..0x29a8df6 len=3042 name=pb_standmg42gunner_fire_45right_level nf=5 fps=30.0 db=314 ds=185 di=93 rs=752 ix=0
+#2152 XAnimParts 0x29a8df6..0x29a99c0 len=3018 name=pb_standmg42gunner_fire_30right_level nf=5 fps=30.0 db=310 ds=187 di=90 rs=752 ix=0
+#2153 XAnimParts 0x29a99c0..0x29aa41a len=2650 name=pb_standmg42gunner_fire_15right_level nf=5 fps=30.0 db=266 ds=194 di=81 rs=616 ix=0
+#2154 XAnimParts 0x29aa41a..0x29ab133 len=3353 name=pb_standmg42gunner_fire_forward_level nf=5 fps=30.0 db=357 ds=158 di=87 rs=944 ix=0
+#2155 XAnimParts 0x29ab133..0x29abc21 len=2798 name=pb_standmg42gunner_fire_15left_level nf=5 fps=30.0 db=281 ds=195 di=84 rs=676 ix=0
+#2156 XAnimParts 0x29abc21..0x29ac743 len=2850 name=pb_standmg42gunner_fire_30left_level nf=5 fps=30.0 db=286 ds=195 di=81 rs=692 ix=0
+#2157 XAnimParts 0x29ac743..0x29ad22e len=2795 name=pb_standmg42gunner_fire_45left_level nf=5 fps=30.0 db=282 ds=195 di=81 rs=680 ix=0
+#2158 XAnimParts 0x29ad22e..0x29ade56 len=3112 name=pb_standmg42gunner_fire_45right_15down nf=5 fps=30.0 db=328 ds=196 di=93 rs=752 ix=0
+#2159 XAnimParts 0x29ade56..0x29aea31 len=3035 name=pb_standmg42gunner_fire_30right_15down nf=5 fps=30.0 db=314 ds=186 di=93 rs=744 ix=0
+#2160 XAnimParts 0x29aea31..0x29af4ec len=2747 name=pb_standmg42gunner_fire_15right_15down nf=5 fps=30.0 db=279 ds=184 di=87 rs=648 ix=0
+#2161 XAnimParts 0x29af4ec..0x29b0098 len=2988 name=pb_standmg42gunner_fire_forward_15down nf=5 fps=30.0 db=309 ds=185 di=90 rs=740 ix=0
+#2162 XAnimParts 0x29b0098..0x29b0b7a len=2786 name=pb_standmg42gunner_fire_15left_15down nf=5 fps=30.0 db=279 ds=193 di=78 rs=698 ix=0
+#2163 XAnimParts 0x29b0b7a..0x29b16a6 len=2860 name=pb_standmg42gunner_fire_30left_15down nf=5 fps=30.0 db=288 ds=186 di=87 rs=688 ix=0
+#2164 XAnimParts 0x29b16a6..0x29b21bd len=2839 name=pb_standmg42gunner_fire_45left_15down nf=5 fps=30.0 db=289 ds=184 di=84 rs=700 ix=0
+#2165 XAnimParts 0x29b21bd..0x29b26af len=1266 name=pb_pronemg42gunner_aim_40right_15up nf=1 fps=24.0 db=104 ds=201 di=48 rs=124 ix=0
+#2166 XAnimParts 0x29b26af..0x29b2bc1 len=1298 name=pb_pronemg42gunner_aim_20right_15up nf=1 fps=24.0 db=106 ds=194 di=51 rs=140 ix=0
+#2167 XAnimParts 0x29b2bc1..0x29b30ff len=1342 name=pb_pronemg42gunner_aim_forward_15up nf=1 fps=24.0 db=116 ds=191 di=45 rs=176 ix=0
+#2168 XAnimParts 0x29b30ff..0x29b35c8 len=1225 name=pb_pronemg42gunner_aim_20left_15up nf=1 fps=24.0 db=94 ds=214 di=48 rs=96 ix=0
+#2169 XAnimParts 0x29b35c8..0x29b3b1d len=1365 name=pb_pronemg42gunner_aim_40left_15up nf=1 fps=24.0 db=116 ds=185 di=48 rs=184 ix=0
+#2170 XAnimParts 0x29b3b1d..0x29b4054 len=1335 name=pb_pronemg42gunner_aim_40right_level nf=1 fps=24.0 db=110 ds=194 di=51 rs=156 ix=0
+#2171 XAnimParts 0x29b4054..0x29b45bb len=1383 name=pb_pronemg42gunner_aim_20right_level nf=1 fps=24.0 db=118 ds=186 di=51 rs=184 ix=0
+#2172 XAnimParts 0x29b45bb..0x29b49fa len=1087 name=pb_pronemg42gunner_aim_forward_level nf=1 fps=24.0 db=70 ds=246 di=51 rs=0 ix=0
+#2173 XAnimParts 0x29b49fa..0x29b4e58 len=1118 name=pb_pronemg42gunner_aim_20left_level nf=1 fps=24.0 db=78 ds=232 di=48 rs=32 ix=0
+#2174 XAnimParts 0x29b4e58..0x29b5372 len=1306 name=pb_pronemg42gunner_aim_40left_level nf=1 fps=24.0 db=108 ds=199 di=48 rs=144 ix=0
+#2175 XAnimParts 0x29b5372..0x29b58ca len=1368 name=pb_pronemg42gunner_aim_40right_15down nf=1 fps=24.0 db=114 ds=188 di=51 rs=176 ix=0
+#2176 XAnimParts 0x29b58ca..0x29b5e12 len=1352 name=pb_pronemg42gunner_aim_20right_15down nf=1 fps=24.0 db=112 ds=193 di=51 rs=164 ix=0
+#2177 XAnimParts 0x29b5e12..0x29b6352 len=1344 name=pb_pronemg42gunner_aim_forward_15down nf=1 fps=24.0 db=110 ds=198 di=51 rs=160 ix=0
+#2178 XAnimParts 0x29b6352..0x29b67dd len=1163 name=pb_pronemg42gunner_aim_20left_15down nf=1 fps=24.0 db=80 ds=239 di=51 rs=40 ix=0
+#2179 XAnimParts 0x29b67dd..0x29b6d44 len=1383 name=pb_pronemg42gunner_aim_40left_15down nf=1 fps=24.0 db=118 ds=188 di=48 rs=188 ix=0
+#2180 XAnimParts 0x29b6d44..0x29b75be len=2170 name=pb_pronemg42gunner_fire_40right_15up nf=5 fps=24.0 db=217 ds=169 di=60 rs=494 ix=0
+#2181 XAnimParts 0x29b75be..0x29b7e6b len=2221 name=pb_pronemg42gunner_fire_20right_15up nf=5 fps=24.0 db=220 ds=169 di=63 rs=512 ix=0
+#2182 XAnimParts 0x29b7e6b..0x29b86e2 len=2167 name=pb_pronemg42gunner_fire_forward_15up nf=5 fps=24.0 db=217 ds=173 di=60 rs=488 ix=0
+#2183 XAnimParts 0x29b86e2..0x29b8e14 len=1842 name=pb_pronemg42gunner_fire_20left_15up nf=5 fps=24.0 db=172 ds=202 di=60 rs=320 ix=0
+#2184 XAnimParts 0x29b8e14..0x29b957c len=1896 name=pb_pronemg42gunner_fire_40left_15up nf=5 fps=24.0 db=180 ds=197 di=57 rs=360 ix=0
+#2185 XAnimParts 0x29b957c..0x29b9be2 len=1638 name=pb_pronemg42gunner_fire_40right_level nf=5 fps=24.0 db=143 ds=221 di=63 rs=208 ix=0
+#2186 XAnimParts 0x29b9be2..0x29ba47e len=2204 name=pb_pronemg42gunner_fire_20right_level nf=5 fps=24.0 db=214 ds=182 di=63 rs=496 ix=0
+#2187 XAnimParts 0x29ba47e..0x29bac9a len=2076 name=pb_pronemg42gunner_fire_forward_level nf=5 fps=24.0 db=198 ds=199 di=66 rs=408 ix=0
+#2188 XAnimParts 0x29bac9a..0x29bb39c len=1794 name=pb_pronemg42gunner_fire_20left_level nf=5 fps=24.0 db=165 ds=205 di=57 rs=308 ix=0
+#2189 XAnimParts 0x29bb39c..0x29bbb12 len=1910 name=pb_pronemg42gunner_fire_40left_level nf=5 fps=24.0 db=181 ds=195 di=60 rs=356 ix=0
+#2190 XAnimParts 0x29bbb12..0x29bc2f9 len=2023 name=pb_pronemg42gunner_fire_40right_15down nf=5 fps=24.0 db=196 ds=182 di=63 rs=408 ix=0
+#2191 XAnimParts 0x29bc2f9..0x29bcb77 len=2174 name=pb_pronemg42gunner_fire_20right_15down nf=5 fps=24.0 db=213 ds=172 di=60 rs=500 ix=0
+#2192 XAnimParts 0x29bcb77..0x29bd400 len=2185 name=pb_pronemg42gunner_fire_forward_15down nf=5 fps=24.0 db=217 ds=169 di=66 rs=488 ix=0
+#2193 XAnimParts 0x29bd400..0x29bdb32 len=1842 name=pb_pronemg42gunner_fire_20left_15down nf=5 fps=24.0 db=171 ds=202 di=63 rs=312 ix=0
+#2194 XAnimParts 0x29bdb32..0x29be268 len=1846 name=pb_pronemg42gunner_fire_40left_15down nf=5 fps=24.0 db=174 ds=199 di=60 rs=320 ix=0
+#2195 XAnimParts 0x29be268..0x29be70f len=1191 name=pb_saw_gunner_aim_down_left45 nf=0 fps=30.0 db=79 ds=276 di=57 rs=0 ix=0
+#2196 XAnimParts 0x29be70f..0x29bebb6 len=1191 name=pb_saw_gunner_aim_down_left30 nf=0 fps=30.0 db=79 ds=276 di=57 rs=0 ix=0
+#2197 XAnimParts 0x29bebb6..0x29bf079 len=1219 name=pb_saw_gunner_aim_down_left15 nf=0 fps=30.0 db=79 ds=284 di=60 rs=0 ix=0
+#2198 XAnimParts 0x29bf079..0x29bf52c len=1203 name=pb_saw_gunner_aim_down_center nf=0 fps=30.0 db=79 ds=286 di=57 rs=0 ix=0
+#2199 XAnimParts 0x29bf52c..0x29bf9ec len=1216 name=pb_saw_gunner_aim_down_right15 nf=0 fps=30.0 db=79 ds=282 di=60 rs=0 ix=0
+#2200 XAnimParts 0x29bf9ec..0x29bfe9c len=1200 name=pb_saw_gunner_aim_down_right30 nf=0 fps=30.0 db=79 ds=280 di=57 rs=0 ix=0
+#2201 XAnimParts 0x29bfe9c..0x29c0340 len=1188 name=pb_saw_gunner_aim_down_right45 nf=0 fps=30.0 db=79 ds=280 di=54 rs=0 ix=0
+#2202 XAnimParts 0x29c0340..0x29c0804 len=1220 name=pb_saw_gunner_aim_level_left45 nf=0 fps=30.0 db=79 ds=284 di=60 rs=0 ix=0
+#2203 XAnimParts 0x29c0804..0x29c0cbc len=1208 name=pb_saw_gunner_aim_level_left30 nf=0 fps=30.0 db=79 ds=278 di=60 rs=0 ix=0
+#2204 XAnimParts 0x29c0cbc..0x29c1168 len=1196 name=pb_saw_gunner_aim_level_left15 nf=0 fps=30.0 db=79 ds=278 di=57 rs=0 ix=0
+#2205 XAnimParts 0x29c1168..0x29c1610 len=1192 name=pb_saw_gunner_aim_level_center nf=0 fps=30.0 db=79 ds=280 di=57 rs=0 ix=0
+#2206 XAnimParts 0x29c1610..0x29c1add len=1229 name=pb_saw_gunner_aim_level_right15 nf=0 fps=30.0 db=79 ds=288 di=60 rs=0 ix=0
+#2207 XAnimParts 0x29c1add..0x29c1f9e len=1217 name=pb_saw_gunner_aim_level_right30 nf=0 fps=30.0 db=79 ds=282 di=60 rs=0 ix=0
+#2208 XAnimParts 0x29c1f9e..0x29c2463 len=1221 name=pb_saw_gunner_aim_level_right45 nf=0 fps=30.0 db=79 ds=284 di=60 rs=0 ix=0
+#2209 XAnimParts 0x29c2463..0x29c2938 len=1237 name=pb_saw_gunner_aim_up_left45 nf=0 fps=30.0 db=79 ds=288 di=63 rs=0 ix=0
+#2210 XAnimParts 0x29c2938..0x29c2df5 len=1213 name=pb_saw_gunner_aim_up_left30 nf=0 fps=30.0 db=79 ds=282 di=60 rs=0 ix=0
+#2211 XAnimParts 0x29c2df5..0x29c32ba len=1221 name=pb_saw_gunner_aim_up_left15 nf=0 fps=30.0 db=79 ds=286 di=60 rs=0 ix=0
+#2212 XAnimParts 0x29c32ba..0x29c3793 len=1241 name=pb_saw_gunner_aim_up_center nf=0 fps=30.0 db=79 ds=288 di=66 rs=0 ix=0
+#2213 XAnimParts 0x29c3793..0x29c3c59 len=1222 name=pb_saw_gunner_aim_up_right15 nf=0 fps=30.0 db=79 ds=286 di=60 rs=0 ix=0
+#2214 XAnimParts 0x29c3c59..0x29c4117 len=1214 name=pb_saw_gunner_aim_up_right30 nf=0 fps=30.0 db=79 ds=276 di=63 rs=0 ix=0
+#2215 XAnimParts 0x29c4117..0x29c45fd len=1254 name=pb_saw_gunner_aim_up_right45 nf=0 fps=30.0 db=79 ds=290 di=66 rs=0 ix=0
+#2216 XAnimParts 0x29c45fd..0x29c4aa6 len=1193 name=pb_saw_gunner_prone_aim_down_center nf=0 fps=30.0 db=79 ds=278 di=57 rs=0 ix=0
+#2217 XAnimParts 0x29c4aa6..0x29c4f74 len=1230 name=pb_saw_gunner_prone_aim_down_right20 nf=0 fps=30.0 db=79 ds=286 di=60 rs=0 ix=0
+#2218 XAnimParts 0x29c4f74..0x29c542a len=1206 name=pb_saw_gunner_prone_aim_down_right40 nf=0 fps=30.0 db=79 ds=280 di=57 rs=0 ix=0
+#2219 XAnimParts 0x29c542a..0x29c58f7 len=1229 name=pb_saw_gunner_prone_aim_down_left20 nf=0 fps=30.0 db=79 ds=286 di=60 rs=0 ix=0
+#2220 XAnimParts 0x29c58f7..0x29c5da4 len=1197 name=pb_saw_gunner_prone_aim_down_left40 nf=0 fps=30.0 db=79 ds=276 di=57 rs=0 ix=0
+#2221 XAnimParts 0x29c5da4..0x29c6243 len=1183 name=pb_saw_gunner_prone_aim_up_center nf=0 fps=30.0 db=79 ds=280 di=54 rs=0 ix=0
+#2222 XAnimParts 0x29c6243..0x29c6703 len=1216 name=pb_saw_gunner_prone_aim_up_right20 nf=0 fps=30.0 db=79 ds=286 di=57 rs=0 ix=0
+#2223 XAnimParts 0x29c6703..0x29c6bb3 len=1200 name=pb_saw_gunner_prone_aim_up_right40 nf=0 fps=30.0 db=79 ds=278 di=57 rs=0 ix=0
+#2224 XAnimParts 0x29c6bb3..0x29c7072 len=1215 name=pb_saw_gunner_prone_aim_up_left20 nf=0 fps=30.0 db=79 ds=280 di=60 rs=0 ix=0
+#2225 XAnimParts 0x29c7072..0x29c7515 len=1187 name=pb_saw_gunner_prone_aim_up_left40 nf=0 fps=30.0 db=79 ds=278 di=54 rs=0 ix=0
+#2226 XAnimParts 0x29c7515..0x29c79bf len=1194 name=pb_saw_gunner_prone_aim_level_center nf=0 fps=30.0 db=79 ds=284 di=54 rs=0 ix=0
+#2227 XAnimParts 0x29c79bf..0x29c7e8e len=1231 name=pb_saw_gunner_prone_aim_level_right20 nf=0 fps=30.0 db=79 ds=292 di=57 rs=0 ix=0
+#2228 XAnimParts 0x29c7e8e..0x29c8351 len=1219 name=pb_saw_gunner_prone_aim_level_right40 nf=0 fps=30.0 db=79 ds=286 di=57 rs=0 ix=0
+#2229 XAnimParts 0x29c8351..0x29c880f len=1214 name=pb_saw_gunner_prone_aim_level_left20 nf=0 fps=30.0 db=79 ds=284 di=57 rs=0 ix=0
+#2230 XAnimParts 0x29c880f..0x29c8ccd len=1214 name=pb_saw_gunner_prone_aim_level_left40 nf=0 fps=30.0 db=79 ds=284 di=57 rs=0 ix=0
+#2231 XAnimParts 0x29c8ccd..0x29c9183 len=1206 name=pb_saw_gunner_lowwall_aim_down_left45 nf=0 fps=30.0 db=80 ds=278 di=57 rs=0 ix=0
+#2232 XAnimParts 0x29c9183..0x29c965d len=1242 name=pb_saw_gunner_lowwall_aim_down_left30 nf=0 fps=30.0 db=80 ds=290 di=60 rs=0 ix=0
+#2233 XAnimParts 0x29c965d..0x29c9b23 len=1222 name=pb_saw_gunner_lowwall_aim_down_left15 nf=0 fps=30.0 db=80 ds=286 di=57 rs=0 ix=0
+#2234 XAnimParts 0x29c9b23..0x29c9fe1 len=1214 name=pb_saw_gunner_lowwall_aim_down_center nf=0 fps=30.0 db=80 ds=286 di=57 rs=0 ix=0
+#2235 XAnimParts 0x29c9fe1..0x29ca4a8 len=1223 name=pb_saw_gunner_lowwall_aim_down_right15 nf=0 fps=30.0 db=80 ds=286 di=57 rs=0 ix=0
+#2236 XAnimParts 0x29ca4a8..0x29ca967 len=1215 name=pb_saw_gunner_lowwall_aim_down_right30 nf=0 fps=30.0 db=80 ds=282 di=57 rs=0 ix=0
+#2237 XAnimParts 0x29ca967..0x29cae32 len=1227 name=pb_saw_gunner_lowwall_aim_down_right45 nf=0 fps=30.0 db=80 ds=282 di=60 rs=0 ix=0
+#2238 XAnimParts 0x29cae32..0x29cb315 len=1251 name=pb_saw_gunner_lowwall_aim_level_left45 nf=0 fps=30.0 db=80 ds=288 di=63 rs=0 ix=0
+#2239 XAnimParts 0x29cb315..0x29cb800 len=1259 name=pb_saw_gunner_lowwall_aim_level_left30 nf=0 fps=30.0 db=80 ds=292 di=63 rs=0 ix=0
+#2240 XAnimParts 0x29cb800..0x29cbcef len=1263 name=pb_saw_gunner_lowwall_aim_level_left15 nf=0 fps=30.0 db=80 ds=300 di=60 rs=0 ix=0
+#2241 XAnimParts 0x29cbcef..0x29cc1be len=1231 name=pb_saw_gunner_lowwall_aim_level_center nf=0 fps=30.0 db=80 ds=282 di=63 rs=0 ix=0
+#2242 XAnimParts 0x29cc1be..0x29cc69a len=1244 name=pb_saw_gunner_lowwall_aim_level_right15 nf=0 fps=30.0 db=80 ds=284 di=63 rs=0 ix=0
+#2243 XAnimParts 0x29cc69a..0x29ccb82 len=1256 name=pb_saw_gunner_lowwall_aim_level_right30 nf=0 fps=30.0 db=80 ds=284 di=66 rs=0 ix=0
+#2244 XAnimParts 0x29ccb82..0x29cd066 len=1252 name=pb_saw_gunner_lowwall_aim_level_right45 nf=0 fps=30.0 db=80 ds=288 di=63 rs=0 ix=0
+#2245 XAnimParts 0x29cd066..0x29cd55a len=1268 name=pb_saw_gunner_lowwall_aim_up_left45 nf=0 fps=30.0 db=80 ds=292 di=66 rs=0 ix=0
+#2246 XAnimParts 0x29cd55a..0x29cda4a len=1264 name=pb_saw_gunner_lowwall_aim_up_left30 nf=0 fps=30.0 db=80 ds=290 di=66 rs=0 ix=0
+#2247 XAnimParts 0x29cda4a..0x29cdf32 len=1256 name=pb_saw_gunner_lowwall_aim_up_left15 nf=0 fps=30.0 db=80 ds=292 di=63 rs=0 ix=0
+#2248 XAnimParts 0x29cdf32..0x29ce426 len=1268 name=pb_saw_gunner_lowwall_aim_up_center nf=0 fps=30.0 db=80 ds=296 di=66 rs=0 ix=0
+#2249 XAnimParts 0x29ce426..0x29ce91b len=1269 name=pb_saw_gunner_lowwall_aim_up_right15 nf=0 fps=30.0 db=80 ds=292 di=66 rs=0 ix=0
+#2250 XAnimParts 0x29ce91b..0x29cee00 len=1253 name=pb_saw_gunner_lowwall_aim_up_right30 nf=0 fps=30.0 db=80 ds=284 di=66 rs=0 ix=0
+#2251 XAnimParts 0x29cee00..0x29cf2fd len=1277 name=pb_saw_gunner_lowwall_aim_up_right45 nf=0 fps=30.0 db=80 ds=296 di=66 rs=0 ix=0
+#2252 FxEffectDef 0x29cf2fd..0x29d38bd len=17856 name=env/fire/fx_fire_player_torso
+#2253 FxEffectDef 0x29d38bd..0x29d5b1e len=8801 name=env/fire/fx_fire_player_sm
+#2254 FxEffectDef 0x29d5b1e..0x29d6b1e len=4096 name=env/fire/fx_fire_player_sm_smk_2sec
+#2255 FxEffectDef 0x29d6b1e..0x29d96eb len=11213 name=env/fire/fx_fire_player_md
+#2256 RawFile 0x29d96eb..0x29d97a0 len=181 name=animtrees/mp_vehicles.atr
+#2257 XAnimParts 0x29d97a0..0x29dabab len=5131 name=fxanim_gp_windsock_anim nf=199 fps=30.0 db=655 ds=18 di=24 rs=1796 ix=0
+#2258 XAnimParts 0x29dabab..0x29dcb27 len=8060 name=fxanim_gp_tarp1_anim nf=329 fps=30.0 db=5 ds=220 di=30 rs=2955 ix=717
+#2259 XAnimParts 0x29dcb27..0x29de14c len=5669 name=fxanim_gp_tarp2_anim nf=329 fps=30.0 db=6 ds=56 di=24 rs=2078 ix=573
+#2260 XAnimParts 0x29de14c..0x29e1f86 len=15930 name=fxanim_gp_cloth01_anim nf=249 fps=30.0 db=1845 ds=16 di=12 rs=6676 ix=0
+#2261 XAnimParts 0x29e1f86..0x29e26d5 len=1871 name=fxanim_gp_streamer01_anim nf=63 fps=30.0 db=193 ds=3 di=0 rs=760 ix=0
+#2262 XAnimParts 0x29e26d5..0x29e2e2d len=1880 name=fxanim_gp_streamer02_anim nf=63 fps=30.0 db=194 ds=3 di=0 rs=764 ix=0
+#2263 XAnimParts 0x29e2e2d..0x29e42a2 len=5237 name=fxanim_gp_fence_tarp_01_anim nf=99 fps=30.0 db=642 ds=10 di=18 rs=1948 ix=0
+#2264 XAnimParts 0x29e42a2..0x29e4424 len=386 name=fxanim_gp_ceiling_fan_old_slow_anim nf=30 fps=30.0 db=26 ds=10 di=0 rs=88 ix=0
+#2265 XAnimParts 0x29e4424..0x29e4a02 len=1502 name=fxanim_gp_ceiling_fan_old_dest_anim nf=95 fps=30.0 db=150 ds=10 di=0 rs=584 ix=0
+#2266 XAnimParts 0x29e4a02..0x29eda95 len=37011 name=pb_pistol_stand_cac_idle nf=382 fps=30.0 db=108 ds=1861 di=240 rs=12472 ix=2357
+#2267 XAnimParts 0x29eda95..0x29f6eb2 len=37917 name=pb_rifle_stand_cac_idle nf=449 fps=30.0 db=108 ds=1778 di=246 rs=12752 ix=2555
+#2268 XAnimParts 0x29f6eb2..0x2a00369 len=38071 name=pb_dw_stand_cac_idle nf=382 fps=30.0 db=108 ds=1622 di=246 rs=12876 ix=2715
+#2269 XAnimParts 0x2a00369..0x2a0c504 len=49563 name=pb_lmg_stand_cac_idle nf=519 fps=30.0 db=108 ds=1940 di=249 rs=17196 ix=3602
+#2270 XAnimParts 0x2a0c504..0x2a11c33 len=22319 name=pb_shot_stand_cac_idle nf=350 fps=30.0 db=108 ds=2211 di=237 rs=7036 ix=416
+#2271 XAnimParts 0x2a11c33..0x2a13df4 len=8641 name=pb_uzi_stand_cac_idle nf=156 fps=30.0 db=961 ds=314 di=135 rs=2876 ix=0
+#2272 XAnimParts 0x2a13df4..0x2a18c5a len=20070 name=pb_sniper_stand_cac_idle nf=306 fps=30.0 db=108 ds=2024 di=240 rs=6256 ix=343
+#2273 XAnimParts 0x2a18c5a..0x2a22c3e len=40932 name=pb_rpg_stand_cac_idle nf=479 fps=30.0 db=108 ds=1693 di=237 rs=14144 ix=2908
+#2274 XAnimParts 0x2a22c3e..0x2a2c3e2 len=38820 name=pb_b_knife_cac_idle nf=382 fps=30.0 db=108 ds=1557 di=249 rs=13332 ix=2705
+#2275 XAnimParts 0x2a2c3e2..0x2a2dfec len=7178 name=pb_huey_minigun_aim nf=132 fps=30.0 db=804 ds=310 di=42 rs=2516 ix=0
+#2276 XAnimParts 0x2a2dfec..0x2a31e54 len=15976 name=pb_huey_minigun_aim_down nf=88 fps=30.0 db=1857 ds=337 di=60 rs=6080 ix=0
+#2277 XAnimParts 0x2a31e54..0x2a33f88 len=8500 name=pb_huey_minigun_aim_up nf=49 fps=30.0 db=953 ds=340 di=54 rs=3008 ix=0
+#2278 XAnimParts 0x2a33f88..0x2a37874 len=14572 name=pb_huey_gunner_aim_60left_level nf=88 fps=30.0 db=1656 ds=322 di=57 rs=5628 ix=0
+#2279 XAnimParts 0x2a37874..0x2a3a3e4 len=11120 name=pb_huey_gunner_aim_60right_level nf=60 fps=30.0 db=1255 ds=318 di=48 rs=4184 ix=0
+#2280 XAnimParts 0x2a3a3e4..0x2a3d97d len=13721 name=pb_huey_gunner_aim_60down_60left nf=80 fps=30.0 db=1560 ds=317 di=60 rs=5252 ix=0
+#2281 XAnimParts 0x2a3d97d..0x2a40285 len=10504 name=pb_huey_gunner_aim_60down_60right nf=52 fps=30.0 db=1198 ds=337 di=60 rs=3804 ix=0
+#2282 XAnimParts 0x2a40285..0x2a42a6c len=10215 name=pb_huey_gunner_aim_60up_60left nf=60 fps=30.0 db=1157 ds=316 di=54 rs=3788 ix=0
+#2283 XAnimParts 0x2a42a6c..0x2a44800 len=7572 name=pb_huey_gunner_aim_60up_60right nf=44 fps=30.0 db=843 ds=315 di=51 rs=2660 ix=0
+#2284 XAnimParts 0x2a44800..0x2a4490f len=271 name=v_huey_door_open nf=9 fps=30.0 db=18 ds=2 di=6 rs=42 ix=0
+#2285 XAnimParts 0x2a4490f..0x2a45261 len=2386 name=v_huey_door_open_state nf=66 fps=30.0 db=281 ds=17 di=18 rs=915 ix=0
+#2286 XAnimParts 0x2a45261..0x2a45364 len=259 name=v_huey_door_close_state nf=10 fps=30.0 db=13 ds=20 di=9 rs=0 ix=0
+#2287 XAnimParts 0x2a45364..0x2a477a6 len=9282 name=int_huey_gunner_on nf=66 fps=30.0 db=971 ds=69 di=204 rs=3547 ix=0
+#2288 MaterialTechniqueSet 0x2a477a6..0x2a47efe len=1880 name=effect_falloff_add_nofog
+#2289 FxEffectDef 0x2a47efe..0x2a48875 len=2423 name=misc/fx_ir_tapereflect
+#2290 FxEffectDef 0x2a48875..0x2a48f94 len=1823 name=misc/fx_light_c4_blink
+#2291 FxEffectDef 0x2a48f94..0x2a49a9e len=2826 name=weapon/claymore/fx_claymore_laser
+#2292 MaterialTechniqueSet 0x2a49a9e..0x2a4a821 len=3459 name=particle_cloud_outdoor
+#2293 FxEffectDef 0x2a4a821..0x2a4b584 len=3427 name=misc/fx_grain_test
+#2294 FxEffectDef 0x2a4b584..0x2a4b816 len=658 name=misc/fx_nv_dlight
+#2295 XModel 0x2a4b816..0x2a4ccb4 len=5278 name=fx_char_gib_chunk_bone03
+#2296 XModel 0x2a4ccb4..0x2a4e4dd len=6185 name=fx_char_gib_chunk_flesh03
+#2297 FxEffectDef 0x2a4e4dd..0x2a50b01 len=9764 name=weapon/bullet/fx_flesh_gib_fatal_01
+#2298 FxEffectDef 0x2a50b01..0x2a51eb2 len=5041 name=impacts/fx_flesh_hit_noblood
+#2299 FxEffectDef 0x2a51eb2..0x2a56290 len=17374 name=impacts/fx_flesh_hit
+#2300 FxEffectDef 0x2a56290..0x2a58d7f len=10991 name=impacts/fx_flesh_hit_knife
+#2301 FxEffectDef 0x2a58d7f..0x2a59266 len=1255 name=impacts/fx_flesh_hit_knife_noblood
+#2302 FxEffectDef 0x2a59266..0x2a5b142 len=7900 name=trail/fx_trail_blood_streak
+#2303 RawFile 0x2a5b142..0x2a5b17f len=61 name=animtrees/zombie_cymbal_monkey.atr
+#2304 StringTable 0x2a5b17f..0x2a5ce22 len=7331 name=mp/zombiemode.csv
+#2305 StringTable 0x2a5ce22..0x2a5d7f0 len=2510 name=mp/zm_protipstable.csv
+#2306 RawFile 0x2a5d7f0..0x2a5e487 len=3223 name=vision/zombie.vision
+#2307 RawFile 0x2a5e487..0x2a5f38b len=3844 name=vision/zombie_last_stand.vision
+#2308 RawFile 0x2a5f38b..0x2a60210 len=3717 name=vision/zombie_death.vision
+#2309 MaterialTechniqueSet 0x2a60210..0x2a9c417 len=246279 name=mc_sw4_3d_char_skin
+#2310 XModel 0x2a9c417..0x2ac842f len=180248 name=viewmodel_usa_pow_arms
+#2311 MaterialTechniqueSet 0x2ac842f..0x2aeb4d0 len=143521 name=mc_l_sm_scroll_r0c0n0s0
+#2312 XModel 0x2aeb4d0..0x2b2ea6a len=275866 name=zombie_vending_packapunch_on
+#2313 XModel 0x2b2ea6a..0x2b2f8a7 len=3645 name=zombie_sign_please_wait
+#2314 XModel 0x2b2f8a7..0x2b2fd83 len=1244 name=viewmodel_usa_no_model
+#2315 XAnimParts 0x2b2fd83..0x2b35443 len=22208 name=viewmodel_zombie_packopunch nf=69 fps=30.0 db=2451 ds=69 di=210 rs=9080 ix=0
+#2316 WeaponVariantDef 0x2b35443..0x2b35eb4 len=2673 name=zombie_knuckle_crack
+#2317 FxEffectDef 0x2b35eb4..0x2b3681a len=2406 name=misc/fx_zombie_powerup_on
+#2318 FxEffectDef 0x2b3681a..0x2b37ad2 len=4792 name=misc/fx_zombie_powerup_grab
+#2319 FxEffectDef 0x2b37ad2..0x2b38b03 len=4145 name=misc/fx_zombie_powerup_wave
+#2320 FxEffectDef 0x2b38b03..0x2b39c84 len=4481 name=misc/fx_zombie_powerup_solo_grab
+#2321 FxEffectDef 0x2b39c84..0x2b3a5ef len=2411 name=misc/fx_zombie_powerup_solo_on
+#2322 MaterialTechniqueSet 0x2b3a5ef..0x2b5f1f4 len=150533 name=mc_l_sm_r0c0s0sc0x0
+#2323 XModel 0x2b5f1f4..0x2b62766 len=13682 name=zombie_bomb
+#2324 FxEffectDef 0x2b62766..0x2b6da53 len=45805 name=misc/fx_zombie_mini_nuke
+#2325 FxEffectDef 0x2b6da53..0x2b76edc len=38025 name=misc/fx_zombie_mini_nuke_hotness
+#2326 XModel 0x2b76edc..0x2b9882a len=137550 name=zombie_skull
+#2327 Material 0x2b9882a..0x2b9895e len=308 name=specialty_instakill_zombies
+#2328 XModel 0x2b9895e..0x2b9b5d6 len=11384 name=zombie_x2_icon
+#2329 Material 0x2b9b5d6..0x2b9b722 len=332 name=specialty_doublepoints_zombies
+#2330 XModel 0x2b9b722..0x2bb1d19 len=91639 name=zombie_firesale
+#2331 Material 0x2bb1d19..0x2bb1e4c len=307 name=specialty_firesale_zombies
+#2332 XModel 0x2bb1e4c..0x2bb7871 len=23077 name=zombie_pickup_bonfire
+#2333 Material 0x2bb7871..0x2bb799a len=297 name=zom_icon_bonfire
+#2334 XModel 0x2bb799a..0x2bc7bb3 len=66073 name=zombie_pickup_minigun
+#2335 Material 0x2bc7bb3..0x2bc7ced len=314 name=zom_icon_minigun
+#2336 MaterialTechniqueSet 0x2bc7ced..0x2bec5df len=149746 name=mc_l_sm_r0c0n0s0sc0x0
+#2337 XModel 0x2bec5df..0x2c0adab len=124876 name=zombie_ammocan
+#2338 XModel 0x2c0adab..0x2c0e4e5 len=14138 name=zombie_carpenter
+#2339 XModel 0x2c0e4e5..0x2c0ffce len=6889 name=zombie_revive
+#2340 XModel 0x2c0ffce..0x2c10f6f len=4001 name=zombie_z_money_icon
+#2341 Material 0x2c10f6f..0x2c110a4 len=309 name=menu_mp_lobby_gamercard_back
+#2342 Material 0x2c110a4..0x2c111d4 len=304 name=menu_mp_lobby_frame_tab
+#2343 Material 0x2c111d4..0x2c11301 len=301 name=menu_mp_popup_window
+#2344 FxEffectDef 0x2c11301..0x2c12250 len=3919 name=impacts/fx_distant_grain
+#2345 MaterialTechniqueSet 0x2c12250..0x2c33cd1 len=137857 name=mc_l_sm_b0c0n0_seethrum
+#2346 MaterialTechniqueSet 0x2c33cd1..0x2c552f8 len=136743 name=wc_l_sm_b0c0n0_seethrum
+#2347 FxEffectDef 0x2c552f8..0x2c56c3f len=6471 name=impacts/fx_default_hit
+#2348 XModel 0x2c56c3f..0x2c57205 len=1478 name=fx_wood_splinter01
+#2349 XModel 0x2c57205..0x2c57b21 len=2332 name=fx_wood_splinter02
+#2350 MaterialTechniqueSet 0x2c57b21..0x2c57d40 len=543 name=mc_l_sm_b0c0n0
+#2351 MaterialTechniqueSet 0x2c57d40..0x2c57f5f len=543 name=wc_l_sm_b0c0n0
+#2352 FxEffectDef 0x2c57f5f..0x2c5a6aa len=10059 name=impacts/fx_large_woodhit
+#2353 FxEffectDef 0x2c5a6aa..0x2c5b98f len=4837 name=impacts/fx_small_brick
+#2354 FxEffectDef 0x2c5b98f..0x2c5ca76 len=4327 name=impacts/fx_cloth_hit
+#2355 FxEffectDef 0x2c5ca76..0x2c5ce8e len=1048 name=impacts/fx_distant_conc
+#2356 FxEffectDef 0x2c5ce8e..0x2c5eb56 len=7368 name=impacts/fx_small_concrete_1
+#2357 FxEffectDef 0x2c5eb56..0x2c607bc len=7270 name=impacts/fx_small_dirt_1
+#2358 FxEffectDef 0x2c607bc..0x2c61f17 len=5979 name=impacts/fx_small_foliage
+#2359 XModel 0x2c61f17..0x2c6257c len=1637 name=fx_glass_piece01
+#2360 XModel 0x2c6257c..0x2c629ee len=1138 name=fx_glass_piece02
+#2361 MaterialTechniqueSet 0x2c629ee..0x2c8b114 len=165670 name=wc_l_sm_b0c0s0
+#2362 FxEffectDef 0x2c8b114..0x2c8d3c1 len=8877 name=impacts/fx_small_glass
+#2363 FxEffectDef 0x2c8d3c1..0x2c8ee61 len=6816 name=impacts/fx_small_grass
+#2364 FxEffectDef 0x2c8ee61..0x2c8fe87 len=4134 name=impacts/fx_small_gravel
+#2365 FxEffectDef 0x2c8fe87..0x2c91f65 len=8414 name=impacts/fx_small_snowhit
+#2366 FxEffectDef 0x2c91f65..0x2c94389 len=9252 name=impacts/fx_small_metalhit_1
+#2367 FxEffectDef 0x2c94389..0x2c97b3b len=14258 name=impacts/fx_small_mud
+#2368 FxEffectDef 0x2c97b3b..0x2c99212 len=5847 name=impacts/fx_small_plaster_1
+#2369 FxEffectDef 0x2c99212..0x2c9b000 len=7662 name=impacts/fx_small_rock_1
+#2370 FxEffectDef 0x2c9b000..0x2c9dd46 len=11590 name=impacts/fx_small_waterhit
+#2371 FxEffectDef 0x2c9dd46..0x2c9fe4b len=8453 name=impacts/fx_small_asphalt
+#2372 FxEffectDef 0x2c9fe4b..0x2ca1d32 len=7911 name=impacts/fx_cushion_hit
+#2373 FxEffectDef 0x2ca1d32..0x2ca5c89 len=16215 name=impacts/fx_flesh_hit_body_nonfatal
+#2374 FxEffectDef 0x2ca5c89..0x2ca7727 len=6814 name=impacts/fx_small_rock
+#2375 FxEffectDef 0x2ca7727..0x2ca7b69 len=1090 name=system_elements/fx_env_water_bubble_sm_rise
+#2376 XModel 0x2ca7b69..0x2cab4da len=14705 name=p_glo_bullet_tip
+#2377 FxEffectDef 0x2cab4da..0x2cab787 len=685 name=system_elements/fx_env_water_bubble_xsm_rise
+#2378 FxEffectDef 0x2cab787..0x2cacd8f len=5640 name=impacts/fx_bullet_water_trail_uw
+#2379 FxEffectDef 0x2cacd8f..0x2cad099 len=778 name=system_elements/fx_blood_streak_wide_emit
+#2380 XModel 0x2cad099..0x2caebae len=6933 name=fx_char_gib_chunk_flesh02
+#2381 FxEffectDef 0x2caebae..0x2cb2773 len=15301 name=impacts/fx_flesh_hit_body_fatal_exit
+#2382 FxEffectDef 0x2cb2773..0x2cb3ad4 len=4961 name=impacts/fx_bullet_dirt_sm_uw
+#2383 FxEffectDef 0x2cb3ad4..0x2cb4d31 len=4701 name=impacts/fx_flesh_hit_body_fatal_uw
+#2384 FxEffectDef 0x2cb4d31..0x2cb5b30 len=3583 name=impacts/fx_large_brick
+#2385 FxEffectDef 0x2cb5b30..0x2cb799c len=7788 name=impacts/fx_large_concrete_1
+#2386 FxEffectDef 0x2cb799c..0x2cb93dc len=6720 name=impacts/fx_large_dirt_1
+#2387 FxEffectDef 0x2cb93dc..0x2cbb50b len=8495 name=impacts/fx_large_glass
+#2388 FxEffectDef 0x2cbb50b..0x2cbc517 len=4108 name=impacts/fx_large_gravel
+#2389 FxEffectDef 0x2cbc517..0x2cbe173 len=7260 name=impacts/fx_large_metalhit_1
+#2390 FxEffectDef 0x2cbe173..0x2cc2023 len=16048 name=impacts/fx_large_mud
+#2391 FxEffectDef 0x2cc2023..0x2cc32ae len=4747 name=impacts/fx_large_plaster_1
+#2392 FxEffectDef 0x2cc32ae..0x2cc52f6 len=8264 name=impacts/fx_large_rock_1
+#2393 FxEffectDef 0x2cc52f6..0x2cc7b58 len=10338 name=impacts/fx_large_waterhit
+#2394 FxEffectDef 0x2cc7b58..0x2cc9ba1 len=8265 name=impacts/fx_large_asphalt
+#2395 FxEffectDef 0x2cc9ba1..0x2ccb60f len=6766 name=impacts/fx_large_rock
+#2396 FxEffectDef 0x2ccb60f..0x2ccc0d5 len=2758 name=impacts/fx_small_concrete
+#2397 FxEffectDef 0x2ccc0d5..0x2ccd043 len=3950 name=impacts/fx_small_dirt
+#2398 FxEffectDef 0x2ccd043..0x2ccf45c len=9241 name=impacts/fx_20mm_metalhit
+#2399 MaterialTechniqueSet 0x2ccf45c..0x2ccf9eb len=1423 name=mc_impactmask
+#2400 MaterialTechniqueSet 0x2ccf9eb..0x2ccfe00 len=1045 name=wc_impactmask
+#2401 FxEffectDef 0x2ccfe00..0x2cd3a24 len=15396 name=impacts/fx_20mm_wood_hit
+#2402 FxEffectDef 0x2cd3a24..0x2cd7519 len=15093 name=impacts/fx_20mil_concrete
+#2403 FxEffectDef 0x2cd7519..0x2cdb9d4 len=17595 name=impacts/fx_20mil_dirthit_libya
+#2404 FxEffectDef 0x2cdb9d4..0x2cdeaac len=12504 name=impacts/fx_20mm_foliage_hit
+#2405 FxEffectDef 0x2cdeaac..0x2ce04a2 len=6646 name=impacts/fx_20mm_glass_hit
+#2406 FxEffectDef 0x2ce04a2..0x2ce6256 len=23988 name=impacts/fx_water_hit_tracer
+#2407 FxEffectDef 0x2ce6256..0x2ce9b4a len=14580 name=impacts/fx_20mm_cushion_hit
+#2408 FxEffectDef 0x2ce9b4a..0x2ced712 len=15304 name=impacts/fx_flesh_hit_body_fatal_lg_exit
+#2409 FxEffectDef 0x2ced712..0x2cedf4e len=2108 name=bio/player/fx_footstep_dust
+#2410 MaterialTechniqueSet 0x2cedf4e..0x2cee16c len=542 name=,effect_nofog
+#2411 FxEffectDef 0x2cee16c..0x2cee76b len=1535 name=bio/player/fx_footstep_mud
+#2412 FxEffectDef 0x2cee76b..0x2cef85c len=4337 name=bio/player/fx_footstep_water
+#2413 FxEffectDef 0x2cef85c..0x2cf50d9 len=22653 name=explosions/fx_grenadeexp_default
+#2414 FxEffectDef 0x2cf50d9..0x2cf6b0a len=6705 name=env/smoke/fx_grenade_smk_ling_w
+#2415 FxEffectDef 0x2cf6b0a..0x2cfae44 len=17210 name=explosions/fx_grenadeexp_wood
+#2416 FxEffectDef 0x2cfae44..0x2cfbd54 len=3856 name=explosions/fx_grenade_flash
+#2417 FxEffectDef 0x2cfbd54..0x2d01d4e len=24570 name=explosions/fx_grenadeexp_concrete
+#2418 FxEffectDef 0x2d01d4e..0x2d096a3 len=31061 name=explosions/fx_grenadeexp_concrete_1
+#2419 FxEffectDef 0x2d096a3..0x2d11c53 len=34224 name=explosions/fx_grenadeexp_dirt_1
+#2420 FxEffectDef 0x2d11c53..0x2d1a3a2 len=34639 name=explosions/fx_grenadeexp_snow
+#2421 FxEffectDef 0x2d1a3a2..0x2d1e9a5 len=17923 name=explosions/fx_grenadeexp_metal
+#2422 FxEffectDef 0x2d1e9a5..0x2d26622 len=31869 name=explosions/fx_grenadeexp_mud_1
+#2423 MaterialTechniqueSet 0x2d26622..0x2d273c9 len=3495 name=particle_cloud_outdoor_add
+#2424 FxEffectDef 0x2d273c9..0x2d326cb len=45826 name=explosions/fx_grenadeexp_water
+#2425 FxEffectDef 0x2d326cb..0x2d40807 len=57660 name=explosions/fx_default_explosion
+#2426 FxEffectDef 0x2d40807..0x2d48c74 len=33901 name=explosions/fx_grenadeexp_mud
+#2427 FxEffectDef 0x2d48c74..0x2d4dbde len=20330 name=explosions/fx_grenadeexp_dirt
+#2428 FxEffectDef 0x2d4dbde..0x2d61553 len=80245 name=explosions/fx_mortarexp_water
+#2429 FxEffectDef 0x2d61553..0x2d75ccf len=83836 name=weapon/rocket/fx_rocket_xtreme_exp_default
+#2430 FxEffectDef 0x2d75ccf..0x2d8a223 len=83284 name=weapon/rocket/fx_rocket_xtreme_exp_rock
+#2431 XModel 0x2d8a223..0x2d8b107 len=3812 name=fx_char_gib_chunk_bone02
+#2432 FxEffectDef 0x2d8b107..0x2d8b4cb len=964 name=system_elements/fx_blood_drops_emit
+#2433 XModel 0x2d8b4cb..0x2d8cbfd len=5938 name=fx_char_gib_chunk_meat01
+#2434 FxEffectDef 0x2d8cbfd..0x2d8f4b2 len=10421 name=weapon/tank/fx_tank_body
+#2435 FxEffectDef 0x2d8f4b2..0x2d9478e len=21212 name=weapon/rocket/fx_rocket_exp_foliage
+#2436 FxEffectDef 0x2d9478e..0x2d94b9c len=1038 name=impacts/fx_missing_impact
+#2437 FxEffectDef 0x2d94b9c..0x2da8de9 len=82509 name=weapon/rocket/fx_rocket_xtreme_exp_metal
+#2438 FxEffectDef 0x2da8de9..0x2dbc070 len=78471 name=weapon/rocket/fx_rocket_xtreme_exp_mud
+#2439 FxEffectDef 0x2dbc070..0x2dd3e6a len=97786 name=weapon/rocket/fx_rocket_exp_water
+#2440 FxEffectDef 0x2dd3e6a..0x2de02e2 len=50296 name=weapon/mortar/fx_mortar_exp_dirt_medium
+#2441 FxEffectDef 0x2de02e2..0x2dea619 len=41783 name=weapon/mortar/fx_mortar_exp_dirt_concrt_sm
+#2442 FxEffectDef 0x2dea619..0x2df5e56 len=47165 name=weapon/mortar/fx_mortar_exp_sand
+#2443 FxEffectDef 0x2df5e56..0x2e0acc0 len=85610 name=weapon/tank/fx_tank_water
+#2444 FxEffectDef 0x2e0acc0..0x2e0c085 len=5061 name=bio/animals/fx_pigeon_panic_flight
+#2445 MaterialTechniqueSet 0x2e0c085..0x2e0c336 len=689 name=effect_falloff_add
+#2446 FxEffectDef 0x2e0c336..0x2e0e798 len=9314 name=maps/zombie/fx_tesla_impact_default
+#2447 FxEffectDef 0x2e0e798..0x2e100ee len=6486 name=impacts/fx_small_metalhit
+#2448 FxEffectDef 0x2e100ee..0x2e1103b len=3917 name=impacts/fx_small_plaster
+#2449 FxImpactTable 0x2e1103b..0x2e11bbf len=2948 name=-
+#2450 FxEffectDef 0x2e11bbf..0x2e13431 len=6258 name=misc/fx_zombie_eye_single
+#2451 MaterialTechniqueSet 0x2e13431..0x2e43344 len=196371 name=mc_cod7modelcloak
+#2452 XModel 0x2e43344..0x2e445e9 len=4773 name=char_ger_zombieeye
+#2453 FxEffectDef 0x2e445e9..0x2e45bc3 len=5594 name=misc/fx_zombie_bloodsplat
+#2454 FxEffectDef 0x2e45bc3..0x2e47561 len=6558 name=misc/fx_zombie_bloodspurt
+#2455 FxEffectDef 0x2e47561..0x2e4843b len=3802 name=maps/zombie/fx_fog_zombie_amb
+#2456 XModel 0x2e4843b..0x2e48e51 len=2582 name=p_zom_counter_0
+#2457 XModel 0x2e48e51..0x2e49608 len=1975 name=p_zom_counter_1
+#2458 XModel 0x2e49608..0x2e49dbf len=1975 name=p_zom_counter_2
+#2459 XModel 0x2e49dbf..0x2e4a576 len=1975 name=p_zom_counter_3
+#2460 XModel 0x2e4a576..0x2e4ad2d len=1975 name=p_zom_counter_4
+#2461 XModel 0x2e4ad2d..0x2e4b4e4 len=1975 name=p_zom_counter_5
+#2462 XModel 0x2e4b4e4..0x2e4bc9b len=1975 name=p_zom_counter_6
+#2463 XModel 0x2e4bc9b..0x2e4c452 len=1975 name=p_zom_counter_7
+#2464 XModel 0x2e4c452..0x2e4cc09 len=1975 name=p_zom_counter_8
+#2465 XModel 0x2e4cc09..0x2e4d3c0 len=1975 name=p_zom_counter_9
+#2466 MenuList 0x2e4d3c0..0x2e4efb7 len=7159 name=ui/hud.menu
+#2467 RawFile 0x2e4efb7..0x2e4f03f len=136 name=mp/zm_challenges_reset.cfg
+#2468 RawFile 0x2e4f03f..0x2e4f140 len=257 name=mp/zm_protips_reset.cfg
+#2469 XAnimParts 0x2e4f140..0x2e55bd1 len=27281 name=ai_zombie_attack_forward_v1 nf=70 fps=30.0 db=3169 ds=156 di=177 rs=10761 ix=0
+#2470 XAnimParts 0x2e55bd1..0x2e5f232 len=38497 name=ai_zombie_attack_forward_v2 nf=100 fps=30.0 db=4525 ds=144 di=192 rs=15188 ix=0
+#2471 XAnimParts 0x2e5f232..0x2e6457b len=21321 name=ai_zombie_attack_v1 nf=54 fps=30.0 db=2470 ds=295 di=171 rs=8175 ix=0
+#2472 XAnimParts 0x2e6457b..0x2e76612 len=73879 name=ai_zombie_attack_v2 nf=215 fps=30.0 db=8787 ds=157 di=195 rs=30461 ix=0
+#2473 XAnimParts 0x2e76612..0x2e7b4c2 len=20144 name=ai_zombie_attack_v4 nf=31 fps=30.0 db=2386 ds=205 di=174 rs=7608 ix=0
+#2474 XAnimParts 0x2e7b4c2..0x2e836cb len=33289 name=ai_zombie_attack_v6 nf=70 fps=30.0 db=3965 ds=150 di=183 rs=13171 ix=0
+#2475 XAnimParts 0x2e836cb..0x2e89c1d len=25938 name=ai_zombie_walk_attack_v1 nf=32 fps=30.0 db=3028 ds=133 di=195 rs=10077 ix=0
+#2476 XAnimParts 0x2e89c1d..0x2e8f9d4 len=23991 name=ai_zombie_walk_attack_v2 nf=47 fps=30.0 db=2873 ds=156 di=198 rs=8948 ix=0
+#2477 XAnimParts 0x2e8f9d4..0x2e96711 len=27965 name=ai_zombie_walk_attack_v3 nf=37 fps=30.0 db=3256 ds=150 di=183 rs=10978 ix=0
+#2478 XAnimParts 0x2e96711..0x2e9ea7f len=33646 name=ai_zombie_walk_attack_v4 nf=44 fps=30.0 db=3957 ds=131 di=192 rs=13321 ix=0
+#2479 XAnimParts 0x2e9ea7f..0x2ea2216 len=14231 name=ai_zombie_run_attack_v1 nf=21 fps=30.0 db=1655 ds=255 di=210 rs=4892 ix=0
+#2480 XAnimParts 0x2ea2216..0x2ea4d87 len=11121 name=ai_zombie_run_attack_v2 nf=22 fps=30.0 db=1251 ds=314 di=171 rs=3658 ix=0
+#2481 XAnimParts 0x2ea4d87..0x2ea8acb len=15684 name=ai_zombie_run_attack_v3 nf=28 fps=30.0 db=1822 ds=251 di=198 rs=5566 ix=0
+#2482 XAnimParts 0x2ea8acb..0x2eac8f7 len=15916 name=ai_zombie_crawl_death_v1 nf=41 fps=30.0 db=1852 ds=128 di=171 rs=6074 ix=0
+#2483 XAnimParts 0x2eac8f7..0x2eb0314 len=14877 name=ai_zombie_crawl_death_v2 nf=36 fps=30.0 db=1731 ds=139 di=162 rs=5637 ix=0
+#2484 XAnimParts 0x2eb0314..0x2eb6043 len=23855 name=ai_zombie_death_v1 nf=60 fps=30.0 db=2794 ds=137 di=165 rs=9302 ix=0
+#2485 XAnimParts 0x2eb6043..0x2ebc6eb len=26280 name=ai_zombie_death_v2 nf=68 fps=30.0 db=3128 ds=192 di=177 rs=10103 ix=0
+#2486 XAnimParts 0x2ebc6eb..0x2ed0b18 len=82989 name=ai_zombie_door_pound_v1 nf=140 fps=30.0 db=9622 ds=120 di=168 rs=35020 ix=0
+#2487 XAnimParts 0x2ed0b18..0x2ed870a len=31730 name=ai_zombie_door_pound_v2 nf=81 fps=30.0 db=3743 ds=116 di=159 rs=12858 ix=0
+#2488 XAnimParts 0x2ed870a..0x2ef4a2a len=115488 name=ai_zombie_door_tear_v1 nf=276 fps=30.0 db=108 ds=473 di=168 rs=42788 ix=11884
+#2489 XAnimParts 0x2ef4a2a..0x2efaac3 len=24729 name=ai_zombie_idle_v1 nf=58 fps=30.0 db=2852 ds=200 di=120 rs=10035 ix=0
+#2490 XAnimParts 0x2efaac3..0x2f00cd8 len=25109 name=ai_zombie_idle_v1_delta nf=59 fps=30.0 db=2866 ds=226 di=171 rs=10080 ix=0
+#2491 XAnimParts 0x2f00cd8..0x2f069a1 len=23753 name=ai_zombie_shot_arm_left nf=59 fps=30.0 db=2784 ds=133 di=168 rs=9421 ix=0
+#2492 XAnimParts 0x2f069a1..0x2f0c6ba len=23833 name=ai_zombie_shot_arm_right nf=58 fps=30.0 db=2829 ds=138 di=165 rs=9313 ix=0
+#2493 XAnimParts 0x2f0c6ba..0x2f11fb7 len=22781 name=ai_zombie_shot_leg_left_2_crawl nf=53 fps=30.0 db=2701 ds=134 di=171 rs=8874 ix=0
+#2494 XAnimParts 0x2f11fb7..0x2f1cff4 len=45117 name=ai_zombie_shot_leg_right_2_crawl nf=122 fps=30.0 db=5370 ds=137 di=177 rs=18318 ix=0
+#2495 XAnimParts 0x2f1cff4..0x2f23c6b len=27767 name=ai_zombie_sprint_v1 nf=64 fps=30.0 db=3367 ds=307 di=177 rs=10333 ix=0
+#2496 XAnimParts 0x2f23c6b..0x2f2a050 len=25573 name=ai_zombie_sprint_v2 nf=59 fps=30.0 db=3080 ds=315 di=177 rs=9444 ix=0
+#2497 XAnimParts 0x2f2a050..0x2f307ba len=26474 name=ai_zombie_run_v1 nf=57 fps=30.0 db=3203 ds=304 di=198 rs=9779 ix=0
+#2498 XAnimParts 0x2f307ba..0x2f3a624 len=40554 name=ai_zombie_run_v2 nf=67 fps=30.0 db=4798 ds=253 di=204 rs=15823 ix=0
+#2499 XAnimParts 0x2f3a624..0x2f419a8 len=29572 name=ai_zombie_run_v3 nf=65 fps=30.0 db=3525 ds=308 di=201 rs=11124 ix=0
+#2500 XAnimParts 0x2f419a8..0x2f4c4da len=43826 name=ai_zombie_run_v4 nf=74 fps=30.0 db=5229 ds=255 di=204 rs=17116 ix=0
+#2501 XAnimParts 0x2f4c4da..0x2f546ab len=33233 name=ai_zombie_walk_fast_v1 nf=82 fps=30.0 db=3882 ds=313 di=174 rs=13071 ix=0
+#2502 XAnimParts 0x2f546ab..0x2f5c156 len=31403 name=ai_zombie_walk_fast_v2 nf=74 fps=30.0 db=3725 ds=312 di=174 rs=12212 ix=0
+#2503 XAnimParts 0x2f5c156..0x2f63f28 len=32210 name=ai_zombie_walk_fast_v3 nf=68 fps=30.0 db=3935 ds=302 di=204 rs=12053 ix=0
+#2504 XAnimParts 0x2f63f28..0x2f70603 len=50907 name=ai_zombie_walk_v1 nf=124 fps=30.0 db=6117 ds=308 di=207 rs=20142 ix=0
+#2505 XAnimParts 0x2f70603..0x2f79d9b len=38808 name=ai_zombie_walk_v2 nf=94 fps=30.0 db=4652 ds=302 di=183 rs=15105 ix=0
+#2506 XAnimParts 0x2f79d9b..0x2f85240 len=46245 name=ai_zombie_walk_v3 nf=107 fps=30.0 db=5469 ds=226 di=183 rs=18671 ix=0
+#2507 XAnimParts 0x2f85240..0x2f8d3d8 len=33176 name=ai_zombie_walk_v4 nf=86 fps=30.0 db=3922 ds=300 di=174 rs=12997 ix=0
+#2508 XAnimParts 0x2f8d3d8..0x2f9f85c len=74884 name=ai_zombie_walk_v6 nf=126 fps=30.0 db=8825 ds=180 di=192 rs=30839 ix=0
+#2509 XAnimParts 0x2f9f85c..0x2faf31e len=64194 name=ai_zombie_walk_v7 nf=103 fps=30.0 db=7537 ds=200 di=186 rs=26404 ix=0
+#2510 XAnimParts 0x2faf31e..0x2fc2e52 len=80692 name=ai_zombie_walk_v8 nf=117 fps=30.0 db=9670 ds=184 di=201 rs=32687 ix=0
+#2511 XAnimParts 0x2fc2e52..0x2fd8498 len=87622 name=ai_zombie_walk_v9 nf=132 fps=30.0 db=10274 ds=194 di=210 rs=36413 ix=0
+#2512 XAnimParts 0x2fd8498..0x2ffce66 len=149966 name=ai_zombie_door_tear_v2 nf=353 fps=30.0 db=108 ds=534 di=177 rs=55084 ix=15524
+#2513 XAnimParts 0x2ffce66..0x300a7ff len=55705 name=ai_zombie_crawl nf=166 fps=30.0 db=6473 ds=284 di=156 rs=22699 ix=0
+#2514 XAnimParts 0x300a7ff..0x30163cb len=48076 name=ai_zombie_crawl_v1 nf=122 fps=30.0 db=5672 ds=228 di=165 rs=19545 ix=0
+#2515 XAnimParts 0x30163cb..0x301d464 len=28825 name=ai_zombie_crawl_v2 nf=48 fps=30.0 db=3356 ds=216 di=180 rs=11201 ix=0
+#2516 XAnimParts 0x301d464..0x3022e51 len=23021 name=ai_zombie_crawl_v3 nf=40 fps=30.0 db=2695 ds=222 di=180 rs=8715 ix=0
+#2517 XAnimParts 0x3022e51..0x302bbba len=36201 name=ai_zombie_crawl_v4 nf=67 fps=30.0 db=4271 ds=251 di=165 rs=14420 ix=0
+#2518 XAnimParts 0x302bbba..0x303c21c len=67170 name=ai_zombie_crawl_v5 nf=193 fps=30.0 db=7921 ds=314 di=162 rs=27346 ix=0
+#2519 XAnimParts 0x303c21c..0x304451f len=33539 name=ai_zombie_crawl_sprint nf=69 fps=30.0 db=3881 ds=229 di=150 rs=13292 ix=0
+#2520 XAnimParts 0x304451f..0x306f21b len=175356 name=ai_zombie_crawl_sprint_1 nf=393 fps=30.0 db=108 ds=1240 di=243 rs=63823 ix=17901
+#2521 XAnimParts 0x306f21b..0x3082e75 len=80986 name=ai_zombie_crawl_sprint_2 nf=191 fps=30.0 db=9902 ds=251 di=171 rs=32247 ix=0
+#2522 XAnimParts 0x3082e75..0x3088767 len=22770 name=ai_zombie_idle_crawl nf=80 fps=30.0 db=2688 ds=165 di=72 rs=9148 ix=0
+#2523 XAnimParts 0x3088767..0x308e469 len=23810 name=ai_zombie_idle_crawl_base nf=81 fps=30.0 db=2725 ds=311 di=144 rs=9279 ix=0
+#2524 XAnimParts 0x308e469..0x309417e len=23829 name=ai_zombie_idle_crawl_delta nf=81 fps=30.0 db=2727 ds=311 di=144 rs=9287 ix=0
+#2525 XAnimParts 0x309417e..0x309a89c len=26398 name=ai_zombie_attack_crawl nf=79 fps=30.0 db=3068 ds=284 di=168 rs=10236 ix=0
+#2526 XAnimParts 0x309a89c..0x309f164 len=18632 name=ai_zombie_attack_crawl_lunge nf=43 fps=30.0 db=2139 ds=276 di=162 rs=7128 ix=0
+#2527 XAnimParts 0x309f164..0x30a72f9 len=33173 name=ai_zombie_walk_on_hands_a nf=96 fps=30.0 db=3848 ds=206 di=147 rs=13429 ix=0
+#2528 XAnimParts 0x30a72f9..0x30af886 len=34189 name=ai_zombie_walk_on_hands_b nf=128 fps=30.0 db=3935 ds=247 di=147 rs=13851 ix=0
+#2529 XAnimParts 0x30af886..0x30bb9ad len=49447 name=ai_zombie_walk_on_hands_shot_a nf=152 fps=30.0 db=5635 ds=199 di=123 rs=20946 ix=0
+#2530 XAnimParts 0x30bb9ad..0x30bfb6b len=16830 name=ai_zombie_walk_on_hands_shot_b nf=65 fps=30.0 db=1886 ds=248 di=114 rs=6652 ix=0
+#2531 XAnimParts 0x30bfb6b..0x30cc4b4 len=51529 name=ai_zombie_taunts_4 nf=129 fps=30.0 db=6117 ds=136 di=195 rs=21006 ix=0
+#2532 XAnimParts 0x30cc4b4..0x30d265f len=25003 name=ai_zombie_taunts_5b nf=56 fps=30.0 db=2990 ds=152 di=189 rs=9657 ix=0
+#2533 XAnimParts 0x30d265f..0x30d7c7d len=22046 name=ai_zombie_taunts_5c nf=54 fps=30.0 db=2587 ds=136 di=153 rs=8723 ix=0
+#2534 XAnimParts 0x30d7c7d..0x30e046d len=34800 name=ai_zombie_taunts_5d nf=88 fps=30.0 db=4135 ds=144 di=159 rs=13993 ix=0
+#2535 XAnimParts 0x30e046d..0x30e8d49 len=35036 name=ai_zombie_taunts_5e nf=96 fps=30.0 db=4188 ds=135 di=153 rs=14059 ix=0
+#2536 XAnimParts 0x30e8d49..0x30f0047 len=29438 name=ai_zombie_taunts_5f nf=68 fps=30.0 db=3541 ds=142 di=198 rs=11453 ix=0
+#2537 XAnimParts 0x30f0047..0x30f4466 len=17439 name=ai_zombie_taunts_7 nf=44 fps=30.0 db=2050 ds=139 di=153 rs=6725 ix=0
+#2538 XAnimParts 0x30f4466..0x30f9a75 len=22031 name=ai_zombie_taunts_9 nf=53 fps=30.0 db=2568 ds=134 di=183 rs=8675 ix=0
+#2539 XAnimParts 0x30f9a75..0x31032ef len=39034 name=ai_zombie_window_attack_arm_l_out nf=68 fps=30.0 db=4595 ds=137 di=186 rs=15741 ix=0
+#2540 XAnimParts 0x31032ef..0x310d4ef len=41472 name=ai_zombie_window_attack_arm_r_out nf=85 fps=30.0 db=4926 ds=130 di=186 rs=16675 ix=0
+#2541 XAnimParts 0x310d4ef..0x3116276 len=36231 name=ai_zombie_boardtear_l_1 nf=69 fps=30.0 db=4272 ds=140 di=201 rs=14640 ix=0
+#2542 XAnimParts 0x3116276..0x311feb4 len=39998 name=ai_zombie_boardtear_l_2 nf=77 fps=30.0 db=4712 ds=135 di=195 rs=16316 ix=0
+#2543 XAnimParts 0x311feb4..0x312a908 len=43604 name=ai_zombie_boardtear_l_3 nf=92 fps=30.0 db=5156 ds=135 di=198 rs=17777 ix=0
+#2544 XAnimParts 0x312a908..0x313567b len=44403 name=ai_zombie_boardtear_l_4 nf=90 fps=30.0 db=5244 ds=138 di=195 rs=18143 ix=0
+#2545 XAnimParts 0x313567b..0x313f1b4 len=39737 name=ai_zombie_boardtear_l_5 nf=79 fps=30.0 db=4675 ds=139 di=177 rs=16260 ix=0
+#2546 XAnimParts 0x313f1b4..0x3148420 len=37484 name=ai_zombie_boardtear_l_6 nf=75 fps=30.0 db=4441 ds=142 di=210 rs=15081 ix=0
+#2547 XAnimParts 0x3148420..0x3151702 len=37602 name=ai_zombie_boardtear_m_1 nf=94 fps=30.0 db=4385 ds=118 di=147 rs=15619 ix=0
+#2548 XAnimParts 0x3151702..0x315b26f len=39789 name=ai_zombie_boardtear_m_2 nf=95 fps=30.0 db=4643 ds=119 di=153 rs=16524 ix=0
+#2549 XAnimParts 0x315b26f..0x3164057 len=36328 name=ai_zombie_boardtear_m_3 nf=85 fps=30.0 db=4242 ds=123 di=150 rs=15026 ix=0
+#2550 XAnimParts 0x3164057..0x316db4f len=39672 name=ai_zombie_boardtear_m_4 nf=90 fps=30.0 db=4620 ds=150 di=147 rs=16461 ix=0
+#2551 XAnimParts 0x316db4f..0x3177023 len=38100 name=ai_zombie_boardtear_m_5 nf=85 fps=30.0 db=4431 ds=124 di=147 rs=15845 ix=0
+#2552 XAnimParts 0x3177023..0x31802e3 len=37568 name=ai_zombie_boardtear_m_6 nf=85 fps=30.0 db=4368 ds=119 di=150 rs=15605 ix=0
+#2553 XAnimParts 0x31802e3..0x3186f1a len=27703 name=ai_zombie_boardtear_r_1 nf=85 fps=30.0 db=3213 ds=117 di=144 rs=11348 ix=0
+#2554 XAnimParts 0x3186f1a..0x318d760 len=26694 name=ai_zombie_boardtear_r_2 nf=75 fps=30.0 db=3084 ds=121 di=141 rs=10925 ix=0
+#2555 XAnimParts 0x318d760..0x3193d55 len=26101 name=ai_zombie_boardtear_r_3 nf=75 fps=30.0 db=3033 ds=116 di=144 rs=10602 ix=0
+#2556 XAnimParts 0x3193d55..0x319b79a len=31301 name=ai_zombie_boardtear_r_4 nf=95 fps=30.0 db=3606 ds=110 di=144 rs=12977 ix=0
+#2557 XAnimParts 0x319b79a..0x31a2d9f len=30213 name=ai_zombie_boardtear_r_5 nf=100 fps=30.0 db=3488 ds=116 di=144 rs=12474 ix=0
+#2558 XAnimParts 0x31a2d9f..0x31a9a00 len=27745 name=ai_zombie_boardtear_r_6 nf=80 fps=30.0 db=3194 ds=122 di=144 rs=11402 ix=0
+#2559 XAnimParts 0x31a9a00..0x31b4437 len=43575 name=ai_zombie_boardtear_crawl_l_1 nf=84 fps=30.0 db=5276 ds=140 di=204 rs=17315 ix=0
+#2560 XAnimParts 0x31b4437..0x31bed09 len=43218 name=ai_zombie_boardtear_crawl_l_2 nf=94 fps=30.0 db=5138 ds=139 di=180 rs=17577 ix=0
+#2561 XAnimParts 0x31bed09..0x31cb1d4 len=50379 name=ai_zombie_boardtear_crawl_l_3 nf=106 fps=30.0 db=6173 ds=136 di=207 rs=19953 ix=0
+#2562 XAnimParts 0x31cb1d4..0x31dea59 len=80005 name=ai_zombie_boardtear_crawl_l_4 nf=153 fps=30.0 db=9683 ds=154 di=207 rs=32528 ix=0
+#2563 XAnimParts 0x31dea59..0x31ea4eb len=47762 name=ai_zombie_boardtear_crawl_l_5 nf=99 fps=30.0 db=5812 ds=140 di=207 rs=18992 ix=0
+#2564 XAnimParts 0x31ea4eb..0x31f27cc len=33505 name=ai_zombie_boardtear_crawl_l_6 nf=75 fps=30.0 db=3986 ds=133 di=174 rs=13463 ix=0
+#2565 XAnimParts 0x31f27cc..0x31fd403 len=44087 name=ai_zombie_boardtear_crawl_m_1 nf=102 fps=30.0 db=5239 ds=137 di=183 rs=17949 ix=0
+#2566 XAnimParts 0x31fd403..0x320af84 len=56193 name=ai_zombie_boardtear_crawl_m_2 nf=146 fps=30.0 db=6836 ds=160 di=186 rs=22624 ix=0
+#2567 XAnimParts 0x320af84..0x321b604 len=67200 name=ai_zombie_boardtear_crawl_m_3 nf=167 fps=30.0 db=8237 ds=134 di=192 rs=27033 ix=0
+#2568 XAnimParts 0x321b604..0x322d3ab len=73127 name=ai_zombie_boardtear_crawl_m_4 nf=177 fps=30.0 db=8994 ds=133 di=189 rs=29394 ix=0
+#2569 XAnimParts 0x322d3ab..0x323aa28 len=54909 name=ai_zombie_boardtear_crawl_m_5 nf=132 fps=30.0 db=6677 ds=133 di=189 rs=22102 ix=0
+#2570 XAnimParts 0x323aa28..0x32444b5 len=39565 name=ai_zombie_boardtear_crawl_m_6 nf=93 fps=30.0 db=4743 ds=131 di=183 rs=15909 ix=0
+#2571 XAnimParts 0x32444b5..0x324f8e2 len=46125 name=ai_zombie_boardtear_crawl_r_1 nf=132 fps=30.0 db=5521 ds=109 di=144 rs=18789 ix=0
+#2572 XAnimParts 0x324f8e2..0x325ab47 len=45669 name=ai_zombie_boardtear_crawl_r_2 nf=133 fps=30.0 db=5448 ds=118 di=144 rs=18641 ix=0
+#2573 XAnimParts 0x325ab47..0x32665ca len=47747 name=ai_zombie_boardtear_crawl_r_3 nf=151 fps=30.0 db=5651 ds=112 di=144 rs=19697 ix=0
+#2574 XAnimParts 0x32665ca..0x3272f7d len=51635 name=ai_zombie_boardtear_crawl_r_4 nf=150 fps=30.0 db=6158 ds=130 di=144 rs=21155 ix=0
+#2575 XAnimParts 0x3272f7d..0x327fd79 len=52732 name=ai_zombie_boardtear_crawl_r_5 nf=160 fps=30.0 db=6263 ds=116 di=144 rs=21731 ix=0
+#2576 XAnimParts 0x327fd79..0x328f0f0 len=62327 name=ai_zombie_boardtear_crawl_r_6 nf=171 fps=30.0 db=7463 ds=129 di=150 rs=25554 ix=0
+#2577 XAnimParts 0x328f0f0..0x32964d1 len=29665 name=ai_zombie_bartear_l_1 nf=69 fps=30.0 db=3447 ds=77 di=54 rs=12464 ix=0
+#2578 XAnimParts 0x32964d1..0x329e228 len=32087 name=ai_zombie_bartear_l_2 nf=77 fps=30.0 db=3726 ds=79 di=54 rs=13523 ix=0
+#2579 XAnimParts 0x329e228..0x32a7221 len=36857 name=ai_zombie_bartear_l_3 nf=92 fps=30.0 db=4273 ds=78 di=54 rs=15613 ix=0
+#2580 XAnimParts 0x32a7221..0x32ae6e4 len=29891 name=ai_zombie_bartear_l_4 nf=79 fps=30.0 db=3474 ds=77 di=54 rs=12577 ix=0
+#2581 XAnimParts 0x32ae6e4..0x32b73dd len=36089 name=ai_zombie_bartear_l_5 nf=90 fps=30.0 db=4191 ds=76 di=54 rs=15263 ix=0
+#2582 XAnimParts 0x32b73dd..0x32be9bd len=30176 name=ai_zombie_bartear_l_6 nf=75 fps=30.0 db=3507 ds=76 di=54 rs=12692 ix=0
+#2583 XAnimParts 0x32be9bd..0x32c7493 len=35542 name=ai_zombie_bartear_m_1 nf=94 fps=30.0 db=4114 ds=79 di=54 rs=15055 ix=0
+#2584 XAnimParts 0x32c7493..0x32d0526 len=37011 name=ai_zombie_bartear_m_2 nf=95 fps=30.0 db=4289 ds=76 di=54 rs=15684 ix=0
+#2585 XAnimParts 0x32d0526..0x32d8615 len=33007 name=ai_zombie_bartear_m_3 nf=85 fps=30.0 db=3844 ds=76 di=54 rs=13891 ix=0
+#2586 XAnimParts 0x32d8615..0x32e0655 len=32832 name=ai_zombie_bartear_m_4 nf=85 fps=30.0 db=3817 ds=77 di=54 rs=13834 ix=0
+#2587 XAnimParts 0x32e0655..0x32e969c len=36935 name=ai_zombie_bartear_m_5 nf=90 fps=30.0 db=4277 ds=78 di=54 rs=15647 ix=0
+#2588 XAnimParts 0x32e969c..0x32f1a75 len=33753 name=ai_zombie_bartear_m_6 nf=85 fps=30.0 db=3907 ds=76 di=54 rs=14282 ix=0
+#2589 XAnimParts 0x32f1a75..0x32f8842 len=28109 name=ai_zombie_bartear_r_1 nf=85 fps=30.0 db=3293 ds=77 di=54 rs=11742 ix=0
+#2590 XAnimParts 0x32f8842..0x32ff2d1 len=27279 name=ai_zombie_bartear_r_2 nf=75 fps=30.0 db=3178 ds=79 di=54 rs=11420 ix=0
+#2591 XAnimParts 0x32ff2d1..0x33056ab len=25562 name=ai_zombie_bartear_r_3 nf=75 fps=30.0 db=2985 ds=84 di=54 rs=10653 ix=0
+#2592 XAnimParts 0x33056ab..0x330c657 len=28588 name=ai_zombie_bartear_r_4 nf=100 fps=30.0 db=3337 ds=78 di=54 rs=11990 ix=0
+#2593 XAnimParts 0x330c657..0x3314054 len=31229 name=ai_zombie_bartear_r_5 nf=95 fps=30.0 db=3650 ds=77 di=54 rs=13107 ix=0
+#2594 XAnimParts 0x3314054..0x331b780 len=30508 name=ai_zombie_bartear_r_6 nf=80 fps=30.0 db=3534 ds=80 di=54 rs=12863 ix=0
+#2595 XAnimParts 0x331b780..0x3321ac6 len=25414 name=ai_zombie_bartear_crawl_l_1 nf=84 fps=30.0 db=2980 ds=76 di=54 rs=10552 ix=0
+#2596 XAnimParts 0x3321ac6..0x3329dd4 len=33550 name=ai_zombie_bartear_crawl_l_2 nf=94 fps=30.0 db=3926 ds=76 di=54 rs=14075 ix=0
+#2597 XAnimParts 0x3329dd4..0x33323f4 len=34336 name=ai_zombie_bartear_crawl_l_3 nf=106 fps=30.0 db=4056 ds=76 di=54 rs=14316 ix=0
+#2598 XAnimParts 0x33323f4..0x3340cc1 len=59597 name=ai_zombie_bartear_crawl_l_4 nf=153 fps=30.0 db=6945 ds=79 di=54 rs=25355 ix=0
+#2599 XAnimParts 0x3340cc1..0x3348ea8 len=33255 name=ai_zombie_bartear_crawl_l_5 nf=99 fps=30.0 db=3918 ds=76 di=54 rs=13876 ix=0
+#2600 XAnimParts 0x3348ea8..0x334f2b0 len=25608 name=ai_zombie_bartear_crawl_l_6 nf=75 fps=30.0 db=2989 ds=79 di=54 rs=10682 ix=0
+#2601 XAnimParts 0x334f2b0..0x3358189 len=36569 name=ai_zombie_bartear_crawl_m_1 nf=102 fps=30.0 db=4264 ds=79 di=54 rs=15402 ix=0
+#2602 XAnimParts 0x3358189..0x336282d len=42660 name=ai_zombie_bartear_crawl_m_2 nf=146 fps=30.0 db=5044 ds=86 di=54 rs=17863 ix=0
+#2603 XAnimParts 0x336282d..0x336e8cf len=49314 name=ai_zombie_bartear_crawl_m_3 nf=167 fps=30.0 db=5836 ds=76 di=54 rs=20708 ix=0
+#2604 XAnimParts 0x336e8cf..0x337b940 len=53361 name=ai_zombie_bartear_crawl_m_4 nf=177 fps=30.0 db=6332 ds=77 di=54 rs=22376 ix=0
+#2605 XAnimParts 0x337b940..0x338592f len=40943 name=ai_zombie_bartear_crawl_m_5 nf=132 fps=30.0 db=4828 ds=77 di=54 rs=17177 ix=0
+#2606 XAnimParts 0x338592f..0x338d16e len=30783 name=ai_zombie_bartear_crawl_m_6 nf=93 fps=30.0 db=3583 ds=76 di=54 rs=12947 ix=0
+#2607 XAnimParts 0x338d16e..0x3396c3a len=39628 name=ai_zombie_bartear_crawl_r_1 nf=132 fps=30.0 db=4707 ds=88 di=54 rs=16497 ix=0
+#2608 XAnimParts 0x3396c3a..0x33a0599 len=39263 name=ai_zombie_bartear_crawl_r_2 nf=133 fps=30.0 db=4649 ds=85 di=54 rs=16393 ix=0
+#2609 XAnimParts 0x33a0599..0x33aad9e len=43013 name=ai_zombie_bartear_crawl_r_3 nf=151 fps=30.0 db=5070 ds=100 di=54 rs=18053 ix=0
+#2610 XAnimParts 0x33aad9e..0x33b5aae len=44304 name=ai_zombie_bartear_crawl_r_4 nf=150 fps=30.0 db=5250 ds=95 di=54 rs=18519 ix=0
+#2611 XAnimParts 0x33b5aae..0x33c0d6b len=45757 name=ai_zombie_bartear_crawl_r_5 nf=160 fps=30.0 db=5377 ds=94 di=54 rs=19288 ix=0
+#2612 XAnimParts 0x33c0d6b..0x33cdd12 len=53159 name=ai_zombie_bartear_crawl_r_6 nf=171 fps=30.0 db=6279 ds=76 di=54 rs=22379 ix=0
+#2613 XAnimParts 0x33cdd12..0x33d4177 len=25701 name=ai_zombie_bar_bend_l nf=69 fps=30.0 db=2974 ds=76 di=54 rs=10795 ix=0
+#2614 XAnimParts 0x33d4177..0x33dc929 len=34738 name=ai_zombie_bar_bend_l_2 nf=102 fps=30.0 db=4032 ds=76 di=54 rs=14692 ix=0
+#2615 XAnimParts 0x33dc929..0x33e5255 len=35116 name=ai_zombie_bar_bend_m_1 nf=100 fps=30.0 db=4065 ds=85 di=54 rs=14881 ix=0
+#2616 XAnimParts 0x33e5255..0x33eba48 len=26611 name=ai_zombie_bar_bend_m_2 nf=85 fps=30.0 db=3087 ds=83 di=54 rs=11175 ix=0
+#2617 XAnimParts 0x33eba48..0x33f214e len=26374 name=ai_zombie_bar_bend_r nf=95 fps=30.0 db=3088 ds=80 di=66 rs=11012 ix=0
+#2618 XAnimParts 0x33f214e..0x33f8a5f len=26897 name=ai_zombie_bar_bend_r_2 nf=85 fps=30.0 db=3131 ds=86 di=54 rs=11260 ix=0
+#2619 XModel 0x33f8a5f..0x33f93cf len=2416 name=fx_debris_stone_02
+#2620 FxEffectDef 0x33f93cf..0x33fb5a7 len=8664 name=maps/zombie/fx_zombie_bar_break
+#2621 FxEffectDef 0x33fb5a7..0x33fce1c len=6261 name=maps/zombie/fx_zombie_bar_break_lite
+#2622 MaterialTechniqueSet 0x33fce1c..0x3424480 len=161380 name=mc_l_sm_r0c0d0n0s0x0
+#2623 XModel 0x3424480..0x342d678 len=37368 name=p_zom_win_bars_01_vert04_bend_180
+#2624 XModel 0x342d678..0x3438125 len=43693 name=p_zom_win_bars_01_vert01_bend_180
+#2625 XModel 0x3438125..0x343937f len=4698 name=p_zom_win_bars_01_vert04_bend
+#2626 XModel 0x343937f..0x343aa59 len=5850 name=p_zom_win_bars_01_vert01_bend
+#2627 XModel 0x343aa59..0x343fc18 len=20927 name=p_zom_win_cell_bars_01_vert01_bent
+#2628 XModel 0x343fc18..0x3440e77 len=4703 name=p_zom_win_cell_bars_01_vert04_bent
+#2629 XAnimParts 0x3440e77..0x344867f len=30728 name=ai_zombie_door_tear_high nf=78 fps=30.0 db=3572 ds=314 di=159 rs=11995 ix=0
+#2630 XAnimParts 0x344867f..0x344f4dd len=28254 name=ai_zombie_door_tear_left nf=72 fps=30.0 db=3266 ds=314 di=159 rs=10983 ix=0
+#2631 XAnimParts 0x344f4dd..0x3457cc8 len=34795 name=ai_zombie_door_tear_right nf=91 fps=30.0 db=4059 ds=315 di=162 rs=13769 ix=0
+#2632 XAnimParts 0x3457cc8..0x345ebbd len=28405 name=ai_zombie_door_tear_low nf=68 fps=30.0 db=3304 ds=277 di=192 rs=10950 ix=0
+#2633 XAnimParts 0x345ebbd..0x3463605 len=19016 name=ai_gib_bothlegs_gib nf=45 fps=30.0 db=2266 ds=105 di=102 rs=7527 ix=0
+#2634 XAnimParts 0x3463605..0x3463cdd len=1752 name=ai_zombie_idle_base nf=1 fps=30.0 db=112 ds=404 di=111 rs=16 ix=0
+#2635 XAnimParts 0x3463cdd..0x3469efc len=25119 name=ai_zombie_traverse_v1 nf=58 fps=30.0 db=2941 ds=152 di=171 rs=9669 ix=0
+#2636 XAnimParts 0x3469efc..0x346ed30 len=20020 name=ai_zombie_traverse_v2 nf=44 fps=30.0 db=2336 ds=153 di=165 rs=7543 ix=0
+#2637 XAnimParts 0x346ed30..0x347f114 len=66532 name=ai_zombie_traverse_v3 nf=107 fps=30.0 db=7866 ds=157 di=207 rs=26984 ix=0
+#2638 XAnimParts 0x347f114..0x348bf5e len=52810 name=ai_zombie_traverse_v4 nf=103 fps=30.0 db=6150 ds=126 di=165 rs=21617 ix=0
+#2639 XAnimParts 0x348bf5e..0x3492928 len=27082 name=ai_zombie_traverse_v5 nf=47 fps=30.0 db=3136 ds=140 di=180 rs=10682 ix=0
+#2640 XAnimParts 0x3492928..0x3497bc5 len=21149 name=ai_zombie_traverse_v6 nf=34 fps=30.0 db=2521 ds=142 di=189 rs=8008 ix=0
+#2641 XAnimParts 0x3497bc5..0x349db17 len=24402 name=ai_zombie_traverse_v7 nf=42 fps=30.0 db=2862 ds=145 di=198 rs=9361 ix=0
+#2642 XAnimParts 0x349db17..0x34b4b11 len=94202 name=ai_zombie_traverse_crawl_v1 nf=230 fps=30.0 db=11093 ds=125 di=168 rs=39288 ix=0
+#2643 XAnimParts 0x34b4b11..0x34b980b len=19706 name=ai_zombie_crawl_jump_down_72 nf=36 fps=30.0 db=2302 ds=136 di=177 rs=7475 ix=0
+#2644 XAnimParts 0x34b980b..0x34bf27d len=23154 name=ai_zombie_crawl_jump_down_97 nf=41 fps=30.0 db=2703 ds=150 di=177 rs=8901 ix=0
+#2645 XAnimParts 0x34bf27d..0x34c47a6 len=21801 name=ai_zombie_crawl_jump_down_127 nf=40 fps=30.0 db=2549 ds=134 di=177 rs=8340 ix=0
+#2646 XAnimParts 0x34c47a6..0x34c9ef8 len=22354 name=ai_zombie_crawl_jump_down_184 nf=39 fps=30.0 db=2603 ds=142 di=177 rs=8584 ix=0
+#2647 XAnimParts 0x34c9ef8..0x34cf09c len=20900 name=ai_zombie_crawl_jump_down_189 nf=39 fps=30.0 db=2449 ds=142 di=177 rs=7913 ix=0
+#2648 XAnimParts 0x34cf09c..0x34d3299 len=16893 name=ai_zombie_jump_down_190 nf=39 fps=30.0 db=1980 ds=136 di=162 rs=6343 ix=0
+#2649 XAnimParts 0x34d3299..0x34d7468 len=16847 name=ai_zombie_jump_down_120 nf=39 fps=30.0 db=1974 ds=136 di=162 rs=6322 ix=0
+#2650 XAnimParts 0x34d7468..0x34dae54 len=14828 name=ai_zombie_jump_down_96 nf=34 fps=30.0 db=1727 ds=145 di=162 rs=5475 ix=0
+#2651 XAnimParts 0x34dae54..0x34de7b6 len=14690 name=ai_zombie_jump_down_72 nf=34 fps=30.0 db=1715 ds=145 di=162 rs=5438 ix=0
+#2652 XAnimParts 0x34de7b6..0x34e1d35 len=13695 name=ai_zombie_jump_down_40 nf=31 fps=30.0 db=1580 ds=140 di=162 rs=5038 ix=0
+#2653 XAnimParts 0x34e1d35..0x34ede99 len=49508 name=ai_zombie_jump_up_2_climb nf=112 fps=30.0 db=5848 ds=128 di=180 rs=19892 ix=0
+#2654 XAnimParts 0x34ede99..0x34f48e9 len=27216 name=ai_zombie_jump_up nf=65 fps=30.0 db=3207 ds=136 di=165 rs=10673 ix=0
+#2655 XAnimParts 0x34f48e9..0x35034d9 len=60400 name=ai_zombie_crawl_jump_up_2_climb nf=179 fps=30.0 db=7040 ds=111 di=129 rs=24972 ix=0
+#2656 XAnimParts 0x35034d9..0x35191aa len=89297 name=ai_zombie_traverse_ground_v1_crawl nf=240 fps=30.0 db=10500 ds=128 di=171 rs=37130 ix=0
+#2657 XAnimParts 0x35191aa..0x3529fc9 len=69151 name=ai_zombie_traverse_ground_v1_crawlfast nf=171 fps=30.0 db=8229 ds=140 di=168 rs=27994 ix=0
+#2658 XAnimParts 0x3529fc9..0x352dfb6 len=16365 name=ai_zombie_traverse_ground_v1_deathinside nf=34 fps=30.0 db=1919 ds=144 di=192 rs=6044 ix=0
+#2659 XAnimParts 0x352dfb6..0x3533bc6 len=23568 name=ai_zombie_traverse_ground_v1_deathinside_alt nf=49 fps=30.0 db=2771 ds=141 di=171 rs=9187 ix=0
+#2660 XAnimParts 0x3533bc6..0x353a3f5 len=26671 name=ai_zombie_traverse_ground_v1_deathoutside nf=67 fps=30.0 db=3077 ds=135 di=165 rs=10633 ix=0
+#2661 XAnimParts 0x353a3f5..0x353f958 len=21859 name=ai_zombie_traverse_ground_v1_deathoutside_alt nf=45 fps=30.0 db=2563 ds=134 di=165 rs=8459 ix=0
+#2662 XAnimParts 0x353f958..0x3552df1 len=79001 name=ai_zombie_traverse_ground_v1_run nf=176 fps=30.0 db=9354 ds=135 di=198 rs=32380 ix=0
+#2663 XAnimParts 0x3552df1..0x356f7dd len=117228 name=ai_zombie_traverse_ground_v1_walk nf=303 fps=30.0 db=108 ds=1691 di=171 rs=43846 ix=10765
+#2664 XAnimParts 0x356f7dd..0x3574e04 len=22055 name=ai_zombie_traverse_ground_v2_death_high nf=73 fps=30.0 db=2557 ds=136 di=189 rs=8700 ix=0
+#2665 XAnimParts 0x3574e04..0x3579a50 len=19532 name=ai_zombie_traverse_ground_v2_death_high_alt nf=54 fps=30.0 db=2280 ds=142 di=177 rs=7565 ix=0
+#2666 XAnimParts 0x3579a50..0x357e092 len=17986 name=ai_zombie_traverse_ground_v2_death_low nf=42 fps=30.0 db=2113 ds=138 di=153 rs=6964 ix=0
+#2667 XAnimParts 0x357e092..0x358211d len=16523 name=ai_zombie_traverse_ground_v2_death_low_alt nf=40 fps=30.0 db=1903 ds=132 di=153 rs=6460 ix=0
+#2668 XAnimParts 0x358211d..0x35889e5 len=26824 name=ai_zombie_traverse_ground_v2_walk nf=79 fps=30.0 db=3115 ds=134 di=192 rs=10680 ix=0
+#2669 XAnimParts 0x35889e5..0x3590d69 len=33668 name=ai_zombie_traverse_ground_v2_walk_alta nf=91 fps=30.0 db=3917 ds=148 di=204 rs=13426 ix=0
+#2670 XAnimParts 0x3590d69..0x3596603 len=22682 name=ai_zombie_traverse_ground_v2_walk_altb nf=72 fps=30.0 db=2591 ds=130 di=168 rs=9106 ix=0
+#2671 XAnimParts 0x3596603..0x35a6e28 len=67621 name=ai_zombie_traverse_ground_climbout_fast nf=140 fps=30.0 db=8034 ds=135 di=198 rs=27495 ix=0
+#2672 MaterialTechniqueSet 0x35a6e28..0x35a807d len=4693 name=mc_projected_decal_unlit
+#2673 XModel 0x35a807d..0x35a8736 len=1721 name=fx_decal_zombie_crater_dirt
+#2674 FxEffectDef 0x35a8736..0x35ac4bb len=15749 name=maps/zombie/fx_mp_zombie_hand_dirt_burst
+#2675 FxEffectDef 0x35ac4bb..0x35aed7d len=10434 name=maps/zombie/fx_mp_zombie_body_dirt_billowing
+#2676 FxEffectDef 0x35aed7d..0x35b00ad len=4912 name=env/dirt/fx_dust_impact_plume_small
+#2677 FxEffectDef 0x35b00ad..0x35b1d78 len=7371 name=maps/zombie/fx_mp_zombie_body_dust_falling
+#2678 FxEffectDef 0x35b1d78..0x35b46e9 len=10609 name=maps/zombie/fx_zombie_body_wtr_burst
+#2679 FxEffectDef 0x35b46e9..0x35b76be len=12245 name=maps/zombie/fx_zombie_body_wtr_billowing
+#2680 FxEffectDef 0x35b76be..0x35b9385 len=7367 name=maps/zombie/fx_zombie_body_wtr_falling
+#2681 XAnimParts 0x35b9385..0x35c42ba len=44853 name=ch_dazed_d_death nf=135 fps=30.0 db=5238 ds=103 di=117 rs=18372 ix=0
+#2682 XAnimParts 0x35c42ba..0x35d09dd len=50979 name=ch_dazed_c_death nf=133 fps=30.0 db=5951 ds=101 di=105 rs=21221 ix=0
+#2683 XAnimParts 0x35d09dd..0x35d6005 len=22056 name=ch_dazed_b_death nf=80 fps=30.0 db=2570 ds=128 di=105 rs=8612 ix=0
+#2684 XAnimParts 0x35d6005..0x35dcd86 len=28033 name=ch_dazed_a_death nf=64 fps=30.0 db=3300 ds=104 di=105 rs=11380 ix=0
+#2685 SndBank 0x35dcd86..0x4bb8ff3 len=22921837 name=zmb_common.all
+#2686 RawFile 0x4bb8ff3..0x4bb930a len=791 name=aitype/zombie_dog.gsc
+#2687 XModel 0x4bb930a..0x4bcc7b4 len=79018 name=grenade_bag
+#2688 XModel 0x4bcc7b4..0x4bd1549 len=19861 name=zombie_pickup_perk_bottle
+#2689 XAnimParts 0x4bd1549..0x4bde6de len=53653 name=ai_zombie_window_attack_crawl_l nf=169 fps=30.0 db=6412 ds=152 di=219 rs=21768 ix=0
+#2690 XAnimParts 0x4bde6de..0x4bea6e7 len=49161 name=ai_zombie_window_attack_crawl_m nf=146 fps=30.0 db=5822 ds=143 di=219 rs=20070 ix=0
+#2691 XAnimParts 0x4bea6e7..0x4bf890a len=57891 name=ai_zombie_window_attack_crawl_r nf=175 fps=30.0 db=6907 ds=139 di=219 rs=23608 ix=0
+#2692 RawFile 0x4bf890a..0x4bf8925 len=27 name=common_zombie
