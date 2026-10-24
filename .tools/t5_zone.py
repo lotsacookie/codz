@@ -995,6 +995,9 @@ class T5Zone:
             else:
                 vals[name] = f"<{kind}>"
             return
+        if isinstance(pv, (list, tuple)) and m.type_name not in self.structs and m.type_name not in ASSET_STRUCTS:
+            vals[name] = self._treat_leaf_ptr_array(sd, dsl, m, name, pv, ctx, scopes, info)
+            return
         if isinstance(pv, (list, tuple)):
             # embedded array of pointers (T* x[N]): values inline in struct
             count = self._eval_count(info["count"], ctx, info) if info["count"] else len(pv)
@@ -1134,6 +1137,73 @@ class T5Zone:
             ref = self.alloc(block, use_align, RawArray(tname, count))
             ref.obj.data = self.read(esz * count, block=block, align=use_align)
             vals[name] = ref
+
+    def _leaf_array_dims(self, dsl, scopes, name, total):
+        pat = re.compile(re.escape(name) + r"((?:\[\d+\])+)$")
+        dims = None
+        for d in [dsl] + [s for s, _ in scopes]:
+            if d is None:
+                continue
+            for key in d.counts:
+                mm = pat.match(key)
+                if not mm:
+                    continue
+                idx = [int(x) for x in re.findall(r"\[(\d+)\]", mm.group(1))]
+                if dims is None:
+                    dims = [0] * len(idx)
+                if len(idx) != len(dims):
+                    continue
+                dims = [max(a, b + 1) for a, b in zip(dims, idx)]
+        if dims is None:
+            return [total]
+        prod = 1
+        for x in dims:
+            prod *= x
+        return dims if prod == total else [total]
+
+    def _treat_leaf_ptr_array(self, sd, dsl, m, name, pv, ctx, scopes, info):
+        dims = self._leaf_array_dims(dsl, scopes, name, len(pv))
+        top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
+        block = info["block"] if info["block"] is not None else top
+        out = []
+        for k, pv2 in enumerate(pv):
+            if not isinstance(pv2, int):
+                out.append(pv2)
+                continue
+            k2, t2 = self.classify(pv2)
+            if k2 == "null":
+                out.append(None)
+                continue
+            if k2 == "offset":
+                try:
+                    out.append(self.resolve(*t2))
+                except (ZoneError, struct.error, ValueError, KeyError):
+                    if not self.deferred:
+                        raise
+                    out.append(PendingRef(*t2))
+                continue
+            if k2 not in ("following", "insert"):
+                out.append(None)
+                continue
+            rem = k
+            idxs = []
+            for dsz in reversed(dims):
+                idxs.append(rem % dsz)
+                rem //= dsz
+            idxs.reverse()
+            ikey = name + "".join(f"[{i}]" for i in idxs)
+            iinfo = self._member_info(dsl, sd, ikey, scopes)
+            expr = iinfo["count"] or info["count"]
+            count = self._eval_count(expr, ctx, iinfo if iinfo["count"] else info) if expr else 1
+            if count < 0 or count > 0x4000000:
+                raise ZoneError(f"implausible array count {count} for {sd.name}.{ikey} (trace={self.ctx_trace[-6:]})")
+            esz, eal = self.hdr.type_size_align(m.type_name)
+            esz *= m.elem_mult
+            use_align = info["align"] or eal
+            ref = self.alloc(block, use_align, RawArray(m.type_name, count))
+            ref.obj.data = self.read(esz * count, block=block, align=use_align)
+            out.append(ref)
+        return out
 
     def _struct_start_looks_right(self, tname, base):
         """Cheap plausibility check for a struct inline read at `base`."""
