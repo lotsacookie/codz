@@ -118,7 +118,7 @@ export class Combat {
     for(let i=0;i<Math.max(1,s.def.pellets);i++){
       const direction=forward.clone(),spread=(s.def.pellets>1?.055:this.ads?0:.012)*(s.perks.has('specialty_deadshot')?.65:1);
       direction.add(new THREE.Vector3((Math.random()-.5)*spread,(Math.random()-.5)*spread,(Math.random()-.5)*spread)).normalize();
-      const ray=new THREE.Ray(this.camera.position.clone(),direction),wall=this.world.raycast(ray,1,6000),hit=this.enemies.rayHit(ray,wall?.distance??6000);
+      const ray=new THREE.Ray(this.camera.position.clone(),direction),wall=(this.world.bulletRaycast??this.world.raycast).call(this.world,ray,1,6000),hit=this.enemies.rayHit(ray,wall?.distance??6000);
       this.lastShot={target:hit?.z.id,head:hit?.head,wall:wall?.distance};
       if(hit)this.enemies.hurt(hit.z,s.def.id==='microwavegundw_zm'?hit.z.health:(hit.distance>s.def.range?s.def.minDamage:s.def.damage)*(hit.head?Math.max(1,s.def.headMultiplier):1),hit.head,false,s.def.id==='microwavegundw_zm'?'zap':'bullet');
       if(hit?.head&&this.blood&&!this.enemies.list.includes(hit.z))popHead({blood:this.blood,enemies:this.enemies,zombie:hit.z,def:s.def,distance:hit.distance});else if(hit?.limb&&this.blood)popLimb({blood:this.blood,enemies:this.enemies,debris:this.limbDebris,zombie:hit.z,limb:hit.limb,cut:hit.cut,def:s.def,distance:hit.distance,awayFrom:this.camera.position});

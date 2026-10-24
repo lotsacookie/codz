@@ -10,6 +10,8 @@ import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
 import { bindPlayerFootsteps } from '../footsteps.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
+import { createBulletFilter } from '../bullet-trace.js';
+let bullets = null;
 import { disposeObject } from '../dispose.js';
 import { chunkWorldMeshes } from '../world-chunks.js';
 import { OcclusionCuller } from '../occlusion.js';
@@ -424,6 +426,7 @@ ctx.onDispose(() => {
 });
 
 function prepareMaterials(root) {
+  (bullets ??= createBulletFilter()).add(root);
   const prepared = new Set(), hiddenEntities = new Set(data.hiddenEntities);
   root.traverse(object => {
     if (object.userData.collisionOnly || hiddenEntities.has(object.userData.entityId)) object.visible = false;
@@ -543,6 +546,7 @@ async function load() {
     path: (a, b) => navigation.path(a, b),
     closest: (p, e) => navigation.closest(p, e),
     raycast: rayIntersect,
+    bulletRaycast: (ray, near, far) => bullets ? bullets.trace(rayIntersect, ray, near, far) : rayIntersect(ray, near, far),
     lineClear: (a, b) => { const d = b.clone().sub(a); return !rayIntersect(new THREE.Ray(a, d.clone().normalize()), 1, Math.max(1, d.length() - 4)); },
     lowGravity: () => false,
     zoneAt: () => C.id,

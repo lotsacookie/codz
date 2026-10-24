@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { init, importNavMesh, NavMeshQuery } from '@recast-navigation/core';
 import { loadCollisionWorld, CollisionWorld } from './collision-world.js';
 import { optimizeStaticScene } from './scene-optimizer.js';
+import { createBulletFilter } from './bullet-trace.js';
 import { hideWallGunAttachments } from './wall-gun-attachments.js';
 import { chunkWorldMeshes } from './world-chunks.js';
 import { loadModel } from './animation.js';
@@ -46,6 +47,7 @@ export class World {
     gltf.scene.traverse(o=>{if(o.userData?.collisionOnly)o.visible=false;if(o.userData?.dynamicBrush){moving.push(o);this.entities.set(o.userData.entityId,o);}});
     for(const o of moving){this.scene.attach(o);if(o.userData.targetname==='theater_extracam_screen')o.visible=false;}
     if(runtimeProfile.shadows)gltf.scene.traverse(o=>{if(o.isMesh&&!o.userData?.collisionOnly){o.castShadow=true;o.receiveShadow=true;enableCascadedShadows(runtimeProfile.csm,o.material);}});
+    this.bullets=createBulletFilter().add(gltf.scene);
     this.chunking=chunkWorldMeshes(gltf.scene);
     this.optimization=optimizeStaticScene(gltf.scene,{cellSize:768});
     this.staticRoot=gltf.scene;
@@ -125,6 +127,8 @@ export class World {
   closest(p,extents){const r=this.query.findClosestPoint({x:p.x,y:p.y,z:p.z},extents?{halfExtents:extents}:undefined);return r.success?new THREE.Vector3(r.point.x,r.point.y,r.point.z):null;}
   path(a,b){const r=this.query.computePath({x:a.x,y:a.y,z:a.z},{x:b.x,y:b.y,z:b.z});return r.success?r.path.map(p=>new THREE.Vector3(p.x,p.y,p.z)):[];}
   raycast(ray,near=0,far=Infinity,windows=false){let hit=this.collision.rayIntersect(ray,near,far);for(const d of this.dynamic){if(!d.enabled||!d.collider||(!windows&&d.window))continue;const h=d.collider.rayIntersect(ray,near,hit?Math.min(hit.distance,far):far);if(h){h.dynamic=true;hit=h;}}return hit;}
+  // Shots pass through invisible collision, cut-away alpha pixels and thin slabs; movement and sight lines do not.
+  bulletRaycast(ray,near=0,far=Infinity){return this.bullets?this.bullets.trace((r,n,f)=>this.raycast(r,n,f),ray,near,far):this.raycast(ray,near,far);}
   lineClear(a,b){const v=b.clone().sub(a),dist=v.length();return !this.raycast(new THREE.Ray(a,v.normalize()),1,Math.max(1,dist-4));}
   setDoors(session){
     for(const [name,d] of this.doors){const open=session.openDoors.has(name)||(d.electric&&session.power);for(const p of d.parts){p.enabled=!open;if(p.object)p.object.visible=!open;}}

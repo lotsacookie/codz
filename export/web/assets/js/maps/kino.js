@@ -265,7 +265,7 @@ function shoot(){
   const pellets=Math.max(1,session.def.pellets);
   for(let i=0;i<pellets;i++){
     const direction=forward.clone();if(pellets>1||!ads){const spread=pellets>1?.055:.012;direction.x+=(Math.random()-.5)*spread;direction.y+=(Math.random()-.5)*spread;direction.z+=(Math.random()-.5)*spread;direction.normalize();}
-    const ray=new THREE.Ray(camera.position.clone(),direction),wall=world.raycast(ray,1,6000),target=enemies.rayHit(ray,wall?.distance??6000);
+    const ray=new THREE.Ray(camera.position.clone(),direction),wall=world.bulletRaycast(ray,1,6000),target=enemies.rayHit(ray,wall?.distance??6000);
     lastShot={origin:ray.origin.toArray(),direction:direction.toArray(),wallDistance:wall?.distance??null,target:target?{id:target.z.id,head:target.head,distance:target.distance}:null};
     if(target){const d=target.distance>session.def.range?session.def.minDamage:session.def.damage;enemies.hurt(target.z,d*(target.head?Math.max(1,session.def.headMultiplier):1),target.head,false,session.def.explosionRadius?'explosion':'bullet');if(target.head&&!enemies.list.includes(target.z))popHead({blood,enemies,zombie:target.z,def:session.def,distance:target.distance});else if(target.limb)popLimb({blood,enemies,debris:limbDebris,zombie:target.z,limb:target.limb,cut:target.cut,def:session.def,distance:target.distance,awayFrom:camera.position});}
     else if(wall)impacts.strike(wall,ray,particles);

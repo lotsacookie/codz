@@ -9,6 +9,8 @@ import { PlayerController } from '../player-controller.js';
 import { bindPlayerFootsteps } from '../footsteps.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { optimizeStaticScene } from '../scene-optimizer.js';
+import { createBulletFilter } from '../bullet-trace.js';
+let bullets = null;
 import { MoonState, contains, environmentAt } from '../moon-rules.js';
 import { MoonNavigation } from '../moon-navigation.js';
 import { Combat } from '../combat.js';
@@ -322,6 +324,7 @@ async function load() {
   const boardIds=data.entities.filter(e=>windowGroups.has(e.targetname)&&e.script_parameters?.startsWith('barricade_')).map(e=>e.id);
   const moving = new Set([...data.doors.flatMap(d => d.parts),...hazardIds,...windowIds,...boardIds]), detach = [];
   applyChalkTransparency(gltf.scene);
+  (bullets ??= createBulletFilter()).add(gltf.scene);
   gltf.scene.traverse(o => {
     if (o.userData.collisionOnly) o.visible = false;
     // Native sky materials use cubemap shaders; their flat DDS preview makes
@@ -343,7 +346,7 @@ async function load() {
   bindPlayerFootsteps(player, () => combat?.audio);
   showStatus('Loading Moon zombies and weapons…');
   await sharedAssets;
-  const worldApi={navigation,path:(a,b)=>navigation.path(a,b),closest:(p,e)=>navigation.closest(p,e),raycast:rayIntersect,
+  const worldApi={navigation,path:(a,b)=>navigation.path(a,b),closest:(p,e)=>navigation.closest(p,e),raycast:rayIntersect,bulletRaycast:(ray,near,far)=>bullets?bullets.trace(rayIntersect,ray,near,far):rayIntersect(ray,near,far),
     lineClear:(a,b)=>{const d=b.clone().sub(a);return !rayIntersect(new THREE.Ray(a,d.clone().normalize()),1,Math.max(1,d.length()-4));},
     zoneAt:p=>environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon').zone,
     lowGravity:p=>{const env=environmentAt(data,p.clone().add(new THREE.Vector3(0,35,0)).toArray(),state.power,navigation.area==='moon');return (features?.environment(env)??env).lowGravity;}};
