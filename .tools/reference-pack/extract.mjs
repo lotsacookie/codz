@@ -163,6 +163,7 @@ export async function extractZoneAssets(file, zoneName, { out, kinds, only, repo
     console.log(`${zoneName}: ${result.status}, ${result.assets} assets walked, ${result.resyncs} resyncs`, result.types);
     const { streamPos = 0, streamSize = 0 } = result.coverage ?? {};
     if (streamSize) console.log(`  walked ${(100 * streamPos / streamSize).toFixed(1)}% of the zone data (${streamPos} of ${streamSize} bytes)`);
+    for (const block of result.blocks ?? []) console.log(`  block ${block.name}: header size ${block.size}, read ${block.cursor}`);
     if (streamSize && result.status !== 'ok') report.push({ archive: zoneName, kind: 'zone', status: 'walk-truncated', streamPos, streamSize, error: result.error });
     if (result.error) console.log(`  walk error: ${result.error}`);
     for (const [type, message, count] of result.failures) console.log(`  failed ${type} x${count}: ${message}`);

@@ -15,7 +15,7 @@ from collections import Counter
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 
-from t5_zone import PendingRef, RawArray, Ref, ScriptStringRef, T5Zone
+from t5_zone import BLOCK_NAMES, PendingRef, RawArray, Ref, ScriptStringRef, T5Zone
 
 KIND_FOR_TYPE = {"XAnimParts": "animations", "XModel": "models", "WeaponVariantDef": "weapons"}
 WEAPON_BUNDLE_KINDS = ("animations", "models")
@@ -579,10 +579,12 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
     types = Counter(type_name for _i, type_name, _n, _o in assets)
     size = len(zone.data) if zone is not None else 0
     pos = zone.pos if zone is not None else 0
+    blocks = [{"name": BLOCK_NAMES[i], "size": zone.block_sizes[i], "cursor": zone.cursors[i]} for i in range(len(BLOCK_NAMES))] if zone is not None else []
     manifest = {
         "zone": zone_name,
         "status": status,
         "error": error,
+        "blocks": blocks,
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),
@@ -604,6 +606,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "error": error,
         "assets": len(assets),
         "coverage": {"streamPos": pos, "streamSize": size},
+        "blocks": blocks,
         "types": dict(types.most_common(40)),
         "resyncs": resyncs,
         "failures": summarize_failures(lines),

@@ -124,24 +124,41 @@ jobs:
         env:
           OUT_DIR: ${{ inputs.out_dir }}
           MAP: ${{ inputs.map }}
-          MAX_COMMIT_BYTES: 150000000
+          MAX_COMMIT_BYTES: 100000000
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          publish_batch() {
+            git commit -q -m "reference: extract $MAP $1 into $OUT_DIR"
+            git pull -q --rebase --autostash origin main
+            git push -q origin HEAD:main
+          }
           commit_group() {
             label="$1"; shift
-            git add -A -- "$@"
-            if git diff --cached --quiet; then echo "$label: nothing changed."; return 0; fi
-            git diff --cached --stat | tail -1
-            new_bytes=$(git diff --cached --name-only --diff-filter=AM -z | xargs -0 -r du -cb | tail -1 | cut -f1)
-            echo "$label: ${new_bytes:-0} bytes changed (limit $MAX_COMMIT_BYTES)"
-            if [ "${new_bytes:-0}" -gt "$MAX_COMMIT_BYTES" ]; then
-              echo "Refusing to commit $label: over the size limit. Re-run with a narrower 'only' regex."
-              git reset -q; return 1
+            deleted=()
+            while IFS= read -r -d '' path; do deleted+=("$path"); done < <(git ls-files -z -d -- "$@")
+            if [ "${#deleted[@]}" -gt 0 ]; then
+              git add -A -- "${deleted[@]}"
+              echo "$label: removing ${#deleted[@]} files"
+              publish_batch "$label removals"
             fi
-            git commit -q -m "reference: extract $MAP $label into $OUT_DIR"
-            git pull -q --rebase origin main
-            git push -q origin HEAD:main
+            batch=(); batch_bytes=0; part=1; total=0
+            while IFS= read -r -d '' path; do
+              size=$(stat -c %s -- "$path")
+              if [ "${#batch[@]}" -gt 0 ] && [ $((batch_bytes + size)) -gt "$MAX_COMMIT_BYTES" ]; then
+                git add -A -- "${batch[@]}"
+                echo "$label: part $part, ${#batch[@]} files, $batch_bytes bytes"
+                publish_batch "$label part $part"
+                part=$((part + 1)); batch=(); batch_bytes=0
+              fi
+              batch+=("$path"); batch_bytes=$((batch_bytes + size)); total=$((total + size))
+            done < <(git ls-files -z -m -o --exclude-standard -- "$@")
+            if [ "${#batch[@]}" -gt 0 ]; then
+              git add -A -- "${batch[@]}"
+              echo "$label: part $part, ${#batch[@]} files, $batch_bytes bytes"
+              publish_batch "$label part $part"
+            fi
+            if [ "$total" -eq 0 ] && [ "${#deleted[@]}" -eq 0 ]; then echo "$label: nothing changed."; fi
           }
           status=0
           # deletions from the clean step first, then each zone folder, then the shared archive folders (images, sounds, ...)
