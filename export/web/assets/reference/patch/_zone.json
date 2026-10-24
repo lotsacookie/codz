@@ -2,11 +2,11 @@
  "zone": "zone/Common/patch.ff",
  "status": "ok",
  "error": null,
- "complete": false,
+ "complete": true,
  "coverage": {
-  "streamPos": 124931,
+  "streamPos": 4203998,
   "streamSize": 4203998,
-  "percent": 2.97
+  "percent": 100.0
  },
  "types": {
   "Material": 30,
@@ -22,9 +22,7 @@
  "failures": [],
  "softErrors": [],
  "failedSpans": [],
- "unwalkedTail": [
-  "_unwalked/tail_0001e803_part0.bin"
- ],
+ "unwalkedTail": [],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
  "assets": [
@@ -91,68 +89,68 @@
   {
    "index": 10,
    "type": "MenuList",
-   "name": "\u0004",
-   "file": "assets/MenuList/_.json"
+   "name": "ui/options_graphics_pc.menu",
+   "file": "assets/MenuList/ui/options_graphics_pc.menu.json"
   },
   {
    "index": 11,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/11.json"
+   "name": "ui/options_shoot_pc.menu",
+   "file": "assets/MenuList/ui/options_shoot_pc.menu.json"
   },
   {
    "index": 12,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/12.json"
+   "name": "ui/levels.menu",
+   "file": "assets/MenuList/ui/levels.menu.json"
   },
   {
    "index": 13,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/13.json"
+   "name": "ui/settings.menu",
+   "file": "assets/MenuList/ui/settings.menu.json"
   },
   {
    "index": 14,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/14.json"
+   "name": "ui/leaderboards.menu",
+   "file": "assets/MenuList/ui/leaderboards.menu.json"
   },
   {
    "index": 15,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/15.json"
+   "name": "ui/xboxlive.menu",
+   "file": "assets/MenuList/ui/xboxlive.menu.json"
   },
   {
    "index": 16,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/16.json"
+   "name": "ui/xboxlive_lobby.menu",
+   "file": "assets/MenuList/ui/xboxlive_lobby.menu.json"
   },
   {
    "index": 17,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/17.json"
+   "name": "ui/main.menu",
+   "file": "assets/MenuList/ui/main.menu.json"
   },
   {
    "index": 18,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/18.json"
+   "name": "cinematic",
+   "file": "assets/MaterialTechniqueSet/cinematic.json"
   },
   {
    "index": 19,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/19.json"
+   "name": "ui/error.menu",
+   "file": "assets/MenuList/ui/error.menu.json"
   },
   {
    "index": 20,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/20.json"
+   "name": "ui/hud_zombie.menu",
+   "file": "assets/MenuList/ui/hud_zombie.menu.json"
   },
   {
    "index": 21,
@@ -163,26 +161,26 @@
   {
    "index": 22,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/22.json"
+   "name": "mp/reportuser.csv",
+   "file": "assets/StringTable/mp/reportuser.csv.json"
   },
   {
    "index": 23,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/23.json"
+   "name": "sw4_3d_char_skin_gas",
+   "file": "assets/MaterialTechniqueSet/sw4_3d_char_skin_gas.json"
   },
   {
    "index": 24,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/24.json"
+   "name": "mtl_c_usa_jungmar_ass_head_gassed",
+   "file": "assets/Material/mtl_c_usa_jungmar_ass_head_gassed.json"
   },
   {
    "index": 25,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/25.json"
+   "name": "mtl_c_rus_patrenko_head_gas",
+   "file": "assets/Material/mtl_c_rus_patrenko_head_gas.json"
   },
   {
    "index": 26,
@@ -235,197 +233,203 @@
   {
    "index": 34,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/34.json"
+   "name": "mc_sw4_3d_char_cloth",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_cloth.json"
   },
   {
    "index": 35,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/35.json"
+   "name": "mc_sw4_3d_char_eye_cornea_transparent",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_eye_cornea_transparent.json"
   },
   {
    "index": 36,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/36.json"
+   "name": "mc_sw4_3d_char_skin",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_skin.json"
   },
   {
    "index": 37,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/37.json"
+   "name": "mc_sw4_3d_char_skin_gas",
+   "file": "assets/MaterialTechniqueSet/mc_sw4_3d_char_skin_gas.json"
   },
   {
    "index": 41,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/41.json"
+   "name": "loadscreen_mp_berlinwall2",
+   "file": "assets/Material/loadscreen_mp_berlinwall2.json"
   },
   {
    "index": 42,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/42.json"
+   "name": "loadscreen_mp_discovery",
+   "file": "assets/Material/loadscreen_mp_discovery.json"
   },
   {
    "index": 43,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/43.json"
+   "name": "loadscreen_mp_kowloon",
+   "file": "assets/Material/loadscreen_mp_kowloon.json"
   },
   {
    "index": 44,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/44.json"
+   "name": "loadscreen_mp_stadium",
+   "file": "assets/Material/loadscreen_mp_stadium.json"
   },
   {
    "index": 45,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/45.json"
+   "name": "loadscreen_zombie_cosmodrome",
+   "file": "assets/Material/loadscreen_zombie_cosmodrome.json"
   },
   {
    "index": 46,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/46.json"
+   "name": "loadscreen_zombie_coast",
+   "file": "assets/Material/loadscreen_zombie_coast.json"
   },
   {
    "index": 47,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/47.json"
+   "name": "loadscreen_mp_hotel2",
+   "file": "assets/Material/loadscreen_mp_hotel2.json"
   },
   {
    "index": 48,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/48.json"
+   "name": "loadscreen_mp_outskirts",
+   "file": "assets/Material/loadscreen_mp_outskirts.json"
   },
   {
    "index": 49,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/49.json"
+   "name": "loadscreen_mp_zoo",
+   "file": "assets/Material/loadscreen_mp_zoo.json"
   },
   {
    "index": 50,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/50.json"
+   "name": "loadscreen_mp_gridlock",
+   "file": "assets/Material/loadscreen_mp_gridlock.json"
   },
   {
    "index": 51,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/51.json"
+   "name": "loadscreen_mp_area51",
+   "file": "assets/Material/loadscreen_mp_area51.json"
   },
   {
    "index": 52,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/52.json"
+   "name": "loadscreen_mp_drivein",
+   "file": "assets/Material/loadscreen_mp_drivein.json"
   },
   {
    "index": 53,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/53.json"
+   "name": "loadscreen_mp_golfcourse",
+   "file": "assets/Material/loadscreen_mp_golfcourse.json"
   },
   {
    "index": 54,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/54.json"
+   "name": "loadscreen_mp_silo",
+   "file": "assets/Material/loadscreen_mp_silo.json"
   },
   {
    "index": 55,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/55.json"
+   "name": "loadscreen_zombie_temple",
+   "file": "assets/Material/loadscreen_zombie_temple.json"
   },
   {
    "index": 56,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/56.json"
+   "name": "loadscreen_zombie_moon",
+   "file": "assets/Material/loadscreen_zombie_moon.json"
   },
   {
    "index": 57,
    "type": "Material",
-   "name": "\u0001",
-   "file": "assets/Material/_.json"
+   "name": "loadscreen_zombie_cod5_factory",
+   "file": "assets/Material/loadscreen_zombie_cod5_factory.json"
   },
   {
    "index": 58,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/58.json"
+   "name": "loadscreen_zombie_cod5_sumpf",
+   "file": "assets/Material/loadscreen_zombie_cod5_sumpf.json"
   },
   {
    "index": 59,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/59.json"
+   "name": "loadscreen_zombie_cod5_asylum",
+   "file": "assets/Material/loadscreen_zombie_cod5_asylum.json"
   },
   {
    "index": 60,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/60.json"
+   "name": "loadscreen_zombie_cod5_prototype",
+   "file": "assets/Material/loadscreen_zombie_cod5_prototype.json"
   },
   {
    "index": 61,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/61.json"
+   "name": "configure.cfg",
+   "file": "rawfiles/configure.cfg"
   },
   {
    "index": 63,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/63.json"
+   "name": "sp/configstrings/configstrings_pc_zombietron_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombietron_zom.csv.json"
   },
   {
    "index": 64,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/64.json"
+   "name": "sp/configstrings/configstrings_pc_zombie_theater_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombie_theater_zom.csv.json"
   },
   {
    "index": 65,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/65.json"
+   "name": "sp/configstrings/configstrings_pc_zombie_pentagon_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombie_pentagon_zom.csv.json"
   },
   {
    "index": 66,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/66.json"
+   "name": "sp/configstrings/configstrings_pc_zombie_cosmodrome_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombie_cosmodrome_zom.csv.json"
   },
   {
    "index": 67,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/67.json"
+   "name": "sp/configstrings/configstrings_pc_zombie_coast_zom.csv",
+   "file": "assets/StringTable/sp/configstrings/configstrings_pc_zombie_coast_zom.csv.json"
   },
   {
    "index": 68,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/68.json"
+   "name": "patch",
+   "file": "rawfiles/patch"
   }
  ],
  "named": {
   "animations": {
-   "names": [],
+   "names": [
+    "ai_stand_exposed_idle_movement"
+   ],
    "references": []
   },
   "models": {
-   "names": [],
+   "names": [
+    "c_rus_fullahead_patrenko_fb_gas",
+    "c_usa_blackops_body2_fb_gassed",
+    "c_usa_rebirth_hazmat_head_gas"
+   ],
    "references": []
   },
   "weapons": {
