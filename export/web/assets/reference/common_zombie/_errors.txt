@@ -1,30 +1,108 @@
 # error report: zone/Common/common_zombie.ff
 status: ok
-stream: walked 0x19af387 of 0x4bf8925 bytes (33.81%), 52729246 unwalked
-errors: 2 (1 failed assets, 0 soft errors, 0 poisoned pointers)
+stream: walked 0x2a6dafa of 0x4bf8925 bytes (55.85%), 35171883 unwalked
+errors: 8 (7 failed assets, 0 soft errors, 0 poisoned pointers)
 
-[1] FAILED ASSET #2212 XAnimParts
-  error: stream exhausted at 0x198aeb7 need 1204288126 (trace=['<zone>', 'asset#2212:XAnimParts', 'XAnimParts.randomDataShort'])
-  stream: start=0x198ae4f end=0x198af4b bytes=252 resyncedTo=#2213
-  previous walked asset: #2211 XAnimParts unnamed stream=0x198ade7..0x198ae4f
+[1] FAILED ASSET #2227 XAnimParts
+  error: stream exhausted at 0x29d6e8c need 1600582590 (trace=['<zone>', 'asset#2227:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])
+  stream: start=0x29d6e24 end=0x29d6e8c bytes=104 resyncedTo=#2228
+  previous walked asset: #2226 XAnimParts unnamed stream=0x29d6dbc..0x29d6e24
   bytes around the start (16 before):
-    0x0198ae3f  3f 86 fe 78 3f 9a e0 44 40 e0 2f be be c4 06 4f  ?..x?..D@./....O
-    0x0198ae4f  3f 00 00 80 bf ff ff ff ff a1 3a b1 39 01 87 8c  ?.........:.9...
-    0x0198ae5f  3f 86 fd 71 3f 40 02 26 01 00 00 5e 01 ff ff ff  ?..q?@.&...^....
-    0x0198ae6f  ff a0 34 1f c0 55 f6 15 3f fd e3 23 41 51 cf ff  ..4..U..?..#AQ..
-    0x0198ae7f  45 49 81 5a 47 6a e4 b7 45 28 00 00 00 ff ff ff  EI.ZGj..E(......
+    0x029d6e14  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d6e24  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d6e34  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d6e44  00 00 00 00 00 00 00 00 00 f3 66 df be f3 66 5f  ..........f...f_
+    0x029d6e54  3f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80  ?...............
 
-[2] WALK STOPPED at 0x19af387
-  52729246 bytes after this were not turned into assets
+[2] FAILED ASSET #2241 XAnimParts
+  error: stream exhausted at 0x29d743c need 1225775872 (trace=['<zone>', 'asset#2241:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])
+  stream: start=0x29d73d4 end=0x29d743c bytes=104 resyncedTo=#2242
+  previous walked asset: #2240 XAnimParts unnamed stream=0x29d736c..0x29d73d4
+  bytes around the start (16 before):
+    0x029d73c4  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d73d4  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d73e4  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x029d73f4  00 00 00 00 00 00 00 00 00 00 00 00 00 db 0f 49  ...............I
+    0x029d7404  c0 db 0f c9 40 00 00 00 00 0a d7 a3 bb 0a d7 a3  ....@...........
+
+[3] FAILED ASSET #2272 XAnimParts
+  error: stream exhausted at 0x2a41eee need 274726912 (trace=['<zone>', 'asset#2272:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._2'])
+  stream: start=0x29d7f60 end=0x2a41eee bytes=434062 resyncedTo=#2273
+  previous walked asset: #2271 XAnimParts unnamed stream=0x29d7ef8..0x29d7f60
+  bytes around the start (16 before):
+    0x029d7f50  c0 00 00 00 00 8a cc f9 00 00 00 00 00 00 00 00  ................
+    0x029d7f60  00 ad 06 86 40 74 60 ef 40 00 00 00 00 0b 96 e1  ....@t`.@.......
+    0x029d7f70  00 00 00 00 80 00 00 00 00 fa 1d f3 bf 8d 60 6f  ..............`o
+    0x029d7f80  c0 00 00 00 00 ff ff ff ff 00 00 00 00 00 30 08  ..............0.
+    0x029d7f90  08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+
+[4] FAILED ASSET #2438 FxEffectDef
+  error: implausible array count -2146983796 (trace=['<zone>', 'asset#2438:FxEffectDef', 'FxEffectDef.elemDefs'])
+  stream: start=0x2a4a263 end=0x2a4a29f bytes=60 resyncedTo=#2439
+  previous walked asset: #2437 FxEffectDef unnamed stream=0x2a4a227..0x2a4a263
+  bytes around the start (16 before):
+    0x02a4a253  65 63 68 6e 69 71 75 65 5f 70 61 72 74 69 63 6c  echnique_particl
+    0x02a4a263  65 63 6c 6f 75 64 5f 66 38 39 30 35 62 63 33 00  ecloud_f8905bc3.
+    0x02a4a273  ff ff ff ff 80 00 01 00 0d a0 06 80 ff ff ff ff  ................
+    0x02a4a283  ff ff ff ff 02 02 03 00 ff ff ff ff ff ff ff ff  ................
+    0x02a4a293  00 00 00 00 ff ff ff ff d2 00 00 00 70 69 6d 70  ............pimp
+
+[5] FAILED ASSET #2461 XModel
+  error: implausible array count -1 (trace=['<zone>', 'asset#2461:XModel', 'XModel.collSurfs'])
+  stream: start=0x2a4b015 end=0x2a4b83d bytes=2088 resyncedTo=#2464
+  previous walked asset: #2460 XModel unnamed stream=0x2a4af19..0x2a4b015
+  bytes around the start (16 before):
+    0x02a4b005  00 28 40 36 ba de 43 ff ff ff 00 00 00 00 00 00  .(@6..C.........
+    0x02a4b015  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ff  ................
+    0x02a4b025  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+    0x02a4b035  ff ff ff 00 00 00 00 00 2b 01 01 00 00 00 00 00  ........+.......
+    0x02a4b045  00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00  .............. .
+
+[6] FAILED ASSET #2545 XAnimParts
+  error: stream exhausted at 0x2a4e974 need 1225775872 (trace=['<zone>', 'asset#2545:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])
+  stream: start=0x2a4e90c end=0x2a4e974 bytes=104 resyncedTo=#2546
+  previous walked asset: #2544 XAnimParts unnamed stream=0x2a4e8a4..0x2a4e90c
+  bytes around the start (16 before):
+    0x02a4e8fc  3f 00 00 00 00 00 00 80 3f 00 00 00 00 00 00 00  ?.......?.......
+    0x02a4e90c  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x02a4e91c  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    0x02a4e92c  00 00 00 00 00 00 00 00 00 00 00 00 00 db 0f 49  ...............I
+    0x02a4e93c  40 00 00 00 00 00 00 00 00 66 66 e6 3e 66 66 26  @........ff.>ff&
+
+[7] FAILED ASSET #2629 XAnimParts
+  error: stream exhausted at 0x2a6c02a need 4008099530 (trace=['<zone>', 'asset#2629:XAnimParts', 'XAnimParts.randomDataShort'])
+  stream: start=0x2a6a0aa end=0x2a6c02a bytes=8064 resyncedTo=#2630
+  previous walked asset: #2628 XModel unnamed stream=0x2a69fae..0x2a6a0aa
+  bytes around the start (16 before):
+    0x02a6a09a  d0 a1 0c 06 00 1d 00 d9 9e ca 45 06 00 1f 00 26  ..........E....&
+    0x02a6a0aa  07 98 5b 06 00 1c 00 b3 e3 8d 5f 06 00 1e 00 ba  ..[......._.....
+    0x02a6a0ba  93 4b c9 06 00 20 00 96 bb bb fc 70 69 6d 70 5f  .K... .....pimp_
+    0x02a6a0ca  74 65 63 68 6e 69 71 75 65 5f 73 77 34 5f 33 64  technique_sw4_3d
+    0x02a6a0da  5f 63 68 61 72 5f 73 6b 69 6e 5f 36 32 61 38 66  _char_skin_62a8f
+
+[8] WALK STOPPED at 0x2a6dafa
+  35171883 bytes after this were not turned into assets
   the zone's asset list ended here (2693 entries, all walked); the bytes after it are not covered by the list
-  last walked asset: #2692 RawFile stream=0x19af37b..0x19af387
+  last walked asset: #2692 RawFile stream=0x2a6daee..0x2a6dafa
   bytes at the stop (16 before):
-    0x019af377  39 00 7f 7f 3f 7f 12 3d 3f be 34 32 40 7c 28 e1  9...?..=?.42@|(.
-    0x019af387  3e e5 60 61 40 00 00 80 bf ff ff ff ff bd 36 04  >.`a@.........6.
-    0x019af397  3a 00 7f 7f 3f 7f 13 3c 3f be 34 32 40 49 a2 0b  :...?..<?.42@I..
-    0x019af3a7  3f 0d a3 6f 40 00 00 80 bf ff ff ff ff 91 36 e4  ?..o@.........6.
-    0x019af3b7  39 00 7f 7f 3f 7f 12 3e 3f 26 74 18 40 1e 51 8d  9...?..>?&t.@.Q.
+    0x02a6daea  00 00 00 00 ca 05 00 00 02 00 1a 00 01 00 00 00  ................
+    0x02a6dafa  5c 05 00 00 00 00 00 00 e4 05 00 00 02 00 1b 00  \...............
+    0x02a6db0a  01 00 00 00 5c 05 00 00 00 00 00 00 fe 05 00 00  ....\...........
+    0x02a6db1a  02 00 1c 00 01 00 00 00 5c 05 00 00 00 00 00 00  ........\.......
+    0x02a6db2a  18 06 00 00 02 00 08 00 01 00 00 00 5c 05 00 00  ............\...
 
 ## raw walker output
-  asset#2212 (XAnimParts) failed (stream exhausted at 0x198aeb7 need 1204288126 (trace=['<zone>', 'asset#2212:XAnimParts', 'XAnimParts.randomDataShort'])); resyncing
-  resync -> asset#2213 (XAnimParts) @ 0x198af4b
+  asset#2227 (XAnimParts) failed (stream exhausted at 0x29d6e8c need 1600582590 (trace=['<zone>', 'asset#2227:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])); resyncing
+  resync -> asset#2228 (XAnimParts) @ 0x29d6e8c
+  asset#2241 (XAnimParts) failed (stream exhausted at 0x29d743c need 1225775872 (trace=['<zone>', 'asset#2241:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])); resyncing
+  resync -> asset#2242 (XAnimParts) @ 0x29d743c
+  asset#2272 (XAnimParts) failed (stream exhausted at 0x2a41eee need 274726912 (trace=['<zone>', 'asset#2272:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._2'])); resyncing
+  resync -> asset#2273 (XAnimParts) @ 0x2a41eee
+  asset#2438 (FxEffectDef) failed (implausible array count -2146983796 (trace=['<zone>', 'asset#2438:FxEffectDef', 'FxEffectDef.elemDefs'])); resyncing
+  resync -> asset#2439 (FxEffectDef) @ 0x2a4a29f
+  asset#2461 (XModel) failed (implausible array count -1 (trace=['<zone>', 'asset#2461:XModel', 'XModel.collSurfs'])); resyncing
+  resync -> asset#2464 (XModel) @ 0x2a4b83d
+  asset#2545 (XAnimParts) failed (stream exhausted at 0x2a4e974 need 1225775872 (trace=['<zone>', 'asset#2545:XAnimParts', 'XAnimParts.indices', 'XAnimIndices[0]', 'XAnimIndices._1'])); resyncing
+  resync -> asset#2546 (XAnimParts) @ 0x2a4e974
+  asset#2629 (XAnimParts) failed (stream exhausted at 0x2a6c02a need 4008099530 (trace=['<zone>', 'asset#2629:XAnimParts', 'XAnimParts.randomDataShort'])); resyncing
+  resync -> asset#2630 (XAnimParts) @ 0x2a6c02a
