@@ -51,7 +51,7 @@ for (const entry of manifest.files) {
     entries.push({ path: entry.path, kind: entry.kind, status: 'rejected-path' });
     continue;
   }
-  const record = { path: relative, kind: entry.kind, size: entry.size, status: 'missing', file: null };
+  const record = { path: relative, kind: entry.kind, size: entry.size, sha256: entry.sha256, status: 'missing', file: null };
   const whole = join(packRoot, relative);
   const parts = await listParts(`${whole}.part`);
   const fallbackHash = entry.fallback?.sha256;

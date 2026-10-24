@@ -21,6 +21,10 @@ on:
       out_dir:
         description: Output folder in this repo
         default: export/web/assets/reference
+      skip_completed:
+        description: Skip zones whose earlier walk completed (same source file, kinds and only regex) and keep their folders when cleaning
+        type: boolean
+        default: true
       clean:
         description: Delete the previous zone folders and flat animations/models/weapons/scripts folders first, then re-extract from scratch
         type: boolean
@@ -74,15 +78,21 @@ jobs:
       - name: Clean previous zone output
         if: ${{ inputs.clean }}
         env:
+          SKIP_COMPLETED: ${{ inputs.skip_completed }}
           OUT_DIR: ${{ inputs.out_dir }}
         run: |
           rm -rf "$OUT_DIR/animations" "$OUT_DIR/models" "$OUT_DIR/weapons" "$OUT_DIR/scripts" "$OUT_DIR/fx-index.json"
           if [ -d "$OUT_DIR" ]; then
-            find "$OUT_DIR" -maxdepth 2 -name _zone.json -printf '%h\n' | while read -r dir; do echo "removing $dir"; rm -rf "$dir"; done
+            # completed zones are kept when skip_completed is on: the extractor decides per zone whether they are still up to date
+            find "$OUT_DIR" -maxdepth 2 -name _zone.json -printf '%h\n' | while read -r dir; do
+              if [ "$SKIP_COMPLETED" = "true" ] && [ -f "$dir/_extract-stamp.json" ] && grep -q '"complete": true' "$dir/_zone.json"; then echo "keeping completed $dir"; continue; fi
+              echo "removing $dir"; rm -rf "$dir"
+            done
           fi
 
       - name: Extract (existing files are kept, never replaced)
         env:
+          SKIP_COMPLETED: ${{ inputs.skip_completed }}
           KINDS: ${{ inputs.kinds }}
           ONLY: ${{ inputs.only }}
           OUT_DIR: ${{ inputs.out_dir }}
@@ -91,12 +101,14 @@ jobs:
           if [ -z "$base" ]; then echo "No archive or zone kinds requested."; exit 0; fi
           args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract --kinds "$base")
           if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
+          if [ "$SKIP_COMPLETED" != "true" ]; then args+=(--force); fi
           node .tools/reference-pack/extract.mjs "${args[@]}"
 
       - name: Extract weapons, animations and models (zone walk)
         timeout-minutes: 75
         continue-on-error: true
         env:
+          SKIP_COMPLETED: ${{ inputs.skip_completed }}
           KINDS: ${{ inputs.kinds }}
           ONLY: ${{ inputs.only }}
           OUT_DIR: ${{ inputs.out_dir }}
@@ -105,6 +117,7 @@ jobs:
           if [ -z "$walk" ]; then echo "No weapons, animations or models requested."; exit 0; fi
           args=(--resolved .work/reference/resolved.json --out "$OUT_DIR" --report-dir .work/extract-zone-assets --kinds "$walk,scripts,fx" --overwrite)
           if [ -n "$ONLY" ]; then args+=(--only "$ONLY"); fi
+          if [ "$SKIP_COMPLETED" != "true" ]; then args+=(--force); fi
           node .tools/reference-pack/extract.mjs "${args[@]}"
 
       - name: Commit and push (one commit per zone folder)

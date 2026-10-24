@@ -62,6 +62,29 @@ export function fxNames(names) {
   return [...names].filter(name => FX_PATTERN.test(name)).sort();
 }
 
+// A zone that was walked completely before is skipped when the source file (manifest sha256), the --only filter and the
+// requested kinds are unchanged. The stamp sits next to _zone.json in the zone folder; --force ignores it.
+const ZONE_KINDS = ['fx', 'scripts', 'characters', 'animations', 'models', 'weapons'];
+export const STAMP_FILE = '_extract-stamp.json';
+
+export async function zoneIsDone(zoneOut, item, kinds, only) {
+  if (!item.sha256) return false;
+  try {
+    const stamp = JSON.parse(await readFile(join(zoneOut, STAMP_FILE), 'utf8'));
+    const zone = JSON.parse(await readFile(join(zoneOut, '_zone.json'), 'utf8'));
+    return stamp.sha256 === item.sha256 && stamp.only === (only?.source ?? '') && zone.complete === true && ZONE_KINDS.filter(kind => kinds.has(kind)).every(kind => stamp.kinds.includes(kind));
+  } catch { return false; }
+}
+
+export async function markZoneDone(zoneOut, item, kinds, only) {
+  try {
+    const zone = JSON.parse(await readFile(join(zoneOut, '_zone.json'), 'utf8'));
+    if (zone.complete !== true) return false;
+    await writeFile(join(zoneOut, STAMP_FILE), JSON.stringify({ zone: item.path, sha256: item.sha256, only: only?.source ?? '', kinds: ZONE_KINDS.filter(kind => kinds.has(kind)) }, null, 1));
+    return true;
+  } catch { return false; }
+}
+
 const exists = file => access(file).then(() => true, () => false);
 
 // Never replaces a file that is already there (unless --overwrite): returns { file, existed }.
@@ -167,6 +190,7 @@ async function main() {
   const out = resolve(option('out', '.work/extracted'));
   const kinds = new Set(String(option('kinds', 'images,sounds,fx,scripts')).split(',').map(value => value.trim()));
   const overwrite = argv.includes('--overwrite');
+  const force = argv.includes('--force');
   const reportDir = resolve(option('report-dir', out));
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
@@ -180,6 +204,7 @@ async function main() {
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
     else if (item.kind === 'zone') {
       const zoneOut = perZone ? join(out, zoneFolder(item.path, taken)) : out;
+      if (perZone && !force && await zoneIsDone(zoneOut, item, kinds, only)) { console.log(`${item.path}: already completed before, skipped (use --force to redo)`); continue; }
       if (kinds.has('fx') || kinds.has('scripts') || kinds.has('characters')) {
         const zone = inflateZone(await readFile(item.file));
         if (zone.error) report.push({ archive: item.path, kind: 'zone', status: zone.error });
@@ -200,6 +225,7 @@ async function main() {
       }
       if (zoneAssetKinds(kinds).length) {
         const result = await extractZoneAssets(item.file, item.path, { out: zoneOut, kinds, only: only ?? (kinds.has('characters') ? CHARACTER_ONLY : null), report, overwrite, perZone });
+        if (perZone && result.status === 'ok') await markZoneDone(zoneOut, item, kinds, only);
         for (const kind of ZONE_ASSET_KINDS) {
           const found = result.index[kind];
           if (found?.names.length || found?.references.length) walked[kind].push({ zone: item.path, names: found.names, references: found.references, ...(found.links ? { links: found.links } : {}) });
