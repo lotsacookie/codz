@@ -1,3 +1,4 @@
+import { windowStandPoint, groundStand } from './window-stand.js';
 import { attachEnemies, zombieTimeScale } from './mods/runtime.js';
 import * as THREE from 'three';
 import { DOG_SPAWN_DELAY } from './dog-spawn-fx.js';
@@ -60,7 +61,7 @@ export class Enemies {
       }
     }
     if(runtimeProfile.shadows)root.traverse(o=>{if(o.isMesh)o.castShadow=true;});
-    const spawnAt=barrier&&!position?this.spawnPointOf(barrier):null;root.position.copy(position??spawnAt??barrier.outside);this.scene.add(root);
+    const spawnAt=barrier&&!position?this.spawnPointOf(barrier):null;root.position.copy(position??spawnAt??this.standOf(barrier));this.scene.add(root);
     const rig=new Rig(root),round=this.session.round;
     const gait=kind==='dog'?'sprint':rollGait(round,this.data.rules,()=>this.session.random());
     const variant=Math.floor(this.session.random()*3),jitter=.94+this.session.random()*.12;
@@ -108,7 +109,7 @@ export class Enemies {
       // Zombies from a distant spawn point walk to the window before tearing its boards.
       if(z.state==='approach'){
         z.approachTime+=dt;
-        const to=z.barrier.outside,near=Math.hypot(to.x-z.root.position.x,to.z-z.root.position.z)<14&&Math.abs(to.y-z.root.position.y)<60;
+        const to=this.standOf(z.barrier),near=Math.hypot(to.x-z.root.position.x,to.z-z.root.position.z)<14&&Math.abs(to.y-z.root.position.y)<60;
         z.approachMark??={t:0,p:z.root.position.clone()};z.approachMark.t+=dt;let jam=false;if(z.approachMark.t>=4){jam=z.approachMark.p.distanceTo(z.root.position)<20;z.approachMark.t=0;z.approachMark.p.copy(z.root.position);}
         if(near||z.approachTime>30||((jam||(z.approachTime>1.5&&z.path.length<2))&&!this.seen(z,player))){z.root.position.copy(to);z.state='barricade';z.heading=null;z.path=[];z.tearLeft=1.1;}
       }
@@ -123,7 +124,7 @@ export class Enemies {
         z.enterTime+=dt;const t=Math.min(1,z.enterTime/1.2);if(!z.enterTo){const g=this.world.closest(z.barrier.inside,{x:40,y:100,z:40});z.enterTo=g&&Math.hypot(g.x-z.barrier.inside.x,g.z-z.barrier.inside.z)<70?g:z.barrier.inside;}z.root.position.lerpVectors(z.enterFrom,z.enterTo,t*t*(3-2*t));z.root.position.y+=Math.sin(t*Math.PI)*12;
         if(t===1){z.state='chase';z.repath=0;}continue;
       }
-      const approaching=z.state==='approach',lure=approaching?null:this.lureTarget?.(z),goal=approaching?z.barrier.outside:lure??player;
+      const approaching=z.state==='approach',lure=approaching?null:this.lureTarget?.(z),goal=approaching?this.standOf(z.barrier):lure??player;
       const dist=z.root.position.distanceTo(player),at=_at.copy(z.root.position),eye=_eye.copy(player);at.y+=z.kind==='dog'?25:45;eye.y+=40;
       if(z.state==='attack'){
         z.attackLeft-=dt;
@@ -184,6 +185,12 @@ export class Enemies {
     if(!z.voice)z.voiceGap=1.2;
   }
   silence(z){z.voice?.stop();z.voice=null;}
+  // Grounded spot a little in front of the window; cached once the navmesh can answer.
+  standOf(b){
+    if(b.stand)return b.stand;
+    const stand=windowStandPoint(b.outside,b.inside);
+    return groundStand(stand,this.world.closest?.(stand,{x:30,y:100,z:30}))?(b.stand=stand):stand;
+  }
   spawnPointOf(b){
     const list=b.spawnPoints?.length?b.spawnPoints:(b.spawnPoint?[b.spawnPoint]:[]);if(!list.length)return null;
     const nav=this.world.navigation;let usable=list;
