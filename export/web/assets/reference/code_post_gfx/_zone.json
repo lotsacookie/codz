@@ -2,11 +2,11 @@
  "zone": "zone/Common/code_post_gfx.ff",
  "status": "ok",
  "error": null,
- "complete": false,
+ "complete": true,
  "coverage": {
-  "streamPos": 354536,
+  "streamPos": 6222433,
   "streamSize": 6222433,
-  "percent": 5.7
+  "percent": 100.0
  },
  "types": {
   "RawFile": 373,
@@ -25,32 +25,14 @@
   "PhysPreset": 1,
   "PhysConstraints": 1,
   "FxImpactTable": 1,
-  "SKIPPED": 1,
+  "SndDriverGlobals": 1,
   "SndBank": 1
  },
- "resyncs": 2,
- "failures": [
-  [
-   "SndDriverGlobals",
-   "implausible array count N (trace=['<zone>', 'asset#N:SndDriverGlobals', 'SndDriverGlobals.snapshotGroups'])",
-   1
-  ]
- ],
+ "resyncs": 0,
+ "failures": [],
  "softErrors": [],
- "failedSpans": [
-  {
-   "index": 496,
-   "type": "SndDriverGlobals",
-   "error": "implausible array count 4294967168 (trace=['<zone>', 'asset#496:SndDriverGlobals', 'SndDriverGlobals.snapshotGroups'])",
-   "start": 273060,
-   "end": 273116,
-   "resyncedTo": 497,
-   "file": "_failed/asset_496_SndDriverGlobals.bin"
-  }
- ],
- "unwalkedTail": [
-  "_unwalked/tail_000568e8_part0.bin"
- ],
+ "failedSpans": [],
+ "unwalkedTail": [],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
  "assets": [
@@ -147,68 +129,68 @@
   {
    "index": 18,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/18.json"
+   "name": "mc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0s0.json"
   },
   {
    "index": 20,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/20.json"
+   "name": "weapon/shellejects/fx_rifle_resting",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_rifle_resting.json"
   },
   {
    "index": 21,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/21.json"
+   "name": "mc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0n0s0.json"
   },
   {
    "index": 23,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/23.json"
+   "name": "weapon/shellejects/fx_rifle",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_rifle.json"
   },
   {
    "index": 24,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/24.json"
+   "name": "mc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0.json"
   },
   {
    "index": 32,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/32.json"
+   "name": "rumble/defaultweapon_fire",
+   "file": "rawfiles/rumble/defaultweapon_fire"
   },
   {
    "index": 33,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/33.json"
+   "name": "rumble/defaultweapon_fire_h.rmb",
+   "file": "rawfiles/rumble/defaultweapon_fire_h.rmb"
   },
   {
    "index": 34,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/34.json"
+   "name": "rumble/defaultweapon_fire_l.rmb",
+   "file": "rawfiles/rumble/defaultweapon_fire_l.rmb"
   },
   {
    "index": 36,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/36.json"
+   "name": "mp/defaultstringtable.csv",
+   "file": "assets/StringTable/mp/defaultstringtable.csv.json"
   },
   {
    "index": 37,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/37.json"
+   "name": "effect_nofog",
+   "file": "assets/MaterialTechniqueSet/effect_nofog.json"
   },
   {
    "index": 38,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/38.json"
+   "name": "misc/missing_fx",
+   "file": "assets/FxEffectDef/misc/missing_fx.json"
   },
   {
    "index": 39,
@@ -219,2408 +201,2414 @@
   {
    "index": 40,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/40.json"
+   "name": "ui/ingame_options.txt",
+   "file": "assets/MenuList/ui/ingame_options.txt.json"
   },
   {
    "index": 41,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/41.json"
+   "name": "ui_cursor",
+   "file": "assets/Material/ui_cursor.json"
   },
   {
    "index": 42,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/42.json"
+   "name": "tools",
+   "file": "assets/MaterialTechniqueSet/tools.json"
   },
   {
    "index": 43,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/43.json"
+   "name": "debug_sphere_exterior",
+   "file": "assets/Material/debug_sphere_exterior.json"
   },
   {
    "index": 44,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/44.json"
+   "name": "debug_sphere_interior",
+   "file": "assets/Material/debug_sphere_interior.json"
   },
   {
    "index": 45,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/45.json"
+   "name": "whitetransparent",
+   "file": "assets/Material/whitetransparent.json"
   },
   {
    "index": 46,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/46.json"
+   "name": "sw4_2d_anim_icon_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_anim_icon_transparent.json"
   },
   {
    "index": 47,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/47.json"
+   "name": "net_new_animation",
+   "file": "assets/Material/net_new_animation.json"
   },
   {
    "index": 48,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/48.json"
+   "name": "coopmaps.arena",
+   "file": "rawfiles/coopmaps.arena"
   },
   {
    "index": 49,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/49.json"
+   "name": "bik/front_end_sp.bik",
+   "file": "rawfiles/bik/front_end_sp.bik"
   },
   {
    "index": 50,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/50.json"
+   "name": "bik/front_end_coop.bik",
+   "file": "rawfiles/bik/front_end_coop.bik"
   },
   {
    "index": 51,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/51.json"
+   "name": "sw4_3d_clan_tag_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_3d_clan_tag_transparent.json"
   },
   {
    "index": 52,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/52.json"
+   "name": "mtl_clan_tag",
+   "file": "assets/Material/mtl_clan_tag.json"
   },
   {
    "index": 53,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/53.json"
+   "name": "sw4_3d_player_icon_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_3d_player_icon_transparent.json"
   },
   {
    "index": 54,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/54.json"
+   "name": "mtl_player_icon",
+   "file": "assets/Material/mtl_player_icon.json"
   },
   {
    "index": 55,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/55.json"
+   "name": "animtrees/civilian.atr",
+   "file": "rawfiles/animtrees/civilian.atr"
   },
   {
    "index": 56,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/56.json"
+   "name": "animtrees/dog.atr",
+   "file": "rawfiles/animtrees/dog.atr"
   },
   {
    "index": 57,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/57.json"
+   "name": "animtrees/drones.atr",
+   "file": "rawfiles/animtrees/drones.atr"
   },
   {
    "index": 58,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/58.json"
+   "name": "animtrees/fakeshooters.atr",
+   "file": "rawfiles/animtrees/fakeshooters.atr"
   },
   {
    "index": 59,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/59.json"
+   "name": "animtrees/generic_human.atr",
+   "file": "rawfiles/animtrees/generic_human.atr"
   },
   {
    "index": 60,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/60.json"
+   "name": "animtrees/player.atr",
+   "file": "rawfiles/animtrees/player.atr"
   },
   {
    "index": 61,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/61.json"
+   "name": "animtrees/vehicles.atr",
+   "file": "rawfiles/animtrees/vehicles.atr"
   },
   {
    "index": 62,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/62.json"
+   "name": "animtrees/animated_props.atr",
+   "file": "rawfiles/animtrees/animated_props.atr"
   },
   {
    "index": 63,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/63.json"
+   "name": "animtrees/mg42.atr",
+   "file": "rawfiles/animtrees/mg42.atr"
   },
   {
    "index": 64,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/64.json"
+   "name": "animtrees/tank.atr",
+   "file": "rawfiles/animtrees/tank.atr"
   },
   {
    "index": 65,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/65.json"
+   "name": "animtrees/fxanim_props.atr",
+   "file": "rawfiles/animtrees/fxanim_props.atr"
   },
   {
    "index": 66,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/66.json"
+   "name": "clientscripts/_airsupport.csc",
+   "file": "rawfiles/clientscripts/_airsupport.csc"
   },
   {
    "index": 67,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/67.json"
+   "name": "clientscripts/_ambient.csc",
+   "file": "rawfiles/clientscripts/_ambient.csc"
   },
   {
    "index": 68,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/68.json"
+   "name": "clientscripts/_ambientpackage.csc",
+   "file": "rawfiles/clientscripts/_ambientpackage.csc"
   },
   {
    "index": 69,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/69.json"
+   "name": "clientscripts/_audio.csc",
+   "file": "rawfiles/clientscripts/_audio.csc"
   },
   {
    "index": 70,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/70.json"
+   "name": "clientscripts/_busing.csc",
+   "file": "rawfiles/clientscripts/_busing.csc"
   },
   {
    "index": 71,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/71.json"
+   "name": "clientscripts/_callbacks.csc",
+   "file": "rawfiles/clientscripts/_callbacks.csc"
   },
   {
    "index": 72,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/72.json"
+   "name": "clientscripts/_contextual_melee.csc",
+   "file": "rawfiles/clientscripts/_contextual_melee.csc"
   },
   {
    "index": 73,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/73.json"
+   "name": "clientscripts/_destructibles.csc",
+   "file": "rawfiles/clientscripts/_destructibles.csc"
   },
   {
    "index": 74,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/74.json"
+   "name": "clientscripts/_explosive_bolt.csc",
+   "file": "rawfiles/clientscripts/_explosive_bolt.csc"
   },
   {
    "index": 75,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/75.json"
+   "name": "clientscripts/_footsteps.csc",
+   "file": "rawfiles/clientscripts/_footsteps.csc"
   },
   {
    "index": 76,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/76.json"
+   "name": "clientscripts/_flamethrower_plight.csc",
+   "file": "rawfiles/clientscripts/_flamethrower_plight.csc"
   },
   {
    "index": 77,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/77.json"
+   "name": "clientscripts/_fx.csc",
+   "file": "rawfiles/clientscripts/_fx.csc"
   },
   {
    "index": 78,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/78.json"
+   "name": "clientscripts/_global_fx.csc",
+   "file": "rawfiles/clientscripts/_global_fx.csc"
   },
   {
    "index": 79,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/79.json"
+   "name": "clientscripts/_helicopter_sounds.csc",
+   "file": "rawfiles/clientscripts/_helicopter_sounds.csc"
   },
   {
    "index": 80,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/80.json"
+   "name": "clientscripts/_lights.csc",
+   "file": "rawfiles/clientscripts/_lights.csc"
   },
   {
    "index": 81,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/81.json"
+   "name": "clientscripts/_load.csc",
+   "file": "rawfiles/clientscripts/_load.csc"
   },
   {
    "index": 82,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/82.json"
+   "name": "clientscripts/_meatshield.csc",
+   "file": "rawfiles/clientscripts/_meatshield.csc"
   },
   {
    "index": 83,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/83.json"
+   "name": "clientscripts/_mortar.csc",
+   "file": "rawfiles/clientscripts/_mortar.csc"
   },
   {
    "index": 84,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/84.json"
+   "name": "clientscripts/_music.csc",
+   "file": "rawfiles/clientscripts/_music.csc"
   },
   {
    "index": 85,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/85.json"
+   "name": "clientscripts/_napalm.csc",
+   "file": "rawfiles/clientscripts/_napalm.csc"
   },
   {
    "index": 86,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/86.json"
+   "name": "clientscripts/_radiant_live_update.csc",
+   "file": "rawfiles/clientscripts/_radiant_live_update.csc"
   },
   {
    "index": 87,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/87.json"
+   "name": "clientscripts/_swimming.csc",
+   "file": "rawfiles/clientscripts/_swimming.csc"
   },
   {
    "index": 88,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/88.json"
+   "name": "clientscripts/_treadfx.csc",
+   "file": "rawfiles/clientscripts/_treadfx.csc"
   },
   {
    "index": 89,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/89.json"
+   "name": "clientscripts/_utility.csc",
+   "file": "rawfiles/clientscripts/_utility.csc"
   },
   {
    "index": 90,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/90.json"
+   "name": "clientscripts/_utility_code.csc",
+   "file": "rawfiles/clientscripts/_utility_code.csc"
   },
   {
    "index": 91,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/91.json"
+   "name": "clientscripts/_vehicle.csc",
+   "file": "rawfiles/clientscripts/_vehicle.csc"
   },
   {
    "index": 92,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/92.json"
+   "name": "clientscripts/_filter.csc",
+   "file": "rawfiles/clientscripts/_filter.csc"
   },
   {
    "index": 93,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/93.json"
+   "name": "maps/_serverfaceanim.gsc",
+   "file": "rawfiles/maps/_serverfaceanim.gsc"
   },
   {
    "index": 94,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/94.json"
+   "name": "clientscripts/_clientfaceanim.csc",
+   "file": "rawfiles/clientscripts/_clientfaceanim.csc"
   },
   {
    "index": 95,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/95.json"
+   "name": "clientscripts/_face_generichuman.csc",
+   "file": "rawfiles/clientscripts/_face_generichuman.csc"
   },
   {
    "index": 96,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/96.json"
+   "name": "clientscripts/_face_utility.csc",
+   "file": "rawfiles/clientscripts/_face_utility.csc"
   },
   {
    "index": 147,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/147.json"
+   "name": "mp/playeranim.script",
+   "file": "rawfiles/mp/playeranim.script"
   },
   {
    "index": 148,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/148.json"
+   "name": "mp/playeranimtypes.txt",
+   "file": "rawfiles/mp/playeranimtypes.txt"
   },
   {
    "index": 149,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/149.json"
+   "name": "animtrees/multiplayer.atr",
+   "file": "rawfiles/animtrees/multiplayer.atr"
   },
   {
    "index": 150,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/150.json"
+   "name": "mptype/player_t5_zm.gsc",
+   "file": "rawfiles/mptype/player_t5_zm.gsc"
   },
   {
    "index": 151,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/151.json"
+   "name": "mptype/player_t5_zm_pentagon.gsc",
+   "file": "rawfiles/mptype/player_t5_zm_pentagon.gsc"
   },
   {
    "index": 152,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/152.json"
+   "name": "mptype/player_t5_zm_theater.gsc",
+   "file": "rawfiles/mptype/player_t5_zm_theater.gsc"
   },
   {
    "index": 153,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/153.json"
+   "name": "mptype/player_t5_zt.gsc",
+   "file": "rawfiles/mptype/player_t5_zt.gsc"
   },
   {
    "index": 154,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/154.json"
+   "name": "character/c_sprint1_marine_yaw_player.gsc",
+   "file": "rawfiles/character/c_sprint1_marine_yaw_player.gsc"
   },
   {
    "index": 155,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/155.json"
+   "name": "character/c_sprint1_marine_scot_player.gsc",
+   "file": "rawfiles/character/c_sprint1_marine_scot_player.gsc"
   },
   {
    "index": 156,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/156.json"
+   "name": "character/c_usa_marine_michael_carter_player.gsc",
+   "file": "rawfiles/character/c_usa_marine_michael_carter_player.gsc"
   },
   {
    "index": 157,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/157.json"
+   "name": "character/c_usa_marine_winston_lewis_player.gsc",
+   "file": "rawfiles/character/c_usa_marine_winston_lewis_player.gsc"
   },
   {
    "index": 158,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/158.json"
+   "name": "character/c_usa_marine_michael_carter_player_zm.gsc",
+   "file": "rawfiles/character/c_usa_marine_michael_carter_player_zm.gsc"
   },
   {
    "index": 159,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/159.json"
+   "name": "character/c_rus_spetsnaz_zt.gsc",
+   "file": "rawfiles/character/c_rus_spetsnaz_zt.gsc"
   },
   {
    "index": 160,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/160.json"
+   "name": "character/c_usa_cia_zt.gsc",
+   "file": "rawfiles/character/c_usa_cia_zt.gsc"
   },
   {
    "index": 161,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/161.json"
+   "name": "character/c_usa_sog_zt.gsc",
+   "file": "rawfiles/character/c_usa_sog_zt.gsc"
   },
   {
    "index": 162,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/162.json"
+   "name": "character/c_vtn_nva_zt.gsc",
+   "file": "rawfiles/character/c_vtn_nva_zt.gsc"
   },
   {
    "index": 163,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/163.json"
+   "name": "character/c_rus_spetsnaz2_zt.gsc",
+   "file": "rawfiles/character/c_rus_spetsnaz2_zt.gsc"
   },
   {
    "index": 164,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/164.json"
+   "name": "character/c_usa_cia2_zt.gsc",
+   "file": "rawfiles/character/c_usa_cia2_zt.gsc"
   },
   {
    "index": 165,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/165.json"
+   "name": "character/c_usa_sog2_zt.gsc",
+   "file": "rawfiles/character/c_usa_sog2_zt.gsc"
   },
   {
    "index": 166,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/166.json"
+   "name": "character/c_vtn_nva2_zt.gsc",
+   "file": "rawfiles/character/c_vtn_nva2_zt.gsc"
   },
   {
    "index": 167,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/167.json"
+   "name": "character/c_zom_blue_guy_zt.gsc",
+   "file": "rawfiles/character/c_zom_blue_guy_zt.gsc"
   },
   {
    "index": 168,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/168.json"
+   "name": "character/c_zom_red_guy_zt.gsc",
+   "file": "rawfiles/character/c_zom_red_guy_zt.gsc"
   },
   {
    "index": 169,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/169.json"
+   "name": "character/c_zom_yellow_guy_zt.gsc",
+   "file": "rawfiles/character/c_zom_yellow_guy_zt.gsc"
   },
   {
    "index": 170,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/170.json"
+   "name": "character/c_ger_richtofen_zt.gsc",
+   "file": "rawfiles/character/c_ger_richtofen_zt.gsc"
   },
   {
    "index": 171,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/171.json"
+   "name": "character/c_jap_takeo_zt.gsc",
+   "file": "rawfiles/character/c_jap_takeo_zt.gsc"
   },
   {
    "index": 172,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/172.json"
+   "name": "character/c_rus_nikolai_zt.gsc",
+   "file": "rawfiles/character/c_rus_nikolai_zt.gsc"
   },
   {
    "index": 173,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/173.json"
+   "name": "character/c_usa_dempsey_zt.gsc",
+   "file": "rawfiles/character/c_usa_dempsey_zt.gsc"
   },
   {
    "index": 174,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/174.json"
+   "name": "character/c_usa_jfk_zt.gsc",
+   "file": "rawfiles/character/c_usa_jfk_zt.gsc"
   },
   {
    "index": 175,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/175.json"
+   "name": "character/c_usa_mcnamara_zt.gsc",
+   "file": "rawfiles/character/c_usa_mcnamara_zt.gsc"
   },
   {
    "index": 176,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/176.json"
+   "name": "character/c_cub_castro_zt.gsc",
+   "file": "rawfiles/character/c_cub_castro_zt.gsc"
   },
   {
    "index": 177,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/177.json"
+   "name": "character/c_usa_nixon_zt.gsc",
+   "file": "rawfiles/character/c_usa_nixon_zt.gsc"
   },
   {
    "index": 178,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/178.json"
+   "name": "common_scripts/utility.gsc",
+   "file": "rawfiles/common_scripts/utility.gsc"
   },
   {
    "index": 179,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/179.json"
+   "name": "maps/_ambientpackage.gsc",
+   "file": "rawfiles/maps/_ambientpackage.gsc"
   },
   {
    "index": 180,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/180.json"
+   "name": "maps/_anim.gsc",
+   "file": "rawfiles/maps/_anim.gsc"
   },
   {
    "index": 181,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/181.json"
+   "name": "maps/_animatedmodels.gsc",
+   "file": "rawfiles/maps/_animatedmodels.gsc"
   },
   {
    "index": 182,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/182.json"
+   "name": "maps/_art.gsc",
+   "file": "rawfiles/maps/_art.gsc"
   },
   {
    "index": 183,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/183.json"
+   "name": "maps/_audio.gsc",
+   "file": "rawfiles/maps/_audio.gsc"
   },
   {
    "index": 184,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/184.json"
+   "name": "maps/_autosave.gsc",
+   "file": "rawfiles/maps/_autosave.gsc"
   },
   {
    "index": 185,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/185.json"
+   "name": "maps/_ballistic_knife.gsc",
+   "file": "rawfiles/maps/_ballistic_knife.gsc"
   },
   {
    "index": 186,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/186.json"
+   "name": "maps/_banzai.gsc",
+   "file": "rawfiles/maps/_banzai.gsc"
   },
   {
    "index": 187,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/187.json"
+   "name": "maps/_bayonet.gsc",
+   "file": "rawfiles/maps/_bayonet.gsc"
   },
   {
    "index": 188,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/188.json"
+   "name": "maps/_bouncing_betties.gsc",
+   "file": "rawfiles/maps/_bouncing_betties.gsc"
   },
   {
    "index": 189,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/189.json"
+   "name": "maps/_bulletcam.gsc",
+   "file": "rawfiles/maps/_bulletcam.gsc"
   },
   {
    "index": 190,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/190.json"
+   "name": "maps/_busing.gsc",
+   "file": "rawfiles/maps/_busing.gsc"
   },
   {
    "index": 191,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/191.json"
+   "name": "maps/_callbackglobal.gsc",
+   "file": "rawfiles/maps/_callbackglobal.gsc"
   },
   {
    "index": 192,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/192.json"
+   "name": "maps/_callbacksetup.gsc",
+   "file": "rawfiles/maps/_callbacksetup.gsc"
   },
   {
    "index": 193,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/193.json"
+   "name": "maps/_camera.gsc",
+   "file": "rawfiles/maps/_camera.gsc"
   },
   {
    "index": 194,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/194.json"
+   "name": "maps/_camsys.gsc",
+   "file": "rawfiles/maps/_camsys.gsc"
   },
   {
    "index": 195,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/195.json"
+   "name": "maps/_cheat.gsc",
+   "file": "rawfiles/maps/_cheat.gsc"
   },
   {
    "index": 196,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/196.json"
+   "name": "maps/_collectibles.gsc",
+   "file": "rawfiles/maps/_collectibles.gsc"
   },
   {
    "index": 197,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/197.json"
+   "name": "maps/_colors.gsc",
+   "file": "rawfiles/maps/_colors.gsc"
   },
   {
    "index": 198,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/198.json"
+   "name": "maps/_constants.gsc",
+   "file": "rawfiles/maps/_constants.gsc"
   },
   {
    "index": 199,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/199.json"
+   "name": "maps/_contextual_melee.gsc",
+   "file": "rawfiles/maps/_contextual_melee.gsc"
   },
   {
    "index": 200,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/200.json"
+   "name": "maps/_coop_weaponswap.gsc",
+   "file": "rawfiles/maps/_coop_weaponswap.gsc"
   },
   {
    "index": 201,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/201.json"
+   "name": "maps/_cooplogic.gsc",
+   "file": "rawfiles/maps/_cooplogic.gsc"
   },
   {
    "index": 202,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/202.json"
+   "name": "maps/_createcam.gsc",
+   "file": "rawfiles/maps/_createcam.gsc"
   },
   {
    "index": 203,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/203.json"
+   "name": "maps/_createdynents.gsc",
+   "file": "rawfiles/maps/_createdynents.gsc"
   },
   {
    "index": 204,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/204.json"
+   "name": "maps/_createfx.gsc",
+   "file": "rawfiles/maps/_createfx.gsc"
   },
   {
    "index": 205,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/205.json"
+   "name": "maps/_createfxmenu.gsc",
+   "file": "rawfiles/maps/_createfxmenu.gsc"
   },
   {
    "index": 206,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/206.json"
+   "name": "maps/_createmenu.gsc",
+   "file": "rawfiles/maps/_createmenu.gsc"
   },
   {
    "index": 207,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/207.json"
+   "name": "maps/_createpath.gsc",
+   "file": "rawfiles/maps/_createpath.gsc"
   },
   {
    "index": 208,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/208.json"
+   "name": "maps/_credits.gsc",
+   "file": "rawfiles/maps/_credits.gsc"
   },
   {
    "index": 209,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/209.json"
+   "name": "maps/_damagefeedback.gsc",
+   "file": "rawfiles/maps/_damagefeedback.gsc"
   },
   {
    "index": 210,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/210.json"
+   "name": "maps/_dds.gsc",
+   "file": "rawfiles/maps/_dds.gsc"
   },
   {
    "index": 211,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/211.json"
+   "name": "maps/_debug.gsc",
+   "file": "rawfiles/maps/_debug.gsc"
   },
   {
    "index": 212,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/212.json"
+   "name": "maps/_destructible.gsc",
+   "file": "rawfiles/maps/_destructible.gsc"
   },
   {
    "index": 213,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/213.json"
+   "name": "maps/_detonategrenades.gsc",
+   "file": "rawfiles/maps/_detonategrenades.gsc"
   },
   {
    "index": 214,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/214.json"
+   "name": "maps/_dev.gsc",
+   "file": "rawfiles/maps/_dev.gsc"
   },
   {
    "index": 215,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/215.json"
+   "name": "maps/_drone.gsc",
+   "file": "rawfiles/maps/_drone.gsc"
   },
   {
    "index": 216,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/216.json"
+   "name": "maps/_drones.gsc",
+   "file": "rawfiles/maps/_drones.gsc"
   },
   {
    "index": 217,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/217.json"
+   "name": "maps/_endmission.gsc",
+   "file": "rawfiles/maps/_endmission.gsc"
   },
   {
    "index": 218,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/218.json"
+   "name": "maps/_explosive_bolt.gsc",
+   "file": "rawfiles/maps/_explosive_bolt.gsc"
   },
   {
    "index": 219,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/219.json"
+   "name": "maps/_flareweapon.gsc",
+   "file": "rawfiles/maps/_flareweapon.gsc"
   },
   {
    "index": 220,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/220.json"
+   "name": "maps/_flamethrower_plight.gsc",
+   "file": "rawfiles/maps/_flamethrower_plight.gsc"
   },
   {
    "index": 221,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/221.json"
+   "name": "maps/_flashgrenades.gsc",
+   "file": "rawfiles/maps/_flashgrenades.gsc"
   },
   {
    "index": 222,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/222.json"
+   "name": "maps/_fx.gsc",
+   "file": "rawfiles/maps/_fx.gsc"
   },
   {
    "index": 223,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/223.json"
+   "name": "maps/_friendlyfire.gsc",
+   "file": "rawfiles/maps/_friendlyfire.gsc"
   },
   {
    "index": 224,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/224.json"
+   "name": "maps/_gamemode.gsc",
+   "file": "rawfiles/maps/_gamemode.gsc"
   },
   {
    "index": 225,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/225.json"
+   "name": "maps/_gib.gsc",
+   "file": "rawfiles/maps/_gib.gsc"
   },
   {
    "index": 226,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/226.json"
+   "name": "maps/_gameskill.gsc",
+   "file": "rawfiles/maps/_gameskill.gsc"
   },
   {
    "index": 227,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/227.json"
+   "name": "maps/_global_fx.gsc",
+   "file": "rawfiles/maps/_global_fx.gsc"
   },
   {
    "index": 228,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/228.json"
+   "name": "maps/_grenade_toss.gsc",
+   "file": "rawfiles/maps/_grenade_toss.gsc"
   },
   {
    "index": 229,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/229.json"
+   "name": "maps/_hud.gsc",
+   "file": "rawfiles/maps/_hud.gsc"
   },
   {
    "index": 230,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/230.json"
+   "name": "maps/_hud_message.gsc",
+   "file": "rawfiles/maps/_hud_message.gsc"
   },
   {
    "index": 231,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/231.json"
+   "name": "maps/_hud_util.gsc",
+   "file": "rawfiles/maps/_hud_util.gsc"
   },
   {
    "index": 232,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/232.json"
+   "name": "maps/_hud_weapons.gsc",
+   "file": "rawfiles/maps/_hud_weapons.gsc"
   },
   {
    "index": 233,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/233.json"
+   "name": "maps/_ingamemenus.gsc",
+   "file": "rawfiles/maps/_ingamemenus.gsc"
   },
   {
    "index": 234,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/234.json"
+   "name": "maps/_introscreen.gsc",
+   "file": "rawfiles/maps/_introscreen.gsc"
   },
   {
    "index": 235,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/235.json"
+   "name": "maps/_laststand.gsc",
+   "file": "rawfiles/maps/_laststand.gsc"
   },
   {
    "index": 236,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/236.json"
+   "name": "maps/_lights.gsc",
+   "file": "rawfiles/maps/_lights.gsc"
   },
   {
    "index": 237,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/237.json"
+   "name": "maps/_load_common.gsc",
+   "file": "rawfiles/maps/_load_common.gsc"
   },
   {
    "index": 238,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/238.json"
+   "name": "maps/_loadout.gsc",
+   "file": "rawfiles/maps/_loadout.gsc"
   },
   {
    "index": 239,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/239.json"
+   "name": "maps/_meatshield.gsc",
+   "file": "rawfiles/maps/_meatshield.gsc"
   },
   {
    "index": 240,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/240.json"
+   "name": "maps/_menus.gsc",
+   "file": "rawfiles/maps/_menus.gsc"
   },
   {
    "index": 241,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/241.json"
+   "name": "maps/_mg_penetration.gsc",
+   "file": "rawfiles/maps/_mg_penetration.gsc"
   },
   {
    "index": 242,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/242.json"
+   "name": "maps/_mgturret.gsc",
+   "file": "rawfiles/maps/_mgturret.gsc"
   },
   {
    "index": 243,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/243.json"
+   "name": "maps/_minefields.gsc",
+   "file": "rawfiles/maps/_minefields.gsc"
   },
   {
    "index": 244,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/244.json"
+   "name": "maps/_mortar.gsc",
+   "file": "rawfiles/maps/_mortar.gsc"
   },
   {
    "index": 245,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/245.json"
+   "name": "maps/_music.gsc",
+   "file": "rawfiles/maps/_music.gsc"
   },
   {
    "index": 246,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/246.json"
+   "name": "maps/_names.gsc",
+   "file": "rawfiles/maps/_names.gsc"
   },
   {
    "index": 247,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/247.json"
+   "name": "maps/_notetrack.gsc",
+   "file": "rawfiles/maps/_notetrack.gsc"
   },
   {
    "index": 248,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/248.json"
+   "name": "maps/_patrol.gsc",
+   "file": "rawfiles/maps/_patrol.gsc"
   },
   {
    "index": 249,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/249.json"
+   "name": "maps/_radiant_live_update.gsc",
+   "file": "rawfiles/maps/_radiant_live_update.gsc"
   },
   {
    "index": 250,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/250.json"
+   "name": "maps/_rusher.gsc",
+   "file": "rawfiles/maps/_rusher.gsc"
   },
   {
    "index": 251,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/251.json"
+   "name": "maps/_scripted.gsc",
+   "file": "rawfiles/maps/_scripted.gsc"
   },
   {
    "index": 252,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/252.json"
+   "name": "maps/_shellshock.gsc",
+   "file": "rawfiles/maps/_shellshock.gsc"
   },
   {
    "index": 253,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/253.json"
+   "name": "maps/_shutter.gsc",
+   "file": "rawfiles/maps/_shutter.gsc"
   },
   {
    "index": 254,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/254.json"
+   "name": "maps/_spawn_manager.gsc",
+   "file": "rawfiles/maps/_spawn_manager.gsc"
   },
   {
    "index": 255,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/255.json"
+   "name": "maps/_spawner.gsc",
+   "file": "rawfiles/maps/_spawner.gsc"
   },
   {
    "index": 256,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/256.json"
+   "name": "maps/_specialops.gsc",
+   "file": "rawfiles/maps/_specialops.gsc"
   },
   {
    "index": 257,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/257.json"
+   "name": "maps/_spiderhole.gsc",
+   "file": "rawfiles/maps/_spiderhole.gsc"
   },
   {
    "index": 258,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/258.json"
+   "name": "maps/_splash_screens.gsc",
+   "file": "rawfiles/maps/_splash_screens.gsc"
   },
   {
    "index": 259,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/259.json"
+   "name": "maps/_swimming.gsc",
+   "file": "rawfiles/maps/_swimming.gsc"
   },
   {
    "index": 260,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/260.json"
+   "name": "maps/_treadfx.gsc",
+   "file": "rawfiles/maps/_treadfx.gsc"
   },
   {
    "index": 261,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/261.json"
+   "name": "maps/_utility.gsc",
+   "file": "rawfiles/maps/_utility.gsc"
   },
   {
    "index": 262,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/262.json"
+   "name": "maps/_utility_code.gsc",
+   "file": "rawfiles/maps/_utility_code.gsc"
   },
   {
    "index": 263,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/263.json"
+   "name": "maps/_vehicle.gsc",
+   "file": "rawfiles/maps/_vehicle.gsc"
   },
   {
    "index": 264,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/264.json"
+   "name": "maps/_vehicle_aianim.gsc",
+   "file": "rawfiles/maps/_vehicle_aianim.gsc"
   },
   {
    "index": 265,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/265.json"
+   "name": "maps/_vehicle_dials.gsc",
+   "file": "rawfiles/maps/_vehicle_dials.gsc"
   },
   {
    "index": 266,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/266.json"
+   "name": "maps/_vehicle_turret_ai.gsc",
+   "file": "rawfiles/maps/_vehicle_turret_ai.gsc"
   },
   {
    "index": 267,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/267.json"
+   "name": "maps/_vehicle_utility.gsc",
+   "file": "rawfiles/maps/_vehicle_utility.gsc"
   },
   {
    "index": 268,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/268.json"
+   "name": "maps/_vehicledrive.gsc",
+   "file": "rawfiles/maps/_vehicledrive.gsc"
   },
   {
    "index": 269,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/269.json"
+   "name": "maps/_vehiclenames.gsc",
+   "file": "rawfiles/maps/_vehiclenames.gsc"
   },
   {
    "index": 270,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/270.json"
+   "name": "maps/_vehicletypes.gsc",
+   "file": "rawfiles/maps/_vehicletypes.gsc"
   },
   {
    "index": 271,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/271.json"
+   "name": "maps/_weaponobjects.gsc",
+   "file": "rawfiles/maps/_weaponobjects.gsc"
   },
   {
    "index": 272,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/272.json"
+   "name": "maps/_weapons.gsc",
+   "file": "rawfiles/maps/_weapons.gsc"
   },
   {
    "index": 273,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/273.json"
+   "name": "maps/_weather.gsc",
+   "file": "rawfiles/maps/_weather.gsc"
   },
   {
    "index": 274,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/274.json"
+   "name": "maps/_compass.gsc",
+   "file": "rawfiles/maps/_compass.gsc"
   },
   {
    "index": 275,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/275.json"
+   "name": "vehicles/misc_camera",
+   "file": "rawfiles/vehicles/misc_camera"
   },
   {
    "index": 276,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/276.json"
+   "name": "vehicles/defaultvehicle",
+   "file": "rawfiles/vehicles/defaultvehicle"
   },
   {
    "index": 277,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/277.json"
+   "name": "vehicles/defaultvehicle_mp",
+   "file": "rawfiles/vehicles/defaultvehicle_mp"
   },
   {
    "index": 278,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/278.json"
+   "name": "maps/_apc.gsc",
+   "file": "rawfiles/maps/_apc.gsc"
   },
   {
    "index": 279,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/279.json"
+   "name": "maps/_boat_nvapbr.gsc",
+   "file": "rawfiles/maps/_boat_nvapbr.gsc"
   },
   {
    "index": 280,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/280.json"
+   "name": "maps/_boat_patrol_nva.gsc",
+   "file": "rawfiles/maps/_boat_patrol_nva.gsc"
   },
   {
    "index": 281,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/281.json"
+   "name": "maps/_boat_pbr.gsc",
+   "file": "rawfiles/maps/_boat_pbr.gsc"
   },
   {
    "index": 282,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/282.json"
+   "name": "maps/_btr.gsc",
+   "file": "rawfiles/maps/_btr.gsc"
   },
   {
    "index": 283,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/283.json"
+   "name": "maps/_chinook.gsc",
+   "file": "rawfiles/maps/_chinook.gsc"
   },
   {
    "index": 284,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/284.json"
+   "name": "maps/_civ_vehicle.gsc",
+   "file": "rawfiles/maps/_civ_vehicle.gsc"
   },
   {
    "index": 285,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/285.json"
+   "name": "maps/_cobra.gsc",
+   "file": "rawfiles/maps/_cobra.gsc"
   },
   {
    "index": 286,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/286.json"
+   "name": "maps/_hind.gsc",
+   "file": "rawfiles/maps/_hind.gsc"
   },
   {
    "index": 287,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/287.json"
+   "name": "maps/_hind_player.gsc",
+   "file": "rawfiles/maps/_hind_player.gsc"
   },
   {
    "index": 288,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/288.json"
+   "name": "maps/_hip.gsc",
+   "file": "rawfiles/maps/_hip.gsc"
   },
   {
    "index": 289,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/289.json"
+   "name": "maps/_huey.gsc",
+   "file": "rawfiles/maps/_huey.gsc"
   },
   {
    "index": 290,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/290.json"
+   "name": "maps/_jeep.gsc",
+   "file": "rawfiles/maps/_jeep.gsc"
   },
   {
    "index": 291,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/291.json"
+   "name": "maps/_mig17.gsc",
+   "file": "rawfiles/maps/_mig17.gsc"
   },
   {
    "index": 292,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/292.json"
+   "name": "maps/_motorcycle.gsc",
+   "file": "rawfiles/maps/_motorcycle.gsc"
   },
   {
    "index": 293,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/293.json"
+   "name": "maps/_plane_weapons.gsc",
+   "file": "rawfiles/maps/_plane_weapons.gsc"
   },
   {
    "index": 294,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/294.json"
+   "name": "maps/_policecar.gsc",
+   "file": "rawfiles/maps/_policecar.gsc"
   },
   {
    "index": 295,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/295.json"
+   "name": "maps/_rcbomb.gsc",
+   "file": "rawfiles/maps/_rcbomb.gsc"
   },
   {
    "index": 296,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/296.json"
+   "name": "maps/_sampan.gsc",
+   "file": "rawfiles/maps/_sampan.gsc"
   },
   {
    "index": 297,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/297.json"
+   "name": "maps/_snowcat.gsc",
+   "file": "rawfiles/maps/_snowcat.gsc"
   },
   {
    "index": 298,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/298.json"
+   "name": "maps/_t72.gsc",
+   "file": "rawfiles/maps/_t72.gsc"
   },
   {
    "index": 299,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/299.json"
+   "name": "maps/_tank_zsu23.gsc",
+   "file": "rawfiles/maps/_tank_zsu23.gsc"
   },
   {
    "index": 300,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/300.json"
+   "name": "maps/_tiara.gsc",
+   "file": "rawfiles/maps/_tiara.gsc"
   },
   {
    "index": 301,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/301.json"
+   "name": "maps/_truck.gsc",
+   "file": "rawfiles/maps/_truck.gsc"
   },
   {
    "index": 302,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/302.json"
+   "name": "maps/_truck_gaz63.gsc",
+   "file": "rawfiles/maps/_truck_gaz63.gsc"
   },
   {
    "index": 303,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/303.json"
+   "name": "maps/_truck_gaz66.gsc",
+   "file": "rawfiles/maps/_truck_gaz66.gsc"
   },
   {
    "index": 304,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/304.json"
+   "name": "maps/_uaz.gsc",
+   "file": "rawfiles/maps/_uaz.gsc"
   },
   {
    "index": 305,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/305.json"
+   "name": "maps/_zpu_antiair.gsc",
+   "file": "rawfiles/maps/_zpu_antiair.gsc"
   },
   {
    "index": 307,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/307.json"
+   "name": "vision/berserker.vision",
+   "file": "rawfiles/vision/berserker.vision"
   },
   {
    "index": 308,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/308.json"
+   "name": "vision/cheat_bw.vision",
+   "file": "rawfiles/vision/cheat_bw.vision"
   },
   {
    "index": 309,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/309.json"
+   "name": "vision/cheat_bw_invert.vision",
+   "file": "rawfiles/vision/cheat_bw_invert.vision"
   },
   {
    "index": 310,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/310.json"
+   "name": "vision/concussion_grenade.vision",
+   "file": "rawfiles/vision/concussion_grenade.vision"
   },
   {
    "index": 311,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/311.json"
+   "name": "vision/death.vision",
+   "file": "rawfiles/vision/death.vision"
   },
   {
    "index": 312,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/312.json"
+   "name": "vision/default.vision",
+   "file": "rawfiles/vision/default.vision"
   },
   {
    "index": 313,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/313.json"
+   "name": "vision/default_night.vision",
+   "file": "rawfiles/vision/default_night.vision"
   },
   {
    "index": 314,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/314.json"
+   "name": "vision/flare.vision",
+   "file": "rawfiles/vision/flare.vision"
   },
   {
    "index": 315,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/315.json"
+   "name": "vision/flash_grenade.vision",
+   "file": "rawfiles/vision/flash_grenade.vision"
   },
   {
    "index": 316,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/316.json"
+   "name": "vision/laststand.vision",
+   "file": "rawfiles/vision/laststand.vision"
   },
   {
    "index": 317,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/317.json"
+   "name": "vision/low_health.vision",
+   "file": "rawfiles/vision/low_health.vision"
   },
   {
    "index": 318,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/318.json"
+   "name": "vision/mpintro.vision",
+   "file": "rawfiles/vision/mpintro.vision"
   },
   {
    "index": 319,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/319.json"
+   "name": "vision/mpoutro.vision",
+   "file": "rawfiles/vision/mpoutro.vision"
   },
   {
    "index": 320,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/320.json"
+   "name": "vision/neutral.vision",
+   "file": "rawfiles/vision/neutral.vision"
   },
   {
    "index": 321,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/321.json"
+   "name": "vision/zombie_neutral.vision",
+   "file": "rawfiles/vision/zombie_neutral.vision"
   },
   {
    "index": 322,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/322.json"
+   "name": "vision/revive.vision",
+   "file": "rawfiles/vision/revive.vision"
   },
   {
    "index": 323,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/323.json"
+   "name": "vision/mp_nuked.vision",
+   "file": "rawfiles/vision/mp_nuked.vision"
   },
   {
    "index": 324,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/324.json"
+   "name": "vision/mp_nuked2.vision",
+   "file": "rawfiles/vision/mp_nuked2.vision"
   },
   {
    "index": 325,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/325.json"
+   "name": "vision/creek_1.vision",
+   "file": "rawfiles/vision/creek_1.vision"
   },
   {
    "index": 326,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/326.json"
+   "name": "vision/creek_1_interior.vision",
+   "file": "rawfiles/vision/creek_1_interior.vision"
   },
   {
    "index": 327,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/327.json"
+   "name": "vision/creek_1_dark.vision",
+   "file": "rawfiles/vision/creek_1_dark.vision"
   },
   {
    "index": 328,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/328.json"
+   "name": "vision/creek_1_helicopter.vision",
+   "file": "rawfiles/vision/creek_1_helicopter.vision"
   },
   {
    "index": 329,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/329.json"
+   "name": "vision/creek_1_helicopter_start.vision",
+   "file": "rawfiles/vision/creek_1_helicopter_start.vision"
   },
   {
    "index": 330,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/330.json"
+   "name": "vision/creek_1_helicopter_water.vision",
+   "file": "rawfiles/vision/creek_1_helicopter_water.vision"
   },
   {
    "index": 331,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/331.json"
+   "name": "vision/creek_1_helicopter_water_exit.vision",
+   "file": "rawfiles/vision/creek_1_helicopter_water_exit.vision"
   },
   {
    "index": 332,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/332.json"
+   "name": "vision/creek_1_rain.vision",
+   "file": "rawfiles/vision/creek_1_rain.vision"
   },
   {
    "index": 333,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/333.json"
+   "name": "vision/creek_1_ambush_path.vision",
+   "file": "rawfiles/vision/creek_1_ambush_path.vision"
   },
   {
    "index": 334,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/334.json"
+   "name": "vision/creek_1_village.vision",
+   "file": "rawfiles/vision/creek_1_village.vision"
   },
   {
    "index": 335,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/335.json"
+   "name": "vision/creek_1_tunnel.vision",
+   "file": "rawfiles/vision/creek_1_tunnel.vision"
   },
   {
    "index": 336,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/336.json"
+   "name": "vision/creek_1_tunnel_enter.vision",
+   "file": "rawfiles/vision/creek_1_tunnel_enter.vision"
   },
   {
    "index": 337,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/337.json"
+   "name": "vision/creek_1_tunnel_off.vision",
+   "file": "rawfiles/vision/creek_1_tunnel_off.vision"
   },
   {
    "index": 338,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/338.json"
+   "name": "vision/creek_1_war_room.vision",
+   "file": "rawfiles/vision/creek_1_war_room.vision"
   },
   {
    "index": 339,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/339.json"
+   "name": "vision/creek_1_tunnel_collapse.vision",
+   "file": "rawfiles/vision/creek_1_tunnel_collapse.vision"
   },
   {
    "index": 340,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/340.json"
+   "name": "vision/creek_1_tunnel_cave_light_end.vision",
+   "file": "rawfiles/vision/creek_1_tunnel_cave_light_end.vision"
   },
   {
    "index": 341,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/341.json"
+   "name": "vision/creek_1_tunnel_cliffhanger.vision",
+   "file": "rawfiles/vision/creek_1_tunnel_cliffhanger.vision"
   },
   {
    "index": 342,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/342.json"
+   "name": "vision/creek_1b.vision",
+   "file": "rawfiles/vision/creek_1b.vision"
   },
   {
    "index": 343,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/343.json"
+   "name": "vision/creek_drown.vision",
+   "file": "rawfiles/vision/creek_drown.vision"
   },
   {
    "index": 344,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/344.json"
+   "name": "vision/drown.vision",
+   "file": "rawfiles/vision/drown.vision"
   },
   {
    "index": 345,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/345.json"
+   "name": "vision/flashpoint.vision",
+   "file": "rawfiles/vision/flashpoint.vision"
   },
   {
    "index": 346,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/346.json"
+   "name": "vision/huey_city.vision",
+   "file": "rawfiles/vision/huey_city.vision"
   },
   {
    "index": 347,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/347.json"
+   "name": "vision/in_country.vision",
+   "file": "rawfiles/vision/in_country.vision"
   },
   {
    "index": 348,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/348.json"
+   "name": "vision/infrared.vision",
+   "file": "rawfiles/vision/infrared.vision"
   },
   {
    "index": 349,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/349.json"
+   "name": "vision/infrared_snow.vision",
+   "file": "rawfiles/vision/infrared_snow.vision"
   },
   {
    "index": 350,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/350.json"
+   "name": "vision/int_frontend_char_trans.vision",
+   "file": "rawfiles/vision/int_frontend_char_trans.vision"
   },
   {
    "index": 351,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/351.json"
+   "name": "vision/interrogation_escape.vision",
+   "file": "rawfiles/vision/interrogation_escape.vision"
   },
   {
    "index": 352,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/352.json"
+   "name": "vision/khe_sanh.vision",
+   "file": "rawfiles/vision/khe_sanh.vision"
   },
   {
    "index": 353,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/353.json"
+   "name": "vision/mp_array.vision",
+   "file": "rawfiles/vision/mp_array.vision"
   },
   {
    "index": 354,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/354.json"
+   "name": "vision/mp_berlinwall.vision",
+   "file": "rawfiles/vision/mp_berlinwall.vision"
   },
   {
    "index": 355,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/355.json"
+   "name": "vision/mp_cairo.vision",
+   "file": "rawfiles/vision/mp_cairo.vision"
   },
   {
    "index": 356,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/356.json"
+   "name": "vision/mp_cosmodrome.vision",
+   "file": "rawfiles/vision/mp_cosmodrome.vision"
   },
   {
    "index": 357,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/357.json"
+   "name": "vision/mp_cracked.vision",
+   "file": "rawfiles/vision/mp_cracked.vision"
   },
   {
    "index": 358,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/358.json"
+   "name": "vision/mp_crisis.vision",
+   "file": "rawfiles/vision/mp_crisis.vision"
   },
   {
    "index": 359,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/359.json"
+   "name": "vision/mp_discovery.vision",
+   "file": "rawfiles/vision/mp_discovery.vision"
   },
   {
    "index": 360,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/360.json"
+   "name": "vision/mp_duga.vision",
+   "file": "rawfiles/vision/mp_duga.vision"
   },
   {
    "index": 361,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/361.json"
+   "name": "vision/mp_hanoi.vision",
+   "file": "rawfiles/vision/mp_hanoi.vision"
   },
   {
    "index": 362,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/362.json"
+   "name": "vision/mp_havoc.vision",
+   "file": "rawfiles/vision/mp_havoc.vision"
   },
   {
    "index": 363,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/363.json"
+   "name": "vision/mp_mountain.vision",
+   "file": "rawfiles/vision/mp_mountain.vision"
   },
   {
    "index": 364,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/364.json"
+   "name": "vision/mp_radiation.vision",
+   "file": "rawfiles/vision/mp_radiation.vision"
   },
   {
    "index": 365,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/365.json"
+   "name": "vision/mp_underwater.vision",
+   "file": "rawfiles/vision/mp_underwater.vision"
   },
   {
    "index": 366,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/366.json"
+   "name": "vision/mp_vdm_cosmopoc.vision",
+   "file": "rawfiles/vision/mp_vdm_cosmopoc.vision"
   },
   {
    "index": 367,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/367.json"
+   "name": "vision/pentagon.vision",
+   "file": "rawfiles/vision/pentagon.vision"
   },
   {
    "index": 368,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/368.json"
+   "name": "vision/pow.vision",
+   "file": "rawfiles/vision/pow.vision"
   },
   {
    "index": 369,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/369.json"
+   "name": "vision/quagmire_1.vision",
+   "file": "rawfiles/vision/quagmire_1.vision"
   },
   {
    "index": 370,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/370.json"
+   "name": "vision/quagmire_2.vision",
+   "file": "rawfiles/vision/quagmire_2.vision"
   },
   {
    "index": 371,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/371.json"
+   "name": "vision/quagmire_3.vision",
+   "file": "rawfiles/vision/quagmire_3.vision"
   },
   {
    "index": 372,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/372.json"
+   "name": "vision/quagmire_4.vision",
+   "file": "rawfiles/vision/quagmire_4.vision"
   },
   {
    "index": 373,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/373.json"
+   "name": "vision/quagmire_default.vision",
+   "file": "rawfiles/vision/quagmire_default.vision"
   },
   {
    "index": 374,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/374.json"
+   "name": "vision/rebirth.vision",
+   "file": "rawfiles/vision/rebirth.vision"
   },
   {
    "index": 375,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/375.json"
+   "name": "vision/underwaterbase.vision",
+   "file": "rawfiles/vision/underwaterbase.vision"
   },
   {
    "index": 376,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/376.json"
+   "name": "vision/underwaterbase_swimming.vision",
+   "file": "rawfiles/vision/underwaterbase_swimming.vision"
   },
   {
    "index": 377,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/377.json"
+   "name": "vision/wmd.vision",
+   "file": "rawfiles/vision/wmd.vision"
   },
   {
    "index": 378,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/378.json"
+   "name": "vision/wmd_runway.vision",
+   "file": "rawfiles/vision/wmd_runway.vision"
   },
   {
    "index": 379,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/379.json"
+   "name": "vision/wmd_gforce.vision",
+   "file": "rawfiles/vision/wmd_gforce.vision"
   },
   {
    "index": 380,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/380.json"
+   "name": "vision/wmd_sr71.vision",
+   "file": "rawfiles/vision/wmd_sr71.vision"
   },
   {
    "index": 381,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/381.json"
+   "name": "vision/wmd_sr71cam.vision",
+   "file": "rawfiles/vision/wmd_sr71cam.vision"
   },
   {
    "index": 382,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/382.json"
+   "name": "vision/wmd_pilot.vision",
+   "file": "rawfiles/vision/wmd_pilot.vision"
   },
   {
    "index": 383,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/383.json"
+   "name": "vision/wmd_jumpcut.vision",
+   "file": "rawfiles/vision/wmd_jumpcut.vision"
   },
   {
    "index": 384,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/384.json"
+   "name": "vision/wmd_takeoff.vision",
+   "file": "rawfiles/vision/wmd_takeoff.vision"
   },
   {
    "index": 385,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/385.json"
+   "name": "vision/zombie_cosmodrome.vision",
+   "file": "rawfiles/vision/zombie_cosmodrome.vision"
   },
   {
    "index": 386,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/386.json"
+   "name": "vision/zombie_coast.vision",
+   "file": "rawfiles/vision/zombie_coast.vision"
   },
   {
    "index": 387,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/387.json"
+   "name": "vision/zombie_mountain.vision",
+   "file": "rawfiles/vision/zombie_mountain.vision"
   },
   {
    "index": 388,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/388.json"
+   "name": "vision/zombie_pentagon.vision",
+   "file": "rawfiles/vision/zombie_pentagon.vision"
   },
   {
    "index": 389,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/389.json"
+   "name": "vision/zombie_turned.vision",
+   "file": "rawfiles/vision/zombie_turned.vision"
   },
   {
    "index": 390,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/390.json"
+   "name": "vision/tvguided_sp.vision",
+   "file": "rawfiles/vision/tvguided_sp.vision"
   },
   {
    "index": 391,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/391.json"
+   "name": "vision/tvguided_mp.vision",
+   "file": "rawfiles/vision/tvguided_mp.vision"
   },
   {
    "index": 392,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/392.json"
+   "name": "vision/camera_spike_mp.vision",
+   "file": "rawfiles/vision/camera_spike_mp.vision"
   },
   {
    "index": 393,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/393.json"
+   "name": "loadscreen_zombietron",
+   "file": "assets/Material/loadscreen_zombietron.json"
   },
   {
    "index": 394,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/394.json"
+   "name": "loadscreen_zombie_theater",
+   "file": "assets/Material/loadscreen_zombie_theater.json"
   },
   {
    "index": 395,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/395.json"
+   "name": "loadscreen_zombie_pentagon",
+   "file": "assets/Material/loadscreen_zombie_pentagon.json"
   },
   {
    "index": 396,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/396.json"
+   "name": "skilltable_coop.csv",
+   "file": "assets/StringTable/skilltable_coop.csv.json"
   },
   {
    "index": 397,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/397.json"
+   "name": "mp/gametypestable.csv",
+   "file": "assets/StringTable/mp/gametypestable.csv.json"
   },
   {
    "index": 398,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/398.json"
+   "name": "mp/rankicontable.csv",
+   "file": "assets/StringTable/mp/rankicontable.csv.json"
   },
   {
    "index": 399,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/399.json"
+   "name": "mp/ranktable.csv",
+   "file": "assets/StringTable/mp/ranktable.csv.json"
   },
   {
    "index": 400,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/400.json"
+   "name": "maps/mapstable.csv",
+   "file": "assets/StringTable/maps/mapstable.csv.json"
   },
   {
    "index": 401,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/401.json"
+   "name": "maps/gametypestable.csv",
+   "file": "assets/StringTable/maps/gametypestable.csv.json"
   },
   {
    "index": 402,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/402.json"
+   "name": "mp/globalcounters.csv",
+   "file": "assets/StringTable/mp/globalcounters.csv.json"
   },
   {
    "index": 403,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/403.json"
+   "name": "mp/reportuser.csv",
+   "file": "assets/StringTable/mp/reportuser.csv.json"
   },
   {
    "index": 404,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/404.json"
+   "name": "weaponoptions.csv",
+   "file": "assets/StringTable/weaponoptions.csv.json"
   },
   {
    "index": 405,
    "type": "StringTable",
-   "name": null,
-   "file": "assets/StringTable/_unnamed/405.json"
+   "name": "binkduck.csv",
+   "file": "assets/StringTable/binkduck.csv.json"
   },
   {
    "index": 406,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/406.json"
+   "name": "info/ai_lochit_dmgtable",
+   "file": "rawfiles/info/ai_lochit_dmgtable"
   },
   {
    "index": 407,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/407.json"
+   "name": "info/bullet_penetration_sp",
+   "file": "rawfiles/info/bullet_penetration_sp"
   },
   {
    "index": 408,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/408.json"
+   "name": "aim_assist/view_input_0.graph",
+   "file": "rawfiles/aim_assist/view_input_0.graph"
   },
   {
    "index": 409,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/409.json"
+   "name": "aim_assist/view_input_1.graph",
+   "file": "rawfiles/aim_assist/view_input_1.graph"
   },
   {
    "index": 410,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/410.json"
+   "name": "aim_assist/view_input_2.graph",
+   "file": "rawfiles/aim_assist/view_input_2.graph"
   },
   {
    "index": 411,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/411.json"
+   "name": "aim_assist/view_input_3.graph",
+   "file": "rawfiles/aim_assist/view_input_3.graph"
   },
   {
    "index": 412,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/412.json"
+   "name": "video/cin_levels.txt",
+   "file": "rawfiles/video/cin_levels.txt"
   },
   {
    "index": 417,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/417.json"
+   "name": "shock/death.shock",
+   "file": "rawfiles/shock/death.shock"
   },
   {
    "index": 418,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/418.json"
+   "name": "shock/explosion.shock",
+   "file": "rawfiles/shock/explosion.shock"
   },
   {
    "index": 419,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/419.json"
+   "name": "shock/tank_mantle.shock",
+   "file": "rawfiles/shock/tank_mantle.shock"
   },
   {
    "index": 420,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/420.json"
+   "name": "shock/level_end.shock",
+   "file": "rawfiles/shock/level_end.shock"
   },
   {
    "index": 421,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/421.json"
+   "name": "$black",
+   "file": "assets/GfxImage/$black.json"
   },
   {
    "index": 422,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/422.json"
+   "name": "$blank",
+   "file": "assets/GfxImage/$blank.json"
   },
   {
    "index": 423,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/423.json"
+   "name": "$gray",
+   "file": "assets/GfxImage/$gray.json"
   },
   {
    "index": 424,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/424.json"
+   "name": "$g16r16",
+   "file": "assets/GfxImage/$g16r16.json"
   },
   {
    "index": 425,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/425.json"
+   "name": "$r5g6b5",
+   "file": "assets/GfxImage/$r5g6b5.json"
   },
   {
    "index": 426,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/426.json"
+   "name": "$blacktransparent",
+   "file": "assets/GfxImage/$blacktransparent.json"
   },
   {
    "index": 427,
    "type": "GfxImage",
-   "name": null,
-   "file": "assets/GfxImage/_unnamed/427.json"
+   "name": "$white_r32f",
+   "file": "assets/GfxImage/$white_r32f.json"
   },
   {
    "index": 428,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/428.json"
+   "name": "rumble/damage_heavy",
+   "file": "rawfiles/rumble/damage_heavy"
   },
   {
    "index": 429,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/429.json"
+   "name": "rumble/damage_light",
+   "file": "rawfiles/rumble/damage_light"
   },
   {
    "index": 430,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/430.json"
+   "name": "rumble/defaultweapon_melee",
+   "file": "rawfiles/rumble/defaultweapon_melee"
   },
   {
    "index": 431,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/431.json"
+   "name": "rumble/flamethrower_h.rmb",
+   "file": "rawfiles/rumble/flamethrower_h.rmb"
   },
   {
    "index": 432,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/432.json"
+   "name": "rumble/flamethrower_l.rmb",
+   "file": "rawfiles/rumble/flamethrower_l.rmb"
   },
   {
    "index": 433,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/433.json"
+   "name": "rumble/damage_heavy_h.rmb",
+   "file": "rawfiles/rumble/damage_heavy_h.rmb"
   },
   {
    "index": 434,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/434.json"
+   "name": "rumble/damage_heavy_l.rmb",
+   "file": "rawfiles/rumble/damage_heavy_l.rmb"
   },
   {
    "index": 435,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/435.json"
+   "name": "rumble/damage_light_h.rmb",
+   "file": "rawfiles/rumble/damage_light_h.rmb"
   },
   {
    "index": 436,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/436.json"
+   "name": "rumble/damage_light_l.rmb",
+   "file": "rawfiles/rumble/damage_light_l.rmb"
   },
   {
    "index": 437,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/437.json"
+   "name": "rumble/defaultweapon_melee_h.rmb",
+   "file": "rawfiles/rumble/defaultweapon_melee_h.rmb"
   },
   {
    "index": 438,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/438.json"
+   "name": "rumble/defaultweapon_melee_l.rmb",
+   "file": "rawfiles/rumble/defaultweapon_melee_l.rmb"
   },
   {
    "index": 439,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/439.json"
+   "name": "rumble/explosion_generic",
+   "file": "rawfiles/rumble/explosion_generic"
   },
   {
    "index": 440,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/440.json"
+   "name": "rumble/explosion_generic_l.rmb",
+   "file": "rawfiles/rumble/explosion_generic_l.rmb"
   },
   {
    "index": 441,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/441.json"
+   "name": "rumble/explosion_generic_h.rmb",
+   "file": "rawfiles/rumble/explosion_generic_h.rmb"
   },
   {
    "index": 442,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/442.json"
+   "name": "rumble/tank_rumble",
+   "file": "rawfiles/rumble/tank_rumble"
   },
   {
    "index": 443,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/443.json"
+   "name": "rumble/tank_rumble_h.rmb",
+   "file": "rawfiles/rumble/tank_rumble_h.rmb"
   },
   {
    "index": 444,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/444.json"
+   "name": "rumble/tank_rumble_l.rmb",
+   "file": "rawfiles/rumble/tank_rumble_l.rmb"
   },
   {
    "index": 445,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/445.json"
+   "name": "rumble/artillery_rumble",
+   "file": "rawfiles/rumble/artillery_rumble"
   },
   {
    "index": 446,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/446.json"
+   "name": "rumble/artillery_rumble_h.rmb",
+   "file": "rawfiles/rumble/artillery_rumble_h.rmb"
   },
   {
    "index": 447,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/447.json"
+   "name": "rumble/artillery_rumble_l.rmb",
+   "file": "rawfiles/rumble/artillery_rumble_l.rmb"
   },
   {
    "index": 448,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/448.json"
+   "name": "rumble/grenade_rumble",
+   "file": "rawfiles/rumble/grenade_rumble"
   },
   {
    "index": 449,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/449.json"
+   "name": "rumble/grenade_rumble_h.rmb",
+   "file": "rawfiles/rumble/grenade_rumble_h.rmb"
   },
   {
    "index": 450,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/450.json"
+   "name": "rumble/grenade_rumble_l.rmb",
+   "file": "rawfiles/rumble/grenade_rumble_l.rmb"
   },
   {
    "index": 451,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/451.json"
+   "name": "rumble/barrel_explosion",
+   "file": "rawfiles/rumble/barrel_explosion"
   },
   {
    "index": 452,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/452.json"
+   "name": "rumble/barrel_explosion_h.rmb",
+   "file": "rawfiles/rumble/barrel_explosion_h.rmb"
   },
   {
    "index": 453,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/453.json"
+   "name": "rumble/barrel_explosion_l.rmb",
+   "file": "rawfiles/rumble/barrel_explosion_l.rmb"
   },
   {
    "index": 454,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/454.json"
+   "name": "rumble/tank_fire",
+   "file": "rawfiles/rumble/tank_fire"
   },
   {
    "index": 455,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/455.json"
+   "name": "rumble/tank_fire_sp_h.rmb",
+   "file": "rawfiles/rumble/tank_fire_sp_h.rmb"
   },
   {
    "index": 456,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/456.json"
+   "name": "rumble/tank_fire_sp_l.rmb",
+   "file": "rawfiles/rumble/tank_fire_sp_l.rmb"
   },
   {
    "index": 457,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/457.json"
+   "name": "rumble/melee_garrote",
+   "file": "rawfiles/rumble/melee_garrote"
   },
   {
    "index": 458,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/458.json"
+   "name": "rumble/melee_garrote_h.rmb",
+   "file": "rawfiles/rumble/melee_garrote_h.rmb"
   },
   {
    "index": 459,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/459.json"
+   "name": "rumble/melee_garrote_l.rmb",
+   "file": "rawfiles/rumble/melee_garrote_l.rmb"
   },
   {
    "index": 460,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/460.json"
+   "name": "rumble/reload_small",
+   "file": "rawfiles/rumble/reload_small"
   },
   {
    "index": 461,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/461.json"
+   "name": "rumble/reload_small_h.rmb",
+   "file": "rawfiles/rumble/reload_small_h.rmb"
   },
   {
    "index": 462,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/462.json"
+   "name": "rumble/reload_small_l.rmb",
+   "file": "rawfiles/rumble/reload_small_l.rmb"
   },
   {
    "index": 463,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/463.json"
+   "name": "rumble/reload_medium",
+   "file": "rawfiles/rumble/reload_medium"
   },
   {
    "index": 464,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/464.json"
+   "name": "rumble/reload_medium_h.rmb",
+   "file": "rawfiles/rumble/reload_medium_h.rmb"
   },
   {
    "index": 465,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/465.json"
+   "name": "rumble/reload_medium_l.rmb",
+   "file": "rawfiles/rumble/reload_medium_l.rmb"
   },
   {
    "index": 466,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/466.json"
+   "name": "rumble/reload_large",
+   "file": "rawfiles/rumble/reload_large"
   },
   {
    "index": 467,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/467.json"
+   "name": "rumble/reload_large_h.rmb",
+   "file": "rawfiles/rumble/reload_large_h.rmb"
   },
   {
    "index": 468,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/468.json"
+   "name": "rumble/reload_large_l.rmb",
+   "file": "rawfiles/rumble/reload_large_l.rmb"
   },
   {
    "index": 469,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/469.json"
+   "name": "rumble/reload_clipin",
+   "file": "rawfiles/rumble/reload_clipin"
   },
   {
    "index": 470,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/470.json"
+   "name": "rumble/reload_clipout",
+   "file": "rawfiles/rumble/reload_clipout"
   },
   {
    "index": 471,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/471.json"
+   "name": "rumble/reload_rechamber",
+   "file": "rawfiles/rumble/reload_rechamber"
   },
   {
    "index": 472,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/472.json"
+   "name": "rumble/pullout_small",
+   "file": "rawfiles/rumble/pullout_small"
   },
   {
    "index": 473,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/473.json"
+   "name": "rumble/dtp_rumble",
+   "file": "rawfiles/rumble/dtp_rumble"
   },
   {
    "index": 474,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/474.json"
+   "name": "rumble/slide_rumble",
+   "file": "rawfiles/rumble/slide_rumble"
   },
   {
    "index": 475,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/475.json"
+   "name": "shock/default.shock",
+   "file": "rawfiles/shock/default.shock"
   },
   {
    "index": 476,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/476.json"
+   "name": "shock/hold_breath.shock",
+   "file": "rawfiles/shock/hold_breath.shock"
   },
   {
    "index": 477,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/477.json"
+   "name": "shock/pain.shock",
+   "file": "rawfiles/shock/pain.shock"
   },
   {
    "index": 478,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/478.json"
+   "name": "shock/victoryscreen.shock",
+   "file": "rawfiles/shock/victoryscreen.shock"
   },
   {
    "index": 479,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/479.json"
+   "name": "shock/flashbang.shock",
+   "file": "rawfiles/shock/flashbang.shock"
   },
   {
    "index": 480,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/480.json"
+   "name": "shock/dog_bite.shock",
+   "file": "rawfiles/shock/dog_bite.shock"
   },
   {
    "index": 481,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/481.json"
+   "name": "shock/chaplincheat.shock",
+   "file": "rawfiles/shock/chaplincheat.shock"
   },
   {
    "index": 482,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/482.json"
+   "name": "radiant/keys.txt",
+   "file": "rawfiles/radiant/keys.txt"
   },
   {
    "index": 483,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/483.json"
+   "name": "radiant/clientkeys.txt",
+   "file": "rawfiles/radiant/clientkeys.txt"
   },
   {
    "index": 484,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/484.json"
+   "name": "codescripts/character.gsc",
+   "file": "rawfiles/codescripts/character.gsc"
   },
   {
    "index": 485,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/485.json"
+   "name": "codescripts/delete.gsc",
+   "file": "rawfiles/codescripts/delete.gsc"
   },
   {
    "index": 486,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/486.json"
+   "name": "codescripts/struct.gsc",
+   "file": "rawfiles/codescripts/struct.gsc"
   },
   {
    "index": 487,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/487.json"
+   "name": "maps/gametypes/_gametypes.txt",
+   "file": "rawfiles/maps/gametypes/_gametypes.txt"
   },
   {
    "index": 488,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/488.json"
+   "name": "maps/gametypes/cmp.txt",
+   "file": "rawfiles/maps/gametypes/cmp.txt"
   },
   {
    "index": 489,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/489.json"
+   "name": "maps/gametypes/cmp.gsc",
+   "file": "rawfiles/maps/gametypes/cmp.gsc"
   },
   {
    "index": 490,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/490.json"
+   "name": "maps/gametypes/arc.txt",
+   "file": "rawfiles/maps/gametypes/arc.txt"
   },
   {
    "index": 491,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/491.json"
+   "name": "maps/gametypes/bnk.txt",
+   "file": "rawfiles/maps/gametypes/bnk.txt"
   },
   {
    "index": 492,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/492.json"
+   "name": "maps/gametypes/zom.txt",
+   "file": "rawfiles/maps/gametypes/zom.txt"
   },
   {
    "index": 493,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/493.json"
+   "name": "maps/gametypes/sop.txt",
+   "file": "rawfiles/maps/gametypes/sop.txt"
   },
   {
    "index": 494,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/494.json"
+   "name": "expressions/functions.txt",
+   "file": "rawfiles/expressions/functions.txt"
   },
   {
    "index": 495,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/495.json"
+   "name": "level_dependencies.csv",
+   "file": "rawfiles/level_dependencies.csv"
+  },
+  {
+   "index": 496,
+   "type": "SndDriverGlobals",
+   "name": "singleton",
+   "file": "assets/SndDriverGlobals/singleton.json"
   },
   {
    "index": 497,
@@ -2637,74 +2625,74 @@
   {
    "index": 499,
    "type": "GfxLightDef",
-   "name": null,
-   "file": "assets/GfxLightDef/_unnamed/499.json"
+   "name": "light_point_linear",
+   "file": "assets/GfxLightDef/light_point_linear.json"
   },
   {
    "index": 500,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/500.json"
+   "name": "black",
+   "file": "assets/Material/black.json"
   },
   {
    "index": 501,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/501.json"
+   "name": "white_r32f",
+   "file": "assets/Material/white_r32f.json"
   },
   {
    "index": 502,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/502.json"
+   "name": "$additive",
+   "file": "assets/Material/$additive.json"
   },
   {
    "index": 503,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/503.json"
+   "name": "$additive_nodepth",
+   "file": "assets/Material/$additive_nodepth.json"
   },
   {
    "index": 504,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/504.json"
+   "name": "$glare_blind",
+   "file": "assets/Material/$glare_blind.json"
   },
   {
    "index": 505,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/505.json"
+   "name": "$point",
+   "file": "assets/Material/$point.json"
   },
   {
    "index": 506,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/506.json"
+   "name": "$line",
+   "file": "assets/Material/$line.json"
   },
   {
    "index": 507,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/507.json"
+   "name": "$line_nodepth",
+   "file": "assets/Material/$line_nodepth.json"
   },
   {
    "index": 508,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/508.json"
+   "name": "$blend",
+   "file": "assets/Material/$blend.json"
   },
   {
    "index": 509,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/509.json"
+   "name": "$blend_nodepth",
+   "file": "assets/Material/$blend_nodepth.json"
   },
   {
    "index": 510,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/510.json"
+   "name": "clear_alpha",
+   "file": "assets/MaterialTechniqueSet/clear_alpha.json"
   },
   {
    "index": 511,
@@ -2715,8 +2703,8 @@
   {
    "index": 512,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/512.json"
+   "name": "clear_alpha_stencil",
+   "file": "assets/MaterialTechniqueSet/clear_alpha_stencil.json"
   },
   {
    "index": 513,
@@ -2727,8 +2715,8 @@
   {
    "index": 514,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/514.json"
+   "name": "set_alpha",
+   "file": "assets/MaterialTechniqueSet/set_alpha.json"
   },
   {
    "index": 515,
@@ -2739,8 +2727,8 @@
   {
    "index": 516,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/516.json"
+   "name": "depthprepass",
+   "file": "assets/MaterialTechniqueSet/depthprepass.json"
   },
   {
    "index": 517,
@@ -2751,8 +2739,8 @@
   {
    "index": 518,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/518.json"
+   "name": "shadowclear",
+   "file": "assets/MaterialTechniqueSet/shadowclear.json"
   },
   {
    "index": 519,
@@ -2763,32 +2751,32 @@
   {
    "index": 520,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/520.json"
+   "name": "shell_shock",
+   "file": "assets/MaterialTechniqueSet/shell_shock.json"
   },
   {
    "index": 521,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/521.json"
+   "name": "shellshock",
+   "file": "assets/Material/shellshock.json"
   },
   {
    "index": 522,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/522.json"
+   "name": "shell_shock_flashed",
+   "file": "assets/MaterialTechniqueSet/shell_shock_flashed.json"
   },
   {
    "index": 523,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/523.json"
+   "name": "shellshock_flashed",
+   "file": "assets/Material/shellshock_flashed.json"
   },
   {
    "index": 524,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/524.json"
+   "name": "color_channel_mixer",
+   "file": "assets/MaterialTechniqueSet/color_channel_mixer.json"
   },
   {
    "index": 525,
@@ -2799,68 +2787,68 @@
   {
    "index": 526,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/526.json"
+   "name": "frame_color_debug",
+   "file": "assets/Material/frame_color_debug.json"
   },
   {
    "index": 527,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/527.json"
+   "name": "frame_alpha_debug",
+   "file": "assets/Material/frame_alpha_debug.json"
   },
   {
    "index": 528,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/528.json"
+   "name": "passthru_vertalpha",
+   "file": "assets/MaterialTechniqueSet/passthru_vertalpha.json"
   },
   {
    "index": 529,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/529.json"
+   "name": "feedbackblend",
+   "file": "assets/Material/feedbackblend.json"
   },
   {
    "index": 530,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/530.json"
+   "name": "passthru_film",
+   "file": "assets/MaterialTechniqueSet/passthru_film.json"
   },
   {
    "index": 531,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/531.json"
+   "name": "feedbackfilmblend",
+   "file": "assets/Material/feedbackfilmblend.json"
   },
   {
    "index": 532,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/532.json"
+   "name": "passthru_alpha",
+   "file": "assets/MaterialTechniqueSet/passthru_alpha.json"
   },
   {
    "index": 533,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/533.json"
+   "name": "feedbackreplace",
+   "file": "assets/Material/feedbackreplace.json"
   },
   {
    "index": 534,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/534.json"
+   "name": "ps3_aadownsample",
+   "file": "assets/MaterialTechniqueSet/ps3_aadownsample.json"
   },
   {
    "index": 535,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/535.json"
+   "name": "$ps3_aadownsample",
+   "file": "assets/Material/$ps3_aadownsample.json"
   },
   {
    "index": 536,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/536.json"
+   "name": "glow_setup",
+   "file": "assets/MaterialTechniqueSet/glow_setup.json"
   },
   {
    "index": 537,
@@ -2871,8 +2859,8 @@
   {
    "index": 538,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/538.json"
+   "name": "glow_consistent_setup",
+   "file": "assets/MaterialTechniqueSet/glow_consistent_setup.json"
   },
   {
    "index": 539,
@@ -2883,8 +2871,8 @@
   {
    "index": 540,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/540.json"
+   "name": "glow_apply_bloom",
+   "file": "assets/MaterialTechniqueSet/glow_apply_bloom.json"
   },
   {
    "index": 541,
@@ -2895,8 +2883,8 @@
   {
    "index": 542,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/542.json"
+   "name": "glow_apply_sky_bleed",
+   "file": "assets/MaterialTechniqueSet/glow_apply_sky_bleed.json"
   },
   {
    "index": 543,
@@ -2907,8 +2895,8 @@
   {
    "index": 544,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/544.json"
+   "name": "glow_godrays",
+   "file": "assets/MaterialTechniqueSet/glow_godrays.json"
   },
   {
    "index": 545,
@@ -2919,8 +2907,8 @@
   {
    "index": 546,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/546.json"
+   "name": "filter_symmetric_1",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_1.json"
   },
   {
    "index": 547,
@@ -2931,8 +2919,8 @@
   {
    "index": 548,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/548.json"
+   "name": "filter_symmetric_2",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_2.json"
   },
   {
    "index": 549,
@@ -2943,8 +2931,8 @@
   {
    "index": 550,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/550.json"
+   "name": "filter_symmetric_3",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_3.json"
   },
   {
    "index": 551,
@@ -2955,8 +2943,8 @@
   {
    "index": 552,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/552.json"
+   "name": "filter_symmetric_4",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_4.json"
   },
   {
    "index": 553,
@@ -2967,8 +2955,8 @@
   {
    "index": 554,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/554.json"
+   "name": "filter_symmetric_5",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_5.json"
   },
   {
    "index": 555,
@@ -2979,8 +2967,8 @@
   {
    "index": 556,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/556.json"
+   "name": "filter_symmetric_6",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_6.json"
   },
   {
    "index": 557,
@@ -2991,8 +2979,8 @@
   {
    "index": 558,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/558.json"
+   "name": "filter_symmetric_7",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_7.json"
   },
   {
    "index": 559,
@@ -3003,8 +2991,8 @@
   {
    "index": 560,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/560.json"
+   "name": "filter_symmetric_8",
+   "file": "assets/MaterialTechniqueSet/filter_symmetric_8.json"
   },
   {
    "index": 561,
@@ -3015,20 +3003,20 @@
   {
    "index": 562,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/562.json"
+   "name": "sw4_2d_line_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_line_transparent.json"
   },
   {
    "index": 563,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/563.json"
+   "name": "ui_line",
+   "file": "assets/Material/ui_line.json"
   },
   {
    "index": 564,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/564.json"
+   "name": "bloom_downsample_ldr",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_ldr.json"
   },
   {
    "index": 565,
@@ -3039,8 +3027,8 @@
   {
    "index": 566,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/566.json"
+   "name": "bloom_downsample_hdr",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_hdr.json"
   },
   {
    "index": 567,
@@ -3051,8 +3039,8 @@
   {
    "index": 568,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/568.json"
+   "name": "bloom_downsample_convolution",
+   "file": "assets/MaterialTechniqueSet/bloom_downsample_convolution.json"
   },
   {
    "index": 569,
@@ -3063,8 +3051,8 @@
   {
    "index": 570,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/570.json"
+   "name": "bloom_remap",
+   "file": "assets/MaterialTechniqueSet/bloom_remap.json"
   },
   {
    "index": 571,
@@ -3075,8 +3063,8 @@
   {
    "index": 572,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/572.json"
+   "name": "bloom_expansion",
+   "file": "assets/MaterialTechniqueSet/bloom_expansion.json"
   },
   {
    "index": 573,
@@ -3087,8 +3075,8 @@
   {
    "index": 574,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/574.json"
+   "name": "bloom_remap_streak",
+   "file": "assets/MaterialTechniqueSet/bloom_remap_streak.json"
   },
   {
    "index": 575,
@@ -3099,8 +3087,8 @@
   {
    "index": 576,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/576.json"
+   "name": "bloom_streak_x",
+   "file": "assets/MaterialTechniqueSet/bloom_streak_x.json"
   },
   {
    "index": 577,
@@ -3111,8 +3099,8 @@
   {
    "index": 578,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/578.json"
+   "name": "bloom_streak_y",
+   "file": "assets/MaterialTechniqueSet/bloom_streak_y.json"
   },
   {
    "index": 579,
@@ -3123,8 +3111,8 @@
   {
    "index": 580,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/580.json"
+   "name": "bloom_apply_streak",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_streak.json"
   },
   {
    "index": 581,
@@ -3135,8 +3123,8 @@
   {
    "index": 582,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/582.json"
+   "name": "bloom_blur_x",
+   "file": "assets/MaterialTechniqueSet/bloom_blur_x.json"
   },
   {
    "index": 583,
@@ -3147,8 +3135,8 @@
   {
    "index": 584,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/584.json"
+   "name": "bloom_blur_y",
+   "file": "assets/MaterialTechniqueSet/bloom_blur_y.json"
   },
   {
    "index": 585,
@@ -3159,20 +3147,20 @@
   {
    "index": 586,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/586.json"
+   "name": "sw4_2d_mip3blur",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_mip3blur.json"
   },
   {
    "index": 587,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/587.json"
+   "name": "bloom_mip3_blur",
+   "file": "assets/Material/bloom_mip3_blur.json"
   },
   {
    "index": 588,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/588.json"
+   "name": "bloom_apply_hdr",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_hdr.json"
   },
   {
    "index": 589,
@@ -3183,8 +3171,8 @@
   {
    "index": 590,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/590.json"
+   "name": "bloom_apply_ldr",
+   "file": "assets/MaterialTechniqueSet/bloom_apply_ldr.json"
   },
   {
    "index": 591,
@@ -3195,8 +3183,8 @@
   {
    "index": 592,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/592.json"
+   "name": "create_lut2dv",
+   "file": "assets/MaterialTechniqueSet/create_lut2dv.json"
   },
   {
    "index": 593,
@@ -3207,8 +3195,8 @@
   {
    "index": 594,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/594.json"
+   "name": "apply_lut3d",
+   "file": "assets/MaterialTechniqueSet/apply_lut3d.json"
   },
   {
    "index": 595,
@@ -3219,8 +3207,8 @@
   {
    "index": 596,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/596.json"
+   "name": "resample_final",
+   "file": "assets/MaterialTechniqueSet/resample_final.json"
   },
   {
    "index": 597,
@@ -3231,8 +3219,8 @@
   {
    "index": 598,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/598.json"
+   "name": "resample_shift",
+   "file": "assets/MaterialTechniqueSet/resample_shift.json"
   },
   {
    "index": 599,
@@ -3243,8 +3231,8 @@
   {
    "index": 600,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/600.json"
+   "name": "bloom_smooth_a",
+   "file": "assets/MaterialTechniqueSet/bloom_smooth_a.json"
   },
   {
    "index": 601,
@@ -3255,8 +3243,8 @@
   {
    "index": 602,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/602.json"
+   "name": "bloom_smooth_b",
+   "file": "assets/MaterialTechniqueSet/bloom_smooth_b.json"
   },
   {
    "index": 603,
@@ -3267,8 +3255,8 @@
   {
    "index": 604,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/604.json"
+   "name": "postfx_dof",
+   "file": "assets/MaterialTechniqueSet/postfx_dof.json"
   },
   {
    "index": 605,
@@ -3279,8 +3267,8 @@
   {
    "index": 606,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/606.json"
+   "name": "postfx_dof_nv_intz",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_nv_intz.json"
   },
   {
    "index": 607,
@@ -3291,8 +3279,8 @@
   {
    "index": 608,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/608.json"
+   "name": "postfx_dof_color",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_color.json"
   },
   {
    "index": 609,
@@ -3303,8 +3291,8 @@
   {
    "index": 610,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/610.json"
+   "name": "postfx_dof_color_nv_intz",
+   "file": "assets/MaterialTechniqueSet/postfx_dof_color_nv_intz.json"
   },
   {
    "index": 611,
@@ -3315,8 +3303,8 @@
   {
    "index": 612,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/612.json"
+   "name": "postfx_color",
+   "file": "assets/MaterialTechniqueSet/postfx_color.json"
   },
   {
    "index": 613,
@@ -3327,8 +3315,8 @@
   {
    "index": 614,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/614.json"
+   "name": "postfx",
+   "file": "assets/MaterialTechniqueSet/postfx.json"
   },
   {
    "index": 615,
@@ -3339,8 +3327,8 @@
   {
    "index": 616,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/616.json"
+   "name": "dof_downsample",
+   "file": "assets/MaterialTechniqueSet/dof_downsample.json"
   },
   {
    "index": 617,
@@ -3351,8 +3339,8 @@
   {
    "index": 618,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/618.json"
+   "name": "dof_downsample_nv_intz",
+   "file": "assets/MaterialTechniqueSet/dof_downsample_nv_intz.json"
   },
   {
    "index": 619,
@@ -3363,8 +3351,8 @@
   {
    "index": 620,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/620.json"
+   "name": "dof_near_coc",
+   "file": "assets/MaterialTechniqueSet/dof_near_coc.json"
   },
   {
    "index": 621,
@@ -3375,8 +3363,8 @@
   {
    "index": 622,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/622.json"
+   "name": "small_blur",
+   "file": "assets/MaterialTechniqueSet/small_blur.json"
   },
   {
    "index": 623,
@@ -3387,8 +3375,8 @@
   {
    "index": 624,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/624.json"
+   "name": "motionblurfilter1",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter1.json"
   },
   {
    "index": 625,
@@ -3399,8 +3387,8 @@
   {
    "index": 626,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/626.json"
+   "name": "motionblurfilter2",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter2.json"
   },
   {
    "index": 627,
@@ -3411,8 +3399,8 @@
   {
    "index": 628,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/628.json"
+   "name": "motionblurfilter3",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter3.json"
   },
   {
    "index": 629,
@@ -3423,8 +3411,8 @@
   {
    "index": 630,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/630.json"
+   "name": "motionblurfilter4",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter4.json"
   },
   {
    "index": 631,
@@ -3435,8 +3423,8 @@
   {
    "index": 632,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/632.json"
+   "name": "motionblurfilter5",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter5.json"
   },
   {
    "index": 633,
@@ -3447,8 +3435,8 @@
   {
    "index": 634,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/634.json"
+   "name": "motionblurfilter6",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter6.json"
   },
   {
    "index": 635,
@@ -3459,8 +3447,8 @@
   {
    "index": 636,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/636.json"
+   "name": "motionblurfilter7",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter7.json"
   },
   {
    "index": 637,
@@ -3471,8 +3459,8 @@
   {
    "index": 638,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/638.json"
+   "name": "motionblurfilter8",
+   "file": "assets/MaterialTechniqueSet/motionblurfilter8.json"
   },
   {
    "index": 639,
@@ -3483,8 +3471,8 @@
   {
    "index": 640,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/640.json"
+   "name": "motionblurframebased",
+   "file": "assets/MaterialTechniqueSet/motionblurframebased.json"
   },
   {
    "index": 641,
@@ -3495,8 +3483,8 @@
   {
    "index": 642,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/642.json"
+   "name": "motionblurradial",
+   "file": "assets/MaterialTechniqueSet/motionblurradial.json"
   },
   {
    "index": 643,
@@ -3507,8 +3495,8 @@
   {
    "index": 644,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/644.json"
+   "name": "watersheeting_color_distort_blur",
+   "file": "assets/MaterialTechniqueSet/watersheeting_color_distort_blur.json"
   },
   {
    "index": 645,
@@ -3519,8 +3507,8 @@
   {
    "index": 646,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/646.json"
+   "name": "revivefx",
+   "file": "assets/MaterialTechniqueSet/revivefx.json"
   },
   {
    "index": 647,
@@ -3531,44 +3519,44 @@
   {
    "index": 648,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/648.json"
+   "name": "statmon_warning_tris",
+   "file": "assets/Material/statmon_warning_tris.json"
   },
   {
    "index": 649,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/649.json"
+   "name": "console",
+   "file": "assets/Material/console.json"
   },
   {
    "index": 650,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/650.json"
+   "name": "code_warning_file",
+   "file": "assets/Material/code_warning_file.json"
   },
   {
    "index": 651,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/651.json"
+   "name": "code_warning_fps",
+   "file": "assets/Material/code_warning_fps.json"
   },
   {
    "index": 652,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/652.json"
+   "name": "nottalkingicon",
+   "file": "assets/Material/nottalkingicon.json"
   },
   {
    "index": 653,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/653.json"
+   "name": "talkingicon",
+   "file": "assets/Material/talkingicon.json"
   },
   {
    "index": 654,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/654.json"
+   "name": "shadowcaster",
+   "file": "assets/MaterialTechniqueSet/shadowcaster.json"
   },
   {
    "index": 655,
@@ -3579,8 +3567,8 @@
   {
    "index": 656,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/656.json"
+   "name": "shadowoverlay",
+   "file": "assets/MaterialTechniqueSet/shadowoverlay.json"
   },
   {
    "index": 657,
@@ -3591,44 +3579,44 @@
   {
    "index": 658,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/658.json"
+   "name": "floatzdisplay",
+   "file": "assets/MaterialTechniqueSet/floatzdisplay.json"
   },
   {
    "index": 659,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/659.json"
+   "name": "floatz_display",
+   "file": "assets/Material/floatz_display.json"
   },
   {
    "index": 660,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/660.json"
+   "name": "floatz",
+   "file": "assets/MaterialTechniqueSet/floatz.json"
   },
   {
    "index": 661,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/661.json"
+   "name": "$floatz",
+   "file": "assets/Material/$floatz.json"
   },
   {
    "index": 662,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/662.json"
+   "name": "processed_floatz",
+   "file": "assets/MaterialTechniqueSet/processed_floatz.json"
   },
   {
    "index": 663,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/663.json"
+   "name": "$processed_floatz",
+   "file": "assets/Material/$processed_floatz.json"
   },
   {
    "index": 664,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/664.json"
+   "name": "stencilshadow",
+   "file": "assets/MaterialTechniqueSet/stencilshadow.json"
   },
   {
    "index": 665,
@@ -3639,8 +3627,8 @@
   {
    "index": 666,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/666.json"
+   "name": "stencildisplay",
+   "file": "assets/MaterialTechniqueSet/stencildisplay.json"
   },
   {
    "index": 667,
@@ -3651,8 +3639,8 @@
   {
    "index": 668,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/668.json"
+   "name": "pixel_cost_color_code",
+   "file": "assets/MaterialTechniqueSet/pixel_cost_color_code.json"
   },
   {
    "index": 669,
@@ -3663,56 +3651,56 @@
   {
    "index": 670,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/670.json"
+   "name": "pixel_cost_add",
+   "file": "assets/MaterialTechniqueSet/pixel_cost_add.json"
   },
   {
    "index": 671,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/671.json"
+   "name": "pixel_cost_add_depth_always",
+   "file": "assets/Material/pixel_cost_add_depth_always.json"
   },
   {
    "index": 672,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/672.json"
+   "name": "pixel_cost_add_depth_disable",
+   "file": "assets/Material/pixel_cost_add_depth_disable.json"
   },
   {
    "index": 673,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/673.json"
+   "name": "pixel_cost_add_depth_equal",
+   "file": "assets/Material/pixel_cost_add_depth_equal.json"
   },
   {
    "index": 674,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/674.json"
+   "name": "pixel_cost_add_depth_less",
+   "file": "assets/Material/pixel_cost_add_depth_less.json"
   },
   {
    "index": 675,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/675.json"
+   "name": "pixel_cost_add_depthwrite",
+   "file": "assets/Material/pixel_cost_add_depthwrite.json"
   },
   {
    "index": 676,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/676.json"
+   "name": "pixel_cost_add_nodepthwrite",
+   "file": "assets/Material/pixel_cost_add_nodepthwrite.json"
   },
   {
    "index": 677,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/677.json"
+   "name": "line_horizontal",
+   "file": "assets/Material/line_horizontal.json"
   },
   {
    "index": 678,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/678.json"
+   "name": "poison",
+   "file": "assets/MaterialTechniqueSet/poison.json"
   },
   {
    "index": 679,
@@ -3723,224 +3711,224 @@
   {
    "index": 680,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/680.json"
+   "name": "m_rope",
+   "file": "assets/MaterialTechniqueSet/m_rope.json"
   },
   {
    "index": 681,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/681.json"
+   "name": "rope",
+   "file": "assets/Material/rope.json"
   },
   {
    "index": 682,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/682.json"
+   "name": "redact1",
+   "file": "assets/Material/redact1.json"
   },
   {
    "index": 683,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/683.json"
+   "name": "redact2",
+   "file": "assets/Material/redact2.json"
   },
   {
    "index": 684,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/684.json"
+   "name": "redact3",
+   "file": "assets/Material/redact3.json"
   },
   {
    "index": 685,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/685.json"
+   "name": "light_corona",
+   "file": "assets/Material/light_corona.json"
   },
   {
    "index": 686,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/686.json"
+   "name": "cinematic",
+   "file": "assets/MaterialTechniqueSet/cinematic.json"
   },
   {
    "index": 687,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/687.json"
+   "name": ",$levelbriefing",
+   "file": "assets/Material/,$levelbriefing.json"
   },
   {
    "index": 688,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/688.json"
+   "name": "ui/code.txt",
+   "file": "assets/MenuList/ui/code.txt.json"
   },
   {
    "index": 700,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/700.json"
+   "name": "ui_scrollbar",
+   "file": "assets/Material/ui_scrollbar.json"
   },
   {
    "index": 701,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/701.json"
+   "name": "ui_scrollbar_arrow_dwn_a",
+   "file": "assets/Material/ui_scrollbar_arrow_dwn_a.json"
   },
   {
    "index": 702,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/702.json"
+   "name": "ui_scrollbar_arrow_up_a",
+   "file": "assets/Material/ui_scrollbar_arrow_up_a.json"
   },
   {
    "index": 703,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/703.json"
+   "name": "ui_scrollbar_arrow_left",
+   "file": "assets/Material/ui_scrollbar_arrow_left.json"
   },
   {
    "index": 704,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/704.json"
+   "name": "ui_scrollbar_arrow_right",
+   "file": "assets/Material/ui_scrollbar_arrow_right.json"
   },
   {
    "index": 705,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/705.json"
+   "name": "ui_scrollbar_thumb",
+   "file": "assets/Material/ui_scrollbar_thumb.json"
   },
   {
    "index": 706,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/706.json"
+   "name": "ui_slider2",
+   "file": "assets/Material/ui_slider2.json"
   },
   {
    "index": 707,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/707.json"
+   "name": "ui_sliderbutt_1",
+   "file": "assets/Material/ui_sliderbutt_1.json"
   },
   {
    "index": 708,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/708.json"
+   "name": "gradient",
+   "file": "assets/Material/gradient.json"
   },
   {
    "index": 709,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/709.json"
+   "name": "gradient_center",
+   "file": "assets/Material/gradient_center.json"
   },
   {
    "index": 710,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/710.json"
+   "name": "ui_arrow_right",
+   "file": "assets/Material/ui_arrow_right.json"
   },
   {
    "index": 711,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/711.json"
+   "name": "ui_arrow_left",
+   "file": "assets/Material/ui_arrow_left.json"
   },
   {
    "index": 712,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/712.json"
+   "name": "hudcolorbar",
+   "file": "assets/Material/hudcolorbar.json"
   },
   {
    "index": 713,
    "type": "ddlRoot_t",
-   "name": null,
-   "file": "assets/ddlRoot_t/_unnamed/713.json"
+   "name": "ddl/stats.old",
+   "file": "assets/ddlRoot_t/ddl/stats.old.json"
   },
   {
    "index": 714,
    "type": "ddlRoot_t",
-   "name": null,
-   "file": "assets/ddlRoot_t/_unnamed/714.json"
+   "name": "ddl/stats_archive.ddl",
+   "file": "assets/ddlRoot_t/ddl/stats_archive.ddl.json"
   },
   {
    "index": 715,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/715.json"
+   "name": "ui_host",
+   "file": "assets/Material/ui_host.json"
   },
   {
    "index": 716,
    "type": "SndBank",
-   "name": null,
-   "file": "assets/SndBank/_unnamed/716.json"
+   "name": "spl_ui.all",
+   "file": "assets/SndBank/spl_ui.all.json"
   },
   {
    "index": 717,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/717.json"
+   "name": "effect_hero",
+   "file": "assets/MaterialTechniqueSet/effect_hero.json"
   },
   {
    "index": 718,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/718.json"
+   "name": "infrared_white",
+   "file": "assets/Material/infrared_white.json"
   },
   {
    "index": 719,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/719.json"
+   "name": "ui/hud.txt",
+   "file": "assets/MenuList/ui/hud.txt.json"
   },
   {
    "index": 720,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/720.json"
+   "name": "sw4_2d_dpadcompass_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_dpadcompass_transparent.json"
   },
   {
    "index": 721,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/721.json"
+   "name": "ui/hud_sp.txt",
+   "file": "assets/MenuList/ui/hud_sp.txt.json"
   },
   {
    "index": 722,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/722.json"
+   "name": "ui/hud_zombie.txt",
+   "file": "assets/MenuList/ui/hud_zombie.txt.json"
   },
   {
    "index": 723,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/723.json"
+   "name": "ui/hud_coop.txt",
+   "file": "assets/MenuList/ui/hud_coop.txt.json"
   },
   {
    "index": 724,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/724.json"
+   "name": "ui/hud_dev.txt",
+   "file": "assets/MenuList/ui/hud_dev.txt.json"
   },
   {
    "index": 725,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/725.json"
+   "name": "ui/hud_demo.txt",
+   "file": "assets/MenuList/ui/hud_demo.txt.json"
   },
   {
    "index": 726,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/726.json"
+   "name": "ui/ingame.txt",
+   "file": "assets/MenuList/ui/ingame.txt.json"
   },
   {
    "index": 727,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/727.json"
+   "name": "ui/hud_splitscreen.txt",
+   "file": "assets/MenuList/ui/hud_splitscreen.txt.json"
   },
   {
    "index": 728,
@@ -3951,56 +3939,56 @@
   {
    "index": 729,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/729.json"
+   "name": "menu_zom_lobby_blood_big01",
+   "file": "assets/Material/menu_zom_lobby_blood_big01.json"
   },
   {
    "index": 730,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/730.json"
+   "name": "menu_safearea_arrow",
+   "file": "assets/Material/menu_safearea_arrow.json"
   },
   {
    "index": 731,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/731.json"
+   "name": "menu_mp_sound_cables",
+   "file": "assets/Material/menu_mp_sound_cables.json"
   },
   {
    "index": 732,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/732.json"
+   "name": "menu_mp_sound_lines1",
+   "file": "assets/Material/menu_mp_sound_lines1.json"
   },
   {
    "index": 733,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/733.json"
+   "name": "menu_mp_sound_lines2",
+   "file": "assets/Material/menu_mp_sound_lines2.json"
   },
   {
    "index": 734,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/734.json"
+   "name": "menu_mp_sound_speaker",
+   "file": "assets/Material/menu_mp_sound_speaker.json"
   },
   {
    "index": 735,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/735.json"
+   "name": "menu_mp_sound_tv",
+   "file": "assets/Material/menu_mp_sound_tv.json"
   },
   {
    "index": 736,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/736.json"
+   "name": "menu_mp_sound_headphones",
+   "file": "assets/Material/menu_mp_sound_headphones.json"
   },
   {
    "index": 737,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/737.json"
+   "name": "voice_off",
+   "file": "assets/Material/voice_off.json"
   },
   {
    "index": 738,
@@ -4011,92 +3999,92 @@
   {
    "index": 739,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/739.json"
+   "name": "menu_mp_bar_shadow",
+   "file": "assets/Material/menu_mp_bar_shadow.json"
   },
   {
    "index": 740,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/740.json"
+   "name": "menu_mp_killstreak_select",
+   "file": "assets/Material/menu_mp_killstreak_select.json"
   },
   {
    "index": 741,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/741.json"
+   "name": "sw4_2d_superflare_apply_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_apply_transparent.json"
   },
   {
    "index": 742,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/742.json"
+   "name": "generic_filter_superflare_apply",
+   "file": "assets/Material/generic_filter_superflare_apply.json"
   },
   {
    "index": 743,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/743.json"
+   "name": "sw4_2d_superflare_occluder_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_transparent.json"
   },
   {
    "index": 744,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/744.json"
+   "name": "generic_filter_superflare_occluder",
+   "file": "assets/Material/generic_filter_superflare_occluder.json"
   },
   {
    "index": 745,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/745.json"
+   "name": "sw4_2d_superflare_occluder_debug_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_debug_transparent.json"
   },
   {
    "index": 746,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/746.json"
+   "name": "generic_filter_superflare_occluder_debug",
+   "file": "assets/Material/generic_filter_superflare_occluder_debug.json"
   },
   {
    "index": 747,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/747.json"
+   "name": "sw4_2d_superflare_occluder_noz_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_noz_transparent.json"
   },
   {
    "index": 748,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/748.json"
+   "name": "generic_filter_superflare_occluder_noz",
+   "file": "assets/Material/generic_filter_superflare_occluder_noz.json"
   },
   {
    "index": 749,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/749.json"
+   "name": "sw4_2d_superflare_occluder_noz_debug_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_noz_debug_transparent.json"
   },
   {
    "index": 750,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/750.json"
+   "name": "generic_filter_superflare_occluder_noz_debug",
+   "file": "assets/Material/generic_filter_superflare_occluder_noz_debug.json"
   },
   {
    "index": 751,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/751.json"
+   "name": "thumbsup",
+   "file": "assets/Material/thumbsup.json"
   },
   {
    "index": 752,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/752.json"
+   "name": "emblem_bg_nocod",
+   "file": "assets/Material/emblem_bg_nocod.json"
   },
   {
    "index": 753,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/753.json"
+   "name": "composite_result",
+   "file": "assets/MaterialTechniqueSet/composite_result.json"
   },
   {
    "index": 754,
@@ -4107,14 +4095,14 @@
   {
    "index": 755,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/755.json"
+   "name": "spinner_wedge",
+   "file": "assets/Material/spinner_wedge.json"
   },
   {
    "index": 756,
    "type": "ddlRoot_t",
-   "name": null,
-   "file": "assets/ddlRoot_t/_unnamed/756.json"
+   "name": "ddl_mp/player.ddl",
+   "file": "assets/ddlRoot_t/ddl_mp/player.ddl.json"
   },
   {
    "index": 757,
@@ -4287,19 +4275,93 @@
   {
    "index": 785,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/785.json"
+   "name": "code_post_gfx",
+   "file": "rawfiles/code_post_gfx"
   }
  ],
  "named": {
   "animations": {
    "names": [
+    "f_death_v1",
+    "f_death_v2",
+    "f_death_v3",
+    "f_death_v4",
+    "f_death_v5",
+    "f_death_v6",
+    "f_death_v7",
+    "f_death_v8",
+    "f_firing_v1",
+    "f_firing_v10",
+    "f_firing_v12",
+    "f_firing_v13",
+    "f_firing_v14",
+    "f_firing_v15",
+    "f_firing_v2",
+    "f_firing_v3",
+    "f_firing_v4",
+    "f_firing_v5",
+    "f_firing_v6",
+    "f_firing_v7",
+    "f_firing_v8",
+    "f_firing_v9",
+    "f_idle_alert_v1",
+    "f_idle_alert_v2",
+    "f_idle_alert_v3",
+    "f_idle_casual_v1",
+    "f_im_reloading",
+    "f_melee_v1",
+    "f_melee_v2",
+    "f_melee_v3",
+    "f_melee_v4",
+    "f_pain_v1",
+    "f_pain_v2",
+    "f_pain_v3",
+    "f_pain_v4",
+    "f_pain_v5",
+    "f_pain_v6",
+    "f_react_v1",
+    "f_react_v2",
+    "f_react_v3",
+    "f_react_v4",
+    "f_react_v5",
+    "f_running_v1",
+    "f_running_v2",
+    "pf_alert_idle",
+    "pf_casual_idle",
+    "pf_death",
+    "pf_firing",
+    "pf_melee",
+    "pf_pain",
+    "player_mantle_over_high",
+    "player_mantle_over_low",
+    "player_mantle_over_mid",
+    "player_mantle_up_21",
+    "player_mantle_up_27",
+    "player_mantle_up_33",
+    "player_mantle_up_39",
+    "player_mantle_up_45",
+    "player_mantle_up_51",
+    "player_mantle_up_57",
+    "veh_car_destroy",
+    "viewmodel_default_ads_down",
+    "viewmodel_default_ads_up",
+    "viewmodel_default_fire",
+    "viewmodel_default_idle",
+    "viewmodel_default_pullout",
+    "viewmodel_default_putaway",
     "void"
    ],
    "references": []
   },
   "models": {
    "names": [
+    "defaultactor",
+    "defaultvehicle",
+    "defaultweapon",
+    "fx_rifle_shell",
+    "fx_rifle_shell_blur",
+    "tag_origin",
+    "tag_origin_animate",
     "viewmodel_default"
    ],
    "references": []
