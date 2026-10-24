@@ -1,0 +1,12 @@
+{
+ "zone": "zone/Common/zombie_theater_patch.ff",
+ "sha256": "9913ee8a177743e546af2961110ac26361643bef2892dd3b9b9473fc22ea15ea",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
