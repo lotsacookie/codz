@@ -4,6 +4,7 @@ import { flattenObject, fitModel, applyFit, appendBoxes, addGround } from './geo
 import { createProbe, planLevel, wallDistance } from './analyze.js';
 import { planFromLayout } from './bsp-plan.js';
 import { addMapLights, POOL_COARSE, POOL_DESKTOP } from './lights.js';
+import { loadKinoBoards, placeKinoBoards } from '../window-boards.js';
 
 export const SKY_FACES = ['textures/sky-px.png', 'textures/sky-nx.png', 'textures/sky-py.png', 'textures/sky-ny.png', 'textures/sky-pz.png', 'textures/sky-nz.png'];
 export const PERK_IDS = Object.keys(MOON_PERKS);
@@ -137,33 +138,6 @@ function placeChest(site, models, add, scene, solids) {
   });
 }
 
-// Kino der Toten's window boards (same plank sizes, tilt, layout and wood texture), fitted onto each window.
-let kinoBoards = null;
-async function loadKinoBoards() {
-  if (kinoBoards) return kinoBoards;
-  const template = await (await fetch(new URL('../../custom-maps/window-boards.json', import.meta.url))).json();
-  const { assetManager } = await import('../runtime-assets.js');
-  const texture = await new Promise(resolve => new THREE.TextureLoader(assetManager).load(template.texture, resolve, undefined, () => resolve(null)));
-  if (texture) {
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 4;
-  } else console.warn('[custom-map] Kino board texture unavailable');
-  return kinoBoards = { ...template, material: material(texture ? 0xffffff : 0x7a5a3a, { map: texture, roughness: .95 }) };
-}
-
-function boardGeometry(size) {
-  const geometry = new THREE.BoxGeometry(...size);
-  const position = geometry.attributes.position, normal = geometry.attributes.normal, uv = geometry.attributes.uv;
-  for (let i = 0; i < uv.count; i++) {
-    const axes = [0, 1, 2].filter(a => Math.abs(normal.getComponent(i, a)) < .5);
-    uv.setXY(i, position.getComponent(i, axes[0]) / 96, position.getComponent(i, axes[1]) / 96);
-  }
-  return geometry;
-}
-
-const UP = new THREE.Vector3(0, 1, 0);
-
 const CHALK = { m14_zm: 'm14', rottweil72_zm: 'rottweil72', ithaca_zm: 'ithaca', mp40_zm: 'mp40', mp5k_zm: 'mp5', mpl_zm: 'mpl', pm63_zm: 'pm63', ak74u_zm: 'ak74u', m16_zm: 'm16' };
 const WALL_POOL = Object.keys(CHALK);
 const AXES = [[1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -228,24 +202,7 @@ function placeWindow(w, index, add, scene, kino) {
   const name = `cm_window_${index}`;
   add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: name, position: w.outside, repair: w.repair, spawn: w.spawnPoint ?? undefined, spawns: w.spawnPoints?.length ? w.spawnPoints : undefined });
   add({ classname: 'script_struct', targetname: name, position: w.inside });
-  const ku = (w.width + 8) / kino.width, ky = (WINDOW.top - WINDOW.sill) / kino.height;
-  // Window frame: X along the wall, Y up, Z out of the window (away from the room).
-  const outward = new THREE.Vector3(-w.n[0], 0, -w.n[1]);
-  const along = new THREE.Vector3().crossVectors(UP, outward);
-  const frameQuat = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(along, UP, outward));
-  kino.boards.forEach((spec, k) => {
-    const vertical = Math.abs(Math.sin(spec.angle * Math.PI / 180)) > .7;
-    const length = spec.length * (vertical ? ky : ku);
-    const u = spec.u * ku, v = spec.v - 2.5;
-    const x = w.x + w.t[0] * u + outward.x * v, z = w.z + w.t[1] * u + outward.z * v;
-    const y = w.y + WINDOW.sill + spec.y * ky;
-    const entity = add({ classname: 'script_model', targetname: name, script_parameters: 'board', script_noteworthy: String(k + 1), position: [x, y, z], yaw: 0, plank: spec.width });
-    const board = new THREE.Mesh(boardGeometry([length, spec.width, spec.thick]), kino.material);
-    board.quaternion.copy(frameQuat).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), spec.angle * Math.PI / 180));
-    board.position.set(x, y, z);
-    board.userData.entityId = entity.id;
-    scene.add(board);
-  });
+  placeKinoBoards(kino, { add, scene, name, x: w.x, y: w.y, z: w.z, t: w.t, n: w.n, width: w.width, sill: WINDOW.sill, top: WINDOW.top });
 }
 
 

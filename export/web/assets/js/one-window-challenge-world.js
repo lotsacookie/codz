@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { MOON_PERKS } from './moon-session.js';
+import { loadKinoBoards, placeKinoBoards } from './window-boards.js';
 
 export const ROOM = { minX: -500, maxX: 500, minZ: -300, maxZ: 300, height: 220, wall: 24 };
 export const WINDOW = { halfWidth: 60, sill: 36, top: 120, boards: 6, boardX: -512 };
@@ -189,9 +190,11 @@ export async function buildWorld() {
 
   add({ classname: 'trigger_multiple', targetname: 'exterior_goal', target: 'owc_window', position: OUTSIDE });
   add({ classname: 'script_struct', targetname: 'owc_window', position: INSIDE });
+  // Kino's own window boards; the plain planks below are only a fallback if the template cannot load.
+  const kino = await loadKinoBoards().catch(error => { console.warn('[one-window-challenge] Kino boards unavailable, using planks:', error?.message ?? error); return null; });
   const boardIds = [];
   const plank = (WINDOW.top - WINDOW.sill - 8) / WINDOW.boards;
-  for (let i = 0; i < WINDOW.boards; i++) {
+  for (let i = 0; !kino && i < WINDOW.boards; i++) {
     const y = WINDOW.sill + 4 + plank * (i + .5);
     boardIds.push(add({ classname: 'script_model', targetname: 'owc_window', script_parameters: 'board', script_noteworthy: String(i + 1), position: [WINDOW.boardX, y, 0], yaw: 0, plank: plank - 2 }).id);
   }
@@ -225,6 +228,7 @@ export async function buildWorld() {
   const packModel = await tryLoad(loadModel, PACK_MODEL);
   scene.add(packModel ? seat(packModel, { yaw: Math.PI, x: PACK.x, wallZ: ROOM.maxZ }).group : packMachine());
 
+  if (kino) placeKinoBoards(kino, { add, scene, name: 'owc_window', x: WINDOW.boardX, y: 0, z: 0, t: [0, 1], n: [1, 0], width: WINDOW.halfWidth * 2, sill: WINDOW.sill, top: WINDOW.top });
   const wood = material('owc_wood', 0x7a5a3a, null, { roughness: .95 });
   boardIds.forEach(id => {
     const e = entities[id];
