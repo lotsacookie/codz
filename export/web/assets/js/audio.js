@@ -1,5 +1,6 @@
 import {zombieCues,dogCues,preloadZombieKeys,preloadDogKeys} from './zombie-sfx.js';
 import {stepPools,pickStep,pickLanding,pickCrawl,preloadStepKeys,PLAYER_STEP_GAIN,ZOMBIE_STEP_GAIN,ZOMBIE_STEP_RANGE} from './footsteps.js';
+import {EVENT_LAYERS,resolveEvent} from './sound-events.js';
 import {weaponProfile,weaponFolder,foleyKey,blastCues,hasScope,GRENADE_LAUNCHER_FOLDER,usesPapShot} from './weapon-sfx.js';
 // Native T5 cues decoded from IWD streams and resident LoadedSound records.
 const SPATIAL={near:140,rolloff:1.6,far:6000};
@@ -190,6 +191,7 @@ export class GameAudio {
     if(kind==='dog'&&type==='death'&&cause==='melee'){const neck=this.pick(cues.neck);if(neck)this.play(neck,.7*gain,position);}
     if(kind!=='dog'&&type==='step'){this.zombieStep(kind,position,cause||'walk',gain);return;}
     if(kind==='dog'&&type==='step'){const step=this.pick(cues.step),collar=this.pick(cues.collar);if(step)this.play(step,.6*gain,position);if(collar&&Math.random()<.3)this.play(collar,.3*gain,position);return;}
+    if(type==='death'&&kind!=='dog'&&cause!=='nuke')this.play('zombieFall',.8*gain,position);
     const key=this.pick(type==='death'&&cause==='electric'&&cues.elec?.length?cues.elec:cues[type]);
     if(key)this.play(key,.8*gain,position);
   }
@@ -252,6 +254,7 @@ export class GameAudio {
   async playMusic(key){if(!this.ctx)return;const token=++this.musicToken;this.music?.stop();this.music={stop(){}};let music;try{music=await this.native(key,key==='ambience'?.18:.65,key==='ambience');}catch(error){console.warn('Music '+key+' could not be decoded',error);return;}if(token!==this.musicToken){music.stop();return;}this.music=music;}
   play(kind,volume=1,position=null){
     if(!this.enabled||!this.ctx||this.ctx.state!=='running')return;
+    if(EVENT_LAYERS[kind]&&this.eventCues(kind,volume,position))return;
     if(this.manifest[kind]){this.native(kind,volume*.8,false,position,null,this.staleLimit(kind)).catch(console.error);return;}
     const c=this.ctx,t=c.currentTime,g=c.createGain();g.connect(this.master);g.gain.setValueAtTime(Math.max(.001,volume*.25),t);
     const duration={shot:.18,knife:.16,hit:.08,board:.18,reload:.11,growl:.75,round:1.5,buy:.35,empty:.06,explosion:.9}[kind]??.25;
@@ -261,6 +264,12 @@ export class GameAudio {
       for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1);
       const src=c.createBufferSource(),filter=c.createBiquadFilter();src.buffer=buffer;filter.type='lowpass';filter.frequency.value=kind==='growl'?180:kind==='shot'?3500:kind==='explosion'?400:1600;src.connect(filter);filter.connect(g);src.start();src.stop(t+duration);
     }else{const o=c.createOscillator();o.type=kind==='round'?'sawtooth':'sine';o.frequency.setValueAtTime(kind==='round'?62:kind==='buy'?660:180,t);o.frequency.exponentialRampToValueAtTime(kind==='round'?38:kind==='buy'?990:60,t+duration);o.connect(g);o.start();o.stop(t+duration);}
+  }
+  eventCues(name,volume=1,position=null){
+    const layers=resolveEvent(name,this.manifest,position,list=>this.pick(list));
+    if(!layers.length)return false;
+    for(const layer of layers){const gain=volume*layer.gain;if(layer.delay)this.later(layer.delay,()=>this.native(layer.key,gain*.8,false,position,null,this.staleLimit(layer.key)).catch(console.error));else this.native(layer.key,gain*.8,false,position,null,this.staleLimit(layer.key)).catch(console.error);}
+    return true;
   }
   snapshot(){return {enabled:this.enabled,nativeCues:Object.keys(this.manifest).length,decoded:this.buffers.size,decodedBytes:this.bufferBytes,played:this.played.slice(),state:this.ctx?.state??'idle'};}
 }

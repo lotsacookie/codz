@@ -354,11 +354,11 @@ function interact(){
   if(t==='claymore_purchase'){const ok=features.interact(e);if(ok)revealWall(e);return ok;}
   if(e.script_noteworthy==='auto_turret_trigger'||t?.startsWith('trigger_movie_reel_')||t==='trigger_change_projector_reels')return features.interact(e);
   if(t==='meteor_egg_trigger'){meteors.add(e.id);audio.play('buy');toast('Meteor fragment '+meteors.size+' / 3');if(meteors.size===3){audio.playMusic('115');announce('115','MUSICAL EASTER EGG');}return true;}
-  const pay=n=>{if(!session.spend(n)){toast('Not enough points');playerVox.say('nomoney');return false;}audio.play('buy');return true;};
+  const pay=n=>{if(!session.spend(n)){toast('Not enough points');audio.play('deny');playerVox.say('nomoney');return false;}audio.play('buy');return true;};
   if(t==='bowie_upgrade'){if(session.bowie||!pay(3000))return false;session.bowie=true;toast('Bowie Knife');return true;}
   if(t==='zombie_door'){
     const d=world.doors.get(e.target);if(d.electric){toast('Turn on the power');return false;}if(session.openDoors.has(e.target)||!pay(d.cost))return false;
-    session.openDoors.add(e.target);if(d.flag)session.flags.add(d.flag);world.setDoors(session);worldNet?.door(e.target);toast('Door opened');return true;
+    session.openDoors.add(e.target);if(d.flag)session.flags.add(d.flag);world.setDoors(session);worldNet?.door(e.target);toast('Door opened');audio.play('door',1,e.position);return true;
   }
   if(t==='weapon_upgrade'){
     const d=data.weapons[e.zombie_weapon_upgrade];if(!d||session.pack?.weapon===session.weapon)return false;
@@ -366,7 +366,7 @@ function interact(){
     const cost=owned?(owned.upgraded?4500:d.ammoPrice??Math.ceil(d.price/2)):d.price;
     if(!pay(cost))return false;
     if(owned)owned.reserve=owned.upgraded?d.upgrade?.maxAmmo??d.maxAmmo:d.maxAmmo;
-    else {session.giveWeapon(d.id);equipView();}revealWall(e);toast(owned?'Ammo replenished':d.name);return true;
+    else {session.giveWeapon(d.id);equipView();}revealWall(e);audio.play('weaponWall');toast(owned?'Ammo replenished':d.name);return true;
   }
   if(t==='zombie_vending'){
     const id=e.script_noteworthy,p=perkInfo[id];if(!p||session.perks.has(id)||(!session.power&&id!=='specialty_quickrevive'))return false;
@@ -374,7 +374,7 @@ function interact(){
     if(!session.drink(id))return false;primary=false;primaryPressed=false;ads=false;burstLeft=0;reloadShot=false;perkDrink.start(id,view);toast(p.name);audio.play(id,1,e.position);playerVox.perk(id);return true;
   }
   if(t==='use_elec_switch'&&!session.power){
-    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=lightLevels.powered;audio.play('round');audio.play('ref/evt/zombie_global/switch/turn_on/turn_on_00',.6);return true;
+    session.power=true;session.flags.add('power_on');world.setDoors(session);ambient.intensity=lightLevels.powered;audio.play('power');return true;
   }
   if(t==='treasure_chest_use'){
     if(mysteryBox.at(e)){if(session.pack?.weapon===session.weapon)return false;const weapon=mysteryBox.take(e);if(!weapon)return false;if(weapon==='zombie_cymbal_monkey'){session.giveMonkeys();toast('Monkey Bombs · X to throw');}else{session.giveWeapon(weapon);equipView();toast(data.weapons[weapon].name);}return true;}
@@ -383,7 +383,7 @@ function interact(){
     if(!mysteryBox.start(e))return false;session.spend(cost);audio.play('buy');return true;
   }
   if(t==='zombie_vending_upgrade'){
-    if(session.pack){if(!session.takePack())return false;equipView();toast(session.def.name);return true;}
+    if(session.pack){if(!session.takePack())return false;audio.play('papReady');audio.play('weaponPickup');equipView();toast(session.def.name);return true;}
     if(!session.beginPack())return false;ads=false;primary=false;burstLeft=0;reloadShot=false;audio.play('buy');audio.play('packapunch',1,e.position);toast('Upgrading… retrieve your weapon when it is ready.');return true;
   }
   if(t==='trigger_teleport_pad_0'&&session.power){
@@ -392,7 +392,7 @@ function interact(){
   }
   if(t==='pf16_auto1'&&session.teleporter==='linking'){session.teleporter='linked';toast('Teleporter linked',4);audio.play('buy');return true;}
   if(t?.endsWith('_room_trap')&&session.power){
-    if(traps.some(tr=>tr.name===t&&tr.cooldown>session.time)){toast('Trap cooling down');return false;}if(!pay(1000))return false;
+    if(traps.some(tr=>tr.name===t&&tr.cooldown>session.time)){toast('Trap cooling down');return false;}if(!pay(1000))return false;audio.play('trap',1,e.position);
     const p=vector(e.position),mesh=new THREE.Mesh(new THREE.CylinderGeometry(60,60,100,12,1,true),new THREE.MeshBasicMaterial({color:0x8cbbff,transparent:true,opacity:.24,wireframe:true}));mesh.position.copy(p);scene.add(mesh);traps.push({name:t,position:p,mesh,end:session.time+30,cooldown:session.time+90});return true;
   }
   return false;
@@ -544,7 +544,7 @@ try{
   spawn=data.entities.find(e=>e.targetname==='initial_spawn_points'&&e.script_int==='1');
   player=new PlayerController(camera,world.physics,{spawn:vector(spawn.position),spawnIsEye:false,radius:14,height:70,eyeHeight:60,moveSpeed:190,sprintSpeed:285,crouchSpeed:95,gravity:800,jumpHeight:39,fallResetY:-800,maxSubSteps:12,groundSnapSpeed:10,smoothCamera:smoothingEnabled()});bindPlayerFootsteps(player,()=>audio);audio.surfaceResolver=createSurfaceResolver({root:world.staticRoot,fallback:'concrete'});
   camera.rotation.set(0,spawn.yaw-Math.PI/2,0);world.setDoors(session);
-  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));if(charFire)charFire.clear();charFire=new CharacterFire(scene);if(dogFx)dogFx.clear();dogFx=new DogSpawnFx(scene,{shake:()=>view?.cameraFx?.build()});enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='bite')view?.cameraFx?.build(.9);if(type==='burn')charFire?.ignite(z,{death:cause==='death'});if(type==='spawn'&&z.kind==='dog'&&z.spawnFx>0)dogFx.begin(z.root.position);audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});enemies.spawnEffects=true;
+  progress('Loading weapons and the undead',85);view=new ViewWeapon(viewScene,data,(name,def)=>audio.notify(name,def));if(charFire)charFire.clear();charFire=new CharacterFire(scene);if(dogFx)dogFx.clear();dogFx=new DogSpawnFx(scene,{shake:()=>view?.cameraFx?.build()});enemies=new Enemies(scene,world,data,session,{damage,kill,hit,sound:(kind,p)=>audio.play(kind==='board'?'boardTear':kind,Math.max(0,1-p.distanceTo(camera.position)/1000)),voice:(z,gait,kind)=>audio.voice(gait,()=>z.root.position,kind),event:(type,z,cause)=>{if(type==='bite')view?.cameraFx?.build(.9);if(type==='burn')charFire?.ignite(z,{death:cause==='death'});if(type==='spawn'&&z.kind==='dog'&&z.spawnFx>0)dogFx.begin(z.root.position);audio.zombieEvent(type,z.kind,z.root.position,1,cause);playerVox.enemyEvent(type,z,cause,session);}});enemies.spawnEffects=true;
   world.actors=()=>enemies.list;
   coop=createCoop({scene,camera,feet:()=>player.getFeetPosition(),points:()=>session.points,health:()=>coopHealth(session)});enemies.remoteTargets=coop?()=>coop.targets():null;if(coop){coop.attachEnemies(enemies,{session,damage:n=>damage(n,nearestAttacker(camera.position,enemies.list)),teleport:p=>player.setPosition(p),onGameOver:showGameOver});coop.attachAudio(audio,{weapons:data.weapons});enemies.onRemoteHit=remoteHit;enemies.onPuppetKill=puppetKill;}
   powerups=new Powerups(scene,data,audio,collect);perkDrink=new PerkDrink(viewScene,data,audio);mysteryBox=new MysteryBox(scene,world,data,session,audio,toast);coop?.attachBox(mysteryBox);coop?.attachPowerups(powerups);worldNet=coop?.attachWorld({applyDoor:remoteDoor,applyWall:remoteWall})??null;mysteryBox.onOffer=createOfferPrefetch({weapons:data.weapons,view,onBuilt:entry=>warmEntry(renderer,viewScene,viewCamera,entry),warmAudio:def=>audio.warmWeapon(def)});
