@@ -1,0 +1,12 @@
+{
+ "zone": "zone/Common/patch.ff",
+ "sha256": "38009ffa802bcd177429c67d7774630bb1a8a7b7aea08842e8bc914996cfcb81",
+ "only": "",
+ "kinds": [
+  "fx",
+  "scripts",
+  "animations",
+  "models",
+  "weapons"
+ ]
+}
