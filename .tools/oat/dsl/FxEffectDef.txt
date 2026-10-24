@@ -18,6 +18,7 @@ set count markArray FxElemDef::visualCount;
 // array and markArray share a union: a decal element reads markArray only
 set condition array FxElemDef::elemType != FX_ELEM_TYPE_DECAL && FxElemDef::visualCount > 1;
 set count array FxElemDef::visualCount;
+set condition instance FxElemDef::elemType != FX_ELEM_TYPE_DECAL && FxElemDef::visualCount <= 1;
 
 // FxElemVisuals
 use FxElemVisuals;
