@@ -440,6 +440,7 @@ def parse_dsl_folder(dsl_dir):
             if m:
                 expr = m.group(2)
                 if all(re.match(r"^[\w:\[\]]+\s*(==|!=|<=|>=|<|>)\s*\w+$", t.strip())
+                       or re.match(r"^!?[A-Za-z_][\w:\[\]]*$", t.strip())
                        for t in re.split(r"\|\||&&", expr)):
                     cur.cond_expr[m.group(1)] = expr
                 else:
@@ -680,6 +681,12 @@ class T5Zone:
             return any(self.eval_cond(t.strip(), ctx) for t in expr.split("||"))
         if "&&" in expr:
             return all(self.eval_cond(t.strip(), ctx) for t in expr.split("&&"))
+        bare = re.match(r"^(!?)([A-Za-z_][\w:\[\]]*)$", expr)
+        if bare:
+            val = self._lookup_path(bare.group(2), ctx)
+            if isinstance(val, (bytes, bytearray)):
+                val = int.from_bytes(val, "little")
+            return (not val) if bare.group(1) else bool(val)
         m = re.match(r"^([\w:\[\]]+)\s*(==|!=|<=|>=|<|>)\s*(\w+)$", expr)
         if not m:
             raise ZoneError(f"bad condition {expr!r}")
@@ -744,7 +751,23 @@ class T5Zone:
         any); `scopes` = ancestor [(dsl, member-prefix)] chain innermost last."""
         scopes = scopes or []
         order = self._treated_member_names(sd, dsl)
+        skip_default = False
+        if sd.is_union:
+            for uname in order:
+                uinfo = self._member_info(dsl, sd, uname, scopes)
+                if uinfo["cond"] is None or uinfo["cond_never"]:
+                    continue
+                try:
+                    if self.eval_cond(uinfo["cond"], self._owner_ctx(ctx, uinfo["cond_owner"])):
+                        skip_default = True
+                        break
+                except ZoneError:
+                    continue
         for name in order:
+            if skip_default:
+                dinfo = self._member_info(dsl, sd, name, scopes)
+                if dinfo["cond"] is None and not dinfo["cond_never"]:
+                    continue
             self.ctx_trace.append(f"{sd.name}.{name}")
             try:
                 if os.environ.get("T5_TRACE"):
@@ -793,7 +816,13 @@ class T5Zone:
         count = self.eval_expr(info["arraysize"], scope_ctx)
         esz = max(1, m.size // (m.array or 1))
         extra = count * esz - self.INLINE_ARRAY_CAPACITY
-        if extra <= 0:
+        if extra == 0:
+            return
+        if extra < 0:
+            self.pos += extra
+            ctop = self.block_stack[-1] if self.block_stack else None
+            if ctop is not None and not BLOCK_NAMES[ctop].endswith("RUNTIME"):
+                self.cursors[ctop] += extra
             return
         top = self.block_stack[-1] if self.block_stack else BLOCK_TEMP
         tail = self.read(extra, block=top)
@@ -910,6 +939,24 @@ class T5Zone:
             return
         pv = vals.get(name)
         if info["string"]:
+            if isinstance(pv, (list, tuple)):
+                out = []
+                for pv2 in pv:
+                    if not isinstance(pv2, int):
+                        out.append(pv2)
+                        continue
+                    k2, t2 = self.classify(pv2)
+                    if k2 == "following":
+                        out.append(self.read_cstr())
+                    elif k2 == "offset":
+                        try:
+                            out.append(self.resolve(*t2))
+                        except (ZoneError, struct.error, ValueError, KeyError):
+                            out.append(PendingRef(*t2) if self.deferred else None)
+                    else:
+                        out.append(None)
+                vals[name] = out
+                return
             if not isinstance(pv, int):
                 return
             kind, tgt = self.classify(pv)
@@ -1064,9 +1111,7 @@ class T5Zone:
                         self.push_block(BLOCK_NAMES.index(tdsl.block))
                         pushed = True
                     try:
-                        child_scopes = scopes + ([(dsl, name)] if (dsl is not None and dsl.has_use) else
-                                                 [(d, f"{p}::{name}" if p else name) for d, p in scopes])
-                        self.treat_members(tsd, tdsl, el, ctx + [(tname, el)], scopes=child_scopes)
+                        self.treat_members(tsd, tdsl, el, ctx + [(tname, el)], scopes=[])
                     finally:
                         if pushed:
                             self.pop_block()

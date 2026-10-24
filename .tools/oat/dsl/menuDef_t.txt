@@ -11,6 +11,7 @@ set count items itemCount;
 
 // windowDef_t
 use windowDef_t;
+set string name;
 set string group;
 
 // GenericEventHandler
