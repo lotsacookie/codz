@@ -1,6 +1,6 @@
 // Extracts vfx/sfx source assets from fetched reference packs (see fetch.mjs, which writes resolved.json).
 // Existing output files are never replaced unless --overwrite is passed. --report-dir keeps reports out of the output tree.
-//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--kinds images,sounds,fx,scripts,animations,models,weapons,raw]
+//   node extract.mjs --resolved .work/reference/resolved.json --out .work/extracted [--only REGEX] [--zone REGEX] [--kinds images,sounds,fx,scripts,animations,models,weapons,raw]
 // images: IWI -> PNG (decodeIwi). sounds: IWD .wav/.flac and KSPK clips, copied as-is (decode with ffmpeg later).
 // scripts: GSC/CSC/other raw files stored in .ff zones (zlib payloads), written as plain text under scripts/.
 // fx: names found in .ff zones that look like effects/particles (FX_PATTERN), written to fx-index.json. raw: other IWD entries.
@@ -70,8 +70,11 @@ export const STAMP_FILE = '_extract-stamp.json';
 export async function zoneIsDone(zoneOut, item, kinds, only) {
   if (!item.sha256) return false;
   try {
-    const stamp = JSON.parse(await readFile(join(zoneOut, STAMP_FILE), 'utf8'));
     const zone = JSON.parse(await readFile(join(zoneOut, '_zone.json'), 'utf8'));
+    if (zone.complete !== true) return false;
+    let stamp = null;
+    try { stamp = JSON.parse(await readFile(join(zoneOut, STAMP_FILE), 'utf8')); } catch { stamp = null; }
+    if (!stamp) return only ? false : await markZoneDone(zoneOut, item, kinds, only);
     return stamp.sha256 === item.sha256 && stamp.only === (only?.source ?? '') && zone.complete === true && ZONE_KINDS.filter(kind => kinds.has(kind)).every(kind => stamp.kinds.includes(kind));
   } catch { return false; }
 }
@@ -193,6 +196,7 @@ async function main() {
   const force = argv.includes('--force');
   const reportDir = resolve(option('report-dir', out));
   const only = option('only') ? new RegExp(option('only'), 'i') : null;
+  const zoneFilter = option('zone') ? new RegExp(option('zone'), 'i') : null;
   const resolved = JSON.parse(await readFile(resolvedFile, 'utf8'));
   const report = [], zones = [];
   const taken = new Set();
@@ -200,6 +204,7 @@ async function main() {
   const walked = { animations: [], models: [], weapons: [] };
   for (const item of resolved.entries) {
     if (!item.file || !String(item.status).startsWith('ok')) continue;
+    if (zoneFilter && (item.kind !== 'zone' || !zoneFilter.test(item.path))) continue;
     if (item.kind === 'iwd' || item.kind === 'iw_00') await extractArchive(item.file, { out, kinds, only, report, overwrite });
     else if (item.kind === 'loaded-sound' && kinds.has('sounds')) await extractSoundPack(item.file, { out, only, report, overwrite });
     else if (item.kind === 'zone') {
