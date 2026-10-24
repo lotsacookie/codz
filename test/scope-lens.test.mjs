@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, updateScopeLens, lensUniforms } from '../export/web/assets/js/scope-lens.js';
+import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, sightAlpha, SIGHT_SHAPE, patchSightShader, enableSightThrough, wantsSightThrough, updateScopeLens, lensUniforms } from '../export/web/assets/js/scope-lens.js';
 
 test('lens materials are recognised by name', () => {
   assert.ok(isLensMaterial({ name: 'mc/mtl_weapon_scope_acog_lens' }));
@@ -80,4 +80,30 @@ test('uniform updates clamp aim and ignore a bad aspect', () => {
   updateScopeLens(-1, undefined);
   assert.equal(lensUniforms.uLensAim.value, 0);
   assert.equal(lensUniforms.uLensAspect.value, 1.5);
+});
+
+test('the sight line is fully clear at the crosshair and solid at the edge', () => {
+  assert.equal(sightAlpha(0, 1), 0);
+  assert.equal(sightAlpha(SIGHT_SHAPE.outer, 1), 1);
+  assert.equal(sightAlpha(0, 0), 1);
+});
+
+test('sight-through patches opaque scope parts once and skips lens materials', () => {
+  const body = { name: 'mtl_dragunov_scope', userData: {} };
+  const lens = { name: 'mtl_scope_lens', userData: { scopeLens: true } };
+  assert.equal(enableSightThrough([body, lens, null]), 1);
+  assert.equal(enableSightThrough([body]), 0);
+  assert.equal(body.needsUpdate, true);
+  const shader = { uniforms: {}, vertexShader: '#include <common>\n#include <project_vertex>', fragmentShader: '#include <common>\n#include <opaque_fragment>' };
+  body.onBeforeCompile(shader);
+  assert.ok(shader.fragmentShader.includes('discard'));
+  assert.ok(shader.uniforms.uSightShape && shader.uniforms.uLensAim);
+});
+
+test('only scoped guns get sight-through', () => {
+  assert.ok(wantsSightThrough({ id: 'l96a1_zm' }));
+  assert.ok(wantsSightThrough({ id: 'aug_acog_zm' }));
+  assert.ok(wantsSightThrough({ id: 'dragunov_upgraded_zm' }));
+  assert.ok(!wantsSightThrough({ id: 'm1911_zm' }));
+  assert.ok(!wantsSightThrough({ id: 'ak74u_zm' }));
 });
