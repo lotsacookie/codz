@@ -13,6 +13,7 @@ import { createOfferPrefetch, prefetchOtherSlots, warmEntry } from './viewmodel.
 import { clone } from 'three/addons/utils/SkeletonUtils.js';
 import { guardEnemies } from './enemy-guard.js';
 import { BloodFx } from './blood.js';
+import { installSharedFx } from './shared-fx.js';
 import { ExplosionFx } from './explosion-fx.js';
 import { KnifeBlood, tipToView, viewEmitter } from './knife-blood.js';
 import { popHead, popLimb } from './gore.js';
@@ -23,11 +24,11 @@ import { HitDirections, hitBearing, nearestAttacker } from './hit-direction.js';
 const pickupNames={full_ammo:'Max Ammo',double_points:'Double Points',insta_kill:'Insta-Kill',nuke:'Nuke',carpenter:'Carpenter',fire_sale:'Fire Sale'};
 
 export class Combat {
-  constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=false}) {
+  constructor(scene,camera,world,{notice,end,feet,teleport,sessionClass=MoonSession,enemiesClass=MoonEnemies,blood=true}) {
     Object.assign(this,{scene,camera,world,notice,end,feet,teleport,sessionClass,enemiesClass});
-    // Kino's sprite blood (burst, gush, drops, trail). Opt-in per map; others keep the cube particles.
+    // Kino's sprite blood (burst, gush, drops, trail) is on for every map; a map can opt out with blood:false.
     this.blood=blood?new BloodFx(scene):null;this.knifeBlood=new KnifeBlood();this.explosions=new ExplosionFx(scene);this.fire=new CharacterFire(scene);this.flopFx=new FlopFx(scene);this.limbDebris=new LimbDebris(scene);this.enabled=true;this.primary=false;this.pressed=false;this.ads=false;
-    this.impacts=new WallImpacts(scene);
+    this.impacts=new WallImpacts(scene);this.sharedFx=installSharedFx(this);
     this.hitDirections=new HitDirections();this.hitArcEls=[];if(typeof document!=='undefined')document.getElementById('hit-directions')?.replaceChildren();
     this.audio=new MoonAudio();this.audio.camera=camera;
     // Common combat cues are reusable; Kino's looping theater ambience is not.
@@ -73,7 +74,7 @@ export class Combat {
     this.pendingMelee=null;this.session.meleeLeft=0;this.clearInput();
     for(const list of [this.particles,this.grenades]){for(const p of [...list])this.removeEffect(list,p);}
     this.blood?.clear();this.explosions.clear();this.limbDebris.clear();
-    this.impacts.clear();this.hitDirections.clear();
+    this.impacts.clear();this.sharedFx?.clear();this.hitDirections.clear();
   }
   async reset(){this.clearTransient();this.audio.reset();this.session.reset();this.enemies.reset();this.pickups.reset();this.view.currentId=null;this.view.clearCache();this.lastRound=0;this.lastPhase=undefined;this.lastLookYaw=undefined;this.lastLookPitch=undefined;this.lastReload=0;await this.equip();}
   damage(n,from){
@@ -201,14 +202,14 @@ export class Combat {
     if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});
   }
   update(dt,{moving,sprint}){
-    this.blood?.update(dt);this.explosions.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
+    this.blood?.update(dt);this.sharedFx?.update(dt);this.explosions.update(dt);this.limbDebris.update(dt);this.coop?.update(dt);
     this.hitDirections.update(dt);this.renderHitArcs();
     if(!this.enabled||this.session.phase==='gameover')return;
     const s=this.session;s.update(dt);
     if(this.view.currentId!==s.def.id+(s.def.upgraded?':upgraded':'')||this.handSuit!==!!this.features?.state.suit)this.equip().catch(console.error);
     this.perkDrink.update(dt,s);this.view.pivot.visible=!s.pack&&!s.drinking&&s.phase!=='reviving';
     if(s.reloadLeft>0&&s.reloadSerial!==this.lastReload){this.lastReload=s.reloadSerial;this.view.reload(false,s.reloadDuration,s.reloadStage);}
-    if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);this.bloodyKnife();}}
+    if(this.pendingMelee&&s.time>=this.pendingMelee.at){const strike=this.pendingMelee;this.pendingMelee=null;this.features?.shot(new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),'melee',94);const z=this.meleeTarget();if(z){this.enemies.hurt(z,strike.damage,false,true,'melee');this.audio.knife('hit',false);this.bloodyKnife();}else{const ray=new THREE.Ray(this.camera.position.clone(),this.camera.getWorldDirection(new THREE.Vector3())),wall=this.world.raycast(ray,0,94);if(wall){this.audio.knife?.('wall',false);this.impacts.dust(wall,ray,this.particles);}}}
     if(this.knifeBlood.active){this.knifeBlood.update(dt,tipToView(this.camera,this.view.knifeTip(this.camera,this.viewCamera)),viewEmitter(this.camera,(p,v,k,s,h)=>this.blood?.fling(p,v,k,this.camera,s,h)));if(this.knifeBlood.active)this.view.tintKnife(this.knifeBlood.level);}
     const base=this.view.lookBase(this.camera);
     const lookYaw=this.lastLookYaw===undefined?0:Math.atan2(Math.sin(base.yaw-this.lastLookYaw),Math.cos(base.yaw-this.lastLookYaw)),lookPitch=this.lastLookPitch===undefined?0:base.pitch-this.lastLookPitch;this.lastLookYaw=base.yaw;this.lastLookPitch=base.pitch;

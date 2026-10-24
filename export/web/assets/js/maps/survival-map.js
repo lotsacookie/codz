@@ -558,7 +558,7 @@ async function load() {
     spawnBarriers: () => features.barriers,
     stepClear: (a, b) => navigation.stepClear(a, b),
   };
-  combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), teleport: p => player.setPosition(p), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: !!C.blood });
+  combat = new Combat(scene, camera, worldApi, { notice: showNotice, end: endRun, feet: () => player.getFeetPosition(), teleport: p => player.setPosition(p), sessionClass: C.classes.session, enemiesClass: C.classes.enemies, blood: C.blood !== false });
   combat.renderer = renderer;
   await combat.load();
   combat.attachCoop(createCoop({ scene, camera, feet: () => player.getFeetPosition(), points: () => combat.session.points, health: () => coopHealth(combat.session) }));
@@ -578,7 +578,7 @@ async function load() {
   showStatus('Checking zombie routes…');
   await navigation.prepare({ onStatus: showStatus });
   if (navigation.health && !navigation.health.reachable) showNotice('No verified zombie route found. Using fallback movement.', 8);
-  combat.enemies.onDrop = (type, position) => { if (combat.data.powerups[type]) combat.pickups.spawn(type, position); };
+  combat.enemies.onDrop = (type, position) => combat.dropPowerup(type, position);
   for (const [triggerId, modelId] of gunModels) { const o = objects.get(modelId); if (o) { hideWallGunAttachments(o, combat.data.weapons[data.entities[triggerId]?.zombie_weapon_upgrade]); wallGuns.set(triggerId, [o]); } }
   worldNet = combat.coop?.attachWorld({ applyDoor: remoteDoor, applyWall: remoteWall }) ?? null;
   const buy = features.interact.bind(features);
