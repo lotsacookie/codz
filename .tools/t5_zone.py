@@ -781,6 +781,10 @@ class T5Zone:
                 self.ctx_trace.pop()
 
     INLINE_ARRAY_CAPACITY = 4
+    PARTIAL_STRUCT_TAIL = {
+        "XAnimPartTrans": (lambda v: v.get("size") == 0, 20),
+        "XAnimDeltaPartQuat": (lambda v: v.get("size") == 0, 4),
+    }
 
     @staticmethod
     def _owner_ctx(ctx, owner):
@@ -1102,6 +1106,11 @@ class T5Zone:
             ref = self.alloc(block, align, arr)
             inline_raw = self.read(tsd.size * count, block=block, align=align)
             self.decode_array(tsd, inline_raw, arr, ctx, tname)
+            partial = self.PARTIAL_STRUCT_TAIL.get(tname)
+            if partial and count == 1 and isinstance(arr[0], dict) and partial[0](arr[0]):
+                self.pos -= partial[1]
+                if not BLOCK_NAMES[block].endswith("RUNTIME"):
+                    self.cursors[block] -= partial[1]
             tdsl = self.struct_dsl(tname)
             for i, el in enumerate(arr):
                 self.ctx_trace.append(f"{tname}[{i}]")
