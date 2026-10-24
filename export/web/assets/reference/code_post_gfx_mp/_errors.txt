@@ -1,17 +1,6 @@
 # error report: zone/Common/code_post_gfx_mp.ff
 status: ok
-stream: walked 0x23ce06 of 0x3a989d bytes (61.1%), 1493655 unwalked
-errors: 1 (0 failed assets, 0 soft errors, 0 poisoned pointers)
-
-[1] WALK STOPPED at 0x23ce06
-  1493655 bytes after this were not turned into assets
-  the zone's asset list ended here (664 entries, all walked); the bytes after it are not covered by the list
-  last walked asset: #663 RawFile stream=0x23cdfa..0x23ce06
-  bytes at the stop (16 before):
-    0x0023cdf6  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    0x0023ce06  00 00 00 00 00 00 00 00 00 00 00 80 3f 00 00 80  ............?...
-    0x0023ce16  3f 00 00 80 3f 00 00 80 3f 00 00 80 3f 00 00 80  ?...?...?...?...
-    0x0023ce26  3f 00 00 00 00 00 00 00 00 00 00 00 00 76 6f 72  ?............vor
-    0x0023ce36  6b 75 74 61 5f 66 61 64 65 6f 75 74 00 00 00 00  kuta_fadeout....
+stream: walked 0x3a989d of 0x3a989d bytes (100.0%), 0 unwalked
+errors: 0 (0 failed assets, 0 soft errors, 0 poisoned pointers)
 
 ## raw walker output

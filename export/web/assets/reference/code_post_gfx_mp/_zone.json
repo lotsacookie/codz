@@ -2,11 +2,11 @@
  "zone": "zone/Common/code_post_gfx_mp.ff",
  "status": "ok",
  "error": null,
- "complete": false,
+ "complete": true,
  "coverage": {
-  "streamPos": 2346502,
+  "streamPos": 3840157,
   "streamSize": 3840157,
-  "percent": 61.1
+  "percent": 100.0
  },
  "types": {
   "Material": 446,
@@ -33,9 +33,7 @@
  "failures": [],
  "softErrors": [],
  "failedSpans": [],
- "unwalkedTail": [
-  "_unwalked/tail_0023ce06_part0.bin"
- ],
+ "unwalkedTail": [],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
  "assets": [
@@ -2742,248 +2740,248 @@
   {
    "index": 467,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/467.json"
+   "name": "hud_asp",
+   "file": "assets/Material/hud_asp.json"
   },
   {
    "index": 468,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/468.json"
+   "name": "hud_icon_cz75",
+   "file": "assets/Material/hud_icon_cz75.json"
   },
   {
    "index": 469,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/469.json"
+   "name": "hud_icon_colt",
+   "file": "assets/Material/hud_icon_colt.json"
   },
   {
    "index": 470,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/470.json"
+   "name": "hud_icon_makarov",
+   "file": "assets/Material/hud_icon_makarov.json"
   },
   {
    "index": 471,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/471.json"
+   "name": "hud_python",
+   "file": "assets/Material/hud_python.json"
   },
   {
    "index": 472,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/472.json"
+   "name": "hud_icon_ak74u",
+   "file": "assets/Material/hud_icon_ak74u.json"
   },
   {
    "index": 473,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/473.json"
+   "name": "hud_icon_kiparis",
+   "file": "assets/Material/hud_icon_kiparis.json"
   },
   {
    "index": 474,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/474.json"
+   "name": "hud_icon_mac11",
+   "file": "assets/Material/hud_icon_mac11.json"
   },
   {
    "index": 475,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/475.json"
+   "name": "hud_icon_mpl",
+   "file": "assets/Material/hud_icon_mpl.json"
   },
   {
    "index": 476,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/476.json"
+   "name": "hud_mp5k",
+   "file": "assets/Material/hud_mp5k.json"
   },
   {
    "index": 477,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/477.json"
+   "name": "hud_icon_pm63",
+   "file": "assets/Material/hud_icon_pm63.json"
   },
   {
    "index": 478,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/478.json"
+   "name": "hud_icon_skorpion",
+   "file": "assets/Material/hud_icon_skorpion.json"
   },
   {
    "index": 479,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/479.json"
+   "name": "hud_icon_spectre",
+   "file": "assets/Material/hud_icon_spectre.json"
   },
   {
    "index": 480,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/480.json"
+   "name": "hud_icon_uzi",
+   "file": "assets/Material/hud_icon_uzi.json"
   },
   {
    "index": 481,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/481.json"
+   "name": "hud_commando",
+   "file": "assets/Material/hud_commando.json"
   },
   {
    "index": 482,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/482.json"
+   "name": "hud_icon_fnfal",
+   "file": "assets/Material/hud_icon_fnfal.json"
   },
   {
    "index": 483,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/483.json"
+   "name": "hud_icon_galil",
+   "file": "assets/Material/hud_icon_galil.json"
   },
   {
    "index": 484,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/484.json"
+   "name": "hud_icon_m14",
+   "file": "assets/Material/hud_icon_m14.json"
   },
   {
    "index": 485,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/485.json"
+   "name": "hud_icon_m16a4",
+   "file": "assets/Material/hud_icon_m16a4.json"
   },
   {
    "index": 486,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/486.json"
+   "name": "hud_icon_aug",
+   "file": "assets/Material/hud_icon_aug.json"
   },
   {
    "index": 487,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/487.json"
+   "name": "hud_enfield",
+   "file": "assets/Material/hud_enfield.json"
   },
   {
    "index": 488,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/488.json"
+   "name": "hud_icon_famas",
+   "file": "assets/Material/hud_icon_famas.json"
   },
   {
    "index": 489,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/489.json"
+   "name": "hud_icon_g11",
+   "file": "assets/Material/hud_icon_g11.json"
   },
   {
    "index": 490,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/490.json"
+   "name": "hud_hk21",
+   "file": "assets/Material/hud_hk21.json"
   },
   {
    "index": 491,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/491.json"
+   "name": "hud_icon_m60e4",
+   "file": "assets/Material/hud_icon_m60e4.json"
   },
   {
    "index": 492,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/492.json"
+   "name": "hud_rpk",
+   "file": "assets/Material/hud_rpk.json"
   },
   {
    "index": 493,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/493.json"
+   "name": "hud_icon_stoner63a",
+   "file": "assets/Material/hud_icon_stoner63a.json"
   },
   {
    "index": 494,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/494.json"
+   "name": "hud_icon_dragunov",
+   "file": "assets/Material/hud_icon_dragunov.json"
   },
   {
    "index": 495,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/495.json"
+   "name": "hud_l96",
+   "file": "assets/Material/hud_l96.json"
   },
   {
    "index": 496,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/496.json"
+   "name": "hud_psg1",
+   "file": "assets/Material/hud_psg1.json"
   },
   {
    "index": 497,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/497.json"
+   "name": "hud_icon_waw2000",
+   "file": "assets/Material/hud_icon_waw2000.json"
   },
   {
    "index": 498,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/498.json"
+   "name": "hud_hs10",
+   "file": "assets/Material/hud_hs10.json"
   },
   {
    "index": 499,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/499.json"
+   "name": "hud_ithaca",
+   "file": "assets/Material/hud_ithaca.json"
   },
   {
    "index": 500,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/500.json"
+   "name": "hud_beretta",
+   "file": "assets/Material/hud_beretta.json"
   },
   {
    "index": 501,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/501.json"
+   "name": "hud_icon_spas12",
+   "file": "assets/Material/hud_icon_spas12.json"
   },
   {
    "index": 502,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/502.json"
+   "name": "hud_icon_rpg",
+   "file": "assets/Material/hud_icon_rpg.json"
   },
   {
    "index": 503,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/503.json"
+   "name": "hud_strela",
+   "file": "assets/Material/hud_strela.json"
   },
   {
    "index": 504,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/504.json"
+   "name": "hud_icon_crossbow",
+   "file": "assets/Material/hud_icon_crossbow.json"
   },
   {
    "index": 505,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/505.json"
+   "name": "hud_china_lake",
+   "file": "assets/Material/hud_china_lake.json"
   },
   {
    "index": 506,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/506.json"
+   "name": "hud_icon_m72law",
+   "file": "assets/Material/hud_icon_m72law.json"
   },
   {
    "index": 507,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/507.json"
+   "name": "hudcolorbar",
+   "file": "assets/Material/hudcolorbar.json"
   },
   {
    "index": 508,
@@ -3264,8 +3262,8 @@
   {
    "index": 554,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/554.json"
+   "name": "menu_mp_weapons_attach_drum",
+   "file": "assets/Material/menu_mp_weapons_attach_drum.json"
   },
   {
    "index": 555,
@@ -3276,8 +3274,8 @@
   {
    "index": 556,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/556.json"
+   "name": "menu_mp_weapons_attach_dual_wield",
+   "file": "assets/Material/menu_mp_weapons_attach_dual_wield.json"
   },
   {
    "index": 557,
@@ -3312,8 +3310,8 @@
   {
    "index": 562,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/562.json"
+   "name": "menu_mp_weapons_attach_grip_folding",
+   "file": "assets/Material/menu_mp_weapons_attach_grip_folding.json"
   },
   {
    "index": 563,
@@ -3324,8 +3322,8 @@
   {
    "index": 564,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/564.json"
+   "name": "menu_mp_weapons_attach_ironsight",
+   "file": "assets/Material/menu_mp_weapons_attach_ironsight.json"
   },
   {
    "index": 565,
@@ -3468,38 +3466,38 @@
   {
    "index": 588,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/588.json"
+   "name": "menu_mp_bar_shadow",
+   "file": "assets/Material/menu_mp_bar_shadow.json"
   },
   {
    "index": 589,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/589.json"
+   "name": "menu_mp_combatrecord_bar",
+   "file": "assets/Material/menu_mp_combatrecord_bar.json"
   },
   {
    "index": 590,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/590.json"
+   "name": "menu_mp_lobby_cac_line_2_prong",
+   "file": "assets/Material/menu_mp_lobby_cac_line_2_prong.json"
   },
   {
    "index": 591,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/591.json"
+   "name": "menu_mp_lobby_cac_line_2_prong_left",
+   "file": "assets/Material/menu_mp_lobby_cac_line_2_prong_left.json"
   },
   {
    "index": 592,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/592.json"
+   "name": "menu_mp_lobby_cac_line_3_prong",
+   "file": "assets/Material/menu_mp_lobby_cac_line_3_prong.json"
   },
   {
    "index": 593,
    "type": "MenuList",
-   "name": null,
-   "file": "assets/MenuList/_unnamed/593.json"
+   "name": "ui_mp/code.txt",
+   "file": "assets/MenuList/ui_mp/code.txt.json"
   },
   {
    "index": 594,
@@ -3510,20 +3508,20 @@
   {
    "index": 595,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/595.json"
+   "name": "menu_safearea_arrow",
+   "file": "assets/Material/menu_safearea_arrow.json"
   },
   {
    "index": 596,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/596.json"
+   "name": "menu_mp_lobby_bar_name",
+   "file": "assets/Material/menu_mp_lobby_bar_name.json"
   },
   {
    "index": 597,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/597.json"
+   "name": "thumbsup",
+   "file": "assets/Material/thumbsup.json"
   },
   {
    "index": 598,
@@ -3720,74 +3718,74 @@
   {
    "index": 630,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/630.json"
+   "name": "hud_notification_rank_backing",
+   "file": "assets/Material/hud_notification_rank_backing.json"
   },
   {
    "index": 631,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/631.json"
+   "name": "menu_mp_lobby_aar_award_challenge",
+   "file": "assets/Material/menu_mp_lobby_aar_award_challenge.json"
   },
   {
    "index": 632,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/632.json"
+   "name": "menu_mp_lobby_aar_award_ccontract",
+   "file": "assets/Material/menu_mp_lobby_aar_award_ccontract.json"
   },
   {
    "index": 633,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/633.json"
+   "name": "hud_arrow_right",
+   "file": "assets/Material/hud_arrow_right.json"
   },
   {
    "index": 634,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/634.json"
+   "name": "hud_arrow_down",
+   "file": "assets/Material/hud_arrow_down.json"
   },
   {
    "index": 635,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/635.json"
+   "name": "menu_mp_lobby_icon_clip",
+   "file": "assets/Material/menu_mp_lobby_icon_clip.json"
   },
   {
    "index": 636,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/636.json"
+   "name": "menu_mp_lobby_icon_film",
+   "file": "assets/Material/menu_mp_lobby_icon_film.json"
   },
   {
    "index": 637,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/637.json"
+   "name": "menu_mp_lobby_icon_screenshot",
+   "file": "assets/Material/menu_mp_lobby_icon_screenshot.json"
   },
   {
    "index": 638,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/638.json"
+   "name": "menu_mp_lobby_icon_customgamemode",
+   "file": "assets/Material/menu_mp_lobby_icon_customgamemode.json"
   },
   {
    "index": 639,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/639.json"
+   "name": "menu_mp_star_rating",
+   "file": "assets/Material/menu_mp_star_rating.json"
   },
   {
    "index": 640,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/640.json"
+   "name": "menu_mp_fileshare_custom",
+   "file": "assets/Material/menu_mp_fileshare_custom.json"
   },
   {
    "index": 641,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/641.json"
+   "name": "sw4_2d_anim_icon_pingpong_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_anim_icon_pingpong_transparent.json"
   },
   {
    "index": 642,
@@ -3804,14 +3802,14 @@
   {
    "index": 644,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/644.json"
+   "name": "emblem_lut",
+   "file": "assets/Material/emblem_lut.json"
   },
   {
    "index": 645,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/645.json"
+   "name": "emblem_lut_2d",
+   "file": "assets/Material/emblem_lut_2d.json"
   },
   {
    "index": 646,
@@ -3822,104 +3820,104 @@
   {
    "index": 647,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/647.json"
+   "name": "rumble/dtp_rumble",
+   "file": "rawfiles/rumble/dtp_rumble"
   },
   {
    "index": 648,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/648.json"
+   "name": "rumble/slide_rumble",
+   "file": "rawfiles/rumble/slide_rumble"
   },
   {
    "index": 649,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/649.json"
+   "name": "sw4_2d_superflare_apply_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_apply_transparent.json"
   },
   {
    "index": 650,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/650.json"
+   "name": "generic_filter_superflare_apply",
+   "file": "assets/Material/generic_filter_superflare_apply.json"
   },
   {
    "index": 651,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/651.json"
+   "name": "sw4_2d_superflare_occluder_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_transparent.json"
   },
   {
    "index": 652,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/652.json"
+   "name": "generic_filter_superflare_occluder",
+   "file": "assets/Material/generic_filter_superflare_occluder.json"
   },
   {
    "index": 653,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/653.json"
+   "name": "sw4_2d_superflare_occluder_debug_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_debug_transparent.json"
   },
   {
    "index": 654,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/654.json"
+   "name": "generic_filter_superflare_occluder_debug",
+   "file": "assets/Material/generic_filter_superflare_occluder_debug.json"
   },
   {
    "index": 655,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/655.json"
+   "name": "sw4_2d_superflare_occluder_noz_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_noz_transparent.json"
   },
   {
    "index": 656,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/656.json"
+   "name": "generic_filter_superflare_occluder_noz",
+   "file": "assets/Material/generic_filter_superflare_occluder_noz.json"
   },
   {
    "index": 657,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/657.json"
+   "name": "sw4_2d_superflare_occluder_noz_debug_transparent",
+   "file": "assets/MaterialTechniqueSet/sw4_2d_superflare_occluder_noz_debug_transparent.json"
   },
   {
    "index": 658,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/658.json"
+   "name": "generic_filter_superflare_occluder_noz_debug",
+   "file": "assets/Material/generic_filter_superflare_occluder_noz_debug.json"
   },
   {
    "index": 659,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/659.json"
+   "name": "theater_up_arrow",
+   "file": "assets/Material/theater_up_arrow.json"
   },
   {
    "index": 660,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/660.json"
+   "name": "theater_down_arrow",
+   "file": "assets/Material/theater_down_arrow.json"
   },
   {
    "index": 661,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/661.json"
+   "name": "theater_left_arrow",
+   "file": "assets/Material/theater_left_arrow.json"
   },
   {
    "index": 662,
    "type": "Material",
-   "name": null,
-   "file": "assets/Material/_unnamed/662.json"
+   "name": "theater_right_arrow",
+   "file": "assets/Material/theater_right_arrow.json"
   },
   {
    "index": 663,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/663.json"
+   "name": "code_post_gfx_mp",
+   "file": "rawfiles/code_post_gfx_mp"
   }
  ],
  "named": {
