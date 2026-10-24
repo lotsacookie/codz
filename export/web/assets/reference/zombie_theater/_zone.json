@@ -4,66 +4,49 @@
  "error": null,
  "complete": false,
  "coverage": {
-  "streamPos": 19508681,
+  "streamPos": 78473976,
   "streamSize": 111197376,
-  "percent": 17.54
+  "percent": 70.57
  },
  "types": {
   "XModel": 328,
   "MaterialTechniqueSet": 198,
-  "XAnimParts": 176,
-  "FxEffectDef": 128,
+  "XAnimParts": 177,
+  "FxEffectDef": 129,
   "RawFile": 50,
   "WeaponVariantDef": 13,
   "Material": 5,
-  "SKIPPED": 2,
   "StringTable": 1,
   "PhysPreset": 1,
   "ComWorld": 1,
   "GfxLightDef": 1,
-  "GfxWorld": 1,
+  "SKIPPED": 1,
   "GameWorldSp": 1,
   "clipMap_t": 1,
   "SndBank": 1
  },
- "resyncs": 4,
+ "resyncs": 2,
  "failures": [
   [
-   "XAnimParts",
-   "stream exhausted at N need N (trace=['<zone>', 'asset#N:XAnimParts', 'XAnimParts.randomDataShort'])",
-   1
-  ],
-  [
-   "FxEffectDef",
-   "implausible array count N (trace=['<zone>', 'asset#N:FxEffectDef', 'FxEffectDef.elemDefs'])",
+   "GfxWorld",
+   "unknown struct unsigned int",
    1
   ]
  ],
  "softErrors": [],
  "failedSpans": [
   {
-   "index": 595,
-   "type": "XAnimParts",
-   "error": "stream exhausted at 0x128fb5f need 1929379990 (trace=['<zone>', 'asset#595:XAnimParts', 'XAnimParts.randomDataShort'])",
-   "start": 19462903,
-   "end": 19463019,
-   "resyncedTo": 596,
-   "file": "_failed/asset_595_XAnimParts.bin"
-  },
-  {
-   "index": 890,
-   "type": "FxEffectDef",
-   "error": "implausible array count 50528513 (trace=['<zone>', 'asset#890:FxEffectDef', 'FxEffectDef.elemDefs'])",
-   "start": 19497720,
-   "end": 19497792,
-   "resyncedTo": 891,
-   "file": "_failed/asset_890_FxEffectDef.bin"
+   "index": 538,
+   "type": "GfxWorld",
+   "error": "unknown struct unsigned int",
+   "start": 49006423,
+   "end": 78429252,
+   "resyncedTo": 539,
+   "file": "_failed/asset_538_GfxWorld.bin"
   }
  ],
  "unwalkedTail": [
-  "_unwalked/tail_0129adc9_part0.bin",
-  "_unwalked/tail_0129adc9_part1.bin",
-  "_unwalked/tail_0129adc9_part2.bin"
+  "_unwalked/tail_04ad6af8_part0.bin"
  ],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
@@ -323,404 +306,404 @@
   {
    "index": 279,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/279.json"
+   "name": ",effect_zfeather",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather.json"
   },
   {
    "index": 280,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/280.json"
+   "name": ",effect_add",
+   "file": "assets/MaterialTechniqueSet/,effect_add.json"
   },
   {
    "index": 281,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/281.json"
+   "name": ",effect_add_eyeoffset",
+   "file": "assets/MaterialTechniqueSet/,effect_add_eyeoffset.json"
   },
   {
    "index": 282,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/282.json"
+   "name": ",particle_cloud",
+   "file": "assets/MaterialTechniqueSet/,particle_cloud.json"
   },
   {
    "index": 283,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/283.json"
+   "name": ",wc_l_sm_b0c0s0",
+   "file": "assets/MaterialTechniqueSet/,wc_l_sm_b0c0s0.json"
   },
   {
    "index": 284,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/284.json"
+   "name": ",impacts/fx_small_glass",
+   "file": "assets/FxEffectDef/,impacts/fx_small_glass.json"
   },
   {
    "index": 285,
    "type": "PhysPreset",
-   "name": null,
-   "file": "assets/PhysPreset/_unnamed/285.json"
+   "name": "wood_chunk_light",
+   "file": "assets/PhysPreset/wood_chunk_light.json"
   },
   {
    "index": 289,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/289.json"
+   "name": "destructibles/fx_dest_trashbag",
+   "file": "assets/FxEffectDef/destructibles/fx_dest_trashbag.json"
   },
   {
    "index": 293,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/293.json"
+   "name": ",effect_zfeather_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_add_nofog.json"
   },
   {
    "index": 294,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/294.json"
+   "name": ",effect_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_add_nofog.json"
   },
   {
    "index": 295,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/295.json"
+   "name": ",effect",
+   "file": "assets/MaterialTechniqueSet/,effect.json"
   },
   {
    "index": 296,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/296.json"
+   "name": ",effect_add_nofog_eyeoffset",
+   "file": "assets/MaterialTechniqueSet/,effect_add_nofog_eyeoffset.json"
   },
   {
    "index": 297,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/297.json"
+   "name": ",particle_cloud_add",
+   "file": "assets/MaterialTechniqueSet/,particle_cloud_add.json"
   },
   {
    "index": 298,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/298.json"
+   "name": "destructibles/fx_dest_elec_shower",
+   "file": "assets/FxEffectDef/destructibles/fx_dest_elec_shower.json"
   },
   {
    "index": 299,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/299.json"
+   "name": ",destructibles/fx_dest_elec_shower_sm",
+   "file": "assets/FxEffectDef/,destructibles/fx_dest_elec_shower_sm.json"
   },
   {
    "index": 300,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/300.json"
+   "name": ",system_elements/fx_null",
+   "file": "assets/FxEffectDef/,system_elements/fx_null.json"
   },
   {
    "index": 301,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/301.json"
+   "name": "destructibles/fx_dest_elec_box",
+   "file": "assets/FxEffectDef/destructibles/fx_dest_elec_box.json"
   },
   {
    "index": 309,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/309.json"
+   "name": "aitype/zombie_ger_zombie.gsc",
+   "file": "rawfiles/aitype/zombie_ger_zombie.gsc"
   },
   {
    "index": 310,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/310.json"
+   "name": "character/c_ger_honorguard_zt.gsc",
+   "file": "rawfiles/character/c_ger_honorguard_zt.gsc"
   },
   {
    "index": 311,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/311.json"
+   "name": "xmodelalias/c_ger_honorguard_zomb_bodyalias.gsc",
+   "file": "rawfiles/xmodelalias/c_ger_honorguard_zomb_bodyalias.gsc"
   },
   {
    "index": 314,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/314.json"
+   "name": "xmodelalias/c_ger_honorguard_zomb_headalias.gsc",
+   "file": "rawfiles/xmodelalias/c_ger_honorguard_zomb_headalias.gsc"
   },
   {
    "index": 319,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/319.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_rarmoffalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_rarmoffalias.gsc"
   },
   {
    "index": 320,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/320.json"
+   "name": "mc_l_sm_r0c0d0n0s0_sco",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0_sco.json"
   },
   {
    "index": 321,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/321.json"
+   "name": "mc_l_sm_b0c0d0n0s0_sco",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0d0n0s0_sco.json"
   },
   {
    "index": 322,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/322.json"
+   "name": "mc_l_sm_t0c0d0n0s0_sco",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0d0n0s0_sco.json"
   },
   {
    "index": 325,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/325.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_larmoffalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_larmoffalias.gsc"
   },
   {
    "index": 328,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/328.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_torsoalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_torsoalias.gsc"
   },
   {
    "index": 332,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/332.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_rlegoffalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_rlegoffalias.gsc"
   },
   {
    "index": 335,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/335.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_llegoffalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_llegoffalias.gsc"
   },
   {
    "index": 338,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/338.json"
+   "name": "xmodelalias/char_ger_hnrgrd_body1_g_legsoffalias.gsc",
+   "file": "rawfiles/xmodelalias/char_ger_hnrgrd_body1_g_legsoffalias.gsc"
   },
   {
    "index": 340,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/340.json"
+   "name": "mc_l_sm_r0c0d0n0s0_clothcharr",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0d0n0s0_clothcharr.json"
   },
   {
    "index": 345,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/345.json"
+   "name": "character/clientscripts/c_ger_honorguard_zt.csc",
+   "file": "rawfiles/character/clientscripts/c_ger_honorguard_zt.csc"
   },
   {
    "index": 346,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/346.json"
+   "name": ",mc_l_sm_r0c0n0s0_wpn_clrdtl_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0_wpn_clrdtl_hero.json"
   },
   {
    "index": 347,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/347.json"
+   "name": ",mc_l_sm_b0c0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_b0c0n0s0_hero.json"
   },
   {
    "index": 348,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/348.json"
+   "name": ",mc_effect_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_effect_hero.json"
   },
   {
    "index": 349,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/349.json"
+   "name": ",mc_l_sm_r0c0n0s0_wpn_clrdtl",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0_wpn_clrdtl.json"
   },
   {
    "index": 350,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/350.json"
+   "name": ",mc_reflexsight",
+   "file": "assets/MaterialTechniqueSet/,mc_reflexsight.json"
   },
   {
    "index": 351,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/351.json"
+   "name": ",mc_sw4_3d_player_icon_transparent",
+   "file": "assets/MaterialTechniqueSet/,mc_sw4_3d_player_icon_transparent.json"
   },
   {
    "index": 352,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/352.json"
+   "name": ",mc_sw4_3d_clan_tag_transparent",
+   "file": "assets/MaterialTechniqueSet/,mc_sw4_3d_clan_tag_transparent.json"
   },
   {
    "index": 353,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/353.json"
+   "name": ",mc_l_sm_r0c0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_r0c0n0s0_hero.json"
   },
   {
    "index": 355,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/355.json"
+   "name": ",mc_l_sm_skin_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,mc_l_sm_skin_r0c0n0s0.json"
   },
   {
    "index": 356,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/356.json"
+   "name": ",effect_zfeather_falloff_add_nofog",
+   "file": "assets/MaterialTechniqueSet/,effect_zfeather_falloff_add_nofog.json"
   },
   {
    "index": 357,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/357.json"
+   "name": ",distortion_scale_zfeather",
+   "file": "assets/MaterialTechniqueSet/,distortion_scale_zfeather.json"
   },
   {
    "index": 358,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/358.json"
+   "name": ",weapon/muzzleflashes/fx_rifle1_flash_base",
+   "file": "assets/FxEffectDef/,weapon/muzzleflashes/fx_rifle1_flash_base.json"
   },
   {
    "index": 359,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/359.json"
+   "name": ",weapon/shellejects/fx_rifle_resting",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_rifle_resting.json"
   },
   {
    "index": 360,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/360.json"
+   "name": ",weapon/shellejects/fx_rifle",
+   "file": "assets/FxEffectDef/,weapon/shellejects/fx_rifle.json"
   },
   {
    "index": 361,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/361.json"
+   "name": ",2d",
+   "file": "assets/MaterialTechniqueSet/,2d.json"
   },
   {
    "index": 382,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/382.json"
+   "name": "aitype/zombie_quad.gsc",
+   "file": "rawfiles/aitype/zombie_quad.gsc"
   },
   {
    "index": 383,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/383.json"
+   "name": "character/c_zom_quad.gsc",
+   "file": "rawfiles/character/c_zom_quad.gsc"
   },
   {
    "index": 384,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/384.json"
+   "name": "mc_l_sm_t0c0d0n0s0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0d0n0s0_hero.json"
   },
   {
    "index": 388,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/388.json"
+   "name": "mc_l_sm_t0c0d0n0s0_sco_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_t0c0d0n0s0_sco_hero.json"
   },
   {
    "index": 389,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/389.json"
+   "name": "mc_l_sm_b0c0d0n0s0_sco_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0d0n0s0_sco_hero.json"
   },
   {
    "index": 398,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/398.json"
+   "name": "character/clientscripts/c_zom_quad.csc",
+   "file": "rawfiles/character/clientscripts/c_zom_quad.csc"
   },
   {
    "index": 399,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/399.json"
+   "name": "mc_objective",
+   "file": "assets/MaterialTechniqueSet/mc_objective.json"
   },
   {
    "index": 403,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/403.json"
+   "name": "weapon/tracer/fx_tracer_zombie_turret_1",
+   "file": "assets/FxEffectDef/weapon/tracer/fx_tracer_zombie_turret_1.json"
   },
   {
    "index": 404,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/404.json"
+   "name": "weapon/tracer/fx_tracer_zombie_turret_2",
+   "file": "assets/FxEffectDef/weapon/tracer/fx_tracer_zombie_turret_2.json"
   },
   {
    "index": 405,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/405.json"
+   "name": "weapon/tracer/fx_tracer_zombie_turret_3",
+   "file": "assets/FxEffectDef/weapon/tracer/fx_tracer_zombie_turret_3.json"
   },
   {
    "index": 406,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/406.json"
+   "name": "weapon/muzzleflashes/fx_zombie_turret",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_zombie_turret.json"
   },
   {
    "index": 407,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/407.json"
+   "name": "weapon/shellejects/fx_heavy_link_resting",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_heavy_link_resting.json"
   },
   {
    "index": 408,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/408.json"
+   "name": "weapon/shellejects/fx_heavy_link_view",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_heavy_link_view.json"
   },
   {
    "index": 409,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/409.json"
+   "name": "weapon/shellejects/fx_heavy",
+   "file": "assets/FxEffectDef/weapon/shellejects/fx_heavy.json"
   },
   {
    "index": 410,
    "type": "FxEffectDef",
-   "name": null,
-   "file": "assets/FxEffectDef/_unnamed/410.json"
+   "name": "weapon/muzzleflashes/fx_overheat_mg",
+   "file": "assets/FxEffectDef/weapon/muzzleflashes/fx_overheat_mg.json"
   },
   {
    "index": 412,
    "type": "RawFile",
-   "name": null,
-   "file": "assets/RawFile/_unnamed/412.json"
+   "name": "character/character_sp_zombie_dog.gsc",
+   "file": "rawfiles/character/character_sp_zombie_dog.gsc"
   },
   {
    "index": 413,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/413.json"
+   "name": "mc_l_sm_b0c0n0_hero",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_b0c0n0_hero.json"
   },
   {
    "index": 414,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/414.json"
+   "name": "mc_l_sm_r0c0n0_clothcharr",
+   "file": "assets/MaterialTechniqueSet/mc_l_sm_r0c0n0_clothcharr.json"
   },
   {
    "index": 428,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/428.json"
+   "name": "mc_sky_cubemap_hdr",
+   "file": "assets/MaterialTechniqueSet/mc_sky_cubemap_hdr.json"
   },
   {
    "index": 430,
    "type": "ComWorld",
-   "name": null,
-   "file": "assets/ComWorld/_unnamed/430.json"
+   "name": "maps/zombie_theater.d3dbsp",
+   "file": "assets/ComWorld/maps/zombie_theater.d3dbsp.json"
   },
   {
    "index": 431,
@@ -731,644 +714,638 @@
   {
    "index": 432,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/432.json"
+   "name": "wc_l_sm_r0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0n0s0.json"
   },
   {
    "index": 433,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/433.json"
+   "name": "wc_l_sm_r0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0n0s0x0.json"
   },
   {
    "index": 434,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/434.json"
+   "name": "wc_unlitdecalblend_multiply",
+   "file": "assets/MaterialTechniqueSet/wc_unlitdecalblend_multiply.json"
   },
   {
    "index": 435,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/435.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1.json"
   },
   {
    "index": 436,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/436.json"
+   "name": "wc_l_sm_t0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0n0s0.json"
   },
   {
    "index": 437,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/437.json"
+   "name": "wc_tools",
+   "file": "assets/MaterialTechniqueSet/wc_tools.json"
   },
   {
    "index": 438,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/438.json"
+   "name": "wc_l_sm_r0c0s0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0s0.json"
   },
   {
    "index": 439,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/439.json"
+   "name": "l_sm_r0c0s0_m1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0s0_m1c1.json"
   },
   {
    "index": 440,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/440.json"
+   "name": "wc_unlitdecalblend_add",
+   "file": "assets/MaterialTechniqueSet/wc_unlitdecalblend_add.json"
   },
   {
    "index": 441,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/441.json"
+   "name": ",wc_l_sm_b0c0n0s0",
+   "file": "assets/MaterialTechniqueSet/,wc_l_sm_b0c0n0s0.json"
   },
   {
    "index": 442,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/442.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1.json"
   },
   {
    "index": 443,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/443.json"
+   "name": "wc_l_sm_b0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_b0c0n0s0x0.json"
   },
   {
    "index": 444,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/444.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1s1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1s1_b2c2n2s2x2.json"
   },
   {
    "index": 445,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/445.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1x1.json"
   },
   {
    "index": 446,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/446.json"
+   "name": "l_sm_r0c0n0s0_b1c1s1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1s1_m2c2.json"
   },
   {
    "index": 447,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/447.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1s1.json"
   },
   {
    "index": 448,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/448.json"
+   "name": "l_sm_r0c0n0s0_b1c1s1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1s1_m2c2_m3c3.json"
   },
   {
    "index": 449,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/449.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1s1x1.json"
   },
   {
    "index": 450,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/450.json"
+   "name": "l_sm_r0c0n0s0_m1c1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_m1c1_b2c2n2s2x2.json"
   },
   {
    "index": 451,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/451.json"
+   "name": ",wc_l_sm_b0c0n0",
+   "file": "assets/MaterialTechniqueSet/,wc_l_sm_b0c0n0.json"
   },
   {
    "index": 452,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/452.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1_m2c2.json"
   },
   {
    "index": 453,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/453.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1.json"
   },
   {
    "index": 454,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/454.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1x1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1x1_m2c2.json"
   },
   {
    "index": 455,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/455.json"
+   "name": "l_sm_r0c0n0s0_m1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_m1c1.json"
   },
   {
    "index": 456,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/456.json"
+   "name": "wc_unlit",
+   "file": "assets/MaterialTechniqueSet/wc_unlit.json"
   },
   {
    "index": 457,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/457.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_m2c2.json"
   },
   {
    "index": 458,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/458.json"
+   "name": "wc_l_sm_r0c0n0s0sc0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0n0s0sc0x0.json"
   },
   {
    "index": 459,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/459.json"
+   "name": "l_sm_r0c0n0s0sc0x0_m1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0sc0x0_m1c1.json"
   },
   {
    "index": 460,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/460.json"
+   "name": "l_sm_r0c0n0s0_m1c1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_m1c1_m2c2.json"
   },
   {
    "index": 461,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/461.json"
+   "name": "wc_unlit_replace",
+   "file": "assets/MaterialTechniqueSet/wc_unlit_replace.json"
   },
   {
    "index": 462,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/462.json"
+   "name": "wc_l_sm_t0c0n0s0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0n0s0x0.json"
   },
   {
    "index": 463,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/463.json"
+   "name": "wc_shadowcaster",
+   "file": "assets/MaterialTechniqueSet/wc_shadowcaster.json"
   },
   {
    "index": 464,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/464.json"
+   "name": "wc_l_sm_r0c0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0.json"
   },
   {
    "index": 465,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/465.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1.json"
   },
   {
    "index": 466,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/466.json"
+   "name": "l_sm_r0c0_b1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0_b1c1n1s1.json"
   },
   {
    "index": 467,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/467.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1_m2c2.json"
   },
   {
    "index": 468,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/468.json"
+   "name": "wc_sky",
+   "file": "assets/MaterialTechniqueSet/wc_sky.json"
   },
   {
    "index": 469,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/469.json"
+   "name": "l_sm_r0c0n0s0_m1c1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_m1c1_m2c2_m3c3.json"
   },
   {
    "index": 470,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/470.json"
+   "name": "l_sm_t0c0n0s0_t1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_t0c0n0s0_t1c1n1s1.json"
   },
   {
    "index": 471,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/471.json"
+   "name": "wc_l_sm_t0c0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0x0.json"
   },
   {
    "index": 472,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/472.json"
+   "name": "l_sm_r0c0n0s0_t1c1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_t1c1x1.json"
   },
   {
    "index": 473,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/473.json"
+   "name": "l_sm_r0c0n0s0_t1c1x1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_t1c1x1_m2c2.json"
   },
   {
    "index": 474,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/474.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1x1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1x1_m2c2.json"
   },
   {
    "index": 475,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/475.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1x1.json"
   },
   {
    "index": 476,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/476.json"
+   "name": "l_sm_r0c0n0s0x0_a1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_a1c1.json"
   },
   {
    "index": 477,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/477.json"
+   "name": "l_sm_r0c0n0s0x0_a1c1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_a1c1_m2c2.json"
   },
   {
    "index": 478,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/478.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1_b2c2n2s2x2.json"
   },
   {
    "index": 479,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/479.json"
+   "name": "wc_l_sm_t0c0n0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0n0x0.json"
   },
   {
    "index": 480,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/480.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1x1.json"
   },
   {
    "index": 481,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/481.json"
+   "name": "l_sm_t0c0n0s0x0_t1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_t0c0n0s0x0_t1c1n1s1x1.json"
   },
   {
    "index": 482,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/482.json"
+   "name": "l_sm_r0c0n0s0_t1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_t1c1n1s1x1.json"
   },
   {
    "index": 483,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/483.json"
+   "name": "l_sm_b0c0n0s0x0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_b0c0n0s0x0_b1c1n1s1x1.json"
   },
   {
    "index": 484,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/484.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1s1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1s1x1_b2c2n2s2x2.json"
   },
   {
    "index": 485,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/485.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1x1_b2c2n2s2x2.json"
   },
   {
    "index": 486,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/486.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1x1.json"
   },
   {
    "index": 487,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/487.json"
+   "name": "l_sm_r0c0_t1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0_t1c1n1s1x1.json"
   },
   {
    "index": 488,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/488.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_b2c2n2s2x2.json"
   },
   {
    "index": 489,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/489.json"
+   "name": "wc_l_sm_b0c0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_b0c0x0.json"
   },
   {
    "index": 490,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/490.json"
+   "name": "l_sm_b0c0x0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_b0c0x0_b1c1n1s1x1.json"
   },
   {
    "index": 491,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/491.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_b2c2s2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_b2c2s2.json"
   },
   {
    "index": 492,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/492.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1_b2c2n2s2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1_b2c2n2s2.json"
   },
   {
    "index": 493,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/493.json"
+   "name": "l_sm_r0c0n0s0sc0x0_b1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0sc0x0_b1c1n1s1.json"
   },
   {
    "index": 494,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/494.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1x1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1x1_m2c2.json"
   },
   {
    "index": 495,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/495.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1s1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1s1_m2c2.json"
   },
   {
    "index": 496,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/496.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_m2c2_m3c3.json"
   },
   {
    "index": 497,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/497.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1s1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1s1_m2c2_m3c3.json"
   },
   {
    "index": 498,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/498.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1s1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1s1_m2c2.json"
   },
   {
    "index": 499,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/499.json"
+   "name": "wc_l_sm_t0c0s0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_t0c0s0.json"
   },
   {
    "index": 500,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/500.json"
+   "name": "l_sm_r0c0n0s0sc0x0_a1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0sc0x0_a1c1.json"
   },
   {
    "index": 501,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/501.json"
+   "name": "l_sm_r0c0n0s0x0_a1c1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_a1c1_m2c2_m3c3.json"
   },
   {
    "index": 502,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/502.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1_m2c2_m3c3.json"
   },
   {
    "index": 503,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/503.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1x1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1x1_m2c2.json"
   },
   {
    "index": 504,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/504.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1x1.json"
   },
   {
    "index": 505,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/505.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_t2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_t2c2n2s2x2.json"
   },
   {
    "index": 506,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/506.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1x1_t2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1x1_t2c2n2s2x2.json"
   },
   {
    "index": 507,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/507.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1x1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1x1_m2c2_m3c3.json"
   },
   {
    "index": 508,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/508.json"
+   "name": "l_sm_r0c0n0s0_t1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_t1c1n1s1.json"
   },
   {
    "index": 509,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/509.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1_b2c2n2s2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1_b2c2n2s2.json"
   },
   {
    "index": 510,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/510.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1_b2c2n2s2x2.json"
   },
   {
    "index": 511,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/511.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1_b2c2n2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1_b2c2n2.json"
   },
   {
    "index": 512,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/512.json"
+   "name": "l_sm_r0c0n0s0sc0x0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0sc0x0_b1c1n1s1x1.json"
   },
   {
    "index": 513,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/513.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1s1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1s1.json"
   },
   {
    "index": 514,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/514.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1s1_b2c2n2s2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1s1_b2c2n2s2.json"
   },
   {
    "index": 515,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/515.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1_m2c2_m3c3.json"
   },
   {
    "index": 516,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/516.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1_m2c2.json"
   },
   {
    "index": 517,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/517.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1x1_b2c2n2s2x2.json"
   },
   {
    "index": 518,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/518.json"
+   "name": "l_sm_r0c0n0s0x0_m1c1_b2c2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_m1c1_b2c2x2.json"
   },
   {
    "index": 519,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/519.json"
+   "name": "l_sm_r0c0n0s0_a1c1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_a1c1.json"
   },
   {
    "index": 520,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/520.json"
+   "name": "l_sm_r0c0n0s0_b1c1n1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0_b1c1n1_m2c2.json"
   },
   {
    "index": 521,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/521.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1x1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1x1_m2c2_m3c3.json"
   },
   {
    "index": 522,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/522.json"
+   "name": "wc_l_sm_r0c0n0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0n0.json"
   },
   {
    "index": 523,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/523.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1_b2c2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1_b2c2x2.json"
   },
   {
    "index": 524,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/524.json"
+   "name": "wc_l_sm_r0c0s0_sls",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0s0_sls.json"
   },
   {
    "index": 525,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/525.json"
+   "name": "wc_l_sm_r0c0n0s0_sls",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0n0s0_sls.json"
   },
   {
    "index": 526,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/526.json"
+   "name": "l_sm_b0c0n0s0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_b0c0n0s0_b1c1n1s1x1.json"
   },
   {
    "index": 527,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/527.json"
+   "name": "l_sm_r0c0n0s0x0_b1c1n1s1_m2c2_m3c3",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_b1c1n1s1_m2c2_m3c3.json"
   },
   {
    "index": 528,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/528.json"
+   "name": "l_sm_r0c0s0_m1c1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0s0_m1c1_m2c2.json"
   },
   {
    "index": 529,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/529.json"
+   "name": "l_sm_r0c0s0_b1c1n1s1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0s0_b1c1n1s1x1_b2c2n2s2x2.json"
   },
   {
    "index": 530,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/530.json"
+   "name": "l_sm_r0c0s0_b1c1n1s1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0s0_b1c1n1s1x1.json"
   },
   {
    "index": 531,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/531.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1x1_b2c2n2s2x2.json"
   },
   {
    "index": 532,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/532.json"
+   "name": "l_sm_b0c0x0_b1c1x1",
+   "file": "assets/MaterialTechniqueSet/l_sm_b0c0x0_b1c1x1.json"
   },
   {
    "index": 533,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/533.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1x1_b2c2n2s2x2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1x1_b2c2n2s2x2.json"
   },
   {
    "index": 534,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/534.json"
+   "name": "l_sm_r0c0n0s0x0_t1c1n1s1x1_b2c2n2s2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0n0s0x0_t1c1n1s1x1_b2c2n2s2.json"
   },
   {
    "index": 535,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/535.json"
+   "name": "wc_l_sm_r0c0x0",
+   "file": "assets/MaterialTechniqueSet/wc_l_sm_r0c0x0.json"
   },
   {
    "index": 536,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/536.json"
+   "name": "l_sm_r0c0x0_m1c1_m2c2",
+   "file": "assets/MaterialTechniqueSet/l_sm_r0c0x0_m1c1_m2c2.json"
   },
   {
    "index": 537,
    "type": "MaterialTechniqueSet",
-   "name": null,
-   "file": "assets/MaterialTechniqueSet/_unnamed/537.json"
-  },
-  {
-   "index": 538,
-   "type": "GfxWorld",
-   "name": null,
-   "file": "assets/GfxWorld/_unnamed/538.json"
+   "name": "wc_sw4_3d_projector_ring",
+   "file": "assets/MaterialTechniqueSet/wc_sw4_3d_projector_ring.json"
   },
   {
    "index": 539,
@@ -2349,6 +2326,12 @@
    "file": "assets/FxEffectDef/_unnamed/889.json"
   },
   {
+   "index": 890,
+   "type": "FxEffectDef",
+   "name": null,
+   "file": "assets/FxEffectDef/_unnamed/890.json"
+  },
+  {
    "index": 891,
    "type": "FxEffectDef",
    "name": null,
@@ -2405,7 +2388,27 @@
  ],
  "named": {
   "animations": {
-   "names": [],
+   "names": [
+    "viewmodel_ak47_ads_down",
+    "viewmodel_ak47_ads_fire",
+    "viewmodel_ak47_ads_up",
+    "viewmodel_ak47_d2p_in",
+    "viewmodel_ak47_d2p_loop",
+    "viewmodel_ak47_d2p_out",
+    "viewmodel_ak47_fire",
+    "viewmodel_ak47_first_raise",
+    "viewmodel_ak47_idle",
+    "viewmodel_ak47_pullout",
+    "viewmodel_ak47_pullout_quick",
+    "viewmodel_ak47_putaway",
+    "viewmodel_ak47_putaway_quick",
+    "viewmodel_ak47_reload",
+    "viewmodel_ak47_reload_empty",
+    "viewmodel_ak47_sprint_in",
+    "viewmodel_ak47_sprint_loop",
+    "viewmodel_ak47_sprint_out",
+    "viewmodel_radio_mp_idle"
+   ],
    "references": []
   },
   "models": {
@@ -2426,9 +2429,13 @@
     "p_cub_ashtray_glass",
     "p_cub_barstool",
     "p_cub_folding_chair",
+    "p_cub_glass_shot",
     "p_cub_playing_card_single",
     "p_dest_electrical_boxes01_base02",
+    "p_dest_electrical_boxes01_base02_lid",
     "p_dest_electrical_boxes01_base03",
+    "p_dest_electrical_boxes01_base03_lid",
+    "p_dest_paper_stack01",
     "p_dest_paper_stack02",
     "p_dest_pot_lg_chunk_01",
     "p_dest_pot_lg_chunk_02",
@@ -2532,8 +2539,11 @@
     "p_pent_reel_small_metal",
     "p_pent_reel_small_white_plastic",
     "p_pent_tv_base",
+    "p_phys_beer_bottle01",
     "p_phys_trash_paper_scrap03",
     "p_phys_trash_paper_scrap05",
+    "p_phys_trashbag01",
+    "p_phys_trashbag01_messed",
     "p_rus_bookcase_fncy",
     "p_rus_cabinet_metal_large",
     "p_rus_cabinet_metal_lower",
@@ -2564,6 +2574,7 @@
     "p_us_walltable",
     "p_zom_clock",
     "russian_pipes_cap",
+    "skybox_zombie_theater",
     "static_berlin_dining_table_oval",
     "static_berlin_stair_railing",
     "static_berlin_victorian_couch_d",
@@ -2581,9 +2592,11 @@
     "t5_foliage_tree_aspen01b",
     "t5_veh_civ_smallcar_blue",
     "t5_veh_civ_vw_bus",
+    "t5_weapon_ak47_viewmodel",
     "test_sphere_cod7_50_75_50",
     "test_sphere_cod7_b_25_25",
     "test_sphere_cod7_w_75_50",
+    "viewmodel_satchel_charge",
     "zombie_chalkboard",
     "zombie_difference_engine",
     "zombie_generator",
@@ -2638,9 +2651,37 @@
    "references": []
   },
   "weapons": {
-   "names": [],
+   "names": [
+    "ak47_zm",
+    "dog_bite_zm",
+    "zombie_bullet_crouch"
+   ],
    "references": [],
-   "links": {}
+   "links": {
+    "ak47_zm": {
+     "animations": [],
+     "missingAnimations": [
+      "t5_viewmodel_camera_mantle"
+     ],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "zombie_bullet_crouch": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    },
+    "dog_bite_zm": {
+     "animations": [],
+     "missingAnimations": [],
+     "externalAnimations": [],
+     "models": [],
+     "externalModels": []
+    }
+   }
   }
  }
 }
