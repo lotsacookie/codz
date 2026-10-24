@@ -1,4 +1,4 @@
-const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+import { clamp } from './math-utils.js';
 
 // Pointer ownership is independent of DOM hit testing. A finger keeps its job
 // until released, even when it crosses another control or leaves the screen.

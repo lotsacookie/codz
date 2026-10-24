@@ -73,3 +73,6 @@ export async function prewarm({ ctx, renderer, scenes, mobile = detectMobile(), 
     if (i % 8 === 7) { ctx.progress(`Preparing graphics · ${Math.round(i / textures.length * 100)}%`, from + i / textures.length * (to - from)); await sleep(0); }
   }
 }
+
+// Yield to the browser so loading screens can repaint between heavy steps.
+export const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));

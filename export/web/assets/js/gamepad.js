@@ -16,7 +16,7 @@
 // The browser's "standard" Gamepad mapping puts these buttons at the same
 // indices on Xbox, PlayStation and Switch Pro pads (A/Cross, B/Circle, ...).
 
-const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+import { clamp } from './math-utils.js';
 
 export const BUTTON = Object.freeze({
   A: 0, B: 1, X: 2, Y: 3, LB: 4, RB: 5, LT: 6, RT: 7,

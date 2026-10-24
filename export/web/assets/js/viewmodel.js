@@ -1,5 +1,5 @@
 const TAU = Math.PI * 2;
-const damp = (from, to, rate, dt) => to + (from - to) * Math.exp(-rate * dt);
+import { damp } from './math-utils.js';
 
 export const BOB = {
   walk: { rate: 1.05, x: 0.07, y: 0.05, z: 0.014, roll: 0.032, pitch: 0.018, yaw: 0.016 },

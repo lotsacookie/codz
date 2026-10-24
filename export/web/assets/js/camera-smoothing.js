@@ -1,5 +1,4 @@
-import { damp } from './steering.js';
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+import { clamp, damp } from './math-utils.js';
 
 export class CameraSmoother {
   constructor({ eyeRate = 18, stepRate = 12, stepSpeed = 450, maxStep = 26, landStiffness = 220, landDamping = 24, landScale = .2, landMaxImpulse = 110, maxDip = 3.5, minFallSpeed = 150 } = {}) {

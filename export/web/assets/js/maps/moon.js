@@ -2,7 +2,8 @@ import { createCoop } from '../net/coop-client.js';
 import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { loadMapGltf } from '../map-assets.js';
-import { ensureTextures, prewarm } from '../load-flow.js';
+import { ensureTextures, prewarm, nextTask } from '../load-flow.js';
+import { enemyCapsuleHit, createFaultReporter } from '../map-runtime.js';
 import { preloadShared } from '../shared-assets.js';
 import { PlayerController } from '../player-controller.js';
 import { bindPlayerFootsteps } from '../footsteps.js';
@@ -54,12 +55,7 @@ const labels = {nml_zone: 'No Man’s Land', bridge_zone: 'Receiving Bay', water
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
 // One bad frame must not stop the render loop (everything would vanish): log it once, show it in diagnostics and keep drawing.
-const faults = new Map();
-function reportFault(error) {
-  const key = String(error?.message ?? error), n = (faults.get(key) ?? 0) + 1;
-  faults.set(key, n);
-  if (n === 1) { console.error('[moon]', error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
-}
+const reportFault = createFaultReporter({ label: '[moon]', errors, notify: (text, duration) => showNotice(text, duration) });
 let mousePrimary=false,mouseSecondary=false,mouseAim=false,touchFirePending=false;const aimToggle=ctx.useAimToggle();
 const tapReload=new TapReload();
 const touchControls=createZombieTouch({ctx,moon:true,menuSettings:false,
@@ -169,12 +165,7 @@ function capsuleIntersect(capsule) {
     const local = capsule.clone(); local.translate(part.delta.clone().negate());
     const contact = part.collider.capsuleIntersect(local); if (contact) return contact;
   }
-  if(combat?.enabled)for(const z of combat.enemies.list){
-    const p=z.root.position,feet=capsule.start.y-capsule.radius,top=capsule.end.y+capsule.radius;
-    if(feet>p.y+65||top<p.y+4)continue;
-    const normal=new THREE.Vector3(capsule.start.x-p.x,0,capsule.start.z-p.z),distance=normal.length(),depth=capsule.radius+15-distance;
-    if(depth>0)return {normal:distance>.001?normal.divideScalar(distance):new THREE.Vector3(1,0,0),depth};
-  }
+  const pushed = enemyCapsuleHit(combat, capsule); if (pushed) return pushed;
   return false;
 }
 function rayIntersect(ray, near = 0, far = Infinity) {
@@ -309,7 +300,7 @@ function update(dt) {
     for(const key of ['double_points','insta_kill','fire_sale']){const slot=$('pu-'+key),left=(s.effects[key]??0)-s.time,visible=left>0&&powerupVisible(left,seconds);if(slot&&slot.hidden===visible)slot.hidden=!visible;}
   }
 }
-const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
+
 async function load() {
   const response = await fetch('moon/map-data.json');
   if (!response.ok) throw new Error('Moon data is missing. Run .tools/rebuild-moon.ps1.');

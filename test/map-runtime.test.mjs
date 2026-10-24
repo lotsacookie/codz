@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import { register } from 'node:module';
+// Resolve 'three' to the vendored copy so the test runs with plain node and no npm install.
+const vendor = new URL('../export/web/assets/js/vendor/three.module.js', import.meta.url).href;
+register('data:text/javascript,' + encodeURIComponent(`export async function resolve(s, c, n) { return s === 'three' ? { url: ${JSON.stringify(vendor)}, shortCircuit: true } : n(s, c); }`));
+const { clamp, damp } = await import('../export/web/assets/js/math-utils.js');
+const { enemyCapsuleHit, createFaultReporter } = await import('../export/web/assets/js/map-runtime.js');
+assert.equal(clamp(5, 0, 3), 3); assert.equal(clamp(-1, 0, 3), 0); assert.equal(clamp(2, 0, 3), 2);
+assert.equal(damp(10, 0, 5, 0), 10); assert.ok(damp(10, 0, 5, 1) < 1);
+const v = (x, y, z) => ({ x, y, z });
+const capsule = { start: v(0, 10, 0), end: v(0, 50, 0), radius: 10 };
+const zombie = x => ({ root: { position: v(x, 0, 0) } });
+assert.equal(enemyCapsuleHit({ enabled: false, enemies: { list: [zombie(0)] } }, capsule), null);
+assert.equal(enemyCapsuleHit({ enabled: true, enemies: { list: [zombie(100)] } }, capsule), null);
+const hit = enemyCapsuleHit({ enabled: true, enemies: { list: [zombie(10)] } }, capsule);
+assert.ok(hit.depth > 0 && hit.normal.x < 0);
+const errors = [], notes = [], quiet = console.error; console.error = () => {};
+const report = createFaultReporter({ label: () => '[t]', errors, notify: (t, d) => notes.push([t, d]) });
+report(new Error('boom')); report(new Error('boom')); report('other'); console.error = quiet;
+assert.deepEqual(errors, ['boom', 'other']); assert.equal(notes.length, 2); assert.equal(notes[0][1], 6);
+console.log('map runtime ok');

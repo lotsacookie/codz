@@ -11,9 +11,8 @@ export function turnToward(current, target, dt, { rate = 10, maxSpeed = Math.PI 
   return current + Math.max(-cap, Math.min(cap, eased));
 }
 
-export function damp(current, target, rate, dt) {
-  return target + (current - target) * Math.exp(-rate * dt);
-}
+import { damp } from './math-utils.js';
+export { damp };
 
 export function steerDirection(current, desired, dt, rate = 8) {
   const k = Number.isFinite(rate) ? 1 - Math.exp(-rate * dt) : 1;

@@ -30,9 +30,7 @@ function numberOr(value, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
+import { clamp } from './math-utils.js';
 
 function readButton(input, ...names) {
   for (const name of names) {

@@ -3,7 +3,8 @@ import { coopHealth } from '../net/coop.js';
 import * as THREE from 'three';
 import { hideWallGunAttachments } from '../wall-gun-attachments.js';
 import { loadMapGltf } from '../map-assets.js';
-import { loadManifest, loadPacks, ensureTextures, prewarm } from '../load-flow.js';
+import { loadManifest, loadPacks, ensureTextures, prewarm, nextTask } from '../load-flow.js';
+import { enemyCapsuleHit, createFaultReporter } from '../map-runtime.js';
 import { preloadShared } from '../shared-assets.js';
 import { CollisionWorld, loadCollisionWorld } from '../collision-world.js';
 import { PlayerController } from '../player-controller.js';
@@ -133,13 +134,7 @@ const aimToggle = ctx.useAimToggle();
 
 function showNotice(text, duration = 4) { notice = text; noticeLeft = duration; }
 // One bad frame must not freeze the whole game: log it once, surface it in the diagnostics (F3) and keep rendering.
-const faults = new Map();
-function reportFault(error) {
-  const key = String(error?.message ?? error);
-  const n = (faults.get(key) ?? 0) + 1;
-  faults.set(key, n);
-  if (n === 1) { console.error(LOG, error); errors.push(key); showNotice('Game error: ' + key.slice(0, 80), 6); }
-}
+const reportFault = createFaultReporter({ label: () => LOG, errors, notify: (text, duration) => showNotice(text, duration) });
 
 const tapReload = new TapReload();
 const touchControls = createZombieTouch({
@@ -229,12 +224,8 @@ function capsuleIntersect(capsule) {
     const contact = part.collider.capsuleIntersect(capsule);
     if (contact) return contact;
   }
-  if (combat?.enabled) for (const z of combat.enemies.list) {
-    const p = z.root.position, feet = capsule.start.y - capsule.radius, top = capsule.end.y + capsule.radius;
-    if (feet > p.y + 65 || top < p.y + 4) continue;
-    const normal = new THREE.Vector3(capsule.start.x - p.x, 0, capsule.start.z - p.z), distance = normal.length(), depth = capsule.radius + 15 - distance;
-    if (depth > 0) return { normal: distance > .001 ? normal.divideScalar(distance) : new THREE.Vector3(1, 0, 0), depth };
-  }
+  const pushed = enemyCapsuleHit(combat, capsule);
+  if (pushed) return pushed;
   return false;
 }
 const rayEntry = new THREE.Vector3();
@@ -458,7 +449,7 @@ function prepareMaterials(root) {
   });
 }
 
-const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
+
 async function load() {
   // loadMapGltf registers the texture loader for baked maps; generated maps skip it, so models (machines, box, weapons)
   // would otherwise load their textures through the default loader and come out untextured.

@@ -1,5 +1,5 @@
 const smooth = t => t * t * (3 - 2 * t);
-const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+import { clamp } from './math-utils.js';
 
 function sample(keys, time) {
   if (time <= keys[0][0]) return keys[0][1];
