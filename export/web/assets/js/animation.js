@@ -9,7 +9,7 @@ import { weaponFxProfile } from './fx-profile.js';
 import { ShellEjector, shellKindFor } from './shell-eject.js';
 import { applyPackCamo } from './pack-camo.js';
 import { ViewmodelCache } from './viewmodel.js';
-import { applyScopeLens, updateScopeLens, enableSightThrough, wantsSightThrough } from './scope-lens.js';
+import { applyScopeLens, updateScopeLens, enableSightThrough, wantsSightThrough, gunMaterials } from './scope-lens.js';
 import { ViewmodelBob } from './viewmodel.js';
 import { handsModelFor } from './viewmodel.js';
 
@@ -217,6 +217,7 @@ export class ViewWeapon {
     }
     if(def.upgraded){applyPackCamo(gun);if(leftGun)applyPackCamo(leftGun);}
     applyScopeLens(gun);if(leftGun)applyScopeLens(leftGun);
+    if(wantsSightThrough(def))enableSightThrough(gunMaterials(gun,leftGun));
     root.traverse(o=>{o.frustumCulled=false;});
     return {root,hands,gun,leftGun,flashes,knives:knives_,hiddenTags,rig,aimTracks,aimDuration,released:false};
   }
@@ -288,22 +289,6 @@ export class ViewWeapon {
     this.shells?.update(dt);
   }
   // World-space blade position (the viewmodel is drawn by its own camera, so it is projected out).
-  // Casts a ray down the crosshair once the gun is fully aimed and makes every
-  // gun material in the way (scope body, rings, caps) see-through at screen centre.
-  openSightLine(entry,viewCamera){
-    entry.sightChecked=true;
-    const parts=[entry.gun,entry.leftGun].filter(Boolean);
-    const materials=new Set(),sides=new Map();
-    for(const part of parts)part.traverse(o=>{if(!o.isMesh)return;for(const m of [o.material].flat())if(m&&!sides.has(m)){sides.set(m,m.side);m.side=THREE.DoubleSide;}});
-    try{
-      entry.root.updateWorldMatrix(true,true);viewCamera.updateMatrixWorld(true);
-      const origin=viewCamera.getWorldPosition(new THREE.Vector3()),dir=viewCamera.getWorldDirection(new THREE.Vector3());
-      const ray=new THREE.Raycaster(origin,dir,0,50);
-      for(const hit of ray.intersectObjects(parts,true)){for(const m of [hit.object.material].flat())if(m)materials.add(m);}
-    }catch{}
-    for(const [m,side] of sides)m.side=side;
-    enableSightThrough(materials);
-  }
   knifeTip(camera,viewCamera,distance=26){
     const knife=this.meleeType?this.knives?.[this.meleeType]:null;if(!knife||!knife.visible||!camera||!viewCamera)return null;
     knife.updateWorldMatrix(true,false);const ndc=knife.getWorldPosition(new THREE.Vector3()).project(viewCamera);
@@ -347,7 +332,6 @@ export class ViewWeapon {
     this.aim=THREE.MathUtils.clamp(this.aim+(aiming?dt/Math.max(.01,this.def.adsInTime):-dt/Math.max(.01,this.def.adsOutTime)),0,1);
     this.applyAim(!['idle','fire'].includes(this.mode));
     updateScopeLens(this.aim,viewCamera?.aspect);
-    if(this.aim>=.97&&viewCamera&&this.activeEntry&&!this.activeEntry.sightChecked&&wantsSightThrough(this.def))this.openSightLine(this.activeEntry,viewCamera);
     this.recoil=Math.max(0,this.recoil-dt*8);
     this.walkBob??=new ViewmodelBob();
     const bob=this.walkBob.update(dt,{moving:moving&&!['melee','reload'].includes(this.mode),sprint,aim:this.aim});

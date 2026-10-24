@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, sightAlpha, SIGHT_SHAPE, patchSightShader, enableSightThrough, wantsSightThrough, updateScopeLens, lensUniforms } from '../export/web/assets/js/scope-lens.js';
+import { LENS_SHAPE, isLensMaterial, lensAlpha, lensRadius, applyScopeLens, patchLensShader, sightAlpha, SIGHT_SHAPE, patchSightShader, enableSightThrough, wantsSightThrough, gunMaterials, updateScopeLens, lensUniforms } from '../export/web/assets/js/scope-lens.js';
 
 test('lens materials are recognised by name', () => {
   assert.ok(isLensMaterial({ name: 'mc/mtl_weapon_scope_acog_lens' }));
@@ -106,4 +106,16 @@ test('only scoped guns get sight-through', () => {
   assert.ok(wantsSightThrough({ id: 'dragunov_upgraded_zm' }));
   assert.ok(!wantsSightThrough({ id: 'm1911_zm' }));
   assert.ok(!wantsSightThrough({ id: 'ak74u_zm' }));
+});
+
+test('sight-through keeps an existing shader hook and collects all gun materials', () => {
+  const calls = [];
+  const mat = { name: 'x', userData: {}, onBeforeCompile: () => calls.push('prev'), customProgramCacheKey: () => 'camo' };
+  enableSightThrough([mat]);
+  mat.onBeforeCompile({ uniforms: {}, vertexShader: '', fragmentShader: '' });
+  assert.deepEqual(calls, ['prev']);
+  assert.equal(mat.customProgramCacheKey(), 'camo|scope-sight');
+  const a = { name: 'a' }, b = { name: 'b' };
+  const root = { traverse(fn) { fn({ isMesh: true, material: a }); fn({ isMesh: true, material: [a, b] }); fn({ isMesh: false }); } };
+  assert.equal(gunMaterials(root, null).size, 2);
 });

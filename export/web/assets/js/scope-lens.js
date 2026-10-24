@@ -116,12 +116,24 @@ export function enableSightThrough(materials) {
   for (const material of materials ?? []) {
     if (!material || material.userData?.scopeLens || material.userData?.scopeSight) continue;
     material.userData = { ...material.userData, scopeSight: true };
-    material.onBeforeCompile = patchSightShader;
-    material.customProgramCacheKey = () => 'scope-sight';
+    const previous = material.onBeforeCompile;
+    const previousKey = material.customProgramCacheKey;
+    material.onBeforeCompile = (shader, renderer) => {
+      if (typeof previous === 'function') previous.call(material, shader, renderer);
+      patchSightShader(shader);
+    };
+    material.customProgramCacheKey = () => `${typeof previousKey === 'function' ? previousKey.call(material) : ''}|scope-sight`;
     material.needsUpdate = true;
     patched++;
   }
   return patched;
+}
+
+// Every material of a gun model (hands are separate and never passed in).
+export function gunMaterials(...roots) {
+  const found = new Set();
+  for (const root of roots) root?.traverse?.(o => { if (o.isMesh) for (const m of [o.material].flat()) if (m) found.add(m); });
+  return found;
 }
 
 // Scoped guns: sniper rifles, ACOG/scope ids and the G11's optic.
