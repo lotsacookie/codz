@@ -39,6 +39,2475 @@
    "cursor": 0
   }
  ],
+ "memberTrace": [
+  {
+   "struct": "GfxWorld",
+   "counts": {
+    "planeCount": 12771,
+    "nodeCount": 14725,
+    "surfaceCount": 9141,
+    "skySurfCount": 18,
+    "sunPrimaryLightIndex": 1,
+    "primaryLightCount": 90,
+    "cullGroupCount": 0,
+    "coronaCount": 1,
+    "shadowMapVolumeCount": 0,
+    "shadowMapVolumePlaneCount": 0,
+    "exposureVolumeCount": 5,
+    "exposureVolumePlaneCount": 30,
+    "cellBitsCount": 16,
+    "modelCount": 445,
+    "checksum": 0,
+    "materialMemoryCount": 812,
+    "worldLodChainCount": 0,
+    "worldLodInfoCount": 0,
+    "worldLodSurfaceCount": 0,
+    "numOccluders": 0,
+    "numOutdoorBounds": 0,
+    "heroLightCount": 0,
+    "heroLightTreeCount": 0
+   }
+  },
+  {
+   "member": "GfxWorld.name",
+   "stream": [
+    49007507,
+    49007507
+   ],
+   "virtual": [
+    48767912,
+    48767912
+   ]
+  },
+  {
+   "member": "GfxWorld.baseName",
+   "stream": [
+    49007507,
+    49007507
+   ],
+   "virtual": [
+    48767912,
+    48767912
+   ]
+  },
+  {
+   "member": "GfxWorld.planeCount",
+   "stream": [
+    49007507,
+    49007507
+   ],
+   "virtual": [
+    48767912,
+    48767912
+   ]
+  },
+  {
+   "member": "GfxWorld.nodeCount",
+   "stream": [
+    49007507,
+    49007507
+   ],
+   "virtual": [
+    48767912,
+    48767912
+   ]
+  },
+  {
+   "member": "GfxWorld.surfaceCount",
+   "stream": [
+    49007507,
+    49007507
+   ],
+   "virtual": [
+    48767912,
+    48767912
+   ]
+  },
+  {
+   "member": "GfxWorld.streamInfo",
+   "stream": [
+    49007507,
+    49071911
+   ],
+   "virtual": [
+    48767912,
+    48832316
+   ]
+  },
+  {
+   "member": "GfxWorld.skySurfCount",
+   "stream": [
+    49071911,
+    49071911
+   ],
+   "virtual": [
+    48832316,
+    48832316
+   ]
+  },
+  {
+   "member": "GfxWorld.skyStartSurfs",
+   "stream": [
+    49071911,
+    49071983
+   ],
+   "virtual": [
+    48832316,
+    48832388
+   ]
+  },
+  {
+   "member": "GfxWorld.skyImage",
+   "stream": [
+    49071983,
+    49072054
+   ],
+   "virtual": [
+    48832388,
+    48832408
+   ]
+  },
+  {
+   "member": "GfxWorld.skySamplerState",
+   "stream": [
+    49072054,
+    49072054
+   ],
+   "virtual": [
+    48832408,
+    48832408
+   ]
+  },
+  {
+   "member": "GfxWorld.skyBoxModel",
+   "stream": [
+    49072054,
+    49072054
+   ],
+   "virtual": [
+    48832408,
+    48832408
+   ]
+  },
+  {
+   "member": "GfxWorld.sunParse",
+   "stream": [
+    49072054,
+    49072054
+   ],
+   "virtual": [
+    48832408,
+    48832408
+   ]
+  },
+  {
+   "member": "GfxWorld.sunLight",
+   "stream": [
+    49072054,
+    49072294
+   ],
+   "virtual": [
+    48832408,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.sunColorFromBsp",
+   "stream": [
+    49072294,
+    49072294
+   ],
+   "virtual": [
+    48832656,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.sunPrimaryLightIndex",
+   "stream": [
+    49072294,
+    49072294
+   ],
+   "virtual": [
+    48832656,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.primaryLightCount",
+   "stream": [
+    49072294,
+    49072294
+   ],
+   "virtual": [
+    48832656,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.cullGroupCount",
+   "stream": [
+    49072294,
+    49072294
+   ],
+   "virtual": [
+    48832656,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.coronaCount",
+   "stream": [
+    49072294,
+    49072294
+   ],
+   "virtual": [
+    48832656,
+    48832656
+   ]
+  },
+  {
+   "member": "GfxWorld.coronas",
+   "stream": [
+    49072294,
+    49072326
+   ],
+   "virtual": [
+    48832656,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.shadowMapVolumeCount",
+   "stream": [
+    49072326,
+    49072326
+   ],
+   "virtual": [
+    48832688,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.shadowMapVolumes",
+   "stream": [
+    49072326,
+    49072326
+   ],
+   "virtual": [
+    48832688,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.shadowMapVolumePlaneCount",
+   "stream": [
+    49072326,
+    49072326
+   ],
+   "virtual": [
+    48832688,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.shadowMapVolumePlanes",
+   "stream": [
+    49072326,
+    49072326
+   ],
+   "virtual": [
+    48832688,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.exposureVolumeCount",
+   "stream": [
+    49072326,
+    49072326
+   ],
+   "virtual": [
+    48832688,
+    48832688
+   ]
+  },
+  {
+   "member": "GfxWorld.exposureVolumes",
+   "stream": [
+    49072326,
+    49072446
+   ],
+   "virtual": [
+    48832688,
+    48832808
+   ]
+  },
+  {
+   "member": "GfxWorld.exposureVolumePlaneCount",
+   "stream": [
+    49072446,
+    49072446
+   ],
+   "virtual": [
+    48832808,
+    48832808
+   ]
+  },
+  {
+   "member": "GfxWorld.exposureVolumePlanes",
+   "stream": [
+    49072446,
+    49072926
+   ],
+   "virtual": [
+    48832808,
+    48833288
+   ]
+  },
+  {
+   "member": "GfxWorld.skyDynIntensity",
+   "stream": [
+    49072926,
+    49072926
+   ],
+   "virtual": [
+    48833288,
+    48833288
+   ]
+  },
+  {
+   "struct": "GfxWorldDpvsPlanes",
+   "counts": {
+    "cellCount": 33
+   }
+  },
+  {
+   "member": "GfxWorldDpvsPlanes.cellCount",
+   "stream": [
+    49072926,
+    49072926
+   ],
+   "virtual": [
+    48833288,
+    48833288
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsPlanes.planes",
+   "stream": [
+    49072926,
+    49328346
+   ],
+   "virtual": [
+    48833288,
+    49088708
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsPlanes.nodes",
+   "stream": [
+    49328346,
+    49357796
+   ],
+   "virtual": [
+    49088708,
+    49118158
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsPlanes.sceneEntCellBits",
+   "stream": [
+    49357796,
+    49357796
+   ],
+   "virtual": [
+    49118158,
+    49118158
+   ]
+  },
+  {
+   "member": "GfxWorld.dpvsPlanes",
+   "stream": [
+    49072926,
+    49357796
+   ],
+   "virtual": [
+    48833288,
+    49118158
+   ]
+  },
+  {
+   "member": "GfxWorld.cellBitsCount",
+   "stream": [
+    49357796,
+    49357796
+   ],
+   "virtual": [
+    49118158,
+    49118158
+   ]
+  },
+  {
+   "member": "GfxWorld.cells",
+   "stream": [
+    49357796,
+    49368286
+   ],
+   "virtual": [
+    49118158,
+    49128709
+   ]
+  },
+  {
+   "struct": "GfxWorldDraw",
+   "counts": {
+    "reflectionProbeCount": 2,
+    "lightmapCount": 2,
+    "vertexCount": 471280,
+    "vertexLayerDataSize": 479708,
+    "vertexStream2DataSize": 0,
+    "indexCount": 1015134
+   }
+  },
+  {
+   "member": "GfxWorldDraw.reflectionProbeCount",
+   "stream": [
+    49368286,
+    49368286
+   ],
+   "virtual": [
+    49128709,
+    49128709
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.reflectionProbes",
+   "stream": [
+    49368286,
+    49368334
+   ],
+   "virtual": [
+    49128709,
+    49128760
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.reflectionProbeTextures",
+   "stream": [
+    49368334,
+    49368334
+   ],
+   "virtual": [
+    49128760,
+    49128760
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.lightmapCount",
+   "stream": [
+    49368334,
+    49368334
+   ],
+   "virtual": [
+    49128760,
+    49128760
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.lightmaps",
+   "stream": [
+    49368334,
+    49368358
+   ],
+   "virtual": [
+    49128760,
+    49128784
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.lightmapPrimaryTextures",
+   "stream": [
+    49368358,
+    49368358
+   ],
+   "virtual": [
+    49128784,
+    49128784
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.lightmapSecondaryTextures",
+   "stream": [
+    49368358,
+    49368358
+   ],
+   "virtual": [
+    49128784,
+    49128784
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.lightmapSecondaryTexturesB",
+   "stream": [
+    49368358,
+    49368358
+   ],
+   "virtual": [
+    49128784,
+    49128784
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.terrainScorchImages",
+   "stream": [
+    49368358,
+    49368358
+   ],
+   "virtual": [
+    49128784,
+    49128784
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.vertexCount",
+   "stream": [
+    49368358,
+    49368358
+   ],
+   "virtual": [
+    49128784,
+    49128784
+   ]
+  },
+  {
+   "struct": "GfxWorldVertexData",
+   "counts": {}
+  },
+  {
+   "member": "GfxWorldVertexData.vertices",
+   "stream": [
+    49368358,
+    70104678
+   ],
+   "virtual": [
+    49128784,
+    69865104
+   ]
+  },
+  {
+   "member": "GfxWorldVertexData.worldVb",
+   "stream": [
+    70104678,
+    70104678
+   ],
+   "virtual": [
+    69865104,
+    69865104
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.vd",
+   "stream": [
+    49368358,
+    70104678
+   ],
+   "virtual": [
+    49128784,
+    69865104
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.vertexLayerDataSize",
+   "stream": [
+    70104678,
+    70104678
+   ],
+   "virtual": [
+    69865104,
+    69865104
+   ]
+  },
+  {
+   "struct": "GfxWorldVertexLayerData",
+   "counts": {}
+  },
+  {
+   "member": "GfxWorldVertexLayerData.data",
+   "stream": [
+    70104678,
+    70584386
+   ],
+   "virtual": [
+    69865104,
+    70344812
+   ]
+  },
+  {
+   "member": "GfxWorldVertexLayerData.layerVb",
+   "stream": [
+    70584386,
+    70584386
+   ],
+   "virtual": [
+    70344812,
+    70344812
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.vld",
+   "stream": [
+    70104678,
+    70584386
+   ],
+   "virtual": [
+    69865104,
+    70344812
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.vertexStream2DataSize",
+   "stream": [
+    70584386,
+    70584386
+   ],
+   "virtual": [
+    70344812,
+    70344812
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.indexCount",
+   "stream": [
+    70584386,
+    70584386
+   ],
+   "virtual": [
+    70344812,
+    70344812
+   ]
+  },
+  {
+   "member": "GfxWorldDraw.indices",
+   "stream": [
+    70584386,
+    72614654
+   ],
+   "virtual": [
+    70344812,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxWorld.draw",
+   "stream": [
+    49368286,
+    72614654
+   ],
+   "virtual": [
+    49128709,
+    72375080
+   ]
+  },
+  {
+   "struct": "GfxLightGrid",
+   "counts": {
+    "hasLightRegions": 1,
+    "sunPrimaryLightIndex": 1,
+    "rowAxis": 0,
+    "colAxis": 1,
+    "rawRowDataSize": 7316,
+    "entryCount": 99290,
+    "colorCount": 32001
+   }
+  },
+  {
+   "member": "GfxLightGrid.hasLightRegions",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.sunPrimaryLightIndex",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.mins",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.maxs",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.rowAxis",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.colAxis",
+   "stream": [
+    72614654,
+    72614654
+   ],
+   "virtual": [
+    72375080,
+    72375080
+   ]
+  },
+  {
+   "member": "GfxLightGrid.rowDataStart",
+   "stream": [
+    72614654,
+    72614976
+   ],
+   "virtual": [
+    72375080,
+    72375402
+   ]
+  },
+  {
+   "member": "GfxLightGrid.rawRowDataSize",
+   "stream": [
+    72614976,
+    72614976
+   ],
+   "virtual": [
+    72375402,
+    72375402
+   ]
+  },
+  {
+   "member": "GfxLightGrid.rawRowData",
+   "stream": [
+    72614976,
+    72622292
+   ],
+   "virtual": [
+    72375402,
+    72382718
+   ]
+  },
+  {
+   "member": "GfxLightGrid.entryCount",
+   "stream": [
+    72622292,
+    72622292
+   ],
+   "virtual": [
+    72382718,
+    72382718
+   ]
+  },
+  {
+   "member": "GfxLightGrid.entries",
+   "stream": [
+    72622292,
+    73019452
+   ],
+   "virtual": [
+    72382718,
+    72779880
+   ]
+  },
+  {
+   "member": "GfxLightGrid.colorCount",
+   "stream": [
+    73019452,
+    73019452
+   ],
+   "virtual": [
+    72779880,
+    72779880
+   ]
+  },
+  {
+   "member": "GfxLightGrid.colors",
+   "stream": [
+    73019452,
+    78395620
+   ],
+   "virtual": [
+    72779880,
+    78156048
+   ]
+  },
+  {
+   "member": "GfxWorld.lightGrid",
+   "stream": [
+    72614654,
+    78395620
+   ],
+   "virtual": [
+    72375080,
+    78156048
+   ]
+  },
+  {
+   "member": "GfxWorld.modelCount",
+   "stream": [
+    78395620,
+    78395620
+   ],
+   "virtual": [
+    78156048,
+    78156048
+   ]
+  },
+  {
+   "member": "GfxWorld.models",
+   "stream": [
+    78395620,
+    78422320
+   ],
+   "virtual": [
+    78156048,
+    78182748
+   ]
+  },
+  {
+   "member": "GfxWorld.mins",
+   "stream": [
+    78422320,
+    78422320
+   ],
+   "virtual": [
+    78182748,
+    78182748
+   ]
+  },
+  {
+   "member": "GfxWorld.maxs",
+   "stream": [
+    78422320,
+    78422320
+   ],
+   "virtual": [
+    78182748,
+    78182748
+   ]
+  },
+  {
+   "member": "GfxWorld.checksum",
+   "stream": [
+    78422320,
+    78422320
+   ],
+   "virtual": [
+    78182748,
+    78182748
+   ]
+  },
+  {
+   "member": "GfxWorld.materialMemoryCount",
+   "stream": [
+    78422320,
+    78422320
+   ],
+   "virtual": [
+    78182748,
+    78182748
+   ]
+  },
+  {
+   "member": "GfxWorld.materialMemory",
+   "stream": [
+    78422320,
+    78428816
+   ],
+   "virtual": [
+    78182748,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.sun",
+   "stream": [
+    78428816,
+    78429200
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.outdoorLookupMatrix",
+   "stream": [
+    78429200,
+    78429200
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.outdoorImage",
+   "stream": [
+    78429200,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.cellCasterBits",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.sceneDynModel",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.sceneDynBrush",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.primaryLightEntityShadowVis",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.primaryLightDynEntShadowVis",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.nonSunPrimaryLightForModelDynEnt",
+   "stream": [
+    78429252,
+    78429252
+   ],
+   "virtual": [
+    78189244,
+    78189244
+   ]
+  },
+  {
+   "member": "GfxWorld.shadowGeom",
+   "stream": [
+    78429252,
+    78430332
+   ],
+   "virtual": [
+    78189244,
+    78190324
+   ]
+  },
+  {
+   "member": "GfxWorld.lightRegion",
+   "stream": [
+    78430332,
+    78431052
+   ],
+   "virtual": [
+    78190324,
+    78191044
+   ]
+  },
+  {
+   "struct": "GfxWorldDpvsStatic",
+   "counts": {
+    "smodelCount": 3326,
+    "dynamicSModelCount": 58,
+    "staticSurfaceCount": 8289,
+    "litSurfsBegin": 0,
+    "litSurfsEnd": 7221,
+    "decalSurfsBegin": 7221,
+    "decalSurfsEnd": 7433,
+    "emissiveSurfsBegin": 7433,
+    "emissiveSurfsEnd": 7433,
+    "smodelVisDataCount": 104,
+    "surfaceVisDataCount": 260,
+    "usageCount": 0
+   }
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelCount",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.dynamicSModelCount",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.staticSurfaceCount",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.litSurfsBegin",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.litSurfsEnd",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.decalSurfsBegin",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.decalSurfsEnd",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.emissiveSurfsBegin",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.emissiveSurfsEnd",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelVisDataCount",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaceVisDataCount",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelVisData",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaceVisData",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelVisDataCameraSaved",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaceVisDataCameraSaved",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.lodData",
+   "stream": [
+    78431052,
+    78431052
+   ],
+   "virtual": [
+    78191044,
+    78191044
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.sortedSurfIndex",
+   "stream": [
+    78431052,
+    78447630
+   ],
+   "virtual": [
+    78191044,
+    78207622
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelInsts",
+   "stream": [
+    78447630,
+    78580670
+   ],
+   "virtual": [
+    78207622,
+    78340664
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaces",
+   "stream": [
+    78580670,
+    79311950
+   ],
+   "virtual": [
+    78340664,
+    79071952
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.cullGroups",
+   "stream": [
+    79311950,
+    79311950
+   ],
+   "virtual": [
+    79071952,
+    79071952
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.smodelDrawInsts",
+   "stream": [
+    79311950,
+    79564726
+   ],
+   "virtual": [
+    79071952,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaceMaterials",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.surfaceCastsSunShadow",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsStatic.usageCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.dpvs",
+   "stream": [
+    78431052,
+    79564726
+   ],
+   "virtual": [
+    78191044,
+    79324728
+   ]
+  },
+  {
+   "struct": "GfxWorldDpvsDynamic",
+   "counts": {}
+  },
+  {
+   "member": "GfxWorldDpvsDynamic.dynEntClientWordCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsDynamic.dynEntClientCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsDynamic.dynEntCellBits",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorldDpvsDynamic.dynEntVisData",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.dpvsDyn",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodChainCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodChains",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodInfoCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodInfos",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodSurfaceCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.worldLodSurfaces",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.waterDirection",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.waterBuffers",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.waterMaterial",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.coronaMaterial",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.ropeMaterial",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.numOccluders",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.occluders",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.numOutdoorBounds",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.outdoorBounds",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.heroLightCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.heroLightTreeCount",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.heroLights",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  },
+  {
+   "member": "GfxWorld.heroLightTree",
+   "stream": [
+    79564726,
+    79564726
+   ],
+   "virtual": [
+    79324728,
+    79324728
+   ]
+  }
+ ],
+ "nameHits": {
+  "mapNameHits": [
+   {
+    "offset": 49110,
+    "text": "maps/zombie/fx_dust_ceiling_impact_lg_mdbrown"
+   },
+   {
+    "offset": 49239,
+    "text": "maps/zombie/fx_zombie_dog_breath"
+   },
+   {
+    "offset": 49277,
+    "text": "maps/mp_maps/fx_mp_zombie_hand_dirt_burst"
+   },
+   {
+    "offset": 49324,
+    "text": "maps/mp_maps/fx_mp_zombie_body_dirt_billowing"
+   },
+   {
+    "offset": 49375,
+    "text": "maps/mp_maps/fx_mp_zombie_body_dust_falling"
+   },
+   {
+    "offset": 49424,
+    "text": "maps/zombie/fx_zombie_crawler_grnd_dust_spwnr"
+   },
+   {
+    "offset": 49475,
+    "text": "maps/zombie/fx_zombie_crawler_grnd_dust"
+   },
+   {
+    "offset": 49520,
+    "text": "maps/zombie/fx_zombie_coast_marker"
+   },
+   {
+    "offset": 49560,
+    "text": "maps/zombie/fx_zombie_coast_marker_fl"
+   },
+   {
+    "offset": 49826,
+    "text": "maps/zombie/fx_elec_player_md"
+   },
+   {
+    "offset": 49861,
+    "text": "maps/zombie/fx_elec_player_sm"
+   },
+   {
+    "offset": 49896,
+    "text": "maps/zombie/fx_elec_player_torso"
+   },
+   {
+    "offset": 49934,
+    "text": "maps/zombie/fx_zombie_fire_trap_med"
+   },
+   {
+    "offset": 49975,
+    "text": "maps/zombie/fx_zombie_auto_turret_light"
+   },
+   {
+    "offset": 50020,
+    "text": "maps/zombie/fx_mp_smoke_thick_indoor"
+   },
+   {
+    "offset": 50062,
+    "text": "maps/zombie/fx_zombie_theater_smoke_amb_indoor"
+   },
+   {
+    "offset": 50114,
+    "text": "maps/zombie/fx_smoke_smolder_md_gry"
+   },
+   {
+    "offset": 50188,
+    "text": "maps/zombie/fx_mp_smoke_crater"
+   },
+   {
+    "offset": 50224,
+    "text": "maps/zombie/fx_mp_smoke_sm_slow"
+   },
+   {
+    "offset": 50261,
+    "text": "maps/zombie/fx_mp_fog_low"
+   },
+   {
+    "offset": 50292,
+    "text": "maps/zombie/fx_zombie_theater_fog_lg"
+   },
+   {
+    "offset": 50334,
+    "text": "maps/zombie/fx_zombie_theater_fog_xlg"
+   },
+   {
+    "offset": 50377,
+    "text": "maps/mp_maps/fx_mp_fog_ground_md"
+   },
+   {
+    "offset": 50539,
+    "text": "maps/zombie/fx_mp_ray_overcast_md"
+   },
+   {
+    "offset": 50578,
+    "text": "maps/zombie/fx_light_godray_overcast_lg"
+   },
+   {
+    "offset": 50623,
+    "text": "maps/zombie/fx_mp_ray_motes_lg"
+   },
+   {
+    "offset": 50659,
+    "text": "maps/zombie/fx_mp_dust_mote_pcloud_sm"
+   },
+   {
+    "offset": 50702,
+    "text": "maps/zombie/fx_mp_dust_mote_pcloud_md"
+   },
+   {
+    "offset": 50777,
+    "text": "maps/zombie/fx_mp_pipe_steam_random"
+   },
+   {
+    "offset": 50818,
+    "text": "maps/mp_maps/fx_mp_fumes_vent_sm_int"
+   },
+   {
+    "offset": 50860,
+    "text": "maps/mp_maps/fx_mp_fumes_vent_xsm_int"
+   },
+   {
+    "offset": 50903,
+    "text": "maps/mp_maps/fx_mp_elec_spark_burst_xsm_thin_runner"
+   },
+   {
+    "offset": 50960,
+    "text": "maps/mp_maps/fx_mp_elec_spark_burst_sm_runner"
+   },
+   {
+    "offset": 51011,
+    "text": "maps/zombie/fx_mp_light_lamp"
+   },
+   {
+    "offset": 51045,
+    "text": "maps/zombie/fx_mp_light_corona_cool"
+   },
+   {
+    "offset": 51086,
+    "text": "maps/zombie/fx_mp_light_corona_bulb_ceiling"
+   },
+   {
+    "offset": 51135,
+    "text": "maps/pentagon/fx_pent_tinhat_light"
+   },
+   {
+    "offset": 51175,
+    "text": "maps/zombie/fx_zombie_light_floodlight_bright"
+   },
+   {
+    "offset": 51226,
+    "text": "maps/zombie/fx_zombie_overhead_sm_amber"
+   },
+   {
+    "offset": 51271,
+    "text": "maps/zombie/fx_zombie_overhead_sm_amber_flkr"
+   },
+   {
+    "offset": 51321,
+    "text": "maps/zombie/fx_zombie_overhead_sm_blu"
+   },
+   {
+    "offset": 51364,
+    "text": "maps/zombie/fx_zombie_overhead_sm_blu_flkr"
+   },
+   {
+    "offset": 51412,
+    "text": "maps/zombie/fx_mp_birds_circling"
+   },
+   {
+    "offset": 51450,
+    "text": "maps/zombie/fx_mp_insects_lantern"
+   },
+   {
+    "offset": 51668,
+    "text": "maps/pentagon/fx_pent_movie_projector"
+   },
+   {
+    "offset": 51711,
+    "text": "maps/zombie/fx_zombie_light_theater_blue"
+   },
+   {
+    "offset": 51757,
+    "text": "maps/zombie/fx_zombie_light_theater_green"
+   },
+   {
+    "offset": 51804,
+    "text": "maps/zombie/fx_zombie_theater_projector_beam"
+   },
+   {
+    "offset": 51854,
+    "text": "maps/zombie/fx_zombie_theater_projection_screen"
+   },
+   {
+    "offset": 51907,
+    "text": "maps/zombie/fx_zombie_theater_screen_0"
+   },
+   {
+    "offset": 51951,
+    "text": "maps/zombie/fx_zombie_theater_screen_1"
+   },
+   {
+    "offset": 51995,
+    "text": "maps/zombie/fx_zombie_theater_screen_2"
+   },
+   {
+    "offset": 52039,
+    "text": "maps/zombie/fx_zombie_theater_screen_3"
+   },
+   {
+    "offset": 52083,
+    "text": "maps/zombie/fx_transporter_beam"
+   },
+   {
+    "offset": 52120,
+    "text": "maps/zombie/fx_transporter_pad_start"
+   },
+   {
+    "offset": 52162,
+    "text": "maps/zombie/fx_transporter_start"
+   },
+   {
+    "offset": 52200,
+    "text": "maps/zombie/fx_transporter_ambient"
+   },
+   {
+    "offset": 52240,
+    "text": "maps/zombie/fx_zombie_mainframe_beam"
+   },
+   {
+    "offset": 52282,
+    "text": "maps/zombie/fx_zombie_mainframe_flat"
+   },
+   {
+    "offset": 52324,
+    "text": "maps/zombie/fx_zombie_mainframe_flat_start"
+   },
+   {
+    "offset": 52372,
+    "text": "maps/zombie/fx_zombie_mainframe_beam_start"
+   },
+   {
+    "offset": 52420,
+    "text": "maps/zombie/fx_zombie_flashback_theater"
+   },
+   {
+    "offset": 52465,
+    "text": "maps/zombie/fx_zombie_difference"
+   },
+   {
+    "offset": 52503,
+    "text": "maps/zombie/fx_zombie_heat_sink"
+   },
+   {
+    "offset": 52540,
+    "text": "maps/zombie/fx_zombie_teleporter_pad_glow"
+   },
+   {
+    "offset": 52587,
+    "text": "maps/zombie/fx_zombie_portal_nix_num_pp"
+   },
+   {
+    "offset": 52632,
+    "text": "maps/zombie/fx_zombie_packapunch"
+   },
+   {
+    "offset": 52670,
+    "text": "maps/zombie/fx_zombie_theater_lightboard_green"
+   },
+   {
+    "offset": 52722,
+    "text": "maps/zombie/fx_zombie_theater_lightboard_red"
+   },
+   {
+    "offset": 52772,
+    "text": "maps/zombie/fx_zombie_crawler_roof_break"
+   },
+   {
+    "offset": 52818,
+    "text": "maps/zombie/fx_zombie_crawler_roof_theater"
+   },
+   {
+    "offset": 52866,
+    "text": "maps/zombie/fx_zombie_crawler_dust_roof"
+   },
+   {
+    "offset": 52941,
+    "text": "maps/zombie/fx_zombie_bar_break"
+   },
+   {
+    "offset": 52978,
+    "text": "maps/zombie/fx_zombie_bar_break_lite"
+   },
+   {
+    "offset": 53020,
+    "text": "maps/zombie/fx_fog_zombie_amb"
+   },
+   {
+    "offset": 53209,
+    "text": "maps/zombie/fx_zombie_tesla_neck_spurt"
+   },
+   {
+    "offset": 53253,
+    "text": "maps/zombie/fx_zombie_body_wtr_burst"
+   },
+   {
+    "offset": 53295,
+    "text": "maps/zombie/fx_zombie_body_wtr_billowing"
+   },
+   {
+    "offset": 53341,
+    "text": "maps/zombie/fx_zombie_body_wtr_falling"
+   },
+   {
+    "offset": 53385,
+    "text": "maps/zombie/fx_mp_zombie_hand_dirt_burst"
+   },
+   {
+    "offset": 53431,
+    "text": "maps/zombie/fx_mp_zombie_body_dirt_billowing"
+   },
+   {
+    "offset": 53481,
+    "text": "maps/zombie/fx_mp_zombie_body_dust_falling"
+   },
+   {
+    "offset": 54374,
+    "text": "maps/zombie/fx_zombie_monkey_light"
+   },
+   {
+    "offset": 54733,
+    "text": "maps/zombie/fx_zombie_quad_gas_nova6"
+   },
+   {
+    "offset": 54775,
+    "text": "maps/zombie/fx_zombie_quad_trail"
+   },
+   {
+    "offset": 54813,
+    "text": "maps/zombie/fx_zombie_dog_lightning_buildup"
+   },
+   {
+    "offset": 54862,
+    "text": "maps/zombie/fx_zombie_dog_eyes"
+   },
+   {
+    "offset": 54898,
+    "text": "maps/zombie/fx_zombie_dog_explosion"
+   },
+   {
+    "offset": 54939,
+    "text": "maps/zombie/fx_zombie_dog_fire_trail"
+   },
+   {
+    "offset": 54981,
+    "text": "maps/zombie/fx_zombie_dog_ash_trail"
+   },
+   {
+    "offset": 31007950,
+    "text": "maps/zombie_theater.d3dbsp"
+   },
+   {
+    "offset": 97141933,
+    "text": "maps/_zombiemode_ai_quad.gsc"
+   },
+   {
+    "offset": 97342667,
+    "text": "maps/mp_maps/fx_mp_pipe_steam_oneshot"
+   },
+   {
+    "offset": 97350841,
+    "text": "maps/mp_maps/fx_mp_elec_spark_burst_xsm_thin"
+   },
+   {
+    "offset": 97359610,
+    "text": "maps/mp_maps/fx_mp_elec_spark_burst_sm"
+   },
+   {
+    "offset": 104874291,
+    "text": "maps/_zombiemode_timer.gsc"
+   },
+   {
+    "offset": 104874922,
+    "text": "maps/zombie_theater.gsc"
+   },
+   {
+    "offset": 104880181,
+    "text": "maps/zombie_theater_fx.gsc"
+   },
+   {
+    "offset": 104882064,
+    "text": "maps/zombie_theater_magic_box.gsc"
+   },
+   {
+    "offset": 104883362,
+    "text": "maps/zombie_theater_movie_screen.gsc"
+   },
+   {
+    "offset": 104886497,
+    "text": "maps/createfx/zombie_theater_fx.gsc"
+   },
+   {
+    "offset": 104893658,
+    "text": "maps/zombie_theater_quad.gsc"
+   },
+   {
+    "offset": 104896627,
+    "text": "maps/zombie_theater_teleporter.gsc"
+   },
+   {
+    "offset": 104921524,
+    "text": "maps/zombie_theater_amb.gsc"
+   },
+   {
+    "offset": 109860563,
+    "text": "maps/createart/zombie_theater_art.gsc"
+   },
+   {
+    "offset": 109903619,
+    "text": "maps/zombie/fx_zombie_wire_spark"
+   },
+   {
+    "offset": 110019448,
+    "text": "maps/zombie/fx_mp_spotlight_md"
+   }
+  ],
+  "characterNameHits": [
+   {
+    "offset": 45085,
+    "text": "c_ger_honorguard_body1"
+   },
+   {
+    "offset": 45113,
+    "text": "c_ger_honorguard_body2"
+   },
+   {
+    "offset": 45141,
+    "text": "c_ger_zombie_head1"
+   },
+   {
+    "offset": 45165,
+    "text": "c_ger_zombie_head2"
+   },
+   {
+    "offset": 45189,
+    "text": "c_ger_zombie_head3"
+   },
+   {
+    "offset": 45213,
+    "text": "c_ger_zombie_head4"
+   },
+   {
+    "offset": 48421,
+    "text": "c_ger_richtofen_body"
+   },
+   {
+    "offset": 48447,
+    "text": "c_ger_richtofen_head"
+   },
+   {
+    "offset": 48473,
+    "text": "c_ger_richtofen_offcap"
+   },
+   {
+    "offset": 48501,
+    "text": "c_jap_takeo_body"
+   },
+   {
+    "offset": 48523,
+    "text": "c_rus_nikolai_body"
+   },
+   {
+    "offset": 48547,
+    "text": "c_usa_dempsey_body"
+   },
+   {
+    "offset": 1357232,
+    "text": "mtl_c_ger_zombie_head1"
+   },
+   {
+    "offset": 1357403,
+    "text": "c_ger_zombie_head1_m"
+   },
+   {
+    "offset": 1357488,
+    "text": "c_ger_zombie_head1_c"
+   },
+   {
+    "offset": 1357648,
+    "text": "c_ger_zombie_head1_g"
+   },
+   {
+    "offset": 1357733,
+    "text": "c_ger_zombie_head1_n"
+   },
+   {
+    "offset": 1357818,
+    "text": "c_ger_zombie_head1_s"
+   },
+   {
+    "offset": 1358302,
+    "text": "mtl_c_ger_zombie_eyes"
+   },
+   {
+    "offset": 4389434,
+    "text": "mtl_c_jap_takeo_body_lthr"
+   },
+   {
+    "offset": 4389592,
+    "text": "c_jap_takeo_body_c"
+   },
+   {
+    "offset": 4389754,
+    "text": "c_jap_takeo_body_g"
+   },
+   {
+    "offset": 4389837,
+    "text": "c_jap_takeo_body_n"
+   },
+   {
+    "offset": 4389920,
+    "text": "c_jap_takeo_body_s"
+   },
+   {
+    "offset": 4390338,
+    "text": "mtl_c_jap_takeo_body"
+   },
+   {
+    "offset": 4391067,
+    "text": "c_rus_simianaut_01_alphadissolve_c"
+   },
+   {
+    "offset": 4391353,
+    "text": "c_rus_simianaut_01_dissolve_colormask"
+   },
+   {
+    "offset": 4391861,
+    "text": "mtl_c_jap_takeo_head"
+   },
+   {
+    "offset": 4392030,
+    "text": "c_jap_takeo_head_m"
+   },
+   {
+    "offset": 4392113,
+    "text": "c_jap_takeo_head_c"
+   },
+   {
+    "offset": 4392196,
+    "text": "c_jap_takeo_head_g"
+   },
+   {
+    "offset": 4392279,
+    "text": "c_jap_takeo_head_n"
+   },
+   {
+    "offset": 4392362,
+    "text": "c_jap_takeo_head_s"
+   },
+   {
+    "offset": 4392844,
+    "text": "mtl_c_jap_takeo_eyes"
+   },
+   {
+    "offset": 4393017,
+    "text": "c_jap_takeo_head_s"
+   },
+   {
+    "offset": 4393119,
+    "text": "c_jap_takeo_head_c"
+   },
+   {
+    "offset": 4850690,
+    "text": "mtl_c_rus_nikolai_body"
+   },
+   {
+    "offset": 4850845,
+    "text": "c_rus_nikolai_body_c"
+   },
+   {
+    "offset": 4850930,
+    "text": "c_rus_nikolai_body_g"
+   },
+   {
+    "offset": 4851015,
+    "text": "c_rus_nikolai_body_n"
+   },
+   {
+    "offset": 4851100,
+    "text": "c_rus_nikolai_body_s"
+   },
+   {
+    "offset": 4851520,
+    "text": "mtl_c_rus_nikolai_head"
+   },
+   {
+    "offset": 4851691,
+    "text": "c_rus_nikolai_head_m"
+   },
+   {
+    "offset": 4851776,
+    "text": "c_rus_nikolai_head_c"
+   },
+   {
+    "offset": 4851861,
+    "text": "c_rus_nikolai_head_g"
+   },
+   {
+    "offset": 4851946,
+    "text": "c_rus_nikolai_head_n"
+   },
+   {
+    "offset": 4852031,
+    "text": "c_rus_nikolai_head_s"
+   },
+   {
+    "offset": 4852515,
+    "text": "mtl_c_rus_nikolai_body_linen"
+   },
+   {
+    "offset": 4853011,
+    "text": "mtl_c_rus_nikolai_body_lthr"
+   },
+   {
+    "offset": 4853506,
+    "text": "mtl_c_rus_nikolai_body_canvas"
+   },
+   {
+    "offset": 4854003,
+    "text": "mtl_c_rus_nikolai_body_wool"
+   },
+   {
+    "offset": 4854498,
+    "text": "mtl_c_rus_nikolai_eyes"
+   },
+   {
+    "offset": 4854673,
+    "text": "c_rus_nikolai_head_s"
+   },
+   {
+    "offset": 4854775,
+    "text": "c_rus_nikolai_head_c"
+   },
+   {
+    "offset": 5359868,
+    "text": "mtl_c_usa_dempsey_head"
+   },
+   {
+    "offset": 5360039,
+    "text": "c_usa_dempsey_head_m"
+   },
+   {
+    "offset": 5360124,
+    "text": "c_usa_dempsey_head_c"
+   },
+   {
+    "offset": 5360209,
+    "text": "c_usa_dempsey_head_g"
+   },
+   {
+    "offset": 5360294,
+    "text": "c_usa_dempsey_head_n"
+   },
+   {
+    "offset": 5360379,
+    "text": "c_usa_dempsey_head_s"
+   },
+   {
+    "offset": 5360863,
+    "text": "mtl_c_usa_dempsey_eyes"
+   },
+   {
+    "offset": 5361038,
+    "text": "c_usa_dempsey_head_s"
+   },
+   {
+    "offset": 5361140,
+    "text": "c_usa_dempsey_head_c"
+   },
+   {
+    "offset": 5363029,
+    "text": "mtl_c_usa_dempsey_body"
+   },
+   {
+    "offset": 5363184,
+    "text": "c_usa_dempsey_body_c"
+   },
+   {
+    "offset": 5363269,
+    "text": "c_usa_dempsey_body_g"
+   },
+   {
+    "offset": 5363354,
+    "text": "c_usa_dempsey_body_n"
+   },
+   {
+    "offset": 5363439,
+    "text": "c_usa_dempsey_body_s"
+   },
+   {
+    "offset": 5363859,
+    "text": "mtl_c_usa_dempsey_body_canvas"
+   },
+   {
+    "offset": 5364356,
+    "text": "mtl_c_usa_dempsey_body_linen"
+   },
+   {
+    "offset": 5364852,
+    "text": "mtl_c_usa_dempsey_body_lthr"
+   },
+   {
+    "offset": 5365347,
+    "text": "mtl_c_usa_dempsey_body_metal"
+   },
+   {
+    "offset": 5469360,
+    "text": "mtl_c_ger_richtofen_head"
+   },
+   {
+    "offset": 5469533,
+    "text": "c_ger_richtofen_head_m"
+   },
+   {
+    "offset": 5469620,
+    "text": "c_ger_richtofen_head_c"
+   },
+   {
+    "offset": 5469707,
+    "text": "c_ger_richtofen_head_g"
+   },
+   {
+    "offset": 5469794,
+    "text": "c_ger_richtofen_head_n"
+   },
+   {
+    "offset": 5469881,
+    "text": "c_ger_richtofen_head_s"
+   },
+   {
+    "offset": 5470367,
+    "text": "mtl_c_ger_richtofen_eyes"
+   },
+   {
+    "offset": 5470544,
+    "text": "c_ger_richtofen_head_s"
+   },
+   {
+    "offset": 5470646,
+    "text": "c_ger_richtofen_head_c"
+   },
+   {
+    "offset": 5783066,
+    "text": "mtl_c_ger_richtofen_body_linen"
+   },
+   {
+    "offset": 5783293,
+    "text": "mtl_c_ger_richtofen_body_lthr"
+   },
+   {
+    "offset": 5783519,
+    "text": "mtl_c_ger_richtofen_body_metal"
+   },
+   {
+    "offset": 5783746,
+    "text": "mtl_c_ger_richtofen_body"
+   },
+   {
+    "offset": 20530280,
+    "text": "c_ger_honorguard_zt"
+   },
+   {
+    "offset": 20530839,
+    "text": "c_ger_honorguard_zomb_bodyalias"
+   },
+   {
+    "offset": 20840978,
+    "text": "mtl_c_ger_honorguard_zombie_linen"
+   },
+   {
+    "offset": 20841208,
+    "text": "mtl_c_ger_honorguard_zombie_lthr"
+   },
+   {
+    "offset": 20841437,
+    "text": "mtl_c_ger_honorguard_zombie_metal"
+   },
+   {
+    "offset": 20841667,
+    "text": "mtl_c_ger_honorguard_zombie_body1"
+   },
+   {
+    "offset": 21195212,
+    "text": "c_ger_honorguard_zomb_headalias"
+   },
+   {
+    "offset": 24744441,
+    "text": "c_ger_honorguard_zt"
+   },
+   {
+    "offset": 105134086,
+    "text": "c_usa_jungmar_mp_snip_fb_zm"
+   },
+   {
+    "offset": 105626510,
+    "text": "mtl_c_usa_jungmar_gear_zm"
+   },
+   {
+    "offset": 105626765,
+    "text": "c_usa_jungle_marine_gear_c"
+   },
+   {
+    "offset": 105626875,
+    "text": "c_usa_jung"
+   },
+   {
+    "offset": 105626959,
+    "text": "c_usa_jungle_marine_gear_n"
+   },
+   {
+    "offset": 105627442,
+    "text": "mtl_c_usa_jungmar_body_upper_zm"
+   },
+   {
+    "offset": 105627606,
+    "text": "c_usa_jungle_marine_upper_c"
+   },
+   {
+    "offset": 105627717,
+    "text": "c_usa_jung"
+   },
+   {
+    "offset": 105627801,
+    "text": "c_usa_jungle_marine_upper_n"
+   },
+   {
+    "offset": 105628188,
+    "text": "mtl_c_usa_jungmar_body_lower_zm"
+   },
+   {
+    "offset": 105628352,
+    "text": "c_usa_jungle_marine_lower_c"
+   },
+   {
+    "offset": 105628463,
+    "text": "c_usa_jung"
+   },
+   {
+    "offset": 105628547,
+    "text": "c_usa_jungle_marine_lower_n"
+   },
+   {
+    "offset": 105630371,
+    "text": "mtl_c_usa_jungmar_snip_head_zm"
+   },
+   {
+    "offset": 105630534,
+    "text": "c_usa_jungle_marine_head_snip_c"
+   },
+   {
+    "offset": 105630649,
+    "text": "c_usa_jung"
+   },
+   {
+    "offset": 105630733,
+    "text": "c_usa_jungle_marine_head_snip_n"
+   }
+  ]
+ },
  "complete": false,
  "coverage": {
   "streamPos": 79609450,
