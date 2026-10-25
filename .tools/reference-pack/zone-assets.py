@@ -544,6 +544,24 @@ def export_everything(assets, out, zone_name, only=None, overwrite=True, resolve
     return rows, listing
 
 
+NAME_HIT_PATTERNS = {
+    "mapNameHits": re.compile(rb"maps/[A-Za-z0-9_/.\-]{3,80}"),
+    "characterNameHits": re.compile(rb"(?:mtl_)?c_(?:usa|rus|ger|jap)_[a-z0-9_]{3,60}"),
+}
+
+
+def name_hits(zone, limit=300):
+    out = {}
+    for key, pattern in NAME_HIT_PATTERNS.items():
+        hits = []
+        for match in pattern.finditer(zone.data):
+            hits.append({"offset": match.start(), "text": match.group().decode("latin-1")})
+            if len(hits) >= limit:
+                break
+        out[key] = hits
+    return out
+
+
 def dump_unwalked(zone, out, overwrite=True):
     """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
     files = []
@@ -592,6 +610,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "error": error,
         "blocks": blocks,
         "memberTrace": zone.member_trace if zone is not None else [],
+        "nameHits": name_hits(zone) if zone is not None else {},
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),
