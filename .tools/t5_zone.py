@@ -1401,12 +1401,18 @@ class T5Zone:
                       file=sys.stderr, flush=True)
                 t2idx = idx
                 placed = False
-                for _attempt in range(6):
-                    target = self._find_resync_target(entries, t2idx + 1)
+                first_target = target
+                search_from = None
+                for _attempt in range(24):
+                    if _attempt == 0:
+                        target = first_target
+                    else:
+                        target = self._find_resync_target(entries, t2idx + 1, search_from)
                     if target is None:
                         break
                     t2idx, anchor_pos, tname2 = target
                     pos_before = anchor_pos
+                    search_from = anchor_pos + 4
                     try:
                         t, p = entries[t2idx]
                         kind, tgt = self.classify(p)
@@ -1446,11 +1452,8 @@ class T5Zone:
         self._settle_pending()
         return self
 
-    def _find_resync_target(self, entries, start_idx):
-        """Find the next asset whose struct can be located and validated in
-        the stream after the current position. Returns (idx, pos, tname)."""
-        d = self.data
-        for j in range(start_idx, min(start_idx + 15, len(entries))):
+    def _resync_candidates(self, entries, start_idx):
+        for j in range(start_idx, len(entries)):
             t2, p2 = entries[j]
             tname2 = ASSET_TYPES[t2] if 0 <= t2 < len(ASSET_TYPES) else None
             if not tname2:
@@ -1461,44 +1464,86 @@ class T5Zone:
             sd = self.structs.get(tname2)
             if sd is None or not sd.members:
                 continue
-            dsl = self.struct_dsl(tname2)
-            # probe stream positions ahead for a struct that decodes sanely:
-            # all pointer members classify as valid zone pointers, and any
-            # first-member FOLLOWING string is printable
-            for probe in range(max(self.pos, 0), min(max(self.pos, 0) + 200000, len(d) - sd.size), 4):
-                if probe + sd.size > len(d):
+            yield j, tname2, sd
+
+    def _probe_positions(self, begin, stop, anchor):
+        d = self.data
+        if anchor is None:
+            yield from range(begin, stop, 4)
+            return
+        at = d.find(anchor, begin, stop + 4)
+        while at != -1 and at < stop:
+            if (at - begin) % 4 == 0:
+                yield at
+            at = d.find(anchor, at + 1, stop + 4)
+
+    def _probe_struct(self, tname, sd, begin, end, strict):
+        d = self.data
+        size = sd.size
+        stop = min(end, len(d) - size)
+        if stop <= begin:
+            return None
+        dsl = self.struct_dsl(tname)
+        ptr_offs = [m.offset for m in sd.members if m.ptr]
+        check_offs = ptr_offs[:16 if strict else 8]
+        named = bool(dsl and sd.members[0].ptr and sd.members[0].name in dsl.strings)
+        anchor = struct.pack("<I", PTR_FOLLOWING) if (strict and named) else None
+        zero = b"\x00\x00\x00\x00"
+        unpack = struct.unpack_from
+        for probe in self._probe_positions(begin, stop, anchor):
+            ok = True
+            nonzero = 0
+            for off in check_offs:
+                v, = unpack("<I", d, probe + off)
+                if v:
+                    nonzero += 1
+                if v not in (0, PTR_FOLLOWING, PTR_INSERT) and (v - 1) >> 29 >= 7:
+                    ok = False
                     break
-                ok = True
-                n = 0
-                for m in sd.members:
-                    if not m.ptr:
+            if not ok:
+                continue
+            if not any(d[probe + o:probe + o + 4] != zero for o in ptr_offs):
+                continue
+            if named:
+                v, = unpack("<I", d, probe)
+                if v == PTR_FOLLOWING:
+                    s = d[probe + size: probe + size + 48]
+                    stop_at = s.find(b"\x00")
+                    s = s[:stop_at if stop_at >= 0 else 48]
+                    if not s:
                         continue
-                    v, = struct.unpack_from("<I", d, probe + m.offset)
-                    if v not in (0, PTR_FOLLOWING, PTR_INSERT) and (v - 1) >> 29 >= 7:
-                        ok = False
-                        break
-                    n += 1
-                    if n >= 8:
-                        break
-                if not ok:
-                    continue
-                # reject all-zero regions (common padding): require some
-                # non-zero pointer or count field
-                if not any(d[probe + m.offset:probe + m.offset + 4] != b"\x00\x00\x00\x00"
-                           for m in sd.members if m.ptr):
-                    continue
-                if dsl and sd.members[0].ptr and sd.members[0].name in dsl.strings:
-                    v, = struct.unpack_from("<I", d, probe)
-                    if v == PTR_FOLLOWING:
-                        s = d[probe + sd.size: probe + sd.size + 48]
-                        end = s.find(b"\x00")
-                        s = s[:end if end >= 0 else 48]
-                        if not s:
-                            continue
-                        pr = sum(1 for c in s if 32 <= c < 127 or c == 0x2c)
-                        if pr < len(s) * 0.7:
-                            continue
-                return j, probe, tname2
+                    if strict and len(s) < 3:
+                        continue
+                    pr = sum(1 for c in s if 32 <= c < 127 or c == 0x2c)
+                    if pr < len(s) * (0.9 if strict else 0.7):
+                        continue
+            elif strict and nonzero < 2:
+                continue
+            return probe
+        return None
+
+    def _find_resync_target(self, entries, start_idx, from_pos=None):
+        begin = max(self.pos if from_pos is None else from_pos, 0)
+        total = len(self.data)
+        stages = (
+            (15, 200000, False, True),
+            (60, 4000000, True, True),
+            (200, 24000000, True, False),
+        )
+        for window, span, strict, any_struct in stages:
+            cache = {}
+            seen = 0
+            for j, tname2, sd in self._resync_candidates(entries, start_idx):
+                if seen >= window:
+                    break
+                seen += 1
+                if tname2 not in cache:
+                    if not any_struct and not (sd.members[0].ptr and sd.members[0].name in (self.struct_dsl(tname2).strings if self.struct_dsl(tname2) else ())):
+                        cache[tname2] = None
+                    else:
+                        cache[tname2] = self._probe_struct(tname2, sd, begin, min(begin + span, total), strict)
+                if cache[tname2] is not None:
+                    return j, cache[tname2], tname2
         return None
 
     def _settle_pending(self):

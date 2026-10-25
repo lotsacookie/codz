@@ -123,3 +123,36 @@ print(json.dumps({'n': len(vals), 'e2': vals[2]['target_bone1'], 'e0': vals[0]['
   assert.equal(out.e0, 0);
   assert.equal(out.first, 0);
 });
+
+test('resync finds a struct far past 15 skipped entries and 200KB of padding', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os
+z = T5Zone.__new__(T5Zone)
+hp = t5_zone.HeaderParser(open(os.path.join(t5_zone.OAT, 'T5_Assets.h'), errors='ignore').read())
+z.structs = hp.structs
+z.enums = hp.enums
+z.dsls = t5_zone.parse_dsl_folder(os.path.join(t5_zone.OAT, 'dsl'))
+pick = None
+for ti, tn in enumerate(ASSET_TYPES):
+    sd = z.structs.get(tn) if tn else None
+    dsl = z.struct_dsl(tn) if sd else None
+    if sd and sd.members and sd.members[0].ptr and dsl and sd.members[0].name in dsl.strings:
+        pick = (ti, tn, sd)
+        break
+ti, tn, sd = pick
+data = bytearray(700000)
+at = 450000
+data[at:at + 4] = struct.pack('<I', PTR_FOLLOWING)
+data[at + sd.size:at + sd.size + 13] = b'resync_target\\x00'
+z.data = bytes(data)
+z.pos = 0
+entries = [(-1, 0)] * 20 + [(ti, PTR_FOLLOWING)]
+found = z._find_resync_target(entries, 0)
+again = z._find_resync_target(entries, 0, at + sd.size + 64)
+print(json.dumps({'found': list(found), 'tn': tn, 'again': again}))
+`);
+  assert.equal(out.found[0], 20);
+  assert.equal(out.found[1], 450000);
+  assert.equal(out.found[2], out.tn);
+  assert.equal(out.again, null);
+});
