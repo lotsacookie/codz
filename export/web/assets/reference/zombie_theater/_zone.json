@@ -2,11 +2,48 @@
  "zone": "zone/Common/zombie_theater.ff",
  "status": "ok",
  "error": null,
+ "blocks": [
+  {
+   "name": "TEMP",
+   "size": 2098316,
+   "cursor": 0
+  },
+  {
+   "name": "RUNTIME",
+   "size": 3399472,
+   "cursor": 3211956
+  },
+  {
+   "name": "LARGE_RUNTIME",
+   "size": 0,
+   "cursor": 0
+  },
+  {
+   "name": "PHYSICAL_RUNTIME",
+   "size": 0,
+   "cursor": 0
+  },
+  {
+   "name": "VIRTUAL",
+   "size": 95308692,
+   "cursor": 79324728
+  },
+  {
+   "name": "LARGE",
+   "size": 0,
+   "cursor": 0
+  },
+  {
+   "name": "PHYSICAL",
+   "size": 7238360,
+   "cursor": 0
+  }
+ ],
  "complete": false,
  "coverage": {
-  "streamPos": 78473976,
+  "streamPos": 79609450,
   "streamSize": 111197376,
-  "percent": 70.57
+  "percent": 71.59
  },
  "types": {
   "XModel": 328,
@@ -20,33 +57,17 @@
   "PhysPreset": 1,
   "ComWorld": 1,
   "GfxLightDef": 1,
-  "SKIPPED": 1,
+  "GfxWorld": 1,
   "GameWorldSp": 1,
   "clipMap_t": 1,
   "SndBank": 1
  },
- "resyncs": 2,
- "failures": [
-  [
-   "GfxWorld",
-   "unknown struct unsigned int",
-   1
-  ]
- ],
+ "resyncs": 0,
+ "failures": [],
  "softErrors": [],
- "failedSpans": [
-  {
-   "index": 538,
-   "type": "GfxWorld",
-   "error": "unknown struct unsigned int",
-   "start": 49006423,
-   "end": 78429252,
-   "resyncedTo": 539,
-   "file": "_failed/asset_538_GfxWorld.bin"
-  }
- ],
+ "failedSpans": [],
  "unwalkedTail": [
-  "_unwalked/tail_04ad6af8_part0.bin"
+  "_unwalked/tail_04bebe6a_part0.bin"
  ],
  "errorReport": "_errors.txt",
  "assetTrace": "_asset_trace.txt",
@@ -1346,6 +1367,12 @@
    "type": "MaterialTechniqueSet",
    "name": "wc_sw4_3d_projector_ring",
    "file": "assets/MaterialTechniqueSet/wc_sw4_3d_projector_ring.json"
+  },
+  {
+   "index": 538,
+   "type": "GfxWorld",
+   "name": null,
+   "file": "assets/GfxWorld/_unnamed/538.json"
   },
   {
    "index": 539,

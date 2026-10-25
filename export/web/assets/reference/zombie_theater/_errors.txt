@@ -1,30 +1,17 @@
 # error report: zone/Common/zombie_theater.ff
 status: ok
-stream: walked 0x4ad6af8 of 0x6a0bcc0 bytes (70.57%), 32723400 unwalked
-errors: 2 (1 failed assets, 0 soft errors, 0 poisoned pointers)
+stream: walked 0x4bebe6a of 0x6a0bcc0 bytes (71.59%), 31587926 unwalked
+errors: 1 (0 failed assets, 0 soft errors, 0 poisoned pointers)
 
-[1] FAILED ASSET #538 GfxWorld
-  error: unknown struct unsigned int
-  stream: start=0x2ebc757 end=0x4acbc44 bytes=29422829 resyncedTo=#539
-  previous walked asset: #537 MaterialTechniqueSet wc_sw4_3d_projector_ring stream=0x2ea6404..0x2ebc757
-  bytes around the start (16 before):
-    0x02ebc747  61 64 69 61 6e 74 5f 38 63 38 31 32 66 37 63 00  adiant_8c812f7c.
-    0x02ebc757  7d 2f d6 81 89 e4 00 80 e3 31 00 00 85 39 00 00  }/.......1...9..
-    0x02ebc767  b5 23 00 00 20 03 00 00 ff ff ff ff e5 25 00 00  .#.. ........%..
-    0x02ebc777  ff ff ff ff 12 00 00 00 ff ff ff ff fe ff ff ff  ................
-    0x02ebc787  eb 00 00 00 73 1c d6 81 00 00 00 00 00 00 00 00  ....s...........
-
-[2] WALK STOPPED at 0x4ad6af8
-  32723400 bytes after this were not turned into assets
+[1] WALK STOPPED at 0x4bebe6a
+  31587926 bytes after this were not turned into assets
   the zone's asset list ended here (908 entries, all walked); the bytes after it are not covered by the list
-  last walked asset: #907 RawFile stream=0x4ad6aec..0x4ad6af8
+  last walked asset: #907 RawFile stream=0x4bebe5e..0x4bebe6a
   bytes at the stop (16 before):
-    0x04ad6ae8  d0 b9 41 1c 40 91 40 e4 d0 b9 41 68 80 9b 40 00  ..A.@.@...Ah..@.
-    0x04ad6af8  60 ba 41 81 cf 99 40 e4 d0 b9 41 68 80 9b 40 e4  `.A...@...Ah..@.
-    0x04ad6b08  d0 b9 41 d2 be 9c 40 00 60 ba 41 d2 be 9c 40 e4  ..A...@.`.A...@.
-    0x04ad6b18  d0 b9 41 52 e9 9d 40 00 60 ba 41 9c 8b 3a c0 1c  ..AR..@.`.A..:..
-    0x04ad6b28  2f ae c1 9c 8b 3a c0 00 a0 ad c1 d0 45 3d c0 1a  /....:......E=..
+    0x04bebe5a  1b 71 1b 70 1b 6f 1b 72 1b 71 1b 72 1b 73 1b 71  .q.p.o.r.q.r.s.q
+    0x04bebe6a  1b 72 1b 74 1b 73 1b 72 1b 75 1b 74 1b 76 1b 77  .r.t.s.r.u.t.v.w
+    0x04bebe7a  1b 78 1b 78 1b 79 1b 76 1b 7a 1b 7b 1b 7c 1b 7c  .x.x.y.v.z.{.|.|
+    0x04bebe8a  1b 7d 1b 7a 1b 7e 1b 7f 1b 80 1b 7e 1b 80 1b 81  .}.z.~.....~....
+    0x04bebe9a  1b 82 1b 7e 1b 81 1b 81 1b 83 1b 82 1b 83 1b 84  ...~............
 
 ## raw walker output
-  asset#538 (GfxWorld) failed (unknown struct unsigned int); resyncing
-  resync -> asset#539 (GameWorldSp) @ 0x4acbc44
