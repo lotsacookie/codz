@@ -591,6 +591,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "status": status,
         "error": error,
         "blocks": blocks,
+        "memberTrace": zone.member_trace if zone is not None else [],
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),

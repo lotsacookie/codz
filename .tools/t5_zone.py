@@ -552,6 +552,7 @@ class T5Zone:
         self.soft_errors = []   # recoverable problems (the asset is kept, its bad pointer becomes None)
         self.asset_spans = []   # {index, type, start, end}: where each walked asset sat in the stream
         self.failed_spans = []  # raw stream spans of assets that failed: {index, type, error, start, end}
+        self.member_trace = []
 
     # ----- stream -----
     def read_stream(self, n):
@@ -763,11 +764,17 @@ class T5Zone:
                         break
                 except ZoneError:
                     continue
+        traced = sd.name in self.TRACED_STRUCTS
+        if traced:
+            scalar = {m.name for m in sd.members if not m.ptr}
+            self.member_trace.append({"struct": sd.name, "counts": {k: v for k, v in vals.items() if k in scalar and isinstance(v, int)}})
         for name in order:
             if skip_default:
                 dinfo = self._member_info(dsl, sd, name, scopes)
                 if dinfo["cond"] is None and not dinfo["cond_never"]:
                     continue
+            if traced:
+                before = (self.pos, self.cursors[BLOCK_VIRTUAL])
             self.ctx_trace.append(f"{sd.name}.{name}")
             try:
                 if os.environ.get("T5_TRACE"):
@@ -779,7 +786,10 @@ class T5Zone:
                 self._treat(sd, dsl, name, vals, ctx, scopes)
             finally:
                 self.ctx_trace.pop()
+                if traced:
+                    self.member_trace.append({"member": f"{sd.name}.{name}", "stream": [before[0], self.pos], "virtual": [before[1], self.cursors[BLOCK_VIRTUAL]]})
 
+    TRACED_STRUCTS = {"GfxWorld", "GfxWorldDraw", "GfxWorldVertexData", "GfxWorldVertexLayerData", "GfxLightGrid", "GfxWorldDpvsStatic", "GfxWorldDpvsDynamic", "GfxWorldDpvsPlanes"}
     INLINE_ARRAY_CAPACITY = 4
     PARTIAL_STRUCT_TAIL = {
         "XAnimPartTrans": (lambda v: v.get("size") == 0, 20),
