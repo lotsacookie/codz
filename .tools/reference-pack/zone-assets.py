@@ -562,6 +562,46 @@ def name_hits(zone, limit=300):
     return out
 
 
+TAIL_STRING_PATTERN = re.compile(rb"[A-Za-z0-9_/.,\-]{6,80}\x00")
+
+
+def tail_map(zone, string_limit=3000, run_limit=400):
+    start = 0
+    for span in zone.asset_spans:
+        if span["type"] == "GfxWorld":
+            start = span["end"]
+    data = zone.data
+    strings = []
+    for match in TAIL_STRING_PATTERN.finditer(data, start):
+        strings.append([match.start(), match.group()[:-1].decode("latin-1")])
+        if len(strings) >= string_limit:
+            break
+    runs = []
+    for parity in (0, 1):
+        view = memoryview(data)[start + parity:]
+        usable = len(view) // 2 * 2
+        values = view[:usable].cast("H")
+        run_start = None
+        previous = None
+        count = 0
+        for i, value in enumerate(values):
+            if previous is not None and abs(value - previous) < 256:
+                if run_start is None:
+                    run_start = i - 1
+                    count = 1
+                count += 1
+            else:
+                if run_start is not None and count >= 2048:
+                    runs.append({"start": start + parity + run_start * 2, "end": start + parity + i * 2, "values": count, "parity": parity})
+                run_start = None
+                count = 0
+            previous = value
+        if run_start is not None and count >= 2048:
+            runs.append({"start": start + parity + run_start * 2, "end": start + parity + len(values) * 2, "values": count, "parity": parity})
+    runs.sort(key=lambda run: run["start"])
+    return {"from": start, "strings": strings, "indexRuns": runs[:run_limit], "indexRunCount": len(runs)}
+
+
 def dump_unwalked(zone, out, overwrite=True):
     """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
     files = []
@@ -611,6 +651,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "blocks": blocks,
         "memberTrace": zone.member_trace if zone is not None else [],
         "nameHits": name_hits(zone) if zone is not None else {},
+        "tailMap": tail_map(zone) if zone is not None else {},
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),
