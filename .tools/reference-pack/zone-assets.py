@@ -615,30 +615,33 @@ def flat_members(zone, sd, base, depth):
             yield m, base + m.offset
 
 
-def struct_candidates(zone, type_name, start, end, limit=12):
+def struct_candidates(zone, type_name, start, end, limit=16):
     sd = zone.structs.get(type_name)
     if sd is None or not sd.size:
         return []
     flat = list(flat_members(zone, sd, 0, 0))
     ptr_offsets = [off for m, off in flat if m.ptr and not m.array]
     count_offsets = [off for m, off in flat if not m.ptr and not m.array and m.size == 4 and m.type_name in ("int", "unsigned int") and COUNT_NAME_PATTERN.search(m.name)]
-    sizes = zone.block_sizes
     data = zone.data
     end = min(end, len(data) - sd.size)
     unpack = struct.unpack_from
+    first = ptr_offsets[0]
+    rest = ptr_offsets[1:]
     found = []
     for pos in range(start, end):
+        v = unpack("<I", data, pos + first)[0]
+        if v != 0 and v != PTR_FOLLOWING and (v - 1) >> 29 >= 7:
+            continue
+        following = 0
         ok = True
-        for off in ptr_offsets:
+        for off in rest:
             v = unpack("<I", data, pos + off)[0]
-            if v == 0 or v == PTR_FOLLOWING or v == PTR_INSERT:
-                continue
-            w = v - 1
-            block = w >> 29
-            if block >= 7 or (w & 0x1FFFFFFF) >= max(sizes[block], 1):
+            if v == PTR_FOLLOWING:
+                following += 1
+            elif v != 0:
                 ok = False
                 break
-        if not ok:
+        if not ok or following < max(2, len(rest) // 3):
             continue
         for off in count_offsets:
             if unpack("<I", data, pos + off)[0] >= 0x1000000:
@@ -646,10 +649,7 @@ def struct_candidates(zone, type_name, start, end, limit=12):
                 break
         if not ok:
             continue
-        nonzero = sum(1 for off in ptr_offsets if unpack("<I", data, pos + off)[0] != 0)
-        if nonzero < max(2, len(ptr_offsets) // 3):
-            continue
-        found.append({"offset": pos, "nonzeroPointers": nonzero, "hex": data[pos:pos + 64].hex()})
+        found.append({"offset": pos, "following": following, "hex": data[pos:pos + 64].hex()})
         if len(found) >= limit:
             break
     return found
