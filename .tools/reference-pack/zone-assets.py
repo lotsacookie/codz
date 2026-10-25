@@ -8,6 +8,7 @@ import json
 import math
 import os
 import re
+import struct
 import sys
 import zlib
 from collections import Counter
@@ -15,7 +16,7 @@ from collections import Counter
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 
-from t5_zone import BLOCK_NAMES, PendingRef, RawArray, Ref, ScriptStringRef, T5Zone
+from t5_zone import BLOCK_NAMES, PTR_FOLLOWING, PTR_INSERT, PendingRef, RawArray, Ref, ScriptStringRef, T5Zone
 
 KIND_FOR_TYPE = {"XAnimParts": "animations", "XModel": "models", "WeaponVariantDef": "weapons"}
 WEAPON_BUNDLE_KINDS = ("animations", "models")
@@ -602,6 +603,76 @@ def tail_map(zone, string_limit=3000, run_limit=400):
     return {"from": start, "strings": strings, "indexRuns": runs[:run_limit], "indexRunCount": len(runs)}
 
 
+COUNT_NAME_PATTERN = re.compile(r"(count|num|bytes|size)", re.I)
+
+
+def flat_members(zone, sd, base, depth):
+    for m in sd.members:
+        sub = zone.structs.get(m.type_name)
+        if sub is not None and not m.ptr and not m.array and depth < 4 and m.type_name != sd.name:
+            yield from flat_members(zone, sub, base + m.offset, depth + 1)
+        else:
+            yield m, base + m.offset
+
+
+def struct_candidates(zone, type_name, start, end, limit=12):
+    sd = zone.structs.get(type_name)
+    if sd is None or not sd.size:
+        return []
+    flat = list(flat_members(zone, sd, 0, 0))
+    ptr_offsets = [off for m, off in flat if m.ptr and not m.array]
+    count_offsets = [off for m, off in flat if not m.ptr and not m.array and m.size == 4 and m.type_name in ("int", "unsigned int") and COUNT_NAME_PATTERN.search(m.name)]
+    sizes = zone.block_sizes
+    data = zone.data
+    end = min(end, len(data) - sd.size)
+    unpack = struct.unpack_from
+    found = []
+    for pos in range(start, end):
+        ok = True
+        for off in ptr_offsets:
+            v = unpack("<I", data, pos + off)[0]
+            if v == 0 or v == PTR_FOLLOWING or v == PTR_INSERT:
+                continue
+            w = v - 1
+            block = w >> 29
+            if block >= 7 or (w & 0x1FFFFFFF) >= max(sizes[block], 1):
+                ok = False
+                break
+        if not ok:
+            continue
+        for off in count_offsets:
+            if unpack("<I", data, pos + off)[0] >= 0x1000000:
+                ok = False
+                break
+        if not ok:
+            continue
+        nonzero = sum(1 for off in ptr_offsets if unpack("<I", data, pos + off)[0] != 0)
+        if nonzero < max(2, len(ptr_offsets) // 3):
+            continue
+        found.append({"offset": pos, "nonzeroPointers": nonzero, "hex": data[pos:pos + 64].hex()})
+        if len(found) >= limit:
+            break
+    return found
+
+
+def probe_hex(zone, offsets, length=96):
+    return [{"offset": o, "hex": zone.data[o:o + length].hex()} for o in offsets if 0 <= o < len(zone.data)]
+
+
+def tail_probes(zone):
+    start = 0
+    for span in zone.asset_spans:
+        if span["type"] == "GfxWorld":
+            start = span["end"]
+    if not start:
+        return {}
+    window_end = start + 16000000
+    return {
+        "candidates": {name: struct_candidates(zone, name, start - 64, window_end) for name in ("GameWorldSp", "clipMap_t")},
+        "probes": probe_hex(zone, [start - 16, start + 11000, start + 1400000, start + 5000000, start + 14330568 - 128]),
+    }
+
+
 def dump_unwalked(zone, out, overwrite=True):
     """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
     files = []
@@ -652,6 +723,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "memberTrace": zone.member_trace if zone is not None else [],
         "nameHits": name_hits(zone) if zone is not None else {},
         "tailMap": tail_map(zone) if zone is not None else {},
+        "tailProbes": tail_probes(zone) if zone is not None else {},
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),
