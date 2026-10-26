@@ -188,3 +188,30 @@ print(json.dumps({'jumped': jumped, 'spans': spans, 'stable': z.pos == jumped, '
   assert.equal(out.stable, true);
   assert.equal(out.spansAfter, 1);
 });
+
+test('unresolved VIRTUAL name pointers are matched to zone-start strings with a calibrated offset', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+z = T5Zone.__new__(T5Zone)
+z.mem = [dict() for _ in range(7)]
+z.string_pos = {}
+z.string_delta = None
+names = [b'c_ger_richtofen_body', b'c_ger_richtofen_head', b'c_rus_nikolai_body', b'c_usa_dempsey_body', b'p_prop_one', b'p_prop_two']
+pos = 1000
+starts = []
+for n in names:
+    z.string_pos[pos] = n
+    starts.append(pos)
+    pos += len(n) + 1 + 4
+delta = 68
+assets = []
+for i, at in enumerate(starts[:4]):
+    assets.append((5, 'XModel', None, {'name': PendingRef(BLOCK_VIRTUAL, at - delta), 'numBones': 10 + i}))
+assets.append((5, 'XModel', None, {'name': PendingRef(BLOCK_VIRTUAL, 77777777), 'numBones': 1}))
+z.assets = assets
+z._settle_pending()
+print(json.dumps({'names': [a[2] for a in z.assets], 'delta': z.string_delta}))
+`);
+  assert.equal(out.delta, 68);
+  assert.deepEqual(out.names.slice(0, 4), ['c_ger_richtofen_body', 'c_ger_richtofen_head', 'c_rus_nikolai_body', 'c_usa_dempsey_body']);
+  assert.equal(out.names[4], null);
+});

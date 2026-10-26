@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import array
 import base64
 import contextlib
 import hashlib
@@ -787,6 +788,62 @@ def gfx_audit(zone):
     return out
 
 
+def classify_window(chunk):
+    n = len(chunk)
+    if n < 64:
+        return "tiny"
+    if chunk.count(0) >= 0.85 * n:
+        return "zero"
+    letters = sum(1 for c in chunk[:2048] if 65 <= c <= 122 or c == 95)
+    printable = sum(1 for c in chunk[:2048] if 32 <= c < 127 or c == 0)
+    sample = min(n, 2048)
+    if printable >= 0.8 * sample and letters >= 0.3 * sample:
+        return "text"
+    ratio = len(zlib.compress(chunk, 1)) / n
+    if ratio >= 0.97:
+        return "random"
+    if ratio >= 0.5 and chunk.count(0) < 0.02 * n:
+        return "dense"
+    words16 = array.array("H")
+    words16.frombytes(chunk[:n // 2 * 2])
+    near = sum(1 for i in range(1, len(words16)) if abs(words16[i] - words16[i - 1]) < 64) / max(1, len(words16) - 1)
+    if near >= 0.5:
+        return "index16"
+    floats = array.array("f")
+    floats.frombytes(chunk[:n // 4 * 4])
+    sane = sum(1 for v in floats if v == v and -100000 < v < 100000 and (v == 0 or abs(v) > 0.0001)) / max(1, len(floats))
+    if sane >= 0.85:
+        return "float"
+    words32 = array.array("I")
+    words32.frombytes(chunk[:n // 4 * 4])
+    if words32.count(0xFFFFFFFF) >= 0.1 * len(words32):
+        return "ptr"
+    small = sum(1 for v in words32 if v < 0x10000) / max(1, len(words32))
+    if small >= 0.6:
+        return "ints"
+    return "mixed"
+
+
+def region_map(zone, window=8192, run_limit=700):
+    start = 0
+    for span in zone.asset_spans:
+        if span["type"] == "GfxWorld":
+            start = span["start"]
+            break
+    data = zone.data
+    runs = []
+    totals = Counter()
+    for at in range(start, len(data), window):
+        chunk = data[at:at + window]
+        kind = classify_window(chunk)
+        totals[kind] += len(chunk)
+        if runs and runs[-1][2] == kind:
+            runs[-1][1] = at + len(chunk)
+        else:
+            runs.append([at, at + len(chunk), kind])
+    return {"from": start, "to": len(data), "window": window, "runCount": len(runs), "bytesByClass": dict(totals), "runs": runs[:run_limit]}
+
+
 def dump_unwalked(zone, out, overwrite=True):
     """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
     files = []
@@ -840,6 +897,7 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "tailProbes": tail_probes(zone) if zone is not None else {},
         "unnamedModels": unnamed_models(zone) if zone is not None else [],
         "gfxAudit": gfx_audit(zone) if zone is not None else {},
+        "regionMap": region_map(zone) if zone is not None else {},
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),

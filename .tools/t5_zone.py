@@ -554,6 +554,8 @@ class T5Zone:
         self.asset_spans = []   # {index, type, start, end}: where each walked asset sat in the stream
         self.failed_spans = []  # raw stream spans of assets that failed: {index, type, error, start, end}
         self.member_trace = []
+        self.string_pos = {}
+        self.string_delta = None
 
     # ----- stream -----
     def read_stream(self, n):
@@ -1353,7 +1355,10 @@ class T5Zone:
             for p in ptrs:
                 kind, tgt = self.classify(p)
                 if kind == "following":
-                    self.script_strings.append(self.read_cstr())
+                    at = self.pos
+                    text = self.read_cstr()
+                    self.string_pos[at] = text
+                    self.script_strings.append(text)
                 elif kind == "offset":
                     self.script_strings.append(self.resolve(*tgt))
                 else:
@@ -1662,11 +1667,14 @@ class T5Zone:
         seen = set()
         stack = [o for (_t, _tn, _n, o) in self.assets if o is not None]
         stack += [n for (_t, _tn, n, _o) in self.assets if isinstance(n, PendingRef)]
+        self._calibrate_string_delta(stack)
 
         def landed(p):
             if not (0 <= p.block < 7):
                 return p
             got = self.mem[p.block].get(p.offset)
+            if got is None:
+                got = self._string_for_offset(p)
             return p if got is None else got
 
         while stack:
@@ -1700,12 +1708,55 @@ class T5Zone:
             fixed.append((t, tn, n, o))
         self.assets = fixed
 
+    def _string_for_offset(self, p):
+        if p.block != BLOCK_VIRTUAL or self.string_delta is None:
+            return None
+        return self.string_pos.get(p.offset + self.string_delta)
+
+    def _calibrate_string_delta(self, roots, sample_limit=400):
+        if not self.string_pos:
+            return
+        wanted = set()
+        seen = set()
+        stack = list(roots)
+        while stack and len(wanted) < sample_limit:
+            obj = stack.pop()
+            if isinstance(obj, Ref):
+                obj = obj.obj
+            elif isinstance(obj, (RawArray, ScriptStringRef)):
+                obj = obj.data
+            if not isinstance(obj, (dict, list)) or id(obj) in seen:
+                continue
+            seen.add(id(obj))
+            for value in (obj.values() if isinstance(obj, dict) else obj):
+                if isinstance(value, PendingRef):
+                    if value.block == BLOCK_VIRTUAL and self.mem[BLOCK_VIRTUAL].get(value.offset) is None:
+                        wanted.add(value.offset)
+                elif isinstance(value, (Ref, RawArray, ScriptStringRef, dict, list)):
+                    stack.append(value)
+        if len(wanted) < 3:
+            return
+        votes = Counter()
+        positions = self.string_pos
+        for off in wanted:
+            for delta in range(0, 4096):
+                if off + delta in positions:
+                    votes[delta] += 1
+        ranked = votes.most_common(2)
+        if not ranked or ranked[0][1] < 3:
+            return
+        if len(ranked) > 1 and ranked[0][1] < 2 * ranked[1][1]:
+            return
+        self.string_delta = ranked[0][0]
+
     def _asset_name(self, obj):
         def as_str(v):
             if isinstance(v, Ref):
                 v = v.obj
             if isinstance(v, PendingRef):
                 got = self.mem[v.block].get(v.offset)
+                if got is None:
+                    got = self._string_for_offset(v)
                 v = got.obj if isinstance(got, Ref) else got
             if isinstance(v, (bytes, bytearray)):
                 return v.decode("utf-8", "replace")
