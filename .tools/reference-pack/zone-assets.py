@@ -841,7 +841,14 @@ def region_map(zone, window=8192, run_limit=700):
             runs[-1][1] = at + len(chunk)
         else:
             runs.append([at, at + len(chunk), kind])
-    return {"from": start, "to": len(data), "window": window, "runCount": len(runs), "bytesByClass": dict(totals), "runs": runs[:run_limit]}
+    strings = []
+    for match in re.finditer(rb"[A-Za-z0-9_./\-]{6,80}\x00", data[start:start + 45000000]):
+        text = match.group()[:-1].decode("latin-1")
+        if re.search(r"[A-Za-z]{4}", text):
+            strings.append([start + match.start(), text])
+            if len(strings) >= 1500:
+                break
+    return {"from": start, "to": len(data), "window": window, "runCount": len(runs), "bytesByClass": dict(totals), "runs": runs[:run_limit], "strings": strings}
 
 
 def dump_unwalked(zone, out, overwrite=True):

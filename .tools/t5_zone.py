@@ -1734,10 +1734,12 @@ class T5Zone:
                         wanted.add(value.offset)
                 elif isinstance(value, (Ref, RawArray, ScriptStringRef, dict, list)):
                     stack.append(value)
+        positions = self.string_pos
+        ceiling = max(positions)
+        wanted = {off for off in wanted if off <= ceiling}
         if len(wanted) < 3:
             return
         votes = Counter()
-        positions = self.string_pos
         for off in wanted:
             for delta in range(0, 4096):
                 if off + delta in positions:
@@ -1745,7 +1747,7 @@ class T5Zone:
         ranked = votes.most_common(2)
         if not ranked or ranked[0][1] < 3:
             return
-        if len(ranked) > 1 and ranked[0][1] < 2 * ranked[1][1]:
+        if len(ranked) > 1 and ranked[0][1] < 1.5 * ranked[1][1]:
             return
         self.string_delta = ranked[0][0]
 

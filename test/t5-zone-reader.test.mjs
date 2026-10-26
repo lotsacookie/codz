@@ -207,6 +207,8 @@ assets = []
 for i, at in enumerate(starts[:4]):
     assets.append((5, 'XModel', None, {'name': PendingRef(BLOCK_VIRTUAL, at - delta), 'numBones': 10 + i}))
 assets.append((5, 'XModel', None, {'name': PendingRef(BLOCK_VIRTUAL, 77777777), 'numBones': 1}))
+for g in (287322163, 308241768, 322055455, 341798254, 392524910, 99999999):
+    assets.append((5, 'XModel', None, {'name': PendingRef(BLOCK_VIRTUAL, g), 'numBones': 1}))
 z.assets = assets
 z._settle_pending()
 print(json.dumps({'names': [a[2] for a in z.assets], 'delta': z.string_delta}))
