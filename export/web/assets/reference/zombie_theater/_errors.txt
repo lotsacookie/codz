@@ -1,17 +1,29 @@
 # error report: zone/Common/zombie_theater.ff
 status: ok
-stream: walked 0x4bebe6a of 0x6a0bcc0 bytes (71.59%), 31587926 unwalked
-errors: 1 (0 failed assets, 0 soft errors, 0 poisoned pointers)
+stream: walked 0x5a42a24 of 0x6a0bcc0 bytes (85.11%), 16552604 unwalked
+errors: 2 (1 failed assets, 0 soft errors, 0 poisoned pointers)
 
-[1] WALK STOPPED at 0x4bebe6a
-  31587926 bytes after this were not turned into assets
+[1] FAILED ASSET #539 GameWorldSp
+  error: stream drift: no plausible GameWorldSp at 0x4be0fb6, jumped to 0x54763ac
+  stream: start=0x4be0fb6 end=0x54763ac bytes=8999926 resyncedTo=#539
+  previous walked asset: #538 GfxWorld unnamed stream=0x2ebc757..0x4be0fb6
+  bytes around the start (16 before):
+    0x04be0fa6  00 4e 00 4b 00 4f 00 50 00 51 00 51 00 52 00 4f  .N.K.O.P.Q.Q.R.O
+    0x04be0fb6  00 53 00 54 00 55 00 55 00 56 00 53 00 57 00 58  .S.T.U.U.V.S.W.X
+    0x04be0fc6  00 59 00 59 00 5a 00 57 00 5b 00 5c 00 5d 00 5d  .Y.Y.Z.W.[.\.].]
+    0x04be0fd6  00 5e 00 5b 00 5f 00 60 00 61 00 61 00 62 00 5f  .^.[._.`.a.a.b._
+    0x04be0fe6  00 63 00 64 00 65 00 65 00 66 00 63 00 67 00 68  .c.d.e.e.f.c.g.h
+
+[2] WALK STOPPED at 0x5a42a24
+  16552604 bytes after this were not turned into assets
   the zone's asset list ended here (908 entries, all walked); the bytes after it are not covered by the list
-  last walked asset: #907 RawFile stream=0x4bebe5e..0x4bebe6a
+  last walked asset: #907 RawFile stream=0x5a42a18..0x5a42a24
   bytes at the stop (16 before):
-    0x04bebe5a  1b 71 1b 70 1b 6f 1b 72 1b 71 1b 72 1b 73 1b 71  .q.p.o.r.q.r.s.q
-    0x04bebe6a  1b 72 1b 74 1b 73 1b 72 1b 75 1b 74 1b 76 1b 77  .r.t.s.r.u.t.v.w
-    0x04bebe7a  1b 78 1b 78 1b 79 1b 76 1b 7a 1b 7b 1b 7c 1b 7c  .x.x.y.v.z.{.|.|
-    0x04bebe8a  1b 7d 1b 7a 1b 7e 1b 7f 1b 80 1b 7e 1b 80 1b 81  .}.z.~.....~....
-    0x04bebe9a  1b 82 1b 7e 1b 81 1b 81 1b 83 1b 82 1b 83 1b 84  ...~............
+    0x05a42a14  65 5f 70 61 74 68 6e 6f 64 65 22 0a 7d 0a 7b 0a  e_pathnode".}.{.
+    0x05a42a24  22 6f 72 69 67 69 6e 22 20 22 2d 35 31 32 20 31  "origin" "-512 1
+    0x05a42a34  34 39 38 20 34 34 22 0a 22 63 6c 61 73 73 6e 61  498 44"."classna
+    0x05a42a44  6d 65 22 20 22 6e 6f 64 65 5f 70 61 74 68 6e 6f  me" "node_pathno
+    0x05a42a54  64 65 22 0a 7d 0a 7b 0a 22 63 6c 61 73 73 6e 61  de".}.{."classna
 
 ## raw walker output
+  asset#539 (GameWorldSp) start 0x4be0fb6 implausible; jumping to 0x54763ac (8999926 bytes skipped)
