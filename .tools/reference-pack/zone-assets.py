@@ -673,6 +673,120 @@ def tail_probes(zone):
     }
 
 
+def unnamed_models(zone, limit=150):
+    sd = zone.structs.get("XModel")
+    if sd is None:
+        return []
+    spans = {span["index"]: span for span in zone.asset_spans}
+    offsets = {m.name: m.offset for m in sd.members}
+    rows = []
+    for index, (_type_index, type_name, name, obj) in enumerate(zone.assets):
+        if type_name != "XModel" or name or zone._asset_name(obj):
+            continue
+        span = spans.get(index)
+        if span is None:
+            continue
+        start = span["start"]
+        raw = struct.unpack_from("<I", zone.data, start)[0]
+        after = zone.data[start + sd.size:start + sd.size + 96]
+        stop = after.find(b"\x00")
+        text = after[:stop].decode("latin-1") if 0 < stop < 80 and all(32 <= c < 127 for c in after[:stop]) else None
+        rows.append({
+            "index": index, "start": start, "end": span["end"], "length": span["end"] - start,
+            "namePtr": f"{raw:#010x}", "nameKind": zone.classify(raw)[0], "stringAfterStruct": text,
+            "numBones": zone.data[start + offsets["numBones"]], "numsurfs": zone.data[start + offsets["numsurfs"]],
+            "head": zone.data[start:start + 48].hex(),
+        })
+        if len(rows) >= limit:
+            break
+    return rows
+
+
+def pointer_kinds(zone, tname, start, end):
+    sd = zone.structs.get(tname)
+    if sd is None or not sd.size:
+        return None
+    count = (end - start) // sd.size
+    result = {"elements": count, "sizeExact": count * sd.size == end - start, "members": {}}
+    members = [m for m in sd.members if m.ptr and not m.array and m.offset % 4 == 0]
+    step = max(1, count // 20000)
+    for m in members:
+        tally = Counter()
+        for k in range(0, count, step):
+            value = struct.unpack_from("<I", zone.data, start + k * sd.size + m.offset)[0]
+            if value == 0:
+                tally["null"] += 1
+            elif value == 0xFFFFFFFF:
+                tally["following"] += 1
+            elif value == 0xFFFFFFFE:
+                tally["insert"] += 1
+            elif ((value - 1) >> 29) < 7:
+                tally["offset"] += 1
+            else:
+                tally["invalid"] += 1
+        result["members"][m.name] = dict(tally)
+    return result
+
+
+def gfx_audit(zone):
+    ranges, counts = {}, {}
+    for entry in zone.member_trace:
+        if "member" in entry:
+            ranges[entry["member"]] = entry["stream"]
+        else:
+            counts.setdefault(entry["struct"], entry["counts"])
+    data = zone.data
+    out = {}
+
+    def finite(values, limit):
+        return all(v == v and abs(v) < limit for v in values)
+
+    vertices = ranges.get("GfxWorldVertexData.vertices")
+    if vertices:
+        start, end = vertices
+        scores = {}
+        for stride in (32, 36, 40, 44, 48, 52, 56):
+            n = (end - start) // stride
+            if n <= 0:
+                continue
+            step = max(1, n // 3000)
+            seen = ok = 0
+            for k in range(0, n, step):
+                seen += 1
+                if finite(struct.unpack_from("<3f", data, start + k * stride), 20000):
+                    ok += 1
+            scores[stride] = round(ok / seen, 3)
+        out["vertexPositionSaneByStride"] = scores
+        out["vertexBytesPerVertex"] = (end - start) / max(1, counts.get("GfxWorldDraw", {}).get("vertexCount", 1))
+    inst = ranges.get("GfxWorldDpvsStatic.smodelInsts")
+    if inst:
+        start, end = inst
+        n = (end - start) // 40
+        good = seen = 0
+        for k in range(0, n, max(1, n // 3000)):
+            v = struct.unpack_from("<6f", data, start + k * 40)
+            seen += 1
+            if finite(v, 1e6) and v[0] <= v[3] and v[1] <= v[4] and v[2] <= v[5]:
+                good += 1
+        out["smodelInstBoundsSane"] = round(good / max(1, seen), 3)
+    planes = ranges.get("GfxWorldDpvsPlanes.planes")
+    if planes:
+        start, end = planes
+        n = (end - start) // 20
+        good = seen = 0
+        for k in range(0, n, max(1, n // 3000)):
+            x, y, z_ = struct.unpack_from("<3f", data, start + k * 20)
+            seen += 1
+            if finite((x, y, z_), 2) and abs(x * x + y * y + z_ * z_ - 1) < 0.02:
+                good += 1
+        out["planeNormalsUnit"] = round(good / max(1, seen), 3)
+    for member, tname in (("GfxWorldDpvsStatic.surfaces", "GfxSurface"), ("GfxWorldDpvsStatic.smodelDrawInsts", "GfxStaticModelDrawInst"),
+                          ("GfxWorld.materialMemory", "MaterialMemory"), ("GfxWorld.models", "GfxBrushModel"), ("GfxWorld.cells", "GfxCell")):
+        if member in ranges:
+            out["pointers:" + member] = pointer_kinds(zone, tname, *ranges[member])
+    return out
+
+
 def dump_unwalked(zone, out, overwrite=True):
     """Raw bytes the walker could not turn into assets: failed asset spans and the stream tail after the walk stopped."""
     files = []
@@ -724,6 +838,8 @@ def run_zone(zone_path, zone_name, out, only, overwrite):
         "nameHits": name_hits(zone) if zone is not None else {},
         "tailMap": tail_map(zone) if zone is not None else {},
         "tailProbes": tail_probes(zone) if zone is not None else {},
+        "unnamedModels": unnamed_models(zone) if zone is not None else [],
+        "gfxAudit": gfx_audit(zone) if zone is not None else {},
         "complete": status == "ok" and not failed and pos >= size,
         "coverage": {"streamPos": pos, "streamSize": size, "percent": round(100 * pos / size, 2) if size else 0},
         "types": dict(types.most_common()),

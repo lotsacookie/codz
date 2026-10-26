@@ -12,6 +12,7 @@ Usage:
     python3 t5_zone.py <zone.ff> --json out # walk + dump assets to JSON sidecars
 """
 import argparse
+import array
 import json
 import os
 import re
@@ -1377,6 +1378,9 @@ class T5Zone:
             self.ctx_trace.append(f"asset#{idx}:{tname}")
             try:
                 kind, tgt = self.classify(p)
+                if self.resync and tname in self.DRIFT_GUARDED and kind in ("following", "insert"):
+                    self._guard_asset_start(idx, tname)
+                    start_pos = self.pos
                 if kind == "offset":
                     obj = self.resolve(*tgt)
                     name = self._asset_name(obj)
@@ -1451,6 +1455,108 @@ class T5Zone:
         self.pop_block()
         self._settle_pending()
         return self
+
+    DRIFT_GUARDED = ("GameWorldSp", "clipMap_t")
+    DRIFT_SCAN_BYTES = 24000000
+    DRIFT_COUNT_LIMIT = 0x800000
+    DRIFT_COUNT_NAME = re.compile(r"(count|num|bytes|size)", re.I)
+
+    def _flat_words(self, sd, base=0, depth=0):
+        for m in sd.members:
+            sub = self.structs.get(m.type_name)
+            if sub is not None and not m.ptr and not m.array and depth < 4 and m.type_name != sd.name:
+                yield from self._flat_words(sub, base + m.offset, depth + 1)
+            else:
+                yield m, base + m.offset
+
+    def _word_ok_ptr(self, v):
+        if v == 0 or v == PTR_FOLLOWING or v == PTR_INSERT:
+            return True
+        w = v - 1
+        block = w >> BLOCK_SHIFT
+        if block >= 7:
+            return False
+        return (w & OFFSET_MASK) < max(self.block_sizes[block], 1)
+
+    def _struct_rules(self, tname):
+        sd = self.structs.get(tname)
+        if sd is None or not sd.size:
+            return None
+        flat = [(m, off) for m, off in self._flat_words(sd) if off % 4 == 0]
+        ptrs = [off // 4 for m, off in flat if m.ptr and not m.array]
+        cnts = [off // 4 for m, off in flat if not m.ptr and not m.array and m.size == 4
+                and m.type_name in ("int", "unsigned int") and self.DRIFT_COUNT_NAME.search(m.name)]
+        if not ptrs or not cnts:
+            return None
+        idx = {m.name: off // 4 for m, off in flat if not m.array}
+        limit = self.DRIFT_COUNT_LIMIT
+        ok_ptr = self._word_ok_ptr
+        follow = PTR_FOLLOWING
+
+        def check(words, i):
+            for c in cnts:
+                if words[i + c] > limit:
+                    return False
+            for q in ptrs:
+                if not ok_ptr(words[i + q]):
+                    return False
+            if sum(1 for q in ptrs if words[i + q] == follow) < 3:
+                return False
+            if tname == "GameWorldSp":
+                nc = words[i + idx["nodeCount"]]
+                vb = words[i + idx["visBytes"]]
+                tc = words[i + idx["nodeTreeCount"]]
+                cc = words[i + idx["chainNodeCount"]]
+                if nc == 0 or cc > nc or tc > 4 * nc + 8:
+                    return False
+                expect = nc * nc / 8
+                return 0.5 * expect <= vb <= 1.5 * expect + 64
+            return sum(1 for c in cnts if words[i + c]) >= 4
+
+        return (sd.size + 3) // 4, check
+
+    def _struct_plausible_at(self, tname, pos, rules):
+        size_w, check = rules
+        if pos < 0 or pos + 4 * size_w > len(self.data):
+            return False
+        words = array.array("I")
+        words.frombytes(self.data[pos:pos + 4 * size_w])
+        return check(words, 0)
+
+    def _scan_for_struct(self, tname, begin, end, rules):
+        size_w, check = rules
+        end = min(end, len(self.data))
+        best = None
+        for align in range(4):
+            start = begin + ((align - begin) % 4)
+            stop = end if best is None else min(end, best)
+            n = (stop - start) // 4 - size_w
+            if n <= 0:
+                continue
+            words = array.array("I")
+            words.frombytes(self.data[start:start + 4 * (n + size_w)])
+            for i in range(n):
+                if check(words, i):
+                    best = start + 4 * i
+                    break
+        return best
+
+    def _guard_asset_start(self, idx, tname):
+        try:
+            rules = self._struct_rules(tname)
+            if rules is None or self._struct_plausible_at(tname, self.pos, rules):
+                return
+            found = self._scan_for_struct(tname, self.pos, self.pos + self.DRIFT_SCAN_BYTES, rules)
+        except (struct.error, ValueError, KeyError, MemoryError):
+            return
+        if found is None or found <= self.pos:
+            self.soft_errors.append(f"asset#{idx} {tname}: stream start at {self.pos:#x} looks wrong and no plausible start was found ahead")
+            return
+        print(f"  asset#{idx} ({tname}) start {self.pos:#x} implausible; jumping to {found:#x} ({found - self.pos} bytes skipped)",
+              file=sys.stderr, flush=True)
+        self.failed_spans.append({"index": idx, "type": tname, "error": f"stream drift: no plausible {tname} at {self.pos:#x}, jumped to {found:#x}",
+                                  "start": self.pos, "end": found, "resyncedTo": idx})
+        self.pos = found
 
     def _resync_candidates(self, entries, start_idx):
         for j in range(start_idx, len(entries)):

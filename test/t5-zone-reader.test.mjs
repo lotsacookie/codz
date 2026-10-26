@@ -156,3 +156,35 @@ print(json.dumps({'found': list(found), 'tn': tn, 'again': again}))
   assert.equal(out.found[2], out.tn);
   assert.equal(out.again, null);
 });
+
+test('walker jumps over drifted data to the next plausible GameWorldSp and leaves a correct start alone', { skip: !hasPython }, () => {
+  const out = run(prelude + `
+import os, array, random
+z = T5Zone.__new__(T5Zone)
+hp = t5_zone.HeaderParser(open(os.path.join(t5_zone.OAT, 'T5_Assets.h'), errors='ignore').read())
+z.structs = hp.structs
+z.enums = hp.enums
+z.block_sizes = (0x20048c, 0x33df30, 0, 0, 0x5ae4b94, 0, 0x6e72d8)
+z.failed_spans = []
+z.soft_errors = []
+real = bytes.fromhex('7d2fd681' + '20060000' + 'ffffffff' * 2 + '00000000' + 'ffffffff' * 2 + 'bcaf0400' + 'ffffffff' + 'b1020000' + 'ffffffff')
+random.seed(3)
+data = bytearray()
+v = 1000
+while len(data) < 600000:
+    v = max(0, min(65000, v + random.randint(-3, 4)))
+    data += struct.pack('<H', v)
+data[300003:300003 + len(real)] = real
+z.data = bytes(data)
+z.pos = 0
+z._guard_asset_start(539, 'GameWorldSp')
+jumped = z.pos
+spans = len(z.failed_spans)
+z._guard_asset_start(539, 'GameWorldSp')
+print(json.dumps({'jumped': jumped, 'spans': spans, 'stable': z.pos == jumped, 'spansAfter': len(z.failed_spans)}))
+`);
+  assert.equal(out.jumped, 300003);
+  assert.equal(out.spans, 1);
+  assert.equal(out.stable, true);
+  assert.equal(out.spansAfter, 1);
+});
