@@ -1364,6 +1364,11 @@ class T5Zone:
                 else:
                     self.script_strings.append(None)
 
+        if strings_ptr and self.string_pos:
+            region_start = min(self.string_pos)
+            for match in re.finditer(rb"[\x20-\x7e]{2,200}\x00", self.data[region_start:self.pos]):
+                self.string_pos.setdefault(region_start + match.start(), match.group()[:-1])
+
         entries = []
         if assets_ptr:
             raw = self.read_stream(8 * asset_count)
@@ -1713,9 +1718,11 @@ class T5Zone:
             return None
         return self.string_pos.get(p.offset + self.string_delta)
 
-    def _calibrate_string_delta(self, roots, sample_limit=400):
+    def _calibrate_string_delta(self, roots, sample_limit=20000):
         if not self.string_pos:
             return
+        positions = self.string_pos
+        ceiling = max(positions)
         wanted = set()
         seen = set()
         stack = list(roots)
@@ -1730,13 +1737,10 @@ class T5Zone:
             seen.add(id(obj))
             for value in (obj.values() if isinstance(obj, dict) else obj):
                 if isinstance(value, PendingRef):
-                    if value.block == BLOCK_VIRTUAL and self.mem[BLOCK_VIRTUAL].get(value.offset) is None:
+                    if value.block == BLOCK_VIRTUAL and value.offset <= ceiling and self.mem[BLOCK_VIRTUAL].get(value.offset) is None:
                         wanted.add(value.offset)
                 elif isinstance(value, (Ref, RawArray, ScriptStringRef, dict, list)):
                     stack.append(value)
-        positions = self.string_pos
-        ceiling = max(positions)
-        wanted = {off for off in wanted if off <= ceiling}
         if len(wanted) < 3:
             return
         votes = Counter()
