@@ -5,9 +5,34 @@ let glowTexture = null, started = false;
 function glow() {
   if (!started && typeof document !== 'undefined') {
     started = true;
-    new THREE.TextureLoader().load(DOG_FX.glowUrl, texture => { texture.colorSpace = THREE.SRGBColorSpace; glowTexture = texture; });
+    new THREE.TextureLoader().load(DOG_FX.glowUrl, texture => { glowTexture = keyOutBlack(texture); });
   }
   return glowTexture;
+}
+
+function keyOutBlack(source) {
+  const image = source.image, width = image.naturalWidth || image.width, height = image.naturalHeight || image.height;
+  if (!width || !height || typeof document === 'undefined') { source.colorSpace = THREE.SRGBColorSpace; return source; }
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  context.drawImage(image, 0, 0);
+  const pixels = context.getImageData(0, 0, width, height), data = pixels.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i], g = data[i + 1], b = data[i + 2], alpha = Math.max(r, g, b);
+    if (alpha === 0) { data[i + 3] = 0; continue; }
+    data[i] = Math.min(255, Math.round(r * 255 / alpha));
+    data[i + 1] = Math.min(255, Math.round(g * 255 / alpha));
+    data[i + 2] = Math.min(255, Math.round(b * 255 / alpha));
+    data[i + 3] = alpha;
+  }
+  context.putImageData(pixels, 0, 0);
+  const keyed = new THREE.CanvasTexture(canvas);
+  keyed.colorSpace = THREE.SRGBColorSpace;
+  keyed.needsUpdate = true;
+  source.dispose();
+  return keyed;
 }
 
 const UP = new THREE.Vector3(0, 1, 0);
