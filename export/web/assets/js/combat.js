@@ -163,6 +163,7 @@ export class Combat {
   hit(z,head){this.hitUntil=this.session.time+.12;const p=head?this.enemies.headPosition(z):z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?42:25,0));if(this.blood?.ready())this.blood.spray(p,this.camera.position,{head});else this.effect(p);}
   onKill(z){
     this.features?.onKill(z);
+    if(z?.root&&z.kind==='zombie'&&!this.nuking)this.sharedFx?.gibs?.burst(z.root.position.clone().add(new THREE.Vector3(0,34,0)),{floor:z.root.position.y+1});
     if(z?.root&&this.blood?.ready())this.blood.spray(z.root.position.clone().add(new THREE.Vector3(0,z.kind==='zombie'?40:22,0)),this.camera.position,{kill:true});
     if(!z||this.nuking||this.session.area==='earth'||z.kind==='astronaut'||['wave','gersh'].includes(z.deathCause))return;
     const type=this.session.drops.tryDrop(this.session,{kind:z.kind,playable:true,destroyedWindows:this.features?.brokenWindows??0,boxMoves:this.features?.box?.moves??0});

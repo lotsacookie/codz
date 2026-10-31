@@ -189,3 +189,6 @@
 "export/web/assets/textures/~~-gw_aug_sc-rgb&~-rw_aug_sr&w_aug_n-l.png" filter=lfs diff=lfs merge=lfs -text
 "export/web/assets/textures/~~-gw_famas_sc-rgb&~-rw_famas~a0192da0.png" filter=lfs diff=lfs merge=lfs -text
 "export/web/assets/textures/~~-gweapon_at4_spec-rgb&~-rwe~23144b4a.png" filter=lfs diff=lfs merge=lfs -text
+
+export/web/assets/models/fx_char_gib_chunk_*.glb -filter -diff -merge binary
+export/web/assets/models/p_zom_win_bars_01_*_bend_180.glb -filter -diff -merge binary
