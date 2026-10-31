@@ -38,4 +38,19 @@ assert.equal(Math.round(filter.trace(world([c, d]), ray(), 1, 6000).distance), 2
 // A lone solid wall still stops the shot, and a clear shot returns false.
 assert.equal(Math.round(filter.trace(world([far]), ray(), 1, 6000).distance), 60);
 assert.equal(filter.trace(world([]), ray(), 1, 6000), false);
+
+// See-through panes let shots pass: a translucent blended plane, and a glass-named alpha-cut plane whose pixels are all above the cutoff.
+const pane = (z, material) => {
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), material);
+  mesh.position.z = z; mesh.updateMatrixWorld(true); return mesh;
+};
+let tinted = pane(-10, new THREE.MeshBasicMaterial({ transparent: true, opacity: .3, side: THREE.DoubleSide }));
+let glassMask = pane(-20, new THREE.MeshBasicMaterial({ alphaTest: .45, name: 'wc/global_glass_opac', side: THREE.DoubleSide }));
+let solid = pane(-30, new THREE.MeshBasicMaterial({ name: 'wc/brick_wall', side: THREE.DoubleSide }));
+let panel = pane(-40, new THREE.MeshBasicMaterial({ name: 'wc/wall_panel_01', side: THREE.DoubleSide }));
+group = new THREE.Group(); group.add(tinted, glassMask, solid, panel); group.updateMatrixWorld(true);
+filter = createBulletFilter().add(group);
+assert.equal(filter.stats.glass + filter.stats.cutouts, 2);
+assert.equal(Math.round(filter.trace(world([tinted, glassMask, solid, panel]), ray(), 1, 6000).distance), 30);
+assert.equal(Math.round(filter.trace(world([tinted, glassMask, panel]), ray(), 1, 6000).distance), 40);
 console.log('bullet trace ok');

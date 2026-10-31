@@ -1,10 +1,5 @@
 import * as THREE from 'three';
 
-// Bullets use the same collision mesh as the player, and that mesh is baked from every render triangle. So bullets stop
-// on things you cannot see: the invisible collision helpers that keep the player out of windows and corners, and the
-// fully transparent pixels of alpha-cut materials (fences, grates, signs, decals). They also stop on paper-thin slabs.
-// This filter lets a shot continue through all three, and leaves the player's own movement collision untouched.
-
 const _raycaster = new THREE.Raycaster();
 const _entry = new THREE.Vector3();
 const _normalA = new THREE.Vector3();
@@ -12,7 +7,12 @@ const _normalB = new THREE.Vector3();
 const _uv = new THREE.Vector2();
 const alphaTables = new Map();
 
-// Alpha channel of a texture, downscaled and cached. Null when the pixels cannot be read, which counts as solid.
+const GLASS_NAME = /glass|windshield/i;
+const SOFT_LOW = 8;
+const SOFT_HIGH = 247;
+const SOFT_SHARE = .6;
+const SEE_THROUGH = .95;
+
 function alphaTable(texture) {
   if (alphaTables.has(texture)) return alphaTables.get(texture);
   let table = null;
@@ -27,8 +27,12 @@ function alphaTable(texture) {
       g.drawImage(image, 0, 0, width, height);
       const data = g.getImageData(0, 0, width, height).data;
       const alpha = new Uint8Array(width * height);
-      for (let i = 0; i < alpha.length; i++) alpha[i] = data[i * 4 + 3];
-      table = { width, height, alpha };
+      let soft = 0;
+      for (let i = 0; i < alpha.length; i++) {
+        alpha[i] = data[i * 4 + 3];
+        if (alpha[i] > SOFT_LOW && alpha[i] < SOFT_HIGH) soft++;
+      }
+      table = { width, height, alpha, soft: soft / alpha.length };
     }
   } catch { table = null; }
   alphaTables.set(texture, table);
@@ -47,29 +51,57 @@ export function alphaAt(texture, uv) {
   return table.alpha[y * table.width + x] / 255;
 }
 
+export function isGlassy(material) {
+  if (!material) return false;
+  if (GLASS_NAME.test(material.name ?? '')) return true;
+  if (material.map && (material.alphaTest > 0 || material.transparent)) {
+    const table = alphaTable(material.map);
+    if (table && table.soft >= SOFT_SHARE) return true;
+  }
+  return false;
+}
+
+export function isTranslucent(material) {
+  if (!material) return false;
+  if (material.transparent && material.opacity < SEE_THROUGH) return true;
+  return material.transparent === true || isGlassy(material) || material.alphaTest > 0;
+}
+
+export function lets(material, uv) {
+  if (!material) return false;
+  const opacity = material.opacity ?? 1;
+  if (isGlassy(material)) return true;
+  if (material.map && uv && (material.alphaTest > 0 || material.transparent)) {
+    const alpha = alphaAt(material.map, uv) * opacity;
+    return material.alphaTest > 0 ? alpha < material.alphaTest : alpha < SEE_THROUGH;
+  }
+  if (material.transparent && opacity < SEE_THROUGH) return true;
+  return false;
+}
+
 const materialsOf = mesh => Array.isArray(mesh.material) ? mesh.material : [mesh.material];
 
-export function createBulletFilter({ tolerance = .75, thin = 3, maxSkips = 8 } = {}) {
+export function createBulletFilter({ tolerance = .75, thin = 3, maxSkips = 16 } = {}) {
   const items = [];
-  const stats = { helpers: 0, cutouts: 0 };
+  const stats = { helpers: 0, cutouts: 0, glass: 0 };
 
-  // Call before the scene is optimised or chunked, while the original meshes still exist.
   function add(root) {
     if (!root) return api;
     root.updateMatrixWorld(true);
     root.traverse(object => {
       if (!object.isMesh || !object.geometry) return;
       const always = !!object.userData?.collisionOnly;
-      const cutout = !always && materialsOf(object).some(m => m?.alphaTest > 0 && m.map);
-      if (!always && !cutout) return;
+      const materials = materialsOf(object);
+      const glass = !always && materials.some(isGlassy);
+      const cutout = !always && !glass && materials.some(isTranslucent);
+      if (!always && !glass && !cutout) return;
       if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
       items.push({ mesh: object, always, box: object.geometry.boundingBox.clone().applyMatrix4(object.matrixWorld).expandByScalar(tolerance) });
-      stats[always ? 'helpers' : 'cutouts']++;
+      stats[always ? 'helpers' : glass ? 'glass' : 'cutouts']++;
     });
     return api;
   }
 
-  // True when the surface at hit.distance is invisible: a collision helper, or an alpha-cut pixel that is cut away.
   function seeThrough(hit, ray) {
     const d = hit.distance;
     for (const item of items) {
@@ -83,14 +115,12 @@ export function createBulletFilter({ tolerance = .75, thin = 3, maxSkips = 8 } =
       for (const f of found) {
         if (item.always) return true;
         const material = materials[f.face?.materialIndex ?? 0] ?? materials[0];
-        if (!(material?.alphaTest > 0) || !material.map || !f.uv) continue;
-        if (alphaAt(material.map, f.uv) * (material.opacity ?? 1) < material.alphaTest) return true;
+        if (lets(material, f.uv)) return true;
       }
     }
     return false;
   }
 
-  // A surface with a parallel surface right behind it is a thin slab; returns the distance to the far side, or 0.
   function thickness(cast, hit, ray) {
     if (!hit.triangle || hit.dynamic) return 0;
     const probe = cast(new THREE.Ray(ray.origin.clone().addScaledVector(ray.direction, hit.distance + .05), ray.direction), 0, thin);
@@ -100,7 +130,6 @@ export function createBulletFilter({ tolerance = .75, thin = 3, maxSkips = 8 } =
     return Math.abs(_normalA.dot(_normalB)) > .85 ? .05 + probe.distance : 0;
   }
 
-  // `cast(ray, near, far)` is the map's normal raycast. Returns the first hit that actually stops a bullet.
   function trace(cast, ray, near = 0, far = Infinity) {
     let from = near, last = null;
     for (let skips = 0; skips <= maxSkips; skips++) {
@@ -112,7 +141,7 @@ export function createBulletFilter({ tolerance = .75, thin = 3, maxSkips = 8 } =
       if (slab) { from = hit.distance + slab + .1; continue; }
       return hit;
     }
-    return last;
+    return null;
   }
 
   const api = { add, trace, stats, items };
