@@ -1,27 +1,25 @@
 import * as THREE from 'three';
+import { loadKinoBoards, boardGeometry } from './window-boards.js';
 
-const WOOD = [[0.52, 0.36, 0.2], [0.42, 0.28, 0.15], [0.62, 0.46, 0.28], [0.34, 0.23, 0.12]];
+const SHADES = [1, 0.92, 0.84, 0.76];
 const SHAKE_RANGE = 320;
 const SHAKE_GAP = 0.12;
-const CHIP_TEXTURE = 'textures/~-gfx_wood_splinter_col.png';
-const CHIP_WINDOW = 0.28;
+const FALLBACK_COLOR = 0x56514d;
 
-// One shared reference splinter texture for every chip. Started at import so it is ready before the first board lands.
-let chipTexture = null;
-function woodTexture() {
-  if (chipTexture || typeof document === 'undefined') return chipTexture;
-  chipTexture = new THREE.TextureLoader().load(new URL(`../${encodeURI(CHIP_TEXTURE)}`, import.meta.url).href);
-  chipTexture.colorSpace = THREE.SRGBColorSpace;
-  chipTexture.anisotropy = 2;
-  return chipTexture;
+let boardMap = null, started = false;
+function woodMap() {
+  if (!started && typeof document !== 'undefined') {
+    started = true;
+    loadKinoBoards().then(kino => { boardMap = kino.material.map ?? null; }).catch(() => {});
+  }
+  return boardMap;
 }
-woodTexture();
+woodMap();
 
-// Point a chip's UVs at a random small patch of the splinter sheet (bark half or clean-grain half) so chips differ.
 function texturePatch(geometry, random) {
   const uv = geometry.getAttribute('uv');
-  const u0 = random() * (1 - CHIP_WINDOW), v0 = random() * (1 - CHIP_WINDOW);
-  for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * CHIP_WINDOW, v0 + uv.getY(i) * CHIP_WINDOW);
+  const du = random(), dv = random();
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) + du, uv.getY(i) + dv);
   uv.needsUpdate = true;
   return geometry;
 }
@@ -41,13 +39,13 @@ export function planBoardChips(origin, out, random = Math.random, count = 9) {
     const spread = (random() - 0.5) * 2;
     const direction = random() < 0.7 ? 1 : -1;
     const speed = 22 + random() * 46;
-    const shade = WOOD[Math.floor(random() * WOOD.length) % WOOD.length];
+    const shade = SHADES[Math.floor(random() * SHADES.length) % SHADES.length] * (0.94 + random() * 0.12);
     const thickness = 0.35 + random() * 0.3;
     chips.push({
       position: origin.clone().addScaledVector(side, spread * 22).add(new THREE.Vector3(0, (random() - 0.5) * 6, 0)),
       velocity: out.clone().multiplyScalar(speed * direction).addScaledVector(side, spread * (14 + random() * 26)).add(new THREE.Vector3(0, 26 + random() * 46, 0)),
       size: [thickness, thickness * 0.8, 1.2 + random() * 2.4],
-      color: shade.map(c => Math.min(1, c * (0.85 + random() * 0.3))),
+      color: [shade, shade, shade],
       life: 0.5 + random() * 0.4,
       spin: [random() * Math.PI, random() * Math.PI, random() * Math.PI],
     });
@@ -57,13 +55,11 @@ export function planBoardChips(origin, out, random = Math.random, count = 9) {
 
 export function spawnBoardChips(scene, particles, origin, out, random = Math.random) {
   const chips = planBoardChips(origin, out, random);
-  const map = woodTexture();
+  const map = woodMap();
   for (const chip of chips) {
-    // The splinter texture carries the wood colour; the per-chip shade only lightens or darkens it.
-    const tint = chip.color.map(c => Math.min(1, c * 2));
     const mesh = new THREE.Mesh(
-      texturePatch(new THREE.BoxGeometry(...chip.size), random),
-      new THREE.MeshBasicMaterial({ map, color: new THREE.Color(...tint), transparent: true, toneMapped: false }),
+      texturePatch(boardGeometry(chip.size), random),
+      new THREE.MeshStandardMaterial({ map, color: map ? new THREE.Color(...chip.color) : new THREE.Color(FALLBACK_COLOR).multiplyScalar(chip.color[0]), roughness: 0.95, metalness: 0, transparent: true }),
     );
     mesh.position.copy(chip.position);
     mesh.rotation.set(...chip.spin);
